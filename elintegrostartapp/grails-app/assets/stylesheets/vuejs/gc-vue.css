@@ -1,0 +1,17 @@
+.rounded-card{
+    border-radius:10px;
+}
+
+.rounded-tab-upper{
+    border-top-right-radius:10px;
+    border-top-left-radius:10px;
+}
+
+tr.selected td {
+    background-color: #333;
+    color: #fff;
+}
+
+.input-text-field {
+    width: 30px;
+}

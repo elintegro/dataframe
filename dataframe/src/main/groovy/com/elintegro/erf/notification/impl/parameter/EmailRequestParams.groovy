@@ -1,0 +1,59 @@
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+We invite you to join the community of developers making it even more powerful!
+For more information please visit  https://www.elintegro.com
+
+Copyright © 2007-2019  Elinegro Inc. Eugene Lipkovich, Shai Lipkovich
+
+This program is under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
+See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works. 
+These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
+
+
+package com.elintegro.erf.notification.impl.parameter
+
+import com.elintegro.erf.notification.base.parameter.NotificationRequestBuilder
+
+class EmailRequestParams implements NotificationRequestBuilder{
+
+    def mailService
+    def groovyPageRenderer
+
+    String message
+    String from
+    String to
+    String subject
+    boolean async
+
+    EmailRequestParams setMessage(String message) {
+        this.message = message
+        return this
+    }
+
+    EmailRequestParams setFrom(String from) {
+        this.from = from
+        return this
+    }
+
+    EmailRequestParams setTo(String to) {
+        this.to = to
+        return this
+    }
+
+    EmailRequestParams setSubject(String subject) {
+        this.subject = subject
+        return this
+    }
+
+    EmailRequestParams setMailService(def mailService) {
+        this.mailService = mailService
+        return this
+    }
+
+    EmailRequestParams setGroovyPageRenderer(def groovyPageRenderer) {
+        this.groovyPageRenderer = groovyPageRenderer
+        return this
+    }
+
+}
