@@ -34,11 +34,11 @@ class MapWidgetVue extends WidgetVue{
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         String dataframeName = dataframe.dataframeName
-        VueJsBuilder vueJsBuilder = dataframe.getVuejsBuilder()
-        vueJsBuilder.addToCreatedScript(""" this.callValidateMethod(this.addressValue);\n""")
-        vueJsBuilder.addToWatchScript(""" addressValue: function(){this.callValidateMethod(this.addressValue);}""")
-        vueJsBuilder.addToPropsScript("'addressValue'")
-        vueJsBuilder.addToMethodScript("""  
+        VueJsBuilder vueJsBuilder = dataframe.getVueJsBuilder()
+                .addToCreatedScript(""" this.callValidateMethod(this.addressValue);\n""")
+                .addToWatchScript(""" addressValue: function(){this.callValidateMethod(this.addressValue);}""")
+                .addToPropsScript("'addressValue'")
+                .addToMethodScript("""  
                                callValidateMethod: function(addressValue){
                                         if(addressValue != "" && addressValue!= null && addressValue != undefined){
                                            this.validateGoogleAddress(addressValue);

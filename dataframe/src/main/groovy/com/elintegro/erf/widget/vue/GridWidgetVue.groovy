@@ -33,8 +33,9 @@ import org.apache.commons.lang.WordUtils
  * Created by kchapagain on Nov, 2018.
  */
 class GridWidgetVue extends WidgetVue {
-	//TODO: instantiate contextPath
 
+    def contextPath = Holders.grailsApplication.config.rootPath
+    public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
     String embDDfr = "";
 
     @Override
@@ -44,6 +45,8 @@ class GridWidgetVue extends WidgetVue {
         String wdgHql      = field?.hql;
         def onClick        = field?.onClick
         def onButtonClick  = field?.onButtonClick
+        String valueMember = field?.valueMember
+        boolean internationalize = field.internationalize?true:false
         List gridDataframeList= []
         StringBuilder methodScriptsBuilder = new StringBuilder();
         StringBuilder requestFieldParams   = new StringBuilder()
@@ -58,15 +61,23 @@ class GridWidgetVue extends WidgetVue {
         fieldMetaData.each {metaField ->
             def propItemText = metaField.alias?:metaField.name
             def propItemVal  = metaField.name
-            String capitalisedProp = propItemText.capitalize()
-            dataHeader.add(['text':capitalisedProp, 'keys':propItemVal, 'value':capitalisedProp])
+            String headerText = propItemText.capitalize()
+            if(internationalize){
+                headerText = getMessageSource().getMessage(propItemText,null,propItemText,LocaleContextHolder.getLocale())
+            }
+//            String capitalisedProp = propItemText.capitalize()
+            String hiddenClass = ""
+            if(metaField.pk || metaField.fk){
+                hiddenClass = "hidden"
+            }
+            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':hiddenClass])
             String propTextLowercase = propItemText.toLowerCase()
             if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar")){
                 String defaultImageName = Holders.config.images.defaultImageName
                 String imgUrl =  getImageUrl(field)
                 fieldParams.append("\n<td class='text-xs-left'><div v-html='props.item.$propItemText'></div></td>");
             }else {
-                fieldParams.append("\n<td class='text-xs-left'>{{ props.item.$propItemText }}</td>");
+                fieldParams.append("\n<td class='$hiddenClass text-xs-left'>{{ props.item.$propItemText }}</td>");
             }
             requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
@@ -77,7 +88,7 @@ class GridWidgetVue extends WidgetVue {
         if (onClick){
             showRefreshMethod   = true
             if(onClick.script){
-                dataframe.getVuejsBuilder().addToMethodScript(""" 
+                dataframe.getVueJsBuilder().addToMethodScript(""" 
                    ${fldName}_showDetail: function(dataRecord){
                               ${onClick.script}
                     },\n 
@@ -91,13 +102,13 @@ class GridWidgetVue extends WidgetVue {
         }
 
         if (onButtonClick){
-           showRefreshMethod = true
+            showRefreshMethod = true
             getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, parentDataframeName, requestFieldParams, dataHeader)
 
         }
         showRefreshMethod = showRefreshMethod || field.showRefreshMethod?true:false
         if(showRefreshMethod){
-          dataframe.getVuejsBuilder().addToMethodScript(refreshGrid(fldName, refDataframeName, dataframe))
+            dataframe.getVueJsBuilder().addToMethodScript(refreshGrid(fldName, refDataframeName, dataframe))
         }
         String defaultImageName = Holders.config.images.defaultImageName
         def fldNameDefault = WordUtils.capitalizeFully(fldName);
@@ -110,6 +121,8 @@ class GridWidgetVue extends WidgetVue {
         if(!showGridFooter){
             dataTableAttribbutes.append(""" hide-actions""")
         }
+        String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
+        String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
 //        dataSb.append("${fldName}_display:false,\n")
         String gridTitle = label?"""<v-card-title class='title font-weight-light' style='justify-content: space-evenly;'>$label</v-card-title>""":""
         return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
@@ -119,7 +132,7 @@ class GridWidgetVue extends WidgetVue {
             <v-text-field
                     v-model="${fldName}_search"
                     append-icon="search"
-                    label="Search"
+                    label="$searchPlaceholder"
                     single-line
                     hide-details
                     class='pa-3'
@@ -132,8 +145,8 @@ class GridWidgetVue extends WidgetVue {
             ${dataTableAttribbutes.toString()}
     >
         <template slot="items" slot-scope="props">
-          <tr @click="${onClickMethod}">
-            ${fieldParams.toString()}
+          <tr @click="${onClickMethod}" :key="props.item.$valueMember">
+            $draggIndicator ${fieldParams.toString()}
           </tr>  
         </template>
     </v-data-table></v-card>
@@ -155,12 +168,12 @@ class GridWidgetVue extends WidgetVue {
             gridDataframeNamesBuilder = gridDataframeNamesBuilder + "}\n"
         }
 
-        dataframe.getVuejsBuilder().addToMethodScript(""" getDefaultDataHeaders : function(){\n
+        dataframe.getVueJsBuilder().addToMethodScript(""" getDefaultDataHeaders : function(){\n
                              var defaultDataHeaders = ${dataHeader as JSON};
                              this.${dataVariable}_headers = defaultDataHeaders;
                           },\n""")
         return """
-            
+            drag:'',
            ${search?"${dataVariable}_search:'',":""}
            ${dataVariable}_headers: [],
            ${dataVariable}_items: [],
@@ -183,7 +196,7 @@ class GridWidgetVue extends WidgetVue {
         }
         String fldName = dataframe.getDataVariableForVue(field);
         String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
-        dataframe.getVuejsBuilder().addToComputedScript(""" ${fldName}_display: function(){if(this.${dataVariable}_items.length){
+        dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){if(this.${dataVariable}_items.length){
                   return true;
                }},\n""")
         String hqlLowercase = field.hql?.toLowerCase()
@@ -239,7 +252,7 @@ class GridWidgetVue extends WidgetVue {
             DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
             List resultList = dbRes.getResultList();
             result.put("data", resultList);
-			result.put("dataHeader", dataHeader);
+            result.put("dataHeader", dataHeader);
             result.put("defaultData", getDefaultData(fieldMetaData));
 
             if(!(fieldProps.containsKey("metaData") && fieldProps.get("metaData"))){
@@ -305,10 +318,10 @@ class GridWidgetVue extends WidgetVue {
     }
 
     private void getOnButtonClickScript(onButtonClick, DataframeVue dataframe,  StringBuilder onclickDfrBuilder
-                                                 , gridDataframeList, StringBuilder fieldParams, String fldName, String parentDataframeName, StringBuilder requestFieldParams, List dataHeader){
+                                        , gridDataframeList, StringBuilder fieldParams, String fldName, String parentDataframeName, StringBuilder requestFieldParams, List dataHeader){
         String buttonHoverMessage = ""
         onButtonClick.each{Map onButtonClickMaps ->
-            String actionName = onButtonClickMaps?.actionName?:""
+            String actionName = getMessageSource().getMessage(onButtonClickMaps?.actionName?:"", null, onButtonClickMaps?.actionName?:"", LocaleContextHolder.getLocale())
             dataHeader.add(['text':actionName.capitalize(), 'keys':actionName, 'value':'name', sortable: false])
             fieldParams.append("\n<td class='justify-center layout px-0' @click.stop=''>");
             onButtonClickMaps.buttons.each {Map buttonMaps->
@@ -326,7 +339,7 @@ class GridWidgetVue extends WidgetVue {
                 String btnName = ""
                 String methodScript = ""
                 if(deleteButton){
-                    methodScript= constructGridDeleteScript(buttonMaps, fldName, dataframe.dataframeName, dataframe)
+                    methodScript= constructGridDeleteScript(buttonMaps, fldName, dataframe.dataframeName)
                     btnName = "deleteButton"
                     vIcon.name = "delete"
 
@@ -361,7 +374,7 @@ class GridWidgetVue extends WidgetVue {
                 if(buttonMaps?.refDataframe && !buttonMaps.deleteButton){
                     onclickDfrBuilder.append(getRefDataframeHtml(buttonMaps, dataframe, fldName, gridDataframeList))
                 }
-                    dataframe.getVueJsBuilder().addToMethodScript(""" ${fldName}_${btnName}method: function(dataRecord){
+                dataframe.getVueJsBuilder().addToMethodScript(""" ${fldName}_${btnName}method: function(dataRecord){
                                              $methodScript
                                              },\n""")
 
@@ -377,7 +390,7 @@ class GridWidgetVue extends WidgetVue {
     }
 
     private void getOnClickScript(def onClick, DataframeVue dataframe, String refDataframeName, StringBuilder onclickDfrBuilder, def gridDataframeList
-                                               , String fldName){
+                                  , String fldName){
 
         String stateName = fldName + "_onClick"
 
@@ -402,7 +415,7 @@ class GridWidgetVue extends WidgetVue {
         dataframe.getVueJsBuilder().addToWatchScript("""refresh${fldName}Grid: {handler: function(val, oldVal) {
                                                 this.${fldName}_refreshDataForGrid(val);
                             }},\n""")
-      return """
+        return """
                     ${fldName}_refreshDataForGrid: function(responseData){
                        
                           var selectedRow = this.${fldName}_selectedrow;
@@ -448,9 +461,9 @@ class GridWidgetVue extends WidgetVue {
         String refDataframeName = refDataframe?.dataframeName?:""
         gridDataframeList.add(refDataframeName)
         dataframe.childrenDataframes.add(refDataframeName)
-        VueStore store = dataframe.getVuejsBuilder().getVueStore()
+        VueStore store = dataframe.getVueJsBuilder().getVueStore()
         store.addToShowHideParamNames("${refDataframeName}_display : true,\n")
-        dataframe.getVuejsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true},\n")
+        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true},\n")
 
         if(onClickMap.showAsDialog){
             resultPageHtml.append("""<v-dialog v-model="gridDataframeNames.${refDataframeName}_display" max-width="800px">""")
@@ -469,9 +482,9 @@ class GridWidgetVue extends WidgetVue {
         String watchScript = """check${refDataframeName}CloseButton:{handler: function(val, oldVal) {
                                this.gridDataframeNames.${refDataframeName}_display = this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display;}}, \n """
 
-        dataframe.getVuejsBuilder().addToDataScript("${refDataframeName}_comp: '',\n")
-        dataframe.getVuejsBuilder().addToComputedScript(computedScript)
-        dataframe.getVuejsBuilder().addToWatchScript(watchScript)
+        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_comp: '',\n")
+                .addToComputedScript(computedScript)
+                .addToWatchScript(watchScript)
 
         return resultPageHtml.toString()
     }
@@ -495,10 +508,10 @@ class GridWidgetVue extends WidgetVue {
 //            dataframe.vueStore = ["state":newState];
 //
 //            Vue.set(this.\$store.state.${parentDataframeName}.${fldName}_grid, "key", '')
-            VueStore store = dataframe.getVuejsBuilder().getVueStore()
+            VueStore store = dataframe.getVueJsBuilder().getVueStore()
             store.addToState("${fldName}_grid:{},\n")
             updateStoreCallScript = "this.${refDataframeName}_updateStore(dataRecord);"
-            dataframe.getVuejsBuilder().addToMethodScript("""${refDataframeName}_updateStore: function(data){
+            dataframe.getVueJsBuilder().addToMethodScript("""${refDataframeName}_updateStore: function(data){
                             var key = data.id?data.id:data.Id;
                             Vue.set(this.\$store.state.${parentDataframeName}.${fldName}_grid, "key", key)
                             Vue.set(this.\$store.state.${refDataframeName}, "key", key)
@@ -515,9 +528,10 @@ class GridWidgetVue extends WidgetVue {
                     \n 
                     """
     }
-    private String constructGridDeleteScript(Map buttonMaps,  String fldName, String parentDataframeName, Dataframe dataframe){
+    private String constructGridDeleteScript(Map buttonMaps,  String fldName, String parentDataframeName){
         DataframeVue buttonRefDataframe = getReferenceDataframe(buttonMaps.refDataframe)
         String valueMember =buttonMaps.valueMember?:"id"
+        String doBeforeDelete = buttonMaps.doBeforeDelete?:""
         StringBuilder requestFieldParams = new StringBuilder()
         List<String> keyFieldNames = buttonRefDataframe.getKeyFieldNameForNamedParameter(buttonRefDataframe)
 
@@ -538,12 +552,13 @@ class GridWidgetVue extends WidgetVue {
 
         }
         String confirmMessage = buttonMaps.message?:"Are you sure ?"
-        String url =  buttonMaps.ajaxDeleteUrl?: "/${dataframe.contextPath}/dataframe/ajaxDeleteExpire"
+        String url =  buttonMaps.ajaxDeleteUrl?: ajaxDeleteUrl
         return """
                 
                            var allParams = {};
                            var editedIndex = this.${fldName}_items.indexOf(dataRecord);
                            ${requestFieldParams.toString()}
+                            $doBeforeDelete
                             confirm('${confirmMessage}');
                            axios.get('$url', {
                              params: allParams

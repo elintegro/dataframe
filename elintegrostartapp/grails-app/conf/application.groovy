@@ -107,7 +107,7 @@ images {
 	storageLocation = "/opt/tomcat-8/webapps"
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
-	defaultImagePath = "/elintegrostartapp/assets/$defaultImageName"
+	defaultImagePath = "/assets/$defaultImageName"
 
 
 }
@@ -264,15 +264,15 @@ grails.reload.enabled = true
 // environment specific settings
 environments {
 	development {
-		server.contextPath = "/elintegrostartapp"
-		server.port = 8090
-		baseUrl = "http://localhost:8090"
-		grails.serverURL = "http://localhost:8090/elintegrostartapp"
+		server.contextPath = "/"
+		rootPath = ""
+		server.port = 8099
+		grails.serverURL = "http://localhost:${server.port}"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro@localhost'
 		dataSource {
 			logSql = true
-//			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+//			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
 			url = "jdbc:mysql://localhost:3306/elintegrostartapp_db"
 			username = "root"
 			password = "root"
@@ -321,7 +321,8 @@ environments {
 
 	qa {
 		baseUrl = "http://208.75.75.98"
-		grails.serverURL = "http://208.75.75.98/elintegrostartapp"
+		rootPath = "elintegrostartapp"
+		grails.serverURL = "http://208.75.75.98"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro@QA'
 		dataSource {
 			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'

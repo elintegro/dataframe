@@ -37,12 +37,13 @@ class SnackbarWidgetVue extends WidgetVue{
         :vertical="mode === 'vertical'"
       >
         {{ alertProp.alert_message }}
+        <v-spacer></v-spacer>
         <v-btn
           dark
           flat
           @click="alertProp.snackbar = false"
         >
-          Close
+          <v-icon medium >close</v-icon>
         </v-btn>
       </v-snackbar>
                 """
@@ -52,12 +53,12 @@ class SnackbarWidgetVue extends WidgetVue{
         String y = field?.y?:"top"
         String x = field?.x?:"right"
         def timeout = field?.timeout?:6000
-        dataframe.getVuejsBuilder().addToComputedScript("""
+        dataframe.getVueJsBuilder().addToComputedScript("""
               alertProp(){
                return this.\$store.state.${dataframe.dataframeName}.alertProp;
            },\n
         """)
-        VueStore store = dataframe.getVuejsBuilder().getVueStore()
+        VueStore store = dataframe.getVueJsBuilder().getVueStore()
         store.addToState("""
              alertProp:{
                 snackbar: false,
