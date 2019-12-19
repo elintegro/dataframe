@@ -1,0 +1,6 @@
+.idea/
+elintegrostartapp/build/
+dataframe/build/
+.gradle/
+elintegrostartapp/logs/
+dataframe.iml
