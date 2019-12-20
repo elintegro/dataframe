@@ -49,11 +49,14 @@ beans = {
     loadResource "resourcesWidget.groovy"
     loadResource "resourcesPages.groovy"
     loadResource "globech/resourcesScriptBean.groovy"
+    loadResource "globech/resourcesLayout.groovy"
     loadResource "globech/resourcesLayoutVue.groovy"
     loadResource "globech/resourcesVue.groovy"
     loadResource "globech/applicationManagement/resourcesApplicationForm.groovy"
     loadResource "globech/applicationManagement/resourcesApplicationManagement.groovy"
     loadResource "globech/userManagement/resourcesUserManagement.groovy"
+    loadResource "globech/elintegroWebsite/resourcesElintegroVue.groovy"
+    loadResource "globech/elintegroWebsite/resourcesElintegroLayoutVue.groovy"
     if (Environment.current == Environment.DEVELOPMENT){
 //        loadResource "resourcesEditor.groovy"
 //        editorBeanLoading(EditorBeanLoading){ bean -> }

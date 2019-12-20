@@ -227,11 +227,10 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
     public String getFinalbuildScript(DataframeVue df) {
 
         StringBuffer vueCompBuilder = new StringBuffer() //test for using localized components
-        String dataframeNameLowercase = df.dataframeNameLowercase
         String dataframeName = df.dataframeName
         if(df.isGlobal){
-            vueCompBuilder.append("Vue.component('${dataframeNameLowercase}',{\n")
-            vueCompBuilder.append("name: '$dataframeNameLowercase',\n")
+            vueCompBuilder.append("Vue.component('${dataframeName}',{\n")
+            vueCompBuilder.append("name: '$dataframeName',\n")
             df.componentRegistered = true
         }else{
             df.componentRegistered = false

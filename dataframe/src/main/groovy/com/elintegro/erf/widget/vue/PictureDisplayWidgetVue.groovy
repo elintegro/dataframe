@@ -24,7 +24,7 @@ class PictureDisplayWidgetVue extends WidgetVue{
         String fldParam     = dataframe.getDataVariableForVue(field)
         String height       = field.height?:""
         String width        = field.width?:""
-        String aspectRatio  = field.aspectRatio?field.aspectRatio:"2.75"
+        String aspectRatio  = field.aspectRatio?field.aspectRatio:""
         String attr         = field.attr?:""
         String heightString = height?"height=$height":""
         String widthString  = width?"""width=$width """:""

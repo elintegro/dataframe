@@ -624,7 +624,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			componentName = "<router-view name='${dataframeNameLowercase}'></router-view>"
 		}else{
 			propsString = (propsString != "")?propsString:""
-			componentName = "<${dataframeNameLowercase} ref='${dataframeNameLowercase}_ref' :${dataframeName}_prop='${dataframeName}_data' $propsString></${dataframeNameLowercase}>"
+			componentName = "<${dataframeName} ref='${dataframeName}_ref' :${dataframeName}_prop='${dataframeName}_data' $propsString></${dataframeName}>"
 		}
 		return componentName
 	}
@@ -1036,7 +1036,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 
 		if(route){
-			vueRoutes = "{ path: '/$dataframeNameLowercase/:routeId',name:'${dataframeNameLowercase}' , component: ${dataframeName}Comp },\n"
+			vueRoutes = "{ path: '/$dataframeName/:routeId',name:'${dataframeName}' , component: ${dataframeName}Comp },\n"
 			componentRegistered = true
 			isGlobal = false
 			ResultPageHtmlBuilder.registeredComponents.add(dataframeName)
@@ -1152,9 +1152,9 @@ updateStoreState: function(response, stateVar){
 		if(embeddedDataframes.size()>0){
 			embeddedDataframes.each{
 				if(it.trim() != ""){
-					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it.toLowerCase()}_ref")){for(var a in this.\$refs.${it.toLowerCase()}_ref.\$data){\n
+					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it}_ref")){for(var a in this.\$refs.${it.toLowerCase()}_ref.\$data){\n
                                               var dashA = a.split('_').join('-');
-                                              allParams[dashA] = this.\$refs.${it.toLowerCase()}_ref.\$data[a];\n}}\n""")
+                                              allParams[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
 				}
 			}
 		}
@@ -1230,7 +1230,7 @@ updateStoreState: function(response, stateVar){
                  ${embdDfrs.toString()}
                  if(embdDfrs){
                     for(var em in embdDfrs){
-                         var emS = embdDfrs[em].toLowerCase() + "_ref"
+                         var emS = embdDfrs[em] + "_ref"
                           
                          for(var a in eval("this.\$refs."+emS+".\$data")){
                               eval("this.\$refs."+emS+".\$data")[a]=""
@@ -1272,11 +1272,11 @@ updateStoreState: function(response, stateVar){
 	}
 
 	private String getButtonScript(btn, refDf){
-		String name = refDf.dataframeName.toLowerCase()
+		String name = refDf.dataframeName
 		return """${dataframeName}_${btn.name}: function(){\n 
                          this.\$router.push({
                          name: '$name',
-                         path: '$dataframeNameLowercase',
+                         path: '$dataframeName',
                          params: {
                            $name: "test"
                          }

@@ -15,6 +15,7 @@ package spring.globech
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.vue.FKWidgetVue
+import com.elintegro.erf.widget.vue.PictureDisplayWidgetVue
 import grails.util.Holders
 
 beans {
@@ -49,7 +50,7 @@ beans {
                 "facility.facilityName":[
                         widget: "TextDisplayWidgetVue"
                 ]
-]
+        ]
 //        componentsToRegister = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
@@ -261,24 +262,6 @@ beans {
                              Cancel:[name:"cancel", type:"button", script:"\$router.go(-1)"]]
 
         currentFrameLayout = ref("defaultDialogBoxLayout")
-    }
-
-    vueLoginNavigation(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueLoginNavigation']
-        saveButton = false
-        wrapInForm=false
-
-        initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]
-        //Vue parameters
-        isGlobal = true
-        dataframeButtons = [
-                Register:[name:"register", type:"link", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true, attr:"flat", script:""" this.vueRegisterDataframe_display = true;\n  drfExtCont.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', true);\n""", refDataframe: ref("vueRegisterDataframe"), tooltip: [message: 'Register']],
-                Login:[name:"login", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true,script:""" this.vueLoginDataframe_display = true; \n  drfExtCont.saveToStore('dataframeShowHideMaps','vueLoginDataframe_display', true);\n""", refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login']]]
-        currentFrameLayout = ref("loginLogoutNavigationLayout")
-        createStore = true
-
     }
 
     vueAlertMsgDataframe(DataframeVue){bean ->
@@ -618,7 +601,25 @@ beans {
                 ],
                 "person.mainPicture" : [
                         "widget"        : "PictureDisplayWidgetVue",
-                        "defaultValue"  : "default_profile.jpg",
+                        "defaultValue"  : "`vueElintegroLogoDataframe(DataframeVue){bean ->\n" +
+                                "        bean.parent = dataFrameSuper\n" +
+                                "        bean.constructorArgs = ['vueElintegroLogoDataframe']\n" +
+                                "        isGlobal = true\n" +
+                                "        saveButton = false\n" +
+                                "        addFieldDef =[\n" +
+                                "                \"person.mainPicture\":[\n" +
+                                "                        \"widget\": \"PictureDisplayWidgetVue\",\n" +
+                                "                        \"defaultValue\"  : \"elintegro_logo.png\",\n" +
+                                "                        flexGridValues: ['xs12', 'sm6', 'md1', 'lg4', 'xl4'],\n" +
+                                "                        \"aspectRatio\":\"2.5\",\n" +
+                                "                      \"height\":\"20px\",\n" +
+                                "                        \"width\":\"300px\",\n" +
+                                "                ]\n" +
+                                "\n" +
+                                "        ]\n" +
+                                "        currentFrameLayout = ref(\"defaultDataframeLayout\")\n" +
+                                "\n" +
+                                "    }`.jpg",
                         "aspectRatio"   : "2.5",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "height"        : 200]

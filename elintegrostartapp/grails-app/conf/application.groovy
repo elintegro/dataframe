@@ -272,10 +272,12 @@ environments {
 		dataSource {
 			logSql = true
 //			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
-			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegrostartapp_db"
-			username = "root"
-			password = "root"
+			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
+			url = "jdbc:mysql://localhost:3308/elintegro_website_db_dev"
+//			username = "root"
+//			password = "qbohfoj"
+			username = "developer"
+			password = "java11"
 		}
 	}
 	test {

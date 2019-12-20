@@ -18,30 +18,9 @@ import com.elintegro.erf.layout.RowLayoutVue
 
 beans {
 
-    defaultColumnLayout(ColumnLayoutVue){ bean->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-layout
-          column
-          wrap
-          class="my-5"
-          align-center
-        ></v-layout>"""
-    }
-    defaultRowLayout(RowLayoutVue){ bean->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-layout
-          row
-          wrap
-          class="my-5"
-          justify-center
-        ></v-layout>"""
-    }
+
     /*Layout test for component and router based layout design*/
-    vueContainerLayout(ColumnLayoutVue){bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<div id='app'><v-app><sectionlayout3/></v-app></div>"""
-        children = ["sectionLayout3"]
-    }
+
 
     sectionLayout3(RowLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -63,18 +42,16 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-toolbar color="light-blue darken-2" dark  tabs style="z-index:99;">
                                    <v-toolbar-side-icon></v-toolbar-side-icon>
-                                   <v-toolbar-title class="display-1 thin  amber--text text--lighten-1" dark> <div v-if="this.\$store.state.vueInitDataframe.loggedIn"><vueappnamedataframe/></div><div v-else>Elintegro Start App</div></v-toolbar-title>
-                                   <v-spacer></v-spacer><vuetoolbardataframe/>
-                                   <vueinitdataframe/>
-                                   
+                                   <v-toolbar-title class="display-1 thin  amber--text text--lighten-1" dark> logo  </v-toolbar-title>
+                                 
+                                   <v-spacer></v-spacer>
+                                   <vueNavigationButtonDataframe/>
+                                   <vueElintegroNavigationLogoDataframe/>
+                                   <vueInitDataframe/>
                                </v-toolbar>"""
         isGlobal = true
     }
 
-    appNameDataframeLayout(RowLayoutVue){bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<span>[DATAFRAME_SCRIPT]</span>"""
-    }
     vueToolbarDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-toolbar-items dark class="hidden-xs-and-down">
@@ -98,10 +75,7 @@ beans {
 
 /*<v-tabs slot="extension" color="transparent" fixed-tabs slider-color="yellow">
       <v-tab ripple href="#vueOwnerTreeDataframe-tab-id">My Properties</v-tab><v-tab ripple href="#vueUserProfileDataframe-tab-id">Financial Data</v-tab><v-tab ripple href="#vueUserProfileDataframe-tab-id">My Profile</v-tab></v-tabs>*/
-    footerLayout(ColumnLayoutVue){bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-footer app>Copyright @ Elintegro Inc., Elintegro Start App project</v-footer>"""
-    }
+
 
     midSectionLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -117,16 +91,17 @@ beans {
         layoutPlaceHolder = """<v-layout wrap row align-start justify-start><v-content><v-container grid-list-md><v-layout row wrap justify-center>
                                                                 <v-flex xs2 order-lg1></v-flex>
                                                                      <v-flex lg8 md8 xs8 order-lg2>
-                                                                     <router-view name='vueapplicationformdataframe'/>
                                                                      <router-view :key="\$route.fullPath"></router-view>
                                                                      <mainpagemessagelayout v-if="!this.\$store.state.vueInitDataframe.loggedIn"/>
                                         </v-flex>
                                         <v-flex xs2 order-lg3></v-flex>
                                         </v-layout></v-container></v-content></v-layout>"""
-        componentsToRegister = ["vueApplicationFormDataframe"]
+//        componentsToRegister = ["vueApplicationFormDataframe"]
         children = ["mainPageMessageLayout"]
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
+//            <router-view name='vueapplicationformdataframe'/>
+//
 //    <vueapplicationformdataframe v-if="this.\$store.state.vueToolbarDataframe.newApplication_display == true"/>
     mainPageMessageLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -144,54 +119,22 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
 
-    columnSpacerLayout(ColumnLayoutVue){bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs1 md1 lg1 xl1></v-flex>"""
-    }
+
 
     sidebarLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-navigation-drawer permanent fixed app v-model="drawer">Elintegro Start App</v-navigation-drawer>"""
     }
 
-    defaultDataframeLayout(ColumnLayoutVue){ bean->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
-    }
 
-    defaultDfrButtonLayout(RowLayoutVue){bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-card-actions slot="dfButtons">[BUTTON_SCRIPT]</v-card-actions>"""
-    }
-    defaultDialogBoxLayout(ColumnLayoutVue){ bean->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' ><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
-                                <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
-    }
-    defaultRouteDataframeLayout(ColumnLayoutVue){ bean->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title></v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
-    }
+
     vueUserProfileDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round width='fit-content'><v-toolbar dark color="light-blue darken-2"><v-toolbar-title class="white--text">My Profile</v-toolbar-title><v-spacer></v-spacer></v-toolbar>[vueUserProfileDataframe]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[ALL_OTHER_BUTTONS][saveButton]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
 
-    vueEmbeddedDataframeLayout(ColumnLayoutVue){ bean->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<div>[DATAFRAME_LABEL]<v-layout row wrap justify-end align-start> [DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-layout></div>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
-    }
 
-    treeWidgetDataframeLayout(ColumnLayoutVue){bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex><v-card style="overflow-x:auto">[vueOwnerTreeDataframe]</v-card></v-flex>"""
-    }
 
     vueAfterLoggedinDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -202,10 +145,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-card color="default" flat id="vueProfileMenuDataframe-id" style="overflow: hidden;"><v-form  ref='vueProfileMenuDataframe_form'><v-container class="pa-2"><v-layout wrap><v-flex xs12 sm12 md12 lg12 xl12><v-subheader class="subheading">Hello, {{vueProfileMenuDataframe_person_fullName}}</v-subheader></v-flex>[person.mainPicture]</v-layout></v-container></v-form>[BUTTON_SCRIPT]</v-card>"""
     }
-    emptyDataframeLayout(ColumnLayoutVue){bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</div>"""
-    }
+
 
     vueLoginDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -219,7 +159,7 @@ beans {
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card'><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
                                 <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
                                 </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
 
     vueUserManagementMenuDataframeLayout(RowLayoutVue){bean ->
@@ -273,11 +213,7 @@ beans {
     }
 
 
-    formDataframeLayout(ColumnLayoutVue){ bean->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap>[previous][ALL_OTHER_BUTTONS]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
-    }
+
     addressDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[previous][ALL_OTHER_BUTTONS][googleMap]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
