@@ -14,8 +14,11 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package spring.globech.applicationManagement
 import com.elintegro.erf.dataframe.vue.DataframeVue
 
+import grails.util.Holders
+
 beans {
 
+    def contextPath = Holders.grailsApplication.config.rootPath
     vueApplicationFormDataframe(DataframeVue){ bean ->
 
         bean.parent = dataFrameSuper
@@ -27,7 +30,7 @@ beans {
 //        app.referredByPerson, app.referredByOrganisation, app.signedBy,   app.applicationDate,
         initOnPageLoad = false
 
-        ajaxSaveUrl = "/elintegrostartapp/applicationForm/save"
+        ajaxSaveUrl = "${contextPath}/applicationForm/save"
         //These are values, that overrides the default ones
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         deleteButton = false
@@ -101,7 +104,7 @@ beans {
         dataframeLabelCode = "Medical.Record"
         hql = "select record.medicareNo, record.physician, record.otherRequirements, record.person from MedicalRecord as record where record.id=:id"
 
-        ajaxSaveUrl = "/elintegrostartapp/applicationForm/saveMedicalRecord"
+        ajaxSaveUrl = "${contextPath}/applicationForm/saveMedicalRecord"
         initOnPageLoad = false
         //These are values, that overrides the default ones
         deleteButton = false
@@ -142,7 +145,7 @@ beans {
 
         dataframeLabelCode = "Add.Medications"
         initOnPageLoad = false
-        ajaxSaveUrl = "/elintegrostartapp/applicationForm/saveMedications"
+        ajaxSaveUrl = "${contextPath}/applicationForm/saveMedications"
         doAfterSave = """drfExtCont.saveToStore('dataframeShowHideMaps', 'vuePrescribedMedicationsDataframe_display', false);\ndrfExtCont.saveToStore('vueMedicationsGridDataframe', 'key', response.nodeId[0]);\n
                           drfExtCont.saveToStore("dataframeBuffer","savedResponseData", responseData);"""
         doBeforeSave = "allParams['medicalRecordId'] = drfExtCont.getFromStore('vueMedicalRecordDataframe', 'key');"
@@ -320,7 +323,7 @@ beans {
         doAfterSave = "drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicalRecordDataframe-tab-id');"
 
         componentsToRegister =["vueMapWidgetDataframe"]
-        ajaxSaveUrl = "/elintegrostartapp/applicationForm/saveAddress"
+        ajaxSaveUrl = "${contextPath}/applicationForm/saveAddress"
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         deleteButton = false

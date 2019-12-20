@@ -31,7 +31,7 @@ class CheckboxWidgetVue extends WidgetVue{
 
         String required = field.required?"required":""
         def width = field.width?:'auto'
-        def height = field.height?:'5px'
+        def height = field.height?:'auto'
         String attr = field.attr?:""
         return """<v-checkbox
       v-model = "$fldName" 

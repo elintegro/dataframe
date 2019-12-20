@@ -39,25 +39,37 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         this.df = df
     }
 
-    public void addToTemplateScript(script){
-     templateScriptSbf.append(script)
+    public VueJsBuilder addToTemplateScript(script){
+        templateScriptSbf.append(script)
+        return this
     }
 
-    public void addToDataScript(script){
+    public VueJsBuilder addToDataScript(script){
         dataScriptStringbf.append(script)
-
+        return this
     }
 
-    public void addToCreatedScript(script){
+    public VueJsBuilder addToCreatedScript(script){
         createdScriptSbf.append(script)
-
+        this
     }
 
-    public void addToComponentScript(script){
+    public VueJsBuilder addToComputedScript(String script){
+        computedScriptSbf.append(script)
+        this
+    }
+
+    public VueJsBuilder addToWatchScript(String script){
+        watchScriptSbf.append(script)
+        return this
+    }
+
+    public VueJsBuilder addToComponentScript(script){
         componentScriptSbf.append(script)
+        return this
     }
 
-    public void addToMethodScript(script){
+    public VueJsBuilder addToMethodScript(script){
         if(script.trim()){
             methodScriptSbf.append(script)
             def index = script.lastIndexOf(",")
@@ -71,7 +83,25 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
             }
 
         }
+        return this
 
+    }
+
+    public VueJsBuilder addToPropsScript(script){
+        if(script.trim()){
+            propsScriptSbf.append(script)
+            def index = script.lastIndexOf(",")
+            if(index >= 0){
+                def s = script.substring(index+1).trim()
+                if("" != s){
+                    propsScriptSbf.append(",")
+                }
+            }else {
+                propsScriptSbf.append(",")
+            }
+
+        }
+        return this
     }
 
     public String buildTemplateScript(){
@@ -96,10 +126,6 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return sb.toString()
     }
 
-    public void onMount(){
-
-    }
-
     public String buildMethodScript(){
         if(methodScriptSbf.length() == 0){
             return ""
@@ -109,10 +135,6 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         sb.append(methodScriptSbf.toString())
         sb.append("},\n")
         return sb.toString()
-    }
-
-    public void watch(){
-
     }
 
     public String buildComponentScript(){
@@ -126,14 +148,6 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return sb.toString()
     }
 
-    public void addToComputedScript(String script){
-        computedScriptSbf.append(script)
-
-    }
-
-    public void addToWatchScript(String script){
-        watchScriptSbf.append(script)
-    }
 
     public String buildDataScript(){
         StringBuilder sb = new StringBuilder()
@@ -169,21 +183,6 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return computedScriptSbf.toString()
     }
 
-    public void addToPropsScript(script){
-        if(script.trim()){
-            propsScriptSbf.append(script)
-            def index = script.lastIndexOf(",")
-            if(index >= 0){
-                def s = script.substring(index+1).trim()
-                if("" != s){
-                    propsScriptSbf.append(",")
-                }
-            }else {
-                propsScriptSbf.append(",")
-            }
-
-        }
-    }
 
     public String buildPropsScript(){
         if(propsScriptSbf.length() == 0){
@@ -196,20 +195,13 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return sb.toString()
     }
 
-    public void addToPropsAttrString(script){
-      propsAttrString.append(script)
+    public VueJsBuilder addToPropsAttrString(script){
+        propsAttrString.append(script)
+        return this
     }
 
     public String getPropsAttrString(){
-          return propsAttrString.toString()
-    }
-
-    public String createComponent(){
-
-    }
-
-    public String createInstance(){
-
+        return propsAttrString.toString()
     }
 
     public static String createCompRegistrationString(component){
@@ -259,3 +251,4 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return vueStore
     }
 }
+

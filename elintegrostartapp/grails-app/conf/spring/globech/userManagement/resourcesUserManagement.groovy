@@ -14,9 +14,10 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package spring.globech.contactManagement
 import com.elintegro.erf.dataframe.vue.DataframeVue
 
+import grails.util.Holders
 beans {
 
-
+    def contextPath = Holders.grailsApplication.config.rootPath
     vueEmployeeAddDataframe(DataframeVue){ bean ->
 
         bean.parent = dataFrameSuper
@@ -24,7 +25,7 @@ beans {
 
         hql = "select employee.id, employee.positionStart, employee.role, employee.description, employee.person from Employee employee where employee.id=:id"
 
-        ajaxSaveUrl = '/elintegrostartapp/userManagementForm/saveEmployee'
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveEmployee"
 
         dataframeLabelCode = "Employee.Registration"
         //These are values, that overrides the default ones
@@ -55,7 +56,7 @@ beans {
                 ],
                 "employee.role"  :[
                         "widget"        : "ComboboxVue"
-                        ,"name"         : "role"
+                        ,"name"         : "employee.role"
                         ,internationalize: true
                         ,"hql"          : "select role.id as id, role.authority as name from Role as role where isEmployee=true"
 
@@ -85,7 +86,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        componentsToRegister=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = '/elintegrostartapp/userManagementForm/saveContact'
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
         doAfterSave = """
 
                          drfExtCont.saveToStore("vueEmployeeContactDataframe","key", response.nodeId[0]);
@@ -136,7 +137,7 @@ beans {
         doAfterSave = "drfExtCont.saveToStore('vueEmployeeAddDataframe','vueEmployeeAddDataframe_tab_model', 'vueEmployeeAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "/elintegrostartapp/userManagementForm/saveAddress"
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         componentsToRegister = ["vueMapWidgetDataframe"]
         wrapInForm=false
@@ -273,7 +274,7 @@ beans {
                 ],
                 "employee.role"  :[
                         "widget"        : "ComboboxVue"
-                        ,"name"         : "role"
+                        ,"name"         : "employee.role"
                         ,readOnly        : true
                         ,internationalize: true
                         ,"hql"          : "select role.id as id, role.authority as name from Role as role where isEmployee=true"
@@ -325,7 +326,7 @@ beans {
                 ],
                 "employee.role"  :[
                         "widget"        : "ComboboxVue"
-                        ,"name"         : "role"
+                        ,"name"         : "employee.role"
                         ,internationalize: true
                         ,"hql"          : "select role.id as id, role.authority as name from Role as role where isEmployee=true"
 
@@ -355,7 +356,7 @@ beans {
 
         hql = "select provider.id, provider.person, provider.providerType from Provider provider where provider.id=:id"
 
-        ajaxSaveUrl = '/elintegrostartapp/userManagementForm/saveProvider'
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveProvider"
 
         dataframeLabelCode = "Provider.Registration"
         //These are values, that overrides the default ones
@@ -383,7 +384,7 @@ beans {
                 ],
                 "provider.providerType"  :[
                         "widget"        : "ComboboxVue"
-                        ,"name"         : "role"
+                        ,"name"         : "provider.providerType"
                         ,internationalize: true
                         ,"hql"          : "select pType.id as id, pType.name as name from ProviderType as pType"
 
@@ -410,7 +411,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        componentsToRegister=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = '/elintegrostartapp/userManagementForm/saveContact'
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
         doAfterSave = """
 
                          drfExtCont.saveToStore("vueProviderContactDataframe","key", response.nodeId[0]);
@@ -461,7 +462,7 @@ beans {
         doAfterSave = "drfExtCont.saveToStore('vueProviderAddDataframe','vueProviderAddDataframe_tab_model', 'vueProviderAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "/elintegrostartapp/userManagementForm/saveAddress"
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         componentsToRegister = ["vueMapWidgetDataframe"]
         wrapInForm=false
@@ -594,7 +595,7 @@ beans {
                 ],
                 "provider.providerType"  :[
                         "widget"        : "ComboboxVue"
-                        ,"name"         : "providerType"
+                        ,"name"         : "provider.providerType"
                         ,readOnly        : true
                         ,internationalize: true
                         ,"hql"          : "select pType.id as id, pType.name as name from ProviderType as pType"
@@ -637,7 +638,7 @@ beans {
                 ],
                 "provider.providerType"  :[
                         "widget"        : "ComboboxVue"
-                        ,"name"         : "providerType"
+                        ,"name"         : "provider.providerType"
                         ,internationalize: true
                         ,"hql"          : "select pType.id as id, pType.name as name from ProviderType as pType"
 
@@ -663,7 +664,7 @@ beans {
 
         hql = "select vendor.id, vendor.person, vendor.description from Vendor vendor where vendor.id=:id"
 
-        ajaxSaveUrl = '/elintegrostartapp/userManagementForm/saveVendor'
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveVendor"
 
         dataframeLabelCode = "Vendor.Registration"
         //These are values, that overrides the default ones
@@ -711,7 +712,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        componentsToRegister=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = '/elintegrostartapp/userManagementForm/saveContact'
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
         doAfterSave = """
 
                          drfExtCont.saveToStore("vueVendorContactDataframe","key", response.nodeId[0]);
@@ -762,7 +763,7 @@ beans {
         doAfterSave = "drfExtCont.saveToStore('vueVendorAddDataframe','vueVendorAddDataframe_tab_model', 'vueVendorAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "/elintegrostartapp/userManagementForm/saveAddress"
+        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         componentsToRegister = ["vueMapWidgetDataframe"]
         wrapInForm=false

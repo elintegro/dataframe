@@ -225,7 +225,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return "<!--"+ hashId + "-->"
     }
     public static String getHashIdAttribute(String hashId){
-           return " :id=\"" + hashId + "\""
+        return " :id=\"" + hashId + "\""
     }
 
 /*
@@ -277,7 +277,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
 
         def contextPath = Holders.config.images
         def s3ContextPath = Holders.config.aws.s3
-        def baseUrl = Holders.config.baseUrl
+        def baseUrl = Holders.config.grails.serverURL
         String imgUrl =""
         def homeDir = ""
         /*if(System.getProperty("prop_dir")){

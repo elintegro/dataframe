@@ -58,9 +58,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public static final String DOT = ".";
 	public static final String SESSION_PARAM_NAME_PREFIX = "session_"
 	private String currentLanguage = ""
-    List flexGridValues = LayoutVue.defaultGridValues
+	List flexGridValues = LayoutVue.defaultGridValues
 
-    DataframeVue parent
+	DataframeVue parent
 	String dataframeName
 	String dataframeNameLowercase = ""
 	@OverridableByEditor
@@ -77,12 +77,13 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	boolean submitButton = false
 	@OverridableByEditor
 	boolean insertButton = false
+	boolean resetButton = false
 	@OverridableByEditor
 	boolean cancelButton = false
 	@OverridableByEditor
 	boolean wrapInForm = true
 	boolean wrapInDiv = false
-    boolean validateForm = false
+	boolean validateForm = false
 	@OverridableByEditor
 	boolean addButton = false
 	@OverridableByEditor
@@ -92,6 +93,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String doBeforeSave = ""
 	@OverridableByEditor
 	String doAfterSave = ""
+	String doAfterReset = ""
 	String doAfterRefresh = ""
 	@OverridableByEditor
 	String doBeforeDelete = "false" //by default delete is not allowed, unless somebody defined a script to turn it into true
@@ -139,15 +141,15 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String divID
 	String supportJScriptSource
 
+	String contextPath = Holders.grailsApplication.config.rootPath
 	// This is a default to use DataframeController to perform CRUD operations, could be overwritten in Dataframe bean definition to any other controller operation
-	//TODO: instantiate contextPath
-	def ajaxUrl = "/${contextPath}/dataframe/ajaxValues";
-	def ajaxSaveUrl = "/${contextPath}/dataframe/ajaxSave";
-	//def ajaxDeleteUrl = "/${contextPath}/dataframe/ajaxDelete"
-	def ajaxDeleteUrl = "/${contextPath}/dataframe/ajaxDeleteExpire";
-	def ajaxInsertUrl = "/${contextPath}/dataframe/ajaxInsert";
-	def ajaxDefaultUrl = "/${contextPath}/dataframe/ajaxDefaultData";
-	def ajaxCreateUrl ="/${contextPath}/dataframe/ajaxCreateNew"
+	def ajaxUrl = "${contextPath}/dataframe/ajaxValues";
+	def ajaxSaveUrl = "${contextPath}/dataframe/ajaxSave";
+	//def ajaxDeleteUrl = "/ayalon/dataframe/ajaxDelete"
+	def ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire";
+	def ajaxInsertUrl = "${contextPath}/dataframe/ajaxInsert";
+	def ajaxDefaultUrl = "${contextPath}/dataframe/ajaxDefaultData";
+	def ajaxCreateUrl ="${contextPath}/dataframe/ajaxCreateNew"
 	@OverridableByEditor
 	Map dataframeButtons = [:];
 	@OverridableByEditor
@@ -158,7 +160,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	def ajaxDynamicSelectionBuildUrl
 
 	//TODO: This should be removed to the Widget class!
-	def ajaxjQTreeLoadUrl = "/dataframe/ajaxjQTreeLoad"
+	def ajaxjQTreeLoadUrl = "${contextPath}/dataframe/ajaxjQTreeLoad"
 
 	//this String URL is to refresh when updating dataframe
 	//def dataFrameParamsToRefresh = null
@@ -221,6 +223,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	boolean componentRegistered = false //Set once the component is registered
 	boolean createStore = true
 	boolean putFillInitDataMethod = false
+	String externalTemplateId = ""
 	Map<String, String> vueStore = new HashMap<String, String>();//For creating vue store
 	StringBuilder stateStringBuilder = new StringBuilder()// Remove after enchancing vueStore implementation
 	Map onClick = new HashMap() //For onCLick on the surface of dataframe
@@ -228,21 +231,26 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	List flexGridValuesForSaveButton = []
 	String layoutForSaveButton = ""
 	List flexGridValuesForInsertButton = []
+	List flexGridValuesForResetButton = []
 	List flexGridValuesForCancelButton = []
 	List flexGridValuesForDeleteButton = []
 	String layoutForInsertButton = ""
+	String layoutForResetButton = ""
 	String layoutForCancelButton = ""
 	String layoutForDeleteButton=""
 	String saveButtonAttr = ""
 	String saveButtonAlignment
+	String insertButtonAlignment
 	String insertButtonAttr = ""
-    String cancelButtonAttr = ""
+	String resetButtonAlignment
+	String resetButtonAttr = ""
+	String cancelButtonAttr = ""
 	String deleteButtonAttr = ""
 	String vueSaveVariablesScriptString = ""
 	boolean wrapButtons = true
-    // For vue store
-	VueJsBuilder vueJsBuilder
-    private Map vueStoreScriptMap
+	// For vue store
+	private VueJsBuilder vueJsBuilder
+	private Map vueStoreScriptMap
 	@OverridableByEditor
 	boolean initOnVueComponentLoad = true
 	/*private void createVueJsEntityObj(){
@@ -278,10 +286,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(fields.size()==0){
 			buildCustomWidgets()
 		}
-
-        if(!vueJsBuilder){
-			vueJsBuilder = new VueJsBuilder(this)
-		}
+		vueJsBuilder = new VueJsBuilder(this)
 	}
 
 
@@ -812,8 +817,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(vueSaveVariablesScriptString.isEmpty()){
 			vueSaveVariablesScriptString = vueSaveVariables.toString()
 		}
+		checkComponentsToRegister()
 //        StringBuilder remainingButtons = new St
-        addButtonsToDataframe(resultPageHtml, vueJsBuilder, buttonHtmlStringBuilder, refDataframeHtmlStringBuilder, keyFieldNames, vueSaveVariables.toString(), vueFileSaveVariables.toString(), new StringBuilder()) //Adding bbuttons to dataframe
+		addButtonsToDataframe(resultPageHtml, vueJsBuilder, buttonHtmlStringBuilder, refDataframeHtmlStringBuilder, keyFieldNames, vueSaveVariables.toString(), vueFileSaveVariables.toString(), new StringBuilder()) //Adding bbuttons to dataframe
 
 		if(!onClick.isEmpty()){
 			refDataframeHtmlStringBuilder.append(dataframeView.getRefDataframeHtmlForOnClick(onClick, vueJsBuilder))
@@ -902,9 +908,24 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return [fieldLayout, fieldCount]
 	}
 
-    public VueJsBuilder getVuejsBuilder(){
+	public VueJsBuilder getVueJsBuilder(){
 		return vueJsBuilder
 	}
+	private void checkComponentsToRegister(){
+
+		if(!componentsToRegister.isEmpty()){
+			for(String compS : componentsToRegister){
+				if(compS.isEmpty()) continue
+
+				if(!embeddedDataframes.contains(compS)){
+					embeddedDataframes.add(compS)
+				}
+				vueJsBuilder.addToComponentScript(VueJsBuilder.createCompRegistrationString(compS))
+				ResultPageHtmlBuilder.registeredComponents.add(compS)
+			}
+		}
+	}
+
 	private addButtonsToDataframe(StringBuilder resultHtml, VueJsBuilder vueJsBuilder, StringBuilder buttonHtmlStringBuilder, StringBuilder refDataframeHtmlStringBuilder, List<String> keyFieldNames, String vueSaveVariables, String vueFileSaveVariables, StringBuilder remainingButtons){
 
 		if(ajaxSaveUrl){
@@ -917,8 +938,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 //				buttonHtmlStringBuilder.append(applyLayoutForButton("<v-btn type='button' class='text-capitalize' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr>${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString))     // TODO  i18n
 				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $saveButtonAlignment' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr>${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString)     // TODO  i18n
 				vueJsBuilder.addToMethodScript(getSaveDataScript(this, vueSaveVariables, vueFileSaveVariables))
-			    this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "saveButton", btnScript)
-            }
+				this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "saveButton", btnScript)
+			}
 		}
 		if(ajaxInsertUrl){
 			if(insertButton){
@@ -926,12 +947,25 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				List gridvaluesInsert = flexGridValuesForInsertButton?:LayoutVue.defaultButtonGridValues
 				String insertGridValueString = LayoutVue.convertListToString(gridvaluesInsert)
 
+				String insertButtonAlignment = insertButtonAlignment?:"left"
 				String insertButtonLabel = messageSource.getMessage("${dataframeName}.button.insert", null, messageSource.getMessage("button.insert", null, "Insert", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
 				//buttonHtmlStringBuilder.append(applylayoutforbutton("<v-btn type='button' class='text-capitalize' id='$dataframename-insert' @click='${dataframename}_insert' $insertbuttonattr>${insertbuttonlabel}</v-btn>\n", layoutforinsertbutton, insertgridvaluestring))
-				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize' id='$dataframeName-insert' @click='${dataframeName}_insert' $insertButtonAttr>${insertButtonLabel}</v-btn>\n", layoutForInsertButton, insertGridValueString)
-				vueJsBuilder.addToMethodScript(getInsertScript(this, keyFieldNames))
+				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $insertButtonAlignment' id='$dataframeName-insert' @click='${dataframeName}_insert' $insertButtonAttr>${insertButtonLabel}</v-btn>\n", layoutForInsertButton, insertGridValueString)
+				vueJsBuilder.addToMethodScript(getResetScript(this, keyFieldNames))
 				this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "insertButton", btnScript)
 			}
+		}
+		if(resetButton){
+			String resetButtonAttr = resetButtonAttr?:""
+			List gridvaluesReset = flexGridValuesForResetButton?:LayoutVue.defaultButtonGridValues
+			String resetGridValueString = LayoutVue.convertListToString(gridvaluesReset)
+
+			String resetButtonAlignment = resetButtonAlignment?:"left"
+			String resetButtonLabel = messageSource.getMessage("${dataframeName}.button.reset", null, messageSource.getMessage("button.reset", null, "Reset", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
+			//buttonHtmlStringBuilder.append(applylayoutforbutton("<v-btn type='button' class='text-capitalize' id='$dataframename-insert' @click='${dataframename}_insert' $insertbuttonattr>${insertbuttonlabel}</v-btn>\n", layoutforinsertbutton, insertgridvaluestring))
+			String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $resetButtonAlignment' id='$dataframeName-reset' @click='${dataframeName}_reset' $resetButtonAttr>${resetButtonLabel}</v-btn>\n", layoutForResetButton, resetGridValueString)
+			vueJsBuilder.addToMethodScript(getResetScript(this, keyFieldNames))
+			this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "resetButton", btnScript)
 		}
 		if(cancelButton){
 			String cancelButtonAttr = cancelButtonAttr?:" left"
@@ -944,7 +978,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 		if(ajaxDeleteUrl){
 			if(deleteButton){
-                String deleteButtonAttr = deleteButtonAttr?:" left"
+				String deleteButtonAttr = deleteButtonAttr?:" left"
 				List gridValuesDelete = flexGridValuesForDeleteButton?:LayoutVue.defaultButtonGridValues
 				String deleteGridValueString = LayoutVue.convertListToString(gridValuesDelete)
 				String deleteButtonLabel = messageSource.getMessage("${dataframeName}.button.delete", null, messageSource.getMessage("button.delete", null, "Delete", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
@@ -985,12 +1019,13 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	private void constructVueComponent(VueJsBuilder vueJsBuilder, String dfrHtml){
 		VueJsEntity vueJsEntity = getvueJsEntity(dataframeName+"_script")// get Bbean name for vue js Entity
 
-		vueJsBuilder.addToTemplateScript(dfrHtml)
+		externalTemplateId?vueJsBuilder.addToTemplateScript("#$externalTemplateId"):vueJsBuilder.addToTemplateScript(dfrHtml)
 		vueJsBuilder.addToDataScript("namedParamKey:'',\n params:{},\n")
 		if(tab){
 			vueJsBuilder.addToDataScript("${dataframeName}_tab_model : this.tabValue,\n")
-			vueJsBuilder.addToComputedScript(""" tabValue(){return this.\$store.state.${dataframeName}.${dataframeName}_tab_model},\n""")
-            vueJsBuilder.addToWatchScript(""" tabValue:{handler: function(val, oldVal) {this.${dataframeName}_tab_model = val;}},\n""")
+					.addToComputedScript(""" tabValue(){return this.\$store.state.${dataframeName}.${dataframeName}_tab_model},\n""")
+					.addToWatchScript(""" tabValue:{handler: function(val, oldVal) {this.${dataframeName}_tab_model = val;}},\n""")
+					.addToMethodScript(""" tabClicked:function(){${putFillInitDataMethod?"this.${dataframeName}_fillInitData();":""}},\n""")
 		}
 		if(vueJsEntity.data){
 			vueJsBuilder.addToDataScript(vueJsEntity.data)
@@ -1001,15 +1036,16 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vueJsBuilder.addToPropsScript(vueJsEntity.props)
 
 		}
-		if(!componentsToRegister.isEmpty()){
-			for(String compS : componentsToRegister){
-				vueJsBuilder.addToComponentScript(VueJsBuilder.createCompRegistrationString(compS))
-				ResultPageHtmlBuilder.registeredComponents.add(compS)
-			}
-		}
 		addVueComponents(vueJsBuilder)
 
 		vueJsBuilder.addToCreatedScript("${dataframeName}Var = this;\n")
+				.addToComputedScript("""
+                                      checkResetFormProp: function(){
+                                                  if(this.\$props.resetForm){
+                                                      this.\$refs.${dataframeName}_form.reset()
+                                                  }
+                                     },
+""")
 
 		if(vueJsEntity.created){
 			vueJsBuilder.addToCreatedScript(vueJsEntity.created)
@@ -1021,9 +1057,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vueJsBuilder.addToWatchScript(vueJsEntity.watch)
 		}
 		vueJsBuilder.addToMethodScript("""
-                                      verifyInitDfr: function(){
-                                                  
-                                       },
                                      closeDataframe: function(){
                                           console.log("${dataframeName} dataframe close button.");
                                        if(this.\$store.state.dataframeShowHideMaps){
@@ -1058,7 +1091,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(route){
 			allParamsSb.append("allParams['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
 		}else{
-				allParamsSb.append("""allParams["$namedParamKey"] = eval(this.namedParamKey);\n""")
+			allParamsSb.append("""allParams["$namedParamKey"] = eval(this.namedParamKey);\n""")
 		}
 		if(!ajaxUrlParams.isEmpty()){
 			for(Map.Entry entry: ajaxUrlParams){
@@ -1152,7 +1185,7 @@ updateStoreState: function(response, stateVar){
 		if(embeddedDataframes.size()>0){
 			embeddedDataframes.each{
 				if(it.trim() != ""){
-					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it}_ref")){for(var a in this.\$refs.${it.toLowerCase()}_ref.\$data){\n
+					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it}_ref") && this.\$refs.${it}_ref){for(var a in this.\$refs.${it}_ref.\$data){\n
                                               var dashA = a.split('_').join('-');
                                               allParams[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
 				}
@@ -1207,7 +1240,7 @@ updateStoreState: function(response, stateVar){
 
                },\n"""
 	}
-	private String getInsertScript(df, List<String> keyFieldNames){
+	public String getResetScript(df, List<String> keyFieldNames){
 
 		String dataframeName = df.dataframeName
 		StringBuilder embdDfrs = new StringBuilder("")
@@ -1218,27 +1251,29 @@ updateStoreState: function(response, stateVar){
 				}
 			}
 		}
-        StringBuilder keyFieldNamesInsertBuilder = new StringBuilder()
-        keyFieldNames.each {
-            keyFieldNamesInsertBuilder.append("""this.${convertToDataVariableFromat(it)} = null;\n""")
-        }
+		StringBuilder keyFieldNamesInsertBuilder = new StringBuilder()
+		keyFieldNames.each {
+			keyFieldNamesInsertBuilder.append("""this.${convertToDataVariableFromat(it)} = null;\n""")
+		}
 		return """
                
-              ${dataframeName}_insert: function(){
+              ${dataframeName}_reset: function(){
                  this.\$refs.${dataframeName}_form.reset()
                  var embdDfrs = []
                  ${embdDfrs.toString()}
                  if(embdDfrs){
                     for(var em in embdDfrs){
                          var emS = embdDfrs[em] + "_ref"
+                         var emF = embdDfrs[em] + "_form"
                           
                          for(var a in eval("this.\$refs."+emS+".\$data")){
-                              eval("this.\$refs."+emS+".\$data")[a]=""
+                              eval("this.\$refs."+emS+".\$refs."+emF).reset();
                           }
                      }
                  }
                 ${keyFieldNamesInsertBuilder.toString()}  
-              
+                $doAfterReset 
+             
                },\n"""
 	}
 
@@ -1296,15 +1331,16 @@ updateStoreState: function(response, stateVar){
 
 	}
 
-    public void createVueStore(VueJsBuilder vueJsBuilder){
-        VueStore vStore = vueJsBuilder.getVueStore()
+	public void createVueStore(VueJsBuilder vueJsBuilder){
+		VueStore vStore = vueJsBuilder.getVueStore()
 		Map initValues = this.vueStore
 		if(initValues && initValues.state){
 			vStore.addToState(initValues.state)
 		}
 
 		vStore.addToState("key:''\n,")
-    }
+		vStore.addToState("doRefresh: ''\n,")
+	}
 
 	public List getKeyFieldNameForNamedParameter(df){
 		List<String> keyFieldNames = new ArrayList<>()
@@ -1331,21 +1367,21 @@ updateStoreState: function(response, stateVar){
 		String attr = btn.attr?:""
 		String layout = btn.layout?:""
 		String classNames = btn.classNames?:""
-        String height = ""
-        String width = ""
+		String height = ""
+		String width = ""
 		List flexGridValues = btn.flexGridValues?:LayoutVue.defaultButtonGridValues
 
-        if(btn.image){
-            height = btn.image?.height?:50
-            width = btn.image?.width?:75
+		if(btn.image){
+			height = btn.image?.height?:50
+			width = btn.image?.width?:75
 
-        }
-        String imgUrl = btn.image?.url? messageSource.getMessage(btn.image.url, null, buttonLabel, LocaleContextHolder.getLocale()):""
-        if ("link".equals(btn.type)) {
+		}
+		String imgUrl = btn.image?.url? messageSource.getMessage(btn.image.url, null, buttonLabel, LocaleContextHolder.getLocale()):""
+		if ("link".equals(btn.type)) {
 			btnString=" <v-btn href='${btn.url}' class='text-capitalize $classNames' flat id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr>${buttonLabel}</v-btn>\n"
 		}else if("image".equals(btn.type)){
-            btnString=" <input type='image' src='$imgUrl' id='$dataframeName-${btn.name}' alt='${buttonLabel}' @click.prevent='${dataframeName}_${btn.name}' $attr height='$height' width='$width' />\n"
-        }else{
+			btnString=" <input type='image' src='$imgUrl' id='$dataframeName-${btn.name}' alt='${buttonLabel}' @click.prevent='${dataframeName}_${btn.name}' $attr height='$height' width='$width' />\n"
+		}else{
 			if(btn.image && btn.image.showIcon){
 				btnString=""" <v-btn ${WidgetVue.toolTip(btn)} class='text-capitalize $classNames' type='button' id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr><img height="${btn.image.height ?: 20}" width="${btn.image.width ?: 25}" src="$imgUrl"/></v-btn>\n"""
 			}else{
@@ -1799,3 +1835,4 @@ updateStoreState: function(response, stateVar){
 	}
 */
 }
+
