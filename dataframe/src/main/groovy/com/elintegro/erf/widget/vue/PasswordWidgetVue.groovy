@@ -29,6 +29,7 @@ class PasswordWidgetVue extends WidgetVue {
         def disabled = field.disabled == null? false : field.disabled;
         def width = field.width?:'auto'
         def height = field.height?:'30px'
+        String attr = field.attr?:""
 //        disabled = (fldMetadata.pk == true)? true: disabled;
         String errorMessageCode = field.errMessageCode?:"password.validation.message"
         String errorMessage = getMessageSource().getMessage(errorMessageCode, null, errorMessageCode, LocaleContextHolder.getLocale())
@@ -46,6 +47,7 @@ class PasswordWidgetVue extends WidgetVue {
             @click:append="${fldName}_show = !${fldName}_show"
             ${toolTip(field)}
             style="width:$width; height:$height;"
+            $attr
           ></v-text-field>"""
         if(field?.layout){
             html = applyLayout(dataframe, field, html)

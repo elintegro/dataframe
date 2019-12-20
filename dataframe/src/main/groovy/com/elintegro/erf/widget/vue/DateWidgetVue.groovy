@@ -18,6 +18,7 @@ import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 
+import org.springframework.context.i18n.LocaleContextHolder
 /**
  * Created by kchapagain on Oct, 2018.
  */
@@ -33,6 +34,7 @@ class DateWidgetVue extends WidgetVue {
         String label = field.label + mandatory
         def height = field.height?:'auto'
         String attr = field.attr?:""
+        String dateFormatPlaceholder = getMessageSource().getMessage("date.format.hint", null, "date.format.hint", LocaleContextHolder.getLocale())
         String readonly = field.readOnly?"":""
         return """
                     <v-menu
@@ -53,7 +55,7 @@ class DateWidgetVue extends WidgetVue {
                             label="$label"
                             ${validate?":rules = '${fldName}_rule'":""}
 
-                            hint="MM/DD/YYYY format"
+                            hint="$dateFormatPlaceholder"
                             persistent-hint
                             prepend-icon="event"
                             $readonly
@@ -69,7 +71,7 @@ class DateWidgetVue extends WidgetVue {
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
-       dataframe.getVuejsBuilder().addToMethodScript("""formatDate: function(date) {
+        dataframe.getVueJsBuilder().addToMethodScript("""formatDate: function(date) {
                if (!date) return null;
                var d = new Date(date);
                this.$dataVariable = d.toISOString();
@@ -81,7 +83,7 @@ class DateWidgetVue extends WidgetVue {
                                   var al = `\${year}-\${month.padStart(2, '0')}-\${day.padStart(2, '0')}`
                                   return al
                              },\n""")
-        dataframe.getVuejsBuilder().addToComputedScript(""" 
+        dataframe.getVueJsBuilder().addToComputedScript(""" 
         ${dataVariable}_formatted() {
             if (!this.$dataVariable) return null;
             var d = new Date(this.$dataVariable);

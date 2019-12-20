@@ -86,6 +86,13 @@ class MultiSelectComboboxVue extends WidgetVue {
         return """allParams["$thisFieldName"] = drfExtCont.mapStringify(this.$dataVariable, '$valueMember'),\n"""
     }
 
+    String getVueSaveVariables(DataframeVue dataframe, Map field) {
+        String valueMember = field.valueMember?:"id"
+        String dataVariable = dataframe.getDataVariableForVue(field)
+        String thisFieldName = dataframe.getFieldId(field)
+        return """allParams['$thisFieldName'] = drfExtCont.mapStringify(this.$dataVariable, '$valueMember'); \n"""
+    }
+
     public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){
         Map result=[:]
         Dataframe df = dfInst.df;

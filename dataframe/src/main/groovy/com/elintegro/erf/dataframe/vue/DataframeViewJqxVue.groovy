@@ -123,12 +123,10 @@ public class DataframeViewJqxVue implements DataframeView {
         vueJsBuilder.addToDataScript("${refDataframeName}_display : false,\n")
         vueJsBuilder.addToDataScript(" ${refDataframeName}_data:{key:''},\n")
 
-        if(dataframeName == "vueTenantDataframe"){
-            println "hello"
-        }
         if(dfButton.showAsDialog){
-            resultPageHtml.append("""<v-dialog v-model="${refDataframeName}_display" width='initial' max-width='500px'>""")
-            resultPageHtml.append(refDataframe.getComponentName(""))
+            resultPageHtml.append("""<v-dialog v-model="${refDataframeName}_display" width='initial' max-width='800px'>""")
+            resultPageHtml.append(refDataframe.getComponentName("resetForm=true"))
+//            resultPageHtml.append("""<component :is='${refDataframeName.toLowerCase()}' ref='${refDataframeName.toLowerCase()}_ref' :${refDataframeName}_prop="${refDataframeName}_data" :key='randomKey'></component>""")
             resultPageHtml.append("""</v-dialog>""")
         } else if(dfButton.showAsMenu && dfButton.showAsMenu.attr){
             String attr = dfButton.showAsMenu.attr?:"left"
@@ -138,7 +136,7 @@ public class DataframeViewJqxVue implements DataframeView {
             resultPageHtml.append("""</v-menu>""")
         }else{
             resultPageHtml.append("""<div v-show="${refDataframeName}_display " max-width="500px">""")
-            resultPageHtml.append(refDataframe.getComponentName(""))
+            resultPageHtml.append(refDataframe.getComponentName(":key='randomKey'"))
             resultPageHtml.append("""</div>""")
         }
         //Add computed and watch scripts for dialog box
@@ -146,6 +144,7 @@ public class DataframeViewJqxVue implements DataframeView {
         String watchScript = """check${refDataframeName}CloseButton:{handler: function(val, oldVal) {
                                this.${refDataframeName}_display = this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display;}}, \n """
 
+        vueJsBuilder.addToComputedScript("""randomKey: function(){drfExtCont.generateRandom();},\n""")
         vueJsBuilder.addToComputedScript(computedScript)
         vueJsBuilder.addToWatchScript(watchScript)
 

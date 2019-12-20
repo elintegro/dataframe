@@ -39,11 +39,11 @@ class ComboboxVue extends WidgetVue {
         String validate = field?.validate
         def disabled = field.disabled == null? false : field.disabled
         def search = field?.search
-        String displayMember = field.displayMember
+        String displayMember = field.displayMember?:'name'
         String onSelect = ""
         if(field.onSelect && field.onSelect.methodScript ){
             onSelect = " @change='${dataframe.dataframeName}_onSelect' "
-            dataframe.getVuejsBuilder().addToMethodScript("""${dataframe.dataframeName}_onSelect: function(e){
+            dataframe.getVueJsBuilder().addToMethodScript("""${dataframe.dataframeName}_onSelect: function(e){
                             $field.onSelect.methodScript
              },\n """)
         }
@@ -73,28 +73,96 @@ class ComboboxVue extends WidgetVue {
         String fieldnameToReload = dataVariable.replace("_", ".")
         def search = field?.search
 
-        String wdgHql = field?.hql
+        String domainAlias= Dataframe.getDataFrameDomainAlias(fieldnameToReload)
         List resultList = []
         List keys = []
-        if(wdgHql){
-            resultList = dataframe.getHqlResult(wdgHql)
-        }
-        List res = new ArrayList(resultList.size())
+        List res
+        def selMap= [:]
         String valueMember = field.valueMember?:"id"
         String displayMember = field.displayMember?:"name"
-        if(field.internationalize){
-            resultList.each {
-                Map value1 = ["$valueMember":it.getAt("id"), "$displayMember":getMessageSource().getMessage(it.getAt("$displayMember"), null, it.getAt("$displayMember"), LocaleContextHolder.getLocale())]
-                res.push(value1)
+        if (domainAlias && dataframe.writableDomains) {
+            Map domain = dataframe.writableDomains.get(domainAlias)
+            def queryDomain = DataframeInstance.getPersistentEntityFromDomainMap(domain)
+            String simpleFieldName = Dataframe.extractSimpleFieldName(dataframe.dataframeName,fieldnameToReload,domainAlias)
+            if (simpleFieldName) {
+
+                def prop = queryDomain.getPropertyByName(simpleFieldName)
+                String defaultValue = field.defaultValue
+                if(field.isEnumType){
+                    if(field.enumClassName){
+                        try {
+                            Class enumClass = Class.forName(field.enumClassName)
+                            def exClass = Holders.grailsApplication.getClassForName(field.enumClassName)
+                            keys = enumClass.getTypes()
+                            res = new ArrayList(keys.size())
+                            keys.each {
+                                String displayValue = it
+                                if(field.internationalize){
+                                    displayValue = getMessageSource().getMessage(it, null, it, LocaleContextHolder.getLocale())
+                                }
+                                Map prepEnum = ["$valueMember":it, "$displayMember":displayValue]
+                                if (defaultValue && defaultValue.equals(it)){
+                                    selMap = prepEnum
+                                }
+                                res.push(prepEnum)
+                            }
+                            field.put("isEnumType", true)
+                        } catch(ClassNotFoundException e){
+                            e.printStackTrace()
+                        }
+                    }
+                } else {
+
+                    if(dataframe.metaFieldService.isEnumType(prop)){
+                        def enumClass = prop.type
+//                    res = enumClass.getDescs()
+                        keys = enumClass.getTypes()
+                        res = new ArrayList(keys.size())
+                        keys.each {
+                            String displayValue = it
+                            if(field.internationalize){
+                                displayValue = getMessageSource().getMessage(it, null, it, LocaleContextHolder.getLocale())
+                            }
+                            Map prepEnum = ["$valueMember":it, "$displayMember":displayValue]
+                            if (defaultValue && defaultValue.equals(it)){
+                                selMap = prepEnum
+                            }
+                            res.push(prepEnum)
+                        }
+                        field.put("isEnumType", true)
+                    } else {
+
+                        String wdgHql = field?.hql
+                        if(wdgHql){
+                            resultList = dataframe.getHqlResult(wdgHql)
+                        }
+                        res = new ArrayList(resultList.size())
+                        if(field.internationalize){
+                            resultList.each {
+                                def displayMemberValue = it.getAt("$displayMember")
+                                Map value1 = ["$valueMember":it.getAt("id"), "$displayMember":getMessageSource().getMessage(displayMemberValue, null, displayMemberValue, LocaleContextHolder.getLocale())]
+                                if (defaultValue && defaultValue.equals(displayMemberValue)){
+                                    selMap = value1
+                                }
+                                res.push(value1)
+                            }
+                        }else {
+                            res = resultList
+                        }
+                    }
+                }
             }
-        }else {
-            res = resultList
         }
         /*if (field.isEnumType) {
             resultList = enumClass.getDescs()
             keys = enumClass.getTypes()
         }*/
-        return """$dataVariable:\"\",\n
+        dataframe.getVueJsBuilder().addToWatchScript("""$dataVariable: function(e){
+                        if(e){
+                            drfExtCont.saveToStore("${dataframe.dataframeName}","$dataVariable",e.$valueMember?e.$valueMember:'' )
+                        }
+             },\n """)
+        return """$dataVariable:${selMap?selMap as JSON:"\"\""},\n
                   ${dataVariable}_items:${res as JSON} ,\n
                   ${dataVariable}_keys:${keys as JSON},\n
                   ${search?"${dataVariable}_search:null,\n":""}"""
@@ -128,11 +196,11 @@ class ComboboxVue extends WidgetVue {
         String dataVariable = dataframe.getDataVariableForVue(field)
         String thisFieldName = dataframe.getFieldId(field)
         boolean isEnumType = field?.isEnumType
-        if (isEnumType || field?.dictionary){
-            super.getVueSaveVariables(dataframe, field)
-        }else {
-            return """allParams['$thisFieldName'] = this.$dataVariable.$valueMember; \n"""
-        }
+//        if (isEnumType || field?.dictionary){
+//            super.getVueSaveVariables(dataframe, field)
+//        }else {
+        return """allParams['$thisFieldName'] = this.$dataVariable.$valueMember; \n"""
+//        }
     }
 
     public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){
@@ -141,9 +209,9 @@ class ComboboxVue extends WidgetVue {
         Map fieldProps = df.fields.get(fieldnameToReload)
 
         String wdgHql = fieldProps?.hql
-        ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory);
 
         if(wdgHql){
+            ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory);
             DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);
             List resultList = dbRes.getResultList()
             List res = new ArrayList(resultList.size())

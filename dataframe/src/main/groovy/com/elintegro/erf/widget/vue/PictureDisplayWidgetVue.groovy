@@ -55,7 +55,7 @@ class PictureDisplayWidgetVue extends WidgetVue{
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
 
-       String imgUrl =  getImageUrl(field)
+        String imgUrl =  getImageUrl(field)
         String defImgUrl = getDefaultImageName()
         return """this.$dataVariable = response['$key']?"$imgUrl"+response['$key']:"$defImgUrl";\n
                   this.${dataVariable}_alt = response['$key']?response['$key']:"$defImgUrl";"""
