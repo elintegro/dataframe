@@ -476,7 +476,7 @@ class LayoutVue extends Layout {
     private static String addNavigationPanel(resultPage){
         String toolbarTitle = wrapWithTag("<v-toolbar-title>","class='display-3'","Globe Chalet")
         String toolBarWrapper = wrapWithTag("<v-toolbar>","prominent extended",toolbarTitle)
-        String wrapWithCard = wrapWithTag("<v-card>","color='grey lighten-4' flat height='200px' tile",toolBarWrapper)
+        String wrapWithCard = wrapWithTag("<v-card>","color='grey lighten-4' text height='200px' tile",toolBarWrapper)
         resultPage.insert(0,wrapWithCard)
     }
 

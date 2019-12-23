@@ -11,12 +11,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Elintegro Start App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/elintegrostartapp/assets/vuejs/tooltip.css?compile=false"/>
-    <script type="text/javascript" src="/elintegrostartapp/assets/jquery/jquery-1.11.2.js?compile=false"></script>
-    <script type="text/javascript" src="/elintegrostartapp/assets/jquery/dateformat.js?compile=false"></script>
-    <link rel="stylesheet" href="/elintegrostartapp/assets/vuejs/vue-material.css?compile=false"/>
-    <link rel="stylesheet" href="/elintegrostartapp/assets/vuejs/vuetify.min.css?compile=false"/>
-    <link rel="stylesheet" href="/elintegrostartapp/assets/vuejs/gc-vue.css?compile=false"/>
+    <link rel="stylesheet" href="/assets/vuejs/tooltip.css?compile=false"/>
+    <script type="text/javascript" src="/assets/jquery/jquery-1.11.2.js?compile=false"></script>
+    <script type="text/javascript" src="/assets/jquery/dateformat.js?compile=false"></script>
+    <link rel="stylesheet" href="/assets/vuejs/vue-material.css?compile=false"/>
+    <link rel="stylesheet" href="/assets/vuejs/vuetify.min.css?compile=false"/>
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/assets/vuejs/gc-vue.css?compile=false"/>
 </head>
 <body>
 <style>
@@ -25,8 +26,12 @@
 }
 
 .v-table__overflow {
-    overflow-x: inherit;
+    /*overflow-x: inherit;*/
     overflow-y: inherit;
+}
+
+.hidden {
+    display: none;
 }
 </style>
 <div id="dfr"></div>
@@ -35,107 +40,46 @@
         <sectionLayout/>
     </v-app>
 </div>
-<script type="text/javascript" src="/elintegrostartapp/assets/vuejs/vue.js?compile=false"></script>
-<script type="text/javascript" src="/elintegrostartapp/assets/vuejs/vuetify.js?compile=false"></script>
-<script type="text/javascript" src="/elintegrostartapp/assets/vuejs/vue-router.js?compile=false"></script>
+<script type="text/javascript" src="/assets/vuejs/vue.js?compile=false"></script>
+<script type="text/javascript" src="/assets/vuejs/vuetify.js?compile=false"></script>
+<script type="text/javascript" src="/assets/vuejs/vue-router.js?compile=false"></script>
+<script type="text/javascript" src="/assets/vuejs/vuex.js?compile=false"></script>
 <!--asset:javascript src="vuejs/vue-spring-security.min.js"/-->
 <!--script type="text/javascript" src="https://unpkg.com/vue-spring-security"></script-->
+<script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
 <script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/v-tooltip"></script>
-<script type="text/javascript" src="/elintegrostartapp/assets/vuejs/v-dataframe.min.js?compile=false"></script>
+<script type="text/javascript" src="/assets/vuejs/v-eutil.min.js?compile=false"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAAxHUhrxxl_2ZSpVtGeMX-1Fs83tunNU"></script>
-<script type="text/javascript" src="/elintegrostartapp/assets/erf/erfVueController.js?compile=false"></script>
-<script type="text/javascript" src="/elintegrostartapp/assets/vuejs/vuex.js?compile=false"></script>
+<script type="text/javascript" src="/assets/erf/erfVueController.js?compile=false"></script>
+<script type="text/javascript" src="/assets/vuejs/vuex.js?compile=false"></script>
 <script>
     let store = new Vuex.Store({
         state: {
             dataframeShowHideMaps: {},
-            vueInitDataframe: {
-                loggedIn: false,
-                key: '',
-            },
             vueTechnologiesDataframe: {
                 key: '',
+                doRefresh: '',
             },
             vueElintegroNavigationButtonDataframe: {
                 key: '',
+                doRefresh: '',
             },
             vueElintegroLogoDataframe: {
                 key: '',
+                doRefresh: '',
             },
             vueElintegroBannerDataframe: {
                 key: '',
+                doRefresh: '',
             },
             dataframeBuffer: {},
         },
         mutations: {},
     })
-    Vue.component('vueInitDataframe', {
-        name: 'vueInitDataframe',
-        template: `<div><v-flex xs12 sm12 md12 lg12 xl12><v-form  ref='vueInitDataframe_form'><v-container grid-list-xl fluid><v-layout wrap>
- <div id='vueInitDataframe-errorContainer'></div>
-</v-layout></v-container></v-form></v-flex>
-<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row justify-center wrap pa-2>
-</v-layout></v-container></v-card-actions>
- <font color='red'><div id='vueInitDataframe-errorContainer'></div></font>
-</div>`,
-        data: function() {
-            return {
-                namedParamKey: '',
-                params: {},
-            }
-        },
-        props: ['vueInitDataframe_prop', ],
-        created() {
-            vueInitDataframeVar = this;
-            this.checkIfPopupWindow();
-            this.setInitPageValues();
-        },
-        methods: {
-
-            verifyInitDfr: function() {
-            },
-            closeDataframe: function() {
-                console.log("vueInitDataframe dataframe close button.");
-                if (this.$store.state.dataframeShowHideMaps) {
-                    Vue.set(this.$store.state.dataframeShowHideMaps, "vueInitDataframe_display", false);
-                }
-            },
-            checkIfPopupWindow: function() {
-                var url = window.location.href;
-                //                           var t = url.searchParams.get("reloadPage");
-                //                           if(url){
-                //                               window.opener.location.reload();
-                //                               close();
-                //                           }
-            },
-            setInitPageValues: function(data) {
-
-                axios.get('/elintegrostartapp/login/getUserInfo').then(function(responseData) {
-                    drfExtCont.saveToStore("vueInitDataframe", "key", '');
-                    drfExtCont.saveToStore("vueProfileMenuDataframe", "key", '');
-                    drfExtCont.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
-                    drfExtCont.saveToStore("loggedIn", responseData.data.loggedIn);
-                    //                                                     vueInitDataframeVar.$store.state.vueInitDataframe = responseData.data;
-                    //                                                     Vue.set(vueInitDataframeVar.$store.state.vueInitDataframe, "key", '');
-                    //                                                     Vue.set(vueInitDataframeVar.$store.state.vueProfileMenuDataframe, "key", '');
-                    var loggedIn = responseData.data.loggedIn
-                    //                                                     vueInitDataframeVar.$store.state.loggedIn = loggedIn;
-                    var urlLocation = window.location.href;
-                    if (loggedIn == false) {//                                                        vueInitDataframeVar.$router.push("/");this.location.reload();
-                    }
-
-                }).catch(function(error) {
-                    console.log(error);
-                });
-            },
-
-        },
-    })
-
     Vue.component('vueTechnologiesDataframe', {
         name: 'vueTechnologiesDataframe',
         template: `<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' ><v-toolbar dark color="light-blue darken-2"><v-toolbar-title></v-toolbar-title>
@@ -283,10 +227,17 @@
         created() {
             vueTechnologiesDataframeVar = this;
         },
+        computed: {
+
+            checkResetFormProp: function() {
+                if (this.$props.resetForm) {
+                    this.$refs.vueTechnologiesDataframe_form.reset()
+                }
+            },
+
+        },
         methods: {
 
-            verifyInitDfr: function() {
-            },
             closeDataframe: function() {
                 console.log("vueTechnologiesDataframe dataframe close button.");
                 if (this.$store.state.dataframeShowHideMaps) {
@@ -298,14 +249,18 @@
 
     Vue.component('vueElintegroNavigationButtonDataframe', {
         name: 'vueElintegroNavigationButtonDataframe',
-        template: `<v-flex><v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row justify-center  pa-2>
-<v-flex xs12 sm12 md4 lg4 xl4 > <v-btn href='null' class='text-capitalize ' flat id='vueElintegroNavigationButtonDataframe-home' @click.prevent='vueElintegroNavigationButtonDataframe_home' >home</v-btn>
-</v-flex><v-flex xs12 sm12 md4 lg4 xl4 > <v-btn href='null' class='text-capitalize ' flat id='vueElintegroNavigationButtonDataframe-clientsProjects' @click.prevent='vueElintegroNavigationButtonDataframe_clientsProjects' >Clients & Projects</v-btn>
-</v-flex><v-flex xs6 sm6 md12 lg12 xl12 > <v-btn href='null' class='text-capitalize ' flat id='vueElintegroNavigationButtonDataframe-gettingStarted' @click.prevent='vueElintegroNavigationButtonDataframe_gettingStarted' >Getting Started</v-btn>
-</v-flex><v-flex xs3 sm3 md12 lg12 xl12 > <v-btn href='null' class='text-capitalize ' flat id='vueElintegroNavigationButtonDataframe-carrers' @click.prevent='vueElintegroNavigationButtonDataframe_carrers' >Carrers</v-btn>
-</v-flex><v-flex xs3 sm3 md12 lg12 xl12 > <v-btn href='null' class='text-capitalize ' flat id='vueElintegroNavigationButtonDataframe-contactUs' @click.prevent='vueElintegroNavigationButtonDataframe_contactUs' >Contact Us</v-btn>
-</v-flex><v-flex xs3 sm3 md12 lg12 xl12 > <v-btn href='null' class='text-capitalize ' flat id='vueElintegroNavigationButtonDataframe-login' @click.prevent='vueElintegroNavigationButtonDataframe_login' >Login</v-btn>
-</v-flex><v-flex xs3 sm3 md12 lg12 xl12 > <v-btn href='null' class='text-capitalize ' flat id='vueElintegroNavigationButtonDataframe-register' @click.prevent='vueElintegroNavigationButtonDataframe_register' >Register</v-btn>
+        template: `<v-flex><v-flex xs12 sm12 md12 lg12 xl12><v-form  ref='vueElintegroNavigationButtonDataframe_form'><v-container grid-list-xl fluid><v-layout wrap>
+ <div id='vueElintegroNavigationButtonDataframe-errorContainer'></div>
+</v-layout></v-container></v-form></v-flex>
+<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row justify-center  pa-2>
+<v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-home' @click.prevent='vueElintegroNavigationButtonDataframe_home' >home</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-clientsProjects' @click.prevent='vueElintegroNavigationButtonDataframe_clientsProjects' >Clients & Projects</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='/ElintegroWebsite/renderUrlData' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-technologies' @click.prevent='vueElintegroNavigationButtonDataframe_technologies' >technologies</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-gettingStarted' @click.prevent='vueElintegroNavigationButtonDataframe_gettingStarted' >Getting Started</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-carrers' @click.prevent='vueElintegroNavigationButtonDataframe_carrers' >Careers</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-contactUs' @click.prevent='vueElintegroNavigationButtonDataframe_contactUs' >Contact Us</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-login' @click.prevent='vueElintegroNavigationButtonDataframe_login' >Login</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-register' @click.prevent='vueElintegroNavigationButtonDataframe_register' >Register</v-btn>
 </v-flex></v-layout></v-container></v-card-actions>
  <font color='red'><div id='vueElintegroNavigationButtonDataframe-errorContainer'></div></font>
 </v-flex> `,
@@ -318,6 +273,15 @@
         props: ['vueElintegroNavigationButtonDataframe_prop', ],
         created() {
             vueElintegroNavigationButtonDataframeVar = this;
+        },
+        computed: {
+
+            checkResetFormProp: function() {
+                if (this.$props.resetForm) {
+                    this.$refs.vueElintegroNavigationButtonDataframe_form.reset()
+                }
+            },
+
         },
         methods: {
 
@@ -332,6 +296,50 @@
                 var allParams = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
+
+            },
+
+            vueElintegroNavigationButtonDataframe_technologies: function() {
+                var allParams = {
+                    'dataframe': 'vueElintegroNavigationButtonDataframe'
+                };
+
+                allParams['id'] = 1;
+
+                if (this.$refs.vueElintegroNavigationButtonDataframe_form.validate()) {
+                    axios({
+                        method: 'post',
+                        url: '/ElintegroWebsite/renderUrlData',
+                        params: allParams
+                    }).then(function(responseData) {
+                        var response = responseData.data
+                        if (response.success) {
+                            if (response.msg) {
+                                store.commit('alertMessage', {
+                                    'snackbar': true,
+                                    'alert_type': 'success',
+                                    'alert_message': response.msg
+                                });
+                            }
+
+                            let url = response.url;
+                            window.open("" + url, '_blank');
+
+                        } else {
+                            if (!response.error) {
+                            }
+                            if (response.msg) {
+                                store.commit('alertMessage', {
+                                    'snackbar': true,
+                                    'alert_type': 'error',
+                                    'alert_message': response.msg
+                                })
+                            }
+                        }
+                    }).catch(function(error) {
+                        console.log(error);
+                    });
+                }
 
             },
 
@@ -370,8 +378,6 @@
 
             },
 
-            verifyInitDfr: function() {
-            },
             closeDataframe: function() {
                 console.log("vueElintegroNavigationButtonDataframe dataframe close button.");
                 if (this.$store.state.dataframeShowHideMaps) {
@@ -400,7 +406,7 @@
 </span>`,
         data: function() {
             return {
-                vueElintegroLogoDataframe_logo: '/elintegrostartapp/assets/elintegro_logo.png',
+                vueElintegroLogoDataframe_logo: '/assets/elintegro_logo.png',
 
                 vueElintegroLogoDataframe_logo_alt: '',
                 namedParamKey: '',
@@ -411,10 +417,17 @@
         created() {
             vueElintegroLogoDataframeVar = this;
         },
+        computed: {
+
+            checkResetFormProp: function() {
+                if (this.$props.resetForm) {
+                    this.$refs.vueElintegroLogoDataframe_form.reset()
+                }
+            },
+
+        },
         methods: {
 
-            verifyInitDfr: function() {
-            },
             closeDataframe: function() {
                 console.log("vueElintegroLogoDataframe dataframe close button.");
                 if (this.$store.state.dataframeShowHideMaps) {
@@ -438,7 +451,7 @@
 
 
            ></v-img></v-flex>
-	 <div id='vueInitDataframe-errorContainer'></div>
+	 <div id='vueElintegroBannerDataframe-errorContainer'></div>
 </v-layout></v-container></v-form></v-flex>
 <v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row justify-center wrap pa-2>
 </v-layout></v-container></v-card-actions>
@@ -446,7 +459,7 @@
 </div>`,
         data: function() {
             return {
-                vueElintegroBannerDataframe_banner: '/elintegrostartapp/assets/elintegro_banner.jpg',
+                vueElintegroBannerDataframe_banner: '/assets/elintegro_banner.jpg',
 
                 vueElintegroBannerDataframe_banner_alt: '',
                 namedParamKey: '',
@@ -457,10 +470,17 @@
         created() {
             vueElintegroBannerDataframeVar = this;
         },
+        computed: {
+
+            checkResetFormProp: function() {
+                if (this.$props.resetForm) {
+                    this.$refs.vueElintegroBannerDataframe_form.reset()
+                }
+            },
+
+        },
         methods: {
 
-            verifyInitDfr: function() {
-            },
             closeDataframe: function() {
                 console.log("vueElintegroBannerDataframe dataframe close button.");
                 if (this.$store.state.dataframeShowHideMaps) {
@@ -472,68 +492,80 @@
 
     Vue.component('navigationLayout', {
         name: 'navigationLayout',
-        template: `<v-toolbar flat color="white"  tabs style="z-index:99;">
-
-                                   <v-toolbar-side-icon @click.stop="drawer = !drawer" ></v-toolbar-side-icon>
-
-<v-layout  wrap
-      style="height: 200px;">
-<v-navigation-drawer
-           v-model="drawer"
-        absolute
-        bottom
-        temporary
-       style = " width:250px;"
+        template: `<v-card  height="400">
+<v-app-bar flat color="white accent-4"  tabs style="z-index:99;">
+                                   <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
 
-
-
-      >
-
-
-        <v-list dense>
-
-
-          <v-list-tile
-            v-for="item in items"
-            :key="item.title"
-            @click=""
-          >
-            <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-tile-action>
-
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-navigation-drawer>
-</v-layout>
-
-
-                                   <v-toolbar-title ><vueElintegroLogoDataframe/></v-toolbar-title>
+                                   <v-toolbar-title style="position:relative;" mx-1 ><vueElintegroLogoDataframe/></v-toolbar-title>
 
                                    <v-spacer></v-spacer>
                                    <vueElintegroNavigationButtonDataframe/>
-                                   <vueInitDataframe/>
-                               </v-toolbar>`,
+
+
+
+                               </v-app-bar>
+<v-navigation-drawer
+        v-model="drawer"
+        absolute
+        bottom
+        temporary
+      >
+        <v-list
+          nav
+          dense
+        >
+          <v-list-item-group
+            v-model="group"
+            active-class="deep-purple--text text--accent-4"
+          >
+            <v-list-item>
+              <v-list-item-title>Home</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-title>Clients & Projects</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-title>Technologies</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item>
+              <v-list-item-title>Getting Started</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>Careers</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>Contact Us</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>Login</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title>Register</v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-navigation-drawer>
+<v-card-text>
+                                    <midSectionLayout/>
+
+</v-card-text>
+
+</v-card>`,
+
+        components: {},
         data: () => ({
             drawer: false,
-            items: [
-                { title: 'Home' },
-                { title: 'About' },
-                { title: 'About' },
-                { title: 'About' },
-                { title: 'About' },
-                { title: 'About' },
-                { title: 'About' },
-                { title: 'About' }
-                ]
-
+            group: null,
         }),
 
-        components: {
+        watch: {
+            group () {
+                this.drawer = false
+            },
         },
     })
     Vue.component('midSectionLayout', {
@@ -545,7 +577,6 @@
         template: `<v-content>
                                   <v-container fluid pa-0>
                                      <navigationLayout/>
-                                     <midSectionLayout/>
                                    </v-container>
                                </v-content>`,
         components: {},
@@ -557,6 +588,7 @@
         el: '#app',
         router,
         store,
+        vuetify: new Vuetify(),
         data() {
             return {
                 drawer: null,
@@ -567,6 +599,13 @@
 
         },
     })
+</script>
+<script>
+
+    // import Vuetify from 'vuetify'
+    // Vue.use(Vuetify,{
+    //     rtl:true
+    // })
 </script>
 </body>
 </html>

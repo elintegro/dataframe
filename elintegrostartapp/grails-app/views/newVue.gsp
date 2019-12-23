@@ -21,10 +21,14 @@
         <asset:stylesheet href="/vuejs/vuetify.min.css"/>
     </g:if>
     <g:else>
+
         <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     %{--<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">--}%
+
         <asset:stylesheet href="/vuejs/vuetify.min.css"/>
     </g:else>
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
+
     <asset:stylesheet href="/vuejs/gc-vue.css"/>
 
 </head>

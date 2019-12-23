@@ -92,6 +92,7 @@ class ResultPageHtmlBuilder {
         finalScriptSb.append("var app = new Vue ({\nel:'#app',\n") // Vue Instance
         finalScriptSb.append("router,\n") //Inject router to vue instance
         finalScriptSb.append("store,\n") //Inject store
+        finalScriptSb.append("vuetify: new Vuetify(),\n") //Inject vuetify
         finalScriptSb.append("data(){ return {\n")
         finalScriptSb.append("drawer : null,\n") //Insert some external data
         finalScriptSb.append("}\n},\n") // data addition completed

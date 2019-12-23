@@ -40,7 +40,7 @@ class SnackbarWidgetVue extends WidgetVue{
         <v-spacer></v-spacer>
         <v-btn
           dark
-          flat
+          text
           @click="alertProp.snackbar = false"
         >
           <v-icon medium >close</v-icon>

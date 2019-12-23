@@ -33,7 +33,7 @@ beans {
         children = ["navigationLayout", "midSectionLayout","footerLayout"]
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
-    /*<v-card color="light-blue darken-2" flat><v-layout row align-start justify-end>
+    /*<v-card color="light-blue darken-2" text><v-layout row align-start justify-end>
     <v-flex grow> <vuetoolbardataframe/> </v-flex>
             <v-flex shrink> <vueafterloggedindataframe v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
     <vueloginnavigation v-else/></v-flex>
@@ -55,12 +55,12 @@ beans {
     vueToolbarDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-toolbar-items dark class="hidden-xs-and-down">
-                                    <v-card v-if="this.\$store.state.vueInitDataframe.loggedIn" color="light-blue darken-2 ma-2" flat>[BUTTON_SCRIPT][REF_FIELD]
+                                    <v-card v-if="this.\$store.state.vueInitDataframe.loggedIn" color="light-blue darken-2 ma-2" text>[BUTTON_SCRIPT][REF_FIELD]
                                                  </v-card><v-spacer style=" width: 100px; "></v-spacer>
                                                  <vueafterloggedindataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                                  <vueloginnavigation v-else/>                                  
                                 </v-toolbar-items>"""
-        /*layoutPlaceHolder = """<v-toolbar-items dark class="hidden-xs-and-down"><v-card color="light-blue darken-2" flat>
+        /*layoutPlaceHolder = """<v-toolbar-items dark class="hidden-xs-and-down"><v-card color="light-blue darken-2" text>
                 [BUTTON_SCRIPT][REF_FIELD]</v-card><v-spacer style=" width: 100px; "></v-spacer><v-layout row align-center justify-end>
                                          <vueafterloggedindataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                          <vueloginnavigation v-else/>
@@ -70,7 +70,7 @@ beans {
 
     loginLogoutNavigationLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-card style="height:inherit;" color="light-blue darken-2" flat><v-container fill-height grid-list-xl><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-container></v-card>"""
+        layoutPlaceHolder = """<v-card style="height:inherit;" color="light-blue darken-2" text><v-container fill-height grid-list-xl><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-container></v-card>"""
     }
 
 /*<v-tabs slot="extension" color="transparent" fixed-tabs slider-color="yellow">
@@ -138,12 +138,12 @@ beans {
 
     vueAfterLoggedinDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-card color="light-blue darken-2 mt-2" flat id="vueAfterLoggedinDataframe-id" @click="vueProfileMenuDataframe_display = true;" ><v-layout row align-center justify-center> [person.mainPicture][REF_FIELD]</v-layout></v-card>"""
+        layoutPlaceHolder = """<v-card color="light-blue darken-2 mt-2" text id="vueAfterLoggedinDataframe-id" @click="vueProfileMenuDataframe_display = true;" ><v-layout row align-center justify-center> [person.mainPicture][REF_FIELD]</v-layout></v-card>"""
     }
 
     vueProfileMenuDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-card color="default" flat id="vueProfileMenuDataframe-id" style="overflow: hidden;"><v-form  ref='vueProfileMenuDataframe_form'><v-container class="pa-2"><v-layout wrap><v-flex xs12 sm12 md12 lg12 xl12><v-subheader class="subheading">Hello, {{vueProfileMenuDataframe_person_fullName}}</v-subheader></v-flex>[person.mainPicture]</v-layout></v-container></v-form>[BUTTON_SCRIPT]</v-card>"""
+        layoutPlaceHolder = """<v-card color="default" text id="vueProfileMenuDataframe-id" style="overflow: hidden;"><v-form  ref='vueProfileMenuDataframe_form'><v-container class="pa-2"><v-layout wrap><v-flex xs12 sm12 md12 lg12 xl12><v-subheader class="subheading">Hello, {{vueProfileMenuDataframe_person_fullName}}</v-subheader></v-flex>[person.mainPicture]</v-layout></v-container></v-form>[BUTTON_SCRIPT]</v-card>"""
     }
 
 
@@ -164,13 +164,13 @@ beans {
 
     vueUserManagementMenuDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-card color="default" flat><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-card>"""
+        layoutPlaceHolder = """<v-card color="default" text><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-card>"""
 
     }
 
     vueRegisterMenuDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-card color="default" flat><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-card>"""
+        layoutPlaceHolder = """<v-card color="default" text><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-card>"""
 
     }
 

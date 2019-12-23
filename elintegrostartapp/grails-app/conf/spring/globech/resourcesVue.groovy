@@ -100,7 +100,7 @@ beans {
 
         dataframeButtons = [ReportClientEvent:[name:"ReportClientEvent", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "0", refDataframe: ref("vueRecordEventDataframe"), roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
                             IssueRequest:[name:"IssueRequest", type:"link", attr: "open-on-hover", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_CLIENT"], accessType: "ifAnyGranted"],
-                            ReportIncident:[name:"ReportIncident", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"]/*, attr:"flat"*/
+                            ReportIncident:[name:"ReportIncident", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"]/*, attr:"text"*/
         ]
         currentFrameLayout = ref("vueUserManagementMenuDataframeLayout")
     }
@@ -113,9 +113,9 @@ beans {
         dataframeButtons = [ApplicationManagement:[name:"ApplicationManagement", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], "route" : true, routeIdScript: "0", refDataframe: ref("vueApplicationManagementDataframe") , roles:["ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
                             ClientManagement:[name:"ClientManagement", type:"link", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_NURSE"], accessType: "ifAnyGranted"],
                             Employees:[name:"Employees", type:"link",  attr: "open-on-hover", route: true, routeIdScript: "0", refDataframe: ref("vueEmployeeGridDataframe"),"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Vendors:[name:"Vendors", type:"link",route: true, routeIdScript: "0", refDataframe: ref("vueVendorGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"flat", roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            ServiceProviders:[name:"ServiceProviders", type:"link", attr:"flat",route: true, routeIdScript: "0", refDataframe: ref("vueProviderGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Users:[name:"Users", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_SUPER_ADMIN"], accessType: "ifAnyGranted"]
+                            Vendors:[name:"Vendors", type:"link",route: true, routeIdScript: "0", refDataframe: ref("vueVendorGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text", roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            ServiceProviders:[name:"ServiceProviders", type:"link", attr:"text",route: true, routeIdScript: "0", refDataframe: ref("vueProviderGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Users:[name:"Users", type:"link", attr:"text", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_SUPER_ADMIN"], accessType: "ifAnyGranted"]
         ]
         currentFrameLayout = ref("vueUserManagementMenuDataframeLayout")
     }
@@ -127,13 +127,13 @@ beans {
         saveButton = false
 
         dataframeButtons = [Administrator:[name:"Administrator", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-//                            Client:[name:"Client", type:"link", attr: "flat", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+//                            Client:[name:"Client", type:"link", attr: "text", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
 
-//                            Receptionist:[name:"Receptionist", type:"link",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"flat",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Employee:[name:"Employee", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueEmployeeAddDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"flat",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Provider:[name:"Provider", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueProviderAddDataframe"), attr:"flat",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-//                            Relative:[name:"Relative", type:"link", attr:"flat", route: true, routeIdScript: "0", refDataframe: ref("vueRelativeGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], showAsDialog: true, roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Vendors:[name:"Vendors", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueVendorAddDataframe"), attr:"flat",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"]
+//                            Receptionist:[name:"Receptionist", type:"link",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Employee:[name:"Employee", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueEmployeeAddDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Provider:[name:"Provider", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueProviderAddDataframe"), attr:"text",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+//                            Relative:[name:"Relative", type:"link", attr:"text", route: true, routeIdScript: "0", refDataframe: ref("vueRelativeGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], showAsDialog: true, roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Vendors:[name:"Vendors", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueVendorAddDataframe"), attr:"text",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"]
         ]
         currentFrameLayout = ref("vueRegisterMenuDataframeLayout")
     }
@@ -473,8 +473,8 @@ beans {
 
         ]
 //        this.location.reload();
-        dataframeButtons = [profile:[name:'Profile', type: "link", attr: "flat small", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], showAsDialog: false, route:true, routeIdScript:"this.vueProfileMenuDataframe_person_id;", refDataframe: ref('vueUserProfileDataframe')],
-                            Logout:[name:"logout", type:"link", url:"${contextPath}/logoff", attr:"flat small","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], script:"", callBackParams:[failureScript:"""vueProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
+        dataframeButtons = [profile:[name:'Profile', type: "link", attr: "text small", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], showAsDialog: false, route:true, routeIdScript:"this.vueProfileMenuDataframe_person_id;", refDataframe: ref('vueUserProfileDataframe')],
+                            Logout:[name:"logout", type:"link", url:"${contextPath}/logoff", attr:"text small","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], script:"", callBackParams:[failureScript:"""vueProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
         currentFrameLayout = ref("vueProfileMenuDataframeLayout")
     }
 

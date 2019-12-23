@@ -1378,7 +1378,7 @@ updateStoreState: function(response, stateVar){
 		}
 		String imgUrl = btn.image?.url? messageSource.getMessage(btn.image.url, null, buttonLabel, LocaleContextHolder.getLocale()):""
 		if ("link".equals(btn.type)) {
-			btnString=" <v-btn href='${btn.url}' class='text-capitalize $classNames' flat id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr>${buttonLabel}</v-btn>\n"
+			btnString=" <v-btn href='${btn.url}' class='text-capitalize $classNames' text id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr>${buttonLabel}</v-btn>\n"
 		}else if("image".equals(btn.type)){
 			btnString=" <input type='image' src='$imgUrl' id='$dataframeName-${btn.name}' alt='${buttonLabel}' @click.prevent='${dataframeName}_${btn.name}' $attr height='$height' width='$width' />\n"
 		}else{
