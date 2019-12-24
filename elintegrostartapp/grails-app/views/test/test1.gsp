@@ -253,14 +253,14 @@
  <div id='vueElintegroNavigationButtonDataframe-errorContainer'></div>
 </v-layout></v-container></v-form></v-flex>
 <v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row justify-center  pa-2>
-<v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-home' @click.prevent='vueElintegroNavigationButtonDataframe_home' >home</v-btn>
-</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-clientsProjects' @click.prevent='vueElintegroNavigationButtonDataframe_clientsProjects' >Clients & Projects</v-btn>
-</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='/ElintegroWebsite/renderUrlData' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-technologies' @click.prevent='vueElintegroNavigationButtonDataframe_technologies' >technologies</v-btn>
-</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-gettingStarted' @click.prevent='vueElintegroNavigationButtonDataframe_gettingStarted' >Getting Started</v-btn>
-</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-carrers' @click.prevent='vueElintegroNavigationButtonDataframe_carrers' >Careers</v-btn>
-</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-contactUs' @click.prevent='vueElintegroNavigationButtonDataframe_contactUs' >Contact Us</v-btn>
-</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-login' @click.prevent='vueElintegroNavigationButtonDataframe_login' >Login</v-btn>
-</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize ' text id='vueElintegroNavigationButtonDataframe-register' @click.prevent='vueElintegroNavigationButtonDataframe_register' >Register</v-btn>
+<v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize  hidden-md-and-down ' text id='vueElintegroNavigationButtonDataframe-home' @click.prevent='vueElintegroNavigationButtonDataframe_home' >home</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize  hidden-md-and-down  ' text id='vueElintegroNavigationButtonDataframe-clientsProjects' @click.prevent='vueElintegroNavigationButtonDataframe_clientsProjects' >Clients & Projects</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='/ElintegroWebsite/renderUrlData' class='text-capitalize hidden-md-and-down  ' text id='vueElintegroNavigationButtonDataframe-technologies' @click.prevent='vueElintegroNavigationButtonDataframe_technologies' >technologies</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize  hidden-md-and-down  ' text id='vueElintegroNavigationButtonDataframe-gettingStarted' @click.prevent='vueElintegroNavigationButtonDataframe_gettingStarted' >Getting Started</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize  hidden-md-and-down  ' text id='vueElintegroNavigationButtonDataframe-carrers' @click.prevent='vueElintegroNavigationButtonDataframe_carrers' >Careers</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize  hidden-md-and-down  ' text id='vueElintegroNavigationButtonDataframe-contactUs' @click.prevent='vueElintegroNavigationButtonDataframe_contactUs' >Contact Us</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize  hidden-md-and-down  ' text id='vueElintegroNavigationButtonDataframe-login' @click.prevent='vueElintegroNavigationButtonDataframe_login' >Login</v-btn>
+</v-flex><v-flex xs0 sm0 md0 lg0 xl0 > <v-btn href='null' class='text-capitalize  hidden-md-and-down  ' text id='vueElintegroNavigationButtonDataframe-register' @click.prevent='vueElintegroNavigationButtonDataframe_register' >Register</v-btn>
 </v-flex></v-layout></v-container></v-card-actions>
  <font color='red'><div id='vueElintegroNavigationButtonDataframe-errorContainer'></div></font>
 </v-flex> `,
@@ -497,7 +497,7 @@
                                    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
 
-                                   <v-toolbar-title style="position:relative;" mx-1 ><vueElintegroLogoDataframe/></v-toolbar-title>
+                                   <v-toolbar-title style="position:relative;"  ><vueElintegroLogoDataframe/></v-toolbar-title>
 
                                    <v-spacer></v-spacer>
                                    <vueElintegroNavigationButtonDataframe/>
@@ -506,10 +506,12 @@
 
                                </v-app-bar>
 <v-navigation-drawer
+     mini-variant="mini"
         v-model="drawer"
-        absolute
-        bottom
-        temporary
+         temporary
+    app
+    hide-overlay
+        white
       >
         <v-list
           nav
@@ -560,13 +562,7 @@
         data: () => ({
             drawer: false,
             group: null,
-        }),
-
-        watch: {
-            group () {
-                this.drawer = false
-            },
-        },
+        })
     })
     Vue.component('midSectionLayout', {
         name: 'midSectionLayout',

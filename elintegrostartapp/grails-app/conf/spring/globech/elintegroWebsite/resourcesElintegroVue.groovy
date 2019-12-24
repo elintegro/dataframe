@@ -44,6 +44,11 @@ beans {
     }
     vueSubContainerDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueSubContainerDataframe']
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        currentFrameLayout = ref("subContainerLayout")
 
     }
 

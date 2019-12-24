@@ -6,7 +6,7 @@ beans {
 		pageName = "gcMainPageVue";
         /**IMPORTANT: Need to put child dataframe bbefore parent dataframes*/
 		allDataframesList = [
-				"vueTechnologiesDataframe","vueElintegroNavigationButtonDataframe","vueElintegroLogoDataframe","vueElintegroBannerDataframe",
+				"vueSubContainerDataframe","vueTechnologiesDataframe","vueElintegroNavigationButtonDataframe","vueElintegroLogoDataframe","vueElintegroBannerDataframe",
         ]
 		dataframesToShowInMainPage = []
 		containerLayout = "vueElintegroContainerLayout" //outermost layout name
