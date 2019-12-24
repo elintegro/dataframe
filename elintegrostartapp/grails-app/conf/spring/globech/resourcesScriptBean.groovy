@@ -428,4 +428,9 @@ beans {
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressLine = result[0].formatted_address;
                     },"""
     }
+    vueNavigationDataframe_script(VueJsEntity){bean ->
+        data = """ drawer: false,
+            group: null """
+
+    }
 }

@@ -1,55 +1,28 @@
 package spring.globech.elintegroWebsite
-
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.util.Holders
-
 beans {
     def contextPath = Holders.grailsApplication.config.rootPath
-
     vueInitDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueInitDataframe']
         saveButton = false
         wrapInForm = false
-
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]
-        //Vue parameters
         isGlobal = true
-        vueStore = ["state": "loggedIn: false,\n"]
-
-        putFillInitDataMethod = false
         currentFrameLayout = ref("emptyDataframeLayout")
     }
-    vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
+    vueNavigationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
+        bean.constructorArgs = ['vueNavigationDataframe']
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
-        dataframeButtons = [home           : [name: "home", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            clientsProjects: [name: "clientsProjects", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            technologies   : [name: "techonologies", type: "link",url:"${contextPath}/ElintegroWebsite/renderUrlData", callBackParams:[successScript:""" let url = response.url;
-                                                                                                                                                                              window.open("${contextPath}"+url, '_blank');
-                                                                                                                                                                 """], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            gettingStarted : [name: "gettingStarted", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            carrers        : [name: "carrers", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            register       : [name: "register", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
-        wrapButtons = false
-
-
-        currentFrameLayout = ref("elintegroNavigationButtonLayout")
+        currentFrameLayout = ref("navigationLayout")
     }
-    vueSubContainerDataframe(DataframeVue){bean ->
+    vueLogoDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
-
-    }
-
-    vueElintegroLogoDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroLogoDataframe']
+        bean.constructorArgs = ['vueLogoDataframe']
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
@@ -61,13 +34,28 @@ beans {
                         "attr"        : " contain ",
                         "height"      : "auto",
                         "width"       : "200",
-                        //"min-width"   : "40"
-
                 ]
-
         ]
         currentFrameLayout = ref("appNameDataframeLayout")
-
+    }
+    vueNavigationButtonDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNavigationButtonDataframe']
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        dataframeButtons = [home           : [name: "home", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            clientsProjects: [name: "clientsProjects", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            technologies   : [name: "techonologies", type: "link",url:"${contextPath}/ElintegroWebsite/renderUrlData",
+                                              callBackParams:[successScript:""" let url = response.url;window.open("${contextPath}"+url, '_blank');"""],
+                                              "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            gettingStarted : [name: "gettingStarted", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            carrers        : [name: "carrers", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            contactUs      : [name: "contactUs", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            login          : [name: "login", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            register       : [name: "register", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        wrapButtons = false
+        currentFrameLayout = ref("navigationButtonLayout")
     }
     vueElintegroBannerDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
@@ -80,72 +68,9 @@ beans {
                         "widget"      : "PictureDisplayWidgetVue",
                         "url"         : "${contextPath}/assets/elintegro_banner.jpg",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-
-
-                ]
-//                "person.firstName":[
-//                        widget: "InputWidgetVue",
-//                        "required": "required"
-//                        ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 10) || 'FirstName must be less than 10'"]]
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']],
-//
-//                "person.lastName":[
-//                        widget: "InputWidgetVue",
-//                        "required": "required"
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
-//                        ,"validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 10) || 'LastName must be less than 10'"]]
-//                ],
-//                "person.bday":[
-//                        widget: "DateWidgetVue",
-//                        "required": "required"
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg12', 'xl4']],
-//                "person.contactEmail":[
-//                        widget: "EmailWidgetVue",
-//                        "required": "required"
-//                        ,readOnly: true
-//                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-//                        ,"validate":["rule":["v => !!v || 'E-mail is required'"]]
-//                ],
-//                "person.phone":[
-//                        widget: "PhoneNumberWidgetVue",
-//                        "required": "required"
-//                        ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
-//                ],
-//                "person.languages":[
-//                        widget: "MultiSelectComboboxVue"
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
-//                        , hql: """select language.id as id, language.ename as ename from Language as language"""
-//                        ,"displayMember":"ename"
-//                        ,"valueMember":"id"
-//                        , search:true
-//                ]
-// yesko dataframe ma arko kei use garera background image ma banner dina paryo vane layout ma gayera background image dine
-//                or class banayera class ko properties css ma lekhne
-        ]
+                          ]
+                     ]
         currentFrameLayout = ref("emptyDataframeLayout")
-
-    }
-    vueTechnologiesDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueTechnologiesDataframe']
-        isGlobal = true
-        saveButton = false
-        initOnPageLoad = false
-        //route : true
-        addFieldDef = [
-                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/java.PNG"],
-                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/javascript.PNG"],
-                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/grailsphoto.PNG"],
-                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/vuejs.PNG"],
-                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/kafka.PNG"],
-                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/oracle.PNG"],
-                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/nodejs.PNG"],
-                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/kubernetes.PNG"],
-                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/mysql.PNG"],
-
-        ]
-        currentFrameLayout = ref("defaultDialogBoxLayout")
-
-
     }
 }
+
