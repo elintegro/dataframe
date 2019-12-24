@@ -28,7 +28,7 @@ beans {
     }
     midSectionLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex style="min-width:1084px">
+        layoutPlaceHolder = """<v-flex>
                                            <vueElintegroBannerDataframe/>
                                            </v-flex>"""
         isGlobal = true
@@ -36,7 +36,7 @@ beans {
     subContainerLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex><v-app-bar flat color="white"  tabs style="z-index:99;">
-                                   <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-md-and-up"></v-app-bar-nav-icon>
+                                   <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
                            
                                    <v-toolbar-title style="position:relative;" ><vueElintegroLogoDataframe/></v-toolbar-title>
                                  
