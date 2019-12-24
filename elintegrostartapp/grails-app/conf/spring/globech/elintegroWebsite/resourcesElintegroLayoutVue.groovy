@@ -28,7 +28,7 @@ beans {
     }
     midSectionLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex>
+        layoutPlaceHolder = """<v-flex >
                                            <vueElintegroBannerDataframe/>
                                            </v-flex>"""
         isGlobal = true
