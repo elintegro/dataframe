@@ -44,8 +44,8 @@ beans {
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
-        dataframeButtons = [home           : [name: "home", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            clientsProjects: [name: "clientsProjects", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+        dataframeButtons = [home           : [name: "home", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0'],],
+                            clientsProjects: [name: "clientsProjects", type: "link", showAsDialog:true, refDataframe: ref('vueClientProjectDataframe'),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             technologies   : [name: "techonologies", type: "link",url:"${contextPath}/ElintegroWebsite/renderUrlData",
                                               callBackParams:[successScript:""" let url = response.url;window.open("${contextPath}"+url, '_blank');"""],
                                               "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
@@ -71,6 +71,25 @@ beans {
                           ]
                      ]
         currentFrameLayout = ref("emptyDataframeLayout")
+    }
+    vueClientProjectDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueClientProjectDataframe']
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = true
+        dataframeLabelCode = "Clients & Projects Table"
+        addFieldDef =[
+                "grid": [
+                        widget          : "GridWidgetVue",
+                        name            :"GRID",
+                        hql             : """select clientProject.clientName as ClientName, clientProject.projectName as ProjectName,clientProject.logo as Logo, clientProject.description as Description, clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject""",
+                        gridWidth       : 850,
+                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ]
+
+        ]
+        currentFrameLayout = ref("defaultDialogBoxLayout")
     }
 }
 
