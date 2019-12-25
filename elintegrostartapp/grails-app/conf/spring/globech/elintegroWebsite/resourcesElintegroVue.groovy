@@ -28,7 +28,7 @@ beans {
         saveButton = false
         initOnPageLoad = false
         dataframeButtons = [home           : [name: "home", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            clientsProjects: [name: "clientsProjects", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            clientsProjects: [name: "clientsProjects", type: "link",showAsDialog:true, refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             technologies   : [name: "techonologies", type: "link",url:"${contextPath}/ElintegroWebsite/renderUrlData", callBackParams:[successScript:""" let url = response.url;
                                                                                                                                                                               window.open("${contextPath}"+url, '_blank');
                                                                                                                                                                  """], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
@@ -152,5 +152,40 @@ beans {
         currentFrameLayout = ref("defaultDialogBoxLayout")
 
 
+    }
+    vueClientProjectDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueClientProjectDataframe']
+        dataframeLabelCode = "Clients & Projects Details"
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = true
+        addFieldDef =[
+                "clientProject": [
+                        widget            : "GridWidgetVue"
+                        , name            : "clientProject"
+
+
+
+                        , hql             : """select clientProject.clientName as Clientname,
+                                                clientProject.projectName as Projectname, clientProject.logo as Logo, 
+                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
+                        , gridWidth       : 820
+                        , search          : true
+                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ]
+                ]
+        currentFrameLayout = ref("defaultDialogBoxLayout")
+
+    }
+    vueContactUsPageDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueContactUsPageDataframe']
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+
+
+        currentFrameLayout = ref("defaultDialogBoxLayout")
     }
 }

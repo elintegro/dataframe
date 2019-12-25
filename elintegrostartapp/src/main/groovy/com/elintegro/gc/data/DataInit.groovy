@@ -25,9 +25,11 @@ import com.elintegro.elintegrostartapp.client.FrequencyUnit
 import com.elintegro.elintegrostartapp.hr.Employee
 import com.elintegro.elintegrostartapp.ref.*
 import com.elintegro.elintegrostartapp.supplyChain.Vendor
+import elintegroWebsite.ClientProject
 import grails.util.Holders
 import com.elintegro.elintegrostartapp.Provider
 import com.elintegro.elintegrostartapp.property.Property
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -108,6 +110,15 @@ class DataInit {
 
 	static def initStructuresForRegisteredUser(User user) {
 		Person person = new Person(contactEmail: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
+	}
+	static def initElintegroClientProject(){
+		ClientProject clientProject = new ClientProject(clientName:"Globe Chalet" ,projectName:"Globe Chalet" ,logo:"/assets/clientsProjectImages/globeChalet.PNG" ,
+				description:"Software to manage Associations\n" +
+				"of real estate properties and communities\n" +
+				"\n" ,linkToWebsite:"www.globeChalet.com" ).save()
+		ClientProject clientProject1 = new ClientProject(clientName:"Coach Clone" ,projectName:"Coach Clone application" ,logo:"/assets/clientsProjectImages/coachClone.PNG" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros" ,linkToWebsite:"https://www.coachclone.com/" ).save()
+		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"Morgan Stanley" ,logo:"/assets/clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
+		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"Yellow Pages" ,logo:"/assets/clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
 	}
 
 	static def initelintegrostartappReferences(def userList) {
