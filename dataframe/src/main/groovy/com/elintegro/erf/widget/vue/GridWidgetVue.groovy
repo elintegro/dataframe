@@ -72,10 +72,10 @@ class GridWidgetVue extends WidgetVue {
             }
             dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':hiddenClass])
             String propTextLowercase = propItemText.toLowerCase()
-            if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar")){
+            if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar") || propTextLowercase.contains("logo")){
                 String defaultImageName = Holders.config.images.defaultImageName
                 String imgUrl =  getImageUrl(field)
-                fieldParams.append("\n<td class='text-xs-left'><div v-html='props.item.$propItemText'></div></td>");
+                fieldParams.append("""\n<td class='text-xs-left'><div v-html="props.item.$propItemText"></div></td>""");
             }else {
                 fieldParams.append("\n<td class='$hiddenClass text-xs-left'>{{ props.item.$propItemText }}</td>");
             }
@@ -119,7 +119,7 @@ class GridWidgetVue extends WidgetVue {
         field.put("gridMethodScripts", methodScriptsBuilder);
         StringBuilder dataTableAttribbutes = new StringBuilder()
         if(!showGridFooter){
-            dataTableAttribbutes.append(""" hide-actions""")
+            dataTableAttribbutes.append("""hide-default-footer""")
         }
         String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
@@ -202,13 +202,13 @@ class GridWidgetVue extends WidgetVue {
         String hqlLowercase = field.hql?.toLowerCase()
         StringBuilder formatAvatarSb = new StringBuilder()
         String avatar = field.avatarAlias?:'Avatar'
-        if(hqlLowercase && hqlLowercase.contains("image") || hqlLowercase.contains("picture") || hqlLowercase.contains("avatar")){
+        if(hqlLowercase && hqlLowercase.contains("image") || hqlLowercase.contains("picture") || hqlLowercase.contains("avatar") || hqlLowercase.contains("logo")){
             String imgUrl =  getImageUrl(field)
             String defaultImageName = Holders.config.images.defaultImageName
             formatAvatarSb.append(""" if(dataDessert.length > 0){for(var i=0; i<dataDessert.length; i++){
                                                var avarName = dataDessert[i].$avatar;
                                                var formattedName = avarName?'$imgUrl'+avarName:'$imgUrl'+'$defaultImageName'
-                                               dataDessert[i].$avatar = '<v-img height="40px" width="40px" src="'+formattedName+'" />';
+                                               dataDessert[i].$avatar = "<img height='40px' width='40px' src='"+formattedName+"' />";
                                     }}""");
         }
         return """
