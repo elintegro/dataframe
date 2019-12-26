@@ -26,17 +26,15 @@ beans {
         bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
         isGlobal = true
         saveButton = false
-        initOnPageLoad = false
-        dataframeButtons = [home           : [name: "home", type: "link","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            clientsProjects: [name: "clientsProjects", type: "link",showAsDialog:true, refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            technologies   : [name: "techonologies", type: "link",url:"${contextPath}/ElintegroWebsite/renderUrlData", callBackParams:[successScript:""" let url = response.url;
-                                                                                                                                                                              window.open("${contextPath}"+url, '_blank');
-                                                                                                                                                                 """], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            gettingStarted : [name: "gettingStarted", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            carrers        : [name: "carrers", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            register       : [name: "register", type: "link", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        initOnPageLoad = true
+        dataframeButtons = [home           : [name: "home", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroBannerDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            clientsProjects: [name: "clientsProjects", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            technologies   : [name: "techonologies", type: "link",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            login          : [name: "login", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueLoginDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            register       : [name: "register", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueRegisterDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
 
 
@@ -80,6 +78,7 @@ beans {
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
+        route = true
         addFieldDef = [
                 "banner": [
                         "widget"      : "PictureDisplayWidgetVue",
@@ -94,63 +93,10 @@ beans {
 //                        ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 10) || 'FirstName must be less than 10'"]]
 //                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']],
 //
-//                "person.lastName":[
-//                        widget: "InputWidgetVue",
-//                        "required": "required"
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
-//                        ,"validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 10) || 'LastName must be less than 10'"]]
-//                ],
-//                "person.bday":[
-//                        widget: "DateWidgetVue",
-//                        "required": "required"
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg12', 'xl4']],
-//                "person.contactEmail":[
-//                        widget: "EmailWidgetVue",
-//                        "required": "required"
-//                        ,readOnly: true
-//                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-//                        ,"validate":["rule":["v => !!v || 'E-mail is required'"]]
-//                ],
-//                "person.phone":[
-//                        widget: "PhoneNumberWidgetVue",
-//                        "required": "required"
-//                        ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
-//                ],
-//                "person.languages":[
-//                        widget: "MultiSelectComboboxVue"
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
-//                        , hql: """select language.id as id, language.ename as ename from Language as language"""
-//                        ,"displayMember":"ename"
-//                        ,"valueMember":"id"
-//                        , search:true
-//                ]
 // yesko dataframe ma arko kei use garera background image ma banner dina paryo vane layout ma gayera background image dine
 //                or class banayera class ko properties css ma lekhne
         ]
-        currentFrameLayout = ref("emptyDataframeLayout")
-
-    }
-    vueTechnologiesDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueTechnologiesDataframe']
-        isGlobal = true
-        saveButton = false
-        initOnPageLoad = false
-        //route : true
-        addFieldDef = [
-                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/java.PNG"],
-                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/javascript.PNG"],
-                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/grailsphoto.PNG"],
-                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/vuejs.PNG"],
-                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/kafka.PNG"],
-                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/oracle.PNG"],
-                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/nodejs.PNG"],
-                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/kubernetes.PNG"],
-                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "/elintegrostartapp/assets/mysql.PNG"],
-
-        ]
-        currentFrameLayout = ref("defaultDialogBoxLayout")
-
+        currentFrameLayout = ref("appNameDataframeLayout")
 
     }
     vueClientProjectDataframe(DataframeVue){bean ->
@@ -160,6 +106,7 @@ beans {
         isGlobal = true
         saveButton = false
         initOnPageLoad = true
+        route = true
         addFieldDef =[
                 "clientProject": [
                         widget            : "GridWidgetVue"
@@ -172,20 +119,89 @@ beans {
                                                 clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
                         , gridWidth       : 820
                         , search          : true
+                        ,avatarAlias      :'Logo'
+                        ,url:'/assets'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ]
-                ]
-        currentFrameLayout = ref("defaultDialogBoxLayout")
+        ]
+        currentFrameLayout = ref("defaultRouteDataframeLayout")
 
     }
-    vueContactUsPageDataframe(DataframeVue){bean ->
+    vueTechnologiesDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueContactUsPageDataframe']
+        bean.constructorArgs = ['vueTechnologiesDataframe']
+        dataframeLabelCode = "Technologies"
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
+        route = true
+        addFieldDef = [
+                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/java.PNG"],
+                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/javascript.PNG"],
+                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/grailsphoto.PNG"],
+                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/vuejs.PNG"],
+                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kafka.PNG"],
+                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/oracle.PNG"],
+                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/nodejs.PNG"],
+                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kubernetes.PNG"],
+                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/mysql.PNG"],
+
+        ]
+        currentFrameLayout = ref("defaultRouteDataframeLayout")
 
 
-        currentFrameLayout = ref("defaultDialogBoxLayout")
+    }
+    vueGettingStartedDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueGettingStartedDataframe']
+        dataframeLabelCode = "Getting Started Page"
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        route = true
+        currentFrameLayout = ref("defaultRouteDataframeLayout")
+    }
+    vueCareersDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueCareersDataframe']
+        dataframeLabelCode = "Careers Page"
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        route = true
+        currentFrameLayout = ref("defaultRouteDataframeLayout")
+    }
+
+    vueContactUsDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueContactUsPageDataframe']
+        dataframeLabelCode = "Contact Us  Page"
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        route = true
+
+
+        currentFrameLayout = ref("defaultRouteDataframeLayout")
+    }
+    vueLoginDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueLoginDataframe']
+        dataframeLabelCode = "Login Page"
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        route = true
+        currentFrameLayout = ref("defaultRouteDataframeLayout")
+    }
+    vueRegisterDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueRegisterDataframe']
+        dataframeLabelCode = "Register Page"
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        route = true
+        currentFrameLayout = ref("defaultRouteDataframeLayout")
     }
 }
