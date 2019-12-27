@@ -11,19 +11,22 @@ beans {
         bean.constructorArgs = ['vueInitDataframe']
         saveButton = false
         wrapInForm = false
-
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]
-        //Vue parameters
         isGlobal = true
-        vueStore = ["state": "loggedIn: false,\n"]
-
         putFillInitDataMethod = false
         currentFrameLayout = ref("emptyDataframeLayout")
     }
-    vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
+    vueNavigationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
+        bean.constructorArgs = ['vueNavigationDataframe']
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        currentFrameLayout = ref("navigationLayout")
+    }
+    vueNavigationButtonDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNavigationButtonDataframe']
         isGlobal = true
         saveButton = false
         initOnPageLoad = true
@@ -40,19 +43,9 @@ beans {
 
         currentFrameLayout = ref("elintegroNavigationButtonLayout")
     }
-    vueSubContainerDataframe(DataframeVue){bean ->
+    vueLogoDataframe(DataframeVue) {bean ->
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueSubContainerDataframe']
-        isGlobal = true
-        saveButton = false
-        initOnPageLoad = false
-        currentFrameLayout = ref("subContainerLayout")
-
-    }
-
-    vueElintegroLogoDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroLogoDataframe']
+        bean.constructorArgs = ['vueLogoDataframe']
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
@@ -64,15 +57,11 @@ beans {
                         "attr"        : " contain ",
                         "height"      : "auto",
                         "width"       : "200",
-                        //"min-width"   : "40"
-
                 ]
-
         ]
         currentFrameLayout = ref("appNameDataframeLayout")
-
     }
-    vueElintegroBannerDataframe(DataframeVue) { bean ->
+    vueElintegroBannerDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroBannerDataframe']
         isGlobal = true
@@ -84,20 +73,9 @@ beans {
                         "widget"      : "PictureDisplayWidgetVue",
                         "url"         : "${contextPath}/assets/elintegro_banner.jpg",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-
-
                 ]
-//                "person.firstName":[
-//                        widget: "InputWidgetVue",
-//                        "required": "required"
-//                        ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 10) || 'FirstName must be less than 10'"]]
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']],
-//
-// yesko dataframe ma arko kei use garera background image ma banner dina paryo vane layout ma gayera background image dine
-//                or class banayera class ko properties css ma lekhne
         ]
         currentFrameLayout = ref("appNameDataframeLayout")
-
     }
     vueClientProjectDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
@@ -111,9 +89,6 @@ beans {
                 "clientProject": [
                         widget            : "GridWidgetVue"
                         , name            : "clientProject"
-
-
-
                         , hql             : """select clientProject.clientName as Clientname,
                                                 clientProject.projectName as Projectname, clientProject.logo as Logo, 
                                                 clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
@@ -125,7 +100,6 @@ beans {
                 ]
         ]
         currentFrameLayout = ref("defaultRouteDataframeLayout")
-
     }
     vueTechnologiesDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
@@ -145,11 +119,8 @@ beans {
                 "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/nodejs.PNG"],
                 "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kubernetes.PNG"],
                 "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/mysql.PNG"],
-
         ]
         currentFrameLayout = ref("defaultRouteDataframeLayout")
-
-
     }
     vueGettingStartedDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
@@ -180,8 +151,6 @@ beans {
         saveButton = false
         initOnPageLoad = false
         route = true
-
-
         currentFrameLayout = ref("defaultRouteDataframeLayout")
     }
     vueLoginDataframe(DataframeVue){bean ->
