@@ -30,6 +30,7 @@ import grails.util.Holders
 import com.elintegro.elintegrostartapp.Provider
 import com.elintegro.elintegrostartapp.property.Property
 
+
 /**
  * Created with IntelliJ IDEA.
  * User: Shai
@@ -38,7 +39,6 @@ import com.elintegro.elintegrostartapp.property.Property
  * To change this template use File | Settings | File Templates.
  */
 class DataInit {
-	def contextPath = Holders.grailsApplication.config.rootPath
 
 
 	static def initFirstUser() {
@@ -111,15 +111,14 @@ class DataInit {
 	static def initStructuresForRegisteredUser(User user) {
 		Person person = new Person(contactEmail: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
 	}
-	static def initClientProject(){
-		ClientProject clientProject = new ClientProject(clientName: "Globe Chalet",projectName:"Globe Chalet",logo:"/assets/globechalet.png" ,description:"Software to manage Associations\n" +
-				"of real estate properties and communities",linkToWebsite:"www.globeChalet.com" ).save()
-		ClientProject clientProject1 = new ClientProject(clientName: "Coach Clone",projectName:"Coach clone",logo:"/assets/coachclone.png" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros"
-				,linkToWebsite:"https://www.coachclone.com/" ).save()
-		ClientProject clientProject2 = new ClientProject(clientName: "Morgan Stanley",projectName:"Morgan Stanley",logo:"/assets/morganstanley.png" ,description:"This is\n" +
-				"Morgan Stanley ",linkToWebsite:"www.morganStanley.com" ).save()
-		ClientProject clientProject3 = new ClientProject(clientName: "Yellow Page",projectName:"yellow Page",logo:"/assets/yellow.png" ,description:"This is\n" +
-				"yellow page ",linkToWebsite:"www.yellowPage.com" ).save()
+	static def initElintegroClientProject(){
+		ClientProject clientProject = new ClientProject(clientName:"Globe Chalet" ,projectName:"Globe Chalet" ,logo:"clientsProjectImages/globeChalet.PNG" ,
+				description:"Software to manage Associations\n" +
+				"of real estate properties and communities\n" +
+				"\n" ,linkToWebsite:"www.globeChalet.com" ).save()
+		ClientProject clientProject1 = new ClientProject(clientName:"Coach Clone" ,projectName:"Coach Clone application" ,logo:"clientsProjectImages/coachClone.PNG" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros" ,linkToWebsite:"https://www.coachclone.com/" ).save()
+		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"Morgan Stanley" ,logo:"clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
+		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"Yellow Pages" ,logo:"clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
 	}
 
 	static def initelintegrostartappReferences(def userList) {

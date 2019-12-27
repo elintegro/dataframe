@@ -28,7 +28,8 @@
         align-items: center;
     }
     .item{
-        margin: 5px;
+        margin:auto;
+        background-color: white;
     }
     </style>
 </head>

@@ -20,17 +20,21 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.checkIfPopupWindow();this.setInitPageValues();\n"""
+        created = """this.setupHomePage();"""
 
         methods =
-                """  checkIfPopupWindow: function(){
-                          var url = window.location.href;
-//                           var t = url.searchParams.get("reloadPage"); 
-//                           if(url){
-//                               window.opener.location.reload();
-//                               close();
-//                           }
-               },\nsetInitPageValues:function(data){
+                """  setupHomePage: function(){
+                          let homePage = "vueElintegroBannerDataframe";
+                          let routeId = 0;
+                          this.\$router.push({
+                              name: homePage,
+                              path: homePage,
+                              params: {
+                                  routeId: routeId
+                              }
+                          })
+                     }
+               ,\nsetInitPageValues:function(data){
                                                
                                                 axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
                                                      drfExtCont.saveToStore("vueInitDataframe", "key", '');
@@ -428,9 +432,7 @@ beans {
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressLine = result[0].formatted_address;
                     },"""
     }
-    vueNavigationDataframe_script(VueJsEntity){bean ->
-        data = """ drawer: false,
-            group: null """
-
+    vueSubContainerDataframe_script(VueJsEntity){bean ->
+        data = """drawer: false, group: null,"""
     }
 }
