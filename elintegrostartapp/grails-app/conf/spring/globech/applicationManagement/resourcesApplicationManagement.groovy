@@ -15,7 +15,10 @@ package spring.globech.applicationManagement
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
 
+import grails.util.Holders
 beans {
+
+    def contextPath = Holders.grailsApplication.config.rootPath
 
     vueApplicationManagementDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
@@ -360,7 +363,7 @@ beans {
         hql = "select app.id, app.createTime, app.applicant, app.medicalRecord from Application as app where app.id=:id"
 //        app.referredByPerson, app.referredByOrganisation, app.signedBy,   app.applicationDate,
 
-        ajaxSaveUrl = "/elintegrostartapp/applicationForm/save"
+        ajaxSaveUrl = "${contextPath}/applicationForm/save"
         //These are values, that overrides the default ones
 //        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         deleteButton = false
@@ -698,7 +701,7 @@ beans {
         dataframeLabelCode = "Edit.Medication"
         initOnPageLoad = true
         saveButton = true
-        ajaxSaveUrl = "/elintegrostartapp/applicationForm/saveMedications"
+        ajaxSaveUrl = "${contextPath}/applicationForm/saveMedications"
         doAfterSave = """drfExtCont.saveToStore('dataframeShowHideMaps', 'vuePrescribedMedicationsEditDataframe_display', false);\ndrfExtCont.saveToStore('vueMedicationsGridEditDataframe', 'key', response.nodeId[0]);\n
                           drfExtCont.saveToStore("dataframeBuffer","savedResponseData", responseData);"""
         doBeforeSave = "allParams['medicalRecordId'] = drfExtCont.getFromStore('vueMedicalRecordEditDataframe', 'key');"

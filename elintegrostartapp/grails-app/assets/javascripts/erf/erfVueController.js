@@ -89,6 +89,9 @@ var drfExtCont = new Vue({
                 // Vue.set(this.\$store.state.vueInitDataframe, dfNameDisplay, false);
             // }
         },
+        generateRandom: function(){
+            return Math.random() * 100;
+        },
 
         updateToStore: function(response, dataInProp){
             if(!dataInProp){

@@ -34,27 +34,16 @@ class ButtonWidgetVue extends WidgetVue{
 
         if(onClick && field.get('onClick')){
             if(onClick.refDataframe){
-                DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
-                String refDataframeName = refDataframe.dataframeName
-                if(onClick.showAsDialog){
-                    VueStore store = dataframe.getVuejsBuilder().getVueStore()
-                    store.addToShowHideParamNames("${refDataframeName}_display : true,\n")
-                    dataframe.getVuejsBuilder().addToDataScript("${refDataframeName}_display:false,\n")
-                    dataframe.getVuejsBuilder().addToComputedScript("""check${refDataframeName}CloseButton: function(){return this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display}, \n""")
-                    dataframe.getVuejsBuilder().addToWatchScript("""check${refDataframeName}CloseButton:{handler: function(val, oldVal) {
-                               this.${refDataframeName}_display = this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display;}}, \n """)
-
-                 refHtml = getRefHtml(refDataframe, dataframe)
-                }
+                refHtml = getRefHtml(onClick, dataframe)
             }
         }
         String script = field.script?:""
-        dataframe.getVuejsBuilder().addToMethodScript("""  
+        dataframe.getVueJsBuilder().addToMethodScript("""  
                                ${fldName}_method: function(addressValue){
                                         $script
                                },\n""")
-                     //Add security access for the button
-        String ret = wrapWithSpringSecurity(field, """<v-flex xs12 sm6 md6 lg12 xl4><v-btn $attr ${toolTip(field)} :disabled="$disabled" id='$fldName' @click.prevent='${fldName}_method'>${label}</v-btn>$refHtml</v-flex>\n""")
+        //Add security access for the button
+        String ret = wrapWithSpringSecurity(field, """$refHtml<v-btn $attr ${toolTip(field)} :disabled="$disabled" id='$fldName' @click.prevent='${fldName}_method'>${label}</v-btn>\n""")
         return ret;
     }
 
@@ -64,14 +53,25 @@ class ButtonWidgetVue extends WidgetVue{
 
     }
 
-    private String getRefHtml(refDataframe, DataframeVue dataframe){
+    private String getRefHtml(Map onClick, DataframeVue dataframe){
         StringBuilder sb = new StringBuilder()
+        DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
         String refDataframeName = refDataframe.dataframeName
-        dataframe.getVuejsBuilder().addToDataScript(" ${refDataframeName}_data:{key:'', refreshGrid:true},\n")
+        VueStore store = dataframe.getVueJsBuilder().getVueStore()
+        store.addToShowHideParamNames("${refDataframeName}_display : true,\n")
+        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_display:false,\n")
+        dataframe.getVueJsBuilder().addToDataScript(" ${refDataframeName}_data:{key:'', refreshGrid:true},\n")
+        if(onClick.showAsDialog){
+            dataframe.getVueJsBuilder().addToComputedScript("""check${refDataframeName}CloseButton: function(){return this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display}, \n""")
+            dataframe.getVueJsBuilder().addToWatchScript("""check${refDataframeName}CloseButton:{handler: function(val, oldVal) {
+                               this.${refDataframeName}_display = this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display;}}, \n """)
 
-        sb.append("""<v-dialog v-model="${refDataframeName}_display" width='initial' max-width='500px'>""")
-        sb.append(refDataframe.getComponentName(""))
-        sb.append("""</v-dialog>""")
+            sb.append("""<v-dialog v-model="${refDataframeName}_display" width='initial' max-width='500px'>""")
+            sb.append(refDataframe.getComponentName("resetForm=true "))
+            sb.append("""</v-dialog>""")
+        } else {
+            sb.append(refDataframe.getComponentName("resetForm=true"))
+        }
 
         return sb.toString()
     }

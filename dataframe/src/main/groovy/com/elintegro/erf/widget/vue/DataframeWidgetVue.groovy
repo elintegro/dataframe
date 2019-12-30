@@ -44,13 +44,13 @@ class DataframeWidgetVue extends WidgetVue{
             String key = propPass.key
             String value = propPass.value
             if(key.trim().indexOf(":") == 0)
-                dataframe.getVuejsBuilder().addToDataScript("$value:'',\n")
+                dataframe.getVueJsBuilder().addToDataScript("$value:'',\n")
             propString.append("""$key = '$value' """)
         }
         propString.append(attr)
 
         String dataframeHtml = refDataframe.getComponentName(propString.toString())
-        dataframe.getVuejsBuilder().addToDataScript("${refDataframeName}_data:{key: ''},\n")
+        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key: ''},\n")
         String fieldnameStr = fldId.replace(DataframeVue.DASH, DataframeVue.DOT);
         dataframe.addEmbeddedDataframe(fieldnameStr , refDataframe)
         embDDfr = refDataframeName

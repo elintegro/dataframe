@@ -31,7 +31,7 @@ class InputWidgetVue extends WidgetVue {
         String mandatory = field.notNull?" *":""
         String label = field.label + mandatory
         String autoComplete = field.autoComplete?:'off'
-
+        String clearable = field.clearable?"clearable":""
         def fldMetadata = dataframe.fieldsMetadata.get(field.name)
         def disabled = field.disabled == null? false : field.disabled;
         disabled = (fldMetadata?.pk == true)? true: disabled;
@@ -45,6 +45,7 @@ class InputWidgetVue extends WidgetVue {
             style="width:$width; height:$height;"
             background-color="white"
             autocomplete = $autoComplete
+            $clearable
             $attr
           ></v-text-field>"""
         if(field?.layout){

@@ -18,20 +18,25 @@ import grails.util.Holders
 
 beans {
 
+    def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.checkIfPopupWindow();this.setInitPageValues();\n"""
+        created = """this.setupHomePage();"""
 
         methods =
-                """  checkIfPopupWindow: function(){
-                          var url = window.location.href;
-//                           var t = url.searchParams.get("reloadPage"); 
-//                           if(url){
-//                               window.opener.location.reload();
-//                               close();
-//                           }
-               },\nsetInitPageValues:function(data){
+                """  setupHomePage: function(){
+                          let homePage = "vueElintegroBannerDataframe";
+                          let routeId = 0;
+                          this.\$router.push({
+                              name: homePage,
+                              path: homePage,
+                              params: {
+                                  routeId: routeId
+                              }
+                          })
+                     }
+               ,\nsetInitPageValues:function(data){
                                                
-                                                axios.get('/elintegrostartapp/login/getUserInfo').then(function (responseData) {
+                                                axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
                                                      drfExtCont.saveToStore("vueInitDataframe", "key", '');
                                                      drfExtCont.saveToStore("vueProfileMenuDataframe", "key", '');
                                                      drfExtCont.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
@@ -142,7 +147,7 @@ beans {
                 var allParams = {};
                 allParams["id"] = eval(this.namedParamKey);
                 allParams['dataframe'] = 'vueAfterLoggedinDataframe';
-                axios.get('/elintegrostartapp/dataframe/ajaxValues', {
+                axios.get('${contextPath}/dataframe/ajaxValues', {
                     params: allParams
                 }).then(function(responseData) {
                     if(responseData == undefined ||  responseData.data == undefined || responseData.data.data == undefined){
@@ -150,7 +155,7 @@ beans {
                         store.commit('alertMessage', {'snackbar':true, 'alert_type':'error', 'alert_message':"Login failed"})
                     }
                     var response = responseData.data.data;
-                    imgUrl = response['vueAfterLoggedinDataframe.person.mainPicture'] ?  '/images/'+response['vueAfterLoggedinDataframe.person.mainPicture'] : "/elintegrostartapp/assets/default_profile.jpg";
+                    imgUrl = response['vueAfterLoggedinDataframe.person.mainPicture'] ?  '/images/'+response['vueAfterLoggedinDataframe.person.mainPicture'] : "${contextPath}/assets/default_profile.jpg";
                     vueAfterLoggedinDataframeVar.vueAfterLoggedinDataframe_person_mainPicture = imgUrl;
                 }).catch(function(error) {
                     console.log(error);
@@ -426,5 +431,8 @@ beans {
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressText = result[0].formatted_address;
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressLine = result[0].formatted_address;
                     },"""
+    }
+    vueSubContainerDataframe_script(VueJsEntity){bean ->
+        data = """drawer: false, group: null,"""
     }
 }

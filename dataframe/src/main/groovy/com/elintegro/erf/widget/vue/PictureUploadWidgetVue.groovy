@@ -32,7 +32,7 @@ class PictureUploadWidgetVue extends WidgetVue{
         String attr = field?.attr
         return """
               <div $attr>
-               <v-dataframe-image-upload 
+               <v-eutil-image-upload 
                   ${multiple?":multiple= 'true'":""} 
                   @upload-success="${fldName}_uploadImages" 
                   ${deleteButton?"@before-remove='${fldName}_beforeRemove'":""}
@@ -41,7 +41,7 @@ class PictureUploadWidgetVue extends WidgetVue{
                   ${deleteButton?":delete-button=true":""}
                   ${toolTip(field)}  
                 >
-               </v-dataframe-image-upload></div>
+               </v-eutil-image-upload></div>
                """
     }
 
@@ -64,8 +64,8 @@ class PictureUploadWidgetVue extends WidgetVue{
         String fieldNameToReload = dataframe.dataframeName+'.'+domainAlias+'.'+valueMember
         boolean deleteButton = field?.deleteButton
         boolean editButton = field?.editButton
-        dataframe.getVuejsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
-        dataframe.getVuejsBuilder().addToMethodScript("""
+        dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
+                .addToMethodScript("""
            ${fldName}_uploadImages: function(event){
                         var detailData = event.detail;
                         var fileList = detailData[3];
