@@ -32,7 +32,7 @@ beans {
                             technologies   : [name: "techonologies", type: "link",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             login          : [name: "login", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueLoginDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             register       : [name: "register", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueRegisterDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
@@ -172,14 +172,25 @@ beans {
         currentFrameLayout = ref("defaultRouteDataframeLayout")
     }
 
-    vueContactUsDataframe(DataframeVue){bean ->
+    vueContactUsPageDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactUsPageDataframe']
         dataframeLabelCode = "Contact Us  Page"
+//        hql = "select contactUs.name,contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs"
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
         route = true
+        addFieldDef = [
+                "name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
+                "email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email"],
+                "phone":[name:"phone",widget: "PhoneNumberWidgetVue", "required": "required","validate":["rule":["v => !!v || 'Phone Number is required'"]]],
+                "textOfMessage":[name: "textOfMessage", widget: "InputWidgetVue","placeHolder":"Describe about yourself"],
+
+
+        ]
+        dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+
 
 
         currentFrameLayout = ref("defaultRouteDataframeLayout")
