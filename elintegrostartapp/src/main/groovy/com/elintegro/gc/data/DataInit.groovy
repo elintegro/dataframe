@@ -121,9 +121,7 @@ class DataInit {
 		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"Morgan Stanley" ,logo:"clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
 		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"Yellow Pages" ,logo:"clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
 	}
-	static def initElintegroContactUs(){
-		ContactUs contactUs = new ContactUs(name:"simon",email:"simon@gmail.com" ,phone:98051 ,textOfMessage:"Hello Simon" ).save()
-	}
+
 
 	static def initelintegrostartappReferences(def userList) {
 

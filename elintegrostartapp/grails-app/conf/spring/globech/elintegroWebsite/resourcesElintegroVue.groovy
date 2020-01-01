@@ -176,9 +176,9 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactUsPageDataframe']
         dataframeLabelCode = "Contact Us  Page"
-//        hql = "select contactUs.name,contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs"
+//       hql = "select contactUs.name,contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs"
         isGlobal = true
-        saveButton = false
+        saveButton = true
         initOnPageLoad = false
         route = true
         addFieldDef = [
@@ -189,7 +189,7 @@ beans {
 
 
         ]
-        dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+      //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
 
 
