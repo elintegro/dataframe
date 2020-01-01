@@ -176,16 +176,16 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactUsPageDataframe']
         dataframeLabelCode = "Contact Us  Page"
-//       hql = "select contactUs.name,contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs"
+        hql = "select contactUs.name , contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs contactUs"
         isGlobal = true
         saveButton = true
         initOnPageLoad = false
         route = true
         addFieldDef = [
-                "name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
-                "email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email"],
-                "phone":[name:"phone",widget: "PhoneNumberWidgetVue", "required": "required","validate":["rule":["v => !!v || 'Phone Number is required'"]]],
-                "textOfMessage":[name: "textOfMessage", widget: "InputWidgetVue","placeHolder":"Describe about yourself"],
+                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
+                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email"],
+                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue", "required": "required","validate":["rule":["v => !!v || 'Phone Number is required'"]]],
+                "contactUs.textOfMessage":[name: "textOfMessage", widget: "InputWidgetVue","placeHolder":"Describe about yourself"],
 
 
         ]
