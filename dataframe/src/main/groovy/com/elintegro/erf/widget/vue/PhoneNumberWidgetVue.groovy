@@ -26,7 +26,8 @@ class PhoneNumberWidgetVue extends WidgetVue{
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = dataframe.getDataVariableForVue(field)
         boolean isReadOnly = dataframe.isReadOnly(field)
-        String label = field.label
+        String mandatory = field.notNull?" *":""
+        String label = field.label + mandatory
         return """
                <v-text-field
                  label="$label"

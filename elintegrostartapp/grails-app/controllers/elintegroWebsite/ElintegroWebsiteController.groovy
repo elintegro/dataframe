@@ -15,7 +15,7 @@ class ElintegroWebsiteController {
 //    def renderUrlData(){
 //        render([success:true, url:"/elintegroWebsite/technologiesButton"] as JSON)
 //    }
-    def ContactUs(){
+ /*   def ContactUs(){
         println("entry point to contact us")
         println(params)
         println(params.id)
@@ -31,5 +31,5 @@ class ElintegroWebsiteController {
         contactUs.save()
         println("hello simon")
 
-    }
+    }*/
 }

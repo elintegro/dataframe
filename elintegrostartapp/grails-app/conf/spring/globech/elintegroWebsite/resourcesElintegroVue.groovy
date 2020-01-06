@@ -176,7 +176,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactUsPageDataframe']
         dataframeLabelCode = "Contact Us  Page"
-        hql = "select contactUs.name ,contactUs.sendNo,contactUs.resend, contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs contactUs where contactUs.id=:id"
+        hql = "select contactUs.name , contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs contactUs where contactUs.id=:id"
         isGlobal = true
         saveButton = true
         initOnPageLoad = false

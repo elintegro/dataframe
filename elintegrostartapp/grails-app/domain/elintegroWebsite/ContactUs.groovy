@@ -13,6 +13,6 @@ class ContactUs {
     String email
     String phone
     String textOfMessage
-    Integer sendNo
-    boolean resend = false
+    Integer sendNo=0
+    boolean resend
 }

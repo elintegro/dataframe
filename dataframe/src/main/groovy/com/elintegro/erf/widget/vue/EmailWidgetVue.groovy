@@ -28,7 +28,8 @@ class EmailWidgetVue extends WidgetVue{
         boolean isReadOnly = dataframe.isReadOnly(field)
         def width = field.width?:'auto'
         def height = field.hight?:'30px'
-        String label = field.label
+        String mandatory = field.notNull?" *":""
+        String label = field.label + mandatory
         return """
                <v-text-field
                  label="$label"
