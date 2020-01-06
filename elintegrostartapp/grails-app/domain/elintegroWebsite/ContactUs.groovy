@@ -8,4 +8,6 @@ class ContactUs {
     String email
     String phone
     String textOfMessage
+    Integer sendNo
+
 }
