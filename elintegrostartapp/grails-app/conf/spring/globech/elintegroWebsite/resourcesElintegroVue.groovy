@@ -122,6 +122,7 @@ beans {
                         ,avatarAlias      :'Logo'
                         ,url:'/assets'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,internationalize : true
                 ]
         ]
         currentFrameLayout = ref("defaultRouteDataframeLayout")
@@ -185,7 +186,7 @@ beans {
                 "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
                 "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email"],
                 "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue"],
-                "contactUs.textOfMessage":[name: "textOfMessage", widget: "InputWidgetVue","placeHolder":"Describe about yourself", "required": "required","validate":["rule":["v => !!v || 'Description is required'"]]],
+                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself", "required": "required","validate":["rule":["v => !!v || 'Description is required'"]]],
 
 
         ]

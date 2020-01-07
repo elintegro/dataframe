@@ -25,8 +25,7 @@ import com.elintegro.elintegrostartapp.client.FrequencyUnit
 import com.elintegro.elintegrostartapp.hr.Employee
 import com.elintegro.elintegrostartapp.ref.*
 import com.elintegro.elintegrostartapp.supplyChain.Vendor
-import elintegroWebsite.ClientProject
-import elintegroWebsite.ContactUs
+import com.elintegro.website.ClientProject
 import grails.util.Holders
 import com.elintegro.elintegrostartapp.Provider
 import com.elintegro.elintegrostartapp.property.Property

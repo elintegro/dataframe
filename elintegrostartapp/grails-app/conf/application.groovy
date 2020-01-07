@@ -505,6 +505,9 @@ Thank you for choosing us. Your registration is almost complete.
 click&nbsp;<a href="$url">here</a> to finish your registration.
 <br/><br/>You can login using the temporary password: $password<br/><br/> 
 '''
+contactUsEmailService.emailWithInformation = '''Hello $name,<br/>
+Thank you for choosing us. Your registration is almost complete.
+'''
 
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rejectIfNoRule = false
