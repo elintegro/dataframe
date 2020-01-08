@@ -12,15 +12,18 @@ class ContactUsMessageService {
         println(contactDetails.email)
         def conf = Holders.grailsApplication.config
         println("This is message from contact us")
-        Map emailParams =[name:contactDetails.name, phone:contactDetails.phone]
+
         String emailBody = conf.contactUsEmailService.emailWithInformation
         println("this is entry point of  loop")
-        for(item in contactDetails.email) {
+        for(item in contactDetails) {
             println("One email printed")
             println(item)
-
-
-            emailService.sendMail(item, emailParams, emailBody)
+            Map emailParams =[name:item.name, phone:item.phone]
+            println(item.name)
+            emailService.sendMail(item.email, emailParams, emailBody)
+            item.sendNo++
+            item.resend = false
+            item.save()
         }
 
         println("Email Sent Successfully")
