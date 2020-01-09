@@ -1,9 +1,9 @@
-package elintegroWebsite
+package com.elintegro.website
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class ClientProjectSpec extends Specification implements DomainUnitTest<ClientProject> {
+class ContactUsSpec extends Specification implements DomainUnitTest<ContactUs> {
 
     def setup() {
     }

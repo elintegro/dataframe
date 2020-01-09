@@ -25,7 +25,7 @@ import com.elintegro.elintegrostartapp.client.FrequencyUnit
 import com.elintegro.elintegrostartapp.hr.Employee
 import com.elintegro.elintegrostartapp.ref.*
 import com.elintegro.elintegrostartapp.supplyChain.Vendor
-import elintegroWebsite.ClientProject
+import com.elintegro.website.ClientProject
 import grails.util.Holders
 import com.elintegro.elintegrostartapp.Provider
 import com.elintegro.elintegrostartapp.property.Property
@@ -120,6 +120,7 @@ class DataInit {
 		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"Morgan Stanley" ,logo:"clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
 		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"Yellow Pages" ,logo:"clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
 	}
+
 
 	static def initelintegrostartappReferences(def userList) {
 

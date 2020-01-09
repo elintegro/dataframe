@@ -272,9 +272,9 @@ environments {
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro@localhost'
 		dataSource {
 			logSql = true
-//			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+//     		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3308/elintegro_website_db_dev"
+			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
 //			username = "root"
 //			password = "qbohfoj"
 			username = "developer"
@@ -504,6 +504,9 @@ Hi $user.firstName,<br/>
 Thank you for choosing us. Your registration is almost complete.
 click&nbsp;<a href="$url">here</a> to finish your registration.
 <br/><br/>You can login using the temporary password: $password<br/><br/> 
+'''
+contactUsEmailService.emailWithInformation = '''Hello $name,<br/>
+Thank you for choosing us. Your registration is almost complete.
 '''
 
 grails.plugin.springsecurity.logout.postOnly = false

@@ -75,9 +75,9 @@ class GridWidgetVue extends WidgetVue {
             if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar") || propTextLowercase.contains("logo")){
                 String defaultImageName = Holders.config.images.defaultImageName
                 String imgUrl =  getImageUrl(field)
-                fieldParams.append("""\n<td class='text-xs-left'><div v-html="props.item.$propItemText"></div></td>""");
+                fieldParams.append("""\n<td class='text-xs-left'><div v-html="item.$propItemText"></div></td>""");
             }else {
-                fieldParams.append("\n<td class='$hiddenClass text-xs-left'>{{ props.item.$propItemText }}</td>");
+                fieldParams.append("\n<td class='$hiddenClass text-xs-left'>{{ item.$propItemText }}</td>");
             }
             requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
@@ -96,7 +96,7 @@ class GridWidgetVue extends WidgetVue {
             } else{
                 DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
                 refDataframeName = refDataframe.dataframeName
-                onClickMethod    = "${fldName}_showDetail$refDataframeName(props.item)"
+                onClickMethod    = "${fldName}_showDetail$refDataframeName(item)"
                 getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName)
             }
         }
@@ -144,8 +144,8 @@ class GridWidgetVue extends WidgetVue {
             ${showGridSearch?":search='${fldName}_search'":""}
             ${dataTableAttribbutes.toString()}
     >
-        <template slot="items" slot-scope="props">
-          <tr @click="${onClickMethod}" :key="props.item.$valueMember">
+        <template v-slot:item="{item}">
+          <tr @click="${onClickMethod}" :key="item.$valueMember">
             $draggIndicator ${fieldParams.toString()}
           </tr>  
         </template>
@@ -360,7 +360,7 @@ class GridWidgetVue extends WidgetVue {
                         methodScript = ""
                     }
                 }
-                String methodName = """ ${fldName}_${btnName}method(props.item);"""
+                String methodName = """ ${fldName}_${btnName}method(item);"""
                 if (buttonMaps?.image){
                     String actionImageUrl = buttonMaps?.image?.url?:"https://image.flaticon.com/icons/png/128/66/66720.png";
                     String height = buttonMaps?.image?.height?:"20"

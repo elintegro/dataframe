@@ -1,4 +1,4 @@
-package elintegroWebsite
+package com.elintegro.website
 
 class ClientProject {
 

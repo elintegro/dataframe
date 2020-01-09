@@ -1,4 +1,4 @@
-package elintegroWebsite
+package com.elintegro.website
 
 import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
