@@ -322,7 +322,8 @@ beans {
                                         <v-form  ref='vueEmployeeAddDataframe_form'>
                                             <v-container grid-list-xl fluid><v-layout row wrap align-center justify-center>[ALL_OTHER_FIELDS]</v-layout></v-container>
                                          </v-form>
-                                     <v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[previous][ALL_OTHER_BUTTONS]</v-layout></v-container></v-card-actions></v-layout></v-tab-item>
+                                     <v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[previous][ALL_OTHER_BUTTONS]</v-layout>
+                                     </v-container></v-card-actions></v-layout></v-tab-item>
                                </v-tabs-items></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 

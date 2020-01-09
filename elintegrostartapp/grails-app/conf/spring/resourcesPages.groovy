@@ -7,7 +7,7 @@ beans {
         /**IMPORTANT: Need to put child dataframe bbefore parent dataframes*/
 		allDataframesList = [
 				"vueInitDataframe","vueSubContainerDataframe","vueElintegroBannerDataframe","vueTechnologiesDataframe","vueClientProjectDataframe","vueGettingStartedDataframe",
-				"vueGettingStartedDataframe","vueCareersDataframe","vueContactUsPageDataframe","vueLoginDataframe","vueRegisterDataframe",
+				"vueGettingStartedDataframe","vueCareersDataframe","vueContactUsPageDataframe","vueElintegroLoginDataframe","vueElintegroRegisterDataframe",
 				"vueElintegroNavigationButtonDataframe","vueElintegroLogoDataframe",
         ]
 		dataframesToShowInMainPage = []
