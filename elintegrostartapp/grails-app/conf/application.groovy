@@ -274,7 +274,7 @@ environments {
 			logSql = true
 //     		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
+			url = "jdbc:mysql://localhost:3308/elintegro_website_db_dev"
 //			username = "root"
 //			password = "qbohfoj"
 			username = "developer"
@@ -506,8 +506,14 @@ click&nbsp;<a href="$url">here</a> to finish your registration.
 <br/><br/>You can login using the temporary password: $password<br/><br/> 
 '''
 contactUsEmailService.emailWithInformation = '''Hello $name,<br/>
+This is the test for email sending service.
 Thank you for choosing us. Your registration is almost complete.
 '''
+elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com, shai@gmail.com,rabindra@gmail.com"
+
+
+elintegro.contuctus.email.interval = 20000     //send email once in 20 seconds
+//elintegro.contuctus.email.interval = 5*60*1000 //send email once in 5 minutes.
 
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rejectIfNoRule = false
