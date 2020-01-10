@@ -1,9 +1,13 @@
 package com.elintegro.website
 
-class contactUsMessageJob {
+import grails.util.Holders
+
+class ContactUsMessageJob {
     def contactUsMessageService
     static triggers = {
-        simple repeatInterval: 1*60*60*1000 //send email once in 5 minutes
+        def conf = Holders.grailsApplication.config
+        Long emailInterval = conf.elintegro.contuctus.email.interval
+        simple repeatInterval: emailInterval //send email once in 20 seconds is a configuration
     }
 
     def execute() {
