@@ -20,7 +20,8 @@ class TextAreaWidgetVue extends WidgetVue {
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = dataframe.getDataVariableForVue(field)
         boolean isReadOnly = dataframe.isReadOnly(field)
-        String label = field.label
+        String mandatory = field.notNull?" *":""
+        String label = field.label + mandatory
         String validate = field?.validate
         def fldMetadata = dataframe.fieldsMetadata.get(field.name)
         def disabled = field.disabled == null? false : field.disabled;

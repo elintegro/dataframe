@@ -178,25 +178,29 @@ beans {
     vueContactUsPageDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactUsPageDataframe']
-        dataframeLabelCode = "Contact Us  Page"
+        dataframeLabelCode = "Contact Us"
         hql = "select contactUs.name , contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs contactUs where contactUs.id=:id"
         isGlobal = true
         saveButton = true
         initOnPageLoad = false
         route = true
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
-                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
-                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email"],
-                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue"],
-                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself", "required": "required","validate":["rule":["v => !!v || 'Description is required'"]]],
+                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                                  "validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
+                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                                           "required": "required","validate":["rule":["v => !!v || 'Description is required'"]]]
 
 
         ]
+
       //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
 
 
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+        currentFrameLayout = ref("contactUsPageDataframeLayout")
     }
     vueElintegroLoginDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
