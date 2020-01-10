@@ -435,4 +435,8 @@ beans {
     vueSubContainerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
     }
+    vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->
+        data = """tab: null,
+               """
+    }
 }

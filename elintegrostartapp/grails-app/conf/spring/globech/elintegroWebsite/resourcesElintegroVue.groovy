@@ -167,12 +167,85 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCareersDataframe']
         dataframeLabelCode = "Careers Page"
-        isGlobal = true
+       // isGlobal = true
         saveButton = false
         initOnPageLoad = false
         route = true
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+        //componentsToRegister = ["vueCareersPageButtonDataframe"]
+        currentFrameLayout = ref("vueCareersDataframeLayout")
     }
+    vueCareersPageButtonDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueCareersPageButtonDataframe']
+        dataframeLabelCode = "Careers Page"
+        saveButton = false
+        initOnPageLoad = false
+        isGlobal = true
+        dataframeButtons = [registerForNewEmployee: [name: "register", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueNewEmployeeApplicantDataframe"),
+                                                     "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        currentFrameLayout = ref("emptyDataframeLayout")
+
+    }
+    vueNewEmployeeApplicantDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeApplicantDataframe']
+        dataframeLabelCode = "New Employee Applicant Registration"
+        initOnPageLoad = false
+        saveButton = false
+        isGlobal = true
+        route = true
+        currentFrameLayout = ref("vueNewEmployeeApplicantDataframeLayout")
+    }
+    vueNewEmployeeBasicInformationDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeBasicInformationDataframe']
+        initOnPageLoad = false
+        saveButton = false
+        isGlobal = true
+        addFieldDef = [
+                     firstName:["name":"firstName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                     lastName:["name":"lastName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                     email:["name":"email","type":"link","widget":"EmailWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                     phone:["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validate":["rule":["v => !!v || 'Phone is required'"]],
+                            "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+
+        ]
+        currentFrameLayout = ref("emptyDataframeLayout")
+
+    }
+    vueNewEmployeeResumeDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeResumeDataframe']
+        initOnPageLoad = false
+        saveButton = false
+        isGlobal = true
+        addFieldDef = [
+                "resume":["name":"resume","widget":"PictureUploadWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
+        ]
+        dataframeButtons = [ previous: [name:"previous", type: "button", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+        currentFrameLayout = ref("emptyDataframeLayout")
+    }
+    vueNewEmployeeDescriptionDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeDescriptionDataframe']
+        initOnPageLoad = false
+        saveButton = false
+        isGlobal = true
+        addFieldDef = [
+                "description":["name":"description","type":"link","widget":"TextAreaWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
+
+        ]
+        currentFrameLayout = ref("emptyDataframeLayout")
+    }
+    vueNewEmployeeSkillSheetDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeSkillSheetDataframe']
+        initOnPageLoad = false
+        saveButton = false
+        isGlobal = true
+        currentFrameLayout = ref("emptyDataframeLayout")
+    }
+
 
     vueContactUsPageDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper

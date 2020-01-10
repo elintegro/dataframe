@@ -25,7 +25,7 @@ class TextAreaWidgetVue extends WidgetVue {
         String validate = field?.validate
         def fldMetadata = dataframe.fieldsMetadata.get(field.name)
         def disabled = field.disabled == null? false : field.disabled;
-        disabled = (fldMetadata.pk == true)? true: disabled;
+        disabled = (fldMetadata?.pk == true)? true: disabled;
         String attr = field.attr?:""
         def width = field.width?:'auto'
         def height = field.height?:'80px'

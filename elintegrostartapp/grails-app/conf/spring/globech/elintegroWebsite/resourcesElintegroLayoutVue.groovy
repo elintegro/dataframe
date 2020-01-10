@@ -81,6 +81,35 @@ beans {
                                  </v-layout></v-container>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
+    vueCareersDataframeLayout(ColumnLayoutVue){ bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="grey darken-3" height="100px" style="margin-bottom:30px;">
+                                 <v-toolbar-title class="white--text" style="margin:100px;">[DATAFRAME_LABEL]</v-toolbar-title>
+                                 <v-spacer></v-spacer>
+                                 <vueCareersPageButtonDataframe/>
+                                  </v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+
+    }
+    vueNewEmployeeApplicantDataframeLayout(ColumnLayoutVue){bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
+                                <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="tab">
+                                    <v-tab ripple href="#vueNewEmployeeBasicInformationDataframe-tab-id">Basic Information</v-tab>
+                                    <v-tab ripple href="#vueNewEmployeeResumeDataframe-tab-id">Resume</v-tab>
+                                   <v-tab ripple href="#vueNewEmployeeDescriptionDataframe-tab-id">Description</v-tab>
+                                   <v-tab ripple href="#vueNewEmployeeSkillSheetDataframe-tab-id">Skill Sheets</v-tab>
+                                 </v-tabs>
+                                  <v-tabs-items v-model="tab">
+                                    <v-tab-item value="vueNewEmployeeBasicInformationDataframe-tab-id">
+                                     <vueNewEmployeeBasicInformationDataframe/>
+                                     </v-tab-item>
+                                     <v-tab-item value="vueNewEmployeeResumeDataframe-tab-id"><vueNewEmployeeResumeDataframe/></v-tab-item>
+                                     <v-tab-item value="vueNewEmployeeDescriptionDataframe-tab-id"><vueNewEmployeeDescriptionDataframe/></v-tab-item>
+                                     <v-tab-item value="vueNewEmployeeSkillSheetDataframe-tab-id"><vueNewEmployeeSkillSheetDataframe/></v-tab-item>
+                                     </v-tabs-items></v-card></v-flex>
+                                 </v-flex>"""
+    }
 
     /*
     buttonTechnologiesLayout(RowLayoutVue){bean ->
