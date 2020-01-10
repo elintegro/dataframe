@@ -124,7 +124,6 @@ beans {
                         ,avatarAlias      :'Logo'
                         ,url:'/assets'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-                        ,internationalize : true
                 ]
         ]
         currentFrameLayout = ref("defaultRouteDataframeLayout")
