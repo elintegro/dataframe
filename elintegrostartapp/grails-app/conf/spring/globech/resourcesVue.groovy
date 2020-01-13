@@ -265,6 +265,24 @@ beans {
         currentFrameLayout = ref("defaultDialogBoxLayout")
     }
 
+    vueLoginNavigation(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueLoginNavigation']
+        saveButton = false
+        wrapInForm=false
+
+        initOnPageLoad = false
+//        componentsToRegister = ["vueLoginDataframe"]
+        //Vue parameters
+        isGlobal = true
+        dataframeButtons = [
+                Register:[name:"register", type:"link", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true, attr:"flat", script:""" this.vueRegisterDataframe_display = true;\n  drfExtCont.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', true);\n""", refDataframe: ref("vueRegisterDataframe"), tooltip: [message: 'Register']],
+                Login:[name:"login", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true,script:""" this.vueLoginDataframe_display = true; \n  drfExtCont.saveToStore('dataframeShowHideMaps','vueLoginDataframe_display', true);\n""", refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login']]]
+        currentFrameLayout = ref("loginLogoutNavigationLayout")
+        createStore = true
+
+    }
+
     vueAlertMsgDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueAlertMsgDataframe']

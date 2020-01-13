@@ -33,8 +33,10 @@ beans {
                             gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueLoginDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            register       : [name: "register", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueRegisterDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                            login          : [name: "login", type: "link",showAsDialog: true,script:""" this.vueElintegroLoginDataframe_display = true; \n  drfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroLoginDataframe_display', true);\n""",
+                                              refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            register       : [name: "register", type: "link", showAsDialog: true, attr:"text", script:""" this.vueElintegroRegisterDataframe_display = true;\n  drfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', true);\n""",
+                                              refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
 
 
@@ -122,7 +124,6 @@ beans {
                         ,avatarAlias      :'Logo'
                         ,url:'/assets'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-                        ,internationalize : true
                 ]
         ]
         currentFrameLayout = ref("defaultRouteDataframeLayout")
@@ -176,44 +177,153 @@ beans {
     vueContactUsPageDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactUsPageDataframe']
-        dataframeLabelCode = "Contact Us  Page"
+        dataframeLabelCode = "Contact Us"
         hql = "select contactUs.name , contactUs.email,contactUs.phone,contactUs.textOfMessage from ContactUs contactUs where contactUs.id=:id"
         isGlobal = true
         saveButton = true
         initOnPageLoad = false
         route = true
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
-                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
-                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email"],
-                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue"],
-                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself", "required": "required","validate":["rule":["v => !!v || 'Description is required'"]]],
+                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                                  "validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
+                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                                           "required": "required","validate":["rule":["v => !!v || 'Description is required'"]]]
 
 
         ]
+
       //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
 
 
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+        currentFrameLayout = ref("contactUsPageDataframeLayout")
     }
-    vueLoginDataframe(DataframeVue){bean ->
+    vueElintegroLoginDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueLoginDataframe']
-        dataframeLabelCode = "Login Page"
-        isGlobal = true
+        bean.constructorArgs = ['vueElintegroLoginDataframe']
+        dataframeLabelCode = "User.Login"
+        hql = "select user.username, user.password from User as user where user.id=:id"
+        wrapInForm = true
         saveButton = false
         initOnPageLoad = false
-        route = true
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
-    }
-    vueRegisterDataframe(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueRegisterDataframe']
-        dataframeLabelCode = "Register Page"
         isGlobal = true
-        saveButton = false
-        initOnPageLoad = false
-        route = true
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+
+        boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
+        String loginAuthenticateUrl = loginWithSpringSecurity?"${contextPath}/login/authenticate" : "${contextPath}/login/loginUser"
+
+        addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an Email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px', "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+        ]
+
+        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#loginDataframe';
+                                                                                                                                allParams["username"] = this.vueElintegroLoginDataframe_user_username;
+                                                                                                                               allParams["password"] = this.vueElintegroLoginDataframe_user_password;
+                                                                                                                               allParams["remember-me"] = this.vueElintegroLoginDataframe_rememberMe;
+                                                                                                                                """,
+                                    /* url: "/elintegrostartapp/login/loginUser" name:"login", type: "button",attr: "color='cyan'", script: """layout: " layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>",
+//                                                                                                                               var url = "/elintegrostartapp/api/login";
+//                                                                                                                               var url = "/elintegrostartapp/login/testLogin";
+                                                                                                                       var url = "/elintegrostartapp/login/authenticate";
+
+                                                                                                                       var elementId = '#loginDataframe';
+                                                                                                                       var allParams ={};
+                                                                                                                       allParams["username"] = this.vueElintegroLoginDataframe_user_username;
+                                                                                                                       allParams["password"] = this.vueElintegroLoginDataframe_user_password;
+                                                                                                                       allParams["remember_me"] = this.vueElintegroLoginDataframe_rememberMe;
+                                                                                                                       axios.post(url, allParams).then(function(responseData) {
+                                                                                                                        var response = responseData.data
+                                                                                                                        if (response.success) {
+                                                                                                                            if (response.msg) {
+                                                                                                                                store.commit('alertMessage', {
+                                                                                                                                    'snackbar': true,
+                                                                                                                                    'alert_type': 'success',
+                                                                                                                                    'alert_message': response.msg
+                                                                                                                                });
+                                                                                                                            }
+                                                                                                                            this.location.reload();
+                                                                                                                            console.log("Login Callback");
+                                                                                                                            console.log(response);
+                                                                                                                            //Dataframe.showHideDataframesBasedOnUserType(data);
+
+                                                                                                                        } else {
+                                                                                                                            if (response.msg) {
+                                                                                                                                store.commit('alertMessage', {
+                                                                                                                                    'snackbar': true,
+                                                                                                                                    'alert_type': 'error',
+                                                                                                                                    'alert_message': response.msg
+                                                                                                                                })
+                                                                                                                            }
+
+                                                                                                                        }
+                                                                                                                            }).catch(function(error){
+                                                                                                                                                        console.log(error.response)
+                                                                                                                            });
+                                                                                                                  layout: "<v-flex xs12 sm12 md6 lg6 xl6> <v-layout column align-center justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>", """,<v-flex xs12 sm12 md6 lg6 xl6><v-layout column align-center justify-center style='margin-top:8px;'>[BUTTON_SCRIPT]</v-layout></v-flex>*/
+                                    callBackParams: [successScript: """
+                                                          console.log("Login Callback");
+                                                           this.location.reload();
+                                                          //Dataframe.showHideDataframesBasedOnUserType(data);
+                                                       """,
+                                                     failureScript:""" if(!response.msg){ this.location.reload();}"""],"flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                             forgetPassword:[name: "forgetPassword", type: "link", attr:"style='margin-left:-3px;'", script:""" console.log("Forget Password Clicked");""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
+                                             layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],
+                             logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
+//                                                                                             var url = "/elintegrostartapp/oauth/authenticate/google";
+                                                                                             var url = "${contextPath}/springSecurityOAuth2/authenticate?provider=google";
+                                                                                             var childWindow = window.open(url, "payment",  "width=500,height=500");
+                                                                                             /*if(childWindow){
+                                                                                                window.opener.location.reload();
+                                                                                                close();
+                                                                                             }*/
+                                                                                              """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                             logInWithFacebook:[name: "logInWithFacebook", type: "image", attr: "style=\"margin-top:3px;\"", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl", width: '135px', height: '43px'],script:"""
+                                                                                             var provider = 'facebook';
+                                                                                             var url = "${contextPath}/springSecurityOAuth2/authenticate?provider="+provider+"";
+                                                                                             var childWindow = window.open(url, "payment",  "width=500,height=500");
+                                                                                              """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']]
+
+        ]
+
+        currentFrameLayout = ref("vueLoginDataframeLayout")
     }
+
+    vueElintegroRegisterDataframe(DataframeVue){ bean ->
+
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroRegisterDataframe']
+
+        hql = "select user.email, user.password, user.firstName, user.lastName from User as user where user.id=:id"
+
+        ajaxSaveUrl = "${contextPath}/register/register"
+
+        dataframeLabelCode = "User.Registration"
+        //These are values, that overrides the default ones
+        saveButtonAttr = " color='light-blue darken-2' dark"
+        initOnPageLoad = false
+        isGlobal = true
+        saveButton = true
+        wrapInForm=true
+
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        doAfterSave = """ drfExtCont.saveToStore('vueLoginNavigation','responseData');\ndrfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
+                           """
+        addFieldDef =[
+                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                                  ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]]],
+                "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                                 ,"validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]]]
+                ,"user.password":[widget: "PasswordWidgetVue", "width":"150", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                                  ,"validate":["rule":["v => !!v || 'Password is required'", "v => (v && v.length >= 8) || 'Password must be greater than 8'"]]]
+                ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                              ,"validate":["rule":["v => !!(v==this.vueElintegroRegisterDataframe_user_password) || 'Password and Confirm Password must match'"]]]
+        ]
+
+        currentFrameLayout = ref("defaultDialogBoxLayout")
+    }
+
 }
