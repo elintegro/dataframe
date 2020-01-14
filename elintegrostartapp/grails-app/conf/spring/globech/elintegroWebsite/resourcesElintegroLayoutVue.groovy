@@ -94,13 +94,13 @@ beans {
     vueNewEmployeeApplicantDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
-                                <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="tab">
+                                <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueNewEmployeeApplicantDataframe_tab_model">
                                     <v-tab ripple href="#vueNewEmployeeBasicInformationDataframe-tab-id">Basic Information</v-tab>
                                     <v-tab ripple href="#vueNewEmployeeResumeDataframe-tab-id">Resume</v-tab>
                                    <v-tab ripple href="#vueNewEmployeeDescriptionDataframe-tab-id">Description</v-tab>
-                                   <v-tab ripple href="#vueNewEmployeeSkillSheetDataframe-tab-id">Skill Sheets</v-tab>
+                                   <v-tab ripple href="#vueNewEmployeeSkillSheetDataframe-tab-id">Skills Sheets</v-tab>
                                  </v-tabs>
-                                  <v-tabs-items v-model="tab">
+                                  <v-tabs-items v-model="vueNewEmployeeApplicantDataframe_tab_model">
                                     <v-tab-item value="vueNewEmployeeBasicInformationDataframe-tab-id">
                                      <vueNewEmployeeBasicInformationDataframe/>
                                      </v-tab-item>

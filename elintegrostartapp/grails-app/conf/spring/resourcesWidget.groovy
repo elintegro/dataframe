@@ -19,6 +19,7 @@ import com.elintegro.erf.widget.vue.PictureDisplayWidgetVue
 import com.elintegro.erf.widget.vue.PictureUploadWidgetVue
 import com.elintegro.erf.widget.vue.SnackbarWidgetVue
 import com.elintegro.erf.widget.vue.TextAreaWidgetVue
+import com.elintegro.erf.widget.vue.FileUploadWidgetVue
 import com.elintegro.erf.widget.vue.TextDisplayWidgetVue
 import com.elintegro.erf.widget.vue.TreeWidgetVue
 
@@ -46,4 +47,5 @@ beans {
 	MapWidgetVue(MapWidgetVue){}
 	FKWidgetVue(FKWidgetVue){}
 	TextDisplayWidgetVue(TextDisplayWidgetVue){}
+	FileUploadWidgetVue(FileUploadWidgetVue){}
 }

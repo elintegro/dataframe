@@ -436,7 +436,8 @@ beans {
         data = """drawer: false, group: null,"""
     }
     vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->
-        data = """tab: null,
-               """
+        data = "vueNewEmployeeApplicantDataframe_tab_model : this.tabValue,\nvueNewEmployeeApplicantDataframe_display: true, \n"
+        computed = """tabValue(){return this.\$store.state.vueNewEmployeeApplicantDataframe.vueNewEmployeeApplicantDataframe_tab_model}"""
+        watch = """ tabValue:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantDataframe_tab_model = val;}},"""
     }
 }
