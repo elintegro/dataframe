@@ -199,10 +199,15 @@ beans {
     vueNewEmployeeBasicInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeBasicInformationDataframe']
-        hql = "select person.firstName , person.lastName,person.contactEmail,person.phone from Person person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.contactEmail,person.phone from Person person where person.id=:id"
         initOnPageLoad = false
-        saveButton = false
+        tab = true
+        saveButton = true
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md1', 'lg1', 'xl1']
         isGlobal = true
+        doAfterSave = """
+                         drfExtCont.saveToStore("vueNewEmployeeBasicInformationDataframe","key", response.nodeId[0]);
+                         drfExtCont.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeResumeDataframe-tab-id');"""
         addFieldDef = [
                      "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                      "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
@@ -223,9 +228,9 @@ beans {
 
 
         ]
-        dataframeButtons = [
-                next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeResumeDataframe-tab-id");\n""",
-                      flexGridValues: ['xs12', 'sm12', 'md1', 'lg1', 'xl1'],url: ""]]
+//        dataframeButtons = [
+//                next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeResumeDataframe-tab-id");\n""",
+//                      flexGridValues: ['xs12', 'sm12', 'md1', 'lg1', 'xl1'],url: ""]]
 
 
         currentFrameLayout = ref("emptyDataframeLayout")
@@ -236,14 +241,19 @@ beans {
         bean.constructorArgs = ['vueNewEmployeeResumeDataframe']
         initOnPageLoad = false
         saveButton = false
+        tab = true
+        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         isGlobal = true
+        doAfterSave = """
+                         drfExtCont.saveToStore("vueNewEmployeeResumeDataframe","key", response.nodeId[0]);
+                         drfExtCont.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeDescriptionDataframe-tab-id');"""
         addFieldDef = [
-                "resume":["name":"resume","widget":"FileUploadWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
-        ]
+                "resume":["name":"resume","widget":"FileUploadWidgetVue",ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+
         dataframeButtons = [ previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
                                       flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""],
                            next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeDescriptionDataframe-tab-id");\n""",
-                                        flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+                                       flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("emptyDataframeLayout")
     }
@@ -251,17 +261,23 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeDescriptionDataframe']
         initOnPageLoad = false
-        saveButton = false
+        hql = "select person.description from Person person where person.id=:id"
+        saveButton = true
+        tab = true
+        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         isGlobal = true
+        doAfterSave = """
+                         drfExtCont.saveToStore("vueNewEmployeeDescriptionDataframe","key", response.nodeId[0]);
+                         drfExtCont.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSkillSheetDataframe-tab-id');"""
         addFieldDef = [
-                "description":["name":"description","type":"link","widget":"TextAreaWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
+                "person.description":["name":"description","type":"link","widget":"TextAreaWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
 
         ]
         dataframeButtons = [
                 previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeResumeDataframe-tab-id");\n""",
-                           flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""],
-                next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSkillSheetDataframe-tab-id");\n""",
-                      flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+                           flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+//                next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSkillSheetDataframe-tab-id");\n""",
+//                      flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("emptyDataframeLayout")
     }

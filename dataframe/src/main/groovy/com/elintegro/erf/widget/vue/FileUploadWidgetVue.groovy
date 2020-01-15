@@ -15,11 +15,8 @@ class FileUploadWidgetVue extends WidgetVue {
         return """
               <div $attr>
                <v-file-input 
-                  label = "Upload Your Resume Here"
-                  ${multiple?":multiple= 'true'":""} 
-                  @upload-success="${fldName}_uploadFiles" 
-                  ${deleteButton?"@before-remove='${fldName}_beforeRemove'":""}
-                  ${deleteButton?":delete-button=true":""}
+                  label = $label
+                  @change = "${fldName}_uploadImages"
                   ${toolTip(field)}  
                 >
                </v-file-input></div>
@@ -45,9 +42,7 @@ class FileUploadWidgetVue extends WidgetVue {
         dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
                 .addToMethodScript("""
            ${fldName}_uploadFiles: function(event){
-                        var detailData = event.detail;
-                        var fileList = detailData[3];
-                        this.${fldName}_files = fileList; 
+                        ${fldName}_ajaxFileSave(event.files)
                     },\n
            ${deleteButton?"""${fldName}_beforeRemove: function(event){
                             var detailData = event.detail;
