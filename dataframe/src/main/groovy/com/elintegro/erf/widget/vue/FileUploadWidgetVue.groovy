@@ -16,7 +16,7 @@ class FileUploadWidgetVue extends WidgetVue {
               <div $attr>
                <v-file-input 
                   label = $label
-                  @change = "${fldName}_uploadImages"
+                  @change = "${fldName}_uploadFile"
                   ${toolTip(field)}  
                 >
                </v-file-input></div>
@@ -38,27 +38,23 @@ class FileUploadWidgetVue extends WidgetVue {
         String domainAlias= getDataFrameDomainAlias(divId)
         String valueMember = field.valueMember
         String fieldNameToReload = dataframe.dataframeName+'.'+domainAlias+'.'+valueMember
-        boolean deleteButton = field?.deleteButton
         dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
                 .addToMethodScript("""
-           ${fldName}_uploadFiles: function(event){
-                        ${fldName}_ajaxFileSave(event.files)
+           ${fldName}_uploadFile: function(event){
+                        var allParams = {};
+                        this.${fldName}_files.push(event);
+                        this.${fldName}_ajaxFileSave(allParams);
+                     
                     },\n
-           ${deleteButton?"""${fldName}_beforeRemove: function(event){
-                            var detailData = event.detail;
-                            var beforeRemove = detailData[1];
-                            var r = confirm("Remove image !");
-                            if (r == true) {
-                                beforeRemove()
-                                this.${fldName}_files = detailData[2];
-                            } 
-                    },\n  """:""}
           
-           ${fldName}_ajaxFileSave: function(data, allParams){
+           ${fldName}_ajaxFileSave: function(allParams){
                         var fileList = this.${fldName}_files;
+                     
                         if(fileList.length > 0){
+                            var firstFile = fileList[0];
+                            var firstFileName = firstFile.name;
                             var fileData = new FormData();
-                            fileData.append('fileSize',fileList.length);
+                            /*fileData.append('fileSize',fileList.length);
                             fileData.append('fieldnameToReload','$fieldNameToReload');
                             jQuery.each(allParams, function (key, value) {
                                     fileData.append(key,value);
@@ -66,7 +62,8 @@ class FileUploadWidgetVue extends WidgetVue {
                             fileData.append('fldId','$fldName');
                             for (var i = 0; i < fileList.length; i++) {
                                 fileData.append("$genId["+i+"]", fileList[i]);
-                            }
+                            }*/
+                            fileData.append('fileName',firstFileName);
                             axios.post('${field.ajaxFileSaveUrl}', fileData).then(response => {
                               console.log(response)
                             }).catch(function (error) {

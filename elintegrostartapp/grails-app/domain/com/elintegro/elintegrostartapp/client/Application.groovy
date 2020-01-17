@@ -32,6 +32,7 @@ class Application extends ControlField{
     String referredByPerson
     String referredByOrganisation
     String linkedin
+    String resume
 
     Person applicant
     MedicalRecord medicalRecord

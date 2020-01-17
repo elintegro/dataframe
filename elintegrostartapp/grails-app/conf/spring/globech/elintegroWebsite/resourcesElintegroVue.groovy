@@ -240,6 +240,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeResumeDataframe']
         initOnPageLoad = false
+        hql = "select application.resume from Application application where application.id=:id"
         saveButton = false
         tab = true
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -248,7 +249,7 @@ beans {
                          drfExtCont.saveToStore("vueNewEmployeeResumeDataframe","key", response.nodeId[0]);
                          drfExtCont.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeDescriptionDataframe-tab-id');"""
         addFieldDef = [
-                "resume":["name":"resume","widget":"FileUploadWidgetVue",ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                "application.resume":["name":"resume","widget":"FileUploadWidgetVue",ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
         dataframeButtons = [ previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
                                       flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""],
