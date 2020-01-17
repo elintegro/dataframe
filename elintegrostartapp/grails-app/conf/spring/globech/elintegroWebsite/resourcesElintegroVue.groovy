@@ -121,6 +121,7 @@ beans {
                                                 clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
                         , gridWidth       : 820
                         , search          : true
+                        ,internationalize: true
                         ,avatarAlias      :'Logo'
                         ,url:'/assets'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
