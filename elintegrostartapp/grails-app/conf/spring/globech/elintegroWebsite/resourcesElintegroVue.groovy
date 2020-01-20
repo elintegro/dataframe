@@ -114,11 +114,14 @@ beans {
                         widget            : "GridWidgetVue"
                         , name            : "clientProject"
 
-
-
-                        , hql             : """select clientProject.clientName as Clientname,
-                                                clientProject.projectName as Projectname, clientProject.logo as Logo, 
+                        ,hql             : """select clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
                                                 clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
+
+
+//                      , hql             : """select (clientProject.clientName || ' ' ||clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
+//                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
+//                      , hql             : """select concat(clientProject.clientName, ' ',clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
+//                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
                         , gridWidth       : 820
                         , search          : true
                         ,internationalize: true
