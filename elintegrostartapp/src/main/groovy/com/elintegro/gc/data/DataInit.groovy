@@ -114,13 +114,13 @@ class DataInit {
 		Person person = new Person(contactEmail: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
 	}
 	static def initElintegroClientProject(){
-		ClientProject clientProject = new ClientProject(clientName:"Globe Chalet" ,projectName:"Globe Chalet" ,logo:"clientsProjectImages/globeChalet.PNG" ,
+		ClientProject clientProject = new ClientProject(clientName:"" ,projectName:"Globe Chalet" ,logo:"clientsProjectImages/globeChalet.PNG" ,
 				description:"Software to manage Associations\n" +
 				"of real estate properties and communities\n" +
 				"\n" ,linkToWebsite:"www.globeChalet.com" ).save()
 		 new ClientProject(clientName:"Coach Clone" ,projectName:"Coach Clone application" ,logo:"clientsProjectImages/coachClone.PNG" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros" ,linkToWebsite:"https://www.coachclone.com/" ).save()
-		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"Morgan Stanley" ,logo:"clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
-		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"Yellow Pages" ,logo:"clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
+		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"" ,logo:"clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
+		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"" ,logo:"clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
 	}
 	static def initelintegrostartappSkills(){
 		new Skills(code:"java",name:"Java",description: "Nothing").save()

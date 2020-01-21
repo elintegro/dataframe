@@ -7,7 +7,7 @@ beans {
         /**IMPORTANT: Need to put child dataframe bbefore parent dataframes*/
 		allDataframesList = [
 				"vueInitDataframe","vueSubContainerDataframe","vueElintegroBannerDataframe","vueNewEmployeeBasicInformationDataframe",
-				"vueNewEmployeeResumeDataframe","vueNewEmployeeDescriptionDataframe","vueNewEmployeeSkillSheetDataframe",
+				"vueNewEmployeeUploadResumeDataframe","vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeAddtionalQuestionsDataframe",
 				"vueNewEmployeeApplicantDataframe","vueCareersPageButtonDataframe","vueTechnologiesDataframe",
 				"vueClientProjectDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueContactUsPageDataframe",
 				"vueElintegroLoginDataframe","vueElintegroRegisterDataframe","vueElintegroNavigationButtonDataframe","vueElintegroLogoDataframe",

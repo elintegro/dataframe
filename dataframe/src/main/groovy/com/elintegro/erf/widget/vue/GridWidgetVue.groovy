@@ -202,13 +202,15 @@ class GridWidgetVue extends WidgetVue {
         String hqlLowercase = field.hql?.toLowerCase()
         StringBuilder formatAvatarSb = new StringBuilder()
         String avatar = field.avatarAlias?:'Avatar'
+        String height = field.avatarHeight?:'auto'
+        String width = field.avatarWidth?:'40'
         if(hqlLowercase && hqlLowercase.contains("image") || hqlLowercase.contains("picture") || hqlLowercase.contains("avatar") || hqlLowercase.contains("logo")){
             String imgUrl =  getImageUrl(field)
             String defaultImageName = Holders.config.images.defaultImageName
             formatAvatarSb.append(""" if(dataDessert.length > 0){for(var i=0; i<dataDessert.length; i++){
                                                var avarName = dataDessert[i].$avatar;
                                                var formattedName = avarName?'$imgUrl'+avarName:'$imgUrl'+'$defaultImageName'
-                                               dataDessert[i].$avatar = "<img height='40px' width='40px' src='"+formattedName+"' />";
+                                               dataDessert[i].$avatar = "<img height='$height' width='$width' src='"+formattedName+"' />";
                                     }}""");
         }
         return """

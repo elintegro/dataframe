@@ -95,18 +95,19 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueNewEmployeeApplicantDataframe_tab_model">
-                                    <v-tab ripple href="#vueNewEmployeeBasicInformationDataframe-tab-id">Basic Information</v-tab>
-                                    <v-tab ripple href="#vueNewEmployeeResumeDataframe-tab-id">Resume</v-tab>
-                                   <v-tab ripple href="#vueNewEmployeeDescriptionDataframe-tab-id">Description</v-tab>
-                                   <v-tab ripple href="#vueNewEmployeeSkillSheetDataframe-tab-id">Skills Sheets</v-tab>
+                                    <v-tab style ="text-transform:capitalize;" ripple href="#vueNewEmployeeBasicInformationDataframe-tab-id">Basic Information</v-tab>
+                                    <v-tab style ="text-transform:capitalize;" ripple href="#vueNewEmployeeUploadResumeDataframe-tab-id">Upload Resume</v-tab>
+                                     <v-tab style ="text-transform:capitalize;" ripple href="#vueNewEmployeeSelfAssesmentDataframe-tab-id">Self Assesment</v-tab>
+                                   <v-tab style ="text-transform:capitalize;" ripple href="#vueNewEmployeeAddtionalQuestionsDataframe-tab-id">Additional Questions</v-tab>
                                  </v-tabs>
+                                 
                                   <v-tabs-items v-model="vueNewEmployeeApplicantDataframe_tab_model">
                                     <v-tab-item value="vueNewEmployeeBasicInformationDataframe-tab-id">
                                      <vueNewEmployeeBasicInformationDataframe/>
                                      </v-tab-item>
-                                     <v-tab-item value="vueNewEmployeeResumeDataframe-tab-id"><vueNewEmployeeResumeDataframe/></v-tab-item>
-                                     <v-tab-item value="vueNewEmployeeDescriptionDataframe-tab-id"><vueNewEmployeeDescriptionDataframe/></v-tab-item>
-                                     <v-tab-item value="vueNewEmployeeSkillSheetDataframe-tab-id"><vueNewEmployeeSkillSheetDataframe/></v-tab-item>
+                                     <v-tab-item value="vueNewEmployeeUploadResumeDataframe-tab-id"><vueNewEmployeeUploadResumeDataframe/></v-tab-item>
+                                     <v-tab-item value="vueNewEmployeeSelfAssesmentDataframe-tab-id"><vueNewEmployeeSelfAssesmentDataframe/></v-tab-item>
+                                     <v-tab-item value="vueNewEmployeeAddtionalQuestionsDataframe-tab-id"><vueNewEmployeeAddtionalQuestionsDataframe/></v-tab-item>
                                      </v-tabs-items></v-card></v-flex>
                                  </v-flex>"""
     }
