@@ -119,17 +119,20 @@ beans {
 
 
 //                      , hql             : """select (clientProject.clientName || ' ' ||clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
-//                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
+//                                                clientProject.description  as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
 //                      , hql             : """select concat(clientProject.clientName, ' ',clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
 //                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
                         , gridWidth       : 820
                         , search          : true
                         ,internationalize: true
+                        ,manageFields     :[linkToWebsite: [type: 'link', script: '']]
                         ,avatarAlias      :'Logo'
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
                         ,url:'/assets'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
+
                 ]
         ]
         currentFrameLayout = ref("defaultRouteDataframeLayout")
@@ -173,7 +176,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCareersDataframe']
         dataframeLabelCode = "Careers Page"
-       // isGlobal = true
+        // isGlobal = true
         saveButton = false
         initOnPageLoad = false
         route = true
@@ -215,22 +218,22 @@ beans {
                          drfExtCont.saveToStore("vueNewEmployeeBasicInformationDataframe","key", response.nodeId[0]);
                          drfExtCont.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeResumeDataframe-tab-id');"""
         addFieldDef = [
-                     "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                     "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                     "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                     "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validate":["rule":["v => !!v || 'Phone is required'"]],
-                            "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                     linkedin :["name":"linkedin","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                     "person.availablePosition"  :[
-                             "widget"        : "ComboboxVue"
-                             ,"name"         : "person.availablePosition"
-                             ,internationalize: true
-                             ,"hql"          : "select position.id as id, position.name as name from Position position"
+                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validate":["rule":["v => !!v || 'Phone is required'"]],
+                                "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                linkedin :["name":"linkedin","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.availablePosition"  :[
+                        "widget"        : "ComboboxVue"
+                        ,"name"         : "person.availablePosition"
+                        ,internationalize: true
+                        ,"hql"          : "select position.id as id, position.name as name from Position position"
 
-                             ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-                             ,"displayMember": "name"
-                             ,"valueMember"  : "id"
-                     ],
+                        ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        ,"displayMember": "name"
+                        ,"valueMember"  : "id"
+                ],
 
 
         ]
@@ -257,9 +260,9 @@ beans {
                 "application.resume":["name":"resume","widget":"FileUploadWidgetVue",ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
         dataframeButtons = [ previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
-                                      flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""],
-                           next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
-                                       flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+                                        flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""],
+                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
+                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("emptyDataframeLayout")
     }
@@ -325,7 +328,7 @@ beans {
 
         ]
 
-      //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
 
 

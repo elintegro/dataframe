@@ -46,6 +46,7 @@ class GridWidgetVue extends WidgetVue {
         def onClick        = field?.onClick
         def onButtonClick  = field?.onButtonClick
         String valueMember = field?.valueMember
+        String alignment = field.textAlign?:'start'
         boolean internationalize = field.internationalize?true:false
         List gridDataframeList= []
         StringBuilder methodScriptsBuilder = new StringBuilder();
@@ -66,18 +67,28 @@ class GridWidgetVue extends WidgetVue {
                 headerText = getMessageSource().getMessage(propItemText,null,propItemText,LocaleContextHolder.getLocale())
             }
 //            String capitalisedProp = propItemText.capitalize()
-            String hiddenClass = ""
+            StringBuilder headerClass = new StringBuilder()
             if(metaField.pk || metaField.fk){
-                hiddenClass = "hidden"
+                headerClass.append("hidden")
+                valueMember=valueMember?:metaField.alias
             }
-            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':hiddenClass])
+            addClassesToHeader(field, headerClass, propItemVal)
+            headerClass.append("text-$alignment")
+            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':"${headerClass.toString()}"])
             String propTextLowercase = propItemText.toLowerCase()
             if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar") || propTextLowercase.contains("logo")){
-                String defaultImageName = Holders.config.images.defaultImageName
-                String imgUrl =  getImageUrl(field)
-                fieldParams.append("""\n<td class='text-xs-left'><div v-html="item.$propItemText"></div></td>""");
+                fieldParams.append("""\n<td class='$headerClass'><div v-html="item.$propItemText"></div></td>""");
             }else {
-                fieldParams.append("\n<td class='$hiddenClass text-xs-left'>{{ item.$propItemText }}</td>");
+                Map manageFields = field.manageFields as Map
+                String tdString = "\n<td class='$headerClass'>{{ item.$propItemText }}</td>";
+                if(manageFields){
+                    if(manageFields.containsKey(propItemVal)){
+                        if('link' == manageFields[propItemVal].type){
+                            tdString = "\n<td class='$headerClass'><a :href='item.$propItemText' target='_blank' >{{ item.$propItemText }} </a></td>";
+                        }
+                    }
+                }
+                fieldParams.append(tdString)
             }
             requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
@@ -665,6 +676,15 @@ class GridWidgetVue extends WidgetVue {
 
     private String getDefaultAligh(String cellType){
         return getDefaultAligh(cellType, "en_ca");
+    }
+    private void addClassesToHeader(Map field, StringBuilder headerClass, String headerText){
+        Map addClassesToHeader = field.addClassesToHeader as Map
+        if(addClassesToHeader){
+            String fieldName = field.name
+            if(addClassesToHeader.containsKey(headerText)){
+                headerClass.append(addClassesToHeader.get(headerText)+" ")
+            }
+        }
     }
 
 }

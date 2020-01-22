@@ -1,3 +1,6 @@
+.hidden {
+    display: none;
+}
 .rounded-card{
     border-radius:10px;
 }

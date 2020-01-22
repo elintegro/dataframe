@@ -513,7 +513,9 @@ elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gma
 
 
 //elintegro.contuctus.email.interval = 20000     //send email once in 20 seconds
-elintegro.contuctus.email.interval = 5*60*1000 //send email once in 5 minutes.
+//elintegro.contuctus.email.interval = 5*60*1000 //send email once in 5 minutes.
+elintegro.contuctus.email.interval = 12*60*60*1000//send email once in 12 hours.
+
 
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rejectIfNoRule = false
