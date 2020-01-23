@@ -18,6 +18,10 @@ tr.selected td {
 .input-text-field {
     width: 30px;
 }
+.clientProject th, .clientProject td
+{
+    font-size: 30px;
+}
 /*.first-banner{*/
 /*    background-size:cover;*/
 /*    height:auto;*/

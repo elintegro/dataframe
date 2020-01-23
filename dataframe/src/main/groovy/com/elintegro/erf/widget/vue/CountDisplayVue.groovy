@@ -13,9 +13,17 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
+import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.dataframe.DataframeException
+import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DbResult
+import com.elintegro.erf.dataframe.ParsedHql
 import com.elintegro.erf.dataframe.vue.DataframeVue
 
-class InputWidgetVue extends WidgetVue {
+/**
+ * Created by kchapagain on Jul, 2019.
+ */
+class CountDisplayVue extends WidgetVue{
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
@@ -25,18 +33,17 @@ class InputWidgetVue extends WidgetVue {
         String fldName = getFieldName(dataframe, field)
         boolean isReadOnly = dataframe.isReadOnly(field)
         String autoComplete = field.autoComplete?:'off'
-        String clearable = field.clearable?"clearable":""
+
+        def fldMetadata = dataframe.fieldsMetadata.get(field.name)
         String html = """<v-text-field
             label="${getLabel(field)}"
             v-model = "$fldName" 
-            ${validate(field)?":rules = '${fldName}_rule'":""}
             ${isDisabled(dataframe, field)?":disabled = true":""}
             ${isReadOnly?"readonly":''}
             ${toolTip(field)}
-            style="width:${getWidth(field)}; height:${getHeight(field, "40px")};"
+            style="width:${getWidth(field)}; height:${getHeight(field, "30px")};"
             background-color="white"
             autocomplete = $autoComplete
-            $clearable
             ${getAttr(field)}
           ></v-text-field>"""
         if(field?.layout){
@@ -45,4 +52,28 @@ class InputWidgetVue extends WidgetVue {
         return html
     }
 
+    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
+        String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
+        return """
+               var fullFieldName = '$fullFieldName';
+               var countData = response.additionalData[fullFieldName]['count'];
+               this.$dataVariable = countData;
+              """
+    }
+
+    public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){
+        Map result=[:]
+        Dataframe df = dfInst.df;
+        Map fieldProps = df.fields.get(fieldnameToReload)
+
+        String wdgHql = fieldProps?.hql
+        ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory);
+        int count = 0
+        if(wdgHql){
+            DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);
+            List resultList = dbRes.getResultList()
+            count = resultList.size()
+        }
+        return ['count': count]
+    }
 }

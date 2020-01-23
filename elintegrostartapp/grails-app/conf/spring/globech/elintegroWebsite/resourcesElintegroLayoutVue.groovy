@@ -71,6 +71,14 @@ beans {
 
                                      """
     }
+    clientProjectPageDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="grey darken-3" height="100px" style="margin-bottom:30px;">
+                                 <v-toolbar-title class="white--text" style="margin:100px;">[DATAFRAME_LABEL]</v-toolbar-title>
+                                  </v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]
+                                  <v-card class ="clientProject">[clientProject]</v-card></v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+    }
     contactUsPageDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-container class="text-xs-center"> 

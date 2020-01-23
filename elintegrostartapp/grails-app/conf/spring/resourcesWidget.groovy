@@ -1,4 +1,3 @@
-import com.elintegro.erf.widget.*
 import com.elintegro.erf.widget.vue.AlertWidgetVue
 import com.elintegro.erf.widget.vue.ButtonWidgetVue
 import com.elintegro.erf.widget.vue.CheckboxWidgetVue

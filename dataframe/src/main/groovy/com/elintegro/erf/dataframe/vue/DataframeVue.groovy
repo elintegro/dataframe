@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -7,7 +7,7 @@ Copyright © 2007-2019  Elinegro Inc. Eugene Lipkovich, Shai Lipkovich
 This program is under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
 See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works. 
+You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works.
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
@@ -108,7 +108,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 
 	ParsedHql parsedHql
-	public 	List pkFields = []
+	public     List pkFields = []
 	def groovySql
 	Map writableDomains = [:]
 	Map defaultRecord = [:]
@@ -132,7 +132,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	private StringBuilder saveScriptJs = new StringBuilder();
 	private StringBuilder doAfterSaveStringBuilder = new StringBuilder();
 	private StringBuilder doAfterDeleteStringBuilder = new StringBuilder();
-//	private StringBuilder additionalParametersScript = new StringBuilder()
+// private StringBuilder additionalParametersScript = new StringBuilder()
 	String vueRoutes = ""
 	//TODO make it injected in Spring way!
 	private DataframeView dataframeView = new DataframeViewJqxVue(this)
@@ -217,7 +217,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	boolean route = false // set to make dfr route(change in url) or dynamic
 	boolean tab = false //Is tab view active in dataframe
 	List<String> componentsToRegister = new ArrayList<>()
-//	VueStore store = new VueStore()
+// VueStore store = new VueStore()
 	String mainNamedParamKey = "" //Specify the main named parameter key if other than id. EX: owner.id:ownerId => specify ownerId
 	boolean isGlobal = false // Whether or not to register the component globally
 	boolean componentRegistered = false //Set once the component is registered
@@ -254,9 +254,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	@OverridableByEditor
 	boolean initOnVueComponentLoad = true
 	/*private void createVueJsEntityObj(){
-		vuejsEntity = new VueJsEntity()
-		vuejsEntity.setAllEntities(vujsLifecycleEntities)
-	}*/
+       vuejsEntity = new VueJsEntity()
+       vuejsEntity.setAllEntities(vujsLifecycleEntities)
+    }*/
 	String resultPage  = null
 	String currentFldLayout = null
 	@OverridableByEditor
@@ -270,7 +270,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		super(dataframeName)
 		if(dataframeName == null)
 			throw new DataframeException("Dataframe name not set.")
-//		log.debug("dataframe created:" +dataframeName);
+//    log.debug("dataframe created:" +dataframeName);
 		this.dataframeName = dataframeName
 		this.dataframeNameLowercase = dataframeName?dataframeName.toLowerCase():""
 		this.dataframeView.dataframeName = dataframeName
@@ -371,19 +371,19 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	 * The method uses the domain class and builds a list of Meta Data using all persistent properties
 	 */
 /*
-	List<MetaField> getDomainMetaData(Class clazz){
-		List<MetaField> metaFields = new ArrayList<MetaField>()
-		def domain = new DefaultGrailsDomainClass(clazz)
-		for(property in domain.persistentProperties){
-			if(!property.isAssociation()){
-				MetaField metaField = new MetaField(property.getFieldName())
-				metaField.domain = clazz.getClass().getName()
-				metaField.dataType = MetaField.getDataType( property.getTypePropertyName() )
-				metaFields.add(metaField)
-			}
-		}
-		return metaFields
-	}
+   List<MetaField> getDomainMetaData(Class clazz){
+      List<MetaField> metaFields = new ArrayList<MetaField>()
+      def domain = new DefaultGrailsDomainClass(clazz)
+      for(property in domain.persistentProperties){
+         if(!property.isAssociation()){
+            MetaField metaField = new MetaField(property.getFieldName())
+            metaField.domain = clazz.getClass().getName()
+            metaField.dataType = MetaField.getDataType( property.getTypePropertyName() )
+            metaFields.add(metaField)
+         }
+      }
+      return metaFields
+   }
 */
 
 
@@ -441,10 +441,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	}
 
 	/*
-	 * TODO: refactor it! we need use Widget concept to bring the data and also be ready to do it each time a field that dependent on this one changed
-	 *This method uses the params and return the list for the combobox option/radio buttons.
-	 *The result format is id of the result object will be on key on value will on the key of value.
-	 */
+     * TODO: refactor it! we need use Widget concept to bring the data and also be ready to do it each time a field that dependent on this one changed
+     *This method uses the params and return the list for the combobox option/radio buttons.
+     *The result format is id of the result object will be on key on value will on the key of value.
+     */
 	public List getSelectOptionList(def params){
 		Map field = fields.dataMap.get(params.fieldName)
 		Connection con = SessionFactoryUtils.getDataSource(sessionFactory).getConnection()
@@ -556,7 +556,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			log.error("No doamin $refDomainAlias found");
 		}
 		//2. Get relevant field:
-//		def prop = domain?.value?.getPersistentProperty(refFieldName)
+//    def prop = domain?.value?.getPersistentProperty(refFieldName)
 		def prop = domain?.value?.getPropertyByName(refFieldName)
 		if(prop){
 			resValue  = DbResult.getTypeCastValue( paramStringValue, prop)
@@ -590,11 +590,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				fieldProp.put("name", dbMetaFieldPropes.get("name"));
 
 				/*if(dbMetaFieldPropes.containsKey("name") && fieldProp.containsKey("name")){
-				 if(!dbMetaFieldPropes.get("name").equals(fieldProp.get("name"))){
-				 fieldProp.put("name", dbMetaFieldPropes.get("name"));
-				 }
-				 }
-				 */
+                 if(!dbMetaFieldPropes.get("name").equals(fieldProp.get("name"))){
+                 fieldProp.put("name", dbMetaFieldPropes.get("name"));
+                 }
+                 }
+                 */
 
 				dbMetaFieldPropes?.putAll(fieldProp)
 
@@ -664,7 +664,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public String getHtml(){
 		def lhcLocale = LocaleContextHolder.getLocale()
 		boolean refresh = false
-//		componentRegistered = false
+//    componentRegistered = false
 		if(lhcLocale.baseLocale.language != currentLanguage){
 			refresh = true
 			currentLanguage = lhcLocale.baseLocale.language
@@ -776,7 +776,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		StringBuilder vueDataVariable = new StringBuilder()
 		StringBuilder vueDataFillScript = new StringBuilder()
 		StringBuilder vueSaveVariables = new StringBuilder()
-//		StringBuilder embbeddedCompScripts = new StringBuilder()
+//    StringBuilder embbeddedCompScripts = new StringBuilder()
 		StringBuilder resultPageHtml = new StringBuilder()
 		resultPageHtml.append(this.currentFrameLayout?.layoutPlaceHolder?:"")
 
@@ -824,7 +824,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(!onClick.isEmpty()){
 			refDataframeHtmlStringBuilder.append(dataframeView.getRefDataframeHtmlForOnClick(onClick, vueJsBuilder))
 		}
-		//		Add section for dialog box or insert div
+		//    Add section for dialog box or insert div
 		this.currentFrameLayout.applyLayoutForDataframe(resultPageHtml, fieldsHtmlBuilder,  refDataframeHtmlStringBuilder.toString(), this);
 		this.currentFrameLayout.applyLayoutForButton(resultPageHtml, buttonHtmlStringBuilder, wrapButtons);
 
@@ -844,7 +844,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vueJsBuilder.addToMethodScript(vueDataFillScript.toString())
 		}
 		constructVueComponent(vueJsBuilder, resultPageHtml.toString())
-//		vueStoreScript = vueJsBuilder.getVueStore().buildVueStoreScript()
+//    vueStoreScript = vueJsBuilder.getVueStore().buildVueStoreScript()
 		currentFldLayout = fieldLayout
 		scripts = vueJsBuilder.getFinalbuildScript(this)
 		resultPage = getComponentName("")
@@ -877,7 +877,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		def errorMsg = messageSource.getMessage("error.$field.labelCode", null, "Error", LocaleContextHolder.getLocale())
 		def binding = [divId   : divId, field: fldName.replace(".", "-"), label: label, mandatory: field.notNull ? "*" : "", gridValueString: gridValueString,
 					   widget  : widget.getHtml(this, field), // TODO: if you need to pass any extra params to getHtml (such as which is the current field etc.) do so
-					   errorMsg: errorMsg, btnDivId: btnDivId, btnWidget: btnWidget]
+					   flexAttr:widget.getFlexAttr(this, field), errorMsg: errorMsg, btnDivId: btnDivId, btnWidget: btnWidget]
 		def template = templateEngine.createTemplate(fieldLayout).make(binding)
 		String fieldName = field?.externalDomainField ? "${fldName}" : "${field.domainAlias}.${fldName}"
 		String childDataframe = ""
@@ -901,10 +901,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		vueDataFillScript.append(widget.getValueSetter(this, field, divId, fldId, key))
 		vueDataFillScript.append("\n")
 		vueSaveVariables.append(widget.getVueSaveVariables(this, field))
-		if (field?.validate) {
-			String valKey = getDataVariableForVue(field) + "_rule"
-			vueDataVariable.append("$valKey : ${field.validate.rule},\n")
-		}
+/*
+      if (field?.validate) {
+         String valKey = getDataVariableForVue(field) + "_rule"
+         vueDataVariable.append("$valKey : ${field.validate.rule},\n")
+      }
+*/
 		return [fieldLayout, fieldCount]
 	}
 
@@ -935,7 +937,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				List gridvaluesSave = flexGridValuesForSaveButton?:LayoutVue.defaultButtonGridValues
 				String saveGridValueString = LayoutVue.convertListToString(gridvaluesSave)
 				String saveButtonLabel = messageSource.getMessage("${dataframeName}.button.save", null, messageSource.getMessage("button.save", null, "Save", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
-//				buttonHtmlStringBuilder.append(applyLayoutForButton("<v-btn type='button' class='text-capitalize' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr>${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString))     // TODO  i18n
+//          buttonHtmlStringBuilder.append(applyLayoutForButton("<v-btn type='button' class='text-capitalize' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr>${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString))     // TODO  i18n
 				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $saveButtonAlignment' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr>${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString)     // TODO  i18n
 				vueJsBuilder.addToMethodScript(getSaveDataScript(this, vueSaveVariables, vueFileSaveVariables))
 				this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "saveButton", btnScript)
@@ -988,10 +990,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			}
 		}
 
-/*		if (ajaxCreateUrl){
-			def ajaxScripts = getAjaxDefaultValueScripts()
-			resultPageJs.append(ajaxScripts)
-		}*/
+/*    if (ajaxCreateUrl){
+         def ajaxScripts = getAjaxDefaultValueScripts()
+         resultPageJs.append(ajaxScripts)
+      }*/
 		for(Entry<String, DFButton> entry: dataframeButtons.entrySet()){
 			DFButton btn = (DFButton)entry.value;
 			btn.name = entry.key;
@@ -1012,7 +1014,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, wrapButtons)
 		/*buttonHtmlStringBuilder.append("</v-layout></v-container></v-card-actions>\n")
-		buttonHtmlStringBuilder.append(" <font color='red'><div id='$dataframeName-errorContainer'></div></font>\n");*/
+        buttonHtmlStringBuilder.append(" <font color='red'><div id='$dataframeName-errorContainer'></div></font>\n");*/
 
 	}
 
@@ -1099,55 +1101,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			}
 		}
 		String updateStoreScriptcaller = ""
-		String updateStoreScript = ""
 		if(createStore){
-			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n ${dataframeName}Var.updateStoreState(response, stateVar);"""
-			updateStoreScript = """
-
-updateStoreState: function(response, stateVar){
-               
-                var dataframe = response.dataframe;
-                let stateVarDf = stateVar+"."+dataframe;
-                var response = response.data
-                let id = response.keys["id"];
-                    let stateVarObj1 = eval(stateVarDf);
-
-                if(stateVarObj1){
-                    Vue.set(eval(' stateVarObj1'), 'key', id);
-                }
-                if(response.hasOwnProperty('additionalData') ) {
-                    Object.keys(response.additionalData).forEach(function (key) {
-                    var embDfr = response.additionalData[key];
-                    if (embDfr.hasOwnProperty('data')){
-                        if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
-                        
-                            ${dataframeName}Var.updateStoreState(embDfr, stateVar)
-                        } else {
-                                dataframe = embDfr.dataframe;
-                                if(dataframe){
-                                
-                                    let stateVarDf =stateVar + "." + dataframe;
-                                    if(embDfr.data.hasOwnProperty('keys')){
-                                        let id = embDfr.data.keys["id"];
-                                        let stateVarObj2 = eval(stateVarDf);
-                                        if(stateVarObj2){
-                                           Vue.set(eval('stateVarObj2'), 'key', id);
-                                           let propKey = "${dataframeName}Var." + dataframe + "_data";
-                                           Vue.set(eval(propKey), 'key', id);
-                                        }
-                                    }
- 
-                                 }
-                        }
-                    }
-
-                    });
-                }
-            },\n
-"""
+			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n drfExtCont.updateStoreState(response, stateVar,${dataframeName}Var);"""
 		}
 		return """
              ${dataframeName}_fillInitData: function(){
+                drfExtCont.saveToStore('$dataframeName','doRefresh',false);
                 if(this.namedParamKey == '' || this.namedParamKey == undefined){
                     if(this.${dataframeName}_prop && this.${dataframeName}_prop.hasOwnProperty('key')){
                         this.namedParamKey = "this.${dataframeName}_prop.key?this.${dataframeName}_prop.key:this.\$store.state.${dataframeName}.key"; 
@@ -1161,6 +1120,7 @@ updateStoreState: function(response, stateVar){
                 ${allParamsSb.toString()}
                 allParams['dataframe'] = '$dataframeName';
                 $doBeforeRefresh
+                drfExtCont.saveToStore('vueInitDataframe','overlay_value',true);
                 axios.get('$df.ajaxUrl', {
                     params: allParams
                 }).then(function (responseData) {
@@ -1169,13 +1129,13 @@ updateStoreState: function(response, stateVar){
                            ${dataframeName}Var.${dataframeName}_populateJSONData(response.data);
                         }
                         $doAfterRefresh 
+                drfExtCont.saveToStore('vueInitDataframe','overlay_value',false);
                   ${updateStoreScriptcaller} 
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
              },\n
-             ${updateStoreScript}
               """
 	}
 
@@ -1205,12 +1165,12 @@ updateStoreState: function(response, stateVar){
                     if(ajaxFileSave){
                        jQuery.each(ajaxFileSave, function( index, value ) {
                          $vueFileSaveVariables
-  						 var dfrVar = eval(${dataframeName}Var);
-  						 dfrVar[value.fieldName+'_ajaxFileSave'](responseData, allParams); 	
-					   });
+                   var dfrVar = eval(${dataframeName}Var);
+                   dfrVar[value.fieldName+'_ajaxFileSave'](responseData, allParams);     
+                  });
                     } 
                   $addKeyToVueStore
-				""")
+            """)
 		return """
               ${dataframeName}_save: function(){
                var allParams = {};
@@ -1223,15 +1183,15 @@ updateStoreState: function(response, stateVar){
                 axios({
                     method:'post',
                     url:'$df.ajaxSaveUrl',
-                    params: allParams
+                    data: allParams
                 }).then(function (responseData) {
                 var response = responseData.data;
                 ${doAfterSaveStringBuilder.toString()}
                 drfExtCont.showAlertMessage(response);
-				if(response.success) {
+            if(response.success) {
                  drfExtCont.updateToStore(response, ${dataframeName}Var.${dataframeName}_data);
                   ${doAfterSave}
-            	}
+               }
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -1263,12 +1223,13 @@ updateStoreState: function(response, stateVar){
                  ${embdDfrs.toString()}
                  if(embdDfrs){
                     for(var em in embdDfrs){
-                         var emS = embdDfrs[em] + "_ref"
+                         var emS = embdDfrs[em].toLowerCase() + "_ref"
                          var emF = embdDfrs[em] + "_form"
-                          
-                         for(var a in eval("this.\$refs."+emS+".\$data")){
-                              eval("this.\$refs."+emS+".\$refs."+emF).reset();
-                          }
+                         if(eval("this.\$refs."+emS)){ 
+                             for(var a in eval("this.\$refs."+emS+".\$data")){
+                                 eval("this.\$refs."+emS+".\$refs."+emF).reset();
+                             }
+                         }
                      }
                  }
                 ${keyFieldNamesInsertBuilder.toString()}  
@@ -1339,7 +1300,7 @@ updateStoreState: function(response, stateVar){
 		}
 
 		vStore.addToState("key:''\n,")
-		vStore.addToState("doRefresh: ''\n,")
+		vStore.addToState("doRefresh: {},\n")
 	}
 
 	public List getKeyFieldNameForNamedParameter(df){
@@ -1385,7 +1346,7 @@ updateStoreState: function(response, stateVar){
 			if(btn.image && btn.image.showIcon){
 				btnString=""" <v-btn ${WidgetVue.toolTip(btn)} class='text-capitalize $classNames' type='button' id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr><img height="${btn.image.height ?: 20}" width="${btn.image.width ?: 25}" src="$imgUrl"/></v-btn>\n"""
 			}else{
-				btnString=" <v-btn ${WidgetVue.toolTip(btn)} class='text-capitalize $classNames' type='button' id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr>${buttonLabel}</v-btn>\n"
+				btnString=" <v-btn ${WidgetVue.toolTip(btn)} class='text-capitalize $classNames' type='button' id='$dataframeName-${btn.name}' @click.stop='${dataframeName}_${btn.name}' $attr>${buttonLabel}</v-btn>\n"
 			}
 		}
 
@@ -1455,13 +1416,13 @@ updateStoreState: function(response, stateVar){
 		QueryTranslator queryTranslator = ast.createQueryTranslator( hql , hql , Collections.EMPTY_MAP, factory, null );
 		queryTranslator.compile( Collections.EMPTY_MAP, true );
 		/*
-		 def retTypes = queryTranslator.getReturnTypes()
-		 def qIdent = queryTranslator.getQueryIdentifier()
-		 def metaClass = queryTranslator.getMetaClass()
-		 def metaProp = queryTranslator.getMetaPropertyValues()
-		 def columns = queryTranslator.getColumnNames()
-		 def aliases = queryTranslator.getReturnAliases()
-		 */
+         def retTypes = queryTranslator.getReturnTypes()
+         def qIdent = queryTranslator.getQueryIdentifier()
+         def metaClass = queryTranslator.getMetaClass()
+         def metaProp = queryTranslator.getMetaPropertyValues()
+         def columns = queryTranslator.getColumnNames()
+         def aliases = queryTranslator.getReturnAliases()
+         */
 		return queryTranslator.getSQLString();
 	}
 
@@ -1820,19 +1781,18 @@ updateStoreState: function(response, stateVar){
 	}
 
 /*
-	public def getPersistentPropertyByName(String fieldName){
-		def parentdomainalais = getDomainAlais()
-		def domainMapp = writableDomains.get(parentdomainalais)
-		def domainClass = domainClassFromParseDomain(domainMapp)
-		def prop = domainClass.getPropertyByName(fieldName)
-		return prop
-	}
+   public def getPersistentPropertyByName(String fieldName){
+      def parentdomainalais = getDomainAlais()
+      def domainMapp = writableDomains.get(parentdomainalais)
+      def domainClass = domainClassFromParseDomain(domainMapp)
+      def prop = domainClass.getPropertyByName(fieldName)
+      return prop
+   }
 
-	public static def domainClassFromParseDomain(Map domainMapp){
-		Map parsedDomain = domainMapp.get("parsedDomain")
-		def domainClass = parsedDomain.get("value")
-		return domainClass
-	}
+   public static def domainClassFromParseDomain(Map domainMapp){
+      Map parsedDomain = domainMapp.get("parsedDomain")
+      def domainClass = parsedDomain.get("value")
+      return domainClass
+   }
 */
 }
-

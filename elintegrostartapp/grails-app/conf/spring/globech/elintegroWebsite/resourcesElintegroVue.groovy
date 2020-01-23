@@ -132,10 +132,9 @@ beans {
                         ,url:'/assets'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
 
-
                 ]
         ]
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+        currentFrameLayout = ref("clientProjectPageDataframeLayout")
 
     }
     vueTechnologiesDataframe(DataframeVue) { bean ->
@@ -221,18 +220,21 @@ beans {
                 "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validate":["rule":["v => !!v || 'Phone is required'"]],
-                                "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone is required']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 linkedin :["name":"linkedin","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.availablePosition"  :[
-                        "widget"        : "ComboboxVue"
-                        ,"name"         : "person.availablePosition"
-                        ,internationalize: true
-                        ,"hql"          : "select position.id as id, position.name as name from Position position"
+                        "widget"             :"ComboboxVue"
+                        ,"name"              :"person.availablePosition"
+                        ,internationalize    :true
+                        ,initBeforePageLoad  :true
+                        ,multiple            :true
+                        ,"hql"               : "select position.id as id, position.name as name from Position as position"
 
-                        ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        ,"flexGridValues"    : ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
+                        , search:true
+
                 ],
 
 

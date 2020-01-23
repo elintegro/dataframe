@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -7,7 +7,7 @@ Copyright © 2007-2019  Elinegro Inc. Eugene Lipkovich, Shai Lipkovich
 This program is under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
 See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works. 
+You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works.
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
@@ -27,20 +27,17 @@ class MultiSelectComboboxVue extends WidgetVue {
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
-        String fldName = dataframe.getDataVariableForVue(field)
+        String fldName = getFieldName(dataframe, field)
         boolean isReadOnly = dataframe.isReadOnly(field)
-        String label = field.label
-        String validate = field?.validate
-        def disabled = field.disabled == null? false : field.disabled
         def search = field?.search
         String displayMember = field.displayMember
         return """
             <v-combobox
           v-model="$fldName"
           :items="${fldName}_items"
-          ${validate?":rules = '${fldName}_rule'":""}
-          label="$label"
-          ${disabled?":readonly":""}
+          ${validate(field)?":rules = '${fldName}_rule'":""}
+          label="${getLabel(field)}"
+          ${isDisabled(dataframe, field)?":readonly":""}
           ${search?"::search-input.sync= '${fldName}_search'":""}
           multiple
           item-text="${displayMember}"
@@ -55,7 +52,8 @@ class MultiSelectComboboxVue extends WidgetVue {
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         def search = field?.search
-        return """$dataVariable:\"\",\n
+        String fromSUper = super.getVueDataVariable(dataframe, field)
+        return """$fromSUper
                   ${dataVariable}_items:[],\n
                   ${search?"${dataVariable}_search:null,\n":""}"""
 
@@ -84,13 +82,6 @@ class MultiSelectComboboxVue extends WidgetVue {
         String dataVariable = dataframe.getDataVariableForVue(field)
         String thisFieldName = dataframe.getFieldId(field)
         return """allParams["$thisFieldName"] = drfExtCont.mapStringify(this.$dataVariable, '$valueMember'),\n"""
-    }
-
-    String getVueSaveVariables(DataframeVue dataframe, Map field) {
-        String valueMember = field.valueMember?:"id"
-        String dataVariable = dataframe.getDataVariableForVue(field)
-        String thisFieldName = dataframe.getFieldId(field)
-        return """allParams['$thisFieldName'] = drfExtCont.mapStringify(this.$dataVariable, '$valueMember'); \n"""
     }
 
     public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){

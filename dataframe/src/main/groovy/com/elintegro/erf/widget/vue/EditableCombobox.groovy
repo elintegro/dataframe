@@ -15,25 +15,9 @@ package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
 
-class TextAreaWidgetVue extends WidgetVue {
+class EditableCombobox extends WidgetVue {
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
-        String fldName = getFieldName(dataframe, field)
-        boolean isReadOnly = dataframe.isReadOnly(field)
-        String rows = field.rows?:'4'
-        String marginBottom = field.marginBottom?:'auto'
-        return """<v-textarea
-          name="$fldName"
-          label="${getLabel(field)}"
-          v-model = "$fldName" 
-          ${validate(field)?":rules = '${fldName}_rule'":""}
-          ${isDisabled(dataframe, field)?":disabled = true":""}
-          ${isReadOnly?"readonly":''}
-          ${toolTip(field)}
-          rows=$rows  
-          auto-grow
-          style="width:${getWidth(field)}; height:${getHeight(field)}; margin-bottom:$marginBottom"
-          ${getAttr(field)}
-        ></v-textarea>"""
+        return null
     }
 }

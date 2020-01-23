@@ -16,12 +16,10 @@ package com.elintegro.erf.widget.vue
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.ResultPageHtmlBuilder
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DbResult
 import com.elintegro.erf.dataframe.ParsedHql
 import com.elintegro.erf.dataframe.db.fields.MetaField
-import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.utils.MapUtil
 import grails.converters.JSON
@@ -32,7 +30,7 @@ import org.apache.commons.lang.WordUtils
 /**
  * Created by kchapagain on Nov, 2018.
  */
-class GridWidgetVue extends WidgetVue {
+class GridWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
@@ -84,7 +82,7 @@ class GridWidgetVue extends WidgetVue {
                 if(manageFields){
                     if(manageFields.containsKey(propItemVal)){
                         if('link' == manageFields[propItemVal].type){
-                            tdString = "\n<td class='$headerClass'><a :href='item.$propItemText' target='_blank' >{{ item.$propItemText }} </a></td>";
+                            tdString = "\n<td class='$headerClass'><a :href='item.$propItemText' target='_blank' style ='text-decoration :none !important;' >{{ item.$propItemText }} </a></td>";
                         }
                     }
                 }

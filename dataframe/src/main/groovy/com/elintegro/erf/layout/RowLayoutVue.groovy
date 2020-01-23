@@ -13,10 +13,9 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.layout
 
-import com.elintegro.erf.layout.abs.Layout
+
 import com.elintegro.erf.layout.abs.LayoutException
 import com.elintegro.erf.layout.abs.LayoutVue
-import com.elintegro.erf.widget.Widget
 import com.elintegro.erf.widget.vue.WidgetVue
 
 class RowLayoutVue extends LayoutVue{
