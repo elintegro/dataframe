@@ -1183,7 +1183,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                 axios({
                     method:'post',
                     url:'$df.ajaxSaveUrl',
-                    data: allParams
+                    params: allParams
                 }).then(function (responseData) {
                 var response = responseData.data;
                 ${doAfterSaveStringBuilder.toString()}

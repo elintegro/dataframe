@@ -146,15 +146,15 @@ beans {
         initOnPageLoad = false
         route = true
         addFieldDef = [
-                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/java.PNG"],
-                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/javascript.PNG"],
-                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/grailsphoto.PNG"],
-                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/vuejs.PNG"],
-                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kafka.PNG"],
-                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/oracle.PNG"],
-                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/nodejs.PNG"],
-                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kubernetes.PNG"],
-                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/mysql.PNG"],
+                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/java.PNG", "aspectRatio":"1.5"],
+                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/javascript.PNG", "aspectRatio":"1.5"],
+                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/grailsphoto.PNG", "aspectRatio":"1.5"],
+                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/vuejs.PNG", "aspectRatio":"1.0"],
+                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kafka.PNG", "aspectRatio":"1.0"],
+                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/oracle.PNG", "aspectRatio":"1.0"],
+                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/nodejs.PNG", "aspectRatio":"1.0"],
+                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kubernetes.PNG", "aspectRatio":"1.0"],
+                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/mysql.PNG", "aspectRatio":"1.0"],
 
         ]
         currentFrameLayout = ref("defaultRouteDataframeLayout")
@@ -207,21 +207,19 @@ beans {
     vueNewEmployeeBasicInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeBasicInformationDataframe']
-        hql = "select person.firstName, person.lastName, person.contactEmail,person.phone from Person person where person.id=:id"
+//      hql = "select person.firstName, person.lastName, person.contactEmail, person.phone from Person person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.contactEmail,person.phone,application.linkedin from Application application inner join application.applicant person where application.id=:id"
         initOnPageLoad = false
-        tab = true
-        saveButton = true
+        saveButton = false
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md1', 'lg1', 'xl1']
         isGlobal = true
-        doAfterSave = """
-                         drfExtCont.saveToStore("vueNewEmployeeBasicInformationDataframe","key", response.nodeId[0]);
-                         drfExtCont.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeResumeDataframe-tab-id');"""
         addFieldDef = [
-                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone is required']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                linkedin :["name":"linkedin","type":"link","widget":"InputWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+
+                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'FirstName.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'LastName.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.availablePosition"  :[
                         "widget"             :"ComboboxVue"
                         ,"name"              :"person.availablePosition"
@@ -239,9 +237,9 @@ beans {
 
 
         ]
-//        dataframeButtons = [
-//                next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeResumeDataframe-tab-id");\n""",
-//                      flexGridValues: ['xs12', 'sm12', 'md1', 'lg1', 'xl1'],url: ""]]
+        dataframeButtons = [
+                next:[name:"next", type: "button",script:'this.newEmployeeBasicInformation()',
+                      flexGridValues: ['xs12', 'sm12', 'md1', 'lg1', 'xl1'], url:""]]
 
 
         currentFrameLayout = ref("emptyDataframeLayout")

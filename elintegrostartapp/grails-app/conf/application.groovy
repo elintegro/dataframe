@@ -361,8 +361,9 @@ environments {
 	}
 
 	production {
-		baseUrl = "http://208.75.75.83"
-		grails.serverURL = "http://208.75.75.83/elintegrostartapp"
+		server.contextPath = "/"
+		rootPath = ""
+		grails.serverURL = "http://208.75.75.83"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro.himalaya'
 		dataSource {
 			logSql = true

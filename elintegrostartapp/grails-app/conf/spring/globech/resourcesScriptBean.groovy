@@ -147,6 +147,7 @@ beans {
                 var allParams = {};
                 allParams["id"] = eval(this.namedParamKey);
                 allParams['dataframe'] = 'vueAfterLoggedinDataframe';
+                
                 axios.get('${contextPath}/dataframe/ajaxValues', {
                     params: allParams
                 }).then(function(responseData) {
@@ -439,5 +440,37 @@ beans {
         data = "vueNewEmployeeApplicantDataframe_tab_model : this.tabValue,\nvueNewEmployeeApplicantDataframe_display: true, \n"
         computed = """tabValue(){return this.\$store.state.vueNewEmployeeApplicantDataframe.vueNewEmployeeApplicantDataframe_tab_model}"""
         watch = """ tabValue:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantDataframe_tab_model = val;}},"""
+    }
+    vueNewEmployeeBasicInformationDataframe_script(VueJsEntity){bean ->
+        methods = """  
+                      newEmployeeBasicInformation(){
+                      console.log("Inside employeeinformation")
+                       var details = this.vueNewEmployeeBasicInformationDataframe
+                       console.log(details)
+                       var allParams = {};
+                       allParams['firstName'] = this.vueNewEmployeeBasicInformationDataframe_person_firstName;
+                       allParams['lastName'] = this.vueNewEmployeeBasicInformationDataframe_person_lastName;
+                       allParams['email'] = this.vueNewEmployeeBasicInformationDataframe_person_contactEmail;
+                       allParams['phone'] = this.vueNewEmployeeBasicInformationDataframe_person_phone;
+                       allParams['linkedin'] = this.vueNewEmployeeBasicInformationDataframe_application_linkedin;
+                       allParams['availablePosition'] = this.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
+                       allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
+                       console.log(allParams)
+                       console.log("do you see all params?")
+                       if (this.\$refs.vueNewEmployeeBasicInformationDataframe_form.validate()){
+                       axios.get('${contextPath}/EmployeeApplication/createApplicant', {
+                       params: allParams
+                         }).then(function(responseData) {
+                          var response = responseData.data;
+                          console.log(response)  
+                });
+                
+                       drfExtCont.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
+                  }   
+                  else{
+                  alert("Error in saving")
+                  }
+                   }
+                          """
     }
 }
