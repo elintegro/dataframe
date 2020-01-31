@@ -16,17 +16,17 @@
     <asset:javascript src="jquery/jquery-1.11.2.js"/>
     <asset:javascript src="jquery/dateformat.js"/>
 
-    <g:if test="${Environment.current == Environment.DEVELOPMENT}">
+%{--    <g:if test="${Environment.current != Environment.DEVELOPMENT}">--}%
         <asset:stylesheet href="/vuejs/vue-material.css"/>
         <asset:stylesheet href="/vuejs/vuetify.min.css"/>
-    </g:if>
-    <g:else>
+%{--    </g:if>--}%
+%{--    <g:else>--}%
 
-        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    %{--<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">--}%
+%{--        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">--}%
+%{--    --}%%{--<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">--}%
 
-        <asset:stylesheet href="/vuejs/vuetify.min.css"/>
-    </g:else>
+%{--        <asset:stylesheet href="/vuejs/vuetify.min.css"/>--}%
+%{--    </g:else>--}%
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
 
     <asset:stylesheet href="/vuejs/gc-vue.css"/>
@@ -48,23 +48,23 @@
 <div id="dfr"></div>
 ${constructedPageHtml}
 
-<g:if test="${Environment.current == Environment.DEVELOPMENT}">
+%{--<g:if test="${Environment.current != Environment.DEVELOPMENT}">--}%
     <asset:javascript src="vuejs/vue.js"/>
     <asset:javascript src="vuejs/vuetify.js"/>
     <asset:javascript src="vuejs/vue-router.js"/>
     <asset:javascript src="vuejs/vuex.js"/>
     <!--asset:javascript src="vuejs/vue-spring-security.min.js"/-->
     <!--script type="text/javascript" src="https://unpkg.com/vue-spring-security"></script-->
-</g:if>
-<g:else>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.18/dist/vue.js"></script>
+%{--</g:if>--}%
+%{--<g:else>--}%
+%{--    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.18/dist/vue.js"></script>--}%
 %{--<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>--}%
-    <asset:javascript src="vuejs/vuetify.js"/>
-    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+%{--    <asset:javascript src="vuejs/vuetify.js"/>--}%
+%{--    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>--}%
 
-    <script src="https://unpkg.com/vuex"></script>
-    <!-- script type="text/javascript" src="https://unpkg.com/vue-spring-security"></script-->
-</g:else>
+%{--    <script src="https://unpkg.com/vuex"></script>--}%
+%{--    <!-- script type="text/javascript" src="https://unpkg.com/vue-spring-security"></script-->--}%
+%{--</g:else>--}%
 <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
 %{--<script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>--}%
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
