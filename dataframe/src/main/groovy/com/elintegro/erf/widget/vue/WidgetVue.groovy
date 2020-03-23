@@ -14,9 +14,12 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.DFButton
+import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.dataframe.ScriptBuilder
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
+import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.erf.widget.Widget
 import grails.util.Holders
 import grails.util.Environment
@@ -40,29 +43,37 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
-        String dataVariable = dataframe.getDataVariableForVue(field)
         String validationString = ""
         if(validate(field)){
             String validationRules = validationRules(field)
+            String dataVariable = dataframe.getDataVariableForVue(field)
             validationString = """ ${dataVariable}_rule: $validationRules,\n"""
         }
-        return """$dataVariable:\"\",\n
-                   $validationString"""
+        return """$validationString"""
+    }
 
+    String getStateDataVariable(DataframeVue dataframe, Map field){
+
+        String dataVariable = dataframe.getDataVariableForVue(field)
+        return """$dataVariable:\"\",\n"""
     }
 
     String getVueSaveVariables(DataframeVue dataframe, Map field){
         String thisFieldName = dataframe.getFieldId(field)
         String dataVariable = dataframe.getDataVariableForVue(field)
 //        String dataVariable = dataframe.getDataVariableForVueCapitalized(field)
-        return """allParams['$thisFieldName'] = this.$dataVariable;\n"""
+//        return """allParams['$thisFieldName'] = this.$dataVariable;\n"""
+        return ""
     }
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         def defaultValue = field.defaultValue?:""
         String fillState = ""
+/*
         return """this.$dataVariable = response['$key']?response['$key']:"$defaultValue\";
                 """
+*/
+        return ""
     }
 
     protected String applyLayout(DataframeVue df, Map field, String html){
@@ -313,6 +324,9 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return imgUrl
     }
 
+    protected getModelString(DataframeVue dataframe, Map field){
+        return "state."+getFieldName(dataframe, field)
+    }
     protected String getFieldName(DataframeVue dataframe, Map field){
         return dataframe.getDataVariableForVue(field)
     }
@@ -321,7 +335,6 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         boolean applyRule = false
         applyRule = applyRule || field.validate
         applyRule = applyRule || field.required
-        applyRule = applyRule || isMandatory(field)
         applyRule = applyRule || field.validationRules
 
         return applyRule
@@ -330,7 +343,10 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     protected String validationRules(Map field){
         StringBuilder rules = new StringBuilder()
         rules.append("[")
-
+        if(field.required || isMandatory(field)){
+            String message = getMessageSource().getMessage("default.required.message", null, "default.required.message", LocaleContextHolder.getLocale())
+            rules.append("""  v => !!v || '$message', """)
+        }
         if(field.validationRules){
             def rulesList = field.validationRules
             rulesList.each{
@@ -339,14 +355,11 @@ abstract class WidgetVue extends Widget<DataframeVue>{
                     String message = getMessageSource().getMessage(it.message, null, it.message, LocaleContextHolder.getLocale())
                     rules.append(" || '"+message+"' ")
                 }
-                    rules.append(""" , """)
+                rules.append(""" , """)
 
             }
         }
-        if(field.required || isMandatory(field)){
-            String message = getMessageSource().getMessage("default.required.message", null, "default.required.message", LocaleContextHolder.getLocale())
-            rules.append("""  v => !!v || '$message', """)
-        }
+
         if(field.validate)
             rules.append(widgetValidationRule(field))
 

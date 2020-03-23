@@ -30,7 +30,7 @@ class PhoneNumberWidgetVue extends WidgetVue{
         return """
                <v-text-field
                  label="$label"
-                 v-model="$fldName"
+                 v-model="${getModelString(dataframe, field)}"
                  :rules = "${fldName}_rule"
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}
@@ -54,6 +54,7 @@ class PhoneNumberWidgetVue extends WidgetVue{
             }
         }
         String vueInstance = dataframe.dataframeName+"_instance"
-        return """this.$dataVariable = response['$key'];"""
+//        return """this.$dataVariable = response['$key'];"""
+        return ""
     }
 }

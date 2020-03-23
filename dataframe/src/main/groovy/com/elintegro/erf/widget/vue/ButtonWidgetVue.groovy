@@ -13,8 +13,9 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
-
+import com.elintegro.erf.dataframe.ResultPageHtmlBuilder
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 
 
@@ -36,7 +37,7 @@ class ButtonWidgetVue extends WidgetVue{
                                ${fldName}_method: function(addressValue){
                                         $script
                                },\n""")
-                     //Add security access for the button
+        //Add security access for the button
         String ret = wrapWithSpringSecurity(field, """$refHtml<v-btn ${getAttr(field)} ${toolTip(field)} :disabled="${isDisabled(dataframe, field)}" id='$fldName' @click.stop='${fldName}_method'>${getLabel(field)}</v-btn>\n""")
         return ret;
     }
@@ -52,15 +53,11 @@ class ButtonWidgetVue extends WidgetVue{
         DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
         String refDataframeName = refDataframe.dataframeName
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
-        store.addToShowHideParamNames("${refDataframeName}_display : true,\n")
-        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_display:false,\n")
+        store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
         dataframe.getVueJsBuilder().addToDataScript(" ${refDataframeName}_data:{key:'', refreshGrid:true},\n")
         if(onClick.showAsDialog){
-            dataframe.getVueJsBuilder().addToComputedScript("""check${refDataframeName}CloseButton: function(){return this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display}, \n""")
-            dataframe.getVueJsBuilder().addToWatchScript("""check${refDataframeName}CloseButton:{handler: function(val, oldVal) {
-                               this.${refDataframeName}_display = this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display;}}, \n """)
-
-            sb.append("""<v-dialog v-model="${refDataframeName}_display" width='initial' max-width='500px'>""")
+            dataframe.getVueJsBuilder().addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
+            sb.append("""<v-dialog v-model="visibility.${refDataframeName}" width='initial' max-width='500px'>""")
             sb.append(refDataframe.getComponentName("resetForm=true "))
             sb.append("""</v-dialog>""")
         } else {

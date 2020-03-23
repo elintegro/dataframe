@@ -26,10 +26,11 @@ class EmailWidgetVue extends WidgetVue{
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = dataframe.getDataVariableForVue(field)
         boolean isReadOnly = dataframe.isReadOnly(field)
+        String modelString = getModelString(dataframe, field)
         return """
                <v-text-field
                  label="${getLabel(field)}"
-                 v-model="$fldName"
+                 v-model="${modelString}"
                  ${validate(field)?":rules = '${fldName}_rule'":""}
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}
@@ -40,12 +41,13 @@ class EmailWidgetVue extends WidgetVue{
     String getVueSaveVariables(DataframeVue dataframe, Map field){
         String thisFieldName = dataframe.getFieldId(field)
         String dataVariable = dataframe.getDataVariableForVue(field)
-        return """allParams['$thisFieldName'] = this.$dataVariable;\n allParams['contactEmail'] = this.$dataVariable;\n"""
+        return """allParams['$dataVariable'] = this.state.$dataVariable;\n allParams['contactEmail'] = this.state.$dataVariable;\n"""
     }
     @Override
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) {
         String vueInstance = dataframe.dataframeName+"_instance"
-        return """this.$dataVariable = response['$key'];"""
+//        return """this.$dataVariable = response['$key'];"""
+        return ""
     }
 
     @Override

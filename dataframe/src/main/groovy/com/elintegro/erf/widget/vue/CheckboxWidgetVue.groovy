@@ -27,8 +27,9 @@ class CheckboxWidgetVue extends WidgetVue{
             onChange = "@change='${fldName}_onChange'"
             dataframe.getVueJsBuilder().addToMethodScript(""" ${fldName}_onChange: function() { \n$field.onChange\n},\n""")
         }
+        String modelString = getModelString(dataframe, field)
         return """<v-checkbox
-      v-model = "$fldName" 
+      v-model = "$modelString" 
       ${validate(field)?":rules = '${fldName}_rule'":""}
       ${isDisabled(dataframe, field)?":disabled = true":""}
       label="${getLabel(field)}"
@@ -41,16 +42,11 @@ class CheckboxWidgetVue extends WidgetVue{
      ></v-checkbox>"""
     }
 
-    String getVueDataVariable(DataframeVue dataframe, Map field) {
+    String getStateDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         boolean  checked = field.defaultValue || field.checked
         checked = checked?:false
-        String validationString = ""
-        if(validate(field)){
-            String validationRules = validationRules(field)
-            validationString = """ ${dataVariable}_rule: $validationRules,\n"""
-        }
-        return """$dataVariable: $checked,\n $validationString"""
+        return """$dataVariable: $checked,\n"""
 
     }
 }

@@ -16,11 +16,12 @@ package com.elintegro.erf.widget
 import com.elintegro.erf.dataframe.Dataframe
 
 abstract class AbstractWidget {
-	
+
 	def abstract getHeaderScript(Dataframe dataframe, Map info)
 	def abstract  getBodyScript(Dataframe dataframe, Map info)
 	def abstract  getHtml(Dataframe dataframe, Map info)
 
-	
-		
+
+
 }
+

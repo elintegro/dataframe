@@ -27,11 +27,12 @@ class PictureDisplayWidgetVue extends WidgetVue{
         String aspectRatio  = field.aspectRatio?field.aspectRatio:"2.75"
         String heightString = height?"height=$height":""
         String widthString  = width?"""width=$width """:""
+        String modelString = getModelString(dataframe, field)
         String html =  """<v-img
            id = "$fldParam"
-          :src="$fldParam"
+          :src="$modelString"
           
-          :alt = "${fldParam}_alt"
+          :alt = "${modelString}_alt"
           aspect-ratio="$aspectRatio"
           ${toolTip(field)} 
            $heightString
@@ -43,10 +44,12 @@ class PictureDisplayWidgetVue extends WidgetVue{
         return html
     }
 //    lazy-src="$imgUrl"
-    String getVueDataVariable(DataframeVue dataframe, Map field) {
+    String getStateDataVariable(DataframeVue dataframe, Map field) {
         String fldParam = dataframe.getDataVariableForVue(field)
-        String url = field.url?:""
-        String alt = field.alt?:""
+        String defImgUrl = getDefaultImageName()
+        String url = field.url?:defImgUrl
+        String alt = field.alt?:defImgUrl
+        String imgUrl =  getImageUrl(field)
         return """$fldParam:'$url',\n
                   ${fldParam}_alt:'$alt',\n"""
 
@@ -54,10 +57,11 @@ class PictureDisplayWidgetVue extends WidgetVue{
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
 
-       String imgUrl =  getImageUrl(field)
-        String defImgUrl = getDefaultImageName()
+/*
         return """this.$dataVariable = response['$key']?"$imgUrl"+response['$key']:"$defImgUrl";\n
                   this.${dataVariable}_alt = response['$key']?response['$key']:"$defImgUrl";"""
+*/
+        return ""
     }
 
     String getVueSaveVariables(DataframeVue dataframe, Map field){

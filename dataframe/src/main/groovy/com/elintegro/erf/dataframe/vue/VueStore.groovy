@@ -17,37 +17,35 @@ class VueStore {
 
     private StringBuilder state = null
     private StringBuilder mutation = null
-    private StringBuilder showHideParamNames = new StringBuilder()
+    private StringBuilder getter = null
+    private StringBuilder dataframeVisibilityMap = new StringBuilder()
 
     VueStore(){
         state = new StringBuilder()
+        getter = new StringBuilder()
         mutation = new StringBuilder()
     }
-
-//    StringBuilder state = new StringBuilder()
-//    StringBuilder mutation = new StringBuilder()
-    StringBuilder getter = new StringBuilder()
 
     String getState(){
         return state.toString()
     }
 
-    void addToState(String value){
+    void addToState(def value){
         state.append(value)
     }
 
-    String getShowHideParamNames(){
+    String getDataframeVisibilityMap(){
 
-        return showHideParamNames.toString()
+        return dataframeVisibilityMap.toString()
     }
 
-    void addToShowHideParamNames(String value){
-        showHideParamNames.append(value)
+    void addToDataframeVisibilityMap(String value){
+        dataframeVisibilityMap.append(value)
     }
 
     public String getGlobalState(){
         StringBuilder sbb = new StringBuilder()
-        sbb.append(showHideParamNames.toString())
+        sbb.append(dataframeVisibilityMap.toString())
 
         return sbb.toString()
     }
@@ -72,6 +70,13 @@ class VueStore {
         mutation.append(value)
     }
 
+    String getGetters(){
+        return getter.toString()
+    }
+
+    void addToGetters(String value){
+        getter.append(value)
+    }
     /*String buildMutation(dataframeName){
         if(mutation.length() == 0){
             return ""

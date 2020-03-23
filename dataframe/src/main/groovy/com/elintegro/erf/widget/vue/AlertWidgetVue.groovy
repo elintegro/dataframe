@@ -41,3 +41,4 @@ class AlertWidgetVue extends WidgetVue{
 
     }
 }
+

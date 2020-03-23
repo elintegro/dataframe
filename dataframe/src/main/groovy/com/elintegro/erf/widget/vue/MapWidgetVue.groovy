@@ -45,12 +45,13 @@ class MapWidgetVue extends WidgetVue{
 
                               validateGoogleAddress: function(addressValue ){
                                  var googleAddressObject = "";
+                                 const self = this;
                                  try {
                                      var geocoder = new google.maps.Geocoder();
                                      var address = addressValue;
                                      geocoder.geocode( { 'address': address}, function(results, status) {
                                          if (status == 'OK') {
-                                             ${dataframeName}Var.afterAddressValidationSuccess(results);
+                                             self.afterAddressValidationSuccess(results);
                                          } else {
                                              alert('Geocode was not successful for the following reason: ' + status);
                                          }

@@ -81,7 +81,7 @@ class MultiSelectComboboxVue extends WidgetVue {
         String valueMember = field.valueMember
         String dataVariable = dataframe.getDataVariableForVue(field)
         String thisFieldName = dataframe.getFieldId(field)
-        return """allParams["$thisFieldName"] = drfExtCont.mapStringify(this.$dataVariable, '$valueMember'),\n"""
+        return """allParams["$thisFieldName"] = excon.mapStringify(this.$dataVariable, '$valueMember'),\n"""
     }
 
     public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){

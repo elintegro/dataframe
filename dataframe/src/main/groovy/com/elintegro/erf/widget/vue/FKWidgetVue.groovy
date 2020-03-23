@@ -17,6 +17,7 @@ import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.layout.abs.LayoutVue
 
 /**
  * This Widget is created to provide saving capabilities to the Foreign Keys fields
@@ -36,7 +37,7 @@ class FKWidgetVue extends WidgetVue{
         Dataframe refDataframe = getReferenceDataframe(field.parent)
         String refDataframeName = refDataframe.dataframeName
         //todo now the update of store value in save method is not automated. make it automated.
-        return """$dataVariable : drfExtCont.getFromStore('$refDataframeName','key'),\n"""
+        return """$dataVariable : excon.getFromStore('$refDataframeName','key'),\n"""
 
     }
 
@@ -48,10 +49,10 @@ class FKWidgetVue extends WidgetVue{
             String keyField = entry.key;
             String keyFieldName = Dataframe.buildFullFieldNameKeyParam(refDataframe, entry.key);
             String parentFieldName = Dataframe.buildFullFieldNameParentParam(refDataframe, keyField);
-            buildParentAndRefParams.append("allParams[\"$parentFieldName\"] = \"$thisFieldName\";\n")
-            buildParentAndRefParams.append("allParams[\"ref-$thisFieldName\"] = \"$keyFieldName\";\n")
             String dataVariable = dataframe.getDataVariableForVue(field)
-            buildParentAndRefParams.append("allParams['$thisFieldName'] = this.$dataVariable;\n")
+            buildParentAndRefParams.append("allParams[\"$parentFieldName\"] = \"$thisFieldName\";\n")
+            buildParentAndRefParams.append("allParams[\"ref_$dataVariable\"] = \"$keyFieldName\";\n")
+            buildParentAndRefParams.append("allParams['$dataVariable'] = this.state.$dataVariable;\n")
         }
         if(refDataframe.saveButton){
             return ""

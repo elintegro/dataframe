@@ -19,7 +19,9 @@ import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DbResult
 import com.elintegro.erf.dataframe.ParsedHql
+import com.elintegro.erf.dfEditor.DfInstance
 import grails.converters.JSON
+import grails.util.Holders
 import org.springframework.context.i18n.LocaleContextHolder
 import org.apache.commons.lang.WordUtils
 
@@ -40,16 +42,24 @@ class ComboboxVue extends WidgetVue {
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
+        def search = field?.search
+        String validationString = ""
+        if(validate(field)){
+            String validationRules = validationRules(field)
+            validationString = """ ${dataVariable}_rule: $validationRules,\n"""
+        }
+        return """
+                  ${search?"${dataVariable}_search:null,\n":""}
+                   $validationString
+                """
+
+    }
+
+    String getStateDataVariable(DataframeVue dataframe, Map field){
+
+        String dataVariable = dataframe.getDataVariableForVue(field)
         Map result = generateInitialData(dataframe, field)
         String valueMember = field.valueMember?:"id"
-/*
-        dataframe.getVueJsBuilder().addToWatchScript("""$dataVariable: function(_param){
-                          if(_param){
-                            drfExtCont.saveToStore("${dataframe.dataframeName}","$dataVariable",e.$valueMember?e.$valueMember:'' )
-                          }
-             },\n """)
-*/
-        def search = field?.search
         List keys=[]
         List res
         Map selMap = [:]
@@ -59,20 +69,11 @@ class ComboboxVue extends WidgetVue {
             res = result.result
             selMap = result.selectedMap
         }
-        String validationString = ""
-        if(validate(field)){
-            String validationRules = validationRules(field)
-            validationString = """ ${dataVariable}_rule: $validationRules,\n"""
-        }
         return """$dataVariable:${selMap?selMap as JSON:"\"\""},\n
                   ${dataVariable}_items:${res as JSON} ,\n
                   ${dataVariable}_keys:${keys as JSON},\n
-                  ${search?"${dataVariable}_search:null,\n":""}
-                   $validationString
                 """
-
     }
-
     private Map generateInitialData(DataframeVue dataframe, Map field){
 
         if(!field.initBeforePageLoad){
@@ -93,14 +94,14 @@ class ComboboxVue extends WidgetVue {
     private Map getFromEnumFile(Map field, String enumFileName){
 
         Map result
-            try {
-                String defaultValue = field.defaultValue
-                Class enumClass = Class.forName(enumFileName)
+        try {
+            String defaultValue = field.defaultValue
+            Class enumClass = Class.forName(enumFileName)
 //                def exClass = Holders.grailsApplication.getClassForName(field.enumClassName)
-                result = getEnumData(field, enumClass, defaultValue)
-            } catch(ClassNotFoundException e){
-                e.printStackTrace()
-            }
+            result = getEnumData(field, enumClass, defaultValue)
+        } catch(ClassNotFoundException e){
+            e.printStackTrace()
+        }
 
         return result
     }
@@ -188,8 +189,9 @@ class ComboboxVue extends WidgetVue {
             throw new DataframeException(" Fields are empty for the Dataframe :${dataframe.dataframeName}")
         }
         if(!(field.hql || dictionary || field?.isEnumType || field.enumFileName)){
-                throw new DataframeException(" Hql field is empty for the Dataframe :${dataframe.dataframeName}")
+            throw new DataframeException(" Hql field is empty for the Dataframe :${dataframe.dataframeName}")
         }
+/*
         return """
                var fullFieldName = '$fullFieldName';
                if(!\$.isEmptyObject(response.additionalData)){
@@ -198,20 +200,27 @@ class ComboboxVue extends WidgetVue {
                var selectedData = response.additionalData[fullFieldName]['selectedData'];
                this.$dataVariable = (selectedData!=null || selectedData!=undefined || selectedData != {})?selectedData:'';
                this.${dataVariable}_items = data;
-               } 
+               }
               """
+*/
+        return ""
     }
 
     @Override
     String getVueSaveVariables(DataframeVue dataframe, Map field) {
         String valueMember = field.valueMember?:"id"
         String dataVariable = dataframe.getDataVariableForVue(field)
-        String thisFieldName = dataframe.getFieldId(field)
         boolean isEnumType = field?.isEnumType
 //        if (isEnumType || field?.dictionary){
 //            super.getVueSaveVariables(dataframe, field)
 //        }else {
-        return """allParams['$thisFieldName'] = this.$dataVariable?this.$dataVariable.$valueMember:''; \n"""
+
+        //Since we assign to the allParams storage values, that were predefined in retrieve, we do not need to assign a value to the allParams field entry.
+        //
+        return """
+            //allParams['$dataVariable'] = this.state.$dataVariable?this.state.$dataVariable.$valueMember:''; \n
+            if(!this.state.$dataVariable){allParams['$dataVariable'] = '';}
+        """
 //        }
     }
 
@@ -324,18 +333,19 @@ class ComboboxVue extends WidgetVue {
         if(!isSearchable(field)){
             typeString = """type="button" """
         }
-        String multiple = field.multiple?"multiple":''
         String displayMember = field.displayMember?:'name'
+        String valueMember = field.valueMember?:'id'
+        String modelString = getModelString(dataframe, field)
         """
             <v-combobox
-          v-model="$fldName"
-          :items="${fldName}_items"
+          v-model = "$modelString" 
+          :items="${modelString}_items"
           ${validate(field)?":rules = '${fldName}_rule'":""}
           label="$label"
           ${isDisabled(dataframe, field)?":disabled=true":""}
           item-text="${displayMember}"
+          item-value="${valueMember}"
           small-chips
-          $multiple
           hide-no-data
           hide-selected
           ${isReadOnly?"readonly":''}

@@ -28,16 +28,17 @@ class GalleryDisplayWidgetVue extends WidgetVue{
         boolean isReadOnly = dataframe.isReadOnly(field)
         def previewHeight = field?.previewHeight?:216
         def previewWidth = field?.previewWidth?:346
+        String modelString = getModelString(dataframe, field)
         return """
             <viewer 
-            :images="${fldName}_images"
+            :images="${modelString}_images"
             >
-            <img style="padding: 1px;" v-for="src in ${fldName}_thumbnailImages" :src="src" :key="src" :height="$previewHeight" :width="$previewWidth">
+            <img style="padding: 1px;" v-for="src in ${modelString}_thumbnailImages" :src="src" :key="src" :height="$previewHeight" :width="$previewWidth">
             </viewer>
         """
     }
 
-    String getVueDataVariable(DataframeVue dataframe, Map field) {
+    String getStateDataVariable(DataframeVue dataframe, Map field) {
         String fldName = dataframe.getDataVariableForVue(field)
         return """
                   
@@ -50,6 +51,7 @@ class GalleryDisplayWidgetVue extends WidgetVue{
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
 
+/*
         return """
                var fullFieldName = '$fullFieldName';
                var orginalImages = response.additionalData[fullFieldName]['orginalImages'];
@@ -57,6 +59,8 @@ class GalleryDisplayWidgetVue extends WidgetVue{
                this.${dataVariable}_images = orginalImages;
                this.${dataVariable}_thumbnailImages = thumbnailImages;
               """
+*/
+        return ""
     }
 
     public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){

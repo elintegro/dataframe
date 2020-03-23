@@ -34,10 +34,9 @@ class CountDisplayVue extends WidgetVue{
         boolean isReadOnly = dataframe.isReadOnly(field)
         String autoComplete = field.autoComplete?:'off'
 
-        def fldMetadata = dataframe.fieldsMetadata.get(field.name)
         String html = """<v-text-field
             label="${getLabel(field)}"
-            v-model = "$fldName" 
+            v-model = "${getModelString(dataframe, field)}" 
             ${isDisabled(dataframe, field)?":disabled = true":""}
             ${isReadOnly?"readonly":''}
             ${toolTip(field)}

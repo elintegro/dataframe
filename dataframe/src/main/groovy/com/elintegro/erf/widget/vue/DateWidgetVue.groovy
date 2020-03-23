@@ -13,8 +13,10 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
-
+import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.dataframe.vue.VueJsBuilder
+import com.elintegro.erf.dataframe.vue.VueStore
 import org.springframework.context.i18n.LocaleContextHolder
 
 /**
@@ -32,12 +34,13 @@ class DateWidgetVue extends WidgetVue {
         String menuAttr = field.menuAttr?:""
 //        :nudge-right="40"
 //
+        String modelString = getModelString(dataframe, field)
         return """
                     <v-menu
                         ref="${fldName}_menu"
                         v-model="${fldName}_menu"
                         :close-on-content-click="false"
-                        :return-value.sync="$fldName"
+                        :return-value.sync="$modelString"
                         transition="scale-transition"
                         offset-y
                         full-width
@@ -61,13 +64,14 @@ class DateWidgetVue extends WidgetVue {
                             ${toolTip(field)}
                     ></v-text-field>
                 </template>
-                ${isReadOnly?"":"""<v-date-picker $localeString v-model="$fldName" ${getAttr(field)} no-title scrollable @input="\$refs.${fldName}_menu.save($fldName)"></v-date-picker>"""}
+                ${isReadOnly?"":"""<v-date-picker $localeString v-model="${modelString}" ${getAttr(field)} no-title scrollable @input="\$refs.${fldName}_menu.save($modelString)"></v-date-picker>"""}
                 </v-menu>
                 """
     }
 
-    String getVueDataVariable(DataframeVue dataframe, Map field) {
+    String getStateDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
+/*
        dataframe.getVueJsBuilder().addToMethodScript("""formatDate: function(date) {
                if (!date) return null;
                var d = new Date(date);
@@ -84,17 +88,32 @@ class DateWidgetVue extends WidgetVue {
                                 \$('#${dataVariable}_id').addClass('date-menu-position');
                                 this.${dataVariable}_menu = !this.${dataVariable}_menu;
                              },\n""")
+*/
+        String modelString = getModelString(dataframe, field)
         dataframe.getVueJsBuilder().addToComputedScript(""" 
         ${dataVariable}_formatted() {
-            if (!this.$dataVariable) return null;
-            var d = new Date(this.$dataVariable);
-            this.$dataVariable = d.toISOString();
+            if (!this.$modelString) return null;
+            var d = new Date(this.$modelString);
+            this.$modelString = d.toISOString();
             return d.format("dd/mm/yyyy")
         },\n""")
         String fromSuper = super.getVueDataVariable(dataframe, field)
         return """$fromSuper
-                  ${dataVariable}_menu:'',\n"""
+                  """
 
+    }
+
+    String getVueDataVariable(DataframeVue dataframe, Map field){
+
+        String dataVariable = dataframe.getDataVariableForVue(field)
+        dataframe.getVueJsBuilder().addToMethodScript("""
+
+                             onIconClick_$dataVariable:function(e){
+                                \$('#${dataVariable}_id').addClass('date-menu-position');
+                                this.${dataVariable}_menu = !this.${dataVariable}_menu;
+},\n
+        """)
+        return """${dataVariable}_menu:'',\n"""
     }
 
 }

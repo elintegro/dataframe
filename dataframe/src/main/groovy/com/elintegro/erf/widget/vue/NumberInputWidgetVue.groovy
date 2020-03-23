@@ -31,10 +31,11 @@ class NumberInputWidgetVue extends WidgetVue {
         def min = field.min == null ? 0 : field.min
         def max = field.max == null ? (Math.pow(10, digits) - 1) : field.max
         def step = field.step ? field.step : 0
+        String modelString = getModelString(dataframe, field)
 
         return """<v-text-field
             label="${getLabel(field)}" type="number"
-            v-model = "$fldName" 
+            v-model = "$modelString" 
             ${validate(field) ? ":rules = '${fldName}_rule'" : ":rules = generalRule"}
             ${isDisabled(dataframe, field) ? ":disabled = true" : ""}
             ${isReadOnly?"readonly":''}

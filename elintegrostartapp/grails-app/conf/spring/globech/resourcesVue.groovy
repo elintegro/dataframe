@@ -46,7 +46,7 @@ beans {
         initOnPageLoad = true
 
         vueStore = ["state": "facilityName: '', \nfacilityId:'',\n"]
-        doAfterRefresh = """drfExtCont.saveToStore("vueAppNameDataframe","facilityId", vueAppNameDataframeVar.vueAppNameDataframe_facility_id);"""
+        doAfterRefresh = """excon.saveToStore("vueAppNameDataframe","facilityId", vueAppNameDataframeVar.vueAppNameDataframe_facility_id);"""
         addFieldDef =[
                 "facility.facilityName":[
                         widget: "TextDisplayWidgetVue"
@@ -276,8 +276,8 @@ beans {
         //Vue parameters
         isGlobal = true
         dataframeButtons = [
-                Register:[name:"register", type:"link", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true, attr:"flat", script:""" this.vueRegisterDataframe_display = true;\n  drfExtCont.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', true);\n""", refDataframe: ref("vueRegisterDataframe"), tooltip: [message: 'Register']],
-                Login:[name:"login", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true,script:""" this.vueLoginDataframe_display = true; \n  drfExtCont.saveToStore('dataframeShowHideMaps','vueLoginDataframe_display', true);\n""", refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login']]]
+                Register:[name:"register", type:"link", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true, attr:"flat", script:""" this.vueRegisterDataframe_display = true;\n  excon.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', true);\n""", refDataframe: ref("vueRegisterDataframe"), tooltip: [message: 'Register']],
+                Login:[name:"login", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true,script:""" this.vueLoginDataframe_display = true; \n  excon.saveToStore('dataframeShowHideMaps','vueLoginDataframe_display', true);\n""", refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login']]]
         currentFrameLayout = ref("loginLogoutNavigationLayout")
         createStore = true
 
@@ -322,7 +322,7 @@ beans {
         wrapInForm=true
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doAfterSave = """ drfExtCont.saveToStore('vueLoginNavigation','responseData');\ndrfExtCont.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', false);\n
+        doAfterSave = """ excon.saveToStore('vueLoginNavigation','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', false);\n
                            """
         addFieldDef =[
                 "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
@@ -553,7 +553,7 @@ beans {
         route = true
         initOnPageLoad = true
 //        doBeforeRefresh = """allParams['contactType'] = this.\$route.params.routeId"""
-//        doAfterSave = "drfExtCont.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
+//        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
         componentsToRegister = ["vueContactManagementDataframe"]
         /*,onClick:[showAsDialog: false, refDataframe: ref("vuePrescribedMedicationsDataframe")]
         ,onButtonClick:[
@@ -583,7 +583,7 @@ beans {
 
         ]
 
-        /*dataframeButtons = [ previous: [name:"previous", type: "button", script:"""drfExtCont.saveToStore("vueApplicationFormDataframe", "vueApplicationFormDataframe_tab_model","vueMedicalRecordDataframe-tab-id");
+        /*dataframeButtons = [ previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueApplicationFormDataframe", "vueApplicationFormDataframe_tab_model","vueMedicalRecordDataframe-tab-id");
                                                                                 \n""", url: ""] ,
                              Submit:[name:"submit", type: "button", script: "vueMedicationsGridDataframeVar.\$router.push('/');this.location.reload();"]
         ]*/
@@ -599,7 +599,7 @@ beans {
         saveButton = false
         dataframeLabelCode = "Contact.Details"
 //        componentsToRegister=["vueAddressDataframe"]
-//        doAfterSave = "drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
+//        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
                 "person.contactEmail": [
@@ -655,7 +655,7 @@ beans {
         initOnPageLoad = true
         dataframeLabelCode = "Contact.Details"
 //        componentsToRegister=["vueAddressDataframe"]
-//        doAfterSave = "drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
+//        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
                 "person.contactEmail": [

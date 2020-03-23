@@ -20,14 +20,12 @@ class TreeWidgetVue extends WidgetVue{
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = getFieldName(dataframe, field)
-//        dataframe.vueDataVariableSb.append("${fldName}_open : [],\n")
-//        dataframe.vueDataVariableSb.append("${fldName}_active : [],\n")
-        return """<v-treeview :active.sync="${fldName}_active" active-class="primary--text" :open.sync="${fldName}_open" :items="$fldName" activatable item-text="label"  item-key="nodeKey" item-children="items" open-all></v-treeview>"""
+        String modelString = getModelString(dataframe, field)
+        return """<v-treeview :active.sync="${modelString}_active" active-class="primary--text" :open.sync="${modelString}_open" :items="$modelString" activatable item-text="label"  item-key="nodeKey" item-children="items" open-all></v-treeview>"""
     }
 
-    String getVueDataVariable(DataframeVue dataframe, Map field) {
+    String getStateDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
-//        String dataVariable = dataframe.getDataVariableForVueCapitalized(field)
         return """$dataVariable:[],\n${dataVariable}_open : [],\n${dataVariable}_active : [],\n"""
 
     }

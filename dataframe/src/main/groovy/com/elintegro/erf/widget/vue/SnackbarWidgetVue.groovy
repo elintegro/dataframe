@@ -14,6 +14,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 
 /**

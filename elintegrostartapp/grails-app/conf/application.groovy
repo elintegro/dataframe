@@ -510,7 +510,7 @@ contactUsEmailService.emailWithInformation = '''Hello $name,<br/>
 This is the test for email sending service.
 Thank you for choosing us. Your registration is almost complete.
 '''
-elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com, shai@gmail.com,rabindra@gmail.com"
+elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com,sumanneupane19982055@gmail.com, shai@gmail.com,rabindra@gmail.com"
 
 
 //elintegro.contuctus.email.interval = 20000     //send email once in 20 seconds

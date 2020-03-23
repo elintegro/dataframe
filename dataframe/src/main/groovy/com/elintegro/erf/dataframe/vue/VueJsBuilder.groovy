@@ -204,8 +204,16 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return propsAttrString.toString()
     }
 
+    public static String createCompRegistrationString(String component, int index){
+
+        if(index == 0){
+            return "'"+component.toLowerCase()+"' : "+component+"Comp,\n"
+        }else {
+            return VueJsBuilder.createCompRegistrationString(component)
+        }
+    }
     public static String createCompRegistrationString(component){
-        return ""+component.toLowerCase()+" : "+component+"Comp,\n"
+        return "'"+component+"' : "+component+"Comp,\n"
     }
 
     public void setFinalComponentInitScript(String finalComponentInitScript){
@@ -226,7 +234,7 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
             df.componentRegistered = true
         }else{
             df.componentRegistered = false
-            vueCompBuilder.append("var ${dataframeName}Comp = {\n")
+            vueCompBuilder.append("const ${dataframeName}Comp = {\n")
         }
         vueCompBuilder.append(buildTemplateScript())
         vueCompBuilder.append(buildDataScript())
@@ -251,4 +259,3 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return vueStore
     }
 }
-

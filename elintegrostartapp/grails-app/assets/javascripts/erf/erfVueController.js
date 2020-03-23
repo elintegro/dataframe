@@ -1,4 +1,5 @@
-var drfExtCont = new Vue({
+
+var excon = new Vue({
     el: '#dfr',
     methods: {
         mapStringify:function(j, valueMember){
@@ -136,18 +137,9 @@ var drfExtCont = new Vue({
         closeDataframe: function(dataframeName){
             var dfNameDisplay = dataframeName +"_display";
             // if(this.\$store.state.vueInitDataframe){
-            drfExtCont.saveToStore("dataframeShowHideMaps", dfNameDisplay, false);
+            excon.saveToStore("dataframeShowHideMaps", dfNameDisplay, false);
             // Vue.set(this.\$store.state.vueInitDataframe, dfNameDisplay, false);
             // }
-        },
-
-        updateToStore: function(response, dataInProp){
-            if(!dataInProp){
-                return
-            }
-            if(dataInProp.refreshGrid != undefined && dataInProp.refreshGrid == true){
-                drfExtCont.saveToStore(response.dataframe,"savedResponseData", response)
-            }
         },
 
         generateRandom: function(){
@@ -264,6 +256,77 @@ var drfExtCont = new Vue({
             _map.keyset = _set;
             _map.choiceMap = choiceMap;
             return _map;
+        },
+
+        updateQuestionGrid(response){
+            let stateData = response;
+            if(stateData){
+                let rowData = {Id:stateData.questionId ,Question:stateData.question, SortOrder: stateData.sortOrder}
+                let oldData = excon.getStateWithKey({key:'vueQuestionsGridDataframe', innerKey:'vueQuestionsGridDataframe_question_grid_items'});
+                oldData.push(rowData);
+                stateData['stateName'] = 'vueQuestionsGridDataframe';
+                stateData["vueQuestionsGridDataframe_question_grid_items"] = oldData;
+                store.commit("updateState", stateData);
+            }
+        },
+        refreshDataForGrid: function(response, dataframeName, fldName, operation = "U"){
+
+            const newData = response.newData;
+            if(!dataframeName && !fldName && !newData) return;
+            let state = store.getters.getState(dataframeName);
+            const items = state[fldName +'_items'];
+            const selectedRow = state[fldName +'_selectedrow'];
+            const editedIndex = items.indexOf(selectedRow);
+            let row = {};
+            for(let key in newData){
+                let dataMap = newData[key];
+                for(let j in dataMap){
+                    if(selectedRow && Object.keys(selectedRow).length !== 0){
+                        if (j in selectedRow) {
+                            row[j] = dataMap[j];
+                        }
+                    } else {
+                        row[j] = dataMap[j];
+                    }
+
+                }
+            }
+            state['stateName'] = dataframeName;
+            if (operation==="I") {
+                state[fldName +'_items'].push(row);
+                store.commit('updateState', state)
+            } else {
+                Object.assign(state[fldName +'_items'][editedIndex], row);
+                store.commit('updateState', state)
+            }
+//                          this.gridDataframes[refreshParams.dataframe] = false;
+        },
+
+        getStateWithKey(key) {
+            if (typeof key === 'object') {
+                const obj = key;
+                const parentData = store.getters.getState(obj.key);
+                let result = parentData;
+                if (parentData && obj.innerKey) {
+                    result = parentData[obj.innerKey];
+                }
+                return result;
+            } else if (typeof key === 'string') {
+                return store.getters.getState(key);
+            } else {
+                throw("Cannot get state for key: " + key);
+            }
+        },
+        setVisibility(dataframeName, setVisible){
+            if(setVisible){
+                store.commit('setVisibility', dataframeName);
+            } else {
+                store.commit('unsetVisibility', dataframeName);
+            }
+        },
+        reset(dataframeName){
+
+            let oldData = store.getters.getState(dataframeName);
         }
     }
 

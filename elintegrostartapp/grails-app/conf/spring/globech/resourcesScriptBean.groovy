@@ -37,10 +37,10 @@ beans {
                ,\nsetInitPageValues:function(data){
                                                
                                                 axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
-                                                     drfExtCont.saveToStore("vueInitDataframe", "key", '');
-                                                     drfExtCont.saveToStore("vueProfileMenuDataframe", "key", '');
-                                                     drfExtCont.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
-                                                     drfExtCont.saveToStore("loggedIn", responseData.data.loggedIn);
+                                                     excon.saveToStore("vueInitDataframe", "key", '');
+                                                     excon.saveToStore("vueProfileMenuDataframe", "key", '');
+                                                     excon.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
+                                                     excon.saveToStore("loggedIn", responseData.data.loggedIn);
 //                                                     vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
 //                                                     Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
 //                                                     Vue.set(vueInitDataframeVar.\$store.state.vueProfileMenuDataframe, "key", '');
@@ -171,7 +171,7 @@ beans {
     }
 
     vueProfileMenuDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueProfileMenuDataframe_person_fullName(){return drfExtCont.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + drfExtCont.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
+        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
     }
 
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
@@ -201,13 +201,13 @@ beans {
     }
     vueMedicationsGridDetailDataframe_script(VueJsEntity){bean -> /* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*/
         watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridDetailDataframe_fillInitData();}},"""
-        computed = """ callInitMethod(){  const data = drfExtCont.getFromStore('vueMedicalRecordDetailDataframe', 'key');
+        computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordDetailDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
 
     vueMedicationsGridEditDataframe_script(VueJsEntity){bean -> /* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*/
         watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridEditDataframe_fillInitData();}},"""
-        computed = """ callInitMethod(){  const data = drfExtCont.getFromStore('vueMedicalRecordEditDataframe', 'key');
+        computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordEditDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
     vueRegisterMenuDataframe_script(VueJsEntity){bean ->
@@ -465,7 +465,7 @@ beans {
                           console.log(response)  
                 });
                 
-                       drfExtCont.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
+                       excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
                   }   
                   else{
                   alert("Error in saving")

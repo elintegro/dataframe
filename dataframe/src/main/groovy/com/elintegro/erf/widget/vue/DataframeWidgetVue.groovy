@@ -17,6 +17,9 @@ import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.dataframe.vue.VueJsBuilder
+import com.elintegro.erf.dataframe.vue.VueStore
+import com.elintegro.erf.layout.abs.LayoutPlaceholder
 import com.elintegro.erf.layout.abs.LayoutVue
 
 class DataframeWidgetVue extends WidgetVue{
@@ -62,7 +65,7 @@ class DataframeWidgetVue extends WidgetVue{
 
         //todo now the update of store value in save method is not automated. make it automated.
         if(isFKAndHide)
-            valueSetter = """$dataVariable : drfExtCont.getFromStore('$refDataframeName','key'),\n"""
+            valueSetter = """$dataVariable : excon.getFromStore('$refDataframeName','key'),\n"""
         return valueSetter
 
     }

@@ -338,12 +338,12 @@ class BoxListWidgetVue extends WidgetVue {
         if(onClickMap.showAsDialog){
             resultPageHtml.append("""<v-dialog v-model="gridDataframeNames.${refDataframeName}_display" max-width="500px">""")
 //            resultPageHtml.append(refDataframe.getComponentName())
-            resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName.toLowerCase()}_ref'></component>""")
+            resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref'></component>""")
             resultPageHtml.append("""</v-dialog>""")
         }else{
             resultPageHtml.append("""<div v-show="gridDataframeNames.${refDataframeName}_display " max-width="500px">""")
 //            resultPageHtml.append(refDataframe.getComponentName())
-            resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName.toLowerCase()}_ref'></component>""")
+            resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref'></component>""")
             resultPageHtml.append("""</div>""")
         }
 
@@ -497,3 +497,4 @@ class BoxListWidgetVue extends WidgetVue {
         return getDefaultAligh(cellType, "en_ca");
     }
 }
+
