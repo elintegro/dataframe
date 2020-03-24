@@ -445,23 +445,26 @@ beans {
         methods = """  
                       newEmployeeBasicInformation(){
                       console.log("Inside employeeinformation")
-                       var details = this.vueNewEmployeeBasicInformationDataframe
+                       var details = this.state.vueNewEmployeeBasicInformationDataframe
                        console.log(details)
                        var allParams = {};
-                       allParams['firstName'] = this.vueNewEmployeeBasicInformationDataframe_person_firstName;
-                       allParams['lastName'] = this.vueNewEmployeeBasicInformationDataframe_person_lastName;
-                       allParams['email'] = this.vueNewEmployeeBasicInformationDataframe_person_contactEmail;
-                       allParams['phone'] = this.vueNewEmployeeBasicInformationDataframe_person_phone;
-                       allParams['linkedin'] = this.vueNewEmployeeBasicInformationDataframe_application_linkedin;
-                       allParams['availablePosition'] = this.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
+                       allParams['firstName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_firstName;
+                       allParams['lastName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_lastName;
+                       allParams['email'] = this.state.vueNewEmployeeBasicInformationDataframe_person_contactEmail;
+                       allParams['phone'] = this.state.vueNewEmployeeBasicInformationDataframe_person_phone;
+                       allParams['linkedin'] = this.state.vueNewEmployeeBasicInformationDataframe_application_linkedin;
+                       allParams['availablePosition'] = this.state.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
                        allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
                        console.log(allParams)
+                       
                        console.log("do you see all params?")
                        if (this.\$refs.vueNewEmployeeBasicInformationDataframe_form.validate()){
-                       axios.get('${contextPath}/EmployeeApplication/createApplicant', {
-                       params: allParams
-                         }).then(function(responseData) {
-                          var response = responseData.data;
+                       axios({
+                       method:'post',
+                       url:'${contextPath}/EmployeeApplication/createApplicant',
+                       data: allParams
+                         }).then(function(responseData){
+                          var response = responseData;
                           console.log(response)  
                 });
                 

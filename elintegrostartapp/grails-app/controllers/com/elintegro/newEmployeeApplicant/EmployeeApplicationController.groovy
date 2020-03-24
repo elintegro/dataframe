@@ -11,46 +11,34 @@ class EmployeeApplicationController {
 
     def createApplicant(){
         println("inside create applicant")
-        println (params)
-        println (params.firstName)
+        println (request.getJSON())
+        def empData = request.getJSON()
+        println(empData)
+        println(empData.firstName)
         Person applicant = new Person()
-        applicant.firstName = params.firstName
-        applicant.lastName = params.lastName
-        applicant.contactEmail = params.email
-        applicant.phone = params.phone
-        println("Printing the positions")
-        println(params.get("availablePosition[]"))
-        println("printing array list")
-        ArrayList arrayList = params.get("availablePosition[]")
-        println(arrayList)
-//        println("Entry point for the loop")
-//        arrayList.each {println it * 1}
-        println("Entry point for for loops ")
-        for (int i = 0; i < arrayList.size();i++)
-        {
-            println(arrayList.get(i));
+        applicant.firstName = empData.firstName
+        applicant.lastName = empData.lastName
+        applicant.contactEmail = empData.email
+        applicant.phone = empData.phone
+        applicant.save()
 
-        }
-        println(applicant.firstName)
+        println("Printing the positions")
+        println(empData.availablePosition.name)
+
         Application application = new Application()
         application.applicant = applicant
-        application.linkedin = params.linkedin
+        application.linkedin = empData.linkedin
         println(application.linkedin)
+
         println("Saving available positions")
-//        application.availablePositions = application.availablePositions.add(arrayList)
-        application.save()
-//        for (int i = 0; i < arrayList.size();i++)
-//        {
-//            application.availablePositions[] = arrayList.get(i)
-//
-//        }
+        for(item in empData.availablePosition) {
+            Position availablePosition = Position.findById(item.id)
+            println(availablePosition.id)
+            application.addToAvailablePositions(availablePosition)
+            application.save(flush: true)
 
-       applicant.save()
-
-//        def a = Application.get(1)
-//        for (availablePosition in a.availablePositions) {
-//            println (availablePosition.name)
-//        }
-
+        }
+      render("success")
     }
+
 }

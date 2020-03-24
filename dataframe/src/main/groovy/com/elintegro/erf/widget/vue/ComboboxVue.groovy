@@ -333,6 +333,7 @@ class ComboboxVue extends WidgetVue {
         if(!isSearchable(field)){
             typeString = """type="button" """
         }
+        String multiple = field.multiple?"multiple":''
         String displayMember = field.displayMember?:'name'
         String valueMember = field.valueMember?:'id'
         String modelString = getModelString(dataframe, field)
@@ -346,6 +347,7 @@ class ComboboxVue extends WidgetVue {
           item-text="${displayMember}"
           item-value="${valueMember}"
           small-chips
+          $multiple
           hide-no-data
           hide-selected
           ${isReadOnly?"readonly":''}
