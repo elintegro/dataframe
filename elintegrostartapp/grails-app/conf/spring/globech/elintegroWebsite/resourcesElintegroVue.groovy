@@ -456,7 +456,7 @@ beans {
                               ,"validate":["rule":["v => !!(v==this.vueElintegroRegisterDataframe_user_password) || 'Password and Confirm Password must match'"]]]
         ]
 
-        currentFrameLayout = ref("defaultDialogBoxLayout")
+        currentFrameLayout = ref("vueRegisterDataframeLayout")
     }
 
 }

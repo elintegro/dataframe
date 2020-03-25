@@ -16,12 +16,16 @@ package gc
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.gc.data.DataInit
 import org.apache.commons.lang.StringUtils
+import grails.plugin.springsecurity.SecurityFilterPosition
+import grails.plugin.springsecurity.SpringSecurityUtils
 
 class BootStrap {
     def springSecurityService
     def grailsApplication
     def init = { servletContext ->
 
+        SpringSecurityUtils.clientRegisterFilter(
+                'oneTimePasswordFilter', SecurityFilterPosition.OPENID_FILTER.order - 10)
 
         def languages = DataInit.initLanguage()
         servletContext.setAttribute("LANG_4_SELECT", languages)

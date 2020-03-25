@@ -1,4 +1,5 @@
 import com.elintegro.auth.UserPasswordEncoderListener
+import com.elintegro.dataframe.OneTimePasswordFilter
 
 // Place your Spring DSL code here
 
@@ -12,6 +13,8 @@ import com.elintegro.erf.layout.ColumnLayout
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.util.Environment
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler
+
+
 
 beans = {
     userPasswordEncoderListener(UserPasswordEncoderListener)
@@ -219,7 +222,13 @@ beans = {
 				}
 				*/
 			}
+    oneTimePasswordFilter(com.elintegro.dataframe.OneTimePasswordFilter){
 
+    }
+   /* oneTimePasswordFilterDeregistrationBean(org.springframework.boot.context.embedded.FilterRegistrationBean) {
+        filter = ref('oneTimePasswordFilter')
+        enabled = false
+    }*/
 
 
 

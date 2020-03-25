@@ -274,7 +274,7 @@ environments {
 			logSql = true
 //     		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3308/elintegro_website_db_dev"
+			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
 //			username = "root"
 //			password = "qbohfoj"
 			username = "developer"
@@ -454,7 +454,8 @@ grails{
 }
 
 
-
+grails.plugin.springsecurity.rest.token.storage.useGorm = true
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = 'com.elintegro.dataframe.AuthenticationToken'
 grails.plugin.springsecurity.providerNames = ['daoAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
 //tag::filterChain[]
 String ANONYMOUS_FILTERS = 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor' // <1>
@@ -468,7 +469,7 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 //		[pattern: '/auth/success', filters: ANONYMOUS_FILTERS], // <1>
 //		[pattern: '/oauth/authenticate/google', filters: ANONYMOUS_FILTERS], // <1>
 //		[pattern: '/oauth/callback/google', filters: ANONYMOUS_FILTERS], // <1>
-//		[pattern: '/api/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
+		[pattern: '/api/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
 //		[pattern: '/elintegrostartapp/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
 //
 		[pattern: '/**', filters:'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter']

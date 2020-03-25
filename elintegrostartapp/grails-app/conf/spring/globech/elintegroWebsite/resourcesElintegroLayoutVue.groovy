@@ -119,6 +119,13 @@ beans {
                                      </v-tabs-items></v-card></v-flex>
                                  </v-flex>"""
     }
+    vueRegisterDataframeLayout(ColumnLayoutVue){ bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card'><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
+                                <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
+                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
+    }
 
     /*
     buttonTechnologiesLayout(RowLayoutVue){bean ->
