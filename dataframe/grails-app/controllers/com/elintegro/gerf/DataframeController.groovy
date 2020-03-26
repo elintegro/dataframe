@@ -226,7 +226,7 @@ class DataframeController {
 		def operation = 'U'; //Update
 		def result;
 		boolean isInsert;
-		result = dfInstance.save(true);
+		result = dfInstance.save(true); //Todo Shai,Eugene Why there is no error handling here ?
 		if(dfInstance.isInsertOccured()){
 			operation = "I";
 		}

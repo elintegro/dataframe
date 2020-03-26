@@ -625,7 +625,12 @@ class DataframeInstance {
 				}
 				quryParamsMap.put(name, value)
 			}
-			currentInstance = domainClass.find("from $domainClassName as m where $wherepart" , quryParamsMap)
+//			try {
+				currentInstance = domainClass.find("from $domainClassName as m where $wherepart", quryParamsMap)
+//			}
+//			catch (Exception ee){
+//				log.error("Problem finding domain class $domainClassName")
+//			}
 		}
 		return currentInstance
 	}

@@ -532,7 +532,7 @@ beans {
                 "event.images":[
                         "widget" : "PictureUploadWidgetVue"
                         ,name:"images"
-                        , valueMember: "images"
+                        ,valueMember: "images"
                         ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                         ,multiple:true
                         ,editButton: true
