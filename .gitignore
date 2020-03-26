@@ -5,3 +5,5 @@ dataframe/build/
 .gradle/
 elintegrostartapp/logs/
 dataframe.iml
+elintegrostartapp/out/
+dataframe/out/

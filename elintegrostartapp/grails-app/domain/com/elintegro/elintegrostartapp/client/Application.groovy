@@ -51,5 +51,6 @@ class Application extends ControlField{
         referredByPerson (nullable: true)
         referredByOrganisation(nullable: true)
         facility(nullable: true)
+        resume(nullable: true)
     }
 }
