@@ -469,7 +469,8 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 //		[pattern: '/auth/success', filters: ANONYMOUS_FILTERS], // <1>
 //		[pattern: '/oauth/authenticate/google', filters: ANONYMOUS_FILTERS], // <1>
 //		[pattern: '/oauth/callback/google', filters: ANONYMOUS_FILTERS], // <1>
-		[pattern: '/api/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
+//		[pattern: '/api/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
+		[pattern: '/api/**', filters:'oneTimePasswordFilter,restAuthenticationFilter'],
 //		[pattern: '/elintegrostartapp/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
 //
 		[pattern: '/**', filters:'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter']
