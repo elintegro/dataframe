@@ -104,6 +104,7 @@ images {
 		local=true
 		s3 = false
 	}
+//	storageLocation = "/opt/tomcat-8/webapps"
 	storageLocation = "/opt/tomcat-8/webapps"
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
@@ -271,11 +272,13 @@ environments {
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro@localhost'
 		dataSource {
 			logSql = true
-			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
-//			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegrostartapp_db"
-			username = "root"
-			password = "root"
+//     		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
+			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
+//			username = "root"
+//			password = "qbohfoj"
+			username = "developer"
+			password = "java11"
 		}
 	}
 	test {
@@ -358,8 +361,9 @@ environments {
 	}
 
 	production {
-		baseUrl = "http://208.75.75.83"
-		grails.serverURL = "http://208.75.75.83/elintegrostartapp"
+		server.contextPath = "/"
+		rootPath = ""
+		grails.serverURL = "http://208.75.75.83"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro.himalaya'
 		dataSource {
 			logSql = true
@@ -450,7 +454,8 @@ grails{
 }
 
 
-
+grails.plugin.springsecurity.rest.token.storage.useGorm = true
+grails.plugin.springsecurity.rest.token.storage.gorm.tokenDomainClassName = 'com.elintegro.dataframe.AuthenticationToken'
 grails.plugin.springsecurity.providerNames = ['daoAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
 //tag::filterChain[]
 String ANONYMOUS_FILTERS = 'anonymousAuthenticationFilter,restTokenValidationFilter,restExceptionTranslationFilter,filterInvocationInterceptor' // <1>
@@ -465,6 +470,7 @@ grails.plugin.springsecurity.filterChain.chainMap = [
 //		[pattern: '/oauth/authenticate/google', filters: ANONYMOUS_FILTERS], // <1>
 //		[pattern: '/oauth/callback/google', filters: ANONYMOUS_FILTERS], // <1>
 //		[pattern: '/api/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
+		[pattern: '/api/**', filters:'oneTimePasswordFilter,restAuthenticationFilter'],
 //		[pattern: '/elintegrostartapp/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
 //
 		[pattern: '/**', filters:'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter']
@@ -502,6 +508,17 @@ Thank you for choosing us. Your registration is almost complete.
 click&nbsp;<a href="$url">here</a> to finish your registration.
 <br/><br/>You can login using the temporary password: $password<br/><br/> 
 '''
+contactUsEmailService.emailWithInformation = '''Hello $name,<br/>
+This is the test for email sending service.
+Thank you for choosing us. Your registration is almost complete.
+'''
+elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com, shai@gmail.com,rabindra@gmail.com"
+
+
+//elintegro.contuctus.email.interval = 20000     //send email once in 20 seconds
+//elintegro.contuctus.email.interval = 5*60*1000 //send email once in 5 minutes.
+elintegro.contuctus.email.interval = 12*60*60*1000//send email once in 12 hours.
+
 
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rejectIfNoRule = false

@@ -16,12 +16,10 @@ package com.elintegro.erf.widget.vue
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.ResultPageHtmlBuilder
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DbResult
 import com.elintegro.erf.dataframe.ParsedHql
 import com.elintegro.erf.dataframe.db.fields.MetaField
-import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.utils.MapUtil
 import grails.converters.JSON
@@ -32,7 +30,7 @@ import org.apache.commons.lang.WordUtils
 /**
  * Created by kchapagain on Nov, 2018.
  */
-class GridWidgetVue extends WidgetVue {
+class GridWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
@@ -46,6 +44,7 @@ class GridWidgetVue extends WidgetVue {
         def onClick        = field?.onClick
         def onButtonClick  = field?.onButtonClick
         String valueMember = field?.valueMember
+        String alignment = field.textAlign?:'start'
         boolean internationalize = field.internationalize?true:false
         List gridDataframeList= []
         StringBuilder methodScriptsBuilder = new StringBuilder();
@@ -66,18 +65,28 @@ class GridWidgetVue extends WidgetVue {
                 headerText = getMessageSource().getMessage(propItemText,null,propItemText,LocaleContextHolder.getLocale())
             }
 //            String capitalisedProp = propItemText.capitalize()
-            String hiddenClass = ""
+            StringBuilder headerClass = new StringBuilder()
             if(metaField.pk || metaField.fk){
-                hiddenClass = "hidden"
+                headerClass.append("hidden")
+                valueMember=valueMember?:metaField.alias
             }
-            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':hiddenClass])
+            addClassesToHeader(field, headerClass, propItemVal)
+            headerClass.append("text-$alignment")
+            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':"${headerClass.toString()}"])
             String propTextLowercase = propItemText.toLowerCase()
-            if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar")){
-                String defaultImageName = Holders.config.images.defaultImageName
-                String imgUrl =  getImageUrl(field)
-                fieldParams.append("\n<td class='text-xs-left'><div v-html='props.item.$propItemText'></div></td>");
+            if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar") || propTextLowercase.contains("logo")){
+                fieldParams.append("""\n<td class='$headerClass'><div v-html="item.$propItemText"></div></td>""");
             }else {
-                fieldParams.append("\n<td class='$hiddenClass text-xs-left'>{{ props.item.$propItemText }}</td>");
+                Map manageFields = field.manageFields as Map
+                String tdString = "\n<td class='$headerClass'>{{ item.$propItemText }}</td>";
+                if(manageFields){
+                    if(manageFields.containsKey(propItemVal)){
+                        if('link' == manageFields[propItemVal].type){
+                            tdString = "\n<td class='$headerClass'><a :href='item.$propItemText' target='_blank' style ='text-decoration :none !important;' >{{ item.$propItemText }} </a></td>";
+                        }
+                    }
+                }
+                fieldParams.append(tdString)
             }
             requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
@@ -96,7 +105,7 @@ class GridWidgetVue extends WidgetVue {
             } else{
                 DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
                 refDataframeName = refDataframe.dataframeName
-                onClickMethod    = "${fldName}_showDetail$refDataframeName(props.item)"
+                onClickMethod    = "${fldName}_showDetail$refDataframeName(item)"
                 getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName)
             }
         }
@@ -119,7 +128,7 @@ class GridWidgetVue extends WidgetVue {
         field.put("gridMethodScripts", methodScriptsBuilder);
         StringBuilder dataTableAttribbutes = new StringBuilder()
         if(!showGridFooter){
-            dataTableAttribbutes.append(""" hide-actions""")
+            dataTableAttribbutes.append("""hide-default-footer""")
         }
         String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
@@ -144,8 +153,8 @@ class GridWidgetVue extends WidgetVue {
             ${showGridSearch?":search='${fldName}_search'":""}
             ${dataTableAttribbutes.toString()}
     >
-        <template slot="items" slot-scope="props">
-          <tr @click="${onClickMethod}" :key="props.item.$valueMember">
+        <template v-slot:item="{item}">
+          <tr @click="${onClickMethod}" :key="item.$valueMember">
             $draggIndicator ${fieldParams.toString()}
           </tr>  
         </template>
@@ -202,13 +211,15 @@ class GridWidgetVue extends WidgetVue {
         String hqlLowercase = field.hql?.toLowerCase()
         StringBuilder formatAvatarSb = new StringBuilder()
         String avatar = field.avatarAlias?:'Avatar'
-        if(hqlLowercase && hqlLowercase.contains("image") || hqlLowercase.contains("picture") || hqlLowercase.contains("avatar")){
+        String height = field.avatarHeight?:'auto'
+        String width = field.avatarWidth?:'40'
+        if(hqlLowercase && hqlLowercase.contains("image") || hqlLowercase.contains("picture") || hqlLowercase.contains("avatar") || hqlLowercase.contains("logo")){
             String imgUrl =  getImageUrl(field)
             String defaultImageName = Holders.config.images.defaultImageName
             formatAvatarSb.append(""" if(dataDessert.length > 0){for(var i=0; i<dataDessert.length; i++){
                                                var avarName = dataDessert[i].$avatar;
                                                var formattedName = avarName?'$imgUrl'+avarName:'$imgUrl'+'$defaultImageName'
-                                               dataDessert[i].$avatar = '<v-img height="40px" width="40px" src="'+formattedName+'" />';
+                                               dataDessert[i].$avatar = "<img height='$height' width='$width' src='"+formattedName+"' />";
                                     }}""");
         }
         return """
@@ -360,7 +371,7 @@ class GridWidgetVue extends WidgetVue {
                         methodScript = ""
                     }
                 }
-                String methodName = """ ${fldName}_${btnName}method(props.item);"""
+                String methodName = """ ${fldName}_${btnName}method(item);"""
                 if (buttonMaps?.image){
                     String actionImageUrl = buttonMaps?.image?.url?:"https://image.flaticon.com/icons/png/128/66/66720.png";
                     String height = buttonMaps?.image?.height?:"20"
@@ -663,6 +674,15 @@ class GridWidgetVue extends WidgetVue {
 
     private String getDefaultAligh(String cellType){
         return getDefaultAligh(cellType, "en_ca");
+    }
+    private void addClassesToHeader(Map field, StringBuilder headerClass, String headerText){
+        Map addClassesToHeader = field.addClassesToHeader as Map
+        if(addClassesToHeader){
+            String fieldName = field.name
+            if(addClassesToHeader.containsKey(headerText)){
+                headerClass.append(addClassesToHeader.get(headerText)+" ")
+            }
+        }
     }
 
 }

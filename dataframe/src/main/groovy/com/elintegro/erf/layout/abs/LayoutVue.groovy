@@ -13,7 +13,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.layout.abs
 
-import com.elintegro.erf.dataframe.Dataframe
+
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.Widget
 import com.elintegro.erf.widget.vue.WidgetVue
@@ -476,7 +476,7 @@ class LayoutVue extends Layout {
     private static String addNavigationPanel(resultPage){
         String toolbarTitle = wrapWithTag("<v-toolbar-title>","class='display-3'","Globe Chalet")
         String toolBarWrapper = wrapWithTag("<v-toolbar>","prominent extended",toolbarTitle)
-        String wrapWithCard = wrapWithTag("<v-card>","color='grey lighten-4' flat height='200px' tile",toolBarWrapper)
+        String wrapWithCard = wrapWithTag("<v-card>","color='grey lighten-4' text height='200px' tile",toolBarWrapper)
         resultPage.insert(0,wrapWithCard)
     }
 

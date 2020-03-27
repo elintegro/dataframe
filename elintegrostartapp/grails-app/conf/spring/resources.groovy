@@ -1,4 +1,5 @@
 import com.elintegro.auth.UserPasswordEncoderListener
+import com.elintegro.dataframe.OneTimePasswordFilter
 
 // Place your Spring DSL code here
 
@@ -12,6 +13,8 @@ import com.elintegro.erf.layout.ColumnLayout
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.util.Environment
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler
+
+
 
 beans = {
     userPasswordEncoderListener(UserPasswordEncoderListener)
@@ -49,11 +52,14 @@ beans = {
     loadResource "resourcesWidget.groovy"
     loadResource "resourcesPages.groovy"
     loadResource "globech/resourcesScriptBean.groovy"
+    loadResource "globech/resourcesLayout.groovy"
     loadResource "globech/resourcesLayoutVue.groovy"
     loadResource "globech/resourcesVue.groovy"
     loadResource "globech/applicationManagement/resourcesApplicationForm.groovy"
     loadResource "globech/applicationManagement/resourcesApplicationManagement.groovy"
     loadResource "globech/userManagement/resourcesUserManagement.groovy"
+    loadResource "globech/elintegroWebsite/resourcesElintegroVue.groovy"
+    loadResource "globech/elintegroWebsite/resourcesElintegroLayoutVue.groovy"
     if (Environment.current == Environment.DEVELOPMENT){
 //        loadResource "resourcesEditor.groovy"
 //        editorBeanLoading(EditorBeanLoading){ bean -> }
@@ -216,7 +222,13 @@ beans = {
 				}
 				*/
 			}
+    oneTimePasswordFilter(com.elintegro.dataframe.OneTimePasswordFilter){
 
+    }
+   /* oneTimePasswordFilterDeregistrationBean(org.springframework.boot.context.embedded.FilterRegistrationBean) {
+        filter = ref('oneTimePasswordFilter')
+        enabled = false
+    }*/
 
 
 

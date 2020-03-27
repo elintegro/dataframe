@@ -42,7 +42,8 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         def requestParams = params
         def resultData
         String dfrName = requestParams["dataframe"] + "-user-email"
-        FacilityUserRegistration facilityUserReg = FacilityUserRegistration.findByExpectedUser(requestParams[dfrName])
+        //FacilityUserRegistration facilityUserReg = FacilityUserRegistration.findByExpectedUser(requestParams[dfrName])
+        FacilityUserRegistration  facilityUserReg = true
         String expectedRole = requestParams["role"]
         String verificationEmailMessage
 

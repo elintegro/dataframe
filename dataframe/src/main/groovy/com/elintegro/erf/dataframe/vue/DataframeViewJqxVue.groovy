@@ -71,7 +71,7 @@ public class DataframeViewJqxVue implements DataframeView {
 
         } else {
             if(refDataframe){
-                String refDfrName = refDataframe.dataframeName.toLowerCase()
+                String refDfrName = refDataframe.dataframeName
                 if(dfButton.route){
                     String routeIdScript = dfButton.routeIdScript
                     ResultPageHtmlBuilder.registeredComponents.add(refDataframe.dataframeName)
