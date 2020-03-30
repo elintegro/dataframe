@@ -3,6 +3,7 @@ package com.elintegro.newEmployeeApplicant
 import com.elintegro.crm.Person
 import com.elintegro.elintegrostartapp.client.Application
 import com.elintegro.elintegrostartapp.hr.Position
+import grails.converters.JSON
 
 class EmployeeApplicationController {
 
@@ -29,7 +30,10 @@ class EmployeeApplicationController {
             application.save(flush: true)
 
         }
-      render("success")
+//        def basicInfo = application.id;
+//        println(basicInfo.toString())
+        def result = [success: true, id:application.id]
+      render(result as JSON)
     }
 
 }

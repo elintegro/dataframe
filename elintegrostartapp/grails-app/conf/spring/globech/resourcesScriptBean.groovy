@@ -465,7 +465,9 @@ beans {
                        data: allParams
                          }).then(function(responseData){
                           var response = responseData;
-                          console.log(response)  
+                          excon.saveToStore("vueNewEmployeeUploadResumeDataframe","vueNewEmployeeUploadResumeDataframe_resume_id",response.data.id)
+                          console.log(response)
+                          console.log(response.data.id)  
                 });
                 
                        excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 

@@ -249,24 +249,26 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.resume from Application application where application.id=:id"
+        hql = "select application.id, application.resume from Application application where application.id=:id"
         saveButton = true
         tab = true
         isGlobal = true
+        doBeforeSave = """allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
+                          allParams['key_vueNewEmployeeUploadResumeDataframe_application_id_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
+                          allParams['vueNewEmployeeUploadResumeDataframe_application_resume'] =  """
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key", response.nodeId[0]);
                          excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeDescriptionDataframe-tab-id');"""
         addFieldDef = [
 //                "application.resume":["name":"resume","widget":"FileUploadWidgetVue",ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
                 "application.resume":["name":"resume"
-                                      ,"widget":"PictureUploadWidgetVue"
+                                      ,"widget":"FilesUploadWidgetVue"
                                       ,valueMember: "resume"
                                       , ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                                       , insertAfter: "application.resume"
                                       ,"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                                       ,multiple:false
-                                      ,editButton: true
-                                      ,deleteButton:true
+
                                      ]
         ]
 
