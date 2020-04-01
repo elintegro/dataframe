@@ -43,18 +43,59 @@ class GridWidgetVue extends WidgetVue {
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName     = getFieldName(dataframe, field)
         def showGridSearch = field?.showGridSearch?:false
+        StringBuilder onclickDfrBuilder    = new StringBuilder();
+        def fldNameDefault = WordUtils.capitalizeFully(fldName);
+        String labelCode = field.labelCode?:fldName
+        String label = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
+        boolean showGridFooter = field.showGridFooter?true:false
+        StringBuilder dataTableAttribbutes = new StringBuilder()
+        if(!showGridFooter){
+            dataTableAttribbutes.append("""hide-default-footer""")
+        }
+        String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
+        String labelStyle = field.labelStyle?:""
+        String modelString = getModelString(dataframe, field)
+        String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
+        String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
+        return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
+
+       ${showGridSearch?"""
+            <v-spacer></v-spacer>
+            <v-text-field
+                    v-model="${fldName}_search"
+                    append-icon="search"
+                    label="$searchPlaceholder"
+                    single-line
+                    hide-details
+                    class='pa-3'
+            ></v-text-field>
+        """:""}
+       <v-data-table
+            :headers="${modelString}_headers"
+            :items="${modelString}_items"
+            :items-per-page="-1"
+            ${showGridSearch?":search='${fldName}_search'":""}
+            ${dataTableAttribbutes.toString()}
+            ${getAttr(field)}
+    >
+$fieldParams
+    </v-data-table></v-card>
+        ${onclickDfrBuilder.toString()}
+"""
+    }
+
+    String prepareFieldParams(Dataframe dataframe, Map field, StringBuilder onclickDfrBuilder ){
+        String fldName     = getFieldName(dataframe, field)
         String wdgHql      = field?.hql;
         def onClick        = field?.onClick
         def onButtonClick  = field?.onButtonClick
-        String valueMember = field?.valueMember
         String alignment   = field?.textAlign?:'start'
         String headerWidth = field.headerWidth?:''
+        String valueMember = field?.valueMember
         boolean internationalize = field.internationalize?true:false
-        List gridDataframeList= []
-//        StringBuilder methodScriptsBuilder = new StringBuilder();
         StringBuilder requestFieldParams   = new StringBuilder()
         StringBuilder fieldParams          = new StringBuilder();
-        StringBuilder onclickDfrBuilder    = new StringBuilder();
+
         ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory);
         List<MetaField> fieldMetaData      = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
         field.put("gridMetaData", fieldMetaData);
@@ -81,7 +122,11 @@ class GridWidgetVue extends WidgetVue {
             if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar") || propTextLowercase.contains("logo")){
                 String defaultImageName = Holders.config.images.defaultImageName
                 String imgUrl =  getImageUrl(field)
-                fieldParams.append("\n<td class='$headerClass'><div v-html='props.item.$propItemText'></div></td>");
+                String avatar = field.avatarAlias?:'Avatar'
+                String height = field.avatarHeight?:'auto'
+                String width = field.avatarWidth?:'40'
+//                fieldParams.append("\n<td class='$headerClass'><div v-html='props.item.$propItemText'></div></td>");
+                fieldParams.append("\n<td class='$headerClass'><v-img height='$height' width='$width' :src='props.item.$propItemText'></v-img></td>");
             }else {
                 Map manageFields = field.manageFields as Map
                 String tdString = "\n<td class='$headerClass'>{{ props.item.$propItemText }}</td>";
@@ -100,6 +145,7 @@ class GridWidgetVue extends WidgetVue {
         def parentDataframeName = dataframe.dataframeName
         String onClickMethod    = " "
         String refDataframeName = ""
+        List gridDataframeList= []
         if (onClick){
 //            showRefreshMethod   = true
             if(onClick.script){
@@ -121,58 +167,22 @@ class GridWidgetVue extends WidgetVue {
             getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader)
 
         }
+        field.put("gridDataframeList", gridDataframeList);
         showRefreshMethod = showRefreshMethod || field.showRefreshMethod?true:false
         if(showRefreshMethod){
             dataframe.getVueJsBuilder().addToMethodScript(refreshGrid(fldName, refDataframeName, dataframe))
         }
-        String defaultImageName = Holders.config.images.defaultImageName
-        def fldNameDefault = WordUtils.capitalizeFully(fldName);
-        String labelCode = field.labelCode?:fldName
-        String label = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
-        boolean showGridFooter = field.showGridFooter?true:false
-        field.put("gridDataframeList", gridDataframeList);
-//        field.put("gridMethodScripts", methodScriptsBuilder);
-        StringBuilder dataTableAttribbutes = new StringBuilder()
-        if(!showGridFooter){
-            dataTableAttribbutes.append(""" hide-default-footer""")
-        }
-        String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
-        String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
-//        dataSb.append("${fldName}_display:false,\n")
-        String labelStyle = field.labelStyle?:""
-        String modelString = getModelString(dataframe, field)
-        String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
-        return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
 
-       ${showGridSearch?"""
-            <v-spacer></v-spacer>
-            <v-text-field
-                    v-model="${fldName}_search"
-                    append-icon="search"
-                    label="$searchPlaceholder"
-                    single-line
-                    hide-details
-                    class='pa-3'
-            ></v-text-field>
-        """:""}
-       <v-data-table
-            :headers="${modelString}_headers"
-            :items="${modelString}_items"
-            :items-per-page="-1"
-            ${showGridSearch?":search='${fldName}_search'":""}
-            ${dataTableAttribbutes.toString()}
-            ${getAttr(field)}
-    >
+        String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
+        return """
+
         <template slot="item" slot-scope="props">
           <tr @click.stop="${onClickMethod}" :key="props.item.$valueMember">
             $draggIndicator ${fieldParams.toString()}
           </tr>  
         </template>
-    </v-data-table></v-card>
-        ${onclickDfrBuilder.toString()}
-"""
+         """
     }
-
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         def search = field?.showGridSearch
@@ -224,25 +234,7 @@ class GridWidgetVue extends WidgetVue {
         dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){if(this.state.${dataVariable}_items.length){
                   return true;
                }},\n""")
-        StringBuilder formatAvatarSb = null
-        if(field.hql){
-            String hqlLowercase = field.hql?.toLowerCase()
-            String avatar = field.avatarAlias?:'Avatar'
-            if(hqlLowercase && hqlLowercase.contains("image") || hqlLowercase.contains("picture") || hqlLowercase.contains("avatar") || hqlLowercase.contains("logo")){
-                String imgUrl =  getImageUrl(field)
-                String defaultImageName = Holders.config.images.defaultImageName
-                formatAvatarSb = new StringBuilder()
-                formatAvatarSb.append(""" if(response && response.additionalData.length > 0){
-                                               let responses = response.addionalData['$fldName'].dictionary
-                                               for(const i=0; i<responses.length; i++){
-                                               var avarName = responses[i].$avatar;
-                                               var formattedName = avarName?'$imgUrl'+avarName:'$imgUrl'+'$defaultImageName'
-                                               responses[i].$avatar = '<v-img height="40px" width="40px" src="'+formattedName+'" />';
-                                    }}""");
-            }
-        }
         return """
-               ${formatAvatarSb?formatAvatarSb.toString():''}
                $namedParamKey 
               """
     }

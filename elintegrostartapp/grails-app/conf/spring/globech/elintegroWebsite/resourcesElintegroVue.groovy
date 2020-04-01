@@ -129,7 +129,7 @@ beans {
                         ,avatarAlias      :'Logo'
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
-                        ,url:'/assets'
+                        ,url:'/'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
 
                 ]
