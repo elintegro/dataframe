@@ -126,7 +126,7 @@ $fieldParams
                 String height = field.avatarHeight?:'auto'
                 String width = field.avatarWidth?:'40'
 //                fieldParams.append("\n<td class='$headerClass'><div v-html='props.item.$propItemText'></div></td>");
-                fieldParams.append("\n<td class='$headerClass'><v-img height='$height' width='$width' :src='props.item.$propItemText'></v-img></td>");
+                fieldParams.append("\n<td class='$headerClass'><v-img height='$height' width='$width' :src='props.item.$propItemText' alt ='props.item.$propItemText'></v-img></td>");
             }else {
                 Map manageFields = field.manageFields as Map
                 String tdString = "\n<td class='$headerClass'>{{ props.item.$propItemText }}</td>";
