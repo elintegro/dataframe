@@ -17,6 +17,8 @@ import com.elintegro.auth.Role
 import com.elintegro.auth.User
 import com.elintegro.auth.UserRole
 import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.hr.Position
+import com.elintegro.elintegrostartapp.hr.Skills
 import com.elintegro.ref.Address
 import com.elintegro.ref.Language
 import com.elintegro.elintegrostartapp.Facility
@@ -112,13 +114,47 @@ class DataInit {
 		Person person = new Person(contactEmail: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
 	}
 	static def initElintegroClientProject(){
-		ClientProject clientProject = new ClientProject(clientName:"Globe Chalet" ,projectName:"Globe Chalet" ,logo:"clientsProjectImages/globeChalet.PNG" ,
+		ClientProject clientProject = new ClientProject(clientName:"" ,projectName:"Globe Chalet" ,logo:"assets/clientsProjectImages/globeChalet.PNG" ,
 				description:"Software to manage Associations\n" +
 				"of real estate properties and communities\n" +
 				"\n" ,linkToWebsite:"www.globeChalet.com" ).save()
-		ClientProject clientProject1 = new ClientProject(clientName:"Coach Clone" ,projectName:"Coach Clone application" ,logo:"clientsProjectImages/coachClone.PNG" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros" ,linkToWebsite:"https://www.coachclone.com/" ).save()
-		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"Morgan Stanley" ,logo:"clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
-		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"Yellow Pages" ,logo:"clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
+		 new ClientProject(clientName:"Coach Clone" ,projectName:"Coach Clone application" ,logo:"assets/clientsProjectImages/coachClone.PNG" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros" ,linkToWebsite:"https://www.coachclone.com/" ).save()
+		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"" ,logo:"assets/clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
+		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"" ,logo:"assets/clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
+	}
+	static def initelintegrostartappSkills(){
+		new Skills(code:"java",name:"Java",description: "Nothing").save()
+		new Skills(code:"spring",name:"Spring Framework",description: "Nothing").save()
+		new Skills(code:"hibernate",name:"Hibernate",description: "Nothing").save()
+		new Skills(code:"sql",name:"SQL",description: "Nothing").save()
+		new Skills(code:"js",name:"Javascript",description: "Nothing").save()
+		new Skills(code:"jq",name:"JQuery",description: "Nothing").save()
+		new Skills(code:"html",name:"HTML",description: "Nothing").save()
+		new Skills(code:"css",name:"CSS",description: "Nothing").save()
+		new Skills(code:"unix",name:"UNIX/Linux (including scripting)",description: "Nothing").save()
+		new Skills(code:"mvn",name:"Maven",description: "Nothing").save()
+		new Skills(code:"git",name:"Git",description: "Nothing").save()
+		new Skills(code:"eclipse",name:"Eclipse",description: "Nothing").save()
+		new Skills(code:"intellij",name:"Intellij",description: "Nothing").save()
+		new Skills(code:"agile",name:"Agile",description: "Nothing").save()
+		new Skills(code:"grails",name:"Grails",description: "Nothing").save()
+		new Skills(code:"angular",name:"Angular",description: "Nothing").save()
+		new Skills(code:"react",name:"React",description: "Nothing").save()
+		new Skills(code:"python",name:"Python",description: "Nothing").save()
+		new Skills(code:"php",name:"PHP",description: "Nothing").save()
+		new Skills(code:"mongodb",name:"MongoDB",description: "Nothing").save()
+		new Skills(code:"vuejs",name:"VueJs",description: "Nothing").save()
+		new Skills(code:"jenkins",name:"Jenkins",description: "Nothing").save()
+
+	}
+	static def initelintegrostartappPosition(){
+		new Position(_code:"be", name:"Back-end Java Developer",description: "Nothing").save()
+		new Position(_code: "fe", name:"Front-end Developer",description: "Nothing").save()
+		new Position(_code:"po", name:"Product Owner",description: "Nothing").save()
+		new Position(_code:"sm", name:"Scrum Master",description: "Nothing").save()
+		new Position(_code:"sa", name:"Site Adminstrator",description: "Nothing").save()
+		new Position(_code:"do", name:"Developer",description: "Nothing").save()
+
 	}
 
 

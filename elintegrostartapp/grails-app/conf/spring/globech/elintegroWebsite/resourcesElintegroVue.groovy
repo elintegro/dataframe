@@ -33,9 +33,9 @@ beans {
                             gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link",showAsDialog: true,script:""" this.vueElintegroLoginDataframe_display = true; \n  drfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroLoginDataframe_display', true);\n""",
+                            login          : [name: "login", type: "link",showAsDialog: true,script:""" this.vueElintegroLoginDataframe_display = true; \n  excon.saveToStore('dataframeShowHideMaps','vueElintegroLoginDataframe_display', true);\n""",
                                               refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            register       : [name: "register", type: "link", showAsDialog: true, attr:"text", script:""" this.vueElintegroRegisterDataframe_display = true;\n  drfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', true);\n""",
+                            register       : [name: "register", type: "link", showAsDialog: true, attr:"text", script:""" this.vueElintegroRegisterDataframe_display = true;\n  excon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', true);\n""",
                                               refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
 
@@ -114,19 +114,27 @@ beans {
                         widget            : "GridWidgetVue"
                         , name            : "clientProject"
 
-
-
-                        , hql             : """select clientProject.clientName as Clientname,
-                                                clientProject.projectName as Projectname, clientProject.logo as Logo, 
+                        ,hql             : """select clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
                                                 clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
+
+
+//                      , hql             : """select (clientProject.clientName || ' ' ||clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
+//                                                clientProject.description  as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
+//                      , hql             : """select concat(clientProject.clientName, ' ',clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
+//                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
                         , gridWidth       : 820
                         , search          : true
+                        ,internationalize: true
+                        ,manageFields     :[linkToWebsite: [type: 'link', script: '']]
                         ,avatarAlias      :'Logo'
-                        ,url:'/assets'
+                        ,avatarWidth      :'400'
+                        ,avatarHeight     :'auto'
+                        ,url:'/'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
                 ]
         ]
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+        currentFrameLayout = ref("clientProjectPageDataframeLayout")
 
     }
     vueTechnologiesDataframe(DataframeVue) { bean ->
@@ -138,15 +146,15 @@ beans {
         initOnPageLoad = false
         route = true
         addFieldDef = [
-                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/java.PNG"],
-                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/javascript.PNG"],
-                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/grailsphoto.PNG"],
-                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/vuejs.PNG"],
-                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kafka.PNG"],
-                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/oracle.PNG"],
-                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/nodejs.PNG"],
-                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kubernetes.PNG"],
-                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/mysql.PNG"],
+                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/java.PNG", "aspectRatio":"1.5"],
+                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/javascript.PNG", "aspectRatio":"1.5"],
+                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/grailsphoto.PNG", "aspectRatio":"1.5"],
+                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/vuejs.PNG", "aspectRatio":"1.0"],
+                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kafka.PNG", "aspectRatio":"1.0"],
+                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/oracle.PNG", "aspectRatio":"1.0"],
+                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/nodejs.PNG", "aspectRatio":"1.0"],
+                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kubernetes.PNG", "aspectRatio":"1.0"],
+                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/mysql.PNG", "aspectRatio":"1.0"],
 
         ]
         currentFrameLayout = ref("defaultRouteDataframeLayout")
@@ -161,18 +169,156 @@ beans {
         saveButton = false
         initOnPageLoad = false
         route = true
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+        currentFrameLayout = ref("vueGettingStartedPageDataframeLayout")
     }
     vueCareersDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCareersDataframe']
         dataframeLabelCode = "Careers Page"
-        isGlobal = true
+        // isGlobal = true
         saveButton = false
         initOnPageLoad = false
         route = true
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+        //componentsToRegister = ["vueCareersPageButtonDataframe"]
+        currentFrameLayout = ref("vueCareersDataframeLayout")
     }
+    vueCareersPageButtonDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueCareersPageButtonDataframe']
+        dataframeLabelCode = "Careers Page"
+        saveButton = false
+        initOnPageLoad = false
+        isGlobal = true
+        dataframeButtons = [registerForNewEmployee: [name: "register", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueNewEmployeeApplicantDataframe"),
+                                                     "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        currentFrameLayout = ref("emptyDataframeLayout")
+
+    }
+    vueNewEmployeeApplicantDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeApplicantDataframe']
+        dataframeLabelCode = "New Employee Applicant Registration"
+        initOnPageLoad = false
+        saveButton = false
+        isGlobal = true
+        route = true
+        currentFrameLayout = ref("vueNewEmployeeApplicantDataframeLayout")
+    }
+    vueNewEmployeeBasicInformationDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeBasicInformationDataframe']
+//      hql = "select person.firstName, person.lastName, person.contactEmail, person.phone from Person person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.contactEmail,person.phone,application.linkedin from Application application inner join application.applicant person where application.id=:id"
+        initOnPageLoad = false
+        saveButton = false
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md1', 'lg1', 'xl1']
+        isGlobal = true
+        addFieldDef = [
+
+                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'FirstName.required.message'],[condition:"v => (v && v.length <= 30)",message:"FirstName.must.be.less.than.30"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'LastName.required.message'],[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.availablePosition"  :[
+                        "widget"             :"ComboboxVue"
+                        ,"name"              :"person.availablePosition"
+                        ,internationalize    :true
+                        ,initBeforePageLoad  :true
+                        ,multiple            :true
+                        ,"hql"               : "select position.id as id, position.name as name from Position as position"
+
+                        ,"flexGridValues"    : ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        ,"displayMember": "name"
+                        ,"valueMember"  : "id"
+                        , search:true
+
+                ],
+
+
+        ]
+        dataframeButtons = [
+                next:[name:"next", type: "button",script:'this.newEmployeeBasicInformation()',
+                      flexGridValues: ['xs12', 'sm12', 'md1', 'lg1', 'xl1'], url:""]]
+
+
+        currentFrameLayout = ref("emptyDataframeLayout")
+
+    }
+    vueNewEmployeeUploadResumeDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
+        initOnPageLoad = false
+        hql = "select application.id, application.resume from Application application where application.id=:id"
+        saveButton = true
+        tab = true
+        isGlobal = true
+        doBeforeSave = """allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
+                          allParams['key_vueNewEmployeeUploadResumeDataframe_application_id_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
+                          allParams['vueNewEmployeeUploadResumeDataframe_application_resume'] =  """
+        doAfterSave = """
+                         excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key", response.nodeId[0]);
+                         excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeDescriptionDataframe-tab-id');"""
+        addFieldDef = [
+//                "application.resume":["name":"resume","widget":"FileUploadWidgetVue",ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                "application.resume":["name":"resume"
+                                      ,"widget":"FilesUploadWidgetVue"
+                                      ,valueMember: "resume"
+                                      , ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                                      , insertAfter: "application.resume"
+                                      ,"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                                      ,multiple:false
+
+                                     ]
+        ]
+
+        dataframeButtons = [ previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
+                                        flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+//                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
+//                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+
+        currentFrameLayout = ref("emptyDataframeLayout")
+    }
+    vueNewEmployeeSelfAssesmentDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeSelfAssesmentDataframe']
+        initOnPageLoad = false
+        tab = true
+        saveButton = true
+        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        isGlobal = true
+        doAfterSave = """
+                         excon.saveToStore("vueNewEmployeeAddtionalQuestionsDataframe","key", response.nodeId[0]);
+                         excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeAddtionalQuestionsDataframe-tab-id');"""
+
+        dataframeButtons = [previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeUploadResumeDataframe-tab-id");
+                                                                                \n""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'], url: ""]]
+
+        currentFrameLayout = ref("emptyDataframeLayout")
+    }
+
+    vueNewEmployeeAddtionalQuestionsDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeAddtionalQuestionsDataframe']
+        initOnPageLoad = false
+        hql = "select person.description from Person person where person.id=:id"
+        saveButton = true
+        tab = true
+        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        isGlobal = true
+
+        addFieldDef = [
+                "person.description":["name":"description","type":"link","widget":"TextAreaWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
+
+        ]
+        dataframeButtons = [
+                previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
+                           flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+
+        currentFrameLayout = ref("emptyDataframeLayout")
+    }
+
+
 
     vueContactUsPageDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
@@ -186,16 +332,16 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
                 "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-                                  "validate":["rule":["v => !!v || 'Name is required'", "v => (v && v.length <= 30) || 'Name must be less than 30'"]]],
-                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                                  "validationRules":[[condition:"v => !!v" ,message:'Name.required.message'], [condition:"v => (v && v.length <= 30)",message:'Name.must.be.less.than.30']]],
+                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","required": "required","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                 "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-                                           "required": "required","validate":["rule":["v => !!v || 'Description is required'"]]]
+                                           "required": "required","validationRules":[[condition:"v => !!v", message: 'Description.required.message']],]
 
 
         ]
 
-      //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
 
 
@@ -309,7 +455,7 @@ beans {
         wrapInForm=true
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doAfterSave = """ drfExtCont.saveToStore('vueLoginNavigation','responseData');\ndrfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
+        doAfterSave = """ excon.saveToStore('vueLoginNavigation','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
                            """
         addFieldDef =[
                 "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],

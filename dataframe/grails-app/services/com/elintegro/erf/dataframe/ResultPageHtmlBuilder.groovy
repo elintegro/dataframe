@@ -26,6 +26,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.i18n.LocaleContextHolder
 
 import javax.persistence.MapsId
 
@@ -70,6 +71,7 @@ class ResultPageHtmlBuilder {
         String initHmtl = layoutStructM.initHtml
         StringBuilder finalScriptSb = new StringBuilder()
         finalScriptSb.append("<script>\n")
+//        finalScriptSb.append("<script type='text/babel'>\n")
         //Initialize Store
         finalScriptSb.append("let store = new Vuex.Store({\n")
         finalScriptSb.append(dfrComps.vueStore)
@@ -79,6 +81,12 @@ class ResultPageHtmlBuilder {
         finalScriptSb.append(globalLayoutCompScriptSb.toString()) // append global layout components
         finalScriptSb.append(dfrComps.dfrCompScript) // append other dfr components
         finalScriptSb.append(layoutStructM.layoutCompScript) // append other layout components
+        //Initialize i18n
+
+        finalScriptSb.append(""" const i18n = new VueI18n({
+                                 locale:'${LocaleContextHolder.getLocale().getLanguage()}',
+                                 messages
+                           });""")
 //Initialize Router
         finalScriptSb.append("const router = new VueRouter({\n")// Initialize Router
 //        finalScriptSb.append("mode:'history',\n")
@@ -92,15 +100,52 @@ class ResultPageHtmlBuilder {
         finalScriptSb.append("var app = new Vue ({\nel:'#app',\n") // Vue Instance
         finalScriptSb.append("router,\n") //Inject router to vue instance
         finalScriptSb.append("store,\n") //Inject store
+        finalScriptSb.append("i18n,\n") //Inject i18n
         finalScriptSb.append("vuetify: new Vuetify(),\n") //Inject vuetify
         finalScriptSb.append("data(){ return {\n")
         finalScriptSb.append("drawer : null,\n") //Insert some external data
         finalScriptSb.append("}\n},\n") // data addition completed
+        finalScriptSb.append("created () {\n")
+//        finalScriptSb.append("this.\$vuetify.rtl=true;\n")
+        finalScriptSb.append("},\n")
         finalScriptSb.append("components:{\n")
         String layoutCompS = constructCompRegistrationForMainLayout(gcMainPgObj)
         finalScriptSb.append("$layoutCompS") // layout main component registration
         finalScriptSb.append(getMainPgVueCompRegistrationString(gcMainPgObj)) // dfr components registration
         finalScriptSb.append("\n},\n")// components registration completed
+        finalScriptSb.append("methods:{\n")
+        finalScriptSb.append("""
+                   
+                    refreshDataForGrid: function(response, fldName, operation = "U"){
+                       
+                          const newData = response.newData;
+                          if(!newData) return;
+                          const selectedRow = this[fldName +'_selectedrow'];
+                          const editedIndex = this.state[fldName +'_items'].indexOf(selectedRow);
+                          let row = {};
+                          for(let key in newData){
+                              let dataMap = newData[key];
+                              for(let j in dataMap){
+                                 if(selectedRow){
+                                    if (key in selectedRow) {
+                                      row[key] = dataMap[j];
+                                    }
+                                 } else {
+                                    row[key] = dataMap[j];
+                                 }
+                                  
+                              }
+                          }
+                          if (operation==="I") {
+                              this.state[fldName +'_items'].push(row)
+                          } else {
+                              Object.assign(this.state[fldName +'_items'][editedIndex], row)
+                          }
+//                          this.gridDataframes[refreshParams.dataframe] = false; 
+                },
+
+         """)
+        finalScriptSb.append("}, \n") //methods end
         finalScriptSb.append("})")
         finalScriptSb.append("</script>")
         return [initHtml:initHmtl, finalScript:finalScriptSb.toString()]
@@ -113,7 +158,7 @@ class ResultPageHtmlBuilder {
         [initHtml: initHtml.toString(), layoutCompScript: finalLayoutScript]
     }
 
-    private  String constructCompRegistrationForMainLayout(PageDFRegistryVue gcMainPgObj){
+    private static String constructCompRegistrationForMainLayout(PageDFRegistryVue gcMainPgObj){
         def containerLayoutS = gcMainPgObj.containerLayout
 
         LayoutVue contLytObj = LayoutVue.getLayoutVue(containerLayoutS)
@@ -121,11 +166,12 @@ class ResultPageHtmlBuilder {
             return ""
         }
         StringBuilder ltSb = new StringBuilder()
+        int index = 0;
         for(String ltS : contLytObj.children){
             LayoutVue lytT = LayoutVue.getLayoutVue(ltS)
             if(!registeredComponents.contains(ltS)){
-                ltSb.append(VueJsBuilder.createCompRegistrationString(ltS))
-//                lytT.componentRegistered = true
+                ltSb.append(VueJsBuilder.createCompRegistrationString(ltS, index))
+                index++;
                 registeredComponents.add(ltS)
             }
         }
@@ -144,7 +190,6 @@ class ResultPageHtmlBuilder {
             if(ch.trim() != "") {
                 LayoutVue layoutObj = LayoutVue.getLayoutVue(ch)
                 prepareVueLayout(layoutObj.children, resultPageScript, layoutObj)
-//                constructSectionalComponent(resultPageScript, layout)
             }
         }
         initHtml.append(wrapperLayout)
@@ -164,7 +209,6 @@ class ResultPageHtmlBuilder {
                 LayoutVue layoutObj = LayoutVue.getLayoutVue(ch)
                 if(!registeredComponents.contains(ch) && !layoutObj.isGlobal) {
                     disObj.compRegScript.append(VueJsBuilder.createCompRegistrationString(ch))
-//                    layoutObj.componentRegistered = true
                     registeredComponents.add(ch)
                 }
                 List childs = layoutObj.children
@@ -185,7 +229,6 @@ class ResultPageHtmlBuilder {
                 DataframeVue dfrT = DataframeVue.getDataframe(s) // todo check if the component is Layout or Dataframe first
                 if(!registeredComponents.contains(s)){
                     sb.append(VueJsBuilder.createCompRegistrationString(s.trim()))
-//                    dfrT.componentRegistered = true
                     registeredComponents.add(s)
                 }
             }
@@ -193,9 +236,7 @@ class ResultPageHtmlBuilder {
 
         return sb.toString()
     }
-    private String createCompRegistrationString(component){
-        return ""+component+" : "+component+"Comp,\n"
-    }
+
     private void constructSectionalComponent(StringBuilder resultPageScript, LayoutVue disObj){
         StringBuilder compBuilder = new StringBuilder()
         String layoutPlaceHolder = disObj.layoutPlaceHolder
@@ -207,7 +248,7 @@ class ResultPageHtmlBuilder {
             disObj.componentRegistered = true
         }else{
             disObj.componentRegistered = false
-            compBuilder.append("var ${layoutName}Comp = {\n")
+            compBuilder.append("const ${layoutName}Comp = {\n")
         }
         compBuilder.append("template:`")
         compBuilder.append(layoutPlaceHolder)
@@ -295,20 +336,20 @@ class ResultPageHtmlBuilder {
             if(rolesInAttr.length > 1){
                 log.debug("Stop")
             }
-                //String hashId = securityElement.attr(":id")
+            //String hashId = securityElement.attr(":id")
             List<String> rolesInAttribute = rolesInAttr?.toList()
 
             boolean sectionAllowed = ifSectionAllowed(userRoles, secTag, rolesInAttribute)
 
-                if (sectionAllowed) {
-                    String securitySection = resultSecSection.substring(securedSectionStartPos + 1, closingTagMarkPos - 1 )
-                    // append the section content, excluding the security tags
-                    sbResult.append(securitySection)
-                }
+            if (sectionAllowed) {
+                String securitySection = resultSecSection.substring(securedSectionStartPos + 1, closingTagMarkPos - 1 )
+                // append the section content, excluding the security tags
+                sbResult.append(securitySection)
+            }
 
-                sbResult.append(resultSecSection.substring(afterClosingTagPosition-1))
-                resultSecSection = sbResult.toString()
-                secTagStartPos = resultSecSection.indexOf(secTagStartStr)
+            sbResult.append(resultSecSection.substring(afterClosingTagPosition-1))
+            resultSecSection = sbResult.toString()
+            secTagStartPos = resultSecSection.indexOf(secTagStartStr)
 
         }//End of while of security tags
 

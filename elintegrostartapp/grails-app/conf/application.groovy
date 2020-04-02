@@ -361,8 +361,9 @@ environments {
 	}
 
 	production {
-		baseUrl = "http://208.75.75.83"
-		grails.serverURL = "http://208.75.75.83/elintegrostartapp"
+		server.contextPath = "/"
+		rootPath = ""
+		grails.serverURL = "http://208.75.75.83"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro.himalaya'
 		dataSource {
 			logSql = true
@@ -509,11 +510,13 @@ contactUsEmailService.emailWithInformation = '''Hello $name,<br/>
 This is the test for email sending service.
 Thank you for choosing us. Your registration is almost complete.
 '''
-elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com, shai@gmail.com,rabindra@gmail.com"
+elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com,sumanneupane19982055@gmail.com, shai@gmail.com,rabindra@gmail.com"
 
 
-elintegro.contuctus.email.interval = 20000     //send email once in 20 seconds
+//elintegro.contuctus.email.interval = 20000     //send email once in 20 seconds
 //elintegro.contuctus.email.interval = 5*60*1000 //send email once in 5 minutes.
+elintegro.contuctus.email.interval = 12*60*60*1000//send email once in 12 hours.
+
 
 grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rejectIfNoRule = false

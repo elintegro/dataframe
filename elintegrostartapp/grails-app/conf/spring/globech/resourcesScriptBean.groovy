@@ -37,10 +37,10 @@ beans {
                ,\nsetInitPageValues:function(data){
                                                
                                                 axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
-                                                     drfExtCont.saveToStore("vueInitDataframe", "key", '');
-                                                     drfExtCont.saveToStore("vueProfileMenuDataframe", "key", '');
-                                                     drfExtCont.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
-                                                     drfExtCont.saveToStore("loggedIn", responseData.data.loggedIn);
+                                                     excon.saveToStore("vueInitDataframe", "key", '');
+                                                     excon.saveToStore("vueProfileMenuDataframe", "key", '');
+                                                     excon.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
+                                                     excon.saveToStore("loggedIn", responseData.data.loggedIn);
 //                                                     vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
 //                                                     Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
 //                                                     Vue.set(vueInitDataframeVar.\$store.state.vueProfileMenuDataframe, "key", '');
@@ -147,6 +147,7 @@ beans {
                 var allParams = {};
                 allParams["id"] = eval(this.namedParamKey);
                 allParams['dataframe'] = 'vueAfterLoggedinDataframe';
+                
                 axios.get('${contextPath}/dataframe/ajaxValues', {
                     params: allParams
                 }).then(function(responseData) {
@@ -170,7 +171,7 @@ beans {
     }
 
     vueProfileMenuDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueProfileMenuDataframe_person_fullName(){return drfExtCont.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + drfExtCont.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
+        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
     }
 
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
@@ -200,13 +201,13 @@ beans {
     }
     vueMedicationsGridDetailDataframe_script(VueJsEntity){bean -> /* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*/
         watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridDetailDataframe_fillInitData();}},"""
-        computed = """ callInitMethod(){  const data = drfExtCont.getFromStore('vueMedicalRecordDetailDataframe', 'key');
+        computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordDetailDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
 
     vueMedicationsGridEditDataframe_script(VueJsEntity){bean -> /* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*/
         watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridEditDataframe_fillInitData();}},"""
-        computed = """ callInitMethod(){  const data = drfExtCont.getFromStore('vueMedicalRecordEditDataframe', 'key');
+        computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordEditDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
     vueRegisterMenuDataframe_script(VueJsEntity){bean ->
@@ -434,5 +435,47 @@ beans {
     }
     vueSubContainerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
+    }
+    vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->
+        data = "vueNewEmployeeApplicantDataframe_tab_model : this.tabValue,\nvueNewEmployeeApplicantDataframe_display: true, \n"
+        computed = """tabValue(){return this.\$store.state.vueNewEmployeeApplicantDataframe.vueNewEmployeeApplicantDataframe_tab_model}"""
+        watch = """ tabValue:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantDataframe_tab_model = val;}},"""
+    }
+    vueNewEmployeeBasicInformationDataframe_script(VueJsEntity){bean ->
+        methods = """  
+                      newEmployeeBasicInformation(){
+                      console.log("Inside employeeinformation")
+                       var details = this.state.vueNewEmployeeBasicInformationDataframe
+                       console.log(details)
+                       var allParams = {};
+                       allParams['firstName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_firstName;
+                       allParams['lastName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_lastName;
+                       allParams['email'] = this.state.vueNewEmployeeBasicInformationDataframe_person_contactEmail;
+                       allParams['phone'] = this.state.vueNewEmployeeBasicInformationDataframe_person_phone;
+                       allParams['linkedin'] = this.state.vueNewEmployeeBasicInformationDataframe_application_linkedin;
+                       allParams['availablePosition'] = this.state.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
+                       allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
+                       console.log(allParams)
+                       
+                       console.log("do you see all params?")
+                       if (this.\$refs.vueNewEmployeeBasicInformationDataframe_form.validate()){
+                       axios({
+                       method:'post',
+                       url:'${contextPath}/EmployeeApplication/createApplicant',
+                       data: allParams
+                         }).then(function(responseData){
+                          var response = responseData;
+                          excon.saveToStore("vueNewEmployeeUploadResumeDataframe","vueNewEmployeeUploadResumeDataframe_resume_id",response.data.id)
+                          console.log(response)
+                          console.log(response.data.id)  
+                });
+                
+                       excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
+                  }   
+                  else{
+                  alert("Error in saving")
+                  }
+                   }
+                          """
     }
 }

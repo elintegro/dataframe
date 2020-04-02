@@ -213,7 +213,7 @@ class DataframeController {
 	}
 
 	def ajaxSaveRaw(){
-		def _params = params
+		def _params = request.getJSON()
 
 		String prmsPrintOut = DataframeInstance.reqParamPrintout(_params);
 
@@ -226,7 +226,7 @@ class DataframeController {
 		def operation = 'U'; //Update
 		def result;
 		boolean isInsert;
-		result = dfInstance.save(true);
+		result = dfInstance.save(true); //Todo Shai,Eugene Why there is no error handling here ?
 		if(dfInstance.isInsertOccured()){
 			operation = "I";
 		}
@@ -234,8 +234,8 @@ class DataframeController {
 		def resultData
 		def generatedKeys = []
 
-		String parentNode = _params.get(dataframe.dataframeName+"-parentNode");
-		String level = _params.get(dataframe.dataframeName+"-level")
+		String parentNode = _params[dataframe.dataframeName+"-parentNode"];
+		String level = _params[dataframe.dataframeName+"-level"]
 
 		Map savedResultMap = dfInstance.getSavedDomainsMap();
 

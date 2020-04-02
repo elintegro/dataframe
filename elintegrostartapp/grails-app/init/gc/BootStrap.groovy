@@ -36,6 +36,8 @@ class BootStrap {
 
             DataInit.initelintegrostartappReferences(user1)
             DataInit.initElintegroClientProject()
+            DataInit.initelintegrostartappSkills()
+            DataInit.initelintegrostartappPosition()
         }
 
         //DataInit.initNotification()

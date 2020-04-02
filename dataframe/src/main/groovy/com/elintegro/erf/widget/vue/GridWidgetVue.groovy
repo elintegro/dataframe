@@ -17,6 +17,7 @@ import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.ResultPageHtmlBuilder
+import com.elintegro.erf.dataframe.vue.DataMissingException
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DbResult
 import com.elintegro.erf.dataframe.ParsedHql
@@ -40,91 +41,22 @@ class GridWidgetVue extends WidgetVue {
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
-        String fldName     = dataframe.getDataVariableForVue(field);
+        String fldName     = getFieldName(dataframe, field)
         def showGridSearch = field?.showGridSearch?:false
-        String wdgHql      = field?.hql;
-        def onClick        = field?.onClick
-        def onButtonClick  = field?.onButtonClick
-        String valueMember = field?.valueMember
-        boolean internationalize = field.internationalize?true:false
-        List gridDataframeList= []
-        StringBuilder methodScriptsBuilder = new StringBuilder();
-        StringBuilder requestFieldParams   = new StringBuilder()
-        StringBuilder fieldParams          = new StringBuilder();
         StringBuilder onclickDfrBuilder    = new StringBuilder();
-        ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory);
-        List<MetaField> fieldMetaData      = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
-        field.put("gridMetaData", fieldMetaData);
-        field.put("parsedHql", parsedHql);
-        List dataHeader = []
-        boolean showRefreshMethod = false
-        fieldMetaData.each {metaField ->
-            def propItemText = metaField.alias?:metaField.name
-            def propItemVal  = metaField.name
-            String headerText = propItemText.capitalize()
-            if(internationalize){
-                headerText = getMessageSource().getMessage(propItemText,null,propItemText,LocaleContextHolder.getLocale())
-            }
-//            String capitalisedProp = propItemText.capitalize()
-            String hiddenClass = ""
-            if(metaField.pk || metaField.fk){
-                hiddenClass = "hidden"
-            }
-            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':hiddenClass])
-            String propTextLowercase = propItemText.toLowerCase()
-            if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar") || propTextLowercase.contains("logo")){
-                String defaultImageName = Holders.config.images.defaultImageName
-                String imgUrl =  getImageUrl(field)
-                fieldParams.append("""\n<td class='text-xs-left'><div v-html="item.$propItemText"></div></td>""");
-            }else {
-                fieldParams.append("\n<td class='$hiddenClass text-xs-left'>{{ item.$propItemText }}</td>");
-            }
-            requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
-        }
-        field.put("dataHeader", dataHeader);
-        def parentDataframeName = dataframe.dataframeName
-        String onClickMethod    = " "
-        String refDataframeName = ""
-        if (onClick){
-            showRefreshMethod   = true
-            if(onClick.script){
-                dataframe.getVueJsBuilder().addToMethodScript(""" 
-                   ${fldName}_showDetail: function(dataRecord){
-                              ${onClick.script}
-                    },\n 
-            """)
-            } else{
-                DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
-                refDataframeName = refDataframe.dataframeName
-                onClickMethod    = "${fldName}_showDetail$refDataframeName(item)"
-                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName)
-            }
-        }
-
-        if (onButtonClick){
-            showRefreshMethod = true
-            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, parentDataframeName, requestFieldParams, dataHeader)
-
-        }
-        showRefreshMethod = showRefreshMethod || field.showRefreshMethod?true:false
-        if(showRefreshMethod){
-            dataframe.getVueJsBuilder().addToMethodScript(refreshGrid(fldName, refDataframeName, dataframe))
-        }
-        String defaultImageName = Holders.config.images.defaultImageName
         def fldNameDefault = WordUtils.capitalizeFully(fldName);
         String labelCode = field.labelCode?:fldName
         String label = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
         boolean showGridFooter = field.showGridFooter?true:false
-        field.put("gridDataframeList", gridDataframeList);
-        field.put("gridMethodScripts", methodScriptsBuilder);
         StringBuilder dataTableAttribbutes = new StringBuilder()
         if(!showGridFooter){
             dataTableAttribbutes.append("""hide-default-footer""")
         }
         String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
-        String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
-//        dataSb.append("${fldName}_display:false,\n")
-        String gridTitle = label?"""<v-card-title class='title font-weight-light' style='justify-content: space-evenly;'>$label</v-card-title>""":""
+        String labelStyle = field.labelStyle?:""
+        String modelString = getModelString(dataframe, field)
+        String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
+        String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
         return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
 
        ${showGridSearch?"""
@@ -139,27 +71,123 @@ class GridWidgetVue extends WidgetVue {
             ></v-text-field>
         """:""}
        <v-data-table
-            :headers="${fldName}_headers"
-            :items="${fldName}_items"
+            :headers="${modelString}_headers"
+            :items="${modelString}_items"
+            :items-per-page="-1"
             ${showGridSearch?":search='${fldName}_search'":""}
             ${dataTableAttribbutes.toString()}
+            ${getAttr(field)}
     >
-        <template v-slot:item="{item}">
-          <tr @click="${onClickMethod}" :key="item.$valueMember">
-            $draggIndicator ${fieldParams.toString()}
-          </tr>  
-        </template>
+$fieldParams
     </v-data-table></v-card>
         ${onclickDfrBuilder.toString()}
 """
     }
 
+    String prepareFieldParams(Dataframe dataframe, Map field, StringBuilder onclickDfrBuilder ){
+        String fldName     = getFieldName(dataframe, field)
+        String wdgHql      = field?.hql;
+        def onClick        = field?.onClick
+        def onButtonClick  = field?.onButtonClick
+        String alignment   = field?.textAlign?:'start'
+        String headerWidth = field.headerWidth?:''
+        String valueMember = field?.valueMember
+        boolean internationalize = field.internationalize?true:false
+        StringBuilder requestFieldParams   = new StringBuilder()
+        StringBuilder fieldParams          = new StringBuilder();
+
+        ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory);
+        List<MetaField> fieldMetaData      = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
+        field.put("gridMetaData", fieldMetaData);
+        field.put("parsedHql", parsedHql);
+        List dataHeader = []
+        boolean showRefreshMethod = false
+        fieldMetaData.each {metaField ->
+            def propItemText = metaField.alias?:metaField.name
+            def propItemVal  = metaField.name
+            String headerText = propItemText.capitalize()
+            if(internationalize){
+                headerText = getMessageSource().getMessage(propItemText,null,propItemText,LocaleContextHolder.getLocale())
+            }
+//            String capitalisedProp = propItemText.capitalize()
+            StringBuilder headerClass = new StringBuilder()
+            if(metaField.pk || metaField.fk){
+                headerClass.append("hidden ")
+                valueMember = valueMember?: metaField.alias
+            }
+            addClassesToHeader(field, headerClass, propItemVal)
+            headerClass.append("text-$alignment")
+            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':"${headerClass.toString()}", 'width':"${headerWidth}"])
+            String propTextLowercase = propItemText.toLowerCase()
+            if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar") || propTextLowercase.contains("logo")){
+                String defaultImageName = Holders.config.images.defaultImageName
+                String imgUrl =  getImageUrl(field)
+                String avatar = field.avatarAlias?:'Avatar'
+                String height = field.avatarHeight?:'auto'
+                String width = field.avatarWidth?:'40'
+//                fieldParams.append("\n<td class='$headerClass'><div v-html='props.item.$propItemText'></div></td>");
+                fieldParams.append("\n<td class='$headerClass'><v-img height='$height' width='$width' :src='props.item.$propItemText'></v-img></td>");
+            }else {
+                Map manageFields = field.manageFields as Map
+                String tdString = "\n<td class='$headerClass'>{{ props.item.$propItemText }}</td>";
+                if(manageFields){
+                    if(manageFields.containsKey(propItemVal)){
+                        if('link' == manageFields[propItemVal].type){
+                            tdString = "\n<td class='$headerClass'><a :href='props.item.$propItemText' target='_blank' style ='text-decoration :none !important;' >{{ props.item.$propItemText }} </a></td>";
+                        }
+                    }
+                }
+                fieldParams.append(tdString)
+            }
+            requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
+        }
+        field.put("dataHeader", dataHeader);
+        def parentDataframeName = dataframe.dataframeName
+        String onClickMethod    = " "
+        String refDataframeName = ""
+        List gridDataframeList= []
+        if (onClick){
+//            showRefreshMethod   = true
+            if(onClick.script){
+                dataframe.getVueJsBuilder().addToMethodScript(""" 
+                   ${fldName}_showDetail: function(dataRecord){
+                              ${onClick.script}
+                    },\n 
+            """)
+            } else{
+                DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
+                refDataframeName = refDataframe.dataframeName
+                onClickMethod    = "${fldName}_showDetail$refDataframeName(props.item)"
+                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName)
+            }
+        }
+
+        if (onButtonClick){
+//            showRefreshMethod = true
+            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader)
+
+        }
+        field.put("gridDataframeList", gridDataframeList);
+        showRefreshMethod = showRefreshMethod || field.showRefreshMethod?true:false
+        if(showRefreshMethod){
+            dataframe.getVueJsBuilder().addToMethodScript(refreshGrid(fldName, refDataframeName, dataframe))
+        }
+
+        String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
+        return """
+
+        <template slot="item" slot-scope="props">
+          <tr @click.stop="${onClickMethod}" :key="props.item.$valueMember">
+            $draggIndicator ${fieldParams.toString()}
+          </tr>  
+        </template>
+         """
+    }
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         def search = field?.showGridSearch
         List gridDataframeNames = field?.gridDataframeList
         String gridDataframeNamesBuilder = ""
-        def dataHeader = field.dataHeader
         if (gridDataframeNames){
             gridDataframeNamesBuilder = "{\n"
             gridDataframeNames.each {dfName ->
@@ -168,19 +196,26 @@ class GridWidgetVue extends WidgetVue {
             gridDataframeNamesBuilder = gridDataframeNamesBuilder + "}\n"
         }
 
-        dataframe.getVueJsBuilder().addToMethodScript(""" getDefaultDataHeaders : function(){\n
-                             var defaultDataHeaders = ${dataHeader as JSON};
-                             this.${dataVariable}_headers = defaultDataHeaders;
-                          },\n""")
         return """
             drag:'',
            ${search?"${dataVariable}_search:'',":""}
-           ${dataVariable}_headers: [],
-           ${dataVariable}_items: [],
-           ${gridDataframeNamesBuilder?"gridDataframeNames:${gridDataframeNamesBuilder},":""}
-           ${dataVariable}_selectedrow:null,
+           ${gridDataframeNamesBuilder?"gridDataframes:${gridDataframeNamesBuilder},":""}
 """
 
+    }
+    String getStateDataVariable(DataframeVue dataframe, Map field){
+
+        String dataVariable = dataframe.getDataVariableForVue(field)
+        def dataHeader = field.dataHeader
+        dataframe.getVueJsBuilder().addToMethodScript(""" getDefaultDataHeaders_${dataVariable} : function(){\n
+                             var defaultDataHeaders = ${dataHeader as JSON};
+                             this.state.${dataVariable}_headers = defaultDataHeaders;
+                          },\n""")
+        return """
+           ${dataVariable}_headers: [],
+           ${dataVariable}_items: [],
+           ${dataVariable}_selectedrow:{},
+"""
     }
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
@@ -190,34 +225,16 @@ class GridWidgetVue extends WidgetVue {
             if(onClick.refDataframe){
                 DataframeVue refDataframe = getReferenceDataframe(onClick.refDataframe)
                 String refDataframeName = refDataframe.dataframeName
-//                namedParamKey = "this.\$refs.${refDataframeName.toLowerCase()}_ref.\$data.namedParamKey = \"this.\$store.state.${refDataframeName}.key\";\n"
+//                namedParamKey = "this.\$refs.${refDataframeName}_ref.\$data.namedParamKey = \"this.\$store.state.${refDataframeName}.key\";\n"
                 namedParamKey = ""
             }
         }
         String fldName = dataframe.getDataVariableForVue(field);
         String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
-        dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){if(this.${dataVariable}_items.length){
+        dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){if(this.state.${dataVariable}_items.length){
                   return true;
                }},\n""")
-        String hqlLowercase = field.hql?.toLowerCase()
-        StringBuilder formatAvatarSb = new StringBuilder()
-        String avatar = field.avatarAlias?:'Avatar'
-        if(hqlLowercase && hqlLowercase.contains("image") || hqlLowercase.contains("picture") || hqlLowercase.contains("avatar") || hqlLowercase.contains("logo")){
-            String imgUrl =  getImageUrl(field)
-            String defaultImageName = Holders.config.images.defaultImageName
-            formatAvatarSb.append(""" if(dataDessert.length > 0){for(var i=0; i<dataDessert.length; i++){
-                                               var avarName = dataDessert[i].$avatar;
-                                               var formattedName = avarName?'$imgUrl'+avarName:'$imgUrl'+'$defaultImageName'
-                                               dataDessert[i].$avatar = "<img height='40px' width='40px' src='"+formattedName+"' />";
-                                    }}""");
-        }
         return """
-               var fullFieldName = '$fullFieldName'; 
-               var dataDessert = response.additionalData[fullFieldName]['data'];
-               var dataHeader = response.additionalData[fullFieldName]['dataHeader'];
-               ${formatAvatarSb.toString()}
-               this.${dataVariable}_headers = dataHeader;
-               this.${dataVariable}_items = dataDessert;
                $namedParamKey 
               """
     }
@@ -251,8 +268,8 @@ class GridWidgetVue extends WidgetVue {
             getNamedParameterValue(dataframeInst,inputData, parsedHql, fieldProps)
             DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
             List resultList = dbRes.getResultList();
-            result.put("data", resultList);
-            result.put("dataHeader", dataHeader);
+            result.put("dictionary", resultList);
+            result.put("headers", dataHeader);
             result.put("defaultData", getDefaultData(fieldMetaData));
 
             if(!(fieldProps.containsKey("metaData") && fieldProps.get("metaData"))){
@@ -298,8 +315,8 @@ class GridWidgetVue extends WidgetVue {
                 }).then(function (responseData) {
                         var response = responseData.data.data;
                         console.log(response);
-                        ${parentDataframeName}Var.gridDataframeNames.${refDataframeName}_display = true;
-                        var refParams = ${parentDataframeName}Var.\$refs.${refDataframeName.toLowerCase()}_ref.params;
+                        excon.setVisibility(${refDataframeName}, true);
+                        var refParams = ${parentDataframeName}Var.\$refs.${refDataframeName}_ref.params;
                         var gridRefreshParams = {};
                         gridRefreshParams['isGridRefresh'] = true;
                         gridRefreshParams['fieldName'] = '$fldName';
@@ -318,12 +335,12 @@ class GridWidgetVue extends WidgetVue {
     }
 
     private void getOnButtonClickScript(onButtonClick, DataframeVue dataframe,  StringBuilder onclickDfrBuilder
-                                        , gridDataframeList, StringBuilder fieldParams, String fldName, String parentDataframeName, StringBuilder requestFieldParams, List dataHeader){
+                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader){
         String buttonHoverMessage = ""
         onButtonClick.each{Map onButtonClickMaps ->
             String actionName = getMessageSource().getMessage(onButtonClickMaps?.actionName?:"", null, onButtonClickMaps?.actionName?:"", LocaleContextHolder.getLocale())
             dataHeader.add(['text':actionName.capitalize(), 'keys':actionName, 'value':'name', sortable: false])
-            fieldParams.append("\n<td class='justify-center layout px-0' @click.stop=''>");
+            fieldParams.append("\n<td class='text-start layout' @click.stop=''>");
             onButtonClickMaps.buttons.each {Map buttonMaps->
                 String text = buttonMaps?.buttonName
                 String appendCallbackScript
@@ -334,8 +351,8 @@ class GridWidgetVue extends WidgetVue {
                 boolean deleteButton = buttonMaps.deleteButton
                 boolean editButton = buttonMaps.editButton
                 boolean showDetail = buttonMaps.showDetail
-                def vIcon = buttonMaps?.vuetifyIcon
-
+                def vIcon = buttonMaps?.vuetifyIcon?:new HashMap<>()
+                def showHide = vIcon.showHide
                 String btnName = ""
                 String methodScript = ""
                 if(deleteButton){
@@ -352,24 +369,25 @@ class GridWidgetVue extends WidgetVue {
                     methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName)
                 } else {
                     methodScript = buttonMaps.script
-                    btnName = buttonMaps.name?:"editButton"
-                    if(buttonMaps?.refDataframe){
+                    btnName = buttonMaps.name
+                    if(!btnName) throw new DataMissingException("name is required for each action buttons")
+                    if(buttonMaps?.refDataframe && !buttonMaps.script){
                         methodScript= getEditJavascript(buttonMaps, dataframe, fldName)
                     }
                     if(!methodScript){
                         methodScript = ""
                     }
                 }
-                String methodName = """ ${fldName}_${btnName}method(item);"""
+                String methodName = """ ${fldName}_${btnName}method(props.item);"""
                 if (buttonMaps?.image){
                     String actionImageUrl = buttonMaps?.image?.url?:"https://image.flaticon.com/icons/png/128/66/66720.png";
                     String height = buttonMaps?.image?.height?:"20"
                     String width = buttonMaps?.image?.width?:"25"
                     fieldParams.append("""
-                                        <img ${toolTip(buttonMaps)} height="$height" width="$width" style='margin-top: 14px; cursor: pointer;' src="$actionImageUrl" @click="${methodName}"/>
+                                        <img ${toolTip(buttonMaps)} height="$height" width="$width" class="mr-2" style='margin-top: 14px; cursor: pointer;' src="$actionImageUrl" @click.stop="${methodName}"/>
                     """)
                 }else if (vIcon){
-                    fieldParams.append("""<v-icon small ${toolTip(buttonMaps)} class="mr-2" @click="${methodName}">${vIcon?.name}</v-icon>""")
+                    fieldParams.append("""<v-icon small ${toolTip(buttonMaps)} class="mr-2" ${showHide?.showHide?showHide.script:""} @click.stop="${methodName}">${vIcon?.name}</v-icon>""")
                 }
                 if(buttonMaps?.refDataframe && !buttonMaps.deleteButton){
                     onclickDfrBuilder.append(getRefDataframeHtml(buttonMaps, dataframe, fldName, gridDataframeList))
@@ -402,21 +420,8 @@ class GridWidgetVue extends WidgetVue {
     }
 
     private String refreshGrid(String fldName, String refDataframeName, Dataframe dataframe){
-        String vueStoreKeyName = refDataframeName?:"dataframeBuffer"
-        dataframe.getVueJsBuilder().addToComputedScript(""" refresh${fldName}Grid: function(){
-                                        var responseData =  drfExtCont.getFromStore("$vueStoreKeyName", "savedResponseData");
-                                         if(responseData == null || responseData == undefined || responseData == ""){
-                                            return null
-                                          } else {
-                                            return responseData
-                                          }
-                                        
-                               },\n""")
-        dataframe.getVueJsBuilder().addToWatchScript("""refresh${fldName}Grid: {handler: function(val, oldVal) {
-                                                this.${fldName}_refreshDataForGrid(val);
-                            }},\n""")
         return """
-                    ${fldName}_refreshDataForGrid: function(responseData){
+                    refreshDataForGrid: function(response, fldName, operation = "U"){
                        
                           var selectedRow = this.${fldName}_selectedrow;
                           var editedIndex = this.${fldName}_items.indexOf(selectedRow);
@@ -442,7 +447,7 @@ class GridWidgetVue extends WidgetVue {
                           } else {
                               Object.assign(this.${fldName}_items[editedIndex], row)
                           }
-//                          this.gridDataframeNames[refreshParams.dataframe] = false; 
+//                          this.gridDataframes[refreshParams.dataframe] = false; 
                 },\n
 
             """
@@ -462,29 +467,24 @@ class GridWidgetVue extends WidgetVue {
         gridDataframeList.add(refDataframeName)
         dataframe.childrenDataframes.add(refDataframeName)
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
-        store.addToShowHideParamNames("${refDataframeName}_display : true,\n")
-        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true},\n")
+        store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
+        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true, parentData:{}},\n")
 
         if(onClickMap.showAsDialog){
-            resultPageHtml.append("""<v-dialog v-model="gridDataframeNames.${refDataframeName}_display" max-width="800px">""")
+            resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" width='${getWidth(onClickMap)}' max-width='500px' >""")
 //            resultPageHtml.append(refDataframe.getComponentName())
-            resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName.toLowerCase()}_ref' :${refDataframeName}_prop="${refDataframeName}_data"></component>""")
+            resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref' :${refDataframeName}_prop="${refDataframeName}_data"></component>""")
             resultPageHtml.append("""</v-dialog>""")
         }else{
-            resultPageHtml.append("""<div v-show="gridDataframeNames.${refDataframeName}_display " max-width="500px">""")
+            resultPageHtml.append("""<div v-show="visibility.${refDataframeName}" max-width="500px">""")
 //            resultPageHtml.append(refDataframe.getComponentName())
-            resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName.toLowerCase()}_ref' v-bind:refreshGrid="true"></component>""")
+            resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref' :${refDataframeName}_prop="${refDataframeName}_data" v-bind:refreshGrid="true"></component>""")
             resultPageHtml.append("""</div>""")
         }
 
         //Add computed and watch scripts for dialog box
-        String computedScript = """check${refDataframeName}CloseButton: function(){return this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display}, \n"""
-        String watchScript = """check${refDataframeName}CloseButton:{handler: function(val, oldVal) {
-                               this.gridDataframeNames.${refDataframeName}_display = this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display;}}, \n """
-
         dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_comp: '',\n")
-                .addToComputedScript(computedScript)
-                .addToWatchScript(watchScript)
+                .addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
 
         return resultPageHtml.toString()
     }
@@ -496,35 +496,29 @@ class GridWidgetVue extends WidgetVue {
     private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName){
         String parentDataframeName = dataframe.dataframeName
         String updateStoreCallScript = ""
-        String updateStoreMehtodScript = ""
-        DataframeVue refDataframe
-        if(onClickMap.refDataframe){
-            refDataframe = getReferenceDataframe(onClickMap.refDataframe)
+        if(!onClickMap.refDataframe){
+            return ""
         }
+        DataframeVue refDataframe = getReferenceDataframe(onClickMap.refDataframe)
         String refDataframeName = refDataframe.dataframeName
+        boolean refreshInitialData = onClickMap.refreshInitialData ?:false
         if(dataframe.createStore || dataframe.vueStore){
-//            String previousState = dataframe.vueStore.state?:""
-//            String newState = previousState + "${fldName}_grid:{},\n";
-//            dataframe.vueStore = ["state":newState];
-//
-//            Vue.set(this.\$store.state.${parentDataframeName}.${fldName}_grid, "key", '')
             VueStore store = dataframe.getVueJsBuilder().getVueStore()
             store.addToState("${fldName}_grid:{},\n")
             updateStoreCallScript = "this.${refDataframeName}_updateStore(dataRecord);"
             dataframe.getVueJsBuilder().addToMethodScript("""${refDataframeName}_updateStore: function(data){
-                            var key = data.id?data.id:data.Id;
-                            Vue.set(this.\$store.state.${parentDataframeName}.${fldName}_grid, "key", key)
-                            Vue.set(this.\$store.state.${refDataframeName}, "key", key)
+                            Vue.set(this.${refDataframeName}_data, 'parentData', data);
                     },\n """)
         }
         return """
                               $updateStoreCallScript
                               this.${refDataframeName}_comp = "";
-                              this.${refDataframeName}_comp = "${refDataframeName.toLowerCase()}";
+                              this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
                               Vue.set(this.${refDataframeName}_data, 'key', key);
-                              ${parentDataframeName}Var.gridDataframeNames.${refDataframeName}_display = true;
-                              Vue.set(this.\$store.state.dataframeShowHideMaps,'${refDataframeName}_display', true); 
+                              Vue.set(this.${refDataframeName}_data, 'refreshInitialData', ${refreshInitialData?'Math.random()':false});
+                              excon.saveToStore('${parentDataframeName}', '${fldName}_selectedrow', dataRecord);
+                              excon.setVisibility("${refDataframeName}", true);
                     \n 
                     """
     }
@@ -532,6 +526,7 @@ class GridWidgetVue extends WidgetVue {
         DataframeVue buttonRefDataframe = getReferenceDataframe(buttonMaps.refDataframe)
         String valueMember =buttonMaps.valueMember?:"id"
         String doBeforeDelete = buttonMaps.doBeforeDelete?:""
+        String doAfterDelete = buttonMaps.doAfterDelete?:""
         StringBuilder requestFieldParams = new StringBuilder()
         List<String> keyFieldNames = buttonRefDataframe.getKeyFieldNameForNamedParameter(buttonRefDataframe)
 
@@ -540,7 +535,7 @@ class GridWidgetVue extends WidgetVue {
         requestFieldParams.append("allParams['fieldName'] = '$fldName';\n")
         requestFieldParams.append("allParams['id'] = dataRecord.id?dataRecord.id:dataRecord.Id;")
         keyFieldNames.each {
-            if (it.split('-').collect().contains(valueMember)){
+            if (it.split('_').collect().contains(valueMember)){
                 if(valueMember.equalsIgnoreCase("id")){
 
                     requestFieldParams.append("\nallParams['").append(it).append("'] = allParams['id'];\n");
@@ -553,23 +548,33 @@ class GridWidgetVue extends WidgetVue {
         }
         String confirmMessage = buttonMaps.message?:"Are you sure ?"
         String url =  buttonMaps.ajaxDeleteUrl?: ajaxDeleteUrl
+//                            confirm('${confirmMessage}');
         return """
                 
-                           var allParams = {};
-                           var editedIndex = this.${fldName}_items.indexOf(dataRecord);
-                           ${requestFieldParams.toString()}
-                            $doBeforeDelete
-                            confirm('${confirmMessage}');
-                           axios.get('$url', {
-                             params: allParams
-                        }).then(function (responseData) {
-                         if (responseData.data.success){
-                           ${parentDataframeName}Var.${fldName}_items.splice(editedIndex, 1)
-                         }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
+    var allParams = {};
+    var editedIndex = this.state.${fldName}_items.indexOf(dataRecord);
+    ${requestFieldParams.toString()}
+    $doBeforeDelete
+    if(dataRecord.$valueMember){
+        if(!confirm("${messageSource.getMessage("delete.confirm.message", null, "delete.confirm.message", LocaleContextHolder.getLocale())}"))return
+        const self = this;
+        axios({
+            method:'post',
+            url:'$url',
+            data: allParams
+        }).then(function (responseData) {
+            if (responseData.data.success){
+                self.state.${fldName}_items.splice(editedIndex, 1);
+            }
+            $doAfterDelete
+        })
+            .catch(function (error) {
+                console.log(error);
+            });
+    } else {
+
+                this.state.${fldName}_items.splice(editedIndex, 1);
+    }
                     \n 
           """
     }
@@ -665,4 +670,13 @@ class GridWidgetVue extends WidgetVue {
         return getDefaultAligh(cellType, "en_ca");
     }
 
+    private void addClassesToHeader(Map field, StringBuilder headerClass, String headerText){
+        Map addClassesToHeader = field.addClassesToHeader
+        if(addClassesToHeader){
+            String fieldName = field.name
+            if(addClassesToHeader.containsKey(headerText)){
+                headerClass.append(addClassesToHeader.get(headerText)+" ")
+            }
+        }
+    }
 }

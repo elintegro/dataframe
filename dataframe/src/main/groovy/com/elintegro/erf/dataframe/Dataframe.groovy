@@ -57,11 +57,11 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	private static defaultWidget = new InputWidgetVue()
 	public static final String DASH = "-";
 	public static final String DOT = ".";
+	public static final String UNDERSCORE = "_";
 	public static final String SESSION_PARAM_NAME_PREFIX = "session_"
 	private String currentLanguage = ""
 	Dataframe parent
 	String dataframeName
-	String contextPath="elintegrostartapp"; // TODO: inject your context path here. In future get this from the app
 	String dataframeLabel = ""
 	@OverridableByEditor
 	String hql
@@ -80,7 +80,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	@OverridableByEditor
 	boolean wrapInForm = true
 	boolean wrapInDiv = false
-    boolean validateForm = false
+	boolean validateForm = false
 	@OverridableByEditor
 	boolean addButton = false
 	@OverridableByEditor
@@ -126,14 +126,13 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	String supportJScriptSource
 
 	// This is a default to use DataframeController to perform CRUD operations, could be overwritten in Dataframe bean definition to any other controller operation
-	//TODO: instantiate contextPath
-	def ajaxUrl = "/${contextPath}/dataframe/ajaxValues"; 
-	def ajaxSaveUrl = "/${contextPath}/dataframe/ajaxSave";
-	//def ajaxDeleteUrl = "/${contextPath}/dataframe/ajaxDelete"
-	def ajaxDeleteUrl = "/${contextPath}/dataframe/ajaxDeleteExpire";
-	def ajaxInsertUrl = "/${contextPath}/dataframe/ajaxInsert";
-	def ajaxDefaultUrl = "/${contextPath}/dataframe/ajaxDefaultData";
-	def ajaxCreateUrl ="/${contextPath}/dataframe/ajaxCreateNew"
+	def ajaxUrl = "/seniara/dataframe/ajaxValues";
+	def ajaxSaveUrl = "/seniara/dataframe/ajaxSave";
+	//def ajaxDeleteUrl = "/seniara/dataframe/ajaxDelete"
+	def ajaxDeleteUrl = "/seniara/dataframe/ajaxDeleteExpire";
+	def ajaxInsertUrl = "/seniara/dataframe/ajaxInsert";
+	def ajaxDefaultUrl = "/seniara/dataframe/ajaxDefaultData";
+	def ajaxCreateUrl ="/seniara/dataframe/ajaxCreateNew"
 	@OverridableByEditor
 	Map dataframeButtons = [:];
 	@OverridableByEditor
@@ -439,7 +438,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		query = constructQuery(query, keyValue, sessionAttributes)
 		query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
 
-        results = query.list()
+		results = query.list()
 		return results
 	}
 
@@ -558,7 +557,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 				/*if(dbMetaFieldPropes.containsKey("name") && fieldProp.containsKey("name")){
 				 if(!dbMetaFieldPropes.get("name").equals(fieldProp.get("name"))){
 				 fieldProp.put("name", dbMetaFieldPropes.get("name"));
-				 }					
+				 }
 				 }
 				 */
 
@@ -853,11 +852,11 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 		String sb2_ = getJSListOfKeyFields();
 
-		
+
 		String loadPopupString = (displayType == "popup" && insertHtmlTo && divIdToDisable)?"""  																								 
 																								 Dataframe.loadPopup('$insertHtmlTo','$divIdToDisable','$popUpTitle');
 																							""":"""""";
-		
+
 		def ajaxscripts = """
 		
             if(!('${dataframeName}' in Dataframe)){
@@ -1099,7 +1098,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 		if(dataframeButtons){
 			for(Entry<String, DFButton> entry: dataframeButtons.entrySet()){
-				
+
 				def dfb = (com.elintegro.erf.dataframe.DFButton)entry.value;
 				dfb.name = (String)entry.key;
 				def refDf
@@ -1200,8 +1199,8 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 				}
 				def errorMsg = messageSource.getMessage("error.$field.labelCode", null, "Error", LocaleContextHolder.getLocale())
 				def binding = [divId: divId, field: fldName.replace(".", "-"), label: label,mandatory:field.notNull?"*":"",
-					widget: widget.getHtml(this, field), // TODO: if you need to pass any extra params to getHtml (such as which is the current field etc.) do so
-					errorMsg: errorMsg, btnDivId: btnDivId, btnWidget: btnWidget]
+							   widget: widget.getHtml(this, field), // TODO: if you need to pass any extra params to getHtml (such as which is the current field etc.) do so
+							   errorMsg: errorMsg, btnDivId: btnDivId, btnWidget: btnWidget]
 				def template = templateEngine.createTemplate(fieldLayout).make(binding)
 				String fieldName = field?.externalDomainField?"${fldName}":"${field.domainAlias}.${fldName}"
 				//Applying Layout:
@@ -1239,13 +1238,13 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 					jsValidteFormMessages.append(message)
 				}*/
 
-                if(field.validate){
-                    String message = field.validate.message?:""
-                    String action =  field.validate.action?:""
-                    String rule =  field.validate.rule?:""
-                    String rules = """{ input: '#$fldId', message: '$message', action: '$action', rule: '$rule'},"""
-                    jsValidteFormRules.append(rules)
-                }
+				if(field.validate){
+					String message = field.validate.message?:""
+					String action =  field.validate.action?:""
+					String rule =  field.validate.rule?:""
+					String rules = """{ input: '#$fldId', message: '$message', action: '$action', rule: '$rule'},"""
+					jsValidteFormRules.append(rules)
+				}
 
 			}else{
 				log.error("No widget for the field $field.name")
@@ -1306,7 +1305,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		def rules = jsValidteFormRules.toString()
 		def msgs = jsValidteFormMessages.toString()
 		//resultPageJs.append("</script>")
-        //				<script>
+		//				<script>
 //				jQuery(document).ready(function(){
 //				jQuery('#$dataframeName-form').validate({
 //					rules:{$rules},
@@ -1314,7 +1313,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 //				});
 //				});
 //				</script>
-        if(validateForm){
+		if(validateForm){
 //		if(ajaxSaveUrl && wrapInForm){
 			def ajaxValidationscripts = """
 				<script>
@@ -1330,7 +1329,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 			resultPageJs.append(ajaxValidationscripts)
 //		}
-        }
+		}
 		resultPageJs.append(headerScript.toString())
 		// append button only if applicable
 
@@ -1350,7 +1349,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 			String btnString = getBtnWidget(btn)
 			if(!(btn.refField || btn.refInDivId)) {
 				if(btn.buttonLayoutPlaceholder && btn.buttonLayoutPlaceholder?.trim()){
-                       Layout.applyButtonPlaceholder(resultPageHtml, btn.buttonLayoutPlaceholder, btnString)
+					Layout.applyButtonPlaceholder(resultPageHtml, btn.buttonLayoutPlaceholder, btnString)
 				}else {
 					resultPageHtml.append(btnString)
 				}
@@ -1557,7 +1556,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		return "$dataframeName${Dataframe.DOT}$fieldName";
 	}
 
-	//This is when fieldName actually comprises from domain.fieldName	
+	//This is when fieldName actually comprises from domain.fieldName
 	public static String buildKeyFieldParamForMetaData_(String dataframeName, String fieldName){
 		if(fieldName.contains(".")){
 			fieldName = fieldName.trim().replace(".", "-")
@@ -1566,7 +1565,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	}
 
 	/**
-	 *  
+	 *
 	 */
 	public static String buildFullFieldNameKeyParam(Dataframe df, String namedParameter){
 		String domainName = df.getNamedParamDomainAlias(namedParameter);
@@ -1605,8 +1604,8 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 	public static String buildFullFieldNameKeyParam(Dataframe df, String domainAlias , String dbFieldName, String namedParameter){
 		StringBuilder sb = new StringBuilder();
-		sb.append("key").append(DASH).append(df.dataframeName).append(DASH).append(domainAlias).append(DASH);
-		sb.append(dbFieldName).append(DASH).append(namedParameter);
+		sb.append("key").append(UNDERSCORE).append(df.dataframeName).append(UNDERSCORE).append(domainAlias).append(UNDERSCORE);
+		sb.append(dbFieldName).append(UNDERSCORE).append(namedParameter);
 		return sb.toString();
 	}
 

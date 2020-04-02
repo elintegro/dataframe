@@ -36,8 +36,8 @@ public class DFButton {
 	public String doBeforeSave; // Script just before Ajax save
 	public boolean showAsDialog = false; //Show the refDataframe as Dialog??
 	public boolean route = false; // Show as Route??
-    public Map tooltip;
-    public String attr; //add extra attribbubtes from descripter
+	public Map tooltip;
+	public String attr; //add extra attribbubtes from descripter
 	public  String layout=""; // layout for buttons
 	public String doBeforeAjax; // Script just bbefore ajax call
 	public String routeIdScript; //Id for the dataframe when route is true
@@ -47,5 +47,7 @@ public class DFButton {
 	public String roles; //"ROLE_ADMIN,ROLE_CUSTOMER"
 	public String accessType; //ifAllGranted, ifAnyGranted (deafualt)
 	public String classNames;
+	public boolean scrollable;
+	public boolean persistent;
 
 }

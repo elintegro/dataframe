@@ -42,7 +42,7 @@ class Person extends ControlField{
 	}
 
     static constraints = {
-        contactEmail(nullable:true)
+        contactEmail(nullable:false)
 		firstName(nullable: false, size: 2..30)
         lastName (nullable: false, size: 2..30)
 		salutation(nullable:true, size: 2..6)

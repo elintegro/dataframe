@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -7,7 +7,7 @@ Copyright © 2007-2019  Elinegro Inc. Eugene Lipkovich, Shai Lipkovich
 This program is under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
 See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works. 
+You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works.
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
@@ -626,7 +626,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public String getComponentName(String propsString = ""){
 		String componentName = ""
 		if(route){
-			componentName = "<router-view name='${dataframeNameLowercase}'></router-view>"
+			componentName = "<router-view name='${dataframeName}'></router-view>"
 		}else{
 			propsString = (propsString != "")?propsString:""
 			componentName = "<${dataframeName} ref='${dataframeName}_ref' :${dataframeName}_prop='${dataframeName}_data' $propsString></${dataframeName}>"
@@ -774,6 +774,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		String gridValueInString = LayoutVue.convertListToString(flexGridValuesFromDescriptor)
 
 		StringBuilder vueDataVariable = new StringBuilder()
+		StringBuilder vueStateVariable = new StringBuilder()
 		StringBuilder vueDataFillScript = new StringBuilder()
 		StringBuilder vueSaveVariables = new StringBuilder()
 //		StringBuilder embbeddedCompScripts = new StringBuilder()
@@ -792,7 +793,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 			if(field.containsKey("widget")  && field.get("widget") != null){
 
-				(fieldLayout, fieldCount) = buildWidget(field, key, fieldLayout, resultPageHtml, fieldsHtmlBuilder, fieldCount, vueDataVariable, vueDataFillScript, vueSaveVariables, vueJsBuilder)
+				(fieldLayout, fieldCount) = buildWidget(field, key, fieldLayout, resultPageHtml, fieldsHtmlBuilder, fieldCount, vueDataVariable, vueStateVariable, vueDataFillScript, vueSaveVariables, vueJsBuilder)
 
 			}else{
 				log.error("No widget for the field $field.name")
@@ -804,7 +805,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		List<String> keyFieldNames = getKeyFieldNameForNamedParameter(this)
 		StringBuilder vueFileSaveVariables = new StringBuilder()
 		keyFieldNames.each {
-			vueDataVariable.append("${convertToDataVariableFromat(it)}"+":\"\",\n")
+			vueStateVariable.append("${convertToDataVariableFromat(it)}"+":\"\",\n")
 			vueSaveVariables.append("allParams[\"$it\""+"] = this.${convertToDataVariableFromat(it)};\n")
 			vueFileSaveVariables.append("allParams[\"$it\""+"] = response.nodeId[0];\n")
 			vueDataFillScript.append("this.${convertToDataVariableFromat(it)} = response['${convertToReturnedDataVariableFromat(it)}']?response['${convertToReturnedDataVariableFromat(it)}']:\"\"\n")
@@ -829,17 +830,22 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		this.currentFrameLayout.applyLayoutForButton(resultPageHtml, buttonHtmlStringBuilder, wrapButtons);
 
 		vueJsBuilder.addToDataScript(vueDataVariable.toString())
+		vueJsBuilder.getVueStore().addToState(vueStateVariable.toString())
 		if(initOnPageLoad){
 			putFillInitDataMethod = true
 			vueJsBuilder.addToCreatedScript("this.${dataframeName}_fillInitData();\n")
-			vueJsBuilder.addToWatchScript(""" ${dataframeName}_prop: {
-                             deep:true,
-                             handler: function(){
-                                    this.${dataframeName}_fillInitData();
-                             }
-                     },\n""")
 		}
 		if(putFillInitDataMethod){
+			vueJsBuilder.addToWatchScript(""" ${dataframeName}_prop: {
+                             deep:true,
+                             handler: function(val, oldVal){
+                                  if(val.refreshInitialData){
+                                     this.${dataframeName}_fillInitData();
+                                  } else {
+                                      console.log("${dataframeName}_prop has refreshInitialData as false or undefined. Could not refresh.");
+                                  }
+                             }
+                     },\n""")
 			vueJsBuilder.addToMethodScript(getJsonDataFillScript(this))
 			vueJsBuilder.addToMethodScript(vueDataFillScript.toString())
 		}
@@ -851,7 +857,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return resultPage
 	}
 
-	private List buildWidget(Map field, String key, String fieldLayout, StringBuilder resultPageHtml, StringBuilder fieldsHtmlBuilder, int fieldCount, StringBuilder vueDataVariable, StringBuilder vueDataFillScript, StringBuilder vueSaveVariables, VueJsBuilder vueJsBuilder) {
+	private List buildWidget(Map field, String key, String fieldLayout, StringBuilder resultPageHtml, StringBuilder fieldsHtmlBuilder, int fieldCount, StringBuilder vueDataVariable, StringBuilder vueStateVariable, StringBuilder vueDataFillScript, StringBuilder vueSaveVariables, VueJsBuilder vueJsBuilder) {
 		WidgetVue widget = getWidget(field)
 
 		def divId = getDivId(key)
@@ -877,7 +883,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		def errorMsg = messageSource.getMessage("error.$field.labelCode", null, "Error", LocaleContextHolder.getLocale())
 		def binding = [divId   : divId, field: fldName.replace(".", "-"), label: label, mandatory: field.notNull ? "*" : "", gridValueString: gridValueString,
 					   widget  : widget.getHtml(this, field), // TODO: if you need to pass any extra params to getHtml (such as which is the current field etc.) do so
-					   errorMsg: errorMsg, btnDivId: btnDivId, btnWidget: btnWidget]
+					   flexAttr:widget.getFlexAttr(this, field), errorMsg: errorMsg, btnDivId: btnDivId, btnWidget: btnWidget]
 		def template = templateEngine.createTemplate(fieldLayout).make(binding)
 		String fieldName = field?.externalDomainField ? "${fldName}" : "${field.domainAlias}.${fldName}"
 		String childDataframe = ""
@@ -898,13 +904,16 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		fieldCount++;
 
 		vueDataVariable.append(widget.getVueDataVariable(this, field))
+		vueStateVariable.append(widget.getStateDataVariable(this, field))
 		vueDataFillScript.append(widget.getValueSetter(this, field, divId, fldId, key))
 		vueDataFillScript.append("\n")
 		vueSaveVariables.append(widget.getVueSaveVariables(this, field))
+/*
 		if (field?.validate) {
 			String valKey = getDataVariableForVue(field) + "_rule"
 			vueDataVariable.append("$valKey : ${field.validate.rule},\n")
 		}
+*/
 		return [fieldLayout, fieldCount]
 	}
 
@@ -936,7 +945,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				String saveGridValueString = LayoutVue.convertListToString(gridvaluesSave)
 				String saveButtonLabel = messageSource.getMessage("${dataframeName}.button.save", null, messageSource.getMessage("button.save", null, "Save", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
 //				buttonHtmlStringBuilder.append(applyLayoutForButton("<v-btn type='button' class='text-capitalize' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr>${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString))     // TODO  i18n
-				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $saveButtonAlignment' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr>${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString)     // TODO  i18n
+				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $saveButtonAlignment' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr :loading='${dataframeName}_save_loading' >${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString)     // TODO  i18n
 				vueJsBuilder.addToMethodScript(getSaveDataScript(this, vueSaveVariables, vueFileSaveVariables))
 				this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "saveButton", btnScript)
 			}
@@ -1020,11 +1029,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		VueJsEntity vueJsEntity = getvueJsEntity(dataframeName+"_script")// get Bbean name for vue js Entity
 
 		externalTemplateId?vueJsBuilder.addToTemplateScript("#$externalTemplateId"):vueJsBuilder.addToTemplateScript(dfrHtml)
-		vueJsBuilder.addToDataScript("namedParamKey:'',\n params:{},\n")
+		vueJsBuilder.addToDataScript("overlay_dataframe:false,\n ${dataframeName}_save_loading:false,\nnamedParamKey:'',\n params:{},\n")
 		if(tab){
-			vueJsBuilder.addToDataScript("${dataframeName}_tab_model : this.tabValue,\n")
-					.addToComputedScript(""" tabValue(){return this.\$store.state.${dataframeName}.${dataframeName}_tab_model},\n""")
-					.addToWatchScript(""" tabValue:{handler: function(val, oldVal) {this.${dataframeName}_tab_model = val;}},\n""")
+			vueJsBuilder.addToDataScript("${dataframeName}_tab_model : '',\n")
 					.addToMethodScript(""" tabClicked:function(){${putFillInitDataMethod?"this.${dataframeName}_fillInitData();":""}},\n""")
 		}
 		if(vueJsEntity.data){
@@ -1050,19 +1057,18 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(vueJsEntity.created){
 			vueJsBuilder.addToCreatedScript(vueJsEntity.created)
 		}
+		vueJsBuilder.addToComputedScript(getStateAccessor())
 		if(vueJsEntity.computed){
 			vueJsBuilder.addToComputedScript(vueJsEntity.computed)
 		}
 		if(vueJsEntity.watch){
 			vueJsBuilder.addToWatchScript(vueJsEntity.watch)
 		}
+		vueJsBuilder.addToMethodScript(getStateSetter())
 		vueJsBuilder.addToMethodScript("""
                                      closeDataframe: function(){
-                                          console.log("${dataframeName} dataframe close button.");
-                                       if(this.\$store.state.dataframeShowHideMaps){
-                                          Vue.set(this.\$store.state.dataframeShowHideMaps,"${dataframeName}_display", false);
-                                       }
-                                    }
+                                          excon.setVisibility("${dataframeName}", false);
+                                    },
                                      """)
 		if(vueJsEntity.methods){
 			vueJsBuilder.addToMethodScript(vueJsEntity.methods)
@@ -1079,11 +1085,25 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		VueStore vueStore1 = vueJsBuilder.getVueStore()
 		String state = vueStore1.buildState(dataframeName)
 		String mutation = vueStore1.getMutation()
+		String getters = vueStore1.getGetters()
 		String globalState = vueStore1.getGlobalState()
-		this.vueStoreScriptMap = ["state":state, "mutation":mutation, "globalState": globalState]
+		this.vueStoreScriptMap = ["state":state, getters:getters, "mutation":mutation, "globalState": globalState]
 
 	}
+	private String getStateAccessor(){
+		return """
+                state(){
+                   return this.\$store.getters.getState('$dataframeName');
+                },
+               """
+	}
 
+	private String getStateSetter(){
+		return """ updateState: function(response){
+                    this.\$store.commit("updateState", response)
+                },
+               """
+	}
 	public String getJsonDataFillScript(df){
 		String dataframeName = df.dataframeName
 		StringBuilder allParamsSb = new StringBuilder()
@@ -1099,83 +1119,43 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			}
 		}
 		String updateStoreScriptcaller = ""
-		String updateStoreScript = ""
 		if(createStore){
-			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n ${dataframeName}Var.updateStoreState(response, stateVar);"""
-			updateStoreScript = """
-
-updateStoreState: function(response, stateVar){
-               
-                var dataframe = response.dataframe;
-                let stateVarDf = stateVar+"."+dataframe;
-                var response = response.data
-                let id = response.keys["id"];
-                    let stateVarObj1 = eval(stateVarDf);
-
-                if(stateVarObj1){
-                    Vue.set(eval(' stateVarObj1'), 'key', id);
-                }
-                if(response.hasOwnProperty('additionalData') ) {
-                    Object.keys(response.additionalData).forEach(function (key) {
-                    var embDfr = response.additionalData[key];
-                    if (embDfr.hasOwnProperty('data')){
-                        if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
-                        
-                            ${dataframeName}Var.updateStoreState(embDfr, stateVar)
-                        } else {
-                                dataframe = embDfr.dataframe;
-                                if(dataframe){
-                                
-                                    let stateVarDf =stateVar + "." + dataframe;
-                                    if(embDfr.data.hasOwnProperty('keys')){
-                                        let id = embDfr.data.keys["id"];
-                                        let stateVarObj2 = eval(stateVarDf);
-                                        if(stateVarObj2){
-                                           Vue.set(eval('stateVarObj2'), 'key', id);
-                                           let propKey = "${dataframeName}Var." + dataframe + "_data";
-                                           Vue.set(eval(propKey), 'key', id);
-                                        }
-                                    }
- 
-                                 }
-                        }
-                    }
-
-                    });
-                }
-            },\n
-"""
+//			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n excon.updateStoreState(resData, stateVar,${dataframeName}Var);"""
 		}
 		return """
              ${dataframeName}_fillInitData: function(){
-                if(this.namedParamKey == '' || this.namedParamKey == undefined){
-                    if(this.${dataframeName}_prop && this.${dataframeName}_prop.hasOwnProperty('key')){
+                excon.saveToStore('$dataframeName','doRefresh',false);
+                let allParams = {};\n
+                const propData = this.${dataframeName}_prop;
+                 if(propData){
+                    allParams = propData; 
+                    if(this.namedParamKey == '' || this.namedParamKey == undefined){
                         this.namedParamKey = "this.${dataframeName}_prop.key?this.${dataframeName}_prop.key:this.\$store.state.${dataframeName}.key"; 
-                    } else{
-                        this.namedParamKey = "this.\$store.state.${dataframeName}.key";
                     }
-                    
                  }
-                 
-                var allParams = {};\n
                 ${allParamsSb.toString()}
                 allParams['dataframe'] = '$dataframeName';
                 $doBeforeRefresh
+                this.overlay_dataframe = true;
+                let self = this;
                 axios.get('$df.ajaxUrl', {
                     params: allParams
                 }).then(function (responseData) {
-                        var response = responseData.data;
-                       if(response.data != null && response.data != '' && response.data  != undefined){
-                           ${dataframeName}Var.${dataframeName}_populateJSONData(response.data);
+                        let resData = responseData.data;
+                        let response = resData?resData.data:'';
+                       if(response != null && response != '' && response  != undefined){
+                           response["stateName"] = "$dataframeName";
+                           ${dataframeName}Var.updateState(response);
+                           ${dataframeName}Var.${dataframeName}_populateJSONData(response);
                         }
                         $doAfterRefresh 
+                   self.overlay_dataframe = false;
                   ${updateStoreScriptcaller} 
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
              },\n
-             ${updateStoreScript}
               """
 	}
 
@@ -1193,50 +1173,48 @@ updateStoreState: function(response, stateVar){
 		}
 		String addKeyToVueStore
 		if(!putFillInitDataMethod){
-			addKeyToVueStore = """var nodeArr = response.nodeId; if(nodeArr && Array.isArray(nodeArr) && nodeArr.length){drfExtCont.saveToStore("$dataframeName", "key", response.nodeId[0]);}\n"""
+			addKeyToVueStore = """var nodeArr = response.nodeId; if(nodeArr && Array.isArray(nodeArr) && nodeArr.length){excon.saveToStore("$dataframeName", "key", response.nodeId[0]);}\n"""
 		}
 		doAfterSaveStringBuilder.append("""
-                    var refreshParams = ${dataframeName}Var.params.gridRefreshParams;
                     var ajaxFileSave = ${dataframeName}Var.params.ajaxFileSave;
-                    if (refreshParams){
-                        var parentDfr = eval(refreshParams.parentDataframe+'Var');
-                        parentDfr[refreshParams.fieldName+'_refreshDataForGrid'](responseData, refreshParams);
-                     }
                     if(ajaxFileSave){
-                       jQuery.each(ajaxFileSave, function( index, value ) {
+                       for(let i in ajaxFileSave) {
+                         const value = ajaxFileSave[i];
                          $vueFileSaveVariables
-  						 var dfrVar = eval(${dataframeName}Var);
-  						 dfrVar[value.fieldName+'_ajaxFileSave'](responseData, allParams); 	
-					   });
+  						 self[value.fieldName+'_ajaxFileSave'](responseData, allParams); 	
+					   }
                     } 
                   $addKeyToVueStore
 				""")
 		return """
               ${dataframeName}_save: function(){
-               var allParams = {};
-                ${vueSaveVariables}
-               ${embdSaveParms.toString()}
-                 ${doBeforeSave}
-                allParams['dataframe'] = '$dataframeName'
-               console.log(allParams)
-               if (this.\$refs.${dataframeName}_form.validate()) {
-                axios({
-                    method:'post',
-                    url:'$df.ajaxSaveUrl',
-                    params: allParams
-                }).then(function (responseData) {
-                var response = responseData.data;
-                ${doAfterSaveStringBuilder.toString()}
-                drfExtCont.showAlertMessage(response);
-				if(response.success) {
-                 drfExtCont.updateToStore(response, ${dataframeName}Var.${dataframeName}_data);
-                  ${doAfterSave}
-            	}
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-                }
+                  let allParams = {};
+                  allParams = this.state;
+                  $vueSaveVariables
+                  ${embdSaveParms.toString()}
+                  ${doBeforeSave}
+                  allParams['dataframe'] = '$dataframeName';
+                  console.log(allParams)
+                  if (this.\$refs.${dataframeName}_form.validate()) {
+                      this.${dataframeName}_save_loading = true;
+                      const self = this;
+                      axios({
+                          method:'post',
+                          url:'$df.ajaxSaveUrl',
+                          data: allParams
+                      }).then(function (responseData) {
+                        self.${dataframeName}_save_loading = false;
+                        var response = responseData.data;
+                        ${doAfterSaveStringBuilder.toString()}
+                        excon.showAlertMessage(response);
+			            	if(response.success) {
+                               ${doAfterSave}
+                        	}
+                      }).catch(function (error) {
+                        self.${dataframeName}_save_loading = false;
+                              console.log(error);
+                      });
+                  }
 
                },\n"""
 	}
@@ -1259,16 +1237,18 @@ updateStoreState: function(response, stateVar){
                
               ${dataframeName}_reset: function(){
                  this.\$refs.${dataframeName}_form.reset()
+                 const self = this;
                  var embdDfrs = []
                  ${embdDfrs.toString()}
                  if(embdDfrs){
                     for(var em in embdDfrs){
                          var emS = embdDfrs[em] + "_ref"
                          var emF = embdDfrs[em] + "_form"
-                          
-                         for(var a in eval("this.\$refs."+emS+".\$data")){
-                              eval("this.\$refs."+emS+".\$refs."+emF).reset();
-                          }
+                         if(eval("this.\$refs."+emS)){ 
+                             for(var a in eval("this.\$refs."+emS+".\$data")){
+                                 eval("this.\$refs."+emS+".\$refs."+emF).reset();
+                             }
+                         }
                      }
                  }
                 ${keyFieldNamesInsertBuilder.toString()}  
@@ -1294,6 +1274,8 @@ updateStoreState: function(response, stateVar){
                       var allParams = {'dataframe':'$dataframeName'};
                           ${vueSaveVariables}
                        ${doBeforeDelete}
+                       if(!confirm("${messageSource.getMessage("delete.confirm.message", null, "delete.confirm.message", LocaleContextHolder.getLocale())}"))return
+                       const self = this;
                        axios({
                            method:'post',
                            url:'$ajaxDeleteUrl',
@@ -1324,7 +1306,7 @@ updateStoreState: function(response, stateVar){
 		if(childrenDataframes){
 			childrenDataframes.each{
 				if(it.trim()!="" && !registeredComponents.contains(it)){
-					vueJsBuilder.addToComponentScript(""+it.toLowerCase()+" : "+it+"Comp,\n")
+					vueJsBuilder.addToComponentScript(VueJsBuilder.createCompRegistrationString(it))
 				}
 			}
 		}
@@ -1339,7 +1321,8 @@ updateStoreState: function(response, stateVar){
 		}
 
 		vStore.addToState("key:''\n,")
-		vStore.addToState("doRefresh: ''\n,")
+		vStore.addToState("doRefresh: {},\n")
+		vStore.addToState("newData: {},\n")
 	}
 
 	public List getKeyFieldNameForNamedParameter(df){
@@ -1385,7 +1368,7 @@ updateStoreState: function(response, stateVar){
 			if(btn.image && btn.image.showIcon){
 				btnString=""" <v-btn ${WidgetVue.toolTip(btn)} class='text-capitalize $classNames' type='button' id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr><img height="${btn.image.height ?: 20}" width="${btn.image.width ?: 25}" src="$imgUrl"/></v-btn>\n"""
 			}else{
-				btnString=" <v-btn ${WidgetVue.toolTip(btn)} class='text-capitalize $classNames' type='button' id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr>${buttonLabel}</v-btn>\n"
+				btnString=" <v-btn ${WidgetVue.toolTip(btn)} class='text-capitalize $classNames' type='button' id='$dataframeName-${btn.name}' @click.stop='${dataframeName}_${btn.name}' $attr>${buttonLabel}</v-btn>\n"
 			}
 		}
 
@@ -1526,7 +1509,7 @@ updateStoreState: function(response, stateVar){
 	}
 
 	public String getDataVariableForVue(Map field){
-		String res = buildKeyFieldParamForVue(dataframeName, field);
+		String res = buildKeyFieldParam(dataframeName, field);
 		return res
 	}
 
@@ -1537,41 +1520,24 @@ updateStoreState: function(response, stateVar){
 		return false
 	}
 
-	public String getDataVariableForVueCapitalized(Map field){
-		String[] fldArr = buildKeyFieldParamForVue(dataframeName, field).trim().split(UNDERSCORE)
-		String res = ""
-		int count =0
-		fldArr.each{
-			if(count>0){
-				res = res + it.capitalize()
-			}else{
-				res = res + it
-
-			}
-			count++
-		}
-		return res
+	public static String buildFullFieldNameKeyParam(Dataframe df, String domainAlias , String dbFieldName, String namedParameter){
+		StringBuilder sb = new StringBuilder();
+		sb.append("key").append(UNDERSCORE).append(df.dataframeName).append(UNDERSCORE).append(domainAlias).append(UNDERSCORE);
+		sb.append(dbFieldName).append(UNDERSCORE).append(namedParameter);
+		return sb.toString();
 	}
-
-	//todo this method is unique to dataframeVue. donot remove
-	public static String buildKeyFieldParamForVue(dataframeName, Map field){
+	public static String buildKeyFieldParam(dataframeName, Map field){
 		String fieldnameStr = field.name.replace(DOT, UNDERSCORE);
 		def doaminNameStr = (field.domainAlias == null)?field.domain?.key:field.domainAlias;
 		if(fieldnameStr.indexOf(UNDERSCORE) <= 0 && !"".equals(doaminNameStr) && doaminNameStr != null){
 			fieldnameStr = "${doaminNameStr}${UNDERSCORE}${fieldnameStr}";
 		}
-		return "$dataframeName${DataframeVue.UNDERSCORE}$fieldnameStr";
+		return "$dataframeName${UNDERSCORE}$fieldnameStr";
 	}
 
-	public static String buildKeyFieldParam(dataframeName, Map field){
-		String fieldnameStr = field.name.replace(DOT, DASH);
-		def doaminNameStr = (field.domainAlias == null)?field.domain?.key:field.domainAlias;
-		if(fieldnameStr.indexOf(DASH) <= 0 && !"".equals(doaminNameStr) && doaminNameStr != null){
-			fieldnameStr = "${doaminNameStr}${DASH}${fieldnameStr}";
-		}
-		return "$dataframeName${DataframeVue.DASH}$fieldnameStr";
+	public static String buildKeyFieldParam(String dataframeName, String domainAlias, String fieldName){
+		return "$dataframeName${UNDERSCORE}$domainAlias${UNDERSCORE}$fieldName";
 	}
-
 	public static String buildFullFieldNameKeyParamWithDot(Dataframe df, String domainAlias , String dbFieldName, String namedParameter){
 		StringBuilder sb = new StringBuilder();
 		sb.append("key").append(DOT).append(df.dataframeName).append(DOT).append(domainAlias).append(DOT);
@@ -1588,27 +1554,13 @@ updateStoreState: function(response, stateVar){
 		return "${dataframeName}${DataframeVue.DOT}${alias}${DataframeVue.DOT}${fieldName}";
 	}
 
-
-	public static String buildFullFieldName_(String dataframeName, String alias, String fieldName){
-		return "${dataframeName}${DataframeVue.DASH}${alias}${DataframeVue.DASH}${fieldName}";
-	}
-
 	public static String buildFullFieldName(String dataframeName, String fieldName){
 		return buildKeyFieldParamForMetaData(dataframeName, fieldName);
 	}
 
-
 	//This is when fieldName actually comprises from domain.fieldName
 	public static String buildKeyFieldParamForMetaData(String dataframeName, String fieldName){
 		return "$dataframeName${DataframeVue.DOT}$fieldName";
-	}
-
-	//This is when fieldName actually comprises from domain.fieldName
-	public static String buildKeyFieldParamForMetaData_(String dataframeName, String fieldName){
-		if(fieldName.contains(".")){
-			fieldName = fieldName.trim().replace(".", "-")
-		}
-		return "${dataframeName}${DataframeVue.DASH}${fieldName}";
 	}
 
 	/**
@@ -1618,46 +1570,13 @@ updateStoreState: function(response, stateVar){
 		String domainName = df.getNamedParamDomainAlias(namedParameter);
 		String fieldName = df.getNamedParamFieldName(namedParameter);
 		StringBuilder sb = new StringBuilder();
-		sb.append("key").append(DASH).append(df.dataframeName).append(DASH).append(domainName).append(DASH);
-		sb.append(fieldName).append(DASH).append(namedParameter);
-		return sb.toString();
-	}
-
-	/**
-	 *
-	 */
-	public static String buildFullFieldNameRefParam(DataframeVue df, String namedParameter){
-		String domainName = df.getNamedParamDomainAlias(namedParameter);
-		String fieldName = df.getNamedParamFieldName(namedParameter);
-		StringBuilder sb = new StringBuilder();
-		sb.append(df.dataframeName).append(DASH).append(domainName).append(DASH);
-		sb.append(fieldName);
-		return sb.toString();
-	}
-
-
-	/**
-	 *
-	 */
-	public static String buildFullFieldNameParentParam(DataframeVue df, String namedParameter){
-		String domainName = df.getNamedParamDomainAlias(namedParameter);
-		String fieldName = df.getNamedParamFieldName(namedParameter);
-		StringBuilder sb = new StringBuilder();
-		sb.append("parent").append(DASH).append(df.dataframeName).append(DASH).append(df.getNamedParamDomainAlias(namedParameter)).append(DASH);
-		sb.append(df.getNamedParamFieldName(namedParameter));
-		return sb.toString();
-	}
-
-
-	public static String buildFullFieldNameKeyParam(DataframeVue df, String domainAlias , String dbFieldName, String namedParameter){
-		StringBuilder sb = new StringBuilder();
-		sb.append("key").append(DASH).append(df.dataframeName).append(DASH).append(domainAlias).append(DASH);
-		sb.append(dbFieldName).append(DASH).append(namedParameter);
+		sb.append("key").append(UNDERSCORE).append(df.dataframeName).append(UNDERSCORE).append(domainName).append(UNDERSCORE);
+		sb.append(fieldName).append(UNDERSCORE).append(namedParameter);
 		return sb.toString();
 	}
 
 	public String getFieldNameFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(DASH);
+		String[] fieldArr = fieldId.split(UNDERSCORE);
 		def keyWords = ["key", "ref", "parent"];
 		boolean keyWordTrue = fieldArr[0] in keyWords;
 		if(keyWordTrue && fieldArr.size() > 3){
@@ -1677,7 +1596,7 @@ updateStoreState: function(response, stateVar){
 	}
 
 	public String getFieldDoaminFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(DASH);
+		String[] fieldArr = fieldId.split(UNDERSCORE);
 
 		def keyWords = ["key", "ref", "parent"];
 		boolean keyWordTrue = fieldArr[0] in keyWords;
@@ -1692,7 +1611,7 @@ updateStoreState: function(response, stateVar){
 	}
 
 	public String getFieldDataframeFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(DASH);
+		String[] fieldArr = fieldId.split(UNDERSCORE);
 		if(fieldArr.size() == 3){
 			return fieldArr[0];
 		}
@@ -1720,10 +1639,6 @@ updateStoreState: function(response, stateVar){
 			}
 		}
 		return ""
-	}
-
-	public static String getWidgetElementSearchByIdExpression(dataframe, fieldProps){
-		return '#$' + buildKeyFieldParam(dataframe.dataframeName, fieldProps)
 	}
 
 	public class Field{
@@ -1835,4 +1750,3 @@ updateStoreState: function(response, stateVar){
 	}
 */
 }
-

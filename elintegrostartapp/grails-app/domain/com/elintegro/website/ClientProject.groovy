@@ -1,5 +1,7 @@
 package com.elintegro.website
 
+import org.hibernate.annotations.Formula
+
 class ClientProject {
 
     static constraints = {
@@ -9,4 +11,5 @@ class ClientProject {
     String logo
     String description
     String linkToWebsite
+    String clientProject
 }
