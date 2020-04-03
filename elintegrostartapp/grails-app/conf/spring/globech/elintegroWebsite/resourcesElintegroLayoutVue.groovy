@@ -134,16 +134,16 @@ beans {
                                  <v-container>
                                  <v-container class="firstContainer">
                                  <v-row>
-                                 <v-col cols="4" class = "flex-grow-0 flex-shrink-0"><v-card class = "pa-3" outlined><h1>How to Choose an App Developer</h1></v-card></v-col>
+                                 <v-col cols="4"><v-card-actions class="justify-center"><h1 style="margin-top:50%;">How to Choose an App Developer</h1></v-card-actions></v-col>
                                  <v-col cols="1" style="min-width: 100px; max-width: 100%;"
-                                 class="flex-grow-1 flex-shrink-0"><v-card class = "pa-4" outlined>
+                                 class="flex-grow-1 flex-shrink-0"><v-card outlined>
                                  <span style="padding-top:40%" class="video-2 w-video w-embed">
                                  <iframe  width="100%" height="500px" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FjFLFVlBbLNA%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DjFLFVlBbLNA&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjFLFVlBbLNA%2Fhqdefault.jpg&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=youtube" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>
                                  </span></v-card></v-col>
-                                 </v-row>
-                                 <v-row>
-                                 <v-col cols="12"><span><v-img height ="90px" width="56px" src="assets/123.svg"></v-img></span></v-col>
-                                 </v-row>
+                                 </v-row><br><br>
+                                 <v-row><v-col cols="4"></v-col><v-col cols="4"><v-img height ="90px" width="56px" src="assets/123.svg"></v-col></v-img>
+                                 
+                                 </v-row><br><br>
                                  </v-container>
                                  <v-spacer></v-spacer>
                                  
