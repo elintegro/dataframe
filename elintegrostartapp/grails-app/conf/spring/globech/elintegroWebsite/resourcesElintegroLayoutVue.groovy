@@ -194,7 +194,112 @@ beans {
                                  <v-col cols="3"><v-card-actions class="justify-center">On Time</v-card-actions></v-col>
                                  </v-row>
                                  </v-container>
-       
+                                 
+                                 <v-container class="team" style="background-image:url('assets/groupBackground.svg');">
+                                 <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>Team</b></h1></v-card-actions></v-col></v-row>
+                                 <v-row>
+                                 <v-col cols="3"><v-img height="150px" width="150px" src="assets/eugene.png"></v-img></v-col><v-col cols="3"><h2><b>Eugene Lipkovich</b></h2>Team leader</v-col>
+                                 <v-col cols="3"><v-img height="150px" width="150px" src="assets/sampleImage.png"></v-img></v-col><v-col cols="3"><h2><b>Kumar Chapagain</b></h2>Developer</v-col>                                
+                                 </v-row>
+                                 <v-row>
+                                 <v-col cols="3"><v-img height="150px" width="150px" src="assets/shai.png"></v-img></v-col><v-col cols="3"><h2><b>Shai Lipkovich</b></h2>Team leader</v-col>
+                                 <v-col cols="3"><v-img height="150px" width="150px" src="assets/sampleImage.png"></v-img></v-col><v-col cols="3"><h2><b>Prakash Subedi</b></h2>Developer</v-col>                                
+                                 </v-row>
+                                 <v-row>
+                                 <v-col cols="3"><v-img height="150px" width="150px" src="assets/sampleImage.png"></v-img></v-col><v-col cols="3"><h2><b>Nagendra Saragadam</b></h2>Developer</v-col>
+                                 <v-col cols="3"><v-img height="150px" width="150px" src="assets/sampleImage.png"></v-img></v-col><v-col cols="3"><h2><b>Nagendra Saragadam</b></h2>Developer</v-col>         
+                                 </v-row>
+                                 </v-container>
+                                 
+                                 <v-container class="technology">
+                                 <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>Technology</b></h1></v-card-actions></v-col></v-row>
+                                 <v-row><v-col cols="4"><v-img src="assets/java.svg"></v-img></v-col> <v-col cols="4"><v-img src="assets/javascript.svg"></v-img></v-col> <v-col cols="4"><v-img src="assets/grails.svg"></v-img></v-col></v-row>
+                                 <v-row><v-col cols="4"><v-img src="assets/vueJS.svg"></v-img></v-col> <v-col cols="4"><v-img src="assets/kafka.svg"></v-img></v-col> <v-col cols="4"><v-img src="assets/oracle.svg"></v-img></v-col></v-row>
+                                 <v-row><v-col cols="4"><v-img src="assets/nodeJS.svg"></v-img></v-col> <v-col cols="4"><v-img src="assets/kubernetes.svg"></v-img></v-col> <v-col cols="4"><v-img src="assets/mySql.svg"></v-img></v-col></v-row>
+                                 </v-container>
+                                 
+                                 <v-container class="clients">
+                                 <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>Clients</b></h1></v-card-actions></v-col></v-row>
+                                 <v-row><v-col cols="6"><v-img src="assets/globeChalet.svg"></v-img></v-col>      <v-col cols="6"><v-img src="assets/coachClone.svg"></v-img></v-col></v-row>
+                                 </v-container>
+                                 
+                                 <v-container class="careers">
+                                 <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>Careers</b></h1></v-card-actions></v-col></v-row>
+                                 <v-row>
+                                 <v-col cols="5"><p>Solving new challenges ?</p><br><p>Do you enjoy and familiar in programming in Java and/or Python and/or PHP and/or NodeJS and/or Javascript and/or Angular/React/Vue ?</p><br>
+                                 <p>Are you a quick learner, interested in the next big challenge in your career ?</p><br><p>If so,then....</p><br><p>Apply for full-time employment/sub-contract or internship.</p></v-col>
+                                 <v-col cols="2"></v-col>
+                                 <v-col cols="5"><v-img src="assets/careersPagePhoto.svg"></v-img></v-col>
+                                 </v-row>
+                                 </v-container>
+                                 
+                                 <v-container class="aboutUs" style="background-image:url('assets/groupBackground.svg'); padding:70px;">                                 
+                                 <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>About Us</b></h1></v-card-actions></v-col></v-row>
+                                 <v-row><v-col><v-card-actions class="justify-center"><p>We build and design beautiful Mobile Applications, Web Dashboards, SaaS Websites and Wordpress 
+                                 websites for companies and entrepreneurs who are looking to receive their software on time and on budget.
+                                 For those who are interested in cost overruns or headaches dealing with rookie developers who will disappoint them, we normally recommend a freelance website such as upwork.</p></v-card-actions></v-col></v-row>
+                                 </v-container>
+                                 
+                                 <v-container class="contactUs" style = "background-color: #f1f0ec;">
+                                 <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>Contact Us</b></h1></v-card-actions></v-col></v-row>
+                                 <v-row no-gutters><v-col cols="2"></v-col><v-col cols="6"><v-text-field single-line outlined placeholder="Your email address"></v-text-field></v-col><v-col cols="2"><v-btn  style="background-color: #2c3442; color:white; height:55px; width:100%; border-top-right-radius:15px; border-bottom-right-radius:15px; border-top-left-radius:0px; border-bottom-left-radius:0px; ">Send</v-btn></v-col><v-col cols="2"></v-col></v-row>
+                                 <v-row><v-col><v-card-actions class="justify-center"><p>Fill you email or phone and we will get back to you.</p></v-card-actions></v-col></v-row>
+                                 </v-container>
+                                 
+                                   
+                                 <v-container class="footerPage" style = "background-color: #f1f0ec; margin-top:100px;">
+                                 
+                                 <v-container class="contactDetails">
+                                 <v-row>
+                                 <v-col cols="2"><v-img src="assets/elintegroLogo.png"></v-img></v-col>
+                                 <v-col cols="1"></v-col>
+                                 <v-col cols="6">
+                                 <v-row><v-card-actions class="justify-center>"<h3 style="color: #2c3442;"><b>CONTACT INFO</b></h3></v-card-actions></v-row>
+                                 <v-row><v-col cols="1"><v-img src="assets/location.svg"></v-img></v-col> <v-col cols="5">Locations:<br>Monetreal, Canada,Tel-Aviv, Israel,Kathmandu,Nepal</v-col></v-row>
+                                 <v-row><v-col cols="1"><v-img src="assets/phone.svg"></v-img></v-col> <v-col cols="5">Phone:<br>USA:+1 (603) 329-3195<br>CANADA:+1 (438)792 1079<br>UK:+44 (1273) 93 0312<br>IL:+972 (54) 557 9687 </v-col></v-row>
+                                 <v-row><v-col cols="1"><v-img src="assets/atTheRateIcon.svg"></v-img></v-col> <v-col cols="5">Email:<br>elintegroinc@gmail.com</v-col></v-row>
+                                 <v-row><v-col cols="1"><v-img src="assets/linkIcon.svg"></v-img></v-col> <v-col cols="5">Website:<br>http://elintegro.com</v-col></v-row>
+                                 </v-col>
+                                 <v-col cols="3">
+                                 <v-row><v-card-actions class="justify-center"><h3 style="color: #2c3442;"><b>SERVICES</b></h3></v-card-actions></v-row>
+                                 <v-row><a href="#" style="color:inherit;">Mobile Applications</a></v-row><br>
+                                 <v-row><a href="#" style="color:inherit;">Web Applications</a></v-row><br>
+                                 <v-row><a href="#" style="color:inherit;">Custom Software</a></v-row><br>
+                                 <v-row><a href="#" style="color:inherit;">Wordpress Sites</a></v-row><br>
+                                 <v-row><a href="#" style="color:inherit;">Traffic Generation for Websites</a></v-row><br>
+                                 <v-row><a href="#" style="color:inherit;">Sales Conversion for Websites</a></v-row><br>
+                                 <v-row><a href="#" style="color:inherit;">Copy Writing for Websites</a></v-row><br>   
+                                 <v-row><a href="#" style="color:inherit;">Emotional and Practical Support for Entrepreneurs</a></v-row>
+                                 </v-col>
+                                 </v-row><br><br>
+                                 </v-container>
+                                 
+                                 <v-container class="menuButtons">
+                                 <v-row>
+                                 <v-col cols="7">
+                                 <v-row><h3 style="color: #2c3442; margin-left:15px;"><b>NEWSLETTER</b></h3><br><br><br></v-row>
+                                 <v-row no-gutters>
+                                 <v-col cols="5"><v-text-field single-line outlined placeholder="Your email address"></v-text-field></v-col> <v-col cols="2"><v-btn  style="background-color: #2c3442; color:white; height:55px; width:70%; border-top-right-radius:15px; border-bottom-right-radius:15px; border-top-left-radius:0px; border-bottom-left-radius:0px;">Send</v-btn></v-col>
+                                 </v-row>                      
+                                 </v-col>
+                                 <v-col cols="5">
+                                 <v-row><v-col cols="1"><a href="http://localhost:8099/#/vueElintegroBannerDataframe/0" style="color:inherit">Home</a></v-col><v-col cols="2"></v-col> <v-col cols="1"><a href="http://localhost:8099/#/vueTechnologiesDataframe/0" style="color:inherit">Technologies</a></v-col><v-col cols="2"></v-col> <v-col cols="1"><a href="http://localhost:8099/#/vueCareersDataframe/0" style="color:inherit">Careers</a></v-col></v-row>
+                                 <v-row><v-col cols="1"><a href="http://localhost:8099/#/vueClientProjectDataframe/0" style="color:inherit">Clients</a></v-col> <v-col cols="2"></v-col> <v-col cols="1"><a href="http://localhost:8099/#/vueGettingStartedDataframe/0" style="color:inherit">Getting Started</a></v-col> <v-col cols="2"></v-col> <v-col cols="1"><a href="http://localhost:8099/#/vueContactUsPageDataframe/0" style="color:inherit">Contact Us</a></v-col></v-row>
+                                 </v-col>                                 
+                                 </v-row><br><br><br>
+                                 <v-row><v-img src="assets/straightLine.svg"></v-img></v-row><br><br><br>
+                                 <v-row><span>&copy COPYRIGHT - 2019 ELINTEGRO INC. ALL RIGHTS RESERVED</span></v-row><br><br>
+                                 <v-row>
+                                 <p>We build and design beautiful Mobile Applications, Web Dashboards, SaaS Websites and Wordpress 
+                                 websites for companies and entrepreneurs who are looking to receive their software on time and on budget.
+                                 For those who are interested in cost overruns or headaches dealing with rookie developers who will disappoint them, 
+                                 we normally recommend a freelance website such as upwork.
+                                 </p>
+                                 </v-row>
+                                 </v-container>
+                                 
+                                 </v-container>
+                                 
                                  </v-container>
                                  [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                  
