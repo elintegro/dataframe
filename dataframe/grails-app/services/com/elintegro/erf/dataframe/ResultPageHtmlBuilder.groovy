@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -20,6 +20,7 @@ import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.WidgetVue
 import grails.plugin.springsecurity.SpringSecurityService
 import groovy.util.logging.Slf4j
+import org.apache.tomcat.util.http.fileupload.FileUtils
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Attributes
 import org.jsoup.nodes.Document
@@ -29,6 +30,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.i18n.LocaleContextHolder
 
 import javax.persistence.MapsId
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 @Slf4j
 class ResultPageHtmlBuilder {
@@ -59,7 +63,14 @@ class ResultPageHtmlBuilder {
             throw new DataframeException("List of dataframes not found!")
         }
 
-        return rsb.buildFinalScript(gcMainPgObj)
+        def script = rsb.buildFinalScript(gcMainPgObj)
+        BufferedWriter writer = new BufferedWriter(new FileWriter("testing.vue"))
+        writer.write(""+script+"")
+        writer.close()
+
+
+
+        return script
     }
 
     private Map<String, String> buildFinalScript(PageDFRegistryVue gcMainPgObj){
