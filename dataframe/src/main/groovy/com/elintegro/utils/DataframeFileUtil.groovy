@@ -46,4 +46,21 @@ class DataframeFileUtil {
             log.debug(e.getMessage())
         }
     }
+
+    public static void writeStringIntoFile(String fileName, String fileContent){
+        BufferedWriter writer
+        try {
+            writer = new BufferedWriter(new FileWriter(fileName))
+            writer.write(fileContent)
+        }catch(Exception e){
+            log.info("There is a problem to create dataframe vue file. Exception : "+e)
+
+        }finally {
+            writer.close()
+        }
+
+
+
+
+    }
 }

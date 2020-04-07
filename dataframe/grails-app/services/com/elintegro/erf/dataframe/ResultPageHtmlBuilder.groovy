@@ -18,6 +18,7 @@ import com.elintegro.erf.dataframe.vue.PageDFRegistryVue
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.WidgetVue
+import com.elintegro.utils.DataframeFileUtil
 import grails.plugin.springsecurity.SpringSecurityService
 import groovy.util.logging.Slf4j
 import org.apache.tomcat.util.http.fileupload.FileUtils
@@ -64,9 +65,7 @@ class ResultPageHtmlBuilder {
         }
 
         def script = rsb.buildFinalScript(gcMainPgObj)
-        BufferedWriter writer = new BufferedWriter(new FileWriter("testing.vue"))
-        writer.write(""+script+"")
-        writer.close()
+//        DataframeFileUtil.writeStringIntoFile("AppDataframe.vue", script.toString())
 
 
 
