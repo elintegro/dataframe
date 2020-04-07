@@ -131,9 +131,9 @@ beans {
                                  
                                  <v-container class="contactDetails">
                                  <v-row>
-                                 <v-flex xs6 sm6 md2 lg2 xl2><v-img src="assets/elintegroLogo.png"></v-img></v-flex>
+                                 <v-flex xs6 sm6 md2 lg2 xl2><v-img src="assets/elintegroLogo.png" style="margin-bottom:20%;"></v-img></v-flex>
                                  
-                                 <v-flex xs6 sm6 md2 lg2 xl2></v-flex>
+                                 <v-flex xs12 sm12 md2 lg2 xl2></v-flex>
                                  
                                  <v-flex xs12 sm12 md4 lg4 xl4>
                                  <v-row><v-card-actions class="justify-center>"<h3 style="color: #2c3442;"><b>CONTACT INFO</b></h3></v-card-actions></v-row><br>
