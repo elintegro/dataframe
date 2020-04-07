@@ -20,7 +20,9 @@ import com.elintegro.erf.layout.StandardLayout
 import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.InputWidgetVue
 import com.elintegro.erf.widget.vue.WidgetVue
+import com.elintegro.utils.DataframeFileUtil
 import grails.gsp.PageRenderer
+import grails.util.Environment
 import grails.util.Holders
 import groovy.text.SimpleTemplateEngine
 //import grails.validation.Validateable
@@ -610,6 +612,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		if(!scripts){
 			prepare(/*currentFldLayout, currentFrameLayout*/) // TODO by Shai: resolve overloading ambiguity issue when both currentFldLayout, currentFrameLayout are null.
+//			def generateDataframeOutputEnv =  grailsApplication.config.generateDataframeOutputEnv
+//			generateDataframeOutputEnv.each( element ->
+			if(Environment.current == Environment.DEVELOPMENT){
+
+				DataframeFileUtil.writeStringIntoFile("AppDataframe.vue", scripts.toString())
+		}
 		}
 		return scripts
 	}
