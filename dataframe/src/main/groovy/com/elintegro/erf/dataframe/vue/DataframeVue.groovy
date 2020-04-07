@@ -614,6 +614,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			prepare(/*currentFldLayout, currentFrameLayout*/) // TODO by Shai: resolve overloading ambiguity issue when both currentFldLayout, currentFrameLayout are null.
 //			def generateDataframeOutputEnv =  grailsApplication.config.generateDataframeOutputEnv
 //			generateDataframeOutputEnv.each( element ->
+
 			if(Environment.current == Environment.DEVELOPMENT){
 
 				DataframeFileUtil.writeStringIntoFile("AppDataframe.vue", scripts.toString())
