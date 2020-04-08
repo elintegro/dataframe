@@ -15,8 +15,8 @@ beans {
                                  <v-container>
                                  <v-container class="firstContainer">
                                  <v-row>
-                                 <v-flex xs12 sm12 md6 lg6 xl6><div class="hidden-sm-and-down"><div style="margin-top:20%;"></div></div><h1>How to Choose an App Developer</h1></v-flex>
-                                 <v-flex xs12 sm12 md6 lg6 xl6>
+                                 <v-flex xs12 sm12 md6 lg6 xl6><div class="hidden-sm-and-down"><div style="margin-top:20%;"></div></div><span style="font-size:170%;"><b>How to Choose an App Developer</b></span></v-flex>
+                                 <v-flex xs12 sm12 md6 lg6 xl6><div class="hidden-md-and-up"><div style="margin-top:10%;"></div></div>
                                  <iframe width="100%" height="200%" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FjFLFVlBbLNA%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DjFLFVlBbLNA&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjFLFVlBbLNA%2Fhqdefault.jpg&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=youtube" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>
                                  </v-flex>
                                  </v-row><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -75,21 +75,7 @@ beans {
                                  </v-row>
                                  </v-container>
                                  
-                                 <v-container class="team" style="background-image:url('assets/groupBackground.svg');">
-                                 <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>Team</b></h1></v-card-actions></v-col></v-row>
-                                 <v-row>
-                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/eugene.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Eugene Lipkovich</b></h2>Team leader</v-flex>
-                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/sampleImage.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Kumar Chapagain</b></h2>Developer</v-flex>                                
-                                 </v-row>
-                                 <v-row>
-                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/shai.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Shai Lipkovich</b></h2>Team leader</v-flex>
-                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/sampleImage.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Prakash Subedi</b></h2>Developer</v-flex>                                
-                                 </v-row>
-                                 <v-row>
-                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/sampleImage.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Nagendra Saragadam</b></h2>Developer</v-flex>
-                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/sampleImage.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Nagendra Saragadam</b></h2>Developer</v-flex>         
-                                 </v-row>
-                                 </v-container>
+                                 
                                  
                                  <v-container class="technology">
                                  <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>Technology</b></h1></v-card-actions></v-col></v-row>
@@ -189,6 +175,26 @@ beans {
                                  </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
+
+
+
+
+
+    /*        <v-container class="team" style="background-image:url('assets/groupBackground.svg');">
+    <v-row><v-col><v-card-actions class = "justify-center"><h1 style="color: #2c3442;"><b>Team</b></h1></v-card-actions></v-col></v-row>
+                                 <v-row>
+                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/eugene.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Eugene Lipkovich</b></h2>Team leader</v-flex>
+    <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/sampleImage.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Kumar Chapagain</b></h2>Developer</v-flex>
+                                 </v-row>
+    <v-row>
+    <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/shai.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Shai Lipkovich</b></h2>Team leader</v-flex>
+                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/sampleImage.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Prakash Subedi</b></h2>Developer</v-flex>
+    </v-row>
+                                 <v-row>
+                                 <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/sampleImage.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Nagendra Saragadam</b></h2>Developer</v-flex>
+    <v-flex xs12 sm12 md3 lg3 xl3><v-img height="auto" width="100%" src="assets/sampleImage.png"></v-img></v-flex><v-flex xs12 sm12 md3 lg3 xl3><h2><b>Nagendra Saragadam</b></h2>Developer</v-flex>
+                                 </v-row>
+    </v-container>*/
 
 
 }
