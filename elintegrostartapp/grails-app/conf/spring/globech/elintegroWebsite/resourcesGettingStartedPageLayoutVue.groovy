@@ -15,7 +15,7 @@ beans {
                                  <v-container>
                                  <v-container class="firstContainer">
                                  <v-row>
-                                 <v-flex xs12 sm12 md6 lg6 xl6><h1 style="margin-top:20%;">How to Choose an App Developer</h1></v-flex>
+                                 <v-flex xs12 sm12 md6 lg6 xl6><div class="hidden-sm-and-down"><div style="margin-top:20%;"></div></div><h1 style="margin-top:20%;">How to Choose an App Developer</h1></v-flex>
                                  <v-flex xs12 sm12 md6 lg6 xl6>
                                  <iframe width="100%" height="200%" src="https://cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FjFLFVlBbLNA%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DjFLFVlBbLNA&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FjFLFVlBbLNA%2Fhqdefault.jpg&key=96f1f04c5f4143bcb0f2e68c87d65feb&type=text%2Fhtml&schema=youtube" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="true"></iframe>
                                  </v-flex>
@@ -40,7 +40,7 @@ beans {
                                  
                                  <v-container class="thirdContainer">
                                  <v-row>
-                                 <v-flex xs12 sm12 md6 lg6 xl6><h1><b>Development</b></h1 style="color: #2c3442;"><br><p>Web development is the work involved in developing a web site for the Internet (World Wide Web) or an intranet (a private network). Web development can range from developing a simple single static page of plain text to complex web-based internet applications (web apps), electronic businesses, and social network services.</p></v-flex>
+                                 <v-flex xs12 sm12 md6 lg6 xl6><h1 style="color: #2c3442;"><b>Development</b></h1 style="color: #2c3442;"><br><p>Web development is the work involved in developing a web site for the Internet (World Wide Web) or an intranet (a private network). Web development can range from developing a simple single static page of plain text to complex web-based internet applications (web apps), electronic businesses, and social network services.</p></v-flex>
                                  <v-flex xs12 sm12 md6 lg6 xl6><v-img src="assets/DevelopmentPageFirstPhoto.svg"></v-img></v-flex>
                                  </v-row><br><br>
                                  </v-container>

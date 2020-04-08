@@ -164,7 +164,7 @@ beans {
     vueGettingStartedDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueGettingStartedDataframe']
-        dataframeLabelCode = "Getting Started Page"
+        dataframeLabelCode = "Getting Started"
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
