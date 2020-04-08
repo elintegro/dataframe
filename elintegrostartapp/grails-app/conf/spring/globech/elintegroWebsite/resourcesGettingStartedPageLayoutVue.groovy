@@ -65,7 +65,7 @@ beans {
                                  <v-col cols="3"><v-img src="assets/onBudget.svg"></v-img></v-col>
                                  <v-col cols="3"><v-img src="assets/fixedPrice.svg"></v-img></v-col>
                                  <v-col cols="3"><v-img src="assets/agile.svg"></v-img></v-col>
-                                 <v-col cols="3"><v-img src="assets/onTIme.svg"></v-img></v-col>
+                                 <v-col cols="3"><v-img src="assets/onTime.svg"></v-img></v-col>
                                  </v-row>
                                  <v-row>
                                  <v-col cols="3"><v-card-actions class="justify-center">On Budget</v-card-actions></v-col>
