@@ -174,7 +174,7 @@ beans {
     vueCareersDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCareersDataframe']
-        dataframeLabelCode = "Careers Page"
+        dataframeLabelCode = "Careers"
         // isGlobal = true
         saveButton = false
         initOnPageLoad = false
@@ -185,7 +185,7 @@ beans {
     vueCareersPageButtonDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCareersPageButtonDataframe']
-        dataframeLabelCode = "Careers Page"
+        dataframeLabelCode = "Careers"
         saveButton = false
         initOnPageLoad = false
         isGlobal = true
@@ -218,7 +218,7 @@ beans {
                 "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'FirstName.required.message'],[condition:"v => (v && v.length <= 30)",message:"FirstName.must.be.less.than.30"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'LastName.required.message'],[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.availablePosition"  :[
                         "widget"             :"ComboboxVue"
@@ -249,24 +249,36 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, application.resume from Application application where application.id=:id"
-        saveButton = true
+        hql = "select application.id, application.avatar, application.resume from Application application where application.id=:id"
+        //saveButton = true
+        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         tab = true
         isGlobal = true
-        //doBeforeSave = """"""
+
+        doBeforeSave = """allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
+                          allParams['key_vueNewEmployeeUploadResumeDataframe_application_id_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
+                           """
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key", response.nodeId[0]);
-                         excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeDescriptionDataframe-tab-id');
+                         excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSelfAssesmentDataframe-tab-id');
                       """
         addFieldDef = [
-//                "application.resume":["name":"resume","widget":"FileUploadWidgetVue",ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                "application.avatar":["name":"avatar"
+                                      ,"widget":"PictureUploadWidgetVue"
+                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                                      ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                                      ,multiple:false
+                                      ,editButton: true
+                                      ,deleteButton:true  ],
+
                 "application.resume":["name":"resume"
                                       ,"widget":"FilesUploadWidgetVue"
                                       ,valueMember: "resume"
                                       , ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                                       , insertAfter: "application.resume"
-                                      ,"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                                      ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                                       ,multiple:false
+                                      ,"accept":"image/*,.pdf,.docx,.doc"
 
                                      ]
         ]
@@ -333,7 +345,7 @@ beans {
                 "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                                   "validationRules":[[condition:"v => !!v" ,message:'Name.required.message'], [condition:"v => (v && v.length <= 30)",message:'Name.must.be.less.than.30']]],
                 "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","required": "required","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","required": "required","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                 "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                                            "required": "required","validationRules":[[condition:"v => !!v", message: 'Description.required.message']],]
 
