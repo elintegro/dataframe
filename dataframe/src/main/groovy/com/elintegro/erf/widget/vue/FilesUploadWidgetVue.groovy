@@ -12,16 +12,18 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
 //        boolean multiple = field?.multiple
 //        boolean deleteButton = field?.deleteButton
         String attr = field?.attr
+
         return """
               <div $attr>
                <v-file-input 
                   label = $label
+                  v-model="${fldName}"
+                  value="${fldName}"
                   @change = "${fldName}_uploadFile"
                   ${toolTip(field)}  
                 >
                </v-file-input></div>
                """
-
     }
     String getVueDataVariable(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
@@ -38,17 +40,16 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
 
                    ${fldName}_uploadFile: function(event){
                       allParams = {};
-                      this.${fldName}_files.push(event);
+                      this.${fldName}_files.push(event);                      
                       allParams =  this.${fldName}_files;
                       this.${fldName}_ajaxFileSave(allParams);
-                   },\n
-           
-           
+                   },
                    ${fldName}_ajaxFileSave: function(allParams){
                       var fileList = this.${fldName}_files;
                        if(fileList.length > 0){
                               var firstFile = fileList[0];
                               var firstFileName = firstFile.name;
+                              this.state.${fldName} = firstFile.name;
             
                               var fileData = new FormData();
                               fileData.append('fileSize',fileList.length);
@@ -59,7 +60,12 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                               fetch('${field.ajaxFileSaveUrl}',
                                  { method:'POST',
                                    body:fileData 
-                                 }).then(response => {console.log(response)}).catch(function(error){console.log(error)});                      
+                                 }).then(response => {
+                                            console.log(response)
+                                                    })
+                                  .catch(function(error){
+                                                console.log(error)
+                                                });                      
                         }
                    },\n
                  ${fldName}_computedFileUploadParams() {
