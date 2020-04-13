@@ -33,9 +33,9 @@ beans {
                             gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link",showAsDialog: true,script:""" this.vueElintegroLoginDataframe_display = true; \n  excon.saveToStore('dataframeShowHideMaps','vueElintegroLoginDataframe_display', true);\n""",
+                            login          : [name: "login", type: "link",showAsDialog: true,
                                               refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            register       : [name: "register", type: "link", showAsDialog: true, attr:"text", script:""" this.vueElintegroRegisterDataframe_display = true;\n  excon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', true);\n""",
+                            register       : [name: "register", type: "link", showAsDialog: true, attr:"text",
                                               refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
 
@@ -466,18 +466,18 @@ beans {
         wrapInForm=true
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doAfterSave = """ excon.saveToStore('vueLoginNavigation','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
+        doAfterSave = """ excon.saveToStore('vueElintegroNavigationButtonDataframe','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
                            """
         addFieldDef =[
-                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                 "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-                                  ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]]],
+                                  ,"validationRules":[[condition:"v => !!v",message:"FirstName.required.message"],[condition: "v => (v && v.length <= 30)",message:"FirstName.must.be.less.than.30"]]],
                 "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-                                 ,"validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]]]
+                                 ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"],[condition:"v => (v && v.length <= 30)", message:"LastName.must.be.less.than.30"]]]
                 ,"user.password":[widget: "PasswordWidgetVue", "width":"150", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-                                  ,"validate":["rule":["v => !!v || 'Password is required'", "v => (v && v.length >= 8) || 'Password must be greater than 8'"]]]
+                                  ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]]
                 ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-                              ,"validate":["rule":["v => !!(v==this.vueElintegroRegisterDataframe_user_password) || 'Password and Confirm Password must match'"]]]
+                              ,"validationRules":[[condition:"v => !!(v==this.vueElintegroRegisterDataframe_user_password)",message:"Password.and.Confirm.Password."]]]
         ]
 
         currentFrameLayout = ref("defaultDialogBoxLayout")
