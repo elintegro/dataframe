@@ -214,19 +214,17 @@ class DataframeController {
 
 	def ajaxSaveRaw(){
 		def _params = request.getJSON()
-
-		String prmsPrintOut = DataframeInstance.reqParamPrintout(_params);
-
-		log.debug("\n *******   Request Params when Saving : \n" + prmsPrintOut + "\n ***************\n");
-		System.out.println("\n *******   Request Params when Saving : \n" + prmsPrintOut + "\n ***************\n");
-
 		Dataframe dataframe = getDataframe(_params)
-
 		def dfInstance = new DataframeInstance(dataframe, _params)
 		def operation = 'U'; //Update
 		def result;
-		boolean isInsert;
-		result = dfInstance.save(true); //Todo Shai,Eugene Why there is no error handling here ?
+
+		try {
+			result = dfInstance.save(true);
+		}catch(Exception e){
+			log.error("Failed to save data for dataframe ${dfInstance.df.dataframeName} Error : \n " + e)
+		}
+
 		if(dfInstance.isInsertOccured()){
 			operation = "I";
 		}
@@ -252,7 +250,7 @@ class DataframeController {
 			resultAlias.put(String.valueOf(domainAlias), record)
 		}
 
-		result.each{ record->
+		result?.each{ record->
 			def _id = record.id
 			generatedKeys.add record.id
 		}

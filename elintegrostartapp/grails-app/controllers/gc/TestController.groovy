@@ -53,7 +53,6 @@ class TestController {
         String securedCode = resultPageHtmlBuilder.applySecurityFilter(struct.get("finalScript"));
         struct.put("finalScript", securedCode)
 
-
         boolean reloadPage = false
         String msg = params.msg?:""
         if(params.reloadPage){

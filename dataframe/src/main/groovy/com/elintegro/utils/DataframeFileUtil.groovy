@@ -47,8 +47,28 @@ class DataframeFileUtil {
         }
     }
 
-    public static void writeStringIntoFile(String fileName, String fileContent){
+    public static void writeStringIntoFile(String fileName, String fileContent) {
         BufferedWriter writer
+        File file = new File(fileName)
+        if (file) {
+            String pathOnly = fileName.substring(0, fileName.indexOf(file.getName())-1)
+            File theDir = new File(pathOnly);
+            if(!theDir.exists()) {
+                boolean result = false;
+                try {
+                    theDir.mkdir();
+                    result = true;
+                }
+                catch (SecurityException se) {
+                    log.error("File ${fileName} has not been created!")
+                    return;//handle it
+                }
+                if (result) {
+                    System.out.println("DIR created");
+                }
+            }
+        }
+
         try {
             writer = new BufferedWriter(new FileWriter(fileName))
             writer.write(fileContent)

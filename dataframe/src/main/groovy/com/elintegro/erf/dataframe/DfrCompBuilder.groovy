@@ -16,6 +16,8 @@ package com.elintegro.erf.dataframe
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
+import com.elintegro.utils.DataframeFileUtil
+import grails.util.Environment
 import grails.util.Holders
 
 import javax.xml.crypto.Data
@@ -51,6 +53,15 @@ class DfrCompBuilder {
             vueMutationSb.append(dataframe.getVueStoreScript().get("mutation"))
             vueStateGlobalSb.append(dataframe.getVueStoreScript().get("globalState"))
             vueRoutesSb.append(dataframe.getVueRoutes())
+
+            if (Environment.current == Environment.DEVELOPMENT) {
+                StringBuilder initDataframeVars = new StringBuilder()
+                initDataframeVars.append("\n================    State: \n").append(vueStateSb)
+                                 .append("\n================    Getters: \n").append(vueGettersSb)
+                                 .append("\n================    Mutations: \n").append(vueMutationSb)
+                                 .append("\n================    Global State: \n").append(vueStateGlobalSb)
+                DataframeFileUtil.writeStringIntoFile("./logs/${dataframe.dataframeName}/${dataframe.dataframeName}-init-store-state.vue", initDataframeVars.toString())
+            }
         }
 
         String vueStoreScript = buildVueStoreScript(vueStateSb.toString(), vueGettersSb.toString(), vueMutationSb.toString(), vueStateGlobalSb.toString())

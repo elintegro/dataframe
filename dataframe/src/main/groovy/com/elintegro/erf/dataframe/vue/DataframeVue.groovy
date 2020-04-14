@@ -727,7 +727,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	}
 
 	/**
-	 * Overloading prepare(String fieldLayout, String frameLayout)
+	 * Overloading (String fieldLayout, String frameLayout)
 	 * @param fieldLayout
 	 * @param frameLayout
 	 * @return
@@ -862,6 +862,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 //		vueStoreScript = vueJsBuilder.getVueStore().buildVueStoreScript()
 		currentFldLayout = fieldLayout
 		scripts = vueJsBuilder.getFinalbuildScript(this)
+
+		DataframeFileUtil.writeStringIntoFile("./logs/${dataframeName}/${dataframeName}-script.vue", scripts.toString())
+
 		resultPage = getComponentName("")
 		return resultPage
 	}
@@ -1197,10 +1200,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				""")
 		return """
               ${dataframeName}_save: function(){
-                  let allParams = {};
-                  allParams = this.state;
+                  let allParams = this.state;                                    
                   $vueSaveVariables
-                  ${embdSaveParms.toString()}
+                  ${embdSaveParms?.toString()}
                   ${doBeforeSave}
                   allParams['dataframe'] = '$dataframeName';
                   console.log(allParams)
