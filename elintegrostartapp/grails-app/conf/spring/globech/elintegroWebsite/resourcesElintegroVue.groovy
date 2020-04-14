@@ -129,7 +129,7 @@ beans {
                         ,avatarAlias      :'Logo'
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
-                        ,url:'/assets'
+                        ,url:'/'
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
 
                 ]
@@ -250,7 +250,8 @@ beans {
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
         hql = "select application.id, application.avatar, application.resume from Application application where application.id=:id"
-        //saveButton = true
+        saveButton = true
+        saveButtonAttr = " align='right' "
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         tab = true
         isGlobal = true
@@ -288,7 +289,7 @@ beans {
 //                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
 //                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
-        currentFrameLayout = ref("emptyDataframeLayout")
+        currentFrameLayout = ref("vueNewEmployeeUploadResumeDataframeLayout")
     }
     vueNewEmployeeSelfAssesmentDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
@@ -477,7 +478,7 @@ beans {
                 ,"user.password":[widget: "PasswordWidgetVue", "width":"150", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                                   ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]]
                 ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-                              ,"validationRules":[[condition:"v => !!(v==this.vueElintegroRegisterDataframe_user_password)",message:"Password.and.Confirm.Password."]]]
+                              ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroRegisterDataframe_user_password)",message:"Password.and.Confirm.Password."]]]
         ]
 
         currentFrameLayout = ref("defaultDialogBoxLayout")

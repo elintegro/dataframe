@@ -26,6 +26,10 @@ beans {
         children = ["midSectionLayout"]
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
     }
+    vueNewEmployeeUploadResumeDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+    }
 
 
 
