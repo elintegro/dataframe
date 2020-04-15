@@ -306,7 +306,7 @@ beans {
         dataframeButtons = [previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeUploadResumeDataframe-tab-id");
                                                                                 \n""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'], url: ""]]
 
-        currentFrameLayout = ref("emptyDataframeLayout")
+        currentFrameLayout = ref("vueNewEmployeeSelfAssesmentDataframeLayout")
     }
 
     vueNewEmployeeAddtionalQuestionsDataframe(DataframeVue) { bean ->
@@ -320,14 +320,14 @@ beans {
         isGlobal = true
 
         addFieldDef = [
-                "person.description":["name":"description","type":"link","widget":"TextAreaWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
+                "person.description":["name":"description","type":"link","widget":"TextAreaWidgetVue","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']]
 
         ]
         dataframeButtons = [
                 previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
-        currentFrameLayout = ref("emptyDataframeLayout")
+        currentFrameLayout = ref("vueNewEmployeeAddtionalQuestionsDataframeLayout")
     }
 
 
