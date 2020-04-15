@@ -254,9 +254,8 @@ beans {
         tab = true
         isGlobal = true
         doBeforeSave = """
-            var applicationIdKey = this.\$store.state.vueNewEmployeeBasicInformationDataframe.application_id;            
-            var applicationIdKey1 = excon.getFromStore("vueNewEmployeeBasicInformationDataframe","application_id");
-            excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_vueNewEmployeeUploadResumeDataframe_application_id_id", applicationIdKey);
+            //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rathr then insert a new one.                          
+            excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
         """
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key", response.nodeId[0]);

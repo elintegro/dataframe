@@ -470,8 +470,8 @@ beans {
                           // able to use them to complete the data for the same records...  
                           //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_person_id",response.data.person_id)
                           //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_application_id",response.data.application_id)
-                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","person_id",response.data.person_id)
-                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","application_id",response.data.application_id)                                                                              
+                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","key_person_id",response.data.person_id)
+                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","key_application_id",response.data.application_id)                                                                              
                           console.log(response)                            
                 });
                 
