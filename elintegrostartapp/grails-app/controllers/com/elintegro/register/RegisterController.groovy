@@ -43,7 +43,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         def resultData
         String dfrName = requestParams["dataframe"] + "_user_email"
         //FacilityUserRegistration facilityUserReg = FacilityUserRegistration.findByExpectedUser(requestParams[dfrName])
-        FacilityUserRegistration  facilityUserReg = true
+
         String expectedRole = requestParams["role"]
         String verificationEmailMessage
 
@@ -62,7 +62,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 //        }else{ //expected User is registering for the facility and expected role is correct
 
             RegisterCommand command =  getRegisterValidationObj(requestParams)
-            grails.util.Pair result = registerService.registerUser(command, regRole, facilityUserReg.facility)
+            grails.util.Pair result = registerService.registerUser(command, regRole, null)
 
             com.elintegro.auth.User user = result.getaValue()
             def returnedMessage = result.getbValue()

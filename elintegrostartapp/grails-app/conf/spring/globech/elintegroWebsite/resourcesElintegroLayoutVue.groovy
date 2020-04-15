@@ -28,7 +28,7 @@ beans {
     }
     vueNewEmployeeUploadResumeDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][saveButton][BUTTON_SCRIPT]</v-flex>"""
     }
 
 
