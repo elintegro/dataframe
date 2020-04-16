@@ -60,7 +60,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public static final String DOT = ".";
 	public static final String SESSION_PARAM_NAME_PREFIX = "session_"
 	private String currentLanguage = ""
-	List flexGridValues = LayoutVue.defaultGridValues
+	List flexGridValues = []
 
 	DataframeVue parent
 	String dataframeName
@@ -276,6 +276,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		this.dataframeName = dataframeName
 		this.dataframeNameLowercase = dataframeName?dataframeName.toLowerCase():""
 		this.dataframeView.dataframeName = dataframeName
+
+		flexGridValues = flexGridValues?:LayoutVue.defaultGridValues
 	}
 
 
