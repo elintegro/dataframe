@@ -32,7 +32,6 @@ class PasswordWidgetVue extends WidgetVue {
             :type="${fldName}_show ? 'text' : 'password'"
             name="input-10-1"
             label="${getLabel(field)}"
-            hint="$errorMessage"
             autocomplete = $autoComplete
             counter
             ${isReadOnly ? "readonly" : ''}

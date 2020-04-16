@@ -26,6 +26,37 @@ beans {
         children = ["midSectionLayout"]
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
     }
+    vueNewEmployeeUploadResumeDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex>
+                       [DATAFRAME_SCRIPT]
+                       <v-row style="align-items:center;">
+                       <v-col cols="6" class="text-left"><span class="layout justify left">[BUTTON_SCRIPT]</span></v-col>
+                       <v-col cols="6"class="text-left"><span class="layout justify left">[saveButton] </span></v-col>
+                       </v-row>
+                       </v-flex>"""
+    }
+    vueNewEmployeeSelfAssesmentDataframeLayout(ColumnLayoutVue) {bean ->
+    layoutBeanName = bean.name
+    layoutPlaceHolder = """<v-flex>
+                       [DATAFRAME_SCRIPT]
+                       <v-row style="align-items:center;">
+                       <v-col cols="6" class="text-left"><span class="layout justify left">[BUTTON_SCRIPT]</span></v-col>
+                       <v-col cols="6"class="text-left"><span class="layout justify left">[saveButton] </span></v-col>
+                       </v-row>
+                       </v-flex>"""
+}
+    vueNewEmployeeAddtionalQuestionsDataframeLayout(ColumnLayoutVue) {bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex>
+                       [DATAFRAME_SCRIPT]
+                       <v-row style="align-items:center;">
+                       <v-col cols="6" class="text-left"><span class="layout justify left">[BUTTON_SCRIPT]</span></v-col>
+                       <v-col cols="6"class="text-left"><span class="layout justify left">[saveButton] </span></v-col>
+                       </v-row>
+                       </v-flex>"""
+    }
+
 
 
 

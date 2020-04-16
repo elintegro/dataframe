@@ -4,7 +4,7 @@ import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.vue.DataframeVue
 
 
-class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
+class FilesUploadWidgetVue extends WidgetVue {
     @Override
     String getHtml(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
@@ -12,15 +12,18 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
 //        boolean multiple = field?.multiple
 //        boolean deleteButton = field?.deleteButton
         String attr = field?.attr
+        String accept = field?.accept
+        String acceptedLine = accept?"${accept}":'""'
 
         return """
               <div $attr>
                <v-file-input 
                   label = $label
                   v-model="${fldName}"
-                  value="${fldName}"
+                 
                   @change = "${fldName}_uploadFile"
                   ${toolTip(field)}  
+                  accept = ${acceptedLine}
                 >
                </v-file-input></div>
                """
