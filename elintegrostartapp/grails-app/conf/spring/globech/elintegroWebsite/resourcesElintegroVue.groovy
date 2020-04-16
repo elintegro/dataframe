@@ -377,50 +377,11 @@ beans {
                        ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px', "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
         ]
 
-        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#loginDataframe';
-                                                                                                                                allParams["username"] = this.vueElintegroLoginDataframe_user_username;
-                                                                                                                               allParams["password"] = this.vueElintegroLoginDataframe_user_password;
-                                                                                                                               allParams["remember-me"] = this.vueElintegroLoginDataframe_rememberMe;
-                                                                                                                                """,
-                                    /* url: "/elintegrostartapp/login/loginUser" name:"login", type: "button",attr: "color='cyan'", script: """layout: " layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>",
-//                                                                                                                               var url = "/elintegrostartapp/api/login";
-//                                                                                                                               var url = "/elintegrostartapp/login/testLogin";
-                                                                                                                       var url = "/elintegrostartapp/login/authenticate";
-
-                                                                                                                       var elementId = '#loginDataframe';
-                                                                                                                       var allParams ={};
-                                                                                                                       allParams["username"] = this.vueElintegroLoginDataframe_user_username;
-                                                                                                                       allParams["password"] = this.vueElintegroLoginDataframe_user_password;
-                                                                                                                       allParams["remember_me"] = this.vueElintegroLoginDataframe_rememberMe;
-                                                                                                                       axios.post(url, allParams).then(function(responseData) {
-                                                                                                                        var response = responseData.data
-                                                                                                                        if (response.success) {
-                                                                                                                            if (response.msg) {
-                                                                                                                                store.commit('alertMessage', {
-                                                                                                                                    'snackbar': true,
-                                                                                                                                    'alert_type': 'success',
-                                                                                                                                    'alert_message': response.msg
-                                                                                                                                });
-                                                                                                                            }
-                                                                                                                            this.location.reload();
-                                                                                                                            console.log("Login Callback");
-                                                                                                                            console.log(response);
-                                                                                                                            //Dataframe.showHideDataframesBasedOnUserType(data);
-
-                                                                                                                        } else {
-                                                                                                                            if (response.msg) {
-                                                                                                                                store.commit('alertMessage', {
-                                                                                                                                    'snackbar': true,
-                                                                                                                                    'alert_type': 'error',
-                                                                                                                                    'alert_message': response.msg
-                                                                                                                                })
-                                                                                                                            }
-
-                                                                                                                        }
-                                                                                                                            }).catch(function(error){
-                                                                                                                                                        console.log(error.response)
-                                                                                                                            });
-                                                                                                                  layout: "<v-flex xs12 sm12 md6 lg6 xl6> <v-layout column align-center justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>", """,<v-flex xs12 sm12 md6 lg6 xl6><v-layout column align-center justify-center style='margin-top:8px;'>[BUTTON_SCRIPT]</v-layout></v-flex>*/
+        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
+                                     allParams["username"] = this.state.vueElintegroLoginDataframe_user_username;
+                                     allParams["password"] = this.state.vueElintegroLoginDataframe_user_password;
+                                     allParams["remember-me"] = this.state.vueElintegroLoginDataframe_rememberMe;
+                                      """,
                                     callBackParams: [successScript: """
                                                           console.log("Login Callback");
                                                            this.location.reload();
