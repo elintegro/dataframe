@@ -20,7 +20,7 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.setupHomePage();"""
+        created = """this.setupHomePage(); this.setInitPageValues();"""
 
         methods =
                 """  setupHomePage: function(){
@@ -34,7 +34,7 @@ beans {
                               }
                           })
                      }
-               ,\nsetInitPageValues:function(data){
+               ,\nsetInitPageValues:function(){
                                                
                                                 axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
                                                      excon.saveToStore("vueInitDataframe", "key", '');
