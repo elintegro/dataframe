@@ -883,7 +883,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		String btnDivId = "";
 		String btnWidget = "";
 
-		List flexGridValues = field.flexGridValues ?: LayoutVue.defaultGridValues
+		List flexGridValues = field.flexGridValues ?:flexGridValues?: LayoutVue.defaultGridValues
 		String gridValueString = LayoutVue.convertListToString(flexGridValues)
 		def label = field.fldNmAlias ?: messageSource.getMessage(field.labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
 		if (field?.labelDisabled) {
