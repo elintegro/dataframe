@@ -68,8 +68,8 @@ grails.gorm.default.constraints = {
 
 grails.gorm.failOnError = true
 
-//generateDataframeOutputEnv = "development,qa"
-//generateDataframeOutputEnv = ["development","qa"]
+vue.flexGridValues.Default = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+
 
 
 
