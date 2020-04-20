@@ -602,3 +602,5 @@ environments {
 // Added by the Spring Security OAuth2 Google Plugin:
 grails.plugin.springsecurity.oauth2.domainClass = 'com.elintegro.auth.OAuthID'
 
+dataframe.right_to_left_language = false
+
