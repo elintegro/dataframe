@@ -216,8 +216,8 @@ beans {
         isGlobal = true
         addFieldDef = [
 
-                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'FirstName.required.message'],[condition:"v => (v && v.length <= 30)",message:"FirstName.must.be.less.than.30"]]],
-                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'LastName.required.message'],[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],],
+                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue"],
+                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],],
                 "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'Email.required.message']]],
                 "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]],
                 "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']]],
