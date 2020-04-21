@@ -289,7 +289,12 @@ class LayoutVue extends Layout {
         if(stInd>0){
             int endInd = stInd + fldPlaceholder.length()
             dataframeHtml.replace(stInd, endInd, btnScript)
-        } else {
+        }
+        boolean dataframeRightToLeftLanguage = Holders.grailsApplication.config.dataframe.right_to_left_language
+            if(!dataframeRightToLeftLanguage){
+                remainingButtons.insert(0,btnScript)
+            }
+        else {
             remainingButtons.append(btnScript)
         }
 

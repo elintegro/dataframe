@@ -334,7 +334,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     protected boolean validate(Map field){
         boolean applyRule = false
         applyRule = applyRule || field.validate
-        applyRule = applyRule || field.required
+        applyRule = applyRule || isMandatory(field)
         applyRule = applyRule || field.validationRules
 
         return applyRule
@@ -343,6 +343,10 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     protected String validationRules(Map field){
         StringBuilder rules = new StringBuilder()
         rules.append("[")
+        if(isMandatory(field)){
+            String message = getMessageSource().getMessage("default.required.message", [field.label?:null] as Object[], "default.required.message", LocaleContextHolder.getLocale())
+            rules.append("""  v => !!v || '$message', """)
+        }
 
         if(field.validationRules){
             def rulesList = field.validationRules
@@ -356,10 +360,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
 
             }
         }
-        if(field.required || isMandatory(field)){
-            String message = getMessageSource().getMessage("default.required.message", null, "default.required.message", LocaleContextHolder.getLocale())
-            rules.append("""  v => !!v || '$message', """)
-        }
+
         if(field.validate)
             rules.append(widgetValidationRule(field))
 

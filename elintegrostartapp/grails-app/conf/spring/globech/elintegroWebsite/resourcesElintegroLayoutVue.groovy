@@ -28,33 +28,15 @@ beans {
     }
     vueNewEmployeeUploadResumeDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex>
-                       [DATAFRAME_SCRIPT]
-                       <v-row style="align-items:center;">
-                       <v-col cols="6" class="text-left"><span class="layout justify left">[BUTTON_SCRIPT]</span></v-col>
-                       <v-col cols="6"class="text-left"><span class="layout justify left">[saveButton] </span></v-col>
-                       </v-row>
-                       </v-flex>"""
+        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
     }
     vueNewEmployeeSelfAssesmentDataframeLayout(ColumnLayoutVue) {bean ->
     layoutBeanName = bean.name
-    layoutPlaceHolder = """<v-flex>
-                       [DATAFRAME_SCRIPT]
-                       <v-row style="align-items:center;">
-                       <v-col cols="6" class="text-left"><span class="layout justify left">[BUTTON_SCRIPT]</span></v-col>
-                       <v-col cols="6"class="text-left"><span class="layout justify left">[saveButton] </span></v-col>
-                       </v-row>
-                       </v-flex>"""
+    layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
 }
     vueNewEmployeeAddtionalQuestionsDataframeLayout(ColumnLayoutVue) {bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex>
-                       [DATAFRAME_SCRIPT]
-                       <v-row style="align-items:center;">
-                       <v-col cols="6" class="text-left"><span class="layout justify left">[BUTTON_SCRIPT]</span></v-col>
-                       <v-col cols="6"class="text-left"><span class="layout justify left">[saveButton] </span></v-col>
-                       </v-row>
-                       </v-flex>"""
+        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
     }
 
 
