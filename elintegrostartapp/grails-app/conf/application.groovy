@@ -68,8 +68,8 @@ grails.gorm.default.constraints = {
 
 grails.gorm.failOnError = true
 
-//generateDataframeOutputEnv = "development,qa"
-//generateDataframeOutputEnv = ["development","qa"]
+vue.flexGridValues.Default = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+
 
 
 
@@ -601,4 +601,6 @@ environments {
 
 // Added by the Spring Security OAuth2 Google Plugin:
 grails.plugin.springsecurity.oauth2.domainClass = 'com.elintegro.auth.OAuthID'
+
+dataframe.right_to_left_language = false
 
