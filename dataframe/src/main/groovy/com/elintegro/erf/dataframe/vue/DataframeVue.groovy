@@ -128,7 +128,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String popUpTitle=""
 	@OverridableByEditor
 	Map summaryAfterSave = [showSummary: false]
-	static int BIG_TEXT_FIELD_LENGTH = 50;
+	static int BIG_TEXT_FIELD_LENGTH = 255;
 
 	String dataframeLabelCode = ""
 	private StringBuilder saveScriptJs = new StringBuilder();
@@ -422,8 +422,15 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 					break;
 				case "VARCHAR":
 					if(fld.length > BIG_TEXT_FIELD_LENGTH){
-						widget = "InputWidgetVue";
-					}else{
+						widget = "TextAreaWidgetVue";
+					}
+					else if (fld.name.toLowerCase().indexOf("email") >= 0) {
+						widget = "EmailWidgetVue";
+					}
+					else if(fld.name.toLowerCase().indexOf("phone") >= 0){
+						widget = "PhoneNumberWidgetVue"
+					}
+					else{
 						widget = "InputWidgetVue";
 					}
 					break;
@@ -620,7 +627,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			if(Environment.current == Environment.DEVELOPMENT){
 
 				DataframeFileUtil.writeStringIntoFile("AppDataframe.vue", scripts.toString())
-		}
+			}
 		}
 		return scripts
 	}

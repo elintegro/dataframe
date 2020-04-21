@@ -12,7 +12,7 @@ class ContactUs {
         name(nullable:false)
         email(nullable:false)
         phone(nullable:true)
-        textOfMessage(nullable:false)
+        textOfMessage(nullable:false,length:4096)
 
     }
 }

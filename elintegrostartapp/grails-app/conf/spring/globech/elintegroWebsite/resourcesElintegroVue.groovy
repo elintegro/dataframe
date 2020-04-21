@@ -21,7 +21,7 @@ beans {
         putFillInitDataMethod = false
         currentFrameLayout = ref("emptyDataframeLayout")
     }
-    vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
+ /*   vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
         isGlobal = true
@@ -37,6 +37,27 @@ beans {
                                               refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             register       : [name: "register", type: "link", showAsDialog: true, attr:"text",
                                               refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        wrapButtons = false
+
+
+        currentFrameLayout = ref("elintegroNavigationButtonLayout")
+    }*/
+    vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = true
+        dataframeButtons = [register       : [name: "register", type: "link", showAsDialog: true, attr:"text",
+                                              refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            login          : [name: "login", type: "link",showAsDialog: true,
+                                              refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            technologies   : [name: "techonologies", type: "link",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            clientsProjects: [name: "clientsProjects", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            home           : [name: "home", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroBannerDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
 
 
@@ -216,11 +237,11 @@ beans {
         isGlobal = true
         addFieldDef = [
 
-                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue"],
+                /*"person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue"],
                 "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],],
                 "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'Email.required.message']]],
                 "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]],
-                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']]],
+                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']]],*/
                 "person.availablePosition"  :[
                         "widget"             :"ComboboxVue"
                         ,"name"              :"person.availablePosition"
@@ -339,15 +360,16 @@ beans {
         isGlobal = true
         saveButton = true
         initOnPageLoad = false
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         route = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
-                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-                                  "validationRules":[[condition:"v => !!v" ,message:'Name.required.message'], [condition:"v => (v && v.length <= 30)",message:'Name.must.be.less.than.30']]],
-                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","required": "required","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-                                           "required": "required","validationRules":[[condition:"v => !!v", message: 'Description.required.message']],]
+//                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+//                                  "validationRules":[[condition:"v => !!v" ,message:'Name.required.message'], [condition:"v => (v && v.length <= 30)",message:'Name.must.be.less.than.30']]],
+                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","validate":true]
+//                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","required": "required","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]],
+//                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself",
+//                                           "required": "required","validationRules":[[condition:"v => !!v", message: 'Description.required.message']],]
 
 
         ]
