@@ -125,7 +125,7 @@ beans {
                                  <v-row><v-card-actions class="justify-center>"<h3 style="color: #2c3442;"><b>CONTACT INFO</b></h3></v-card-actions></v-row><br>
                                  <v-row><v-flex xs2 sm2 md1 lg1 xl1><v-img src="assets/location.svg"></v-img></v-flex><v-flex xs1 sm1 md0 lg0 xl0></v-flex><v-flex xs9 sm9 md3 lg3 xl3>Locations:<br>Monetreal, Canada,Tel-Aviv, Israel,Kathmandu,Nepal</v-flex></v-row>
                                  <v-row><v-flex xs2 sm2 md1 lg1 xl1><v-img src="assets/phone.svg"></v-img></v-flex><v-flex xs1 sm1 md0 lg0 xl0></v-flex> <v-flex xs9 sm9 md3 lg3 xl3>Phone:<br>USA:+1 (603) 329-3195<br>CANADA:+1 (438)792 1079<br>UK:+44 (1273) 93 0312<br>IL:+972 (54) 557 9687 </v-flex></v-row>
-                                 <v-row><v-flex xs2 sm2 md1 lg1 xl1><v-img src="assets/atTheRateIcon.svg"></v-img></v-flex><v-flex xs1 sm1 md0 lg0 xl0></v-flex> <v-flex xs9 sm9 md3 lg3 xl3>email:<br>elintegroinc@gmail.com</v-flex></v-row>
+                                 <v-row><v-flex xs2 sm2 md1 lg1 xl1><v-img src="assets/atTheRateIcon.svg"></v-img></v-flex><v-flex xs1 sm1 md0 lg0 xl0></v-flex> <v-flex xs9 sm9 md3 lg3 xl3>Email:<br>elintegroinc@gmail.com</v-flex></v-row>
                                  <v-row><v-flex xs2 sm2 md1 lg1 xl1><v-img src="assets/linkIcon.svg"></v-img></v-flex><v-flex xs1 sm1 md0 lg0 xl0></v-flex> <v-flex xs9 sm9 md3 lg3 xl3>Website:<br>http://elintegro.com </v-flex></v-row>
                                  </v-flex>
                                  <v-flex xs12 sm12 md4 lg4 xl4>

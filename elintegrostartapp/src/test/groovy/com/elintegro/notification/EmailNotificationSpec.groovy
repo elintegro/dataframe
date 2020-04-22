@@ -35,7 +35,7 @@ class EmailNotificationSpec extends Specification implements DataTest {
     }
 
     def setup() {
-        notification = NotificationGatewayFactory.getGateway(NotificationPreferences.email)
+        notification = NotificationGatewayFactory.getGateway(NotificationPreferences.EMAIL)
     }
 
     def cleanup() {

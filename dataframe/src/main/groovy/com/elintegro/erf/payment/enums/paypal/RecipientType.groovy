@@ -15,7 +15,7 @@ package com.elintegro.erf.payment.enums.paypal
 
 enum RecipientType {
 
-    email("email"),
+    EMAIL("EMAIL"),
     PHONE("PHONE"),
     PAYPALID("PAYPAL_ID")
 

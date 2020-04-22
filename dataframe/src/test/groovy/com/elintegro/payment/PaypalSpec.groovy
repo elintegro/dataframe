@@ -230,7 +230,7 @@ class PaypalSpec extends Specification implements GrailsUnitTest {
         RequestBuilder payoutParams = new PaypalPayoutParams()
         List<PayoutItem> items = []
         Currency amount = new Currency().setCurrency('USD').setValue("10")
-        PayoutItem item = PaypalServiceOperation.createPayoutItems(RecipientType.email.desc, "Thanks for your patronage"
+        PayoutItem item = PaypalServiceOperation.createPayoutItems(RecipientType.EMAIL.desc, "Thanks for your patronage"
                 , "kumarchapagain03sc-buyer@gmail.com", "201404324236", amount)
         items.add(item)
         payoutParams.senderBatchHeader(PaypalServiceOperation.createSenderBatchHeader("You have a Payment!")).items(items)
