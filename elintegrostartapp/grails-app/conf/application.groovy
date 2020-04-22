@@ -68,7 +68,7 @@ grails.gorm.default.constraints = {
 
 grails.gorm.failOnError = true
 
-vue.flexGridValues.Default = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+vue.flexGridValues.Default = ['xs12', 'sm12', 'md4', 'lg4', 'xl4']
 
 
 

@@ -123,7 +123,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
             return
         }
 
-//        Person p = new Person(firstName:user.firstName, lastName:user.lastName, contactEmail:user.username, user:user).save(flush:true)
+//        Person p = new Person(firstName:user.firstName, lastName:user.lastName, email:user.username, user:user).save(flush:true)
 
         flash.message = message(code: 'spring.security.ui.register.complete')
         redirect uri: registerPostRegisterUrl ?: successHandlerDefaultTargetUrl
@@ -268,7 +268,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 
     private static ResetPasswordCommand getResetPasswordValidationObj(requestParams){
         ResetPasswordCommand command  = new ResetPasswordCommand()
-        command.username = requestParams.get("resetPasswordDfr-user-contactEmail")
+        command.username = requestParams.get("resetPasswordDfr-user-email")
         command.password = requestParams.get("resetPasswordDfr-user-password")
         command.password2 = requestParams.get("resetPasswordDfr-password2")
         return command

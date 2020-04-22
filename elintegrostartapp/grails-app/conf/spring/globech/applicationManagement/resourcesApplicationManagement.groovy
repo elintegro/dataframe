@@ -23,7 +23,7 @@ beans {
     vueApplicationManagementDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueApplicationManagementDataframe']
-//        hql = "select app.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+//        hql = "select app.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = false
         createStore = true
@@ -94,7 +94,7 @@ beans {
         bean.constructorArgs = ['vueApplicationFormDetailDataframe']
 
         dataframeLabelCode = "Application.Details"
-//        hql = "select app.id as Id, apcant.firstName as Firstname, apcant.lastName as Lastname, apcant.phone as Phone_Number, apcant.contactEmail as Email from Application app inner join app.applicant apcant where app.id=:id"
+//        hql = "select app.id as Id, apcant.firstName as Firstname, apcant.lastName as Lastname, apcant.phone as Phone_Number, apcant.email as email from Application app inner join app.applicant apcant where app.id=:id"
         hql = "select app.id, app.createTime, app.applicant, app.medicalRecord from Application as app where app.id=:id"
 //        app.referredByPerson, app.referredByOrganisation, app.signedBy,   app.applicationDate,
         initOnPageLoad = true
@@ -411,7 +411,7 @@ beans {
     vueContactFormEditDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactFormEditDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = true
         saveButton = false
@@ -421,7 +421,7 @@ beans {
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
-                "person.contactEmail": [
+                "person.email": [
                         "widget"        : "EmailWidgetVue",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
@@ -451,7 +451,7 @@ beans {
     vueContactDetailDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactDetailDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = true
         saveButton = false
@@ -460,7 +460,7 @@ beans {
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
-                "person.contactEmail": [
+                "person.email": [
                         "widget"        : "EmailWidgetVue",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
@@ -490,7 +490,7 @@ beans {
     vueContactEditDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactEditDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = true
         saveButton = true
@@ -500,7 +500,7 @@ beans {
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
-                "person.contactEmail": [
+                "person.email": [
                         "widget"        : "EmailWidgetVue",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],

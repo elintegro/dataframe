@@ -16,7 +16,7 @@ class EmployeeApplicationController {
         Person applicant = new Person()
         applicant.firstName = empData.firstName
         applicant.lastName = empData.lastName
-        applicant.contactEmail = empData.email
+        applicant.email = empData.email
         applicant.phone = empData.phone
         applicant.save()
 

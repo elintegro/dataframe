@@ -52,6 +52,7 @@ class Application extends ControlField{
         referredByPerson (nullable: true)
         referredByOrganisation(nullable: true)
         facility(nullable: true)
+        linkedin(nullable: false)
         resume(nullable: true)
         avatar(nullable: true)
     }

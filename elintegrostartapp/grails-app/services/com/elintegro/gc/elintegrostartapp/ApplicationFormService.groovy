@@ -36,7 +36,7 @@ class ApplicationFormService {
 
         String email = userParam["email"]
         if(!email){
-            return [success: false, msg: "Email not present"]
+            return [success: false, msg: "email not present"]
         }
         String firstName = userParam["firstName"]?:""
         String lastName = userParam["lastName"]?:""
@@ -88,7 +88,7 @@ class ApplicationFormService {
             verificationEmailMessage = messageSource.getMessage('registration.mail.success',null,LocaleContextHolder.getLocale())
             resultData = ['msg': verificationEmailMessage, 'success': true]
         }catch (Exception e){
-            log.debug("Verification Email with password could not be sent to Applicant: " + user.email)
+            log.debug("Verification email with password could not be sent to Applicant: " + user.email)
             throw e
         }
         return resultData

@@ -88,9 +88,9 @@ class DataInit {
 		}
 
 		if (!Person.count()) {
-			groupHead = new Person(contactEmail:"eugenelip@gmail.com", firstName:"Eugene", lastName:"Lipkovich", user:adminUser).save(failOnError: true)
-			participant1 = new Person(contactEmail: "daniel.lipkovich@gmail.com", firstName: "Daniel", lastName: "Lipkovich").save(failOnError: true)
-		    pnlPerson = new Person(contactEmail: "pnlwlust@gmail.com", firstName: "Prakash", lastName: "subedi", user: pnlwlust).save()
+			groupHead = new Person(email:"eugenelip@gmail.com", firstName:"Eugene", lastName:"Lipkovich", user:adminUser).save(failOnError: true)
+			participant1 = new Person(email: "daniel.lipkovich@gmail.com", firstName: "Daniel", lastName: "Lipkovich").save(failOnError: true)
+		    pnlPerson = new Person(email: "pnlwlust@gmail.com", firstName: "Prakash", lastName: "subedi", user: pnlwlust).save()
 		}
 
 		return [users:[pnlwlust,adminUser, guestUser], persons:[participant1, groupHead, pnlPerson]]
@@ -111,7 +111,7 @@ class DataInit {
 	}
 
 	static def initStructuresForRegisteredUser(User user) {
-		Person person = new Person(contactEmail: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
+		Person person = new Person(email: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
 	}
 	static def initElintegroClientProject(){
 		ClientProject clientProject = new ClientProject(clientName:"" ,projectName:"Globe Chalet" ,logo:"assets/clientsProjectImages/globeChalet.PNG" ,

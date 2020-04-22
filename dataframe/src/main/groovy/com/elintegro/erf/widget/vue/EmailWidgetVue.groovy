@@ -30,6 +30,7 @@ class EmailWidgetVue extends WidgetVue{
         return """
                <v-text-field
                  label="${getLabel(field)}"
+                 placeholder = "Enter your ${field.name}."
                  v-model="${modelString}"
                  ${validate(field)?":rules = '${fldName}_rule'":""}
                  ${isReadOnly?"readonly":''}
@@ -41,7 +42,7 @@ class EmailWidgetVue extends WidgetVue{
     String getVueSaveVariables(DataframeVue dataframe, Map field){
         String thisFieldName = dataframe.getFieldId(field)
         String dataVariable = dataframe.getDataVariableForVue(field)
-        return """allParams['$dataVariable'] = this.state.$dataVariable;\n allParams['contactEmail'] = this.state.$dataVariable;\n"""
+        return """allParams['$dataVariable'] = this.state.$dataVariable;\n allParams['email'] = this.state.$dataVariable;\n"""
     }
     @Override
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) {

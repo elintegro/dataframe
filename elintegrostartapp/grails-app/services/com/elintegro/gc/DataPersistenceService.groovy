@@ -149,7 +149,7 @@ class DataPersistenceService {
             verificationEmailMessage = messageSource.getMessage('registration.mail.success',null,LocaleContextHolder.getLocale())
             resultData = ['msg': verificationEmailMessage, 'success': true]
         }catch (Exception e){
-            log.debug("Verification Email with password could not be sent to Applicant: " + user.email)
+            log.debug("Verification email with password could not be sent to Applicant: " + user.email)
             throw e
         }
         return resultData
