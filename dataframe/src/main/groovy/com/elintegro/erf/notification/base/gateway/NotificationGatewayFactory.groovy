@@ -14,7 +14,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.erf.notification.base.gateway
 
 import com.elintegro.erf.notification.enums.NotificationPreferences
-import com.elintegro.erf.notification.impl.gateway.email.Email
+import com.elintegro.erf.notification.impl.gateway.email.email
 import com.elintegro.erf.notification.impl.gateway.fb.Messenger
 
 class NotificationGatewayFactory {
@@ -22,8 +22,8 @@ class NotificationGatewayFactory {
     public static Notification getGateway(NotificationPreferences notificationPreferences) {
 
         switch (notificationPreferences) {
-            case NotificationPreferences.EMAIL:
-                return new Email();
+            case NotificationPreferences.email:
+                return new email();
             case NotificationPreferences.FACEBOOK:
                 return new Messenger();
 

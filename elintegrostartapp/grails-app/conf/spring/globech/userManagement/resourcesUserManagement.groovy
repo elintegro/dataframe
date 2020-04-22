@@ -79,7 +79,7 @@ beans {
     vueEmployeeContactDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueEmployeeContactDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = false
         createStore = true
@@ -93,7 +93,7 @@ beans {
                          excon.saveToStore('vueEmployeeAddDataframe','vueEmployeeAddDataframe_tab_model','vueEmployeeAddressDataframe-tab-id');"""
         addFieldDef =[
 
-                "person.contactEmail":[
+                "person.email":[
                         "widget"     : "EmailWidgetVue",
                         "flexGridValues":['xs8', 'sm8', 'md8', 'lg8', 'xl8']
                 ],
@@ -228,7 +228,7 @@ beans {
                         , avatarAlias     : "Avatar" // should be same as alias name in hql
                         , onClick         : [showAsDialog: true, refDataframe: ref("vueEmployeeDetailDataframe")]
                         , hql             : """select  person.mainPicture as Avatar, person.firstName as Firstname, person.lastName as Lastname, employee.id as Id from Employee employee inner join employee.person person inner join employee.facility facility where facility.id=:facilityId"""
-//                        , hql             : """select  person.id as ID, person.firstName as Firstname, person.lastName as Lastname, person.contactEmail as Email from Employee employee inner join employee.person person inner join employee.facility facility where facility.id=:facilityId"""
+//                        , hql             : """select  person.id as ID, person.firstName as Firstname, person.lastName as Lastname, person.email as email from Employee employee inner join employee.person person inner join employee.facility facility where facility.id=:facilityId"""
                         , gridWidth       : 420
                         , showGridSearch          : true
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -404,7 +404,7 @@ beans {
     vueProviderContactDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueProviderContactDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = false
         createStore = true
@@ -418,7 +418,7 @@ beans {
                          excon.saveToStore('vueProviderAddDataframe','vueProviderAddDataframe_tab_model','vueProviderAddressDataframe-tab-id');"""
         addFieldDef =[
 
-                "person.contactEmail":[
+                "person.email":[
                         "widget"     : "EmailWidgetVue",
                         "flexGridValues":['xs8', 'sm8', 'md8', 'lg8', 'xl8']
                 ],
@@ -705,7 +705,7 @@ beans {
     vueVendorContactDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueVendorContactDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = false
         createStore = true
@@ -719,7 +719,7 @@ beans {
                          excon.saveToStore('vueVendorAddDataframe','vueVendorAddDataframe_tab_model','vueVendorAddressDataframe-tab-id');"""
         addFieldDef =[
 
-                "person.contactEmail":[
+                "person.email":[
                         "widget"     : "EmailWidgetVue",
                         "flexGridValues":['xs8', 'sm8', 'md8', 'lg8', 'xl8']
                 ],

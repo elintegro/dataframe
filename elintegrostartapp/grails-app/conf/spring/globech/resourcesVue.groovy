@@ -144,7 +144,7 @@ beans {
         bean.constructorArgs = ['vueUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.contactEmail, person.firstName, person.lastName, person.bday,  person.phone from Person as person where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday,  person.phone from Person as person where person.id=:id"
 
         //These are values, that overrides the default ones
         saveButton = true
@@ -181,7 +181,7 @@ beans {
                         widget: "DateWidgetVue",
                         "required": "required"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg12', 'xl4']],
-                "person.contactEmail":[
+                "person.email":[
                         widget: "EmailWidgetVue",
                         "required": "required"
                         ,readOnly: true
@@ -257,7 +257,7 @@ beans {
         dataframeButtons = [ Submit: [name:"submit", type: "button", url: "${contextPath}/register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
                                                                                                                             var t = url.searchParams.get("token"); 
                                                                                                                             if(t != undefined || t != null){ allParams['t']=t;}
-                                                                                          allParams['resetPasswordDfr-user-contactEmail']=jQuery("#userProfileDataframe-person-contactEmail").val();
+                                                                                          allParams['resetPasswordDfr-user-email']=jQuery("#userProfileDataframe-person-email").val();
                                                                                          """, callBackParams:[successScript:"""if(data.redirect){window.location.href=data.redirectUrl;}
                                                                                                                                jQuery('#resetPassword-Div').jqxWindow('close');"""]],
                              Cancel:[name:"cancel", type:"button", script:"\$router.go(-1)"]]
@@ -353,7 +353,7 @@ beans {
         String loginAuthenticateUrl = loginWithSpringSecurity?"${contextPath}/login/authenticate" : "${contextPath}/login/loginUser"
 
         addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
-                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an Email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
                        ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px', "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
         ]
 
@@ -575,7 +575,7 @@ beans {
                         , hidecolumn      : "contractId"
 
                         , onClick         : [showAsDialog: true, refDataframe: ref("vueContactManagementDataframe")]
-                        , hql             : """select person.id as Id, person.firstName as Firstname, person.lastName as Lastname, person.contactEmail as Email, person.phone as Phone from Relative relative inner join relative.person person"""
+                        , hql             : """select person.id as Id, person.firstName as Firstname, person.lastName as Lastname, person.email as email, person.phone as Phone from Relative relative inner join relative.person person"""
                         , gridWidth       : 420
                         , search          : true
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -593,7 +593,7 @@ beans {
     vueContactManagementDetailDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactManagementDetailDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = true
         saveButton = false
@@ -602,7 +602,7 @@ beans {
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
-                "person.contactEmail": [
+                "person.email": [
                         "widget"        : "EmailWidgetVue",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
@@ -650,7 +650,7 @@ beans {
     vueContactManagementEditDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactManagementEditDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = true
         dataframeLabelCode = "Contact.Details"
@@ -658,7 +658,7 @@ beans {
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
-                "person.contactEmail": [
+                "person.email": [
                         "widget"        : "EmailWidgetVue",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],

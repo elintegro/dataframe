@@ -361,7 +361,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
             }
         }
 
-        if(field.validate)
+        if(field.validate || isMandatory(field))
             rules.append(widgetValidationRule(field))
 
         rules.append("]")

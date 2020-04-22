@@ -130,12 +130,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: person Column Name: first_name   DataType: VARCHAR    DomainClass: java.lang.String
@@ -146,12 +146,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: person Column Name: first_name   DataType: VARCHAR    DomainClass: java.lang.String
@@ -162,12 +162,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: person Column Name: first_name   DataType: VARCHAR    DomainClass: java.lang.String
@@ -178,12 +178,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 DEBUG com.elintegro.erf.dataframe.service.MetaFieldService - 
@@ -331,12 +331,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line   DataType: VARCHAR    DomainClass: java.lang.String
@@ -391,12 +391,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line   DataType: VARCHAR    DomainClass: java.lang.String
@@ -445,12 +445,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line   DataType: VARCHAR    DomainClass: java.lang.String
@@ -571,12 +571,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 DEBUG com.elintegro.erf.dataframe.service.MetaFieldService - 
@@ -730,7 +730,7 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line   DataType: VARCHAR    DomainClass: java.lang.String
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line2   DataType: VARCHAR    DomainClass: java.lang.String
@@ -764,7 +764,7 @@ DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for googleMap 
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: application Column Name: id   DataType: BIGINT    DomainClass: java.lang.Long
@@ -812,7 +812,7 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: person Column Name: phone   DataType: VARCHAR    DomainClass: java.lang.String
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: mainPicture widget:InputWidgetVue datatype: VARCHAR
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: bday widget:DateWidgetVue datatype: DATE
@@ -820,7 +820,7 @@ INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidge
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for mainPicture != PictureDisplayWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for propertyImages != PictureUploadWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for bday != DateWidgetVue
@@ -992,12 +992,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: person Column Name: first_name   DataType: VARCHAR    DomainClass: java.lang.String
@@ -1008,12 +1008,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: person Column Name: first_name   DataType: VARCHAR    DomainClass: java.lang.String
@@ -1024,12 +1024,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: person Column Name: first_name   DataType: VARCHAR    DomainClass: java.lang.String
@@ -1040,12 +1040,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 DEBUG com.elintegro.erf.dataframe.service.MetaFieldService - 
@@ -1193,12 +1193,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line   DataType: VARCHAR    DomainClass: java.lang.String
@@ -1253,12 +1253,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line   DataType: VARCHAR    DomainClass: java.lang.String
@@ -1307,12 +1307,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line   DataType: VARCHAR    DomainClass: java.lang.String
@@ -1433,12 +1433,12 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 DEBUG com.elintegro.erf.dataframe.service.MetaFieldService - 
@@ -1592,7 +1592,7 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line   DataType: VARCHAR    DomainClass: java.lang.String
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: address Column Name: address_line2   DataType: VARCHAR    DomainClass: java.lang.String
@@ -1626,7 +1626,7 @@ DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for googleMap 
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for phone != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for person.mainPicture != PictureDisplayWidgetVue
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: application Column Name: id   DataType: BIGINT    DomainClass: java.lang.Long
@@ -1674,7 +1674,7 @@ INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName:
 INFO com.elintegro.erf.dataframe.service.MetaFieldService - metafield:TableName: person Column Name: phone   DataType: VARCHAR    DomainClass: java.lang.String
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: id widget:NumberInputWidgetVue datatype: BIGINT
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: mainPicture widget:InputWidgetVue datatype: VARCHAR
-INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: contactEmail widget:InputWidgetVue datatype: VARCHAR
+INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: email widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: firstName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: lastName widget:InputWidgetVue datatype: VARCHAR
 INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: bday widget:DateWidgetVue datatype: DATE
@@ -1682,7 +1682,7 @@ INFO com.elintegro.erf.dataframe.vue.DataframeVue - fld: phone widget:InputWidge
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for id != NumberInputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for mainPicture != PictureDisplayWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for propertyImages != PictureUploadWidgetVue
-DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for contactEmail != EmailWidgetVue
+DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for email != EmailWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for firstName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for lastName != InputWidgetVue
 DEBUG com.elintegro.erf.dataframe.vue.DataframeVue - Found widget for bday != DateWidgetVue

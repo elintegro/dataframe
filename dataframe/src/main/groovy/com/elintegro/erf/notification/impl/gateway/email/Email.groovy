@@ -19,7 +19,7 @@ import com.elintegro.erf.notification.impl.parameter.EmailRequestParams
 import com.elintegro.erf.notification.impl.response.EmailResponseParams
 import org.grails.web.json.JSONObject
 
-class Email extends Notification<EmailRequestParams>{
+class email extends Notification<EmailRequestParams>{
 
     @Override
     NotificationResponse send(JSONObject credential, EmailRequestParams requestParamObject) {

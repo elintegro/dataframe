@@ -450,7 +450,7 @@ beans {
                        var allParams = {};
                        allParams['firstName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_firstName;
                        allParams['lastName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_lastName;
-                       allParams['email'] = this.state.vueNewEmployeeBasicInformationDataframe_person_contactEmail;
+                       allParams['email'] = this.state.vueNewEmployeeBasicInformationDataframe_person_email;
                        allParams['phone'] = this.state.vueNewEmployeeBasicInformationDataframe_person_phone;
                        allParams['linkedin'] = this.state.vueNewEmployeeBasicInformationDataframe_application_linkedin;
                        allParams['availablePosition'] = this.state.vueNewEmployeeBasicInformationDataframe_person_availablePosition;

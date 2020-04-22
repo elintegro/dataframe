@@ -268,7 +268,7 @@ beans {
     vueContactDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = false
         createStore = true
@@ -278,7 +278,7 @@ beans {
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef =[
 
-                "person.contactEmail":[
+                "person.email":[
                         "widget"     : "EmailWidgetVue",
                         "flexGridValues":['xs8', 'sm8', 'md8', 'lg8', 'xl8']
                 ],

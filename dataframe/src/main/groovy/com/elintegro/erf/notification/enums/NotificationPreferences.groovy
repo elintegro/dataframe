@@ -16,7 +16,7 @@ package com.elintegro.erf.notification.enums
 enum NotificationPreferences {
 
     SMS("sms", "Sms"),
-    EMAIL("email","Email"),
+    email("email","email"),
     WHATSAPP("whatsapp","Whats App"),
     FACEBOOK("facebook","Facebook"),
     HANGOUT ("hangout","Hangout")
