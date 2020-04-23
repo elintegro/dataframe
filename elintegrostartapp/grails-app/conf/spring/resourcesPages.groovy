@@ -8,9 +8,9 @@ beans {
 		allDataframesList = [
 				"vueInitDataframe","vueSubContainerDataframe","vueElintegroBannerDataframe","vueNewEmployeeBasicInformationDataframe",
 				"vueNewEmployeeUploadResumeDataframe","vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeAddtionalQuestionsDataframe",
-				"vueNewEmployeeApplicantDataframe","vueCareersPageButtonDataframe","vueTechnologiesDataframe",
+				"vueNewEmployeeApplicantDataframe","vueElintegroUserProfileDataframe","vueElintegroProfileMenuDataframe","vueCareersPageButtonDataframe","vueTechnologiesDataframe",
 				"vueClientProjectDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueContactUsPageDataframe",
-				"vueElintegroLoginDataframe","vueElintegroRegisterDataframe","vueElintegroNavigationButtonDataframe","vueElintegroLogoDataframe",
+				"vueElintegroLoginDataframe","vueElintegroRegisterDataframe","vueElintegroNavigationButtonDataframe","vueElintegroNavigationButtonAfterLoggedInDataframe","vueElintegroLogoDataframe",
         ]
 		dataframesToShowInMainPage = []
 		containerLayout = "vueElintegroContainerLayout" //outermost layout name
