@@ -69,8 +69,9 @@ beans {
         isGlobal = true
         saveButton = false
         initOnPageLoad = true
-        dataframeButtons = [myProfile       : [name: "profile", type: "link", route: true,routeIdScript: "0",refDataframe: ref("vueElintegroProfileMenuDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                                                        contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+        dataframeButtons = [myProfile       : [name: "profile", type: "link", showAsDialog: true,refDataframe: ref("vueElintegroProfileMenuDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            applicants     : [name: "applicants", type: "link",route: true, routeIdScript: "0", refDataframe: ref("vueElintegroApplicantsDataframe"), roles: "ROLE_ADMIN", accessType: "ifAnyGranted", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             technologies   : [name: "techonologies", type: "link",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
@@ -230,8 +231,7 @@ beans {
         initOnPageLoad = false
         isGlobal = true
         dataframeButtons = [registerForNewEmployee: [name: "register", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueNewEmployeeApplicantDataframe"),
-                                                     "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-        applicantMenu:[name:"applicantMenu",roles: "ROLE_ADMIN", accessType: "ifAnyGranted","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']]]
+                                                     "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("emptyDataframeLayout")
 
     }
@@ -398,7 +398,6 @@ beans {
         //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
 
-
         currentFrameLayout = ref("contactUsPageDataframeLayout")
     }
     vueElintegroLoginDataframe(DataframeVue){bean ->
@@ -491,12 +490,12 @@ beans {
     vueElintegroProfileMenuDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroProfileMenuDataframe']
-        hql = "select person.id, person.firstName, person.lastName, person.mainPicture from Person person where person.user = :session_userid"
+        hql = "select person.id, person.firstName, person.lastName,person.email, person.mainPicture from Person person where person.user = :session_userid"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         createStore = true
         isGlobal = true
         saveButton = false
-        route = true
+//        route = true
         wrapInForm = true
 //        "url":"https://s3.us-east-2.amazonaws.com/elintegro1",
         addFieldDef = [
@@ -510,6 +509,11 @@ beans {
                         "readOnly": true,
                         "height":"50px",
                 ],
+                "person.email"      : [
+                        "widget"  : "EmailWidgetVue",
+                        "readOnly": true,
+                        "height"  : "50px"
+                ],
                 "person.id": [
                         "widget" : "InputWidgetVue",
                         "readOnly": true,
@@ -518,9 +522,9 @@ beans {
 
         ]
 //        this.location.reload();
-        dataframeButtons = [profile:[name:'Profile', type: "link", attr: "text small", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], showAsDialog: false, route:true, routeIdScript:"this.state.vueElintegroProfileMenuDataframe_person_id;", refDataframe: ref('vueElintegroUserProfileDataframe')],
-                            Logout:[name:"logout", type:"link", url:"${contextPath}/logoff", attr:"text small","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], script:"", callBackParams:[failureScript:"""vueElintegroProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
-        currentFrameLayout = ref("vueProfileMenuDataframeLayout")
+        dataframeButtons = [Logout     : [name: "logout", type: "link", url: "${contextPath}/logoff", attr: "text small", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]],
+                            editProfile: [name: 'editProfile', type: "link",showAsDialog: false, "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "this.state.vueElintegroProfileMenuDataframe_person_id;", refDataframe: ref('vueElintegroUserProfileDataframe')]]
+        currentFrameLayout = ref("vueElintegroProfileMenuDataframeLayout")
     }
     vueElintegroUserProfileDataframe(DataframeVue){ bean ->
 
@@ -637,5 +641,28 @@ beans {
 
         currentFrameLayout = ref("defaultDialogBoxLayout")
     }
+    vueElintegroApplicantsDataframe(DataframeVue) { bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantsDataframe']
+        dataframeLabelCode = "Applicants Detail"
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        isGlobal = true
+        saveButton = false
+        route = true
+        addFieldDef = [
+                "applicant": [
+                        widget            : "GridWidgetVue"
+                        , name            : "applicant"
 
+                        , hql             : """select applicant.id as Id, applicant.firstName as FirstName ,applicant.lastName as LastName,  applicant.email as Email, 
+                                                applicant.phone as Phone from Person applicant"""
+                        , gridWidth       : 820
+                        , search          : true
+                        , internationalize: true
+
+                ]
+        ]
+        currentFrameLayout = ref("vueElintegroApplicantsDataframeLayout")
+
+    }
 }

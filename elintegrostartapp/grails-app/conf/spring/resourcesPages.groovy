@@ -9,7 +9,7 @@ beans {
 				"vueInitDataframe","vueSubContainerDataframe","vueElintegroBannerDataframe","vueNewEmployeeBasicInformationDataframe",
 				"vueNewEmployeeUploadResumeDataframe","vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeAddtionalQuestionsDataframe",
 				"vueNewEmployeeApplicantDataframe","vueElintegroUserProfileDataframe","vueElintegroProfileMenuDataframe","vueCareersPageButtonDataframe","vueTechnologiesDataframe",
-				"vueClientProjectDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueContactUsPageDataframe",
+				"vueClientProjectDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueElintegroApplicantsDataframe","vueContactUsPageDataframe",
 				"vueElintegroLoginDataframe","vueElintegroRegisterDataframe","vueElintegroNavigationButtonDataframe","vueElintegroNavigationButtonAfterLoggedInDataframe","vueElintegroLogoDataframe",
         ]
 		dataframesToShowInMainPage = []
