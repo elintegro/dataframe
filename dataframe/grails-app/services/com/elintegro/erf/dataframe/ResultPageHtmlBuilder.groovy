@@ -20,6 +20,7 @@ import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.WidgetVue
 import com.elintegro.utils.DataframeFileUtil
 import grails.plugin.springsecurity.SpringSecurityService
+import grails.util.Environment
 import groovy.util.logging.Slf4j
 import org.apache.tomcat.util.http.fileupload.FileUtils
 import org.jsoup.Jsoup
@@ -65,9 +66,10 @@ class ResultPageHtmlBuilder {
         }
 
         def script = rsb.buildFinalScript(gcMainPgObj)
-//        DataframeFileUtil.writeStringIntoFile("AppDataframe.vue", script.toString())
 
-
+        if (Environment.current == Environment.DEVELOPMENT) {
+            DataframeFileUtil.writeStringIntoFile("./logs/AppDataframe.vue", script.toString())
+        }
 
         return script
     }

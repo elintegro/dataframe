@@ -20,7 +20,7 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.setupHomePage(); this.setInitPageValues();"""
+        created = """this.setupHomePage();"""
 
         methods =
                 """  setupHomePage: function(){
@@ -34,16 +34,16 @@ beans {
                               }
                           })
                      }
-               ,\nsetInitPageValues:function(){
+               ,\nsetInitPageValues:function(data){
                                                
                                                 axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
                                                      excon.saveToStore("vueInitDataframe", "key", '');
-                                                     excon.saveToStore("vueElintegroProfileMenuDataframe", "key", '');
+                                                     excon.saveToStore("vueProfileMenuDataframe", "key", '');
                                                      excon.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
                                                      excon.saveToStore("loggedIn", responseData.data.loggedIn);
 //                                                     vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
 //                                                     Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
-//                                                     Vue.set(vueInitDataframeVar.\$store.state.vueElintegroProfileMenuDataframe, "key", '');
+//                                                     Vue.set(vueInitDataframeVar.\$store.state.vueProfileMenuDataframe, "key", '');
                                                        var loggedIn = responseData.data.loggedIn
 //                                                     vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
                                                        var urlLocation = window.location.href;
@@ -165,21 +165,15 @@ beans {
                             
                      },"""
     }
-    vueElintegroRegisterDataframe_script(VueJsEntity) { bean ->
-        data = "vueElintegroRegisterDataframe_display:true,\n checkboxSelected: [],\n"
+
+    vueRegisterDataframe_script(VueJsEntity) { bean ->
+        data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
 
-//    vueRegisterDataframe_script(VueJsEntity) { bean ->
-//        data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
-//    }
-
-//    vueProfileMenuDataframe_script(VueJsEntity) { bean ->
-//        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
-//    }
-    vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_lastName)},
-                       vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
+    vueProfileMenuDataframe_script(VueJsEntity) { bean ->
+        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
     }
+
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
         data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
@@ -453,13 +447,13 @@ beans {
                       console.log("Inside employeeinformation")
                        var details = this.state.vueNewEmployeeBasicInformationDataframe
                        console.log(details)
-                       var allParams = {};
-                       allParams['firstName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_firstName;
-                       allParams['lastName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_lastName;
-                       allParams['email'] = this.state.vueNewEmployeeBasicInformationDataframe_person_email;
-                       allParams['phone'] = this.state.vueNewEmployeeBasicInformationDataframe_person_phone;
-                       allParams['linkedin'] = this.state.vueNewEmployeeBasicInformationDataframe_application_linkedin;
-                       allParams['availablePosition'] = this.state.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
+                       var allParams = this.state;
+                       //allParams['firstName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_firstName;
+                       //allParams['lastName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_lastName;
+                       //allParams['email'] = this.state.vueNewEmployeeBasicInformationDataframe_person_contactEmail;
+                       //allParams['phone'] = this.state.vueNewEmployeeBasicInformationDataframe_person_phone;
+                       //allParams['linkedin'] = this.state.vueNewEmployeeBasicInformationDataframe_application_linkedin;
+                       //allParams['availablePosition'] = this.state.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
                        allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
                        console.log(allParams)
                        
@@ -471,15 +465,20 @@ beans {
                        data: allParams
                          }).then(function(responseData){
                           var response = responseData;
-                          excon.saveToStore("vueNewEmployeeUploadResumeDataframe","vueNewEmployeeUploadResumeDataframe_resume_id",response.data.id)
-                          console.log(response)
-                          console.log(response.data.id)  
+                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","vueNewEmployeeUploadResumeDataframe_resume_id",response.data.id)
+                          //Here is I put generated keys to the Vue component Store of this Vue component (dataframe) in order to other dataframes be 
+                          // able to use them to complete the data for the same records...  
+                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_person_id",response.data.person_id)
+                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_application_id",response.data.application_id)
+                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","key_person_id",response.data.person_id)
+                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","key_application_id",response.data.application_id)                                                                              
+                          console.log(response)                            
                 });
                 
                        excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
                   }   
                   else{
-                  alert("Error in saving")
+                      alert("Error in saving")
                   }
                    }
                           """

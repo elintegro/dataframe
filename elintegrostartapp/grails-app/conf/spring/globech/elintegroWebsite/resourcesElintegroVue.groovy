@@ -21,7 +21,7 @@ beans {
         putFillInitDataMethod = false
         currentFrameLayout = ref("emptyDataframeLayout")
     }
- /*   vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
+    vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
         isGlobal = true
@@ -33,56 +33,15 @@ beans {
                             gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link",showAsDialog: true,script:""" this.vueElintegroLoginDataframe_display = true; \n  drfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroLoginDataframe_display', true);\n""",
+                            login          : [name: "login", type: "link",showAsDialog: true,script:""" this.vueElintegroLoginDataframe_display = true; \n  excon.saveToStore('dataframeShowHideMaps','vueElintegroLoginDataframe_display', true);\n""",
                                               refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            register       : [name: "register", type: "link", showAsDialog: true, attr:"text", script:""" this.vueElintegroRegisterDataframe_display = true;\n  drfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', true);\n""",
+                            register       : [name: "register", type: "link", showAsDialog: true, attr:"text", script:""" this.vueElintegroRegisterDataframe_display = true;\n  excon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', true);\n""",
                                               refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
 
 
         currentFrameLayout = ref("elintegroNavigationButtonLayout")
-    }*/
-    vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
-        isGlobal = true
-        saveButton = false
-        initOnPageLoad = true
-        dataframeButtons = [register       : [name: "register", type: "link", showAsDialog: true, attr:"text",
-                                              refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link",showAsDialog: true,
-                                              refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            technologies   : [name: "techonologies", type: "link",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            clientsProjects: [name: "clientsProjects", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            home           : [name: "home", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroBannerDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
-        wrapButtons = false
-
-
-        currentFrameLayout = ref("elintegroNavigationButtonLayout")
     }
-    vueElintegroNavigationButtonAfterLoggedInDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroNavigationButtonAfterLoggedInDataframe']
-        isGlobal = true
-        saveButton = false
-        initOnPageLoad = true
-        dataframeButtons = [myProfile       : [name: "profile", type: "link", showAsDialog: true,refDataframe: ref("vueElintegroProfileMenuDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            applicants     : [name: "applicants", type: "link",route: true, routeIdScript: "0", refDataframe: ref("vueElintegroApplicantsDataframe"), roles: "ROLE_ADMIN", accessType: "ifAnyGranted", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            technologies   : [name: "techonologies", type: "link",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            clientsProjects: [name: "clientsProjects", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            home           : [name: "home", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroBannerDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
-        wrapButtons = false
-
-
-        currentFrameLayout = ref("elintegroNavigationButtonAfterLoggedInLayout")
-    }
-
     vueSubContainerDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueSubContainerDataframe']
@@ -146,7 +105,6 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueClientProjectDataframe']
         dataframeLabelCode = "Clients & Projects Details"
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         isGlobal = true
         saveButton = false
         initOnPageLoad = true
@@ -171,7 +129,8 @@ beans {
                         ,avatarAlias      :'Logo'
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
-                        ,url:'/'
+                        ,url:'/assets'
+                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
 
                 ]
         ]
@@ -215,7 +174,7 @@ beans {
     vueCareersDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCareersDataframe']
-        dataframeLabelCode = "Careers"
+        dataframeLabelCode = "Careers Page"
         // isGlobal = true
         saveButton = false
         initOnPageLoad = false
@@ -226,7 +185,7 @@ beans {
     vueCareersPageButtonDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCareersPageButtonDataframe']
-        dataframeLabelCode = "Careers"
+        dataframeLabelCode = "Careers Page"
         saveButton = false
         initOnPageLoad = false
         isGlobal = true
@@ -248,27 +207,28 @@ beans {
     vueNewEmployeeBasicInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeBasicInformationDataframe']
-//      hql = "select person.firstName, person.lastName, person.email, person.phone from Person person where person.id=:id"
-        hql = "select person.firstName, person.lastName, person.email,person.phone,application.linkedin from Application application inner join application.applicant person where application.id=:id"
+//      hql = "select person.firstName, person.lastName, person.contactEmail, person.phone from Person person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.contactEmail,person.phone,application.linkedin from Application application inner join application.applicant person where application.id=:id"
         initOnPageLoad = false
-        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = false
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md1', 'lg1', 'xl1']
         isGlobal = true
         addFieldDef = [
 
-                /*"person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue"],
-                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],],
-                "person.email":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'email.required.message']]],
-                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]],
-                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']]],*/
+                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'FirstName.required.message'],[condition:"v => (v && v.length <= 30)",message:"FirstName.must.be.less.than.30"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'LastName.required.message'],[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.availablePosition"  :[
                         "widget"             :"ComboboxVue"
-//                        ,"name"              :"person.availablePosition"
+                        ,"name"              :"person.availablePosition"
                         ,internationalize    :true
                         ,initBeforePageLoad  :true
                         ,multiple            :true
                         ,"hql"               : "select position.id as id, position.name as name from Position as position"
+
+                        ,"flexGridValues"    : ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                         , search:true
@@ -289,36 +249,27 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, application.avatar, application.resume from Application application where application.id=:id"
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        hql = "select application.id, application.resume from Application application where application.id=:id"
         saveButton = true
-        saveButtonAttr = " align='right' "
-        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         tab = true
         isGlobal = true
-
-        doBeforeSave = """allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
-                          allParams['key_vueNewEmployeeUploadResumeDataframe_application_id_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
-                           """
+        doBeforeSave = """
+            //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rathr then insert a new one.                          
+            excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
+        """
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key", response.nodeId[0]);
                          excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSelfAssesmentDataframe-tab-id');
                       """
         addFieldDef = [
-                "application.avatar":["name":"avatar"
-                                      ,"widget":"PictureUploadWidgetVue"
-                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                                      ,multiple:false
-                                      ,editButton: true
-                                      ,deleteButton:true  ],
-
+//                "application.resume":["name":"resume","widget":"FileUploadWidgetVue",ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
                 "application.resume":["name":"resume"
                                       ,"widget":"FilesUploadWidgetVue"
                                       ,valueMember: "resume"
                                       , ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                                       , insertAfter: "application.resume"
+                                      ,"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                                       ,multiple:false
-                                      ,"accept":"image/*,.pdf,.docx,.doc"
 
                                      ]
         ]
@@ -328,13 +279,12 @@ beans {
 //                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
 //                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
-        currentFrameLayout = ref("vueNewEmployeeUploadResumeDataframeLayout")
+        currentFrameLayout = ref("emptyDataframeLayout")
     }
     vueNewEmployeeSelfAssesmentDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeSelfAssesmentDataframe']
         initOnPageLoad = false
-        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         tab = true
         saveButton = true
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -344,9 +294,9 @@ beans {
                          excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeAddtionalQuestionsDataframe-tab-id');"""
 
         dataframeButtons = [previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeUploadResumeDataframe-tab-id");
-                                                                                \n""", url: ""]]
+                                                                                \n""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'], url: ""]]
 
-        currentFrameLayout = ref("vueNewEmployeeSelfAssesmentDataframeLayout")
+        currentFrameLayout = ref("emptyDataframeLayout")
     }
 
     vueNewEmployeeAddtionalQuestionsDataframe(DataframeVue) { bean ->
@@ -354,21 +304,20 @@ beans {
         bean.constructorArgs = ['vueNewEmployeeAddtionalQuestionsDataframe']
         initOnPageLoad = false
         hql = "select person.description from Person person where person.id=:id"
-        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         tab = true
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         isGlobal = true
 
-//        addFieldDef = [
-//                "person.description":["name":"description","type":"link","widget":"TextAreaWidgetVue"]
-//
-//        ]
+        addFieldDef = [
+                "person.description":["name":"description","type":"link","widget":"TextAreaWidgetVue","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
+
+        ]
         dataframeButtons = [
                 previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
-        currentFrameLayout = ref("vueNewEmployeeAddtionalQuestionsDataframeLayout")
+        currentFrameLayout = ref("emptyDataframeLayout")
     }
 
 
@@ -381,21 +330,21 @@ beans {
         isGlobal = true
         saveButton = true
         initOnPageLoad = false
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         route = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-//        addFieldDef = [
-//                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-//                                  "validationRules":[[condition:"v => !!v" ,message:'Name.required.message'], [condition:"v => (v && v.length <= 30)",message:'Name.must.be.less.than.30']]],
-//                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","validate":true]
-//                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","required": "required","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]],
-//                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself",
-//                                           "required": "required","validationRules":[[condition:"v => !!v", message: 'Description.required.message']],]
+        addFieldDef = [
+                "contactUs.name":[name: "name", widget: "InputWidgetVue", "placeHolder":"Enter your Name","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                                  "validationRules":[[condition:"v => !!v" ,message:'Name.required.message'], [condition:"v => (v && v.length <= 30)",message:'Name.must.be.less.than.30']]],
+                "contactUs.email":[name:"email",widget: "EmailWidgetVue", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","required": "required","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "contactUs.textOfMessage":[name: "textOfMessage", widget: "TextAreaWidgetVue","placeHolder":"Describe about yourself","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                                           "required": "required","validationRules":[[condition:"v => !!v", message: 'Description.required.message']],]
 
 
-//        ]
+        ]
 
         //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+
 
 
         currentFrameLayout = ref("contactUsPageDataframeLayout")
@@ -407,23 +356,61 @@ beans {
         hql = "select user.username, user.password from User as user where user.id=:id"
         wrapInForm = true
         saveButton = false
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         initOnPageLoad = false
         isGlobal = true
 
         boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
         String loginAuthenticateUrl = loginWithSpringSecurity?"${contextPath}/login/authenticate" : "${contextPath}/login/loginUser"
 
-        addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150]
-                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an email"]
-                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px']
+        addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an Email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px', "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
         ]
 
-        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
-                                     allParams["username"] = this.state.vueElintegroLoginDataframe_user_username;
-                                     allParams["password"] = this.state.vueElintegroLoginDataframe_user_password;
-                                     allParams["remember-me"] = this.state.vueElintegroLoginDataframe_rememberMe;
-                                      """,
+        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#loginDataframe';
+                                                                                                                                allParams["username"] = this.vueElintegroLoginDataframe_user_username;
+                                                                                                                               allParams["password"] = this.vueElintegroLoginDataframe_user_password;
+                                                                                                                               allParams["remember-me"] = this.vueElintegroLoginDataframe_rememberMe;
+                                                                                                                                """,
+                                    /* url: "/elintegrostartapp/login/loginUser" name:"login", type: "button",attr: "color='cyan'", script: """layout: " layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>",
+//                                                                                                                               var url = "/elintegrostartapp/api/login";
+//                                                                                                                               var url = "/elintegrostartapp/login/testLogin";
+                                                                                                                       var url = "/elintegrostartapp/login/authenticate";
+
+                                                                                                                       var elementId = '#loginDataframe';
+                                                                                                                       var allParams ={};
+                                                                                                                       allParams["username"] = this.vueElintegroLoginDataframe_user_username;
+                                                                                                                       allParams["password"] = this.vueElintegroLoginDataframe_user_password;
+                                                                                                                       allParams["remember_me"] = this.vueElintegroLoginDataframe_rememberMe;
+                                                                                                                       axios.post(url, allParams).then(function(responseData) {
+                                                                                                                        var response = responseData.data
+                                                                                                                        if (response.success) {
+                                                                                                                            if (response.msg) {
+                                                                                                                                store.commit('alertMessage', {
+                                                                                                                                    'snackbar': true,
+                                                                                                                                    'alert_type': 'success',
+                                                                                                                                    'alert_message': response.msg
+                                                                                                                                });
+                                                                                                                            }
+                                                                                                                            this.location.reload();
+                                                                                                                            console.log("Login Callback");
+                                                                                                                            console.log(response);
+                                                                                                                            //Dataframe.showHideDataframesBasedOnUserType(data);
+
+                                                                                                                        } else {
+                                                                                                                            if (response.msg) {
+                                                                                                                                store.commit('alertMessage', {
+                                                                                                                                    'snackbar': true,
+                                                                                                                                    'alert_type': 'error',
+                                                                                                                                    'alert_message': response.msg
+                                                                                                                                })
+                                                                                                                            }
+
+                                                                                                                        }
+                                                                                                                            }).catch(function(error){
+                                                                                                                                                        console.log(error.response)
+                                                                                                                            });
+                                                                                                                  layout: "<v-flex xs12 sm12 md6 lg6 xl6> <v-layout column align-center justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>", """,<v-flex xs12 sm12 md6 lg6 xl6><v-layout column align-center justify-center style='margin-top:8px;'>[BUTTON_SCRIPT]</v-layout></v-flex>*/
                                     callBackParams: [successScript: """
                                                           console.log("Login Callback");
                                                            this.location.reload();
@@ -449,7 +436,7 @@ beans {
 
         ]
 
-        currentFrameLayout = ref("vueElintegroLoginDataframeLayout")
+        currentFrameLayout = ref("vueLoginDataframeLayout")
     }
 
     vueElintegroRegisterDataframe(DataframeVue){ bean ->
@@ -467,202 +454,24 @@ beans {
         initOnPageLoad = false
         isGlobal = true
         saveButton = true
-        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         wrapInForm=true
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doAfterSave = """ excon.saveToStore('vueElintegroNavigationButtonDataframe','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
+        doAfterSave = """ excon.saveToStore('vueLoginNavigation','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
                            """
         addFieldDef =[
-                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'email.required.message']],"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname"
-                                  ,"validationRules":[[condition:"v => !!v",message:"FirstName.required.message"],[condition: "v => (v && v.length <= 30)",message:"FirstName.must.be.less.than.30"]]],
-                "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname"
-                                 ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"],[condition:"v => (v && v.length <= 30)", message:"LastName.must.be.less.than.30"]]]
-                ,"user.password":[widget: "PasswordWidgetVue", "width":"150"
-                                  ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]]
-                ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password"
-                              ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroRegisterDataframe_user_password)",message:"Password.and.Confirm.Password."]]]
+                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                                  ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]]],
+                "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                                 ,"validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]]]
+                ,"user.password":[widget: "PasswordWidgetVue", "width":"150", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                                  ,"validate":["rule":["v => !!v || 'Password is required'", "v => (v && v.length >= 8) || 'Password must be greater than 8'"]]]
+                ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                              ,"validate":["rule":["v => !!(v==this.vueElintegroRegisterDataframe_user_password) || 'Password and Confirm Password must match'"]]]
         ]
 
         currentFrameLayout = ref("defaultDialogBoxLayout")
     }
-    vueElintegroProfileMenuDataframe(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroProfileMenuDataframe']
-        hql = "select person.id, person.firstName, person.lastName,person.email, person.mainPicture from Person person where person.user = :session_userid"
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        createStore = true
-        isGlobal = true
-        saveButton = false
-//        route = true
-        wrapInForm = true
-//        "url":"https://s3.us-east-2.amazonaws.com/elintegro1",
-        addFieldDef = [
-                "person.mainPicture": [
-                        "widget" : "PictureDisplayWidgetVue",
-                        "layout": "<v-layout align-center justify-center><v-avatar :size=\"90\" style='margin-top:0px;' color=\"grey lighten-4\">[FIELD_SCRIPT]</v-avatar></v-layout>",
-                        "aspectRatio":"2.5",
-                ],
-                "person.firstName": [
-                        "widget" : "InputWidgetVue",
-                        "readOnly": true,
-                        "height":"50px",
-                ],
-                "person.email"      : [
-                        "widget"  : "EmailWidgetVue",
-                        "readOnly": true,
-                        "height"  : "50px"
-                ],
-                "person.id": [
-                        "widget" : "InputWidgetVue",
-                        "readOnly": true,
-                        hide: true,
-                ]
 
-        ]
-//        this.location.reload();
-        dataframeButtons = [Logout     : [name: "logout", type: "link", url: "${contextPath}/logoff", attr: "text small", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]],
-                            editProfile: [name: 'editProfile', type: "link",showAsDialog: false, "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "this.state.vueElintegroProfileMenuDataframe_person_id;", refDataframe: ref('vueElintegroUserProfileDataframe')]]
-        currentFrameLayout = ref("vueElintegroProfileMenuDataframeLayout")
-    }
-    vueElintegroUserProfileDataframe(DataframeVue){ bean ->
-
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroUserProfileDataframe']
-
-        dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday,  person.phone from Person as person where person.id=:id"
-        saveButton = true
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        deleteButton = false
-        flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
-        wrapInForm=true
-//        componentsToRegister=["vueAddressDataframe"]
-        doAfterSave = """setTimeout(function(){ vueElintegroUserProfileDataframe.\$router.push('/');this.location.reload();}, 3000);"""
-        route = true
-        addFieldDef =[
-                "person.id":[
-                        widget: "NumberInputWidgetVue",
-                        "required": "required"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6']],
-
-                "person.firstName":[
-                        widget: "InputWidgetVue",
-                        "required": "required"],
-
-                "person.lastName":[
-                        widget: "InputWidgetVue"
-                        ,"required": "required"
-                ],
-                "person.bday":[
-                        widget: "DateWidgetVue"
-                        ,"required": "required"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg12', 'xl4']],
-                "person.email":[
-                         widget: "EmailWidgetVue"
-                        ,"required": "required"
-                        ,readOnly: true
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-                ],
-                "person.phone":[
-                          widget: "PhoneNumberWidgetVue"
-                         ,"required": "required"
-                         ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
-                ],
-                "person.languages":[
-                        widget: "ComboboxVue"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
-                        , hql: """select language.id as id, language.ename as ename from Language as language"""
-                        ,"displayMember":"ename"
-                        ,"valueMember":"id"
-                        , search:true
-                        ,multiple: true
-                ],
-
-                "person.mainPicture":[
-                        "widget" : "PictureDisplayWidgetVue",
-                        "aspectRatio":"2.5",
-                        "attr": "contain",
-                        "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'],
-                        "width":200,
-                        "height":200],
-
-                "person.uploadPicture":[
-                        "widget" : "PictureUploadWidgetVue"
-                        ,name:"propertyImages"
-                        , valueMember: "mainPicture"
-                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                        ,insertAfter: "person.mainPicture"
-                        ,multiple:false
-                        ,editButton: true
-                        ,deleteButton:true
-                ]
-        ]
-
-        /*doAfterRefresh = """var currentlocation = this.location.href;
-                             this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button", url: "", route: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueResetPasswordDataframe")] ]
-
-        currentFrameLayout = ref("vueElintegroUserProfileDataframeLayout")
-
-    }
-    vueResetPasswordDataframe(DataframeVue){ bean ->
-
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueResetPasswordDataframe']
-
-//		hql = "select user.password from User as user where user.id=:session_userid"
-
-        initOnPageLoad=true //false by default
-
-        //These are values, that overrides the default ones
-        saveButton = false
-        wrapInForm=true
-        route=true
-
-        //Javascript to run after the save:
-        doAfterSave="""
-//						jQuery('#').jqxWindow('close');
-                       //alert("Data has been saved successfully for id = "+data.generatedKeys[0]);
-                    """
-
-        addFieldDef =[
-                "user.password":[widget: "PasswordWidgetVue", "width":"150", "height":"25"],
-                "password2":[widget: "PasswordWidgetVue", "width":"150", "height":"25"]
-        ]
-        dataframeButtons = [ Submit: [name:"submit", type: "button", url: "${contextPath}/register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
-                                                                                                                            var t = url.searchParams.get("token"); 
-                                                                                                                            if(t != undefined || t != null){ allParams['t']=t;}
-                                                                                          allParams['resetPasswordDfr-user-email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();
-                                                                                         """, callBackParams:[successScript:"""if(data.redirect){window.location.href=data.redirectUrl;}
-                                                                                                                               jQuery('#resetPassword-Div').jqxWindow('close');"""]],
-                             Cancel:[name:"cancel", type:"button", script:"\$router.go(-1)"]]
-
-        currentFrameLayout = ref("defaultDialogBoxLayout")
-    }
-    vueElintegroApplicantsDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroApplicantsDataframe']
-        dataframeLabelCode = "Applicants Detail"
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        isGlobal = true
-        saveButton = false
-        route = true
-        addFieldDef = [
-                "applicant": [
-                        widget            : "GridWidgetVue"
-                        , name            : "applicant"
-
-                        , hql             : """select applicant.id as Id, applicant.firstName as FirstName ,applicant.lastName as LastName,  applicant.email as Email, 
-                                                applicant.phone as Phone from Person applicant"""
-                        , gridWidth       : 820
-                        , search          : true
-                        , internationalize: true
-
-                ]
-        ]
-        currentFrameLayout = ref("vueElintegroApplicantsDataframeLayout")
-
-    }
 }

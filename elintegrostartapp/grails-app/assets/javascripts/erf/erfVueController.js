@@ -70,44 +70,68 @@ var excon = new Vue({
             }
         },
 
-        updateStoreState: function(response, stateVar, propKey){
+        matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {
 
-            var dataframe = response.dataframe;
-            let stateVarDf = stateVar+"."+dataframe;
-            var response = response.data
-            let id = response.keys["id"]?response.keys["id"]:'';
-            let stateVarObj1 = eval(stateVarDf);
+            var sourceDataframeVars = this.getFromStore(fromDataframe);
+            var targetDataframeVars = this.getFromStore(toDataframe);
 
-            if(stateVarObj1){
-                Vue.set(eval(' stateVarObj1'), 'key', id);
-            }
-            if(response.hasOwnProperty('additionalData') ) {
-                Object.keys(response.additionalData).forEach(function (key) {
-                    var embDfr = response.additionalData[key];
-                    if (embDfr.hasOwnProperty('data')){
-                        if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
-                            this.updateStoreState(embDfr, stateVar)
-                        } else {
-                            dataframe = embDfr.dataframe;
-                            if(dataframe){
-
-                                let stateVarDf =stateVar + "." + dataframe;
-                                if(embDfr.data.hasOwnProperty('keys')){
-                                    let id = embDfr.data.keys["id"];
-                                    let stateVarObj2 = eval(stateVarDf);
-                                    if(stateVarObj2){
-                                        Vue.set(eval('stateVarObj2'), 'key', id);
-                                        let propKey1 = propKey +"." +dataframe + "_data";
-                                        Vue.set(eval(propKey1), 'key', id);
-                                    }
-                                }
-
-                            }
+            for(let varName in targetDataframeVars) {
+                let keyPrefix = "key_" + toDataframe;
+                let indStart = varName.indexOf("key_" + toDataframe);
+                if(indStart >= 0) {//The variable is a key
+                    let indEnd = varName.lastIndexOf("_");
+                    let varToSearch = "key" + varName.substring(keyPrefix.length, indEnd);
+                    //Find keys in sourceDataframe and populate in the target with naming convention whatever in target is key_<targetDataframeName>_<domainName>_<fieldName>_<namingParameter>
+                    //Should be keu_<domainName>_<fieldName>, for example In target: key_<TargetDataframe>_application_id_id, in source: key_application_id
+                    for(let varFromName in sourceDataframeVars){
+                        if(varFromName === varToSearch){ //this is our key variable, grab the value and set for the key variable in the target Dataframe
+                            this.saveToStore(toDataframe, varName, sourceDataframeVars[varFromName]);
+                            break;
                         }
                     }
-
-                });
+                }
             }
+
+        },
+
+        updateStoreState: function(response, stateVar, propKey){
+
+                var dataframe = response.dataframe;
+                let stateVarDf = stateVar+"."+dataframe;
+                var response = response.data
+                let id = response.keys["id"]?response.keys["id"]:'';
+                let stateVarObj1 = eval(stateVarDf);
+
+                if(stateVarObj1){
+                    Vue.set(eval(' stateVarObj1'), 'key', id);
+                }
+                if(response.hasOwnProperty('additionalData') ) {
+                    Object.keys(response.additionalData).forEach(function (key) {
+                        var embDfr = response.additionalData[key];
+                        if (embDfr.hasOwnProperty('data')){
+                            if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
+                                this.updateStoreState(embDfr, stateVar)
+                            } else {
+                                dataframe = embDfr.dataframe;
+                                if(dataframe){
+
+                                    let stateVarDf =stateVar + "." + dataframe;
+                                    if(embDfr.data.hasOwnProperty('keys')){
+                                        let id = embDfr.data.keys["id"];
+                                        let stateVarObj2 = eval(stateVarDf);
+                                        if(stateVarObj2){
+                                            Vue.set(eval('stateVarObj2'), 'key', id);
+                                            let propKey1 = propKey +"." +dataframe + "_data";
+                                            Vue.set(eval(propKey1), 'key', id);
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+
+                    });
+                }
         },
 
         showAlertMessage: function(success, msg){
@@ -317,14 +341,14 @@ var excon = new Vue({
                 throw("Cannot get state for key: " + key);
             }
         },
-        setVisibility(dataframeName, setVisible){
+        setVisibility: function(dataframeName, setVisible){
             if(setVisible){
                 store.commit('setVisibility', dataframeName);
             } else {
                 store.commit('unsetVisibility', dataframeName);
             }
         },
-        reset(dataframeName){
+        reset: function(dataframeName){
 
             let oldData = store.getters.getState(dataframeName);
         }
