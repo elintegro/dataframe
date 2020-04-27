@@ -19,6 +19,7 @@ import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.service.JavascriptService
 import com.elintegro.erf.dataframe.service.TreeService
 import grails.converters.JSON
+import grails.test.mixin.gorm.Domain
 import grails.util.Holders
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
@@ -214,25 +215,24 @@ class DataframeController {
 
 	def ajaxSaveRaw(){
 		def _params = request.getJSON()
-
-		String prmsPrintOut = DataframeInstance.reqParamPrintout(_params);
-
-		log.debug("\n *******   Request Params when Saving : \n" + prmsPrintOut + "\n ***************\n");
-		System.out.println("\n *******   Request Params when Saving : \n" + prmsPrintOut + "\n ***************\n");
-
 		Dataframe dataframe = getDataframe(_params)
-
 		def dfInstance = new DataframeInstance(dataframe, _params)
 		def operation = 'U'; //Update
 		def result;
-		boolean isInsert;
-		result = dfInstance.save(true); //Todo Shai,Eugene Why there is no error handling here ?
+
+		try {
+			result = dfInstance.save(true);
+		}catch(Exception e){
+			log.error("Failed to save data for dataframe ${dfInstance.df.dataframeName} Error : \n " + e)
+		}
+
 		if(dfInstance.isInsertOccured()){
 			operation = "I";
 		}
 
 		def resultData
-		def generatedKeys = []
+		def generatedKeys = [:]
+		def generatedKeysArr = []
 
 		String parentNode = _params[dataframe.dataframeName+"-parentNode"];
 		String level = _params[dataframe.dataframeName+"-level"]
@@ -240,7 +240,17 @@ class DataframeController {
 		Map savedResultMap = dfInstance.getSavedDomainsMap();
 
 		Map<String, Map> resultAlias = [:]
-		savedResultMap.each { domainAlias, domainInstance ->
+		savedResultMap.each { domainAlias, domainObj ->
+			//this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], "domainAlias": domainAlias])
+			def doamin = domainObj[0]
+			def domainInstance = domainObj[1]
+			doamin?.keys?.each{ key ->
+				def keyValue = domainInstance."${key}"
+				generatedKeys.put("${doamin.parsedDomain}_${key}", keyValue)
+				generatedKeysArr.add(keyValue)
+			}
+
+
 			Map record = [:];
 			def properties = getAllProperties(domainInstance)
 			properties.each { fieldName, value ->
@@ -252,10 +262,13 @@ class DataframeController {
 			resultAlias.put(String.valueOf(domainAlias), record)
 		}
 
-		result.each{ record->
+/*
+		result?.each{ record->
 			def _id = record.id
 			generatedKeys.add record.id
 		}
+*/
+		//TODO: why do we need this? May be it is failing render process?
 		_params.remove("controller")
 		_params.remove("action")
 
@@ -263,7 +276,7 @@ class DataframeController {
 
 		if(result) {
 			String msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
-			resultData = ['success': true, 'msg': msg, generatedKeys: generatedKeys, nodeId: generatedKeys, operation: operation, newData: resultAlias, params: _params, dfInstance: dfInstance]
+			resultData = ['success': true, 'msg': msg, generatedKeys: generatedKeys, nodeId: generatedKeysArr, operation: operation, newData: resultAlias, params: _params, dfInstance: dfInstance]
 		} else {
 			String msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
 			resultData = ['msg': msg, 'success': false]

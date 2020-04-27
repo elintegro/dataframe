@@ -180,6 +180,13 @@ beans {
         computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_lastName)},
                        vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
     }
+    vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
+        created = """this.vueElintegroProfileMenuDataframeShow();"""
+
+        methods = """vueElintegroProfileMenuDataframeShow : function(){
+                  excon.setVisibility("vueElintegroProfileMenuDataframe",false)}
+                  """
+    }
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
         data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
