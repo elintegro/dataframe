@@ -12,8 +12,8 @@ beans {
                                  
                                    <v-spacer></v-spacer>
                                  
-      
-                                        <div class="hidden-md-and-down"> <vueElintegroNavigationButtonDataframe/></div>
+                                        <div class="hidden-md-and-down"><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                         <vueElintegroNavigationButtonDataframe v-else/></div>
     
 
                                </v-app-bar>
@@ -24,7 +24,8 @@ beans {
         temporary
         width = "min-content"
       >
-      <vueElintegroNavigationButtonDataframe/>
+      <vueElintegroNavigationButtonAfterLoggedInDataframe v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+      <vueElintegroNavigationButtonDataframe v-else/>
        
 
             

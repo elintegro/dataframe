@@ -8,4 +8,8 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder ="""<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex> """
     }
+    elintegroNavigationButtonAfterLoggedInLayout(RowLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder ="""<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex> """
+    }
 }

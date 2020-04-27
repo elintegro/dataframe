@@ -38,12 +38,12 @@ beans {
                                                
                                                 axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
                                                      excon.saveToStore("vueInitDataframe", "key", '');
-                                                     excon.saveToStore("vueProfileMenuDataframe", "key", '');
+                                                     excon.saveToStore("vueElintegroProfileMenuDataframe", "key", '');
                                                      excon.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
                                                      excon.saveToStore("loggedIn", responseData.data.loggedIn);
 //                                                     vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
 //                                                     Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
-//                                                     Vue.set(vueInitDataframeVar.\$store.state.vueProfileMenuDataframe, "key", '');
+//                                                     Vue.set(vueInitDataframeVar.\$store.state.vueElintegroProfileMenuDataframe, "key", '');
                                                        var loggedIn = responseData.data.loggedIn
 //                                                     vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
                                                        var urlLocation = window.location.href;
@@ -165,15 +165,21 @@ beans {
                             
                      },"""
     }
-
-    vueRegisterDataframe_script(VueJsEntity) { bean ->
-        data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
+    vueElintegroRegisterDataframe_script(VueJsEntity) { bean ->
+        data = "vueElintegroRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
 
-    vueProfileMenuDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
-    }
+//    vueRegisterDataframe_script(VueJsEntity) { bean ->
+//        data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
+//    }
 
+//    vueProfileMenuDataframe_script(VueJsEntity) { bean ->
+//        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
+//    }
+    vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
+        computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_lastName)},
+                       vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
+    }
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
         data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
