@@ -31,7 +31,7 @@ class FilesUploadWidgetVue extends WidgetVue {
     String getVueDataVariable(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
         return """
-           ${fldName}_files: [],
+           ${fldName}: [],
             """
     }
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
@@ -40,25 +40,21 @@ class FilesUploadWidgetVue extends WidgetVue {
         String genId = fldName+"-file"
        dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
            .addToMethodScript("""
-
                    ${fldName}_uploadFile: function(event){
-                      allParams = {};
-                      this.${fldName}_files.push(event);                      
-                      allParams =  this.${fldName}_files;
-                      this.${fldName}_ajaxFileSave(allParams);
-                   },
-                   ${fldName}_ajaxFileSave: function(allParams){
-                      var fileList = this.${fldName}_files;
-                       if(fileList.length > 0){
-                              var firstFile = fileList[0];
-                              var firstFileName = firstFile.name;
-                              this.state.${fldName} = firstFile.name;
-            
+                              //TODO: for multi file this should be array and not sinfle file, change this code accordingly
+                              var fileToUpload =  this.${fldName};
+                              this.state.$fldName = fileToUpload.name; //TODO: once we find out why the v-model cannot get state.<fldName>, this line could be deleted!
+                              var fileToUpload =  this.${fldName};                                                                        
                               var fileData = new FormData();
-                              fileData.append('fileSize',fileList.length);
-                              fileData.append('fldId','$fldName');           
-                              fileData.append('fileName',firstFileName);
-                              fileData.append("$genId[0]", fileList[0]);
+                              fileData.append('fileName',fileToUpload.name);
+                              fileData.append('fileSize',fileToUpload.size);                              
+                              fileData.append('fileLastModified',fileToUpload.lastModified);
+                              fileData.append('fileLastModifiedDate',fileToUpload.lastModifiedDate);
+                              fileData.append('fileWebKitRelativePath',fileToUpload.webKitRelativePath);
+                              fileData.append('fileType',fileToUpload.type);                              
+                              fileData.append('fldId','$fldName');          
+                              fileData.append('fileArraySize',1); //TODO: for multi file put the right number here! 
+                              fileData.append("$genId[0]", fileToUpload); //TODO: for multi file this should be array and not single file, change this code accordingly
             
                               fetch('${field.ajaxFileSaveUrl}',
                                  { method:'POST',
@@ -69,8 +65,7 @@ class FilesUploadWidgetVue extends WidgetVue {
                                   .catch(function(error){
                                                 console.log(error)
                                                 });                      
-                        }
-                   },\n
+                   },
                  ${fldName}_computedFileUploadParams() {
                         var refParams = this.params;
                          var ajaxFileUploadParams = refParams['ajaxFileSave'];
@@ -86,9 +81,5 @@ class FilesUploadWidgetVue extends WidgetVue {
 
         return """this.$dataVariable = response['$key']?response['$key']:"$defaultValue\";
                 """
-
     }
-
-
 }
-

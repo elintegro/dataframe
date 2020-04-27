@@ -522,8 +522,8 @@ beans {
 
         ]
 //        this.location.reload();
-        dataframeButtons = [Logout     : [name: "logout", type: "link", url: "${contextPath}/logoff", attr: "text small", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]],
-                            editProfile: [name: 'editProfile', type: "link",showAsDialog: false, "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "this.state.vueElintegroProfileMenuDataframe_person_id;", refDataframe: ref('vueElintegroUserProfileDataframe')]]
+        dataframeButtons = [Logout     : [name: "logout", type: "button", url: "${contextPath}/logoff", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]],
+                            editProfile: [name: 'editProfile', type: "button",showAsDialog: false, "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "this.state.vueElintegroProfileMenuDataframe_person_id;", refDataframe: ref('vueElintegroUserProfileDataframe')]]
         currentFrameLayout = ref("vueElintegroProfileMenuDataframeLayout")
     }
     vueElintegroUserProfileDataframe(DataframeVue){ bean ->

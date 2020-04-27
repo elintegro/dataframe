@@ -268,9 +268,9 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 
     private static ResetPasswordCommand getResetPasswordValidationObj(requestParams){
         ResetPasswordCommand command  = new ResetPasswordCommand()
-        command.username = requestParams.get("resetPasswordDfr-user-email")
-        command.password = requestParams.get("resetPasswordDfr-user-password")
-        command.password2 = requestParams.get("resetPasswordDfr-password2")
+        command.username = requestParams.get("resetPasswordDfr_user_email")
+        command.password = requestParams.get("resetPasswordDfr_user_password")
+        command.password2 = requestParams.get("resetPasswordDfr_password2")
         return command
     }
 
