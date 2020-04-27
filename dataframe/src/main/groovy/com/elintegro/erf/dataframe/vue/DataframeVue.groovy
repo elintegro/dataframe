@@ -60,7 +60,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public static final String DOT = ".";
 	public static final String SESSION_PARAM_NAME_PREFIX = "session_"
 	private String currentLanguage = ""
-	List flexGridValues = LayoutVue.defaultGridValues
+	List flexGridValues = []
 
 	DataframeVue parent
 	String dataframeName
@@ -128,7 +128,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String popUpTitle=""
 	@OverridableByEditor
 	Map summaryAfterSave = [showSummary: false]
-	static int BIG_TEXT_FIELD_LENGTH = 50;
+	static int BIG_TEXT_FIELD_LENGTH = 255;
 
 	String dataframeLabelCode = ""
 	private StringBuilder saveScriptJs = new StringBuilder();
@@ -276,6 +276,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		this.dataframeName = dataframeName
 		this.dataframeNameLowercase = dataframeName?dataframeName.toLowerCase():""
 		this.dataframeView.dataframeName = dataframeName
+
+		flexGridValues = flexGridValues?:LayoutVue.defaultGridValues
 	}
 
 
@@ -420,8 +422,15 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 					break;
 				case "VARCHAR":
 					if(fld.length > BIG_TEXT_FIELD_LENGTH){
-						widget = "InputWidgetVue";
-					}else{
+						widget = "TextAreaWidgetVue";
+					}
+					else if (fld.name.toLowerCase().indexOf("email") >= 0) {
+						widget = "EmailWidgetVue";
+					}
+					else if(fld.name.toLowerCase().indexOf("phone") >= 0){
+						widget = "PhoneNumberWidgetVue"
+					}
+					else{
 						widget = "InputWidgetVue";
 					}
 					break;
@@ -618,7 +627,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			if(Environment.current == Environment.DEVELOPMENT){
 
 				DataframeFileUtil.writeStringIntoFile("AppDataframe.vue", scripts.toString())
-		}
+			}
 		}
 		return scripts
 	}
@@ -884,7 +893,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		String btnDivId = "";
 		String btnWidget = "";
 
-		List flexGridValues = field.flexGridValues ?: LayoutVue.defaultGridValues
+		List flexGridValues = field.flexGridValues ?:flexGridValues?: LayoutVue.defaultGridValues
 		String gridValueString = LayoutVue.convertListToString(flexGridValues)
 		def label = field.fldNmAlias ?: messageSource.getMessage(field.labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
 		if (field?.labelDisabled) {

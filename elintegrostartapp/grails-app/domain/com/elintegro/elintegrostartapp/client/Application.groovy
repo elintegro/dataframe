@@ -33,6 +33,7 @@ class Application extends ControlField{
     String referredByOrganisation
     String linkedin
     String resume
+    String avatar
 
     Person applicant
     MedicalRecord medicalRecord
@@ -51,6 +52,8 @@ class Application extends ControlField{
         referredByPerson (nullable: true)
         referredByOrganisation(nullable: true)
         facility(nullable: true)
+        linkedin(nullable: false)
         resume(nullable: true)
+        avatar(nullable: true)
     }
 }

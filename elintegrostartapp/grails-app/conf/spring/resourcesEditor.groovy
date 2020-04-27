@@ -10,7 +10,7 @@ beans {
 		bean.parent = dataFrameSuper
 		bean.constructorArgs = ['contactDfr']
 
-		hql = "select person.id, person.salutation, person.firstName, person.lastName, person.contactEmail, person.phone, person.mainPicture, person.description from Person as person where person.id=:id"
+		hql = "select person.id, person.salutation, person.firstName, person.lastName, person.email, person.phone, person.mainPicture, person.description from Person as person where person.id=:id"
 
 		initOnPageLoad=true //false by default
 
@@ -42,7 +42,7 @@ beans {
 											 "height":200,
 											 defaultImage:"Screenshot from 2017-02-22 15-00-30.png",
 											 borderRadius:"10px"],
-					   "person.contactEmail":[widget: "JqxEmailWidget",
+					   "person.email":[widget: "JqxEmailWidget",
 											  "placeHolder":"Enter your contact email"],
 					   "person.phone":[widget: "JqxPhoneNumberWidget",
 									   "placeHolder":"Enter your phone number"]

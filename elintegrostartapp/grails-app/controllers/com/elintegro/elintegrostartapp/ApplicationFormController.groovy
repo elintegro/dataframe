@@ -46,7 +46,7 @@ class ApplicationFormController {
 
     def saveRaw(params){
         def _params = params
-        String applicantEmail = params["vueContactDataframe-person-contactEmail"]
+        String applicantEmail = params["vueContactDataframe-person-email"]
         String firstName = params["vueContactDataframe-person-firstName"]
         String lastName = params["vueContactDataframe-person-lastName"]
         assert applicantEmail

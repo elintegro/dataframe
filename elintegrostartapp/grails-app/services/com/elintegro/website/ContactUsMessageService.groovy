@@ -26,7 +26,7 @@ class ContactUsMessageService {
             item.save()
         }
 
-        println("Email Sent Successfully")
+        println("email Sent Successfully")
 
 
     }

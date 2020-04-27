@@ -39,11 +39,11 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     //@Transactional(propagation=Propagation.REQUIRES_NEW)
     def register() {
 
-        def requestParams = params
+        def requestParams = request.getJSON()
         def resultData
-        String dfrName = requestParams["dataframe"] + "-user-email"
+        String dfrName = requestParams["dataframe"] + "_user_email"
         //FacilityUserRegistration facilityUserReg = FacilityUserRegistration.findByExpectedUser(requestParams[dfrName])
-        FacilityUserRegistration  facilityUserReg = true
+
         String expectedRole = requestParams["role"]
         String verificationEmailMessage
 
@@ -54,15 +54,15 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         }
         Role regRole = Role.findByAuthority(expectedRole)
 
-        if (!facilityUserReg || !regRole) {
-            def facilityErrorMessage = message(code: 'registration.facility.notexpected')
-            log.error(facilityErrorMessage)
-            resultData = ['msg': facilityErrorMessage, 'success': false]
-
-        }else{ //expected User is registering for the facility and expected role is correct
+//        if (!facilityUserReg || !regRole) {
+//            def facilityErrorMessage = message(code: 'registration.facility.notexpected')
+//            log.error(facilityErrorMessage)
+//            resultData = ['msg': facilityErrorMessage, 'success': false]
+//
+//        }else{ //expected User is registering for the facility and expected role is correct
 
             RegisterCommand command =  getRegisterValidationObj(requestParams)
-            grails.util.Pair result = registerService.registerUser(command, regRole, facilityUserReg.facility)
+            grails.util.Pair result = registerService.registerUser(command, regRole, null)
 
             com.elintegro.auth.User user = result.getaValue()
             def returnedMessage = result.getbValue()
@@ -93,7 +93,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
                 verificationEmailMessage = message(code: 'registration.mail.noConnection')
                 resultData = ['msg': verificationEmailMessage, 'success': false]
             }
-        }
+
         def converter = resultData as JSON
         converter.render(response)
     }
@@ -123,7 +123,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
             return
         }
 
-//        Person p = new Person(firstName:user.firstName, lastName:user.lastName, contactEmail:user.username, user:user).save(flush:true)
+//        Person p = new Person(firstName:user.firstName, lastName:user.lastName, email:user.username, user:user).save(flush:true)
 
         flash.message = message(code: 'spring.security.ui.register.complete')
         redirect uri: registerPostRegisterUrl ?: successHandlerDefaultTargetUrl
@@ -268,7 +268,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 
     private static ResetPasswordCommand getResetPasswordValidationObj(requestParams){
         ResetPasswordCommand command  = new ResetPasswordCommand()
-        command.username = requestParams.get("resetPasswordDfr-user-contactEmail")
+        command.username = requestParams.get("resetPasswordDfr-user-email")
         command.password = requestParams.get("resetPasswordDfr-user-password")
         command.password2 = requestParams.get("resetPasswordDfr-password2")
         return command
@@ -291,9 +291,9 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     private static RegisterCommand getRegisterValidationObj(requestParams){
         String dataframeName = requestParams.dataframe
         RegisterCommand command  = new RegisterCommand()
-        String emailKey = dataframeName + "-user-email"
-        String passwordKey = dataframeName + "-user-password"
-        String password2Key = dataframeName + "-password2"
+        String emailKey = dataframeName + "_user_email"
+        String passwordKey = dataframeName + "_user_password"
+        String password2Key = dataframeName + "_password2"
         command.email = requestParams.get(emailKey)
         command.username = command.email
         command.password = requestParams.get(passwordKey)

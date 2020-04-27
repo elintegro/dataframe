@@ -22,7 +22,7 @@ class EmailHandler implements Runnable{
 		
 	}
 	/*private MailService mailService
-	String contactEmail
+	String email
 	String emailFrom
 	String emailSubject
 	String emailBody
@@ -39,7 +39,7 @@ class EmailHandler implements Runnable{
 		while(true){
 			try{
 				mailService.sendMail {
-					to contactEmail
+					to email
 					from emailFrom
 					subject emailSubject
 					html emailBody
@@ -64,7 +64,7 @@ class EmailHandler implements Runnable{
 	 *//*
 	boolean validateEmailData() throws EmailDataException{
 		boolean ret = true
-		if(StringUtilsErf.isEmpty(contactEmail)) //TODO: use regex!!!!
+		if(StringUtilsErf.isEmpty(email)) //TODO: use regex!!!!
 		
 		if(StringUtilsErf.isEmpty(emailFrom)) {
 			throw new EmailDataException("From field is empty")		
@@ -75,7 +75,7 @@ class EmailHandler implements Runnable{
 		}
 		
 		if(StringUtilsErf.isEmpty(emailBody)) {
-			throw new EmailDataException("Email body field is empty")
+			throw new EmailDataException("email body field is empty")
 		}
 		
 		return ret		
@@ -90,7 +90,7 @@ class EmailHandler implements Runnable{
 		
 		try{
 			mailService.sendMail {
-				to contactEmail
+				to email
 				from emailFrom
 				subject emailSubject
 				html emailBody

@@ -63,7 +63,7 @@ class LayoutVue extends Layout {
     List children = [] // Add all the children's layout names
     List componentsToRegister = [] //Add all the components to register under this layouts component
     boolean isGlobal = false // Whether or not to register component globally
-    static List defaultGridValues = ['xs12', 'sm6', 'md6', 'lg4', 'xl4']
+    static List defaultGridValues = Holders.grailsApplication.config.vue.flexGridValues.Default
     static List defaultButtonGridValues = ['xs12', 'sm12', 'md4', 'lg4', 'xl4']
     List flexGridValues = defaultGridValues
     boolean componentRegistered = false //Set once the component is registered
@@ -289,7 +289,12 @@ class LayoutVue extends Layout {
         if(stInd>0){
             int endInd = stInd + fldPlaceholder.length()
             dataframeHtml.replace(stInd, endInd, btnScript)
-        } else {
+        }
+        boolean dataframeRightToLeftLanguage = Holders.grailsApplication.config.dataframe.right_to_left_language
+            if(!dataframeRightToLeftLanguage){
+                remainingButtons.insert(0,btnScript)
+            }
+        else {
             remainingButtons.append(btnScript)
         }
 

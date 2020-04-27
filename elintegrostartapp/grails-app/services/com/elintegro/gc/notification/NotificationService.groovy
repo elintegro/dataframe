@@ -50,10 +50,10 @@ class NotificationService {
             String targetId = target?.id?.toString()
             String messageTemplate = ""
             if (notification.email){
-                message = Message.findByEventAndNotificationPreference(event, NotificationPreferences.EMAIL)
+                message = Message.findByEventAndNotificationPreference(event, NotificationPreferences.email)
                 messageTemplate = evaluateMessageBody(message, binding)
                 notificationInfo = buildAndSendEmailNotification(notification, message, messageTemplate)
-                notificationInfo.preference = NotificationPreferences.EMAIL.desc
+                notificationInfo.preference = NotificationPreferences.email.desc
                 notificationInfo.messageSeverity = event.messageSeverity.desc
                 saveNotificationInfo(notificationInfo, sourceId, targetId)
             }
@@ -78,7 +78,7 @@ class NotificationService {
         emailRequestParams.async = true
         emailRequestParams.mailService = mailService
         emailRequestParams.groovyPageRenderer = null
-        GatewayNotification notificationGateWay = NotificationGatewayFactory.getGateway(NotificationPreferences.EMAIL)
+        GatewayNotification notificationGateWay = NotificationGatewayFactory.getGateway(NotificationPreferences.email)
         def emailResponse = notificationGateWay.send(null, emailRequestParams)
         NotificationInfo notificationInfo = new NotificationInfo()
         notificationInfo.notification = notification
