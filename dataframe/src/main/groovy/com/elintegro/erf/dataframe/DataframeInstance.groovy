@@ -438,7 +438,7 @@ class DataframeInstance {
 	@Transactional
 	public List commit() throws DataManipulationException {
 		for ( Map.Entry<String, Object> domainInstanceName : savedDomainsMap.entrySet()) {
-			def doaminToSave = domainInstanceName.value[1]
+			def doaminToSave = domainInstanceName.value
 			doaminToSave.save()
 		}
 	}
@@ -518,7 +518,7 @@ class DataframeInstance {
 
 				if(applyNewValuesToDomainInstanceAndSave(domainInstance, requestParams, keysNamesAndValue, domain, historyDomainInstance, doCommit)){
 					doaminInstancesForSave.add(domainInstance);
-					savedDomainsMap.put(doaminFullName, [domain, domainInstance]);
+					savedDomainsMap.put(doaminFullName, domainInstance);
 				}
 			}
 		}//End of df.writableDomains.each{
