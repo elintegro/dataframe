@@ -234,21 +234,19 @@ class DataframeController {
 		def generatedKeys = [:]
 		def generatedKeysArr = []
 
-		String parentNode = _params[dataframe.dataframeName+"-parentNode"];
-		String level = _params[dataframe.dataframeName+"-level"]
-
 		Map savedResultMap = dfInstance.getSavedDomainsMap();
 
 		Map<String, Map> resultAlias = [:]
-		savedResultMap.each { domainAlias, domainObj ->
+		savedResultMap.each { domainAlias, domainInstance ->
+//			savedResultMap.each { domainAlias, domainObj ->
 			//this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], "domainAlias": domainAlias])
-			def doamin = domainObj[0]
-			def domainInstance = domainObj[1]
-			doamin?.keys?.each{ key ->
-				def keyValue = domainInstance."${key}"
-				generatedKeys.put("${doamin.parsedDomain}_${key}", keyValue)
-				generatedKeysArr.add(keyValue)
-			}
+//			def doamin = domainObj[0]
+//			def domainInstance = domainObj[1]
+//			doamin?.keys?.each{ key ->
+//				def keyValue = domainInstance."${key}"
+//				generatedKeys.put("${doamin.parsedDomain}_${key}", keyValue)
+//				generatedKeysArr.add(keyValue)
+//			}
 
 
 			Map record = [:];
@@ -369,6 +367,8 @@ class DataframeController {
 
 		def operation = params.operation
 
+		String level = _params.get(dataframe.dataframeName+"_level")
+
 
 		Long parentKeyValue = getIdFromUiIdConstruct(parentNode)
 
@@ -417,60 +417,6 @@ class DataframeController {
 		}
 
 		render results as JSON
-	}
-
-	def ajaxjQTreeLoadVue(){
-
-		List results = []
-		Map tt = params;
-		Dataframe dataframe = getDataframe(params)
-		def parentNode = params.key
-		def operation = params.operation
-		Long parentKeyValue = getIdFromUiIdConstruct(parentNode)
-		int t = 0;
-		int currentLevel
-
-		if(params.level != null && params.level != 'null' && params.level != 'undefined'){
-			currentLevel = Integer.valueOf(params.level);
-		}else{
-			currentLevel = 0;
-		}
-
-		def p = params.leveldepth
-		def treeFieldName = params.treefield
-		def isDelOperation = params.isRemoval==null ? false : Boolean.parseBoolean(params.isRemoval)
-		def jQTreeHqlMap = dataframe.getFieldByName(treeFieldName).get("treeMap");
-		int levelDepth
-
-		if(params.leveldepth != null || params.leveldepth != 'null' || params.leveldepth != 'undefined'){
-			levelDepth = 0;// We have not specified level depth, so we want all levels to be retrieved
-		}else{
-			levelDepth = Integer.valueOf(params.leveldepth);
-		}
-
-		long nodeId
-		String nodeIdStr = params.nodeId
-		if(nodeIdStr != null && nodeIdStr != 'null' && nodeIdStr != 'undefined' && nodeIdStr != ""){
-			String[] nodeIdArr = nodeIdStr.split(",")
-			if(nodeIdArr != null && nodeIdArr.size() >0){
-				nodeIdStr = nodeIdArr[0]
-			}
-			try{
-				nodeId = Long.valueOf(nodeIdStr);
-			}catch(NumberFormatException e){
-				nodeId = 0;
-			}
-		}else{
-			nodeId = 0;
-		}
-
-		if(nodeId == 0 || operation == 'D' || operation == 'E'){
-			results.addAll(getLevelList(currentLevel, dataframe, jQTreeHqlMap, parentKeyValue, levelDepth))
-		}else{
-			results.addAll(getNodeData2(currentLevel, dataframe, jQTreeHqlMap, parentKeyValue, nodeId, parentNode, isDelOperation))
-		}
-		def resultData = ['success': true, data:results]
-		render resultData as JSON
 	}
 
 	/**

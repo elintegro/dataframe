@@ -32,9 +32,9 @@ class FileUploadController {
         def fldId = params.fldId
         ArrayList inputFile = []
         def imagePath =[:]
-        Integer fileArraySize = params["fileArraySize"] as Integer
-        if(fileArraySize != 0 && fileArraySize > 0){
-            for(int i=0; i<fileArraySize; i++){
+        Integer fileSize = params["fileSize"] as Integer
+        if(fileSize != 0 && fileSize > 0){
+            for(int i=0; i<fileSize; i++){
                 inputFile.add(params."$fldId-file[$i]")
 
             }
@@ -42,18 +42,16 @@ class FileUploadController {
             //String storagePath = "/OwnerData/images/"
 //            fileUploadTest(inputFile)
              imagePath = fileUploadService.imageSave(inputFile, request)
-            if (imagePath){
+            log.debug("Image successfully saved in : $imagePath.prettyPrint")
+            if (saveFileRecord(imagePath)){
                 imagePath.put('success',true)
-                log.debug("Image successfully saved in : $imagePath")
             }else {
-                imagePath = [:]
                 imagePath.put('success',false)
             }
         }
         render imagePath as JSON
     }
 
-/*
     def saveFileRecord(imagePath){
         ArrayList<Map> urlList = imagePath.localUrlList
         if(!imagePath.s3UrlList.isEmpty()){
@@ -114,9 +112,7 @@ class FileUploadController {
         }
 
     }
-*/
 
-/*
     public def getKeysNamesAndValueForPk(keysNamesAndValue, domain, Map inputData, DataframeInstance dfInst) {
 
         String keyFieldName = dfInst.constructKeyFieldName(domain, inputData)
@@ -125,7 +121,6 @@ class FileUploadController {
             keysNamesAndValue.put(keyFieldName, paramValue)
         }
     }
-*/
 
     def ajaxFileDelete(){
         def fileName = params.fileName
@@ -160,7 +155,6 @@ class FileUploadController {
         }
     }
 
-/*
     def createDirectoryinserver(){
         System.setProperty("prop_dir", "var/webapps/image");
         String prop_dir = System.getProperty("prop_dir","/tmp/images");
@@ -173,11 +167,10 @@ class FileUploadController {
         String env_dir = System.getenv("env_dir");
 
     }
-*/
 
-/*    def getFile(){
+    def getFile(){
         def params = params
         String fileName = params.fileName
 
-    }*/
+    }
 }
