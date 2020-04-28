@@ -290,7 +290,7 @@ beans {
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
         hql = "select application.id, application.avatar, application.resume from Application application where application.id=:id"
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         saveButtonAttr = " align='right' "
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
