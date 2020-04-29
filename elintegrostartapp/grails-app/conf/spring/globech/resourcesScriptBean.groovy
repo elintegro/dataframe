@@ -491,4 +491,9 @@ beans {
                    }
                           """
     }
+    vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
+        data = "vueElintegroApplicantDetailsDataframe_tab_model : this.tabValue,\nvueElintegroApplicantDetailsDataframe_display: true, \n"
+        computed = """tabValue(){return this.\$store.state.vueElintegroApplicantDetailsDataframe.vueElintegroApplicantDetailsDataframe_tab_model}"""
+        watch = """ tabValue:{handler: function(val, oldVal) {this.vueElintegroApplicantDetailsDataframe_tab_model = val;}},"""
+    }
 }

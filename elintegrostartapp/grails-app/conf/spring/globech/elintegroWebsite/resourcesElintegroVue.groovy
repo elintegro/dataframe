@@ -657,12 +657,77 @@ beans {
                         , hql             : """select applicant.id as Id, applicant.firstName as FirstName ,applicant.lastName as LastName,  applicant.email as Email, 
                                                 applicant.phone as Phone from Person applicant"""
                         , gridWidth       : 820
-                        , search          : true
+                        , showGridSearch  : true
                         , internationalize: true
+                        , sortable        : true
+                        , onClick         :[showAsDialog: true, refDataframe: ref("vueElintegroApplicantDetailsDataframe"),MaxWidth:800]
 
                 ]
         ]
         currentFrameLayout = ref("vueElintegroApplicantsDataframeLayout")
 
+    }
+    vueElintegroApplicantDetailsDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantDetailsDataframe']
+        dataframeLabelCode = "Applicants Detail Information"
+        tab = true
+        componentsToRegister = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe"]
+        currentFrameLayout = ref("vueElintegroApplicantDetailsDataframeLayout")
+    }
+    vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantGeneralInformationDataframe']
+        hql = "select applicant.id as Id,applicant.firstName as FirstName,applicant.lastName as LastName,applicant.email as Email,applicant.phone as Phone from Person applicant where applicant.id=:id"
+        tab = true
+        flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
+        addFieldDef =[
+                "applicant.id":[
+                        widget: "NumberInputWidgetVue",
+                        "required": "required"
+                        ],
+
+                "applicant.firstName":[
+                        widget: "InputWidgetVue"
+                        ,"required": "required"
+                        ,readOnly: true
+                        ],
+
+                "applicant.lastName":[
+                        widget: "InputWidgetVue"
+                        ,"required": "required"
+                        ,readOnly: true
+                ],
+                "applicant.email":[
+                        widget: "EmailWidgetVue"
+                        ,"required": "required"
+                        ,readOnly: true
+
+                ],
+                "applicant.phone":[
+                        widget: "PhoneNumberWidgetVue"
+                        ,"required": "required"
+                        ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
+                        ,readOnly: true
+                ]]
+        currentFrameLayout = ref("appNameDataframeLayout")
+    }
+    vueElintegroApplicantSelfAssessmentDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
+        tab = true
+        currentFrameLayout = ref("appNameDataframeLayout")
+    }
+    vueElintegroApplicantCVDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantCVDataframe']
+        tab = true
+        currentFrameLayout = ref("appNameDataframeLayout")
+    }
+    vueElintegroApplicantQuestionAnswerDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantQuestionAnswerDataframe']
+        tab = true
+        currentFrameLayout = ref("appNameDataframeLayout")
     }
 }
