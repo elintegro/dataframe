@@ -538,7 +538,7 @@ beans {
         deleteButton = false
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
-//        componentsToRegister=["vueAddressDataframe"]
+        componentsToRegister=["vueElintegroResetPasswordDataframe"]
         doAfterSave = """setTimeout(function(){ vueElintegroUserProfileDataframe.\$router.push('/');this.location.reload();}, 3000);"""
         route = true
         addFieldDef =[
@@ -602,15 +602,15 @@ beans {
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button", url: "", route: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueResetPasswordDataframe")] ]
+        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button", url: "", showAsDialog: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueElintegroResetPasswordDataframe")] ]
 
         currentFrameLayout = ref("vueElintegroUserProfileDataframeLayout")
 
     }
-    vueResetPasswordDataframe(DataframeVue){ bean ->
+    vueElintegroResetPasswordDataframe(DataframeVue){ bean ->
 
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueResetPasswordDataframe']
+        bean.constructorArgs = ['vueElintegroResetPasswordDataframe']
 
 //		hql = "select user.password from User as user where user.id=:session_userid"
 
@@ -619,7 +619,7 @@ beans {
         //These are values, that overrides the default ones
         saveButton = false
         wrapInForm=true
-        route=true
+        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
         //Javascript to run after the save:
         doAfterSave="""
@@ -634,7 +634,7 @@ beans {
         dataframeButtons = [ Submit: [name:"submit", type: "button", url: "${contextPath}/register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
                                                                                                                             var t = url.searchParams.get("token"); 
                                                                                                                             if(t != undefined || t != null){ allParams['t']=t;}
-                                                                                          allParams['resetPasswordDfr-user-email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();
+                                                                                          allParams['vueElintegroResetPasswordDataframe_user_email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();
                                                                                          """, callBackParams:[successScript:"""if(data.redirect){window.location.href=data.redirectUrl;}
                                                                                                                                jQuery('#resetPassword-Div').jqxWindow('close');"""]],
                              Cancel:[name:"cancel", type:"button", script:"\$router.go(-1)"]]
@@ -654,8 +654,8 @@ beans {
                         widget            : "GridWidgetVue"
                         , name            : "applicant"
 
-                        , hql             : """select applicant.id as Id, applicant.firstName as FirstName ,applicant.lastName as LastName,  applicant.email as Email, 
-                                                applicant.phone as Phone from Person applicant"""
+                        , hql             : """select person.id as Id, person.firstName as FirstName ,person.lastName as LastName,  person.email as Email, 
+                                                person.phone as Phone from Person person"""
                         , gridWidth       : 820
                         , showGridSearch  : true
                         , internationalize: true
@@ -678,33 +678,37 @@ beans {
     vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantGeneralInformationDataframe']
-        hql = "select applicant.id as Id,applicant.firstName as FirstName,applicant.lastName as LastName,applicant.email as Email,applicant.phone as Phone from Person applicant where applicant.id=:id"
+        hql = "select person.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone from Person person where person.id=:id"
         tab = true
+        initOnPageLoad = true
+        putFillInitDataMethod = true
+        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
         addFieldDef =[
-                "applicant.id":[
+                "person.id":[
                         widget: "NumberInputWidgetVue",
+
                         "required": "required"
                         ],
 
-                "applicant.firstName":[
+                "person.firstName":[
                         widget: "InputWidgetVue"
                         ,"required": "required"
                         ,readOnly: true
                         ],
 
-                "applicant.lastName":[
+                "person.lastName":[
                         widget: "InputWidgetVue"
                         ,"required": "required"
                         ,readOnly: true
                 ],
-                "applicant.email":[
+                "person.email":[
                         widget: "EmailWidgetVue"
                         ,"required": "required"
                         ,readOnly: true
 
                 ],
-                "applicant.phone":[
+                "person.phone":[
                         widget: "PhoneNumberWidgetVue"
                         ,"required": "required"
                         ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]

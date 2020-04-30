@@ -86,8 +86,8 @@ beans {
                                       <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
                                       </v-btn><span>Close</span></v-tooltip></v-flex>    
                                   </v-tabs>
-                                  <v-tabs-items v-model="vueElintegroApplicantDetailsDataframe_tab_model">
-                                      <v-tab-item value="vueElintegroApplicantGeneralInformationDataframe-tab-id"><vueElintegroApplicantGeneralInformationDataframe/></v-tab-item>
+                                  <v-tabs-items v-model="vueElintegroApplicantDetailsDataframe_tab_model" >
+                                      <v-tab-item value="vueElintegroApplicantGeneralInformationDataframe-tab-id" ><vueElintegroApplicantGeneralInformationDataframe :vueElintegroApplicantGeneralInformationDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantSelfAssessmentDataframe-tab-id"><vueElintegroApplicantSelfAssessmentDataframe/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantCVDataframe-tab-id"><vueElintegroApplicantCVDataframe/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantQuestionAnswerDataframe-tab-id"><vueElintegroApplicantQuestionAnswerDataframe/></v-tab-item>
