@@ -43,7 +43,7 @@ beans {
                          """
 
         vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
-        componentsToRegister=["vueAddressDataframe", "vueMedicalRecordDataframe", "vueMedicationsGridDataframe"]
+        childDataframes=["vueAddressDataframe", "vueMedicalRecordDataframe", "vueMedicationsGridDataframe"]
 
 //        doAfterSave = """setTimeout(function(){ this.location.reload();}, 3000);"""
 //        route = true
@@ -208,7 +208,7 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         doBeforeRefresh = """allParams['id'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"""
         doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
-        componentsToRegister = ["vuePrescribedMedicationsDataframe"]
+        childDataframes = ["vuePrescribedMedicationsDataframe"]
         /*,onClick:[showAsDialog: false, refDataframe: ref("vuePrescribedMedicationsDataframe")]
         ,onButtonClick:[
                 ['actionName':'Payment','buttons':[
@@ -274,7 +274,7 @@ beans {
         createStore = true
         saveButton = false
         dataframeLabelCode = "Contact.Information"
-//        componentsToRegister=["vueAddressDataframe"]
+//        childDataframes=["vueAddressDataframe"]
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef =[
 
@@ -322,7 +322,7 @@ beans {
         doBeforeSave = "allParams['personId'] = excon.getFromStore('vueContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicalRecordDataframe-tab-id');"
 
-        componentsToRegister =["vueMapWidgetDataframe"]
+        childDataframes =["vueMapWidgetDataframe"]
         ajaxSaveUrl = "${contextPath}/applicationForm/saveAddress"
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required

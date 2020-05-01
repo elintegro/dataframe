@@ -96,7 +96,7 @@ beans {
                                         </v-flex>
                                         <v-flex xs2 order-lg3></v-flex>
                                         </v-layout></v-container></v-content></v-layout>"""
-//        componentsToRegister = ["vueApplicationFormDataframe"]
+//        childDataframes = ["vueApplicationFormDataframe"]
         children = ["mainPageMessageLayout"]
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }

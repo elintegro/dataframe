@@ -268,8 +268,8 @@ class ResultPageHtmlBuilder {
         compBuilder.append("components:{\n") //register embedded components
         compBuilder.append(disObj.compRegScript.toString())
         disObj.compRegScript.setLength(0) //Resetting compRegScript for another layout obj
-        if(!disObj.componentsToRegister.isEmpty()){
-            for(String compS : disObj.componentsToRegister){
+        if(!disObj.childDataframes.isEmpty()){
+            for(String compS : disObj.childDataframes){
                 DataframeVue lytT = DataframeVue.getDataframe(compS) // todo check if component is Layout or Dataframe first
                 if(!registeredComponents.contains(compS)){
                     compBuilder.append(VueJsBuilder.createCompRegistrationString(compS))

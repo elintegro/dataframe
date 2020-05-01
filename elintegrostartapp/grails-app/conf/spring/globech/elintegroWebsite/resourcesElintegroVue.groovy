@@ -13,7 +13,7 @@ beans {
         wrapInForm = false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]
+//        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
         vueStore = ["state": "loggedIn: false,\n"]
@@ -220,7 +220,7 @@ beans {
         saveButton = false
         initOnPageLoad = false
         route = true
-        //componentsToRegister = ["vueCareersPageButtonDataframe"]
+        //childDataframes = ["vueCareersPageButtonDataframe"]
         currentFrameLayout = ref("vueCareersDataframeLayout")
     }
     vueCareersPageButtonDataframe(DataframeVue) { bean ->
@@ -538,7 +538,7 @@ beans {
         deleteButton = false
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
-        componentsToRegister=["vueElintegroResetPasswordDataframe"]
+        childDataframes=["vueElintegroResetPasswordDataframe"]
         doAfterSave = """setTimeout(function(){ vueElintegroUserProfileDataframe.\$router.push('/');this.location.reload();}, 3000);"""
         route = true
         addFieldDef =[
@@ -655,7 +655,7 @@ beans {
                         , name            : "applicant"
 
                         , hql             : """select application.id as Id, person.firstName as FirstName ,person.lastName as LastName,  person.email as Email, 
-                                                person.phone as Phone from Application application inner join application.applicant person where application.id=:id"""
+                                                person.phone as Phone from Application application inner join application.applicant person """
                         , gridWidth       : 820
                         , showGridSearch  : true
                         , internationalize: true
@@ -672,7 +672,7 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantDetailsDataframe']
         dataframeLabelCode = "Applicants Detail Information"
         tab = true
-        componentsToRegister = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe"]
+        childDataframes = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe"]
         currentFrameLayout = ref("vueElintegroApplicantDetailsDataframeLayout")
     }
     vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->
