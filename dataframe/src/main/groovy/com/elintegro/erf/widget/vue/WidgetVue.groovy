@@ -386,6 +386,10 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     protected String getWidth(Map field, String _default = "auto"){
         return field.width?:_default
     }
+    protected String getMaxWidth(Map field, String _default = "500px"){
+        return field.MaxWidth?:_default
+    }
+
 
     protected String getAttr(Map field){
         return field.attr?:""

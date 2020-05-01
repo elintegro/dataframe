@@ -75,6 +75,27 @@ beans {
                                   <v-card class ="applicant">[applicant]</v-card></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
+    vueElintegroApplicantDetailsDataframeLayout(ColumnLayoutVue){bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 ><v-card round style ="overflow:hidden;" >
+                                  <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueElintegroApplicantDetailsDataframe_tab_model">
+                                      <v-tab style ="text-transform:capitalize;" ripple href="#vueElintegroApplicantGeneralInformationDataframe-tab-id">General Information</v-tab>
+                                      <v-tab style ="text-transform:capitalize;" ripple href="#vueElintegroApplicantSelfAssessmentDataframe-tab-id">Self Assessment</v-tab>
+                                      <v-tab style ="text-transform:capitalize;" ripple href="#vueElintegroApplicantCVDataframe-tab-id">CV</v-tab>
+                                      <v-tab style ="text-transform:capitalize;" ripple href="#vueElintegroApplicantQuestionAnswerDataframe-tab-id">Questions/Answers</v-tab>
+                                      <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
+                                      </v-btn><span>Close</span></v-tooltip></v-flex>    
+                                  </v-tabs>
+                                  <v-tabs-items v-model="vueElintegroApplicantDetailsDataframe_tab_model" >
+                                      <v-tab-item value="vueElintegroApplicantGeneralInformationDataframe-tab-id" ><vueElintegroApplicantGeneralInformationDataframe :vueElintegroApplicantGeneralInformationDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
+                                      <v-tab-item value="vueElintegroApplicantSelfAssessmentDataframe-tab-id"><vueElintegroApplicantSelfAssessmentDataframe/></v-tab-item>
+                                      <v-tab-item value="vueElintegroApplicantCVDataframe-tab-id"><vueElintegroApplicantCVDataframe/></v-tab-item>
+                                      <v-tab-item value="vueElintegroApplicantQuestionAnswerDataframe-tab-id"><vueElintegroApplicantQuestionAnswerDataframe/></v-tab-item>
+                                 </v-tabs-items></v-card>
+                                </v-flex>"""
+        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+
+    }
 
 
 

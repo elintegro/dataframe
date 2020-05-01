@@ -212,10 +212,10 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
                 user.password = resetPasswordCommand.password
                 user.save(flush: true)
                 if (user.hasErrors()) {
-                    errorMessage = message(code: 'vueUserProfileDataframe.resetPassword.failure')
+                    errorMessage = message(code: 'vueElintegroUserProfileDataframe.resetPassword.failure')
                     resultData = ['msg': errorMessage, 'success': false]
                 }else{
-                    errorMessage = message(code: 'vueUserProfileDataframe.resetPassword.success')
+                    errorMessage = message(code: 'vueElintegroUserProfileDataframe.resetPassword.success')
                     resultData = ['msg': errorMessage, 'success': true]
 
                 }
@@ -252,10 +252,10 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         }else{
         def user = uiRegistrationCodeStrategy.resetPassword(resetPasswordCommand, registrationCode)
             if (user.hasErrors()) {
-                errorMessage = message(code: 'vueUserProfileDataframe.resetPassword.failure')
+                errorMessage = message(code: 'vueElintegroUserProfileDataframe.resetPassword.failure')
                 resultData = ['msg': errorMessage, 'success': false]
             }else{
-                errorMessage = message(code: 'vueUserProfileDataframe.resetPassword.success')
+                errorMessage = message(code: 'vueElintegroUserProfileDataframe.resetPassword.success')
                 def url = createLink(controller: 'main', action: 'show')
                 resultData = ['msg': errorMessage, 'success': true, 'redirect':true, 'redirectUrl': "$url"]
 
@@ -268,9 +268,9 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 
     private static ResetPasswordCommand getResetPasswordValidationObj(requestParams){
         ResetPasswordCommand command  = new ResetPasswordCommand()
-        command.username = requestParams.get("resetPasswordDfr_user_email")
-        command.password = requestParams.get("resetPasswordDfr_user_password")
-        command.password2 = requestParams.get("resetPasswordDfr_password2")
+        command.username = requestParams.get("vueElintegroResetPasswordDataframe_user_email")
+        command.password = requestParams.get("vueElintegroResetPasswordDataframe_user_password")
+        command.password2 = requestParams.get("vueElintegroResetPasswordDataframe_password2")
         return command
     }
 

@@ -538,7 +538,7 @@ beans {
         deleteButton = false
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
-//        componentsToRegister=["vueAddressDataframe"]
+        componentsToRegister=["vueElintegroResetPasswordDataframe"]
         doAfterSave = """setTimeout(function(){ vueElintegroUserProfileDataframe.\$router.push('/');this.location.reload();}, 3000);"""
         route = true
         addFieldDef =[
@@ -602,15 +602,15 @@ beans {
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button", url: "", route: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueResetPasswordDataframe")] ]
+        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button", url: "", showAsDialog: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueElintegroResetPasswordDataframe")] ]
 
         currentFrameLayout = ref("vueElintegroUserProfileDataframeLayout")
 
     }
-    vueResetPasswordDataframe(DataframeVue){ bean ->
+    vueElintegroResetPasswordDataframe(DataframeVue){ bean ->
 
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueResetPasswordDataframe']
+        bean.constructorArgs = ['vueElintegroResetPasswordDataframe']
 
 //		hql = "select user.password from User as user where user.id=:session_userid"
 
@@ -619,7 +619,7 @@ beans {
         //These are values, that overrides the default ones
         saveButton = false
         wrapInForm=true
-        route=true
+        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
         //Javascript to run after the save:
         doAfterSave="""
@@ -634,7 +634,7 @@ beans {
         dataframeButtons = [ Submit: [name:"submit", type: "button", url: "${contextPath}/register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
                                                                                                                             var t = url.searchParams.get("token"); 
                                                                                                                             if(t != undefined || t != null){ allParams['t']=t;}
-                                                                                          allParams['resetPasswordDfr-user-email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();
+                                                                                          allParams['vueElintegroResetPasswordDataframe_user_email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();
                                                                                          """, callBackParams:[successScript:"""if(data.redirect){window.location.href=data.redirectUrl;}
                                                                                                                                jQuery('#resetPassword-Div').jqxWindow('close');"""]],
                              Cancel:[name:"cancel", type:"button", script:"\$router.go(-1)"]]
@@ -654,15 +654,55 @@ beans {
                         widget            : "GridWidgetVue"
                         , name            : "applicant"
 
-                        , hql             : """select applicant.id as Id, applicant.firstName as FirstName ,applicant.lastName as LastName,  applicant.email as Email, 
-                                                applicant.phone as Phone from Person applicant"""
+                        , hql             : """select application.id as Id, person.firstName as FirstName ,person.lastName as LastName,  person.email as Email, 
+                                                person.phone as Phone from Application application inner join application.applicant person where application.id=:id"""
                         , gridWidth       : 820
-                        , search          : true
+                        , showGridSearch  : true
                         , internationalize: true
+                        , sortable        : true
+                        , onClick         :[showAsDialog: true, refDataframe: ref("vueElintegroApplicantDetailsDataframe"),MaxWidth:800]
 
                 ]
         ]
         currentFrameLayout = ref("vueElintegroApplicantsDataframeLayout")
 
+    }
+    vueElintegroApplicantDetailsDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantDetailsDataframe']
+        dataframeLabelCode = "Applicants Detail Information"
+        tab = true
+        componentsToRegister = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe"]
+        currentFrameLayout = ref("vueElintegroApplicantDetailsDataframeLayout")
+    }
+    vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantGeneralInformationDataframe']
+        hql = "select application.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone from Application application inner join application.applicant person where application.id=:id"
+        tab = true
+        initOnPageLoad = true
+        putFillInitDataMethod = true
+        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
+        flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
+
+        currentFrameLayout = ref("appNameDataframeLayout")
+    }
+    vueElintegroApplicantSelfAssessmentDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
+        tab = true
+        currentFrameLayout = ref("appNameDataframeLayout")
+    }
+    vueElintegroApplicantCVDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantCVDataframe']
+        tab = true
+        currentFrameLayout = ref("appNameDataframeLayout")
+    }
+    vueElintegroApplicantQuestionAnswerDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroApplicantQuestionAnswerDataframe']
+        tab = true
+        currentFrameLayout = ref("appNameDataframeLayout")
     }
 }

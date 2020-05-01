@@ -60,8 +60,9 @@ class GridWidgetVue extends WidgetVue {
         return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
 
        ${showGridSearch?"""
-            <v-spacer></v-spacer>
-            <v-text-field
+            <v-row><v-col cols='8'></v-col>
+            <v-col cols="4">
+                    <v-text-field
                     v-model="${fldName}_search"
                     append-icon="search"
                     label="$searchPlaceholder"
@@ -69,6 +70,7 @@ class GridWidgetVue extends WidgetVue {
                     hide-details
                     class='pa-3'
             ></v-text-field>
+            </v-col></v-row>
         """:""}
        <v-data-table
             :headers="${modelString}_headers"
@@ -471,12 +473,12 @@ $fieldParams
         dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true, parentData:{}},\n")
 
         if(onClickMap.showAsDialog){
-            resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" width='${getWidth(onClickMap)}' max-width='500px' >""")
+            resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" width='${getWidth(onClickMap)}' max-width='${getMaxWidth(onClickMap)}' >""")
 //            resultPageHtml.append(refDataframe.getComponentName())
             resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref' :${refDataframeName}_prop="${refDataframeName}_data"></component>""")
             resultPageHtml.append("""</v-dialog>""")
         }else{
-            resultPageHtml.append("""<div v-show="visibility.${refDataframeName}" max-width="500px">""")
+            resultPageHtml.append("""<div v-show="visibility.${refDataframeName}" max-width="${getMaxWidth(onClickMap)}">""")
 //            resultPageHtml.append(refDataframe.getComponentName())
             resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref' :${refDataframeName}_prop="${refDataframeName}_data" v-bind:refreshGrid="true"></component>""")
             resultPageHtml.append("""</div>""")
