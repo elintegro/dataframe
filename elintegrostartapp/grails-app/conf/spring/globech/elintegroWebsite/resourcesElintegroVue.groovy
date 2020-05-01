@@ -654,8 +654,8 @@ beans {
                         widget            : "GridWidgetVue"
                         , name            : "applicant"
 
-                        , hql             : """select person.id as Id, person.firstName as FirstName ,person.lastName as LastName,  person.email as Email, 
-                                                person.phone as Phone from Person person"""
+                        , hql             : """select application.id as Id, person.firstName as FirstName ,person.lastName as LastName,  person.email as Email, 
+                                                person.phone as Phone from Application application inner join application.applicant person where application.id=:id"""
                         , gridWidth       : 820
                         , showGridSearch  : true
                         , internationalize: true
@@ -678,42 +678,13 @@ beans {
     vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantGeneralInformationDataframe']
-        hql = "select person.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone from Person person where person.id=:id"
+        hql = "select application.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone from Application application inner join application.applicant person where application.id=:id"
         tab = true
         initOnPageLoad = true
         putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
-        addFieldDef =[
-                "person.id":[
-                        widget: "NumberInputWidgetVue",
 
-                        "required": "required"
-                        ],
-
-                "person.firstName":[
-                        widget: "InputWidgetVue"
-                        ,"required": "required"
-                        ,readOnly: true
-                        ],
-
-                "person.lastName":[
-                        widget: "InputWidgetVue"
-                        ,"required": "required"
-                        ,readOnly: true
-                ],
-                "person.email":[
-                        widget: "EmailWidgetVue"
-                        ,"required": "required"
-                        ,readOnly: true
-
-                ],
-                "person.phone":[
-                        widget: "PhoneNumberWidgetVue"
-                        ,"required": "required"
-                        ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
-                        ,readOnly: true
-                ]]
         currentFrameLayout = ref("appNameDataframeLayout")
     }
     vueElintegroApplicantSelfAssessmentDataframe(DataframeVue){bean ->
