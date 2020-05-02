@@ -21,6 +21,18 @@ beans {
         putFillInitDataMethod = false
         currentFrameLayout = ref("emptyDataframeLayout")
     }
+    vueElintegroAppBarDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroAppBarDataframe']
+        saveButton = false
+        wrapInForm=false
+
+        initOnPageLoad = false
+        isGlobal = true
+        wrapButtons = false
+
+        currentFrameLayout = ref("vueElintegroAppBarDataframeLayout")
+    }
  /*   vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
@@ -83,13 +95,13 @@ beans {
         currentFrameLayout = ref("elintegroNavigationButtonAfterLoggedInLayout")
     }
 
-    vueSubContainerDataframe(DataframeVue){bean ->
+    vueElintegroNavigationDrawerDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueSubContainerDataframe']
+        bean.constructorArgs = ['vueElintegroNavigationDrawerDataframe']
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
-        currentFrameLayout = ref("subContainerLayout")
+        currentFrameLayout = ref("vueElintegroNavigationDrawerDataframeLayout")
 
     }
 
