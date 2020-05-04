@@ -20,7 +20,7 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.setInitPageValues();this.setupHomePage();"""
+        created = """this.setInitPageValues();"""
 
         methods =
                 """  setupHomePage: function(){
@@ -491,6 +491,33 @@ beans {
                   }
                    }
                           """
+    }
+    vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
+        methods = """
+                 addApplicationSkill(){
+                 console.log("Inside addApplicationSKill");
+                 
+                 var details = this.state.vueNewEmployeeSelfAssesmentDataframe
+                 console.log(details);
+                 var allParams = {};
+                       allParams['firstName'] = this.state.vueNewEmployeeSelfAssesmentDataframe_firstName;
+                       allParams['lastName'] = this.state.vueNewEmployeeSelfAssesmentDataframe_lastName;
+                       allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
+                       console.log(allParams)
+                       
+                       console.log("do you see all params?")
+                       axios({
+                       method:'post',
+                       url:'${contextPath}/EmployeeApplication/initiateSkillSet',
+                       data: allParams
+                         }).then(function(responseData){
+                          var response = responseData;
+                          console.log(response)
+                          console.log(response.data.id)  
+                });
+                 
+                  }
+                  """
     }
     vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
         data = "vueElintegroApplicantDetailsDataframe_tab_model : this.tabValue,\nvueElintegroApplicantDetailsDataframe_display: true, \n"

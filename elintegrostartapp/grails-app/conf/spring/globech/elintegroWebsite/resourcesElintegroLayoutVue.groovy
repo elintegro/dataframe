@@ -81,10 +81,22 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
     }
-    vueNewEmployeeSelfAssesmentDataframeLayout(ColumnLayoutVue) {bean ->
-    layoutBeanName = bean.name
-    layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
-}
+    vueNewEmployeeSelfAssesmentDataframeLayout(ColumnLayoutVue) { bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
+                                 [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
+                                 </v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+    }
+    vueNewEmployeeApplicantAddSkillDataframeLayout(ColumnLayoutVue){ bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 ><v-card round class='rounded-card' color="default"  style="overflow: hidden;">
+                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
+                                </v-btn><span>Close</span></v-tooltip></v-flex>
+                                [DATAFRAME_SCRIPT]
+                                <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+    }
     vueNewEmployeeAddtionalQuestionsDataframeLayout(ColumnLayoutVue) {bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
