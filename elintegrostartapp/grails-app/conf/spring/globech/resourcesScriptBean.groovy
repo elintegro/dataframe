@@ -20,7 +20,7 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.setupHomePage(); this.setInitPageValues();"""
+        created = """this.setInitPageValues();this.setupHomePage();"""
 
         methods =
                 """  setupHomePage: function(){
@@ -446,7 +446,8 @@ beans {
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressLine = result[0].formatted_address;
                     },"""
     }
-    vueSubContainerDataframe_script(VueJsEntity){bean ->
+
+    vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
     }
     vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->

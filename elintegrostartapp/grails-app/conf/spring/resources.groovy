@@ -58,8 +58,6 @@ beans = {
     loadResource "globech/elintegroWebsite/resourcesElintegroVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesElintegroLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesNavigationButtonLayoutVue.groovy"
-    loadResource "globech/elintegroWebsite/resourcesMidSectionLayoutVue.groovy"
-    loadResource "globech/elintegroWebsite/resourcesSubContainerLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesCareersPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesNewEmployeeApplicantPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesClientProjectPageLayoutVue.groovy"

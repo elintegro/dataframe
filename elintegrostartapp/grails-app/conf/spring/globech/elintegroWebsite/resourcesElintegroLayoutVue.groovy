@@ -18,13 +18,64 @@ beans {
     }
     sectionLayout(RowLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-content><v-card  class="mx-auto overflow-hidden" >
-                                  <vueSubContainerDataframe/>
-                                     </v-card>
-                                     
+        layoutPlaceHolder = """<v-content>
+                                  <vueElintegroNavigationLayout/>
+                                  <vueElintegroMidSectionLayout/>
+                                  <vueElintegroFooterLayout/>
                               </v-content>"""
-        children = ["midSectionLayout"]
+        children = ["vueElintegroNavigationLayout","vueElintegroMidSectionLayout","vueElintegroFooterLayout"]
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+    }
+    vueElintegroNavigationLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex><v-app-bar flat color="white"  tabs style="z-index:99;">
+                                   <vueElintegroNavigationDrawerDataframe/>
+                                   <v-toolbar-title style="position:relative;" ><vueElintegroLogoDataframe/></v-toolbar-title>
+                                 
+                                   <v-spacer></v-spacer>
+                                 
+                                        <div class="hidden-md-and-down"><vueElintegroAppBarDataframe/></div>
+                                         
+                                         <vueInitDataframe/>
+
+                                         </v-app-bar>
+                                        
+         </v-flex>"""
+    }
+    vueElintegroNavigationDrawerDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<div>
+                        <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
+                           <v-navigation-drawer v-model="drawer"
+        app
+        temporary
+        width = "min-content">
+       <vueElintegroAppBarDataframe/>       
+       </v-navigation-drawer>
+       </div>"""
+    }
+    vueElintegroMidSectionLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex style="margin-top:30px;"><v-content>
+                             <router-view :key="\$route.fullPath"></router-view>
+                             </v-content>
+                                </v-flex>
+                            """
+
+    }
+    vueElintegroFooterLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """ """
+    }
+    vueElintegroAppBarDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex>
+                                <v-toolbar-items >
+                                 <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                 <vueElintegroNavigationButtonDataframe v-else/>    
+                                </v-toolbar-items></v-flex>
+                               """
+
     }
     vueNewEmployeeUploadResumeDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -95,6 +146,10 @@ beans {
                                 </v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
+    }
+    vueElintegroApplicantGeneralInformationDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]<v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
     }
 
 
