@@ -218,7 +218,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String scripts = ""
 	boolean route = false // set to make dfr route(change in url) or dynamic
 	boolean tab = false //Is tab view active in dataframe
-	List<String> componentsToRegister = new ArrayList<>()
+	List<String> childDataframes = new ArrayList<>()
 //	VueStore store = new VueStore()
 	String mainNamedParamKey = "" //Specify the main named parameter key if other than id. EX: owner.id:ownerId => specify ownerId
 	boolean isGlobal = false // Whether or not to register the component globally
@@ -943,8 +943,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	}
 	private void checkComponentsToRegister(){
 
-		if(!componentsToRegister.isEmpty()){
-			for(String compS : componentsToRegister){
+		if(!childDataframes.isEmpty()){
+			for(String compS : childDataframes){
 				if(compS.isEmpty()) continue
 
 				if(!embeddedDataframes.contains(compS)){

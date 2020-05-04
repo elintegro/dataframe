@@ -28,7 +28,7 @@ beans {
         wrapInForm=false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]
+//        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
         vueStore = ["state":"loggedIn: false,\n"]
@@ -52,7 +52,7 @@ beans {
                         widget: "TextDisplayWidgetVue"
                 ]
         ]
-//        componentsToRegister = ["vueLoginDataframe"]
+//        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
 //        vueStore = ["state":"loggedIn: false,\n"]
@@ -68,7 +68,7 @@ beans {
         wrapInForm=false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]     script:"""this.\$router.push("/vueapplicationformdataframe");""" , roles: "ROLE_NURSE, ROLE_ADMIN", accessType: "ifAnyGranted"               nudge-right='220' nudge-right='220'   Register:[name:"Register", type:"link", script:"console.log('Register tab selected ');Vue.set(this.\$store.state.vueToolbarDataframe, 'myProperty_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'financialData_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'myRentals_display', true);"],
+//        childDataframes = ["vueLoginDataframe"]     script:"""this.\$router.push("/vueapplicationformdataframe");""" , roles: "ROLE_NURSE, ROLE_ADMIN", accessType: "ifAnyGranted"               nudge-right='220' nudge-right='220'   Register:[name:"Register", type:"link", script:"console.log('Register tab selected ');Vue.set(this.\$store.state.vueToolbarDataframe, 'myProperty_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'financialData_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'myRentals_display', true);"],
         //Vue parameters attr:"v-if='this.\$store.state.vueToolbarDataframe.newApplication_display'", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
         isGlobal = true
         createStore = true
@@ -92,7 +92,7 @@ beans {
         saveButton = false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]     script:"""this.\$router.push("/vueapplicationformdataframe");"""                nudge-right='220' nudge-right='220'   Register:[name:"Register", type:"link", script:"console.log('Register tab selected ');Vue.set(this.\$store.state.vueToolbarDataframe, 'myProperty_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'financialData_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'myRentals_display', true);"],
+//        childDataframes = ["vueLoginDataframe"]     script:"""this.\$router.push("/vueapplicationformdataframe");"""                nudge-right='220' nudge-right='220'   Register:[name:"Register", type:"link", script:"console.log('Register tab selected ');Vue.set(this.\$store.state.vueToolbarDataframe, 'myProperty_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'financialData_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'myRentals_display', true);"],
         //Vue parameters attr:"v-if='this.\$store.state.vueToolbarDataframe.newApplication_display'", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
         isGlobal = true
         createStore = true
@@ -154,7 +154,7 @@ beans {
         tab = true
 //        isGlobal = true
 //        createStore = true
-//        componentsToRegister=["vueAddressDataframe"]
+//        childDataframes=["vueAddressDataframe"]
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         doAfterSave = """setTimeout(function(){ vueUserProfileDataframeVar.\$router.push('/');this.location.reload();}, 3000);"""
@@ -272,7 +272,7 @@ beans {
         wrapInForm=false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]
+//        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
         dataframeButtons = [
@@ -554,7 +554,7 @@ beans {
         initOnPageLoad = true
 //        doBeforeRefresh = """allParams['contactType'] = this.\$route.params.routeId"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
-        componentsToRegister = ["vueContactManagementDataframe"]
+        childDataframes = ["vueContactManagementDataframe"]
         /*,onClick:[showAsDialog: false, refDataframe: ref("vuePrescribedMedicationsDataframe")]
         ,onButtonClick:[
                 ['actionName':'Payment','buttons':[
@@ -598,7 +598,7 @@ beans {
         initOnPageLoad = true
         saveButton = false
         dataframeLabelCode = "Contact.Details"
-//        componentsToRegister=["vueAddressDataframe"]
+//        childDataframes=["vueAddressDataframe"]
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
@@ -654,7 +654,7 @@ beans {
 
         initOnPageLoad = true
         dataframeLabelCode = "Contact.Details"
-//        componentsToRegister=["vueAddressDataframe"]
+//        childDataframes=["vueAddressDataframe"]
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
