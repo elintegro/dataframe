@@ -20,7 +20,7 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.setInitPageValues();"""
+        created = """this.setInitPageValues();this.setupHomePage();"""
 
         methods =
                 """  setupHomePage: function(){
