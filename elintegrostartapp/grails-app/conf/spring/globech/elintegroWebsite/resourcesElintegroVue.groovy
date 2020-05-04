@@ -693,29 +693,49 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantGeneralInformationDataframe']
         hql = "select application.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone from Application application inner join application.applicant person where application.id=:id"
         tab = true
+        saveButton = false
+        readonly = true
         initOnPageLoad = true
         putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
+        dataframeButtons = [next: [name:"next", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
+                                                                                \n""",flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6'], url: ""]]
 
-        currentFrameLayout = ref("appNameDataframeLayout")
+        currentFrameLayout = ref("vueElintegroApplicantGeneralInformationDataframeLayout")
     }
     vueElintegroApplicantSelfAssessmentDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
         tab = true
-        currentFrameLayout = ref("appNameDataframeLayout")
+        saveButton = false
+        dataframeButtons = [next: [name:"next", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
+                                                                                \n""", flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                            previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantGeneralInformationDataframe-tab-id");
+                                                                                \n""", flexGridValues:['xs12', 'sm6', 'md6', 'lg6', 'xl6']]
+        ]
+        currentFrameLayout = ref("emptyDataframeLayout")
     }
     vueElintegroApplicantCVDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantCVDataframe']
         tab = true
-        currentFrameLayout = ref("appNameDataframeLayout")
+        saveButton = false
+        dataframeButtons = [next: [name:"next", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
+                                                                                \n""", flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                            previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
+                                                                                \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
+        ]
+        currentFrameLayout = ref("emptyDataframeLayout")
     }
     vueElintegroApplicantQuestionAnswerDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantQuestionAnswerDataframe']
         tab = true
-        currentFrameLayout = ref("appNameDataframeLayout")
+        saveButton = false
+        dataframeButtons = [previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
+                                                                                \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
+        ]
+        currentFrameLayout = ref("emptyDataframeLayout")
     }
 }

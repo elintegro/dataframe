@@ -147,6 +147,10 @@ beans {
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
     }
+    vueElintegroApplicantGeneralInformationDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]<v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
+    }
 
 
 
