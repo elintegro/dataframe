@@ -154,6 +154,7 @@ beans {
         currentFrameLayout = ref("appNameDataframeLayout")
 
     }
+
     vueClientProjectDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueClientProjectDataframe']
