@@ -360,33 +360,54 @@ beans {
                                     ,hql             : """select applicationSkill.id as Id ,applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill"""
                                     ,internationalize: true
                                     ,editButton: true
+                        ,showRefreshMethod:true
                                     ,onButtonClick   : [
-                                                ['actionName': 'Add Skill', 'buttons': [
+                                                ['actionName': 'Edit Skill', 'buttons': [
                                                         [name        : "edit"
                                                          ,MaxWidth: 500
                                                         ,showAsDialog: true
                                                         ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
-                                                        ,refDataframe: ref("vueNewEmployeeApplicantAddSkillDataframe")
+                                                        ,refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe")
                                                         ,vuetifyIcon : [name: "edit"]
-//                                                       ,script      : "Vue.set(this.\$store.state.vueUnitDataframe.unit_tenants_grid, 'key', data.id);"
+                                                       //,script      : "Vue.set(this.\$store.state.vueNewEmployeeApplicantEditSkillDataframe, 'key', data.id);"
                                                         ]]]]
 ]
         ]
         dataframeButtons = [
-                next:[name:"next", type: "button",script:'this.addApplicationSkill()',flexGridValues: ['xs12', 'sm12', 'md1', 'lg1', 'xl1'], url:""],
+                next:[name:"next", type: "button",script:'this.addApplicationSkill()',flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4'], url:""],
+                addSkill:[name:"addSkill",type:"button",showAsDialog:true,refDataframe: ref("vueNewEmployeeApplicantAddSkillDataframe"),flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4']],
                 previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeUploadResumeDataframe-tab-id");
-                                                                                \n""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'], url: ""]
+                                                                                \n""",flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4'], url: ""]
         ]
-        childDataframes = ['vueNewEmployeeApplicantAddSkillDataframe']
+        childDataframes = ['vueNewEmployeeApplicantEditSkillDataframe','vueNewEmployeeApplicantAddSkillDataframe']
 
         currentFrameLayout = ref("vueNewEmployeeSelfAssesmentDataframeLayout")
+    }
+    vueNewEmployeeApplicantEditSkillDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeApplicantEditSkillDataframe']
+        saveButton = true
+        initOnPageLoad = true
+        putFillInitDataMethod = true
+        doBeforeRefresh = """allParams['id']= this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
+        doBeforeSave = """allParams['key_vueNewEmployeeApplicantEditSkillDataframe_applicationSkill_id_id'] = this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
+        doAfterSave = """ excon.setVisibility("vueNewEmployeeApplicantEditSkillDataframe", false);
+                          excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'U');
+                      """
+        hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill where applicationSkill.id=:id"
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        addFieldDef = ["applicationSkill.skill":[readOnly: true]]
+        currentFrameLayout = ref("vueNewEmployeeApplicantEditSkillDataframeLayout")
     }
     vueNewEmployeeApplicantAddSkillDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeApplicantAddSkillDataframe']
         saveButton = true
         initOnPageLoad = true
-        hql = "select applicationSkill.skill , applicationSkill.level, applicationSkill.comment from ApplicationSkill applicationSkill"
+        doAfterSave = """excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
+                         excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'I');
+                          """
+        hql = "select applicationSkill.id as Id,applicationSkill.skill as Skill , applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill where applicationSkill.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         currentFrameLayout = ref("vueNewEmployeeApplicantAddSkillDataframeLayout")
     }

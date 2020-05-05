@@ -528,4 +528,8 @@ beans {
         watch = """ refreshVueElintegroApplicantGeneralInformationDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantGeneralInformationDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},"
     }
+    vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
+        computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
+    }
 }

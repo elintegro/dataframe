@@ -46,7 +46,7 @@ class EmployeeApplicationController {
             for(item in Skills.findAll())
             {
                 println(item.name)
-                new ApplicationSkill(application: 1, skill: item.name,comment: "nothing").save()
+                new ApplicationSkill(skill: item.name,comment: "").save()
             }
         }
 

@@ -11,6 +11,6 @@ class ApplicationSkill  {
     static constraints = {
         application(nullable: false)
         skill(nullable: false)
-        comment(nullable: false)
+        comment(nullable: true)
     }
 }
