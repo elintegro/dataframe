@@ -360,7 +360,6 @@ beans {
                                     ,hql             : """select applicationSkill.id as Id ,applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill"""
                                     ,internationalize: true
                                     ,editButton: true
-                        ,showRefreshMethod:true
                                     ,onButtonClick   : [
                                                 ['actionName': 'Edit Skill', 'buttons': [
                                                         [name        : "edit"
@@ -369,7 +368,6 @@ beans {
                                                         ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
                                                         ,refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe")
                                                         ,vuetifyIcon : [name: "edit"]
-                                                       //,script      : "Vue.set(this.\$store.state.vueNewEmployeeApplicantEditSkillDataframe, 'key', data.id);"
                                                         ]]]]
 ]
         ]
