@@ -303,27 +303,28 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, application.avatar, application.resume from Application application where application.id=:id"
+        hql = "select application.id, application.resume from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         saveButtonAttr = " align='right' "
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         tab = true
-
-        doBeforeSave = """allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
-                          allParams['key_vueNewEmployeeUploadResumeDataframe_application_id_id'] = this.state.vueNewEmployeeUploadResumeDataframe_resume_id;
-                           """
+        isGlobal = false
+        doBeforeSave = """
+            //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rather then insert a new one.                          
+            excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
+        """
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key", response.nodeId[0]);
                          excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSelfAssesmentDataframe-tab-id');
                       """
         addFieldDef = [
-                "application.avatar":["name":"avatar"
-                                      ,"widget":"PictureUploadWidgetVue"
-                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                                      ,multiple:false
-                                      ,editButton: true
-                                      ,deleteButton:true  ],
+//                "application.avatar":["name":"avatar"
+//                                      ,"widget":"PictureUploadWidgetVue"
+//                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+//                                      ,multiple:false
+//                                      ,editButton: true
+//                                      ,deleteButton:true  ],
 
                 "application.resume":["name":"resume"
                                       ,"widget":"FilesUploadWidgetVue"
@@ -351,6 +352,7 @@ beans {
         tab = true
         saveButton = false
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        doBeforeRefresh = """this.addApplicationSkill();"""
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeAddtionalQuestionsDataframe","key", response.nodeId[0]);
                          excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeAddtionalQuestionsDataframe-tab-id');"""
@@ -372,7 +374,7 @@ beans {
 ]
         ]
         dataframeButtons = [
-                next:[name:"next", type: "button",script:'this.addApplicationSkill()',flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4'], url:""],
+                next:[name:"next", type: "button",script:'',flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4'], url:""],
                 addSkill:[name:"addSkill",type:"button",showAsDialog:true,refDataframe: ref("vueNewEmployeeApplicantAddSkillDataframe"),flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4']],
                 previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeUploadResumeDataframe-tab-id");
                                                                                 \n""",flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4'], url: ""]

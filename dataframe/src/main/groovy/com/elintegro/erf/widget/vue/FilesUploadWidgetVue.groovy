@@ -35,8 +35,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
         String fldName = dataVariable
         def defaultValue = field.defaultValue?:""
         String genId = fldName+"-file"
-       dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
-           .addToMethodScript("""
+       dataframe.getVueJsBuilder().addToMethodScript("""
                    ${fldName}_uploadFile: function(event){
                               //TODO: for multi file this should be array and not sinfle file, change this code accordingly
                               var fileToUpload =  this.${fldName};
@@ -63,16 +62,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                                                 console.log(error)
                                                 });                      
                    },
-                 ${fldName}_computedFileUploadParams() {
-                        var refParams = this.params;
-                         var ajaxFileUploadParams = refParams['ajaxFileSave'];
-                         if (ajaxFileUploadParams){
-                           ajaxFileUploadParams.push({fieldName:'$fldName'})
-                         } 
-                         else{
-                                  refParams['ajaxFileSave'] = [{fieldName:'$fldName'}];
-                         } 
-                 },\n 
+                 
 
        """)
 
