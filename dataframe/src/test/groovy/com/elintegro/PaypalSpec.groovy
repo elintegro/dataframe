@@ -11,7 +11,7 @@ You are not required to accept this License, since you have not signed it. Howev
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
-package com.elintegro.payment
+package com.elintegro
 
 import com.elintegro.erf.payment.base.gateway.PaymentGateway
 import com.elintegro.erf.payment.base.gateway.PaymentGatewayFactory

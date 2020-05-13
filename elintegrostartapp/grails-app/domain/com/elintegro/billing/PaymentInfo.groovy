@@ -15,7 +15,7 @@ package com.elintegro.billing
 
 
 import com.elintegro.gc.commonfield.ControlField
-import com.elintegro.payment.paymentEnums.PaymentMethods
+import com.elintegro.paymentEnums.PaymentMethods
 import com.elintegro.ref.Address
 
 class PaymentInfo extends ControlField {

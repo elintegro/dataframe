@@ -14,7 +14,6 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.erf.dataframe
 
 import com.elintegro.erf.dataframe.service.MetaFieldService
-import com.elintegro.payment.paymentEnums.PaymentMethods
 import com.elintegro.utils.DateTimdataframe
 import groovy.util.logging.Slf4j
 import org.hibernate.Query

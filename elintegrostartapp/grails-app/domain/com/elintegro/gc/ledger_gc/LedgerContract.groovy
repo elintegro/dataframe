@@ -15,7 +15,7 @@ package com.elintegro.gc.ledger_gc
 
 import com.elintegro.billing.PaymentFrequencyUnit
 
-import com.elintegro.payment.paymentEnums.ChargeType
+import com.elintegro.paymentEnums.ChargeType
 
 class LedgerContract{
 

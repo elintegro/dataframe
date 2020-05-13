@@ -11,9 +11,53 @@ You are not required to accept this License, since you have not signed it. Howev
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
-package com.elintegro.payment
+package com.elintegro.paymentEnums
 
-class PaymentBusinessRules {
+enum ChargeType {
 
+    ONETIME("oneTime", "One Time."),
+    RECURRENT("recurrent", "Recurrent."),
+    INSTALLMENTS("installments", "Installments.")
+
+    private String type
+    private String desc
+
+    ChargeType(String type,String desc) {
+        this.type = type
+        this.desc = desc
+    }
+
+    public String getType() {
+        return type
+    }
+    public String getDesc() {
+        return desc
+    }
+
+    public static ChargeType getByType(String type) {
+
+        for (ChargeType chargeType : values()) {
+            if (chargeType.type.equals(type)) {
+                return chargeType
+            }
+        }
+        return null
+    }
+
+    public static def getTypes() {
+        def types = []
+        for (ChargeType chargeType : values()) {
+            types.add(chargeType.getType())
+        }
+        return types
+    }
+
+    public static def getDescs() {
+        def types = []
+        for (ChargeType chargeType : values()) {
+            types.add(chargeType.desc)
+        }
+        return types
+    }
 
 }

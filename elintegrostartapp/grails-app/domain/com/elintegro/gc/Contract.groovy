@@ -13,9 +13,9 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.gc
 
-import com.elintegro.billing.Charge
+
 import com.elintegro.billing.PaymentFrequencyUnit
-import com.elintegro.payment.paymentEnums.ChargeType
+import com.elintegro.paymentEnums.ChargeType
 
 class Contract {
 

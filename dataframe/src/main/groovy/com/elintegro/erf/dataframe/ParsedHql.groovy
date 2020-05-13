@@ -30,10 +30,23 @@ import java.util.regex.Pattern
 
 class ParsedHql {
 
+	static final int HQL_WHOLE_MATCH = 0
+	static final int HQL_FIELDS_CLAUSE = 1
+	static final int HQL_FROM_CLAUSE = 2
+	//static final int HQL_JOIN_CLAUSE = 3
+	static final int HQL_WHERE_CLAUSE = 3
+
+
 	String hql
 	String sqlString
 	String fieldStr
 	String fromStr
+	String joinStr
+	List<JoinParsed> joins = []
+	String groupByStr
+	String orderByStr
+	String whereStr
+
 	String[] fieldsArr
 	Map fields = new LinkedHashMap()
 	Map aliasDomainFields = [:]
@@ -43,7 +56,14 @@ class ParsedHql {
 	def  grailsApplication
 	def sessionFactory
 	Map namedParameters = [:]
+	//def hqlExtractRegex = /(?i)select\s+(?<select>.+?)(?i)from\s+(?<from>.+?)(?<join>(?:(?i)right\s+|(?i)left\s+)?(?:(?i)outer\s+|(?i)inner\s+)?(?i)join\s+(?:.+))(?i)where\s+(?<where>.+)/
+	def hqlExtractRegex = /select\s+(?<select>.+?)from\s+(?<from>.+?)(?<join>(?:right\s+|left\s+)?(?:outer\s+|inner\s+)?join\s+(?:.+))?where\s+(?<where>.+)/
+	Pattern hqlPattern = Pattern.compile(hqlExtractRegex, Pattern.CASE_INSENSITIVE);
+	def joinRegexClause = /((?i)right\s+|(?i)left\s+)?((?i)outer\s+|(?i)inner\s+)?(?i)join\s+/
 
+	ParsedHql(){
+		print "Empty constructor, called for tests!"
+	}
 
 	ParsedHql(String hql, def grailsApplication, def sessionFactory){
 		this.hql = hql?hql.trim().replaceAll("(?!.)\\s", ""):"";
@@ -55,7 +75,7 @@ class ParsedHql {
 	private def parseHQLInit(){
 
 		if(hql){
-            def session = sessionFactory.openSession()
+			def session = sessionFactory.openSession()
 //            def session = SessionFactoryUtils.getSession(sessionFactory, true)
 			Query query =  session.createQuery(hql);
 			for (String parameterName : query.getNamedParameters()) {
@@ -68,11 +88,11 @@ class ParsedHql {
 				// check all occurance
 				String namedParameterExtract = null;
 				while (matcher.find()) {
-				  namedParameterExtract = matcher.group()
+					namedParameterExtract = matcher.group()
 				}
-				
+
 				//This is for straight forward Where expressions, mostly for those of entity.id = :id to be able to save new record (insert operation)
-				//If namedParameterExtract is null this probably more complex expression and is a filter, we do not need to add to the named parameters and deal with it when inserting 
+				//If namedParameterExtract is null this probably more complex expression and is a filter, we do not need to add to the named parameters and deal with it when inserting
 				if(namedParameterExtract != null){
 					// now create a new pattern and matcher to replace whitespace with tabs
 					Pattern replace = Pattern.compile("\\s*=\\s*:${parameterName}");
@@ -92,7 +112,7 @@ class ParsedHql {
 					}
 					namedParameters.put(parameterName.trim(), namedParameter)
 				}
-				
+
 			}
 
 			def HqlFldMatcher = (hql =~ /^(?i)select\s(.+?)\s(?i)from\s.*/)
@@ -103,8 +123,12 @@ class ParsedHql {
 				HqlFromMatcher = (hql =~ /.*(?i)from\s(.*)/)
 				fromStr = HqlFromMatcher.matches()?HqlFromMatcher[0][1]:""//
 			}
-			if(fromStr.matches(/.*(?i)join\s(.+?).*/)){
-				fromStr = getReplacedJoinString(fromStr)
+
+
+			Pattern pattern = Pattern.compile(regexForJoins, Pattern.CASE_INSENSITIVE);
+			if(fromStr.matches(regexForJoins)){
+				String fromStrWithJoins = fromStr
+				fromStr = getReplacedJoinString(fromStrWithJoins)
 			}
 
 			QueryTranslatorFactory ast = new ASTQueryTranslatorFactory();
@@ -112,7 +136,11 @@ class ParsedHql {
 			queryTranslator.compile( Collections.EMPTY_MAP, true );
 			def retTypes = queryTranslator.getReturnTypes()
 			sqlString = queryTranslator.getSQLString()
-					
+
+			if (!extractParts(hql)){
+				throw DataframeException("There is a parsing error of hql: ${hql}")
+			}
+
 			getFromMap(fromStr);
 
 			//def qIdent = queryTranslator.getQueryIdentifier()
@@ -120,10 +148,46 @@ class ParsedHql {
 			//def metaProp = queryTranslator.getMetaPropertyValues()
 			//def columns = queryTranslator.getColumnNames() //This brings just coded sql fields, not too meaningful
 			//def aliases = queryTranslator.getReturnAliases() //Just nambers
-			
-						
+
+
 			fillFieldMap(fieldStr, retTypes)
 
+		}
+	}
+
+
+	public boolean extractParts(String hql){
+		String hqlTemp = hql.replaceAll(/(\s+)/, " ");
+
+		Matcher hqlMatcher = hqlPattern.matcher(hqlTemp);
+		hqlMatcher.matches();
+
+		if(hqlMatcher?.hasGroup()){
+			fieldStr = hqlMatcher.group("select").trim()
+			fromStr = hqlMatcher.group("from").trim()
+			whereStr = hqlMatcher.group("where").trim()
+			if(joinStr) {
+				joinStr = hqlMatcher.group("join").trim()
+				extractJoins(joinStr)
+			}
+			return true
+		}
+		return false
+	}
+
+	public extractJoins(String joinStr){
+		if(StringUtils.isEmpty(joinStr)){
+			return
+		}
+		String[] joinsStringArr = joinStr.split(joinRegexClause)
+		String joinStr_ = joinStr
+		joinsStringArr?.each{ joinClause ->
+			if(!StringUtils.isEmpty(joinClause)) {
+				int joinClauseInd = joinStr_.indexOf(joinClause)
+				String joinElementWordWithOption = joinStr_.substring(0, joinClauseInd) //TODO: maybe -1 here?
+				joins.add(new JoinParsed(fromStr, joinElementWordWithOption, joinClause))
+				joinStr_ = joinStr_.substring(joinElementWordWithOption.length() + joinClause.length())
+			}
 		}
 	}
 
@@ -137,7 +201,7 @@ class ParsedHql {
 		return sqlString;
 	}
 
-	
+
 	public String getReplacedJoinString(String hqlString){
 		/*hqlString = hqlString.replaceAll(/(?i)left\s{1,3}(?i)outer\s{1,3}(?i)join\s{1,3}(?i)fetch\s/,",")
 		hqlString = hqlString.replaceAll(/(?i)right\s{1,3}(?i)outer\s{1,3}(?i)join\s{1,3}(?i)fetch\s/,",")
@@ -158,12 +222,12 @@ class ParsedHql {
 	}
 
 	private void getFromMap(String fromStr){
-		
+
 		String[] tables = fromStr.split(',')
 		Map res = new LinkedMap()
 		int i = 0
 
-		 String parentDomain
+		String parentDomain
 		for(String tbl: tables){
 			String[] tblDtl = tbl.trim().split(/\sas\s/)
 			if(tblDtl.length == 1){
@@ -181,25 +245,25 @@ class ParsedHql {
 			}
 		}
 	}
-	
+
 
 	private DomainClassInfo getDomainFromPath(String path, String domainAlias, String tableName, def parentDomain){
 		String[] domainPaths = path.split(/\./)
 		DefaultGrailsDomainClass dom
-			if(domainPaths.length == 1 ){//Just a Domain name without path
-				dom = grailsApplication.domainClasses.find {
-					it.clazz.simpleName == domainPaths[0]
-				}
-			}else if(domainPaths.length > 2){//Full path
-				dom = grailsApplication.domainClasses.find {
-					it.clazz.name == path
-				}
+		if(domainPaths.length == 1 ){//Just a Domain name without path
+			dom = grailsApplication.domainClasses.find {
+				it.clazz.simpleName == domainPaths[0]
 			}
-			if(!dom && domainPaths.length == 2){//What if the domain specified as dbinstance.Domain?
-                  /**Here, "parentDomain" contains the main domain class name of an association hql,
-				   * It is used with the assumption that the domain class used in save, query operation for an association is the main class itself not the associated domain class*/
-				 if(parentDomain){
-					 dom = grailsApplication.domainClasses.find { it.clazz.simpleName.equalsIgnoreCase(parentDomain) }
+		}else if(domainPaths.length > 2){//Full path
+			dom = grailsApplication.domainClasses.find {
+				it.clazz.name == path
+			}
+		}
+		if(!dom && domainPaths.length == 2){//What if the domain specified as dbinstance.Domain?
+			/**Here, "parentDomain" contains the main domain class name of an association hql,
+			 * It is used with the assumption that the domain class used in save, query operation for an association is the main class itself not the associated domain class*/
+			if(parentDomain){
+				dom = grailsApplication.domainClasses.find { it.clazz.simpleName.equalsIgnoreCase(parentDomain) }
 
 				String parentDomainAlias = domainPaths[0];
 				String asstionName = domainPaths[1];
@@ -207,17 +271,17 @@ class ParsedHql {
 				def prop = ascDomainClass.getPropertyByName(asstionName)
 				def typeName = prop.associatedEntity.getJavaClass().getName()
 				dom = grailsApplication.domainClasses.find { it.clazz.name == typeName }
-				 }
-
 			}
 
-			if(dom){
-				SingleTableEntityPersister persister = sessionFactory.getClassMetadata(dom.clazz)
-				DomainClassInfo domainClassInfo = new DomainClassInfo(dom.clazz, domainAlias, tableName, persister)
+		}
 
-				//return  [key: domainClazz.getSimpleName(), value: domain, domainAlias: domainAlias,  tablename: tableName, clazz:clazz];
-				return domainClassInfo
-			}
+		if(dom){
+			SingleTableEntityPersister persister = sessionFactory.getClassMetadata(dom.clazz)
+			DomainClassInfo domainClassInfo = new DomainClassInfo(dom.clazz, domainAlias, tableName, persister)
+
+			//return  [key: domainClazz.getSimpleName(), value: domain, domainAlias: domainAlias,  tablename: tableName, clazz:clazz];
+			return domainClassInfo
+		}
 
 	}
 
@@ -225,7 +289,7 @@ class ParsedHql {
 	 * The method uses fieldStr and build fields map .
 	 */
 	private def fillFieldMap = { fldStr, types ->
-				
+
 		def fieldArr = fldStr.split(',')
 
 		def domains = hqlDomains.keySet() as String[]
@@ -234,7 +298,7 @@ class ParsedHql {
 			//field = field.replaceAll("\\s+","")
 			Type fieldRetType = types[index]
 
-			
+
 			String[] fldDtl = field.trim().split(/\s*(?i)(\s+as\s+|\s)\s*/)
 			String alias = ""
 			String fldNmAlias = ""

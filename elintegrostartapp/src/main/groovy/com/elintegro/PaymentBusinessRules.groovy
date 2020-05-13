@@ -11,51 +11,9 @@ You are not required to accept this License, since you have not signed it. Howev
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
-package com.elintegro.payment.paymentEnums
+package com.elintegro
 
-enum CardType {
+class PaymentBusinessRules {
 
-    VISA("visa", "Card"),
-    MASTERCARD("masterCard","Master Card"),
 
-    private String type
-    private String desc
-
-    CardType(String type,String desc) {
-        this.type = type
-        this.desc = desc
-    }
-
-    public String getType() {
-        return type
-    }
-    public String getDesc() {
-        return desc
-    }
-
-    public static CardType getByType(String type) {
-
-        for (CardType cardType : values()) {
-            if (cardType.type.equals(type)) {
-                return cardType
-            }
-        }
-        return null
-    }
-
-    public static def getTypes() {
-        def types = []
-        for (CardType cardType : values()) {
-            types.add(cardType.getType())
-        }
-        return types
-    }
-
-    public static def getDescs() {
-        def types = []
-        for (CardType cardType : values()) {
-            types.add(cardType.getDesc())
-        }
-        return types
-    }
 }

@@ -15,7 +15,7 @@ package com.elintegro.billing
 
 import com.elintegro.gc.commonfield.ControlField
 import com.elintegro.gc.commonfield.PaymentInfoSuper
-import com.elintegro.payment.paymentEnums.CardType
+import com.elintegro.paymentEnums.CardType
 import com.elintegro.utils.HashGenerator
 
 class Card extends ControlField implements PaymentInfoSuper{
