@@ -40,20 +40,17 @@ class EmployeeApplicationController {
         render(result as JSON)
     }
     def initiateSkillSet() {
-        println("Inside initiateSkillSet")
-        println(request.getJSON())
         def param = request.getJSON()
-        println(param.id)
-        List<ApplicationSkill> appSkill = ApplicationSkill.findAllById(param.id)
+        List<ApplicationSkill> appSkill = ApplicationSkill.findAllByApplication(Application.findById(param.id))
         if ( appSkill.size() == 0) {
-            println("Inside if condition")
            List<Skills> skillsList = Skills.findAll()
             for (item in skillsList) {
-                println(item.name)
-                new ApplicationSkill(skill: item.name, comment: "").save()
-                println("After ApplicationSkill")
+                new ApplicationSkill(application: param.id, skill: item.name,level: 0, comment: "").save()
+
             }
         }
+        def resultData = [success: true,application_id: param.id, ]
+        render (resultData as JSON)
     }
 
 

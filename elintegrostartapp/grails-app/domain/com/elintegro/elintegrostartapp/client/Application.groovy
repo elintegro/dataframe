@@ -40,6 +40,9 @@ class Application extends ControlField{
 
     Facility facility
 
+    String question1
+    String question2
+
     static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills]
 
     static constraints = {
@@ -55,5 +58,7 @@ class Application extends ControlField{
         linkedin(nullable: false)
         resume(nullable: true)
         avatar(nullable: true)
+        question1(nullable: true,length: 4096)
+        question2(nullable: true,length: 4096)
     }
 }

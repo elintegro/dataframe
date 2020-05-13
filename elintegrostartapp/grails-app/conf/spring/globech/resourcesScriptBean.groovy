@@ -498,6 +498,7 @@ beans {
                           """
     }
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
+        created = """this.addApplicationSkill();"""
         methods = """
                  addApplicationSkill(){
                  console.log("Inside addApplicationSKill");
@@ -505,6 +506,7 @@ beans {
                  var details = this.state.vueNewEmployeeSelfAssesmentDataframe
                  console.log(details);
                  var allParams = {};
+                       var self = this;
                        allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
                        
                        allParams['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
@@ -516,6 +518,8 @@ beans {
                        url:'${contextPath}/EmployeeApplication/initiateSkillSet',
                        data: allParams
                          }).then(function(responseData){
+                         self.vueNewEmployeeSelfAssesmentDataframe_fillInitData();
+                         
                           var response = responseData;
                           console.log(response)
                           console.log(response.data.id)  
