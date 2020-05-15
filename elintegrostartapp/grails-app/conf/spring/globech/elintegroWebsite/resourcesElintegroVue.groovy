@@ -362,7 +362,7 @@ beans {
                 "applicationSkill":[ widget          : "GridWidgetVue"
 
                                     ,name            : "applicationSkill"
-                                    ,hql             : """select application.id as appId,applicationSkill.id as id, applicationSkill.skill as skill,applicationSkill.level as level, applicationSkill.comment as comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"""
+                                    ,hql             : """select application.id as AppId,applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"""
                                     ,internationalize: true
                                     ,editButton: true
                                     ,onButtonClick   : [
@@ -397,7 +397,7 @@ beans {
         doAfterSave = """ excon.setVisibility("vueNewEmployeeApplicantEditSkillDataframe", false);
                           excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'U');
                       """
-        hql = "select applicationSkill.id as id, applicationSkill.skill as skill, applicationSkill.level as level, applicationSkill.comment as comment from ApplicationSkill applicationSkill where applicationSkill.id=:id"
+        hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = ["applicationSkill.skill":[readOnly: true]]
         currentFrameLayout = ref("vueNewEmployeeApplicantEditSkillDataframeLayout")
@@ -418,12 +418,13 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeAddtionalQuestionsDataframe']
         initOnPageLoad = false
+        doBeforeSave = """allParams['key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id');"""
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         saveButton = true
         tab = true
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        doAfterSave = """this.\$router.push("/vueElintegroBannerDataframe");"""
+        //doAfterSave = """this.\$router.push("/vueElintegroBannerDataframe");"""
         dataframeButtons = [
                 previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
@@ -756,13 +757,15 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
         tab = true
         saveButton = false
+        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
         initOnPageLoad = true
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         readonly = true
         addFieldDef =[
                 "applicationSkill":[ widget          : "GridWidgetVue"
 
                                      ,name            : "applicationSkill"
-                                     ,hql             : """select applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"""
+                                     ,hql             : """select application.id as AppId,applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"""
                                      ,internationalize: true
 
                 ]
@@ -791,11 +794,13 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantQuestionAnswerDataframe']
         tab = true
         readonly = true
+        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
         saveButton = false
-        hql = "select application.question1,application.question2 from Application application where application.id=:id"
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
         dataframeButtons = [previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
                                                                                 \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
         ]
-        currentFrameLayout = ref("emptyDataframeLayout")
+        currentFrameLayout = ref("vueElintegroApplicantQuestionAnswerDataframeLayout")
     }
 }

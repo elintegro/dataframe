@@ -500,9 +500,7 @@ beans {
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
         created = """this.fillApplicationSkillTable();"""
         methods = """
-                 fillApplicationSkillTable(){
-                 console.log("Inside fillApplicationSkillTable");
-                 
+                 fillApplicationSkillTable(){  
                  var details = this.state.vueNewEmployeeSelfAssesmentDataframe
                  console.log(details);
                  var allParams = {};
@@ -511,8 +509,6 @@ beans {
                        
                        allParams['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
                        console.log(allParams)
-                       
-                       console.log("do you see all params?")
                        axios({
                        method:'post',
                        url:'${contextPath}/EmployeeApplication/initiateSkillSet',
@@ -522,7 +518,7 @@ beans {
                          
                           var response = responseData;
                           console.log(response)
-                          console.log(response.data.id)  
+                        
                 });
                  
                   }
@@ -530,34 +526,27 @@ beans {
     }
     vueNewEmployeeApplicantAddSkillDataframe_script(VueJsEntity){bean ->
         methods = """addNewSkill(){
-                            console.log("Inside addNewSkill");
-                            var details = this.state.vueNewEmployeeApplicantAddSkillDataframe;
-                            
-                 var details = this.state.vueNewEmployeeApplicantAddSkillDataframe
-                 console.log(details);
-                 var allParams = this.state;
-                       var self = this;
-                       allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
-                       allParams['vueNewEmployeeApplicantAddSkillDataframe_application_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
-                       allParams['dataframe'] = 'vueNewEmployeeApplicantAddSkillDataframe';
-                       console.log(allParams)
-                       
-                       console.log("do you see all params?")
-                       axios({
-                       method:'post',
-                       url:'${contextPath}/EmployeeApplication/addNewSkillSet',
-                       data: allParams
-                         }).then(function(responseData){
-                          var response = responseData.data;
-                          excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
-                          excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'I');
-                         
-                         
-                          console.log(response)
-                       
-                });
-                          }
-                  """
+                                    var details = this.state.vueNewEmployeeApplicantAddSkillDataframe;                           
+                                    var details = this.state.vueNewEmployeeApplicantAddSkillDataframe
+                                    console.log(details);
+                                    var allParams = this.state;
+                                    var self = this;
+                                    allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                                    allParams['vueNewEmployeeApplicantAddSkillDataframe_application_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                                    allParams['dataframe'] = 'vueNewEmployeeApplicantAddSkillDataframe';
+                                    console.log(allParams)
+                                             
+                                    axios({
+                                           method:'post',
+                                           url:'${contextPath}/EmployeeApplication/addNewSkillSet',
+                                            data: allParams
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                   excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
+                                                                   excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'I');                                                 
+                                                                   console.log(response)                      
+                                                                   });
+                  }"""
 
     }
 
@@ -569,6 +558,14 @@ beans {
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantGeneralInformationDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantGeneralInformationDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},"
+    }
+    vueElintegroApplicantSelfAssessmentDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
+    }
+    vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
     }
     vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""

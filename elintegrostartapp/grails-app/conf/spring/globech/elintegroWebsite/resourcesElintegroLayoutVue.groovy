@@ -161,9 +161,9 @@ beans {
                                   </v-tabs>
                                   <v-tabs-items v-model="vueElintegroApplicantDetailsDataframe_tab_model" >
                                       <v-tab-item value="vueElintegroApplicantGeneralInformationDataframe-tab-id" ><vueElintegroApplicantGeneralInformationDataframe :vueElintegroApplicantGeneralInformationDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
-                                      <v-tab-item value="vueElintegroApplicantSelfAssessmentDataframe-tab-id"><vueElintegroApplicantSelfAssessmentDataframe/></v-tab-item>
+                                      <v-tab-item value="vueElintegroApplicantSelfAssessmentDataframe-tab-id"><vueElintegroApplicantSelfAssessmentDataframe :vueElintegroApplicantSelfAssessmentDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantCVDataframe-tab-id"><vueElintegroApplicantCVDataframe/></v-tab-item>
-                                      <v-tab-item value="vueElintegroApplicantQuestionAnswerDataframe-tab-id"><vueElintegroApplicantQuestionAnswerDataframe/></v-tab-item>
+                                      <v-tab-item value="vueElintegroApplicantQuestionAnswerDataframe-tab-id"><vueElintegroApplicantQuestionAnswerDataframe :vueElintegroApplicantQuestionAnswerDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                  </v-tabs-items></v-card>
                                 </v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -172,6 +172,10 @@ beans {
     vueElintegroApplicantGeneralInformationDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]<v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
+    }
+    vueElintegroApplicantQuestionAnswerDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
     }
 
 
