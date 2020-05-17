@@ -263,7 +263,6 @@ beans {
     vueNewEmployeeBasicInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeBasicInformationDataframe']
-//      hql = "select person.firstName, person.lastName, person.email, person.phone from Person person where person.id=:id"
         hql = "select person.firstName, person.lastName, person.email,person.phone,application.linkedin from Application application inner join application.applicant person where application.id=:id"
         initOnPageLoad = false
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -310,6 +309,8 @@ beans {
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         tab = true
         isGlobal = false
+        //Was in >>>>>>> EWEB-68-refactoring
+        //isGlobal = true
         doBeforeSave = """
             //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rather then insert a new one.                          
             excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");

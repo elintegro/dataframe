@@ -469,8 +469,7 @@ beans {
                        //allParams['linkedin'] = this.state.vueNewEmployeeBasicInformationDataframe_application_linkedin;
                        //allParams['availablePosition'] = this.state.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
                        allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
-                       console.log(allParams)
-                       
+                       console.log(allParams)                       
                        console.log("do you see all params?")
                        if (this.\$refs.vueNewEmployeeBasicInformationDataframe_form.validate()){
                        axios({

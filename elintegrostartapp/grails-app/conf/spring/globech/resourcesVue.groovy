@@ -75,7 +75,7 @@ beans {
         vueStore = ["state":"newApplication_display: true,\n"]
         wrapButtons = false
 
-        dataframeButtons = [NewApplication:[name:"NewApplication", type:"link", route: true, routeIdScript: "0", refDataframe: ref("vueApplicationFormDataframe"), roles: "ROLE_NURSE, ROLE_ADMIN", accessType: "ifAnyGranted"],
+        dataframeButtons = [NewApplication:[name:"NewApplication", type:"link", route: true, routeIdScript: "0", refDataframe: ref("vueApplicationFormDataframe"), roles: "ROLE_ADMIN", accessType: "ifAnyGranted"],
                             Register:[name:"register", type:"link",showAsMenu:[attr:"open-on-hover offset-y right nudge-right=150  nudge-width='80px'", attachTo: "vueToolbarDataframe-Register"],  refDataframe: ref("vueRegisterMenuDataframe"), roles: "ROLE_ADMIN", accessType: "ifAnyGranted"],
                             UserManagement:[name:"UserManagement", type:"link", showAsMenu:[attr: "open-on-hover offset-x right nudge-right=300 nudge-width='50'", attachTo:"vueToolbarDataframe-UserManagement"], refDataframe: ref('vueUserManagementMenuDataframe'), roles: "ROLE_ADMIN, ROLE_SUPER_ADMIN", accessType: "ifAnyGranted"],
                             EventManagement:[name:"EventManagement", type:"link", showAsMenu:[attr: "open-on-hover offset-x right nudge-right=460 nudge-width='50'", attachTo:"vueToolbarDataframe-EventManagement"], refDataframe: ref('vueEventManagementMenuDataframe'), roles: "ROLE_NURSE, ROLE_ADMIN, ROLE_EMPLOYEE, ROLE_CLIENT", accessType: "ifAnyGranted"],

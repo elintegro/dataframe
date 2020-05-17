@@ -29,6 +29,7 @@ import org.hibernate.Transaction
 import org.springframework.web.context.request.RequestContextHolder
 
 import javax.servlet.http.HttpSession
+import java.util.stream.Collectors
 
 /**
  * This class holds and manages all transaction data for the records from the database and other sources. 
@@ -438,7 +439,7 @@ class DataframeInstance {
 	@Transactional
 	public List commit() throws DataManipulationException {
 		for ( Map.Entry<String, Object> domainInstanceName : savedDomainsMap.entrySet()) {
-			def doaminToSave = domainInstanceName.value
+			def doaminToSave = domainInstanceName.value[1]
 			doaminToSave.save()
 		}
 	}
@@ -518,7 +519,7 @@ class DataframeInstance {
 
 				if(applyNewValuesToDomainInstanceAndSave(domainInstance, requestParams, keysNamesAndValue, domain, historyDomainInstance, doCommit)){
 					doaminInstancesForSave.add(domainInstance);
-					savedDomainsMap.put(doaminFullName, domainInstance);
+					savedDomainsMap.put(doaminFullName, [domain, domainInstance]);
 				}
 			}
 		}//End of df.writableDomains.each{
@@ -636,47 +637,20 @@ class DataframeInstance {
 	}
 
 	private boolean isInsertDomainInstance(Map keysNamesAndValue, Map domain) {
-		Map inputData = requestParams
-		Set keys = domain.get("keys")
-		String keyFieldName = constructKeyFieldName(domain, inputData)
-		boolean isInsert = false
-		if(requestParams.containsKey(keyFieldName)){
-			String keyFyullParamValue = requestParams.get(keyFieldName);
-			keysNamesAndValue.put(keyFieldName, keyFyullParamValue);
-			if(StringUtils.isEmpty(keyFyullParamValue) || "[New]".equalsIgnoreCase(keyFyullParamValue) || "undefined".equals(keyFyullParamValue)){
-				requestParams.put(keyFieldName, null);
-				isInsert = true;
-			}
-		}
-		/*keys.each {keyName ->
-			//String buildParamName = Dataframe.buildKeyFieldParam(df.dataframeName, keyName)
-			def namedParam = df.getNamedParameter(keyName);
-			String refDomainAlias =  namedParam[0];
-			String refFieldName =  namedParam[1];
-			def pkField = getPkField();
-
-			if(pkField.equals(refFieldName)){
-				keyNamedParam = Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, keyName); //This is child key param name
-			}else {
-				String keyFieldName = dataframeName+"-"+domainAlias + "-" + pkField
-			}
-			String keyRefParam = Dataframe.buildFullFieldNameRefParam(df, keyName);//This is a full name, suppose to be in each dataframe, parent or child
-
-			String parentKeyParamValue = null;
-			String keyFyullParamValue = null;
-
-			if(requestParams.containsKey(keyNamedParam)){
-				keyFyullParamValue = requestParams.get(keyNamedParam);
-				keysNamesAndValue.put(keyNamedParam, keyFyullParamValue);
-				if(StringUtils.isEmpty(keyFyullParamValue) || "[New]".equalsIgnoreCase(keyFyullParamValue) || "undefined".equals(keyFyullParamValue)){
-					requestParams.put(keyNamedParam, null);
-					isInsert = true;
+		String[] keyFieldNames = constructKeyFieldName(domain)
+		int i = 0;
+		keyFieldNames.each { keyParam ->
+			if (requestParams.containsKey(keyParam)) {
+				String keyParamValue = requestParams.get(keyParam);
+				keysNamesAndValue.put(keyParam, keyParamValue);
+				if (StringUtils.isEmpty(keyParamValue) || "[New]".equalsIgnoreCase(keyParamValue) || "undefined".equals(keyParamValue)) {
+					requestParams.put(keyParam, null); //unification of empty value
+				}else{
+					i++ //counter of meaningful values of keys
 				}
 			}
-		}*/
-
-		isInsert = isInsert || (keysNamesAndValue.size() < keys.size())
-		return isInsert
+		}
+		return i != keyFieldNames.size()
 	}
 
 	private Map<String, String> getParentRefNames(DataframeVue refDataframe) {
@@ -722,31 +696,34 @@ class DataframeInstance {
 		return keysNamesAndValue
 	}
 
-	private String constructKeyFieldName(def domain, Map inputData){
-		Set keys = domain.get("keys")
-		String keyFieldName = ""
-		String dataframeName = df.dataframeName
+	private Set<String> constructKeyFieldName(def domain){
+		Set keysNamedParams = domain.get("domainKeys")
 		String domainAlias = domain.get("domainAlias")
-		String pkField = getPkField();
-		if(keys.size() == 0){
-			keyFieldName = dataframeName+df.UNDERSCORE+domainAlias + df.UNDERSCORE + pkField
+		Set<String> keyFieldName = new HashSet<String>()
+		String dataframeName = df.dataframeName
+		keysNamedParams.each { param ->
+			keyFieldName.add(dataframeName+df.UNDERSCORE+domainAlias + df.UNDERSCORE + param)
 		}
-		else {
-			keys.each {keyName ->
+/*
+		String pkField = getPkField();
+		if(!keysNamedParams || keysNamedParams.size() == 0){//There is no named parameter for this writable domain, so we will look in doamainKeys:
+			keyFieldName = dataframeName+df.UNDERSCORE + domain.domainAlias + df.UNDERSCORE + pkField
+		}else {
+			keysNamedParams.each {keyName ->
 				def namedParam = df.getNamedParameter(keyName);
 				String refDomainAlias =  namedParam[0];
 				String refFieldName =  namedParam[1];
 				if(domainAlias == refDomainAlias){
 					if(domainAlias.equals(refDomainAlias) && pkField.equals(refFieldName)){
-						keyFieldName = Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, keyName); //This is child key param name
+						keyFieldName.add(Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, keyName)); //This is child key param name
 					}else {
-						keyFieldName = dataframeName+df.UNDERSCORE+domainAlias +df.UNDERSCORE + pkField
+						keyFieldName.add(dataframeName+df.UNDERSCORE+domainAlias +df.UNDERSCORE + pkField)
 					}
 				}
 			}
 		}
+*/
 		return keyFieldName
-
 	}
 
 	/*private Map getKeysAndValues(Map domain) {
@@ -998,13 +975,18 @@ class DataframeInstance {
 
 //	saves onetomany and manytomany
 	private def saveHasManyAssociation(paramValue,refDomainClass,fieldName,domainInstance){
-		def formattedJSON = "["+paramValue+"]"
-		JSONArray jsonArray = new JSONArray(formattedJSON);
+		//def formattedJSON = paramValue
+		JSONArray jsonArray = new JSONArray(paramValue);
 		domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
 		jsonArray.each{val ->
 			val.each{
-				def refDomainObj  = refDomainClass.get(Long.valueOf(it.value))
-				domainInstance."addTo${fieldName.toLowerCase().capitalize()}"(refDomainObj)
+				if(it.key == "id"){
+					def refDomainObj  = refDomainClass.get(Long.valueOf(it.value))
+					String fn = fieldName.capitalize()
+					String fn1 = fieldName.capitalize()
+					domainInstance."addTo${fieldName.capitalize()}"(refDomainObj)
+
+				}
 			}
 
 		}

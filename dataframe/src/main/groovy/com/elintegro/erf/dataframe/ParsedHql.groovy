@@ -30,10 +30,28 @@ import java.util.regex.Pattern
 
 class ParsedHql {
 
+	static final int HQL_WHOLE_MATCH = 0
+	static final int HQL_FIELDS_CLAUSE = 1
+	static final int HQL_FROM_CLAUSE = 2
+	//static final int HQL_JOIN_CLAUSE = 3
+	static final int HQL_WHERE_CLAUSE = 3
+
+
 	String hql
 	String sqlString
+
 	String fieldStr
+	String fieldStr_ //TODO when refactoring is done, this one will replace one above!
+
 	String fromStr
+	String fromStr_ //TODO when refactoring is done, this one will replace one above!
+
+	String joinStr
+	List<JoinParsed> joins = []
+	String groupByStr
+	String orderByStr
+	String whereStr
+
 	String[] fieldsArr
 	Map fields = new LinkedHashMap()
 	Map aliasDomainFields = [:]
@@ -43,7 +61,14 @@ class ParsedHql {
 	def  grailsApplication
 	def sessionFactory
 	Map namedParameters = [:]
+	//def hqlExtractRegex = /(?i)select\s+(?<select>.+?)(?i)from\s+(?<from>.+?)(?<join>(?:(?i)right\s+|(?i)left\s+)?(?:(?i)outer\s+|(?i)inner\s+)?(?i)join\s+(?:.+))(?i)where\s+(?<where>.+)/
+	def hqlExtractRegex = /select\s+(?<select>.+?)from\s+(?<from>.+?)(?<join>(?:right\s+|left\s+)?(?:outer\s+|inner\s+)?join\s+(?:.+))where\s+(?<where>.+)/
+	Pattern hqlPattern = Pattern.compile(hqlExtractRegex, Pattern.CASE_INSENSITIVE);
+	def joinRegexClause = /((?i)right\s+|(?i)left\s+)?((?i)outer\s+|(?i)inner\s+)?(?i)join\s+/
 
+	ParsedHql(){
+		print "Emty constructor, called for tests!"
+	}
 
 	ParsedHql(String hql, def grailsApplication, def sessionFactory){
 		this.hql = hql?hql.trim().replaceAll("(?!.)\\s", ""):"";
@@ -103,8 +128,12 @@ class ParsedHql {
 				HqlFromMatcher = (hql =~ /.*(?i)from\s(.*)/)
 				fromStr = HqlFromMatcher.matches()?HqlFromMatcher[0][1]:""//
 			}
-			if(fromStr.matches(/.*(?i)join\s(.+?).*/)){
-				fromStr = getReplacedJoinString(fromStr)
+
+
+			Pattern pattern = Pattern.compile(regexForJoins, Pattern.CASE_INSENSITIVE);
+			if(fromStr.matches(regexForJoins)){
+				String fromStrWithJoins = fromStr
+				fromStr = getReplacedJoinString(fromStrWithJoins)
 			}
 
 			QueryTranslatorFactory ast = new ASTQueryTranslatorFactory();
@@ -112,7 +141,11 @@ class ParsedHql {
 			queryTranslator.compile( Collections.EMPTY_MAP, true );
 			def retTypes = queryTranslator.getReturnTypes()
 			sqlString = queryTranslator.getSQLString()
-					
+
+			if (!extractParts(hql)){
+				throw DataframeException("There is a parsing error of hql: ${hql}")
+			}
+
 			getFromMap(fromStr);
 
 			//def qIdent = queryTranslator.getQueryIdentifier()
@@ -124,6 +157,40 @@ class ParsedHql {
 						
 			fillFieldMap(fieldStr, retTypes)
 
+		}
+	}
+
+
+	public boolean extractParts(String hql){
+		String hqlTemp = hql.replaceAll(/(\s+)/, " ");
+
+		Matcher hqlMatcher = hqlPattern.matcher(hqlTemp);
+		hqlMatcher.matches();
+
+		if(hqlMatcher?.hasGroup()){
+			fieldStr_ = hqlMatcher.group("select").trim()
+			fromStr_ = hqlMatcher.group("from").trim()
+			whereStr = hqlMatcher.group("where").trim()
+			joinStr = hqlMatcher.group("join").trim()
+			extractJoins(joinStr)
+			return true
+		}
+		return false
+	}
+
+	public extractJoins(String joinStr){
+		if(StringUtils.isEmpty(joinStr)){
+			return
+		}
+		String[] joinsStringArr = joinStr.split(joinRegexClause)
+		String joinStr_ = joinStr
+		joinsStringArr?.each{ joinClause ->
+			if(!StringUtils.isEmpty(joinClause)) {
+				int joinClauseInd = joinStr_.indexOf(joinClause)
+				String joinElementWordWithOption = joinStr_.substring(0, joinClauseInd) //TODO: maybe -1 here?
+				joins.add(new JoinParsed(fromStr, joinElementWordWithOption, joinClause))
+				joinStr_ = joinStr_.substring(joinElementWordWithOption.length() + joinClause.length())
+			}
 		}
 	}
 

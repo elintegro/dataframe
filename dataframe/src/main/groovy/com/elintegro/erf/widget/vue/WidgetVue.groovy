@@ -52,11 +52,17 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return """$validationString"""
     }
 
+    //EU!!! This is where the DVue component variable is created TODO: depricate this and build the new one, using JSON
     String getStateDataVariable(DataframeVue dataframe, Map field){
 
         String dataVariable = dataframe.getDataVariableForVue(field)
         return """$dataVariable:\"\",\n"""
     }
+
+    String[] getStateDataProps(DataframeVue dataframe, Map field){
+        return [field.domain?.key, field.name, field.defaultValue]
+    }
+
 
     String getVueSaveVariables(DataframeVue dataframe, Map field){
         String thisFieldName = dataframe.getFieldId(field)

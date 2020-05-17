@@ -13,6 +13,8 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.dataframe.vue
 
+import com.elintegro.erf.dataframe.Dataframe
+
 class VueStore {
 
     private StringBuilder state = null
@@ -61,6 +63,21 @@ class VueStore {
 
         return sbb.toString()
     }
+
+    String buildStateJSON(DataframeVue dataframe){
+        if(state.length() == 0){
+            return ""
+        }
+        StringBuilder sbb = new StringBuilder()
+        sbb.append("""$dataframe.dataframeName: {\n""")
+        //JSONObject myString = new JSONObject().putAll(domainFieldMap).toString();
+        //sbb.append(myString.toJString())
+        //TODO here state will be replaced with JSON map of all fields, keys and named parameters
+        sbb.append(state.toString())
+        sbb.append("""},\n""")
+        return sbb.toString()
+    }
+
 
     String getMutation(){
         return mutation.toString()

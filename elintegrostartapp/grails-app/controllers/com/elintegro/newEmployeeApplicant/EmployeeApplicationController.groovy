@@ -26,7 +26,10 @@ class EmployeeApplicationController {
             application.applicant = applicant
             application.linkedin = empData.vueNewEmployeeBasicInformationDataframe_application_linkedin
 
+
             for (item in empData.vueNewEmployeeBasicInformationDataframe_person_availablePosition) {
+            //Was in >>>>>>> EWEB-68-refactoring
+//          for (item in empData.vueNewEmployeeBasicInformationDataframe_person_availablePosition_items) {
                 Position availablePosition = Position.findById(item.id)
                 application.addToAvailablePositions(availablePosition)
                 application.save(flush: true)
@@ -65,8 +68,4 @@ class EmployeeApplicationController {
         def resultData = [success: true,newData:[applicationSkill:newSkillsAfterSave]]
         render (resultData as JSON)
     }
-
-
-
-
 }

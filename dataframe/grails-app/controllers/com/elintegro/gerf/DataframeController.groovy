@@ -233,21 +233,15 @@ class DataframeController {
 		def resultData
 		def generatedKeys = [:]
 		def generatedKeysArr = []
-
-		Map savedResultMap = dfInstance.getSavedDomainsMap();
-
 		Map<String, Map> resultAlias = [:]
-		savedResultMap.each { domainAlias, domainInstance ->
-//			savedResultMap.each { domainAlias, domainObj ->
-			//this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], "domainAlias": domainAlias])
-//			def doamin = domainObj[0]
-//			def domainInstance = domainObj[1]
-//			doamin?.keys?.each{ key ->
-//				def keyValue = domainInstance."${key}"
-//				generatedKeys.put("${doamin.parsedDomain}_${key}", keyValue)
-//				generatedKeysArr.add(keyValue)
-//			}
-
+		savedResultMap.each { domainAlias, domainObj ->
+			def doamin = domainObj[0]
+			def domainInstance = domainObj[1]
+			doamin?.keys?.each{ key ->
+				def keyValue = domainInstance."${key}"
+				generatedKeys.put("${doamin.parsedDomain}_${key}", keyValue)
+				generatedKeysArr.add(keyValue)
+			}
 
 			Map record = [:];
 			def properties = getAllProperties(domainInstance)

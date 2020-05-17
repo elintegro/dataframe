@@ -43,6 +43,8 @@ import org.springframework.orm.hibernate5.SessionFactoryUtils
 
 import java.sql.*
 import java.util.Map.Entry
+import java.util.stream.Collectors
+
 /**
  *This class along with its subsidaries is responsible for retrieve a and provide Meta data for the Dataframe.
  *
@@ -113,6 +115,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public 	List pkFields = []
 	def groovySql
 	Map writableDomains = [:]
+	Map domainFieldMap = [:]
 	Map defaultRecord = [:]
 	@OverridableByEditor
 	String initScripts="" // This parameter holds possible initialization scripts
@@ -323,6 +326,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			metaField.addFieldDef = addFieldDef
 			buildDefaultWidget(metaField)
 			addWritebleDomains(metaField)
+			createDomainFieldMap(metaField)
 			this.defaultRecord.put(metaField.name, metaField.defaultValue)
 		}
 
@@ -335,22 +339,49 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	private void addKeysToWritableDomain() {
 
 		this.writableDomains.each{ domainName, domainMap ->
-			Set keys = domainMap.get("keys")
+			Set namedParamKeys = domainMap.get("keys")
 			parsedHql.namedParameters.each{parmName, parValStringArr ->
 				if(domainName.equalsIgnoreCase(parValStringArr[0])){
-					keys.add(parmName)
+					namedParamKeys.add(parmName)
 				}
 			}
-			domainMap.put("keys", keys)
-			domainMap.put("alias", "")
+			domainMap.put("keys", namedParamKeys)
 
+			Set domainKeys = domainMap.get("domainKeys")
+			if(!domainKeys || domainKeys.size() == 0) {
+				String[] keyColumnNames = domainMap.get("parsedDomain").getPersister().keyColumnNames
+				keyColumnNames?.each{ keyColumnName ->
+					domainKeys.add(keyColumnName)
+				}
+				domainMap.put("domainKeys", domainKeys)
+			}
 		}
 	}
 
 	private void addWritebleDomains(MetaField field){
 		if(!field.isReadOnly()){
 			String domainAlias = field.domain.getDomainAlias()
-			this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], "domainAlias": domainAlias])
+			//keys is the list of Named parameters (as they defined in HQLm after column ":")
+			//domainKeys is the list of PK of the domain as it defined in the db table, in most cases it is field, named "id"
+			this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], domainKeys:[],"domainAlias": domainAlias])
+		}
+	}
+
+	//This Map forms a JSON structure for any Front-end to exchange data with the Back-end!
+	private void createDomainFieldMap(MetaField field){
+		//field.domain.key is actually domain name (like User) TODO: this field should be renamed to "name" to reflect its real meaning
+		if(!this.domainFieldMap.containsKey(field.domain.key)){
+			this.domainFieldMap.put(field.domain.key, [:])
+		}
+		Map domainFields = (Map)this.domainFieldMap.get(field.domain.key)
+		domainFields.put(field.name, field.defaultValue)
+		//Adding key (PK)
+		if(field.pk){
+			if(!domainFields.containsKey("keys")){
+				domainFields.put("keys", [:])
+			}
+			Map keys = domainFields.get("keys")
+			keys.put(field.name, field.defaultValue)
 		}
 	}
 
@@ -804,8 +835,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		List fldsList = fields.getList()
 		int seq = 0
 		int fieldCount = 0;
-
-		for(String key: fields.getList()){
+		List fieldList = fields.getList()
+		for(String key: fieldList){
 			// TODO  make sure the javascript sourcecode aligns
 			Map field = fields.dataMap.get(key)
 
@@ -892,8 +923,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		def lhcLocale = LocaleContextHolder.getLocale()
 		String btnDivId = "";
 		String btnWidget = "";
-
 		List flexGridValues = field.flexGridValues ?:flexGridValues?: LayoutVue.defaultGridValues
+		//Was in EWEB-68-refactoring; TODO check which line is correct!
+		//List flexGridValues = field.flexGridValues ?: LayoutVue.defaultGridValues
+
 		String gridValueString = LayoutVue.convertListToString(flexGridValues)
 		def label = field.fldNmAlias ?: messageSource.getMessage(field.labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
 		if (field?.labelDisabled) {
@@ -1532,6 +1565,18 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		String res = buildKeyFieldParam(dataframeName, field);
 		return res
 	}
+
+	public String getFieldModelNameVue(Map field){
+		String fieldnameStr = field.name.replace(DOT, UNDERSCORE);
+		def doaminNameStr = field.domain?.key
+		if(fieldnameStr.indexOf(UNDERSCORE) <= 0 && !"".equals(doaminNameStr) && doaminNameStr != null){
+			fieldnameStr = "${doaminNameStr}${UNDERSCORE}${fieldnameStr}";
+		}
+		return "$dataframeName${UNDERSCORE}$fieldnameStr";
+
+		return res
+	}
+
 
 	public boolean isReadOnly(Map field){
 		if (field?.readOnly || this.readonly){

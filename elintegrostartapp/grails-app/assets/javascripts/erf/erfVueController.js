@@ -326,6 +326,15 @@ var excon = new Vue({
 //                          this.gridDataframes[refreshParams.dataframe] = false;
         },
 
+
+
+        grabVariableFromParentdataframe: function(fromDataframe, fromVariable, toDataframe, toVariable) {
+            //key_<dfname>_<domain>_id_id
+
+            var sourceDataframeVars = this.getFromStore(fromDataframe);
+            this.saveToStore(toDataframe, toVariable, sourceDataframeVars[varFromName]);
+        },
+
         getStateWithKey(key) {
             if (typeof key === 'object') {
                 const obj = key;
@@ -353,5 +362,4 @@ var excon = new Vue({
             let oldData = store.getters.getState(dataframeName);
         }
     }
-
-});
+    });

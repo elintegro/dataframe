@@ -35,6 +35,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
         String fldName = dataVariable
         def defaultValue = field.defaultValue?:""
         String genId = fldName+"-file"
+
        dataframe.getVueJsBuilder().addToMethodScript("""
                    ${fldName}_uploadFile: function(event){
                               //TODO: for multi file this should be array and not sinfle file, change this code accordingly
@@ -63,7 +64,6 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                                                 });                      
                    },
                  
-
        """)
 
         return """this.$dataVariable = response['$key']?response['$key']:"$defaultValue\";

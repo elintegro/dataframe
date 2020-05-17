@@ -182,14 +182,6 @@ beans {
 
 
 
-
-
-
-
-
-
-
-
     /*
     buttonTechnologiesLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
