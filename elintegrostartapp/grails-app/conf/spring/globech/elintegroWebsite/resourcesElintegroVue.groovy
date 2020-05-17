@@ -208,10 +208,12 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeBasicInformationDataframe']
 //      hql = "select person.firstName, person.lastName, person.contactEmail, person.phone from Person person where person.id=:id"
-        hql = "select person.firstName, person.lastName, person.contactEmail,person.phone,application.linkedin from Application application inner join application.applicant person where application.id=:id"
+        hql = "select person.id, application.id, person.firstName, person.lastName, person.contactEmail, person.phone, application.linkedin, application.availablePositions from Application application inner join application.applicant person where application.id=:id"
         initOnPageLoad = false
-        saveButton = false
+        saveButton = true
+
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md1', 'lg1', 'xl1']
+        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         isGlobal = true
         addFieldDef = [
 
@@ -220,7 +222,7 @@ beans {
                 "person.contactEmail":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'Email.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']],"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                "person.availablePosition"  :[
+                "application.availablePositions"  :[
                         "widget"             :"ComboboxVue"
                         ,"name"              :"person.availablePosition"
                         ,internationalize    :true
@@ -254,7 +256,7 @@ beans {
         tab = true
         isGlobal = true
         doBeforeSave = """
-            //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rathr then insert a new one.                          
+            //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rather then insert a new one.                          
             excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
         """
         doAfterSave = """

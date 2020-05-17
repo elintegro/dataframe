@@ -27,7 +27,7 @@ import org.hibernate.persister.entity.SingleTableEntityPersister
 class DomainClassInfo {
 
     def  grailsApplication
-    String key  //domain Simple name like "User"
+    String key  //domain Simple name like "User" TODO: this field should be renamed to "name" to reflect its real meaning
     HibernatePersistentEntity value // One of the Doamin class representation
     Class clazz; //java domain class
     SingleTableEntityPersister persister// One of the Doamin class representation

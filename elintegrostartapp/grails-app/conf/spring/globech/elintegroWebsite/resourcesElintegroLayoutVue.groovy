@@ -27,14 +27,6 @@ beans {
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
     }
 
-
-
-
-
-
-
-
-
     /*
     buttonTechnologiesLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
