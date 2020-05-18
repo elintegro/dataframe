@@ -30,6 +30,7 @@ import groovy.util.logging.Slf4j
 import org.apache.commons.collections.map.LinkedMap
 import org.apache.commons.lang.WordUtils
 import org.grails.core.DefaultGrailsDomainClass
+import org.grails.web.json.JSONObject
 import org.hibernate.Query
 import org.hibernate.Transaction
 import org.hibernate.engine.spi.SessionFactoryImplementor
@@ -321,6 +322,17 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		List<MetaField> metFields = metaFieldService.getMetaDataFromFields(parsedHql, dataframeName)
 
+		JSONObject obj = new JSONObject(metFields);
+        obj.toString(2)
+        DataframeFileUtil.writeStringIntoFile("MetaFieldsTest.data", metFields.toString(2))
+        DataframeFileUtil.writeStringIntoFile("MetaFieldsOfJSONObjTest.data", obj.toString(2))
+
+
+        JSONObject obj1 = new JSONObject(parsedHql);
+
+        DataframeFileUtil.writeStringIntoFile("ParsedHql", obj1.toString(2))
+
+
 		for( MetaField metaField in metFields){
 			fieldsMetadata.put(metaField.name , metaField)
 			metaField.addFieldDef = addFieldDef
@@ -383,6 +395,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			Map keys = domainFields.get("keys")
 			keys.put(field.name, field.defaultValue)
 		}
+
+		//TODO: EU!!! Add named parameters here
+
 	}
 
 	/**
@@ -1137,7 +1152,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		createVueStore(vueJsBuilder) //create vueStore
 		VueStore vueStore1 = vueJsBuilder.getVueStore()
-		String state = vueStore1.buildState(dataframeName)
+
+		//EU!!! TODO: Remove it as soon as refactoring works!
+		//String state = vueStore1.buildState(dataframeName)
+
+		String state = vueStore1.buildStateJSON(dataframeName)
 		String mutation = vueStore1.getMutation()
 		String getters = vueStore1.getGetters()
 		String globalState = vueStore1.getGlobalState()

@@ -14,6 +14,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.erf.dataframe.vue
 
 import com.elintegro.erf.dataframe.Dataframe
+import org.grails.web.json.JSONObject
 
 class VueStore {
 
@@ -74,6 +75,9 @@ class VueStore {
         //sbb.append(myString.toJString())
         //TODO here state will be replaced with JSON map of all fields, keys and named parameters
         sbb.append(state.toString())
+        JSONObject obj = new JSONObject(domainFieldMap);
+        obj.toString(2)
+
         sbb.append("""},\n""")
         return sbb.toString()
     }
