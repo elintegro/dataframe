@@ -62,7 +62,7 @@ class ParsedHql {
 	def sessionFactory
 	Map namedParameters = [:]
 	//def hqlExtractRegex = /(?i)select\s+(?<select>.+?)(?i)from\s+(?<from>.+?)(?<join>(?:(?i)right\s+|(?i)left\s+)?(?:(?i)outer\s+|(?i)inner\s+)?(?i)join\s+(?:.+))(?i)where\s+(?<where>.+)/
-	def hqlExtractRegex = /select\s+(?<select>.+?)from\s+(?<from>.+?)(?<join>(?:right\s+|left\s+)?(?:outer\s+|inner\s+)?join\s+(?:.+))where\s+(?<where>.+)/
+	def hqlExtractRegex = /select\s+(?<select>.+?)from\s+(?<from>.+?)(?<join>(?:right\s+|left\s+)?(?:outer\s+|inner\s+)?join\s+(?:.+))?(?:where\s+(?<where>.+))?/
 	Pattern hqlPattern = Pattern.compile(hqlExtractRegex, Pattern.CASE_INSENSITIVE);
 	def joinRegexClause = /((?i)right\s+|(?i)left\s+)?((?i)outer\s+|(?i)inner\s+)?(?i)join\s+/
 
@@ -120,6 +120,7 @@ class ParsedHql {
 				
 			}
 
+			//TODO: this code should be depricated and extractParts method will do the job!
 			def HqlFldMatcher = (hql =~ /^(?i)select\s(.+?)\s(?i)from\s.*/)
 			def HqlFromMatcher = (hql =~ /.*(?i)from\s(.+?)\s(?i)where\s.*/)
 			fieldStr = HqlFldMatcher.matches()?HqlFldMatcher[0][1]:""//
@@ -128,13 +129,10 @@ class ParsedHql {
 				HqlFromMatcher = (hql =~ /.*(?i)from\s(.*)/)
 				fromStr = HqlFromMatcher.matches()?HqlFromMatcher[0][1]:""//
 			}
-
-
-			Pattern pattern = Pattern.compile(regexForJoins, Pattern.CASE_INSENSITIVE);
-			if(fromStr.matches(regexForJoins)){
-				String fromStrWithJoins = fromStr
-				fromStr = getReplacedJoinString(fromStrWithJoins)
+			if(fromStr.matches(/.*(?i)join\s(.+?).*/)){
+				fromStr = getReplacedJoinString(fromStr)
 			}
+			//TODO: END of the depricated fragment
 
 			QueryTranslatorFactory ast = new ASTQueryTranslatorFactory();
 			QueryTranslator queryTranslator = ast.createQueryTranslator( hql , hql , Collections.EMPTY_MAP, sessionFactory, null );
@@ -161,19 +159,24 @@ class ParsedHql {
 	}
 
 
-	public boolean extractParts(String hql){
-		String hqlTemp = hql.replaceAll(/(\s+)/, " ");
+	public boolean extractParts(String hql) throws DataframeException{
+		try {
+			String hqlTemp = hql.replaceAll(/(\s+)/, " ");
 
-		Matcher hqlMatcher = hqlPattern.matcher(hqlTemp);
-		hqlMatcher.matches();
+			Matcher hqlMatcher = hqlPattern.matcher(hqlTemp);
+			boolean isMatchs = hqlMatcher.matches();
 
-		if(hqlMatcher?.hasGroup()){
-			fieldStr_ = hqlMatcher.group("select").trim()
-			fromStr_ = hqlMatcher.group("from").trim()
-			whereStr = hqlMatcher.group("where").trim()
-			joinStr = hqlMatcher.group("join").trim()
-			extractJoins(joinStr)
-			return true
+			if (isMatchs && hqlMatcher?.hasGroup()) {
+				//TODO" fieldStr_ and fieldStr_ should be replaced to fieldStr fieldStr
+				fieldStr_ = hqlMatcher.group("select")?.trim()
+				fromStr_ = hqlMatcher.group("from")?.trim()
+				whereStr = hqlMatcher.group("where")?.trim()
+				joinStr = hqlMatcher.group("join")?.trim()
+				extractJoins(joinStr)
+				return true
+			}
+		}catch(IllegalStateException exp){
+			throw new DataframeException("No match found for sql ${hql} Exception: ${exp}")
 		}
 		return false
 	}
