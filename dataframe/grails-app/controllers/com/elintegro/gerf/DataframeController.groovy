@@ -233,6 +233,9 @@ class DataframeController {
 		def resultData
 		def generatedKeys = [:]
 		def generatedKeysArr = []
+
+		Map savedResultMap = dfInstance.getSavedDomainsMap();
+
 		Map<String, Map> resultAlias = [:]
 		savedResultMap.each { domainAlias, domainObj ->
 			def doamin = domainObj[0]
