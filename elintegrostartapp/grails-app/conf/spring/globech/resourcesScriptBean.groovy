@@ -549,9 +549,6 @@ beans {
                   }"""
 
     }
-    vueNewEmployeeAddtionalQuestionsDataframe_script(VueJsEntity){bean ->
-        data = """vueNewEmployeeThankYouMessageAfterSaveDataframe_show:false,dialog:false,"""
-    }
 
     vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
         data = "vueElintegroApplicantDetailsDataframe_tab_model : this.tabValue,\nvueElintegroApplicantDetailsDataframe_display: true, \n"
