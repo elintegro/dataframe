@@ -27,13 +27,18 @@ import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.utils.MapUtil
 import grails.converters.JSON
 import grails.util.Holders
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.context.i18n.LocaleContextHolder
 import org.apache.commons.lang.WordUtils
+import groovy.util.logging.Slf4j
+
 
 /**
  * Created by kchapagain on Nov, 2018.
  */
 class GridWidgetVue extends WidgetVue {
+    private static final Logger log = LoggerFactory.getLogger(GridWidgetVue.class);
 
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
@@ -266,6 +271,10 @@ $fieldParams
             }
             List<MetaField> fieldMetaData =  fieldProps.get("gridMetaData");
             ParsedHql parsedHql =  fieldProps.get("parsedHql");
+            if(parsedHql == null){
+                log.warn("We have to recreate the Parsed Hql since it is null")
+                parsedHql = new ParsedHql(fieldProps.hql, dataframe.grailsApplication, dataframe.sessionFactory)
+            }
             List dataHeader =  fieldProps.get("dataHeader");
             getNamedParameterValue(dataframeInst,inputData, parsedHql, fieldProps)
             DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
