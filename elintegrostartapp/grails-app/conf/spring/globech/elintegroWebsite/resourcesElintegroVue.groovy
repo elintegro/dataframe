@@ -365,7 +365,7 @@ beans {
                                     ,name            : "applicationSkill"
                                     ,hql             : """select application.id as AppId,applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"""
                                     ,internationalize: true
-
+                                    ,onClick :[showAsDialog: true, refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe"),]
                                     ,editButton: true
                                     ,onButtonClick   : [
                                                 ['actionName': 'Edit Skill', 'buttons': [
@@ -427,12 +427,22 @@ beans {
         saveButton = true
         tab = true
         flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        //doAfterSave = """self.vueNewEmployeeThankYouMessageAfterSaveDataframe_show = true;self.dialog=true;"""
+        doAfterSave = """self.\$router.push("/vueNewEmployeeThankYouMessageAfterSaveDataframe/0");"""
         dataframeButtons = [
                 previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("vueNewEmployeeAddtionalQuestionsDataframeLayout")
+    }
+    vueNewEmployeeThankYouMessageAfterSaveDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewEmployeeThankYouMessageAfterSaveDataframe']
+        saveButton = false
+        route = true
+        doBeforeRefresh= """allParams['id'] = excon.getFromStore('vueNewEmployeeAddtionalQuestionsDataframe','key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id');"""
+        hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:id"
+        currentFrameLayout = ref("vueNewEmployeeThankYouMessageAfterSaveDataframeLayout")
+
     }
 
 
