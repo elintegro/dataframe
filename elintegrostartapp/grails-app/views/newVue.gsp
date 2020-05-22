@@ -11,6 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Elintegro Start App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://www.ayalonhw.co.il/wp-content/themes/_tk-master/images/logo.png" type="image/x-icon">
 
     <asset:stylesheet href="/vuejs/tooltip.css"/>
     <asset:javascript src="jquery/jquery-1.11.2.js"/>
@@ -18,13 +19,12 @@
 
     <g:if test="${Environment.current == Environment.DEVELOPMENT}">
         <asset:stylesheet href="/vuejs/vue-material.css"/>
-        <asset:stylesheet href="/vuejs/vuetify.min.css"/>
     </g:if>
     <g:else>
         <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-    %{--<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">--}%
-        <asset:stylesheet href="/vuejs/vuetify.min.css"/>
     </g:else>
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
+    <asset:stylesheet href="/vuejs/vuetify-v2.0.5.css"/>
     <asset:stylesheet href="/vuejs/gc-vue.css"/>
 
 </head>
@@ -46,22 +46,16 @@ ${constructedPageHtml}
 
 <g:if test="${Environment.current == Environment.DEVELOPMENT}">
     <asset:javascript src="vuejs/vue.js"/>
-    <asset:javascript src="vuejs/vuetify.js"/>
-    <asset:javascript src="vuejs/vue-router.js"/>
-    <asset:javascript src="vuejs/vuex.js"/>
-    <!--asset:javascript src="vuejs/vue-spring-security.min.js"/-->
-    <!--script type="text/javascript" src="https://unpkg.com/vue-spring-security"></script-->
 </g:if>
 <g:else>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.18/dist/vue.js"></script>
-%{--<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>--}%
-    <asset:javascript src="vuejs/vuetify.js"/>
-    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <asset:javascript src="vuejs/vue.min.js"/>
 
-    <script src="https://unpkg.com/vuex"></script>
-    <!-- script type="text/javascript" src="https://unpkg.com/vue-spring-security"></script-->
 </g:else>
-<script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+<asset:javascript src="vuejs/vue-router.min.js"/>
+<asset:javascript src="vuejs/vuex.js"/>
+<asset:javascript src="vuejs/vue-i18n.js"/>
+<asset:javascript src="vuejs/vuetify-v2.0.5.js"/>
+%{--<script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>--}%
 %{--<script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>--}%
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
@@ -71,7 +65,9 @@ ${constructedPageHtml}
 <asset:javascript src="/vuejs/v-eutil.min.js"/>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.googleMapsApi.apiKey}">
 </script>
+<asset:javascript src="/erf/i18Messages.js"/>
 <asset:javascript src="/erf/erfVueController.js"/>
+<asset:javascript src="/vuejs/vuex.js"/>
 ${constructedPageScript}
 <script>
 

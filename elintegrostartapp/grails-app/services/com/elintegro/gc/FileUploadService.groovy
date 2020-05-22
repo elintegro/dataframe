@@ -63,8 +63,8 @@ class FileUploadService {
                 }
                 if (saveToLocal){
 //                    String returnUrl = imageSaveToS3(multiPartToFile,"${docName}")
-                    String path = "${filesAbsolutePath}/${docName}"
-                    File fl = new File(path)
+//                    String path = "${filesAbsolutePath}/${docName}"
+                   // File fl = new File(path)
 //                    it.transferTo(fl) //Todo make it working for saving files locally
                     File file = new File(filePath, "${docName}");
 
@@ -72,7 +72,7 @@ class FileUploadService {
                         InputStream input = it.getInputStream()
                         Files.copy(input, file.toPath());
                     }catch(Exception e){
-                        println e
+                        log.debug(e.getMessage())
                     }
                     localUrl1.add([url:  "${saveLocation}/${docName}", name: docName])
 //                    s3Url1.add([url:returnUrl, name:docName])

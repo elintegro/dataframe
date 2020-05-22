@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -7,23 +7,14 @@ Copyright © 2007-2019  Elinegro Inc. Eugene Lipkovich, Shai Lipkovich
 This program is under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
 See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works. 
-These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. 
-We invite you to join the community of developers making it even more powerful!
-For more information please visit  https://www.elintegro.com
-
-Copyright © 2007-2019  Elinegro Inc. Eugene Lipkovich, Shai Lipkovich
-
-This program is under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
-See the GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works. 
+You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works.
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
 package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.DFButton
+import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.ScriptBuilder
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DataframeException
@@ -52,23 +43,37 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
+        String validationString = ""
+        if(validate(field)){
+            String validationRules = validationRules(field)
+            String dataVariable = dataframe.getDataVariableForVue(field)
+            validationString = """ ${dataVariable}_rule: $validationRules,\n"""
+        }
+        return """$validationString"""
+    }
+
+    String getStateDataVariable(DataframeVue dataframe, Map field){
+
         String dataVariable = dataframe.getDataVariableForVue(field)
         return """$dataVariable:\"\",\n"""
-
     }
 
     String getVueSaveVariables(DataframeVue dataframe, Map field){
         String thisFieldName = dataframe.getFieldId(field)
         String dataVariable = dataframe.getDataVariableForVue(field)
 //        String dataVariable = dataframe.getDataVariableForVueCapitalized(field)
-        return """allParams['$thisFieldName'] = this.$dataVariable;\n"""
+//        return """allParams['$thisFieldName'] = this.$dataVariable;\n"""
+        return ""
     }
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         def defaultValue = field.defaultValue?:""
         String fillState = ""
+/*
         return """this.$dataVariable = response['$key']?response['$key']:"$defaultValue\";
                 """
+*/
+        return ""
     }
 
     protected String applyLayout(DataframeVue df, Map field, String html){
@@ -86,6 +91,16 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     }
     String getCreatedScript(DataframeVue dataframe, Map field, String divId, String fldId, String key){
         return """"""
+    }
+    protected boolean isSearchable(Map field){
+        if(field && field.search){
+            return true
+        }
+        return false
+    }
+
+    protected String getFlexAttr(DataframeVue dataframe, Map field){
+        return field.flexAttr?:""
     }
 
     String getEmbeddedCompScript(){
@@ -307,5 +322,88 @@ abstract class WidgetVue extends Widget<DataframeVue>{
             return imgUrl + "/"
         }
         return imgUrl
+    }
+
+    protected getModelString(DataframeVue dataframe, Map field){
+        return "state."+getFieldName(dataframe, field)
+    }
+    protected String getFieldName(DataframeVue dataframe, Map field){
+        return dataframe.getDataVariableForVue(field)
+    }
+
+    protected boolean validate(Map field){
+        boolean applyRule = false
+        applyRule = applyRule || field.validate
+        applyRule = applyRule || isMandatory(field)
+        applyRule = applyRule || field.validationRules
+
+        return applyRule
+    }
+
+    protected String validationRules(Map field){
+        StringBuilder rules = new StringBuilder()
+        rules.append("[")
+        if(isMandatory(field)){
+            String message = getMessageSource().getMessage("default.required.message", [field.label?:null] as Object[], "default.required.message", LocaleContextHolder.getLocale())
+            rules.append("""  v => !!v || '$message', """)
+        }
+
+        if(field.validationRules){
+            def rulesList = field.validationRules
+            rulesList.each{
+                rules.append(""" ${it.condition} """)
+                if(it.message){
+                    String message = getMessageSource().getMessage(it.message, null, it.message, LocaleContextHolder.getLocale())
+                    rules.append(" || '"+message+"' ")
+                }
+                    rules.append(""" , """)
+
+            }
+        }
+
+        if(field.validate || isMandatory(field))
+            rules.append(widgetValidationRule(field))
+
+        rules.append("]")
+        return rules.toString()
+    }
+
+    protected String widgetValidationRule(Map field){
+        return ""
+    }
+    protected boolean isDisabled(DataframeVue dataframe, Map field){
+
+        def fldMetadata = dataframe.fieldsMetadata.get(field.name)
+        boolean isPk = fldMetadata?fldMetadata.pk:false
+        def disabled = field.disabled == null? false : field.disabled;
+        return  (isPk == true)? true: disabled;
+    }
+
+    protected String getHeight(Map field, String _default = "auto"){
+        return field.height?:_default
+    }
+
+    protected String getWidth(Map field, String _default = "auto"){
+        return field.width?:_default
+    }
+    protected String getMaxWidth(Map field, String _default = "500px"){
+        return field.MaxWidth?:_default
+    }
+
+
+    protected String getAttr(Map field){
+        return field.attr?:""
+    }
+
+    protected String getLabel(Map field){
+        String mandatory = isMandatory(field)?" *":""
+        String label = field.label + mandatory
+        return label
+    }
+
+    protected boolean isMandatory(Map field){
+        boolean notNull = field.notNull
+        boolean required = field.required
+        return notNull || required
     }
 }

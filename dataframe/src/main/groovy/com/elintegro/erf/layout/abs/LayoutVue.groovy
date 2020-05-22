@@ -13,7 +13,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.layout.abs
 
-import com.elintegro.erf.dataframe.Dataframe
+
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.Widget
 import com.elintegro.erf.widget.vue.WidgetVue
@@ -61,9 +61,9 @@ class LayoutVue extends Layout {
     //For Vue
     StringBuilder compRegScript = new StringBuilder()
     List children = [] // Add all the children's layout names
-    List componentsToRegister = [] //Add all the components to register under this layouts component
+    List childDataframes = [] //Add all the components to register under this layouts component
     boolean isGlobal = false // Whether or not to register component globally
-    static List defaultGridValues = ['xs12', 'sm6', 'md6', 'lg4', 'xl4']
+    static List defaultGridValues = Holders.grailsApplication.config.vue.flexGridValues.Default
     static List defaultButtonGridValues = ['xs12', 'sm12', 'md4', 'lg4', 'xl4']
     List flexGridValues = defaultGridValues
     boolean componentRegistered = false //Set once the component is registered
@@ -289,7 +289,12 @@ class LayoutVue extends Layout {
         if(stInd>0){
             int endInd = stInd + fldPlaceholder.length()
             dataframeHtml.replace(stInd, endInd, btnScript)
-        } else {
+        }
+        boolean dataframeRightToLeftLanguage = Holders.grailsApplication.config.dataframe.right_to_left_language
+            if(!dataframeRightToLeftLanguage){
+                remainingButtons.insert(0,btnScript)
+            }
+        else {
             remainingButtons.append(btnScript)
         }
 
@@ -476,7 +481,7 @@ class LayoutVue extends Layout {
     private static String addNavigationPanel(resultPage){
         String toolbarTitle = wrapWithTag("<v-toolbar-title>","class='display-3'","Globe Chalet")
         String toolBarWrapper = wrapWithTag("<v-toolbar>","prominent extended",toolbarTitle)
-        String wrapWithCard = wrapWithTag("<v-card>","color='grey lighten-4' flat height='200px' tile",toolBarWrapper)
+        String wrapWithCard = wrapWithTag("<v-card>","color='grey lighten-4' text height='200px' tile",toolBarWrapper)
         resultPage.insert(0,wrapWithCard)
     }
 

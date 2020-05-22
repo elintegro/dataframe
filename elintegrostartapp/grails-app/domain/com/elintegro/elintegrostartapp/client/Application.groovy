@@ -15,6 +15,9 @@ package com.elintegro.elintegrostartapp.client
 
 import com.elintegro.auth.User
 import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.hr.Position
+import com.elintegro.elintegrostartapp.hr.Skills
+import com.elintegro.elintegrostartapp.property.Unit
 import com.elintegro.gc.commonfield.ControlField
 import com.elintegro.elintegrostartapp.Facility
 import com.elintegro.elintegrostartapp.ref.ApplicationStatus
@@ -28,16 +31,22 @@ class Application extends ControlField{
     Date waitingExpirationDate
     String referredByPerson
     String referredByOrganisation
+    String linkedin
+    String resume
+    String avatar
 
     Person applicant
     MedicalRecord medicalRecord
 
     Facility facility
 
-    static 	hasMany = [contacts: Person]
+    String question1
+    String question2
+
+    static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills]
 
     static constraints = {
-        applicant (nullable: false)
+        applicant (nullable: true)
         user (nullable: true)
         applicationDate (nullable: true)
         signedBy (nullable: true)
@@ -46,5 +55,10 @@ class Application extends ControlField{
         referredByPerson (nullable: true)
         referredByOrganisation(nullable: true)
         facility(nullable: true)
+        linkedin(nullable: true)
+        resume(nullable: true)
+        avatar(nullable: true)
+        question1(nullable: true,length: 4096)
+        question2(nullable: true,length: 4096)
     }
 }

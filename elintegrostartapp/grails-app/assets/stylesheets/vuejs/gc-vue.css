@@ -1,3 +1,6 @@
+.hidden {
+    display: none;
+}
 .rounded-card{
     border-radius:10px;
 }
@@ -15,3 +18,15 @@ tr.selected td {
 .input-text-field {
     width: 30px;
 }
+.clientProject th, .clientProject td
+{
+    font-size: 30px;
+}
+.applicant th, .applicant td{
+    font-size: 20px;
+}
+/*.first-banner{*/
+/*    background-size:cover;*/
+/*    height:auto;*/
+/*    background-image:url('/elintegrostartapp/assets/elintegro_banner.jpg');*/
+/*}*/

@@ -16,7 +16,7 @@ package com.elintegro.editor
 class Editor {
     //Todo: may be needed for editor task to reload bean automatically
     def contactDfr = { bean ->
-		bean.hql = '''select person.id, person.salutation,person.lastName, person.contactEmail, person.phone, person.mainPicture, person.description from Person as person where person.id=:id'''
+		bean.hql = '''select person.id, person.salutation,person.lastName, person.email, person.phone, person.mainPicture, person.description from Person as person where person.id=:id'''
 		bean.initOnPageLoad = true
     } //end of contactDfr
 

@@ -76,7 +76,7 @@ def save(Map _params, HttpSession session){
 
         String email = userParam["email"]
         if(!email){
-            return [success: false, user:null, msg: "Email not present"]
+            return [success: false, user:null, msg: "email not present"]
         }
         assert roleId
         String firstName = userParam["firstName"]?:""
@@ -129,7 +129,7 @@ def save(Map _params, HttpSession session){
             verificationEmailMessage = messageSource.getMessage('registration.mail.success',null,LocaleContextHolder.getLocale())
             resultData = ['msg': verificationEmailMessage, 'success': true]
         }catch (Exception e){
-            log.debug("Verification Email with password could not be sent to Applicant: " + user.email)
+            log.debug("Verification email with password could not be sent to Applicant: " + user.email)
             throw e
         }
         return resultData

@@ -71,11 +71,11 @@ public class DataframeViewJqxVue implements DataframeView {
 
         } else {
             if(refDataframe){
-                String refDfrName = refDataframe.dataframeName.toLowerCase()
+                String refDfrName = refDataframe.dataframeName
                 if(dfButton.route){
                     String routeIdScript = dfButton.routeIdScript
                     ResultPageHtmlBuilder.registeredComponents.add(refDataframe.dataframeName)
-                    script.append("""${dataframeName}_${dfButton.name}: function(e){\n 
+                    script.append("""${dataframeName}_${dfButton.name}: function(_param){\n 
                          $doBeforeAjax
                          var routeId = ${routeIdScript?:""}
                          this.\$router.push({
@@ -90,8 +90,7 @@ public class DataframeViewJqxVue implements DataframeView {
                 }else {
                     script.append("""${dataframeName}_${dfButton.name}: function(){\n 
                                  //todo add if refDataframe exist but route is not defined. remove the following code if its scope is limited.
-                                 this.${refDataframe.dataframeName}_display = true;
-                                  Vue.set(this.\$store.state.dataframeShowHideMaps, "${refDataframe.dataframeName}_display", true);
+                        excon.setVisibility("${refDataframe.dataframeName}", true);
                                  },\n""")
                 }
 
@@ -118,35 +117,32 @@ public class DataframeViewJqxVue implements DataframeView {
 
         dataframe.childrenDataframes.add(refDataframeName)
         VueStore store = vueJsBuilder.getVueStore()
-        store.addToShowHideParamNames("${refDataframeName}_display : false,\n")
+        store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
 
-        vueJsBuilder.addToDataScript("${refDataframeName}_display : false,\n")
         vueJsBuilder.addToDataScript(" ${refDataframeName}_data:{key:''},\n")
+//        ResultPageHtmlBuilder.globalParametersInStore.append("${refDataframeName}_display : true,\n")
 
         if(dfButton.showAsDialog){
-            resultPageHtml.append("""<v-dialog v-model="${refDataframeName}_display" width='initial' max-width='800px'>""")
+            String scrollable = dfButton.scrollable?"scrollable":""
+            String persistent = dfButton.persistent?"persistent":""
+            resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" $scrollable $persistent width='initial' max-width='500px'>""")
             resultPageHtml.append(refDataframe.getComponentName("resetForm=true"))
 //            resultPageHtml.append("""<component :is='${refDataframeName.toLowerCase()}' ref='${refDataframeName.toLowerCase()}_ref' :${refDataframeName}_prop="${refDataframeName}_data" :key='randomKey'></component>""")
             resultPageHtml.append("""</v-dialog>""")
         } else if(dfButton.showAsMenu && dfButton.showAsMenu.attr){
             String attr = dfButton.showAsMenu.attr?:"left"
             String attachTo = dfButton.showAsMenu.attachTo?:"$dataframeName-id"
-            resultPageHtml.append("""<v-menu v-model="${refDataframeName}_display" :close-on-content-click="false" z-index='99' max-width="200" :nudge-width="200" $attr attach="$attachTo">""")
+            resultPageHtml.append("""<v-menu v-model="visibility.${refDataframeName}" :close-on-content-click="false" z-index='99' max-width="200" :nudge-width="200" $attr attach="$attachTo">""")
             resultPageHtml.append(refDataframe.getComponentName(""))
             resultPageHtml.append("""</v-menu>""")
         }else{
-            resultPageHtml.append("""<div v-show="${refDataframeName}_display " max-width="500px">""")
+            resultPageHtml.append("""<div v-show="visibility.${refDataframeName}" max-width="500px">""")
             resultPageHtml.append(refDataframe.getComponentName(":key='randomKey'"))
             resultPageHtml.append("""</div>""")
         }
         //Add computed and watch scripts for dialog box
-        String computedScript = """check${refDataframeName}CloseButton: function(){return this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display}, \n"""
-        String watchScript = """check${refDataframeName}CloseButton:{handler: function(val, oldVal) {
-                               this.${refDataframeName}_display = this.\$store.state.dataframeShowHideMaps.${refDataframeName}_display;}}, \n """
-
-        vueJsBuilder.addToComputedScript("""randomKey: function(){drfExtCont.generateRandom();},\n""")
-        vueJsBuilder.addToComputedScript(computedScript)
-        vueJsBuilder.addToWatchScript(watchScript)
+        vueJsBuilder.addToComputedScript("""randomKey: function(){excon.generateRandom();},\n""")
+                .addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
 
         return resultPageHtml.toString()
     }
@@ -161,13 +157,15 @@ public class DataframeViewJqxVue implements DataframeView {
 
         dataframe.childrenDataframes.add(refDataframeName)
 //        resultPageHtml.append("<v-divider></v-divider>")
-        vueJsBuilder.addToDataScript("${refDataframeName}_display : false,\n")
+        VueStore store = vueJsBuilder.getVueStore()
+        store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
         vueJsBuilder.addToDataScript(" ${refDataframeName}_data:null,\n")
+        vueJsBuilder.addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
 
         String attachTo = fields.attachTo?:"$dataframeName-id"
         String attr = fields.attr?:"left"
         if(fields.popup) {
-            resultPageHtml.append("""<v-menu v-model="${refDataframeName}_display" :close-on-content-click="false" z-index='99' max-width="200" :nudge-width="200" $attr attach="$attachTo">""")
+            resultPageHtml.append("""<v-menu v-model="visibility.${refDataframeName}" :close-on-content-click="false" z-index='99' max-width="200" :nudge-width="200" $attr attach="$attachTo">""")
             resultPageHtml.append(refDataframe.getComponentName(""))
             resultPageHtml.append("""</v-menu>""")
         }
@@ -185,7 +183,7 @@ public class DataframeViewJqxVue implements DataframeView {
         String callBackSuccessScriptS = ""
         String callBackFailureScript = ""
         if(dataframe.initOnPageLoad){
-            callBackScriptS = "if(response.data != null && response.data != '' && response.data  != undefined){${dataframeName}Var.${dataframeName}_populateJSONData(response.data);}"
+            callBackScriptS = "if(response.data != null && response.data != '' && response.data  != undefined){self.${dataframeName}_populateJSONData(response.data);}"
         }
         if(dfButton.callBackParams && dfButton.callBackParams.successScript){
             callBackSuccessScriptS = dfButton.callBackParams.successScript
@@ -198,6 +196,7 @@ public class DataframeViewJqxVue implements DataframeView {
                  ${dataframe.getVueSaveVariables()}
                  $doBeforeSave
  if (this.\$refs.${dataframeName}_form.validate()) {
+                const self = this;
                 axios({
                     method:'post',
                     url:'$dfButton.url',

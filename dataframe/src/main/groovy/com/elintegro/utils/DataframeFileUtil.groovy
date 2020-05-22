@@ -46,4 +46,41 @@ class DataframeFileUtil {
             log.debug(e.getMessage())
         }
     }
+
+    public static void writeStringIntoFile(String fileName, String fileContent) {
+        BufferedWriter writer
+        File file = new File(fileName)
+        if (file) {
+            String pathOnly = fileName.substring(0, fileName.indexOf(file.getName())-1)
+            File theDir = new File(pathOnly);
+            if(!theDir.exists()) {
+                boolean result = false;
+                try {
+                    theDir.mkdir();
+                    result = true;
+                }
+                catch (SecurityException se) {
+                    log.error("File ${fileName} has not been created!")
+                    return;//handle it
+                }
+                if (result) {
+                    System.out.println("DIR created");
+                }
+            }
+        }
+
+        try {
+            writer = new BufferedWriter(new FileWriter(fileName))
+            writer.write(fileContent)
+        }catch(Exception e){
+            log.info("There is a problem to create dataframe vue file. Exception : "+e)
+
+        }finally {
+            writer.close()
+        }
+
+
+
+
+    }
 }

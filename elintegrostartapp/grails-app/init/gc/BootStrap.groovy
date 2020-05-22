@@ -35,6 +35,9 @@ class BootStrap {
             servletContext.setAttribute("USER", user1)
 
             DataInit.initelintegrostartappReferences(user1)
+            DataInit.initElintegroClientProject()
+            DataInit.initelintegrostartappSkills()
+            DataInit.initelintegrostartappPosition()
         }
 
         //DataInit.initNotification()

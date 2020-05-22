@@ -26,7 +26,7 @@ class VueJsEntity {
     boolean insertOnMounted
 
     boolean createRoute
-    String routePath = "" 
+    String routePath = "" // '/user' for profile www.ayalon.com/user
     String mounted = ""
     String computed = ""
     String methods = ""

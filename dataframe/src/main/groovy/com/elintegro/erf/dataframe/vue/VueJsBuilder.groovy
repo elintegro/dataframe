@@ -204,8 +204,16 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return propsAttrString.toString()
     }
 
+    public static String createCompRegistrationString(String component, int index){
+
+        if(index == 0){
+            return "'"+component.toLowerCase()+"' : "+component+"Comp,\n"
+        }else {
+            return VueJsBuilder.createCompRegistrationString(component)
+        }
+    }
     public static String createCompRegistrationString(component){
-        return ""+component.toLowerCase()+" : "+component+"Comp,\n"
+        return "'"+component+"' : "+component+"Comp,\n"
     }
 
     public void setFinalComponentInitScript(String finalComponentInitScript){
@@ -219,15 +227,14 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
     public String getFinalbuildScript(DataframeVue df) {
 
         StringBuffer vueCompBuilder = new StringBuffer() //test for using localized components
-        String dataframeNameLowercase = df.dataframeNameLowercase
         String dataframeName = df.dataframeName
         if(df.isGlobal){
-            vueCompBuilder.append("Vue.component('${dataframeNameLowercase}',{\n")
-            vueCompBuilder.append("name: '$dataframeNameLowercase',\n")
+            vueCompBuilder.append("Vue.component('${dataframeName}',{\n")
+            vueCompBuilder.append("name: '$dataframeName',\n")
             df.componentRegistered = true
         }else{
             df.componentRegistered = false
-            vueCompBuilder.append("var ${dataframeName}Comp = {\n")
+            vueCompBuilder.append("const ${dataframeName}Comp = {\n")
         }
         vueCompBuilder.append(buildTemplateScript())
         vueCompBuilder.append(buildDataScript())
@@ -252,4 +259,3 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return vueStore
     }
 }
-

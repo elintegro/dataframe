@@ -20,7 +20,7 @@ import com.elintegro.erf.dataframe.DataframeInstance
 /**
  * This abstract could classdefines a main method for each widget;
  * TODO: consider to turn it into the Interface if not implementation is required here
- *  
+ *
  * @author Eugenelip
  *
  */
@@ -33,29 +33,29 @@ abstract class Widget<T> {
 	abstract String getValueSetter(T dataframe, Map field, String divId, String fldId, String key)
 
 	public static final int ONE_SIMBOL_WITH = 6;
-	
+
 	public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldName, Map inputData, def dbSession){
 		return [:]
 	}
 
 	public def jQTreeHqlMap = null;
-	public treeName;	
+	public treeName;
 
 
 	String getValueScript(Dataframe dataframe, Map field, String divId, String fldId, String key){
 		return """""";
-	 }
+	}
 
 
-    /**
-     * TODO Explain
-     * This method must do the following:
-     *
-     * */
-    Map getDictionary(def dataframeName, def fieldName, def keys){
+	/**
+	 * TODO Explain
+	 * This method must do the following:
+	 *
+	 * */
+	Map getDictionary(def dataframeName, def fieldName, def keys){
 
 
-    }
+	}
 
 	/**
 	 * TODO: explain 
@@ -71,12 +71,12 @@ abstract class Widget<T> {
 	 * This method must do the following:
 	 *
 	 * */
-	Map setTreeMap(def field, String fieldName){		
+	Map setTreeMap(def field, String fieldName){
 		jQTreeHqlMap =  field.get("treeMap");
 		treeName = fieldName;
 		if(jQTreeHqlMap == null){
 			throw new Exception("Treee map has not been defined for the widget "+field.name)
-		}		
+		}
 	}
 
 
@@ -89,5 +89,5 @@ abstract class Widget<T> {
 		return value
 	}
 
-			
+
 }

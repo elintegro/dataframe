@@ -15,6 +15,7 @@ package spring.globech
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.vue.FKWidgetVue
+import com.elintegro.erf.widget.vue.PictureDisplayWidgetVue
 import grails.util.Holders
 
 beans {
@@ -27,7 +28,7 @@ beans {
         wrapInForm=false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]
+//        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
         vueStore = ["state":"loggedIn: false,\n"]
@@ -45,13 +46,13 @@ beans {
         initOnPageLoad = true
 
         vueStore = ["state": "facilityName: '', \nfacilityId:'',\n"]
-        doAfterRefresh = """drfExtCont.saveToStore("vueAppNameDataframe","facilityId", vueAppNameDataframeVar.vueAppNameDataframe_facility_id);"""
+        doAfterRefresh = """excon.saveToStore("vueAppNameDataframe","facilityId", vueAppNameDataframeVar.vueAppNameDataframe_facility_id);"""
         addFieldDef =[
                 "facility.facilityName":[
                         widget: "TextDisplayWidgetVue"
                 ]
-]
-//        componentsToRegister = ["vueLoginDataframe"]
+        ]
+//        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
 //        vueStore = ["state":"loggedIn: false,\n"]
@@ -67,7 +68,7 @@ beans {
         wrapInForm=false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]     script:"""this.\$router.push("/vueapplicationformdataframe");""" , roles: "ROLE_NURSE, ROLE_ADMIN", accessType: "ifAnyGranted"               nudge-right='220' nudge-right='220'   Register:[name:"Register", type:"link", script:"console.log('Register tab selected ');Vue.set(this.\$store.state.vueToolbarDataframe, 'myProperty_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'financialData_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'myRentals_display', true);"],
+//        childDataframes = ["vueLoginDataframe"]     script:"""this.\$router.push("/vueapplicationformdataframe");""" , roles: "ROLE_NURSE, ROLE_ADMIN", accessType: "ifAnyGranted"               nudge-right='220' nudge-right='220'   Register:[name:"Register", type:"link", script:"console.log('Register tab selected ');Vue.set(this.\$store.state.vueToolbarDataframe, 'myProperty_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'financialData_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'myRentals_display', true);"],
         //Vue parameters attr:"v-if='this.\$store.state.vueToolbarDataframe.newApplication_display'", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
         isGlobal = true
         createStore = true
@@ -91,7 +92,7 @@ beans {
         saveButton = false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]     script:"""this.\$router.push("/vueapplicationformdataframe");"""                nudge-right='220' nudge-right='220'   Register:[name:"Register", type:"link", script:"console.log('Register tab selected ');Vue.set(this.\$store.state.vueToolbarDataframe, 'myProperty_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'financialData_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'myRentals_display', true);"],
+//        childDataframes = ["vueLoginDataframe"]     script:"""this.\$router.push("/vueapplicationformdataframe");"""                nudge-right='220' nudge-right='220'   Register:[name:"Register", type:"link", script:"console.log('Register tab selected ');Vue.set(this.\$store.state.vueToolbarDataframe, 'myProperty_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'financialData_display', false);Vue.set(this.\$store.state.vueToolbarDataframe, 'myRentals_display', true);"],
         //Vue parameters attr:"v-if='this.\$store.state.vueToolbarDataframe.newApplication_display'", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
         isGlobal = true
         createStore = true
@@ -99,7 +100,7 @@ beans {
 
         dataframeButtons = [ReportClientEvent:[name:"ReportClientEvent", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "0", refDataframe: ref("vueRecordEventDataframe"), roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
                             IssueRequest:[name:"IssueRequest", type:"link", attr: "open-on-hover", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_CLIENT"], accessType: "ifAnyGranted"],
-                            ReportIncident:[name:"ReportIncident", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"]/*, attr:"flat"*/
+                            ReportIncident:[name:"ReportIncident", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"]/*, attr:"text"*/
         ]
         currentFrameLayout = ref("vueUserManagementMenuDataframeLayout")
     }
@@ -112,9 +113,9 @@ beans {
         dataframeButtons = [ApplicationManagement:[name:"ApplicationManagement", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], "route" : true, routeIdScript: "0", refDataframe: ref("vueApplicationManagementDataframe") , roles:["ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
                             ClientManagement:[name:"ClientManagement", type:"link", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_NURSE"], accessType: "ifAnyGranted"],
                             Employees:[name:"Employees", type:"link",  attr: "open-on-hover", route: true, routeIdScript: "0", refDataframe: ref("vueEmployeeGridDataframe"),"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Vendors:[name:"Vendors", type:"link",route: true, routeIdScript: "0", refDataframe: ref("vueVendorGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"flat", roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            ServiceProviders:[name:"ServiceProviders", type:"link", attr:"flat",route: true, routeIdScript: "0", refDataframe: ref("vueProviderGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Users:[name:"Users", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_SUPER_ADMIN"], accessType: "ifAnyGranted"]
+                            Vendors:[name:"Vendors", type:"link",route: true, routeIdScript: "0", refDataframe: ref("vueVendorGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text", roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            ServiceProviders:[name:"ServiceProviders", type:"link", attr:"text",route: true, routeIdScript: "0", refDataframe: ref("vueProviderGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Users:[name:"Users", type:"link", attr:"text", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_SUPER_ADMIN"], accessType: "ifAnyGranted"]
         ]
         currentFrameLayout = ref("vueUserManagementMenuDataframeLayout")
     }
@@ -126,13 +127,13 @@ beans {
         saveButton = false
 
         dataframeButtons = [Administrator:[name:"Administrator", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-//                            Client:[name:"Client", type:"link", attr: "flat", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+//                            Client:[name:"Client", type:"link", attr: "text", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
 
-//                            Receptionist:[name:"Receptionist", type:"link",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"flat",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Employee:[name:"Employee", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueEmployeeAddDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"flat",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Provider:[name:"Provider", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueProviderAddDataframe"), attr:"flat",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-//                            Relative:[name:"Relative", type:"link", attr:"flat", route: true, routeIdScript: "0", refDataframe: ref("vueRelativeGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], showAsDialog: true, roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Vendors:[name:"Vendors", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueVendorAddDataframe"), attr:"flat",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"]
+//                            Receptionist:[name:"Receptionist", type:"link",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Employee:[name:"Employee", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueEmployeeAddDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Provider:[name:"Provider", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueProviderAddDataframe"), attr:"text",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+//                            Relative:[name:"Relative", type:"link", attr:"text", route: true, routeIdScript: "0", refDataframe: ref("vueRelativeGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], showAsDialog: true, roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Vendors:[name:"Vendors", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueVendorAddDataframe"), attr:"text",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"]
         ]
         currentFrameLayout = ref("vueRegisterMenuDataframeLayout")
     }
@@ -143,7 +144,7 @@ beans {
         bean.constructorArgs = ['vueUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.contactEmail, person.firstName, person.lastName, person.bday,  person.phone from Person as person where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday,  person.phone from Person as person where person.id=:id"
 
         //These are values, that overrides the default ones
         saveButton = true
@@ -153,7 +154,7 @@ beans {
         tab = true
 //        isGlobal = true
 //        createStore = true
-//        componentsToRegister=["vueAddressDataframe"]
+//        childDataframes=["vueAddressDataframe"]
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         doAfterSave = """setTimeout(function(){ vueUserProfileDataframeVar.\$router.push('/');this.location.reload();}, 3000);"""
@@ -180,7 +181,7 @@ beans {
                         widget: "DateWidgetVue",
                         "required": "required"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg12', 'xl4']],
-                "person.contactEmail":[
+                "person.email":[
                         widget: "EmailWidgetVue",
                         "required": "required"
                         ,readOnly: true
@@ -256,7 +257,7 @@ beans {
         dataframeButtons = [ Submit: [name:"submit", type: "button", url: "${contextPath}/register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
                                                                                                                             var t = url.searchParams.get("token"); 
                                                                                                                             if(t != undefined || t != null){ allParams['t']=t;}
-                                                                                          allParams['resetPasswordDfr-user-contactEmail']=jQuery("#userProfileDataframe-person-contactEmail").val();
+                                                                                          allParams['resetPasswordDfr-user-email']=jQuery("#userProfileDataframe-person-email").val();
                                                                                          """, callBackParams:[successScript:"""if(data.redirect){window.location.href=data.redirectUrl;}
                                                                                                                                jQuery('#resetPassword-Div').jqxWindow('close');"""]],
                              Cancel:[name:"cancel", type:"button", script:"\$router.go(-1)"]]
@@ -271,12 +272,12 @@ beans {
         wrapInForm=false
 
         initOnPageLoad = false
-//        componentsToRegister = ["vueLoginDataframe"]
+//        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
         dataframeButtons = [
-                Register:[name:"register", type:"link", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true, attr:"flat", script:""" this.vueRegisterDataframe_display = true;\n  drfExtCont.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', true);\n""", refDataframe: ref("vueRegisterDataframe"), tooltip: [message: 'Register']],
-                Login:[name:"login", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true,script:""" this.vueLoginDataframe_display = true; \n  drfExtCont.saveToStore('dataframeShowHideMaps','vueLoginDataframe_display', true);\n""", refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login']]]
+                Register:[name:"register", type:"link", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true, attr:"flat", script:""" this.vueRegisterDataframe_display = true;\n  excon.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', true);\n""", refDataframe: ref("vueRegisterDataframe"), tooltip: [message: 'Register']],
+                Login:[name:"login", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true,script:""" this.vueLoginDataframe_display = true; \n  excon.saveToStore('dataframeShowHideMaps','vueLoginDataframe_display', true);\n""", refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login']]]
         currentFrameLayout = ref("loginLogoutNavigationLayout")
         createStore = true
 
@@ -321,7 +322,7 @@ beans {
         wrapInForm=true
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doAfterSave = """ drfExtCont.saveToStore('vueLoginNavigation','responseData');\ndrfExtCont.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', false);\n
+        doAfterSave = """ excon.saveToStore('vueLoginNavigation','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', false);\n
                            """
         addFieldDef =[
                 "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
@@ -352,7 +353,7 @@ beans {
         String loginAuthenticateUrl = loginWithSpringSecurity?"${contextPath}/login/authenticate" : "${contextPath}/login/loginUser"
 
         addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
-                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an Email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
                        ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px', "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
         ]
 
@@ -490,8 +491,8 @@ beans {
 
         ]
 //        this.location.reload();
-        dataframeButtons = [profile:[name:'Profile', type: "link", attr: "flat small", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], showAsDialog: false, route:true, routeIdScript:"this.vueProfileMenuDataframe_person_id;", refDataframe: ref('vueUserProfileDataframe')],
-                            Logout:[name:"logout", type:"link", url:"${contextPath}/logoff", attr:"flat small","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], script:"", callBackParams:[failureScript:"""vueProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
+        dataframeButtons = [profile:[name:'Profile', type: "link", attr: "text small", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], showAsDialog: false, route:true, routeIdScript:"this.vueProfileMenuDataframe_person_id;", refDataframe: ref('vueUserProfileDataframe')],
+                            Logout:[name:"logout", type:"link", url:"${contextPath}/logoff", attr:"text small","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], script:"", callBackParams:[failureScript:"""vueProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
         currentFrameLayout = ref("vueProfileMenuDataframeLayout")
     }
 
@@ -531,7 +532,7 @@ beans {
                 "event.images":[
                         "widget" : "PictureUploadWidgetVue"
                         ,name:"images"
-                        , valueMember: "images"
+                        ,valueMember: "images"
                         ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                         ,multiple:true
                         ,editButton: true
@@ -552,8 +553,8 @@ beans {
         route = true
         initOnPageLoad = true
 //        doBeforeRefresh = """allParams['contactType'] = this.\$route.params.routeId"""
-//        doAfterSave = "drfExtCont.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
-        componentsToRegister = ["vueContactManagementDataframe"]
+//        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
+        childDataframes = ["vueContactManagementDataframe"]
         /*,onClick:[showAsDialog: false, refDataframe: ref("vuePrescribedMedicationsDataframe")]
         ,onButtonClick:[
                 ['actionName':'Payment','buttons':[
@@ -574,7 +575,7 @@ beans {
                         , hidecolumn      : "contractId"
 
                         , onClick         : [showAsDialog: true, refDataframe: ref("vueContactManagementDataframe")]
-                        , hql             : """select person.id as Id, person.firstName as Firstname, person.lastName as Lastname, person.contactEmail as Email, person.phone as Phone from Relative relative inner join relative.person person"""
+                        , hql             : """select person.id as Id, person.firstName as Firstname, person.lastName as Lastname, person.email as email, person.phone as Phone from Relative relative inner join relative.person person"""
                         , gridWidth       : 420
                         , search          : true
                         , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -582,7 +583,7 @@ beans {
 
         ]
 
-        /*dataframeButtons = [ previous: [name:"previous", type: "button", script:"""drfExtCont.saveToStore("vueApplicationFormDataframe", "vueApplicationFormDataframe_tab_model","vueMedicalRecordDataframe-tab-id");
+        /*dataframeButtons = [ previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueApplicationFormDataframe", "vueApplicationFormDataframe_tab_model","vueMedicalRecordDataframe-tab-id");
                                                                                 \n""", url: ""] ,
                              Submit:[name:"submit", type: "button", script: "vueMedicationsGridDataframeVar.\$router.push('/');this.location.reload();"]
         ]*/
@@ -592,16 +593,16 @@ beans {
     vueContactManagementDetailDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactManagementDetailDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = true
         saveButton = false
         dataframeLabelCode = "Contact.Details"
-//        componentsToRegister=["vueAddressDataframe"]
-//        doAfterSave = "drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
+//        childDataframes=["vueAddressDataframe"]
+//        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
-                "person.contactEmail": [
+                "person.email": [
                         "widget"        : "EmailWidgetVue",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
@@ -619,7 +620,25 @@ beans {
                 ],
                 "person.mainPicture" : [
                         "widget"        : "PictureDisplayWidgetVue",
-                        "defaultValue"  : "default_profile.jpg",
+                        "defaultValue"  : "`vueElintegroLogoDataframe(DataframeVue){bean ->\n" +
+                                "        bean.parent = dataFrameSuper\n" +
+                                "        bean.constructorArgs = ['vueElintegroLogoDataframe']\n" +
+                                "        isGlobal = true\n" +
+                                "        saveButton = false\n" +
+                                "        addFieldDef =[\n" +
+                                "                \"person.mainPicture\":[\n" +
+                                "                        \"widget\": \"PictureDisplayWidgetVue\",\n" +
+                                "                        \"defaultValue\"  : \"elintegro_logo.png\",\n" +
+                                "                        flexGridValues: ['xs12', 'sm6', 'md1', 'lg4', 'xl4'],\n" +
+                                "                        \"aspectRatio\":\"2.5\",\n" +
+                                "                      \"height\":\"20px\",\n" +
+                                "                        \"width\":\"300px\",\n" +
+                                "                ]\n" +
+                                "\n" +
+                                "        ]\n" +
+                                "        currentFrameLayout = ref(\"defaultDataframeLayout\")\n" +
+                                "\n" +
+                                "    }`.jpg",
                         "aspectRatio"   : "2.5",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "height"        : 200]
@@ -631,15 +650,15 @@ beans {
     vueContactManagementEditDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactManagementEditDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = true
         dataframeLabelCode = "Contact.Details"
-//        componentsToRegister=["vueAddressDataframe"]
-//        doAfterSave = "drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
+//        childDataframes=["vueAddressDataframe"]
+//        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
-                "person.contactEmail": [
+                "person.email": [
                         "widget"        : "EmailWidgetVue",
                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],

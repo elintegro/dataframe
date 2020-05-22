@@ -44,9 +44,9 @@ class UserManagementFormController {
             Person person = Person.get(Long.valueOf(personId))
             String message = ""
             if(person){
-                Map userCreationResponse = userManagementFormService.createUser([email:person.contactEmail, firstName:person.firstName, lastName: person.lastName],Long.valueOf(roleId), true)
+                Map userCreationResponse = userManagementFormService.createUser([email:person.email, firstName:person.firstName, lastName: person.lastName],Long.valueOf(roleId), true)
                 if(userCreationResponse.user){
-                    Person person1 = Person.findByContactEmail(person.contactEmail)
+                    Person person1 = Person.findByContactEmail(person.email)
                     person1.user = userCreationResponse.user
                     person1.save()
 //                  Facility facility = Facility.get(Long.valueOf(facilityId))
@@ -79,9 +79,9 @@ class UserManagementFormController {
             Person person = Person.get(Long.valueOf(personId))
             String message = ""
             if(person){
-                Map userCreationResponse = userManagementFormService.createUser([email:person.contactEmail, firstName:person.firstName, lastName: person.lastName], roleId, true)
+                Map userCreationResponse = userManagementFormService.createUser([email:person.email, firstName:person.firstName, lastName: person.lastName], roleId, true)
                 if(userCreationResponse.user){
-                    Person person1 = Person.findByContactEmail(person.contactEmail)
+                    Person person1 = Person.findByContactEmail(person.email)
                     person1.user = userCreationResponse.user
                     person1.save()
 //                  Facility facility = Facility.get(Long.valueOf(facilityId))
@@ -114,9 +114,9 @@ class UserManagementFormController {
             Person person = Person.get(Long.valueOf(personId))
             String message = ""
             if(person){
-                Map userCreationResponse = userManagementFormService.createUser([email:person.contactEmail, firstName:person.firstName, lastName: person.lastName], roleId, true)
+                Map userCreationResponse = userManagementFormService.createUser([email:person.email, firstName:person.firstName, lastName: person.lastName], roleId, true)
                 if(userCreationResponse.user){
-                    Person person1 = Person.findByContactEmail(person.contactEmail)
+                    Person person1 = Person.findByContactEmail(person.email)
                     person1.user = userCreationResponse.user
                     person1.save()
 //                  Facility facility = Facility.get(Long.valueOf(facilityId))
@@ -141,14 +141,14 @@ class UserManagementFormController {
         def _params = params
         def personId = params["personId"]
 
-        String applicantEmail = params["contactEmail"]
+        String applicantEmail = params["email"]
         Person person = Person.findByContactEmail(applicantEmail)
         if(person){
-            return [success: false, msg:"The Email is already registered. Please use another email."]
+            return [success: false, msg:"The email is already registered. Please use another email."]
         }
         Map returnedMap = userManagementFormService.save(_params, session)
 
-        Map resultData = ['success': true, 'msg': "Contact Information save. Email has been sent for verification", generatedKeys:returnedMap.generatedKeys, nodeId: returnedMap.generatedKeys, newData:returnedMap.resultAlias, params:returnedMap._params]
+        Map resultData = ['success': true, 'msg': "Contact Information save. email has been sent for verification", generatedKeys:returnedMap.generatedKeys, nodeId: returnedMap.generatedKeys, newData:returnedMap.resultAlias, params:returnedMap._params]
         return resultData
     }
 

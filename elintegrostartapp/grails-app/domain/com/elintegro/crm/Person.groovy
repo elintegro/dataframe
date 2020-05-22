@@ -19,8 +19,7 @@ import com.elintegro.ref.Address
 import com.elintegro.ref.Language
 
 class Person extends ControlField{
-
-    String contactEmail
+    String email
 	String firstName
 	String lastName
 	String salutation
@@ -42,7 +41,7 @@ class Person extends ControlField{
 	}
 
     static constraints = {
-        contactEmail(nullable:true)
+		email(nullable:false)
 		firstName(nullable: false, size: 2..30)
         lastName (nullable: false, size: 2..30)
 		salutation(nullable:true, size: 2..6)
@@ -58,12 +57,12 @@ class Person extends ControlField{
     }
 
     String getEmail(){
-        //return user?.username?:contactEmail
-        contactEmail
+        //return user?.username?:email
+        email
     }
 
 	@Override
 	String toString(){
-		return firstName + " " + lastName+" email: "+contactEmail
+		return firstName + " " + lastName+" email: "+email
 	}
 }

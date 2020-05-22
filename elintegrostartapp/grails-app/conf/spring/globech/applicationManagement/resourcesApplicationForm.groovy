@@ -38,12 +38,12 @@ beans {
         route = true
 //        tab = true
         doAfterSave = """var params = response.params;\n
-                         drfExtCont.saveToStore("vueContactDataframe","key", params["key-vueContactDataframe-person-id-id"]);
-                         drfExtCont.saveToStore("vueApplicationFormDataframe","vueApplicationFormDataframe_tab_model",'vueAddressDataframe-tab-id');
+                         excon.saveToStore("vueContactDataframe","key", params["key-vueContactDataframe-person-id-id"]);
+                         excon.saveToStore("vueApplicationFormDataframe","vueApplicationFormDataframe_tab_model",'vueAddressDataframe-tab-id');
                          """
 
         vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
-        componentsToRegister=["vueAddressDataframe", "vueMedicalRecordDataframe", "vueMedicationsGridDataframe"]
+        childDataframes=["vueAddressDataframe", "vueMedicalRecordDataframe", "vueMedicationsGridDataframe"]
 
 //        doAfterSave = """setTimeout(function(){ this.location.reload();}, 3000);"""
 //        route = true
@@ -113,8 +113,8 @@ beans {
 //        isGlobal = true
 //        createStore = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        doBeforeSave = "allParams['vueMedicalRecordDataframe-record-person'] = drfExtCont.getFromStore('vueContactDataframe', 'key'); \nallParams['applicationId'] = drfExtCont.getFromStore('vueApplicationFormDataframe', 'key');"
-        doAfterSave = "drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicationsGridDataframe-tab-id');\n"
+        doBeforeSave = "allParams['vueMedicalRecordDataframe-record-person'] = excon.getFromStore('vueContactDataframe', 'key'); \nallParams['applicationId'] = excon.getFromStore('vueApplicationFormDataframe', 'key');"
+        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicationsGridDataframe-tab-id');\n"
 
 
 //        doAfterSave = """setTimeout(function(){ this.location.reload();}, 3000);"""
@@ -130,7 +130,7 @@ beans {
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""drfExtCont.saveToStore("vueApplicationFormDataframe", "vueApplicationFormDataframe_tab_model","vueAddressDataframe-tab-id");
+        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueApplicationFormDataframe", "vueApplicationFormDataframe_tab_model","vueAddressDataframe-tab-id");
                                                                                 \n""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'], url: ""] ]
 
         currentFrameLayout = ref("formDataframeLayout")
@@ -146,9 +146,9 @@ beans {
         dataframeLabelCode = "Add.Medications"
         initOnPageLoad = false
         ajaxSaveUrl = "${contextPath}/applicationForm/saveMedications"
-        doAfterSave = """drfExtCont.saveToStore('dataframeShowHideMaps', 'vuePrescribedMedicationsDataframe_display', false);\ndrfExtCont.saveToStore('vueMedicationsGridDataframe', 'key', response.nodeId[0]);\n
-                          drfExtCont.saveToStore("dataframeBuffer","savedResponseData", responseData);"""
-        doBeforeSave = "allParams['medicalRecordId'] = drfExtCont.getFromStore('vueMedicalRecordDataframe', 'key');"
+        doAfterSave = """excon.saveToStore('dataframeShowHideMaps', 'vuePrescribedMedicationsDataframe_display', false);\nexcon.saveToStore('vueMedicationsGridDataframe', 'key', response.nodeId[0]);\n
+                          excon.saveToStore("dataframeBuffer","savedResponseData", responseData);"""
+        doBeforeSave = "allParams['medicalRecordId'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"
 
         addFieldDef = [
                 "prescribedMed.medication"     : [
@@ -202,13 +202,13 @@ beans {
         hql = "select record.medications from MedicalRecord as record where record.id=:id"
 
         dataframeLabelCode = "Add.Medications"
-//        doAfterSave = "vueMedicationsGridDataframeVar.\$router.push(\"/\");this.location.reload();drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueAddressDataframe-tab-id');\n"
+//        doAfterSave = "vueMedicationsGridDataframeVar.\$router.push(\"/\");this.location.reload();excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueAddressDataframe-tab-id');\n"
         saveButton = false
         initOnPageLoad = false
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        doBeforeRefresh = """allParams['id'] = drfExtCont.getFromStore('vueMedicalRecordDataframe', 'key');"""
-        doAfterSave = "drfExtCont.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
-        componentsToRegister = ["vuePrescribedMedicationsDataframe"]
+        doBeforeRefresh = """allParams['id'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"""
+        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
+        childDataframes = ["vuePrescribedMedicationsDataframe"]
         /*,onClick:[showAsDialog: false, refDataframe: ref("vuePrescribedMedicationsDataframe")]
         ,onButtonClick:[
                 ['actionName':'Payment','buttons':[
@@ -245,7 +245,7 @@ beans {
                 ],
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""drfExtCont.saveToStore("vueApplicationFormDataframe", "vueApplicationFormDataframe_tab_model","vueMedicalRecordDataframe-tab-id");
+        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueApplicationFormDataframe", "vueApplicationFormDataframe_tab_model","vueMedicalRecordDataframe-tab-id");
                                                                                 \n""", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""] ,
                              Submit:[name:"submit", type: "button", classNames: "right", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],script: "vueMedicationsGridDataframeVar.\$router.push('/');window.location.reload();"]
         ]
@@ -268,17 +268,17 @@ beans {
     vueContactDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactDataframe']
-        hql = "select person.firstName, person.lastName, person.id, person.contactEmail, person.phone from Person as person where person.id=:id"
+        hql = "select person.firstName, person.lastName, person.id, person.email, person.phone from Person as person where person.id=:id"
 
         initOnPageLoad = false
         createStore = true
         saveButton = false
         dataframeLabelCode = "Contact.Information"
-//        componentsToRegister=["vueAddressDataframe"]
-//        doAfterSave = "drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
+//        childDataframes=["vueAddressDataframe"]
+//        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef =[
 
-                "person.contactEmail":[
+                "person.email":[
                         "widget"     : "EmailWidgetVue",
                         "flexGridValues":['xs8', 'sm8', 'md8', 'lg8', 'xl8']
                 ],
@@ -318,11 +318,11 @@ beans {
         hql = "select address.addressLine, address.addressLine2, address.id,  address.addressText, address.apartment, address.street, address.cityString, address.countryString, address.postalZip from Address as address where address.id=:id"
 
 
-//        initOnPageLoad=true //false by default drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = drfExtCont.getFromStore('vueContactDataframe','key');"
-        doAfterSave = "drfExtCont.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicalRecordDataframe-tab-id');"
+//        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
+        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueContactDataframe','key');"
+        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicalRecordDataframe-tab-id');"
 
-        componentsToRegister =["vueMapWidgetDataframe"]
+        childDataframes =["vueMapWidgetDataframe"]
         ajaxSaveUrl = "${contextPath}/applicationForm/saveAddress"
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required

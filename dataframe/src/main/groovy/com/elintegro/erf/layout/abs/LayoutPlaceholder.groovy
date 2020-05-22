@@ -20,5 +20,6 @@ class LayoutPlaceholder {
     public static final DATAFRAME_LABEL = "[DATAFRAME_LABEL]"
     public static final FIELD_SCRIPT = "[FIELD_SCRIPT]"
     public static final ALL_OTHER_FIELDS = "[ALL_OTHER_FIELDS]"
+    public static final REF_FIELD_SCRIPT = "[FIELD_FIELD]"
 
 }

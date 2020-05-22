@@ -17,6 +17,8 @@ import com.elintegro.auth.Role
 import com.elintegro.auth.User
 import com.elintegro.auth.UserRole
 import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.hr.Position
+import com.elintegro.elintegrostartapp.hr.Skills
 import com.elintegro.ref.Address
 import com.elintegro.ref.Language
 import com.elintegro.elintegrostartapp.Facility
@@ -25,9 +27,11 @@ import com.elintegro.elintegrostartapp.client.FrequencyUnit
 import com.elintegro.elintegrostartapp.hr.Employee
 import com.elintegro.elintegrostartapp.ref.*
 import com.elintegro.elintegrostartapp.supplyChain.Vendor
+import com.elintegro.website.ClientProject
 import grails.util.Holders
 import com.elintegro.elintegrostartapp.Provider
 import com.elintegro.elintegrostartapp.property.Property
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -84,9 +88,9 @@ class DataInit {
 		}
 
 		if (!Person.count()) {
-			groupHead = new Person(contactEmail:"eugenelip@gmail.com", firstName:"Eugene", lastName:"Lipkovich", user:adminUser).save(failOnError: true)
-			participant1 = new Person(contactEmail: "daniel.lipkovich@gmail.com", firstName: "Daniel", lastName: "Lipkovich").save(failOnError: true)
-		    pnlPerson = new Person(contactEmail: "pnlwlust@gmail.com", firstName: "Prakash", lastName: "subedi", user: pnlwlust).save()
+			groupHead = new Person(email:"eugenelip@gmail.com", firstName:"Eugene", lastName:"Lipkovich", user:adminUser).save(failOnError: true)
+			participant1 = new Person(email: "daniel.lipkovich@gmail.com", firstName: "Daniel", lastName: "Lipkovich").save(failOnError: true)
+		    pnlPerson = new Person(email: "pnlwlust@gmail.com", firstName: "Prakash", lastName: "subedi", user: pnlwlust).save()
 		}
 
 		return [users:[pnlwlust,adminUser, guestUser], persons:[participant1, groupHead, pnlPerson]]
@@ -107,8 +111,52 @@ class DataInit {
 	}
 
 	static def initStructuresForRegisteredUser(User user) {
-		Person person = new Person(contactEmail: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
+		Person person = new Person(email: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
 	}
+	static def initElintegroClientProject(){
+		ClientProject clientProject = new ClientProject(clientName:"" ,projectName:"Globe Chalet" ,logo:"assets/clientsProjectImages/globeChalet.PNG" ,
+				description:"Software to manage Associations\n" +
+				"of real estate properties and communities\n" +
+				"\n" ,linkToWebsite:"www.globeChalet.com" ).save()
+		 new ClientProject(clientName:"Coach Clone" ,projectName:"Coach Clone application" ,logo:"assets/clientsProjectImages/coachClone.PNG" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros" ,linkToWebsite:"https://www.coachclone.com/" ).save()
+		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"" ,logo:"assets/clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
+		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"" ,logo:"assets/clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
+	}
+	static def initelintegrostartappSkills(){
+		new Skills(code:"java",name:"Java",description: "Nothing").save()
+		new Skills(code:"spring",name:"Spring Framework",description: "Nothing").save()
+		new Skills(code:"hibernate",name:"Hibernate",description: "Nothing").save()
+		new Skills(code:"sql",name:"SQL",description: "Nothing").save()
+		new Skills(code:"js",name:"Javascript",description: "Nothing").save()
+		new Skills(code:"jq",name:"JQuery",description: "Nothing").save()
+		new Skills(code:"html",name:"HTML",description: "Nothing").save()
+		new Skills(code:"css",name:"CSS",description: "Nothing").save()
+		new Skills(code:"unix",name:"UNIX/Linux (including scripting)",description: "Nothing").save()
+		new Skills(code:"mvn",name:"Maven",description: "Nothing").save()
+		new Skills(code:"git",name:"Git",description: "Nothing").save()
+		new Skills(code:"eclipse",name:"Eclipse",description: "Nothing").save()
+		new Skills(code:"intellij",name:"Intellij",description: "Nothing").save()
+		new Skills(code:"agile",name:"Agile",description: "Nothing").save()
+		new Skills(code:"grails",name:"Grails",description: "Nothing").save()
+		new Skills(code:"angular",name:"Angular",description: "Nothing").save()
+		new Skills(code:"react",name:"React",description: "Nothing").save()
+		new Skills(code:"python",name:"Python",description: "Nothing").save()
+		new Skills(code:"php",name:"PHP",description: "Nothing").save()
+		new Skills(code:"mongodb",name:"MongoDB",description: "Nothing").save()
+		new Skills(code:"vuejs",name:"VueJs",description: "Nothing").save()
+		new Skills(code:"jenkins",name:"Jenkins",description: "Nothing").save()
+
+	}
+	static def initelintegrostartappPosition(){
+		new Position(_code:"be", name:"Back-end Java Developer",description: "Nothing").save()
+		new Position(_code: "fe", name:"Front-end Developer",description: "Nothing").save()
+		new Position(_code:"po", name:"Product Owner",description: "Nothing").save()
+		new Position(_code:"sm", name:"Scrum Master",description: "Nothing").save()
+		new Position(_code:"sa", name:"Site Adminstrator",description: "Nothing").save()
+		new Position(_code:"do", name:"Developer",description: "Nothing").save()
+
+	}
+
 
 	static def initelintegrostartappReferences(def userList) {
 

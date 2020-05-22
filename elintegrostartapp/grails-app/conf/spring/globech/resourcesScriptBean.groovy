@@ -20,26 +20,30 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.checkIfPopupWindow();this.setInitPageValues();\n"""
+        created = """this.setInitPageValues();this.setupHomePage();"""
 
         methods =
-                """  checkIfPopupWindow: function(){
-                          var url = window.location.href;
-//                           var t = url.searchParams.get("reloadPage"); 
-//                           if(url){
-//                               window.opener.location.reload();
-//                               close();
-//                           }
-               },\nsetInitPageValues:function(data){
+                """  setupHomePage: function(){
+                          let homePage = "vueElintegroBannerDataframe";
+                          let routeId = 0;
+                          this.\$router.push({
+                              name: homePage,
+                              path: homePage,
+                              params: {
+                                  routeId: routeId
+                              }
+                          })
+                     }
+               ,\nsetInitPageValues:function(){
                                                
                                                 axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
-                                                     drfExtCont.saveToStore("vueInitDataframe", "key", '');
-                                                     drfExtCont.saveToStore("vueProfileMenuDataframe", "key", '');
-                                                     drfExtCont.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
-                                                     drfExtCont.saveToStore("loggedIn", responseData.data.loggedIn);
+                                                     excon.saveToStore("vueInitDataframe", "key", '');
+                                                     excon.saveToStore("vueElintegroProfileMenuDataframe", "key", '');
+                                                     excon.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
+                                                     excon.saveToStore("loggedIn", responseData.data.loggedIn);
 //                                                     vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
 //                                                     Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
-//                                                     Vue.set(vueInitDataframeVar.\$store.state.vueProfileMenuDataframe, "key", '');
+//                                                     Vue.set(vueInitDataframeVar.\$store.state.vueElintegroProfileMenuDataframe, "key", '');
                                                        var loggedIn = responseData.data.loggedIn
 //                                                     vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
                                                        var urlLocation = window.location.href;
@@ -143,6 +147,7 @@ beans {
                 var allParams = {};
                 allParams["id"] = eval(this.namedParamKey);
                 allParams['dataframe'] = 'vueAfterLoggedinDataframe';
+                
                 axios.get('${contextPath}/dataframe/ajaxValues', {
                     params: allParams
                 }).then(function(responseData) {
@@ -160,15 +165,28 @@ beans {
                             
                      },"""
     }
-
-    vueRegisterDataframe_script(VueJsEntity) { bean ->
-        data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
+    vueElintegroRegisterDataframe_script(VueJsEntity) { bean ->
+        data = "vueElintegroRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
 
-    vueProfileMenuDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueProfileMenuDataframe_person_fullName(){return drfExtCont.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + drfExtCont.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
-    }
+//    vueRegisterDataframe_script(VueJsEntity) { bean ->
+//        data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
+//    }
 
+//    vueProfileMenuDataframe_script(VueJsEntity) { bean ->
+//        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
+//    }
+    vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
+        computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_lastName)},
+                       vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
+    }
+    vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
+        created = """this.vueElintegroProfileMenuDataframeShow();"""
+
+        methods = """vueElintegroProfileMenuDataframeShow : function(){
+                  excon.setVisibility("vueElintegroProfileMenuDataframe",false)}
+                  """
+    }
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
         data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
@@ -196,13 +214,13 @@ beans {
     }
     vueMedicationsGridDetailDataframe_script(VueJsEntity){bean -> /* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*/
         watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridDetailDataframe_fillInitData();}},"""
-        computed = """ callInitMethod(){  const data = drfExtCont.getFromStore('vueMedicalRecordDetailDataframe', 'key');
+        computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordDetailDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
 
     vueMedicationsGridEditDataframe_script(VueJsEntity){bean -> /* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*/
         watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridEditDataframe_fillInitData();}},"""
-        computed = """ callInitMethod(){  const data = drfExtCont.getFromStore('vueMedicalRecordEditDataframe', 'key');
+        computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordEditDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
     vueRegisterMenuDataframe_script(VueJsEntity){bean ->
@@ -427,5 +445,133 @@ beans {
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressText = result[0].formatted_address;
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressLine = result[0].formatted_address;
                     },"""
+    }
+
+    vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
+        data = """drawer: false, group: null,"""
+    }
+    vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->
+        data = "vueNewEmployeeApplicantDataframe_tab_model : this.tabValue,\nvueNewEmployeeApplicantDataframe_display: true, \n"
+        computed = """tabValue(){return this.\$store.state.vueNewEmployeeApplicantDataframe.vueNewEmployeeApplicantDataframe_tab_model}"""
+        watch = """ tabValue:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantDataframe_tab_model = val;}},"""
+    }
+    vueNewEmployeeBasicInformationDataframe_script(VueJsEntity){bean ->
+        methods = """  
+                      newEmployeeBasicInformation(){
+                      console.log("Inside employeeinformation")
+                       var details = this.state.vueNewEmployeeBasicInformationDataframe
+                       console.log(details)
+                       var allParams = this.state;
+                       //allParams['firstName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_firstName;
+                       //allParams['lastName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_lastName;
+                       //allParams['email'] = this.state.vueNewEmployeeBasicInformationDataframe_person_email;
+                       //allParams['phone'] = this.state.vueNewEmployeeBasicInformationDataframe_person_phone;
+                       //allParams['linkedin'] = this.state.vueNewEmployeeBasicInformationDataframe_application_linkedin;
+                       //allParams['availablePosition'] = this.state.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
+                       allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
+                       console.log(allParams)
+                       
+                       console.log("do you see all params?")
+                       if (this.\$refs.vueNewEmployeeBasicInformationDataframe_form.validate()){
+                       axios({
+                       method:'post',
+                       url:'${contextPath}/EmployeeApplication/createApplicant',
+                       data: allParams
+                         }).then(function(responseData){
+                          var response = responseData;
+                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","vueNewEmployeeUploadResumeDataframe_resume_id",response.data.id)
+                          //Here is I put generated keys to the Vue component Store of this Vue component (dataframe) in order to other dataframes be 
+                          // able to use them to complete the data for the same records...  
+                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_person_id",response.data.person_id)
+                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_application_id",response.data.application_id)
+                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","key_person_id",response.data.person_id)
+                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","key_application_id",response.data.application_id)                                                                              
+                          console.log(response)                            
+                });
+                
+                       excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
+                  }   
+                  else{
+                      alert("Error in saving")
+                  }
+                   }
+                          """
+    }
+    vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
+        created = """this.fillApplicationSkillTable();"""
+        methods = """
+                 fillApplicationSkillTable(){  
+                 var details = this.state.vueNewEmployeeSelfAssesmentDataframe
+                 console.log(details);
+                 var allParams = {};
+                       var self = this;
+                       allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                       
+                       allParams['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
+                       console.log(allParams)
+                       axios({
+                       method:'post',
+                       url:'${contextPath}/EmployeeApplication/initiateSkillSet',
+                       data: allParams
+                         }).then(function(responseData){
+                         self.vueNewEmployeeSelfAssesmentDataframe_fillInitData();
+                         
+                          var response = responseData;
+                          console.log(response)
+                        
+                });
+                 
+                  }
+                  """
+    }
+    vueNewEmployeeApplicantAddSkillDataframe_script(VueJsEntity){bean ->
+        methods = """addNewSkill(){
+                                    var details = this.state.vueNewEmployeeApplicantAddSkillDataframe;                           
+                                    var details = this.state.vueNewEmployeeApplicantAddSkillDataframe
+                                    console.log(details);
+                                    var allParams = this.state;
+                                    var self = this;
+                                    allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                                    allParams['vueNewEmployeeApplicantAddSkillDataframe_application_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                                    allParams['dataframe'] = 'vueNewEmployeeApplicantAddSkillDataframe';
+                                    console.log(allParams)
+                                             
+                                    axios({
+                                           method:'post',
+                                           url:'${contextPath}/EmployeeApplication/addNewSkillSet',
+                                            data: allParams
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                   excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
+                                                                   excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'I');                                                 
+                                                                   console.log(response)                      
+                                                                   });
+                  }"""
+
+    }
+    vueNewEmployeeThankYouMessageAfterSaveDataframe_script(VueJsEntity) { bean ->
+        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_firstName) + " " + excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_lastName)}"""
+    }
+
+    vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
+        data = "vueElintegroApplicantDetailsDataframe_tab_model : this.tabValue,\nvueElintegroApplicantDetailsDataframe_display: true, \n"
+        computed = """tabValue(){return this.\$store.state.vueElintegroApplicantDetailsDataframe.vueElintegroApplicantDetailsDataframe_tab_model}"""
+        watch = """ tabValue:{handler: function(val, oldVal) {this.vueElintegroApplicantDetailsDataframe_tab_model = val;}},"""
+    }
+    vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroApplicantGeneralInformationDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantGeneralInformationDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},"
+    }
+    vueElintegroApplicantSelfAssessmentDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
+    }
+    vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
+    }
+    vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
+        computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
     }
 }
