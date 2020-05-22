@@ -11,7 +11,7 @@ class ContactUs {
     static constraints = {
         name(nullable:false)
         email(nullable:false)
-        phone(nullable:true)
+        phone(nullable:true,size: 10..15)
         textOfMessage(nullable:false,length:4096)
 
     }

@@ -20,7 +20,7 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.setInitPageValues();"""
+        created = """this.setInitPageValues();this.setupHomePage();"""
 
         methods =
                 """  setupHomePage: function(){
@@ -548,6 +548,9 @@ beans {
                                                                    });
                   }"""
 
+    }
+    vueNewEmployeeThankYouMessageAfterSaveDataframe_script(VueJsEntity) { bean ->
+        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_firstName) + " " + excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_lastName)}"""
     }
 
     vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
