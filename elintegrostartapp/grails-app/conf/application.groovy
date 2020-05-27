@@ -367,14 +367,13 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 	production {
 		server.contextPath = "/"
 		rootPath = ""
-		grails.serverURL = "http://208.75.75.83"
+		grails.serverURL = "http://34.71.77.187"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro.himalaya'
 		dataSource {
 			logSql = true
 //			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegrostartapp_db"
-
+			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
 			username = "developer"
 			password = "java1177"
 
