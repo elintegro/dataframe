@@ -212,7 +212,7 @@ beans {
                 "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/mysql.PNG", "aspectRatio":"1.0"],
 
         ]
-        currentFrameLayout = ref("defaultRouteDataframeLayout")
+        currentFrameLayout = ref("vueTechnologiesDataframeDataframeLayout")
 
 
     }
@@ -485,7 +485,7 @@ beans {
                        ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px']
         ]
 
-        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
+        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='grey darken-3' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
                                      allParams["username"] = this.state.vueElintegroLoginDataframe_user_username;
                                      allParams["password"] = this.state.vueElintegroLoginDataframe_user_password;
                                      allParams["remember-me"] = this.state.vueElintegroLoginDataframe_rememberMe;
@@ -529,7 +529,7 @@ beans {
 
         dataframeLabelCode = "User.Registration"
         //These are values, that overrides the default ones
-        saveButtonAttr = " color='light-blue darken-2' dark"
+        saveButtonAttr = " color='grey darken-3' dark"
         initOnPageLoad = false
         isGlobal = true
         saveButton = true
@@ -551,7 +551,7 @@ beans {
                               ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroRegisterDataframe_user_password)",message:"Password.and.Confirm.Password."]]]
         ]
 
-        currentFrameLayout = ref("defaultDialogBoxLayout")
+        currentFrameLayout = ref("vueElintegroRegisterDataframeLayout")
     }
     vueElintegroProfileMenuDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
