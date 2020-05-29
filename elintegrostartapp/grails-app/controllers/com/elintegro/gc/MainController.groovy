@@ -85,8 +85,11 @@ class MainController {
 
 	@Secured(["permitAll"])
 	def hqlTest(){
-		
 		render(view: "/test/hqlTest")
+	}
+	@Secured(["permitAll"])
+	def thankYou(){
+		render(view:"/com.elintegro.website/thankYouPage" )
 	}
 
 	@Secured(["permitAll"])

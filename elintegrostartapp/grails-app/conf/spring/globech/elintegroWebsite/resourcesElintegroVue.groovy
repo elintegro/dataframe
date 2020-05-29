@@ -2,6 +2,7 @@ package spring.globech.elintegroWebsite
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.vue.GridWidgetVue
+import com.elintegro.erf.widget.vue.TextAreaWidgetVue
 import grails.util.Holders
 
 beans {
@@ -738,7 +739,7 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantDetailsDataframe']
         dataframeLabelCode = "Applicants Detail Information"
         tab = true
-        childDataframes = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe"]
+        childDataframes = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe"]
         currentFrameLayout = ref("vueElintegroApplicantDetailsDataframeLayout")
     }
     vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->
@@ -803,9 +804,30 @@ beans {
         saveButton = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
-        dataframeButtons = [previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
+        dataframeButtons = [ next: [name:"next", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroCommentPageForApplicantDataframe-tab-id");
+                                                                                \n""", flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                             previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
                                                                                 \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
         ]
         currentFrameLayout = ref("vueElintegroApplicantQuestionAnswerDataframeLayout")
+    }
+    vueElintegroCommentPageForApplicantDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroCommentPageForApplicantDataframe']
+        tab = true
+        doBeforeRefresh = """allParams['id'] = this.vueElintegroCommentPageForApplicantDataframe_prop.key"""
+        saveButton = false
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        addFieldDef =[
+                "Comment":[ widget: "TextAreaWidgetVue",
+                            name:"Comment",]
+        ]
+        dataframeButtons = [
+                            previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
+                                                                                \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
+        ]
+        currentFrameLayout = ref("vueElintegroCommentPageForApplicantDataframeLayout")
+
+
     }
 }
