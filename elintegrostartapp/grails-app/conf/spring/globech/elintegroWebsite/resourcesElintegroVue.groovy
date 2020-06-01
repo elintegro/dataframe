@@ -817,13 +817,19 @@ beans {
         tab = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroCommentPageForApplicantDataframe_prop.key"""
         saveButton = false
+        hql="select application.id,application.comments,application.lastComment from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef =[
-                "Comment":[ widget: "TextAreaWidgetVue",
-                            name:"Comment",]
+                "application.comments":[ widget: "TextDisplayWidgetVue",
+                             name:"Comments",
+                             readOnly: true,
+
+                            ],
+                "application.lastComment":[ widget:"TextAreaWidgetVue",
+                                name: "Comment"]
         ]
-        dataframeButtons = [
-                            previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
+        dataframeButtons = [  save: [name:"save",type:"button",script: """this.addCommentsForApplicant(); """ ,flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                              previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
                                                                                 \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
         ]
         currentFrameLayout = ref("vueElintegroCommentPageForApplicantDataframeLayout")

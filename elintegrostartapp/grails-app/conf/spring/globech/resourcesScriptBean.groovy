@@ -223,7 +223,7 @@ beans {
         computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordEditDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
-    vueRegisterMenuDataframe_script(VueJsEntity){bean ->
+    vueRegisterMenuDataframe_script(VueJsEntity){bean ->newEmployeeBasicInformation()
 
         methods = """ showContactDetails: function(dfrName, contactType){
                          routeId = contactType?contactType:""
@@ -573,5 +573,26 @@ beans {
     vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
         computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
+    }
+    vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
+        methods ="""addCommentsForApplicant(){
+                                    var details = this.state.vueElintegroCommentPageForApplicantDataframe;                           
+                                    var details = this.state.vueElintegroCommentPageForApplicantDataframe
+                                    console.log(details);
+                                    var allParams = this.state;
+                                    var self = this;
+                                  
+                                    allParams['dataframe'] = 'vueElintegroCommentPageForApplicantDataframe';
+                                    console.log(allParams)
+                                             
+                                    axios({
+                                           method:'post',
+                                           url:'${contextPath}/EmployeeApplication/addComment',
+                                           data: allParams
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                   console.log(response)                      
+                                                                   });
+                  }"""
     }
 }

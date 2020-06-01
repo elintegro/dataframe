@@ -65,6 +65,14 @@ class EmployeeApplicationController {
         def resultData = [success: true,newData:[applicationSkill:newSkillsAfterSave]]
         render (resultData as JSON)
     }
+    def addComment(){
+        def newComment = request.getJSON()
+        newComment.vueElintegroCommentPageForApplicantDataframe_application_comments = newComment.vueElintegroCommentPageForApplicantDataframe_application_lastComment
+        Application application = new Application()
+        application.comments = newComment.vueElintegroCommentPageForApplicantDataframe_application_comments
+        println(application.comments)
+        application.save()
+    }
 
 
 
