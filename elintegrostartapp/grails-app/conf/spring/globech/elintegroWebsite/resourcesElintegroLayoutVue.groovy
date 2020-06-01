@@ -177,7 +177,7 @@ beans {
     vueElintegroApplicantDetailsDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 ><v-card round style ="overflow:hidden;" >
-                                  <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueElintegroApplicantDetailsDataframe_tab_model">
+                                  <v-tabs color="white" slider-color="yellow"  background-color="blue darken-2" v-model="vueElintegroApplicantDetailsDataframe_tab_model">
                                       <v-tab style ="text-transform:capitalize;" ripple href="#vueElintegroApplicantGeneralInformationDataframe-tab-id">General Information</v-tab>
                                       <v-tab style ="text-transform:capitalize;" ripple href="#vueElintegroApplicantSelfAssessmentDataframe-tab-id">Self Assessment</v-tab>
                                       <v-tab style ="text-transform:capitalize;" ripple href="#vueElintegroApplicantCVDataframe-tab-id">CV</v-tab>
