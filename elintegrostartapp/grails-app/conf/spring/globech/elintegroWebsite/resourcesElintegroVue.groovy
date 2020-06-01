@@ -293,11 +293,11 @@ beans {
 
         ]
         dataframeButtons = [
-                next:[name:"next", type: "button",script:'this.newEmployeeBasicInformation()',
+                next:[name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:'this.newEmployeeBasicInformation()',
                       flexGridValues: ['xs12', 'sm12', 'md1', 'lg1', 'xl1'], url:""]]
 
 
-        currentFrameLayout = ref("emptyDataframeLayout")
+        currentFrameLayout = ref("vueNewEmployeeBasicInformationDataframeLayout")
 
     }
     vueNewEmployeeUploadResumeDataframe(DataframeVue) { bean ->
@@ -307,8 +307,8 @@ beans {
         hql = "select application.id, application.resume from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
-        saveButtonAttr = " align='right' "
-        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
+        flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         tab = true
         isGlobal = false
         doBeforeSave = """
@@ -338,8 +338,8 @@ beans {
                                      ]
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
-                                        flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+        dataframeButtons = [ previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
+                                        flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
 //                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
 //                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
@@ -353,7 +353,7 @@ beans {
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         tab = true
         saveButton = false
-        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        flexGridValuesForSaveButton =['xs6', 'sm6', 'md6', 'lg6', 'xl6']
         doBeforeRefresh = """allParams['id']= excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id');
                              """
         doAfterSave = """
@@ -379,10 +379,10 @@ beans {
 ]
         ]
         dataframeButtons = [
-                next:[name:"next", type: "button",script:"excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeAddtionalQuestionsDataframe-tab-id');",flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4'], url:""],
-                addSkill:[name:"addSkill",type:"button",showAsDialog:true,refDataframe: ref("vueNewEmployeeApplicantAddSkillDataframe"),flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4']],
-                previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeUploadResumeDataframe-tab-id");
-                                                                                \n""",flexGridValues: ['xs12', 'sm12', 'md4', 'lg4', 'xl4'], url: ""]
+                next:[name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeAddtionalQuestionsDataframe-tab-id');",flexGridValues: ['xs4', 'sm4', 'md4', 'lg4', 'xl4'], url:""],
+                addSkill:[name:"addSkill",type:"button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog:true,refDataframe: ref("vueNewEmployeeApplicantAddSkillDataframe"),flexGridValues: ['xs4', 'sm4', 'md4', 'lg4', 'xl4']],
+                previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeUploadResumeDataframe-tab-id");
+                                                                                \n""",flexGridValues: ['xs4', 'sm4', 'md4', 'lg4', 'xl4'], url: ""]
         ]
         childDataframes = ['vueNewEmployeeApplicantEditSkillDataframe','vueNewEmployeeApplicantAddSkillDataframe']
 
@@ -392,6 +392,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeApplicantEditSkillDataframe']
         saveButton = true
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         initOnPageLoad = true
         putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id']= this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
@@ -413,7 +414,7 @@ beans {
         hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = ["applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]]]]
-        dataframeButtons = [save: [name:"save", type: "button",script:"""this.addNewSkill();""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+        dataframeButtons = [save: [name:"save", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""this.addNewSkill();""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
         currentFrameLayout = ref("vueNewEmployeeApplicantAddSkillDataframeLayout")
     }
 
@@ -425,12 +426,13 @@ beans {
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         saveButton = true
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         tab = true
-        flexGridValuesForSaveButton =['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         doAfterSave = """self.\$router.push("/vueNewEmployeeThankYouMessageAfterSaveDataframe/0");"""
         dataframeButtons = [
-                previous: [name:"previous", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
-                           flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+                previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
+                           flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("vueNewEmployeeAddtionalQuestionsDataframeLayout")
     }
@@ -705,7 +707,7 @@ beans {
                                                                                           allParams['vueElintegroResetPasswordDataframe_user_email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();
                                                                                          """, callBackParams:[successScript:"""if(data.redirect){window.location.href=data.redirectUrl;}
                                                                                                                                jQuery('#resetPassword-Div').jqxWindow('close');"""]],
-                             Cancel:[name:"cancel", type:"button", script:"\$router.go(-1)"]]
+                             Cancel:[name:"cancel", type:"button",attr: """style='background-color:#1976D2; color:white;' """, script:"\$router.go(-1)"]]
 
         currentFrameLayout = ref("defaultDialogBoxLayout")
     }
@@ -754,7 +756,8 @@ beans {
         putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
-        dataframeButtons = [next: [name:"next", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
+        addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]]]
+        dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
                                                                                 \n""",flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6'], url: ""]]
 
         currentFrameLayout = ref("vueElintegroApplicantGeneralInformationDataframeLayout")
@@ -777,10 +780,10 @@ beans {
 
                 ]
         ]
-        dataframeButtons = [next: [name:"next", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
-                                                                                \n""", flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
-                            previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantGeneralInformationDataframe-tab-id");
-                                                                                \n""", flexGridValues:['xs12', 'sm6', 'md6', 'lg6', 'xl6']]
+        dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
+                                                                                \n""", flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6']],
+                            previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantGeneralInformationDataframe-tab-id");
+                                                                                \n""", flexGridValues:['xs9', 'sm9', 'md6', 'lg6', 'xl6']]
         ]
         currentFrameLayout = ref("emptyDataframeLayout")
     }
@@ -789,10 +792,10 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantCVDataframe']
         tab = true
         saveButton = false
-        dataframeButtons = [next: [name:"next", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
-                                                                                \n""", flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
-                            previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
-                                                                                \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
+        dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
+                                                                                \n""", flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6']],
+                            previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
+                                                                                \n""", flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6']]
         ]
         currentFrameLayout = ref("emptyDataframeLayout")
     }
@@ -805,8 +808,8 @@ beans {
         saveButton = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
-        dataframeButtons = [previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
-                                                                                \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
+        dataframeButtons = [previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
+                                                                                \n""", flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6']]
         ]
         currentFrameLayout = ref("vueElintegroApplicantQuestionAnswerDataframeLayout")
     }

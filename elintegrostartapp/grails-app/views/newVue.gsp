@@ -11,7 +11,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Elintegro Start App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="http://34.71.77.187/assets/elintegro_logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="https://qa.elintegro.com/assets/elintegro_logo.png" type="image/x-icon">
 
     <asset:stylesheet href="/vuejs/tooltip.css"/>
     <asset:javascript src="jquery/jquery-1.11.2.js"/>
