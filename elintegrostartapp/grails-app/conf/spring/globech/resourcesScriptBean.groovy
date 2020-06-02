@@ -591,6 +591,7 @@ beans {
                                            data: allParams
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
+                                                                   self.vueElintegroCommentPageForApplicantDataframe_fillInitData()
                                                                    console.log(response)                      
                                                                    });
                   }"""

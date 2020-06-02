@@ -191,7 +191,7 @@ beans {
                                       <v-tab-item value="vueElintegroApplicantSelfAssessmentDataframe-tab-id"><vueElintegroApplicantSelfAssessmentDataframe :vueElintegroApplicantSelfAssessmentDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantCVDataframe-tab-id"><vueElintegroApplicantCVDataframe/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantQuestionAnswerDataframe-tab-id"><vueElintegroApplicantQuestionAnswerDataframe :vueElintegroApplicantQuestionAnswerDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
-                                      <v-tab-item value="vueElintegroCommentPageForApplicantDataframe-tab-id"><vueElintegroCommentPageForApplicantDataframe :vueElintegroCommentPageForApplicantDataframe_prop='this.vueElintegroCommentPageForApplicantDataframe_prop'/></v-tab-item>
+                                      <v-tab-item value="vueElintegroCommentPageForApplicantDataframe-tab-id"><vueElintegroCommentPageForApplicantDataframe :vueElintegroCommentPageForApplicantDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                  </v-tabs-items></v-card>
                                 </v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']

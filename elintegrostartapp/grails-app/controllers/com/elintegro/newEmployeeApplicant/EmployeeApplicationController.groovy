@@ -68,10 +68,18 @@ class EmployeeApplicationController {
     def addComment(){
         def newComment = request.getJSON()
         newComment.vueElintegroCommentPageForApplicantDataframe_application_comments = newComment.vueElintegroCommentPageForApplicantDataframe_application_lastComment
-        Application application = new Application()
-        application.comments = newComment.vueElintegroCommentPageForApplicantDataframe_application_comments
+        Application application = Application.findById(newComment.vueElintegroCommentPageForApplicantDataframe_application_id)
+        if(application.comments == null){
+            application.comments = newComment.vueElintegroCommentPageForApplicantDataframe_application_comments
+
+        }
+        else {
+            application.comments = application.comments.concat(" " + newComment.vueElintegroCommentPageForApplicantDataframe_application_comments)
+        }
         println(application.comments)
-        application.save()
+        application.save(flush:true)
+        def resultData = [success: true,savedComment:application.comments]
+        render(resultData as JSON)
     }
 
 
