@@ -19,6 +19,7 @@ import grails.util.Holders
 beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
+    def defaultUrl = Holders.grailsApplication.config.grails.serverURL
     vueInitDataframe_script(VueJsEntity) { bean ->
         created = """this.setInitPageValues();
                      this.setupHomePage()
@@ -26,7 +27,10 @@ beans {
 
         methods =
                 """  setupHomePage: function(){
+                          var currentUrl = window.location.href;
+                          var defaultUrl = '${defaultUrl}/#/';
                           if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == true){
+                          if(currentUrl == defaultUrl){
                             let homePage = "vueElintegroBannerDataframe";
                             let routeId = 0;
                             this.\$router.push({
@@ -36,6 +40,7 @@ beans {
                                       routeId: routeId
                                 }
                             })
+                            }
                             sessionStorage.initialRefresh = false;
                           }//End of if
                      }
