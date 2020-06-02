@@ -23,11 +23,12 @@ class UrlMappings {
         }
 
         "/main/$action"(controller:"main")
-        "/"("/*")
+        "/"("vueElintegroBannerDataframe")
         "/images/*"("/*")
         "/hqlTest"(controller:"main",action:"hqlTest")
         "/"(controller: "test", action: "show")
         "/test"(controller: "test", action: "test")
+        "/applicantthankyou"(view:'/applicant_thankyou')
         "500"(view:'/error')
     }
 }

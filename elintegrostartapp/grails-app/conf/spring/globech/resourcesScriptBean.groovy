@@ -26,13 +26,19 @@ beans {
                 """  setupHomePage: function(){
                           let homePage = "vueElintegroBannerDataframe";
                           let routeId = 0;
-                          this.\$router.push({
-                              name: homePage,
-                              path: homePage,
-                              params: {
-                                  routeId: routeId
-                              }
-                          })
+                          if(this.state.firstTimeLoad == null || this.state.firstTimeLoad == undefined || this.state.firstTimeLoad == true){
+                              alert(" Presenting homepage   this.state.firstTimeLoad = " + this.state.firstTimeLoad);
+                              this.\$router.push({
+                                  name: homePage,
+                                  path: homePage,
+                                  params: {
+                                      routeId: routeId
+                                  }
+                              })
+                              this.state.firstTimeLoad = false;
+                          }else{
+                            alert("  Skipping homePage this.state.firstTimeLoad = " + this.state.firstTimeLoad);
+                          }
                      }
                ,\nsetInitPageValues:function(){
                                                

@@ -46,6 +46,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         String validationString = ""
         if(validate(field)){
             String validationRules = validationRules(field)
+            //TODO: Here we need to use right variable from our state structure! And need to check in any Widget!
             String dataVariable = dataframe.getDataVariableForVue(field)
             validationString = """ ${dataVariable}_rule: $validationRules,\n"""
         }

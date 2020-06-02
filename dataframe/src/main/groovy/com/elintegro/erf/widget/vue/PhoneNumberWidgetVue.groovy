@@ -22,6 +22,8 @@ import org.springframework.context.i18n.LocaleContextHolder
  */
 class PhoneNumberWidgetVue extends WidgetVue{
 
+    boolean validate = true
+
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = getFieldName(dataframe, field)

@@ -26,10 +26,11 @@ class InputWidgetVue extends WidgetVue {
         boolean isReadOnly = dataframe.isReadOnly(field)
         String autoComplete = field.autoComplete?:'off'
         String clearable = field.clearable?"clearable":""
-        String modelString = dataframe.getFieldModelNameVue(field)
+        String modelString = dataframe.getFieldJSONModelNameVue(field)
+        //    String modelString = dataframe.getFieldModelNameVue(field)
         String html = """<v-text-field
             label="${getLabel(field)}"
-            v-model = "$modelString" 
+            v-model = "state.${modelString}" 
             ${validate(field)?":rules = '${fldName}_rule'":""}
             ${isDisabled(dataframe, field)?":disabled = true":""}
             ${isReadOnly?"readonly":''}

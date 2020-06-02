@@ -16,6 +16,7 @@ package com.elintegro.erf.widget
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.vue.DataframeConstants
 
 /**
  * This abstract could classdefines a main method for each widget;
@@ -24,7 +25,7 @@ import com.elintegro.erf.dataframe.DataframeInstance
  * @author Eugenelip
  *
  */
-abstract class Widget<T> {
+abstract class Widget<T> implements DataframeConstants{
 
 	abstract  String  getHeaderScript(T dataframe, Map info, String divId)
 	abstract  String  getBodyScript(T dataframe, Map info)

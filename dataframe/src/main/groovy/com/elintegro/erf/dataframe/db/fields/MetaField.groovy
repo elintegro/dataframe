@@ -15,6 +15,7 @@ package com.elintegro.erf.dataframe.db.fields
 
 import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.db.types.DataType
+import groovy.json.JsonBuilder
 import org.grails.datastore.mapping.model.PersistentEntity
 
 /**
@@ -127,11 +128,22 @@ class MetaField {
 		}
 	}
 	
+
 	@Override
 	public String toString() {
-		return String.format("TableName: %s Column Name: %s   DataType: %s    DomainClass: %s", tableName, columnName , dataType, domainClass?.name);
+		return String.format("\"TableName\": %s Column Name: %s   DataType: %s    DomainClass: %s", tableName, columnName , dataType, domainClass?.name);
 	}
-	
+
+	public String key(){
+		return "${tableName}->${columnName}"
+	}
+
+	@Override
+	public boolean equals(Object that){
+		MetaField that_ = (MetaField)that;
+		return this.columnName == that_.columnName && this.tableName == that_.tableName
+	}
+
 	//TODO: please finish implementation
 	public Map toMap() {
 		return [name: name, columnName: columnName, domain: domain, domainAlias: domainAlias, tableName: tableName, domainClass: domainClass,

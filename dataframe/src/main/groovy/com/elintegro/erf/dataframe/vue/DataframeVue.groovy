@@ -21,15 +21,21 @@ import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.InputWidgetVue
 import com.elintegro.erf.widget.vue.WidgetVue
 import com.elintegro.utils.DataframeFileUtil
+import com.elintegro.utils.MapUtil
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.sun.xml.internal.bind.v2.TODO
+import grails.converters.JSON
 import grails.gsp.PageRenderer
 import grails.util.Environment
 import grails.util.Holders
+import groovy.json.JsonBuilder
 import groovy.text.SimpleTemplateEngine
 //import grails.validation.Validateable
 import groovy.util.logging.Slf4j
 import org.apache.commons.collections.map.LinkedMap
 import org.apache.commons.lang.WordUtils
 import org.grails.core.DefaultGrailsDomainClass
+import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import org.hibernate.Query
 import org.hibernate.Transaction
@@ -37,6 +43,7 @@ import org.hibernate.engine.spi.SessionFactoryImplementor
 import org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory
 import org.hibernate.hql.spi.QueryTranslator
 import org.hibernate.hql.spi.QueryTranslatorFactory
+import org.hibernate.persister.entity.SingleTableEntityPersister
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.i18n.LocaleContextHolder
@@ -56,12 +63,8 @@ import java.util.stream.Collectors
  *
  */
 @Slf4j
-public class DataframeVue extends Dataframe implements Serializable, DataFrameInitialization{
+public class DataframeVue extends Dataframe implements Serializable, DataFrameInitialization, DataframeConstants{
 	private static defaultWidget = new InputWidgetVue()
-	public static final String DASH = "-";
-	public static final String UNDERSCORE = "_";
-	public static final String DOT = ".";
-	public static final String SESSION_PARAM_NAME_PREFIX = "session_"
 	private String currentLanguage = ""
 	List flexGridValues = []
 
@@ -132,7 +135,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String popUpTitle=""
 	@OverridableByEditor
 	Map summaryAfterSave = [showSummary: false]
-	static int BIG_TEXT_FIELD_LENGTH = 255;
+
 
 	String dataframeLabelCode = ""
 	private StringBuilder saveScriptJs = new StringBuilder();
@@ -142,7 +145,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String vueRoutes = ""
 	//TODO make it injected in Spring way!
 	private DataframeView dataframeView = new DataframeViewJqxVue(this)
-
 
 	String divID
 	String supportJScriptSource
@@ -320,22 +322,14 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		fieldsMetadata = new HashMap<String, MetaField>()
 		parsedHql = new ParsedHql(hql, grailsApplication, sessionFactory)
 
-		List<MetaField> metFields = metaFieldService.getMetaDataFromFields(parsedHql, dataframeName)
-
-		JSONObject obj = new JSONObject(metFields);
-        obj.toString(2)
-        DataframeFileUtil.writeStringIntoFile("MetaFieldsTest.data", metFields.toString(2))
-        DataframeFileUtil.writeStringIntoFile("MetaFieldsOfJSONObjTest.data", obj.toString(2))
+		List<MetaField> metaFields = metaFieldService.getMetaDataFromFields(parsedHql, dataframeName)
 
 
-        JSONObject obj1 = new JSONObject(parsedHql);
-
-        DataframeFileUtil.writeStringIntoFile("ParsedHql", obj1.toString(2))
-
-
-		for( MetaField metaField in metFields){
+		for( MetaField metaField in metaFields){
 			fieldsMetadata.put(metaField.name , metaField)
-			metaField.addFieldDef = addFieldDef
+			//TODO: check implications!!!
+			 metaField.addFieldDef = addFieldDef
+
 			buildDefaultWidget(metaField)
 			addWritebleDomains(metaField)
 			createDomainFieldMap(metaField)
@@ -344,8 +338,34 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		//find all keys and set them to respective writable domain for future use (in saving dataInstances)
 		addKeysToWritableDomain()
+		addNamedParameters()
+		addAdditionalFieldDefinitions()
+
+		try{
+			String testObject = MapUtil.convertMapToJSONString(this.domainFieldMap)
+			log.debug(testObject)
+		}catch(Exception e){
+			log.error("The map is not convertible to JSON for dataframe ${dataframeName}")
+		}
 
 		buildCustomWidgets()
+	}
+
+	private addAdditionalFieldDefinitions() {
+		//TODO: here we will add additional field definitions to domainFieldMap, if needed
+		//Check if there are additional fields that are not Persitant:
+		addFieldDef?.forEach { addFldName, addFldProps ->
+			if (!this.fields.containsKey(addFldName)) {
+				//TODO: check if the field name as a key is the same like in fields!
+				if (!this.domainFieldMap.containsKey(TRANSITS)) {
+					this.domainFieldMap.put(TRANSITS, [:])
+				}
+				Map domainFieldMapTans = this.domainFieldMap.get(TRANSITS);
+
+				//Add placeholder to additional data, if exists:
+				domainFieldMapTans.put(addFldName, ["${VALUE_ENTRY}": null])
+			}//End of if field is not persistent one (transit)
+		}
 	}
 
 	private void addKeysToWritableDomain() {
@@ -382,22 +402,49 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	//This Map forms a JSON structure for any Front-end to exchange data with the Back-end!
 	private void createDomainFieldMap(MetaField field){
 		//field.domain.key is actually domain name (like User) TODO: this field should be renamed to "name" to reflect its real meaning
-		if(!this.domainFieldMap.containsKey(field.domain.key)){
-			this.domainFieldMap.put(field.domain.key, [:])
+		if(!this.domainFieldMap.containsKey(PERSISTERS)){
+			this.domainFieldMap.put( PERSISTERS, [:])
 		}
-		Map domainFields = (Map)this.domainFieldMap.get(field.domain.key)
-		domainFields.put(field.name, field.defaultValue)
-		//Adding key (PK)
-		if(field.pk){
-			if(!domainFields.containsKey("keys")){
-				domainFields.put("keys", [:])
+
+		Map domainFieldMapPers = this.domainFieldMap.get(PERSISTERS);
+		if(!domainFieldMapPers.containsKey(field.domain.key)){
+			domainFieldMapPers.put(field.domain.key, new HashMap()) //TODO: Add may be more parameters to doamin here
+		}
+		Map domainFields = domainFieldMapPers.get(field.domain.key)
+		//TODO: remove this comment if null is acceptable as default value in the JSON converter
+		//domainFields.put(field.name, field.defaultValue ? field.defaultValue : "")
+		domainFields.put(field.name, ["${VALUE_ENTRY}":field.defaultValue]) //TODO: add here rule and dictionary if defined
+
+		if(!this.domainFieldMap.containsKey(DOMAIN_KEYS)){
+			this.domainFieldMap.put( DOMAIN_KEYS, [:])
+		}
+		Map domainFieldMapKeys = this.domainFieldMap.get(DOMAIN_KEYS);
+		if(!domainFieldMapKeys.containsKey(field.domain.key)){
+			domainFieldMapKeys.put(field.domain.key, [:])
+			Map domainKeys = (Map)domainFieldMapKeys.get(field.domain.key)
+
+			//Adding key (PK)
+			//What if keys are not in the select statement? They will be added anyway!
+			Map<String, MetaField> pks = metaFieldService.getPKForTable(field.tableName)
+			pks?.forEach{ pk, pkMetaField ->
+				domainKeys.put(pkMetaField.columnName, pkMetaField.defaultValue )
 			}
-			Map keys = domainFields.get("keys")
-			keys.put(field.name, field.defaultValue)
 		}
+	}
 
-		//TODO: EU!!! Add named parameters here
-
+	void addNamedParameters(){
+		parsedHql.namedParameters
+		if(parsedHql.namedParameters && parsedHql.namedParameters.size() > 0) {
+			domainFieldMap.put(NAMED_PARAM, [:])
+			Map namedParams = domainFieldMap.containsKey(NAMED_PARAM) ? domainFieldMap.get(NAMED_PARAM) : [:]
+			parsedHql.namedParameters?.forEach { namedParamKey, namedParamValue ->
+				DomainClassInfo dom = parsedHql.hqlDomains.get(namedParamValue[0])
+				String[] dbColumnNames = dom.persister.getPropertyColumnNames(namedParamValue[1])
+				String dbColumnName = (dbColumnNames && dbColumnNames.size() > 0)  ? dbColumnNames[0]: namedParamValue[1]
+				MetaField metaFields = metaFieldService.getMetaColumn(dom.persister.tableName, dbColumnName)
+				namedParams.put(namedParamKey, ["${DOMAIN_ENTRY}" : namedParamValue[0], "${FIELD_ENTRY}" : namedParamValue[1], "${VALUE_ENTRY}" : metaFields.defaultValue])
+			}
+		}
 	}
 
 	/**
@@ -1098,6 +1145,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		VueJsEntity vueJsEntity = getvueJsEntity(dataframeName+"_script")// get Bbean name for vue js Entity
 
 		externalTemplateId?vueJsBuilder.addToTemplateScript("#$externalTemplateId"):vueJsBuilder.addToTemplateScript(dfrHtml)
+		//EU!!! Here we are adding to data!
 		vueJsBuilder.addToDataScript("overlay_dataframe:false,\n ${dataframeName}_save_loading:false,\nnamedParamKey:'',\n params:{},\n")
 		if(tab){
 			vueJsBuilder.addToDataScript("${dataframeName}_tab_model : '',\n")
@@ -1156,7 +1204,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		//EU!!! TODO: Remove it as soon as refactoring works!
 		//String state = vueStore1.buildState(dataframeName)
 
-		String state = vueStore1.buildStateJSON(dataframeName)
+		//NEW
+		String state = vueStore1.buildStateJSON(this)
+
 		String mutation = vueStore1.getMutation()
 		String getters = vueStore1.getGetters()
 		String globalState = vueStore1.getGlobalState()
@@ -1585,6 +1635,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return res
 	}
 
+    //Depricate this one onse the getFieldJSONModelNameVue is ready and in use
 	public String getFieldModelNameVue(Map field){
 		String fieldnameStr = field.name.replace(DOT, UNDERSCORE);
 		def doaminNameStr = field.domain?.key
@@ -1596,6 +1647,15 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return res
 	}
 
+	//TODO: EU!!! find right field name JSON!
+	public String getFieldJSONModelNameVue(Map field){
+		String fldDomainAndDot = (field.domain?.key?.size() > 0) ? "${field.domain.key}${DOT}" : ""
+		return "${PERSISTERS}${DOT}${fldDomainAndDot}${field.name}.value";
+	}
+
+	public String getFieldJSONModelTransitNameVue(Map field){
+		return "${TRANSITS}${DOT}${field.name}.value";
+	}
 
 	public boolean isReadOnly(Map field){
 		if (field?.readOnly || this.readonly){
