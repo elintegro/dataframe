@@ -20,19 +20,24 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.setInitPageValues();"""
+        created = """this.setInitPageValues();
+                     this.setupHomePage()
+                    """
 
         methods =
                 """  setupHomePage: function(){
-                          let homePage = "vueElintegroBannerDataframe";
-                          let routeId = 0;
-                          this.\$router.push({
-                              name: homePage,
-                              path: homePage,
-                              params: {
-                                  routeId: routeId
-                              }
-                          })
+                          if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == true){
+                            let homePage = "vueElintegroBannerDataframe";
+                            let routeId = 0;
+                            this.\$router.push({
+                                  name: homePage,
+                                path: homePage,
+                                params: {
+                                      routeId: routeId
+                                }
+                            })
+                            sessionStorage.initialRefresh = false;
+                          }//End of if
                      }
                ,\nsetInitPageValues:function(){
                                                
