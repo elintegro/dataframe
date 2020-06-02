@@ -19,26 +19,29 @@ import grails.util.Holders
 beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
+    def defaultUrl = Holders.grailsApplication.config.grails.serverURL
     vueInitDataframe_script(VueJsEntity) { bean ->
-        created = """this.setInitPageValues();"""
-
+        created = """this.setInitPageValues();
+                     this.setupHomePage()
+                    """
         methods =
                 """  setupHomePage: function(){
-                          let homePage = "vueElintegroBannerDataframe";
-                          let routeId = 0;
-                          if(this.state.firstTimeLoad == null || this.state.firstTimeLoad == undefined || this.state.firstTimeLoad == true){
-                              alert(" Presenting homepage   this.state.firstTimeLoad = " + this.state.firstTimeLoad);
-                              this.\$router.push({
-                                  name: homePage,
-                                  path: homePage,
-                                  params: {
-                                      routeId: routeId
-                                  }
-                              })
-                              this.state.firstTimeLoad = false;
-                          }else{
-                            alert("  Skipping homePage this.state.firstTimeLoad = " + this.state.firstTimeLoad);
-                          }
+                          var currentUrl = window.location.href; 
+                          var defaultUrl = '${defaultUrl}/#/';
+                          if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == true){
+                              if(currentUrl == defaultUrl){//TODO: Not sure if it is a good idea!
+                                let homePage = "vueElintegroBannerDataframe";
+                                let routeId = 0;
+                                this.\$router.push({
+                                      name: homePage,
+                                    path: homePage,
+                                    params: {
+                                          routeId: routeId
+                                    }
+                                 })
+                              }
+                            sessionStorage.initialRefresh = false;
+                          }//End of if
                      }
                ,\nsetInitPageValues:function(){
                                                
