@@ -134,6 +134,7 @@ beans {
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
+        currentRoute = "home"
         route = true
         addFieldDef = [
                 "banner": [
@@ -460,6 +461,7 @@ beans {
         initOnPageLoad = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         route = true
+        currentRoute = "contact-us"
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
                 "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue",validate: true]]
@@ -718,6 +720,7 @@ beans {
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         isGlobal = true
         saveButton = false
+        currentRoute = 'applicants'
         route = true
         addFieldDef = [
                 "applicant": [
