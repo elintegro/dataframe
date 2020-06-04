@@ -819,10 +819,12 @@ beans {
         saveButton = false
         hql="select application.id,application.comments,application.lastComment from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
         addFieldDef =[
                 "application.comments":[ widget: "TextAreaWidgetVue",
                              name:"Comments",
                              readOnly: true,
+
 
 
                             ],
