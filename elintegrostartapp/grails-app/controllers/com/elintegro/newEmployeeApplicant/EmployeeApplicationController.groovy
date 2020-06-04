@@ -8,7 +8,7 @@ import com.elintegro.elintegrostartapp.hr.Skills
 import grails.converters.JSON
 
 class EmployeeApplicationController {
-
+    def springSecurityService
     def index() { }
 
     def createApplicant(){
@@ -65,6 +65,23 @@ class EmployeeApplicationController {
         def resultData = [success: true,newData:[applicationSkill:newSkillsAfterSave]]
         render (resultData as JSON)
     }
+    def addComment(){
+        def currentUser = springSecurityService.currentUser
+        def params = request.getJSON()
+        def newComment = params.vueElintegroCommentPageForApplicantDataframe_application_lastComment
+        Application application = Application.findById(params.vueElintegroCommentPageForApplicantDataframe_application_id)
+        if(application.comments == null){
+            application.comments = newComment+"\n\n"+ "\t\t\t\t\t\t"+"-"+" "+(currentUser.firstName).concat(" " + currentUser.lastName)
+        }
+        else {
+            application.comments = application.comments.concat("\n\n" + newComment+"\n\n"+ "\t\t\t\t\t\t"+"-"+" "+(currentUser.firstName).concat(" " + currentUser.lastName))
+        }
+        application.save(flush:true)
+        def resultData = [success: true,savedComment:application.comments]
+        render(resultData as JSON)
+    }
+
+
 
 
 

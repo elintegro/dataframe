@@ -43,6 +43,9 @@ class Application extends ControlField{
     String question1
     String question2
 
+    String comments
+    String lastComment
+
     static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills]
 
     static constraints = {
@@ -60,5 +63,7 @@ class Application extends ControlField{
         avatar(nullable: true)
         question1(nullable: true,length: 4096)
         question2(nullable: true,length: 4096)
+        comments(nullable: true,length: 4096)
+        lastComment(nullable: true,length:4096)
     }
 }
