@@ -62,7 +62,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	private String currentLanguage = ""
 	List flexGridValues = []
 	String currentRoute
-	String defaultRoute
+
 
 	DataframeVue parent
 	String dataframeName
@@ -281,7 +281,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		flexGridValues = flexGridValues?:LayoutVue.defaultGridValues
 
-
+		String defaultRoute
 		defaultRoute = (dataframeName.replaceAll("vue","").replaceAll("Dataframe","").split(/(?=[A-Z])/).join("-")).toLowerCase();
 		currentRoute = currentRoute?:defaultRoute
 	}
