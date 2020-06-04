@@ -576,15 +576,10 @@ beans {
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
-                                    var details = this.state.vueElintegroCommentPageForApplicantDataframe;                           
-                                    var details = this.state.vueElintegroCommentPageForApplicantDataframe
-                                    console.log(details);
+                                        
                                     var allParams = this.state;
                                     var self = this;
-                                  
                                     allParams['dataframe'] = 'vueElintegroCommentPageForApplicantDataframe';
-                                    console.log(allParams)
-                                             
                                     axios({
                                            method:'post',
                                            url:'${contextPath}/EmployeeApplication/addComment',
@@ -592,7 +587,6 @@ beans {
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
                                                                    self.vueElintegroCommentPageForApplicantDataframe_fillInitData()
-                                                                   console.log(response)                      
                                                                    });
                   }"""
     }
