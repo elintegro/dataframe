@@ -61,6 +61,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public static final String SESSION_PARAM_NAME_PREFIX = "session_"
 	private String currentLanguage = ""
 	List flexGridValues = []
+	String currentRoute
+
 
 	DataframeVue parent
 	String dataframeName
@@ -278,6 +280,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		this.dataframeView.dataframeName = dataframeName
 
 		flexGridValues = flexGridValues?:LayoutVue.defaultGridValues
+
+		String defaultRoute
+		defaultRoute = (dataframeName.replaceAll("vue","").replaceAll("Dataframe","").split(/(?=[A-Z])/).join("-")).toLowerCase();
+		currentRoute = currentRoute?:defaultRoute
 	}
 
 
@@ -1096,7 +1102,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 
 		if(route){
-			vueRoutes = "{ path: '/$dataframeName/:routeId',name:'${dataframeName}' , component: ${dataframeName}Comp },\n"
+			vueRoutes = "{ path: '/$currentRoute/:routeId',name:'${dataframeName}' , component: ${dataframeName}Comp },\n"
 			componentRegistered = true
 			isGlobal = false
 			ResultPageHtmlBuilder.registeredComponents.add(dataframeName)

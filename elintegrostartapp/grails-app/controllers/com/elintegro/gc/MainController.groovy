@@ -85,7 +85,7 @@ class MainController {
 
 	@Secured(["permitAll"])
 	def hqlTest(){
-		
+
 		render(view: "/test/hqlTest")
 	}
 

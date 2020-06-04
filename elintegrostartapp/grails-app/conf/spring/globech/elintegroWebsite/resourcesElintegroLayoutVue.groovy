@@ -186,6 +186,7 @@ beans {
                                       <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroApplicantSelfAssessmentDataframe-tab-id">Self Assessment</v-tab>
                                       <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroApplicantCVDataframe-tab-id">CV</v-tab>
                                       <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroApplicantQuestionAnswerDataframe-tab-id">Questions/Answers</v-tab>
+                                      <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroCommentPageForApplicantDataframe-tab-id">Comment</v-tab>
                                       <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
                                       </v-btn><span>Close</span></v-tooltip></v-flex>    
                                   </v-tabs>
@@ -194,6 +195,7 @@ beans {
                                       <v-tab-item value="vueElintegroApplicantSelfAssessmentDataframe-tab-id"><vueElintegroApplicantSelfAssessmentDataframe :vueElintegroApplicantSelfAssessmentDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantCVDataframe-tab-id"><vueElintegroApplicantCVDataframe/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantQuestionAnswerDataframe-tab-id"><vueElintegroApplicantQuestionAnswerDataframe :vueElintegroApplicantQuestionAnswerDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
+                                      <v-tab-item value="vueElintegroCommentPageForApplicantDataframe-tab-id"><vueElintegroCommentPageForApplicantDataframe :vueElintegroCommentPageForApplicantDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                  </v-tabs-items></v-card>
                                 </v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -206,6 +208,12 @@ beans {
     vueElintegroApplicantQuestionAnswerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+    }
+    vueElintegroCommentPageForApplicantDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+
+
     }
 
 
