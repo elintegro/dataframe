@@ -20,6 +20,7 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     def defaultUrl = Holders.grailsApplication.config.grails.serverURL
+    def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
     vueInitDataframe_script(VueJsEntity) { bean ->
         created = """this.setInitPageValues();
                      this.setupHomePage()
@@ -559,6 +560,9 @@ beans {
                   }"""
 
     }
+    vueNewEmployeeThankYouMessageAfterSaveDataframe_script(VueJsEntity) { bean ->
+        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_firstName) + " " + excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_lastName)}"""
+    }
 
     vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
         data = "vueElintegroApplicantDetailsDataframe_tab_model : this.tabValue,\nvueElintegroApplicantDetailsDataframe_display: true, \n"
@@ -580,6 +584,23 @@ beans {
     vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
         computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
+    }
+    vueElintegroApplicantCVDataframe_script(VueJsEntity){ bean ->
+        methods ="""afterRefreshing(response){
+                                 var params = response;
+                                 var fileName = params.vueElintegroApplicantCVDataframe_application_resume;
+                                  var extension = fileName.split('.').pop();
+                                  var fileType = extension;
+                                  if(fileType == 'pdf'){
+                                  var defaultImageUrlForPdf = '${pathForPdf}'
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume',defaultImageUrlForPdf)
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume_name',fileName)
+                                  }
+                                 return fileType;
+                                 
+                                  }
+                             
+                                  """
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){

@@ -236,6 +236,10 @@ beans {
         saveButton = false
         initOnPageLoad = false
         route = true
+        addFieldDef = [
+                "name":[name: "name",widget: "InputWidgetVue"],
+
+                "resume":[name:"resume",widget: "FilesDisplayWidgetVue","aspectRatio":"1","height":100,"width":100]]
         //childDataframes = ["vueCareersPageButtonDataframe"]
         currentFrameLayout = ref("vueCareersDataframeLayout")
     }
@@ -431,7 +435,7 @@ beans {
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         tab = true
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
-        doAfterSave = """self.\$router.push("/vueNewEmployeeThankYouMessageAfterSaveDataframe/0");"""
+        doAfterSave = """self.\$router.push("/thank-you-message/0");"""
         dataframeButtons = [
                 previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
@@ -442,6 +446,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeThankYouMessageAfterSaveDataframe']
         saveButton = false
+        currentRoute = 'thank-you-message'
         route = true
         doBeforeRefresh= """allParams['id'] = excon.getFromStore('vueNewEmployeeAddtionalQuestionsDataframe','key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id');"""
         hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:id"
@@ -797,6 +802,11 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantCVDataframe']
         tab = true
         saveButton = false
+        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantCVDataframe_prop.key"""
+        doAfterRefresh = """self.afterRefreshing(response);"""
+        hql = "select application.id as Id, application.resume from Application application where application.id=:id"
+        addFieldDef = [
+                "application.resume":[name:"resume",widget: "FilesDisplayWidgetVue","aspectRatio":"1","height":100,"width":100]]
         dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
                                                                                 \n""", flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6']],
                             previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
