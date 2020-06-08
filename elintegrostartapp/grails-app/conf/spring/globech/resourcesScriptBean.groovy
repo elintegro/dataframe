@@ -592,9 +592,9 @@ beans {
                                   var extension = fileName.split('.').pop();
                                   var fileType = extension;
                                   if(fileType == 'pdf'){
-                                  var defaultImageUrlForPdf = '${pathForPdf}'
-                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume',defaultImageUrlForPdf)
-                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume_name',fileName)
+                                    var defaultImageUrlForPdf = '${pathForPdf}'
+                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume',defaultImageUrlForPdf)
+                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume_name',fileName)
                                   }
                                  return fileType;
                                  

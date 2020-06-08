@@ -13,10 +13,10 @@ class FilesDisplayWidgetVue extends WidgetVue {
         String aspectRatio  = field.aspectRatio?field.aspectRatio:"2.75"
         String heightString = height?"height=$height":""
         String widthString  = width?"""width=$width """:""
+        String fldName =  getFieldName(dataframe, field)
 
         String fldParam     = dataframe.getDataVariableForVue(field)
-        String html = """<div>
-                     <a href="" target="_blank">
+        String html = """<div @click.stop="${fldName}_url">
                      <v-img
                      id = "$fldParam"
                      :src="$modelString"
@@ -26,7 +26,7 @@ class FilesDisplayWidgetVue extends WidgetVue {
                      $heightString
                       $widthString
                       ${getAttr(field)} >
-                      </v-img></a>
+                      </v-img>
                       <span>{{${modelString}_name}}</span>
                       </div>  
                      """
@@ -57,7 +57,20 @@ class FilesDisplayWidgetVue extends WidgetVue {
         return urlForFile
     }
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-
+        String fldName = dataVariable
+        File f = new File(fileUrl)
+        String absolute = f.getAbsolutePath()
+        dataframe.getVueJsBuilder().addToMethodScript("""
+               ${fldName}_url:function(){
+                         var fileLocation = '$absolute'
+                         var fileName = this.state.${fldName}_name;
+                         var urlForFile = fileLocation + fileName
+                         window.open(urlForFile,"_blank")
+                         console.log(urlForFile)
+                         return urlForFile
+                         }
+          
+            """)
          return ""
     }
 }
