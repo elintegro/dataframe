@@ -336,11 +336,11 @@ class ComboboxVue extends WidgetVue {
         String multiple = field.multiple?"multiple":''
         String displayMember = field.displayMember?:'name'
         String valueMember = field.valueMember?:'id'
-        String modelString = getModelString(dataframe, field)
+        //String modelString = getModelString(dataframe, field)
         """
             <v-combobox
-          v-model = "$modelString" 
-          :items="${modelString}_items"
+          v-model = "${getFieldJSONModelNameVue(field)}"  
+          :items="${getFieldJSONItems(field)}"
           ${validate(field)?":rules = '${fldName}_rule'":""}
           label="$label"
           ${isDisabled(dataframe, field)?":disabled=true":""}

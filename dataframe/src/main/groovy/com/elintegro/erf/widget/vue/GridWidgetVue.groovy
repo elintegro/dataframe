@@ -39,7 +39,7 @@ import groovy.util.logging.Slf4j
  */
 class GridWidgetVue extends WidgetVue {
     private static final Logger log = LoggerFactory.getLogger(GridWidgetVue.class);
-    
+
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
     String embDDfr = "";

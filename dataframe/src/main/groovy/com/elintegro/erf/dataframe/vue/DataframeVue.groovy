@@ -691,17 +691,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 					fields.put(buildFullFieldName(dataframeName, fieldName), fieldProp)
 				}
 			}else{
-				fieldProp.put("name", dbMetaFieldPropes.get("name"));
-
-				/*if(dbMetaFieldPropes.containsKey("name") && fieldProp.containsKey("name")){
-				 if(!dbMetaFieldPropes.get("name").equals(fieldProp.get("name"))){
-				 fieldProp.put("name", dbMetaFieldPropes.get("name"));
-				 }
-				 }
-				 */
-
+				fieldProp.put("name", dbMetaFieldPropes.get("name")); //Since the field is from Database the name should be exactly like in the dbMetaFieldProps
 				dbMetaFieldPropes?.putAll(fieldProp)
-
 			}
 		}
 	}

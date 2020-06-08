@@ -32,7 +32,7 @@ class DomainClassInfo {
     Class clazz; //java domain class
     SingleTableEntityPersister persister// One of the Doamin class representation
     String tablename
-    String domainAlias //Alias as it was defined in the HQL by a developer
+    String domainAlias //Alias as it was defined in the HQL by a developer or by deafault should be equal to the Domain class name
 
     public DomainClassInfo(Class clazz, String domainAlias, String tableName, SingleTableEntityPersister persister) {
         this.tablename = tableName

@@ -16,6 +16,7 @@ package com.elintegro.erf.widget.vue
 import com.elintegro.erf.dataframe.DFButton
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.ScriptBuilder
+import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
@@ -40,6 +41,18 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         String dataVariable = dataframe.getDataVariableForVue(field)
         return """ '${dataframe.dataframeName}_data' """
 
+    }
+    public String getFieldJSONNameVue(Map field){
+            String fldDomainAndDot = (field.domain?.key?.size() > 0) ? "${field.domain.key}${DOT}" : ""
+            String fieldType = field.containsKey("domain") ? PERSISTERS : TRANSITS
+            return "state.${fieldType}${DOT}${fldDomainAndDot}${field.name}";
+    }
+    public String getFieldJSONModelNameVue(Map field){
+        return "${getFieldJSONNameVue(field)}.value";
+    }
+    public String getFieldJSONItems(Map field){
+        String fldDomainAndDot = (field.domain?.key?.size() > 0) ? "${field.domain.key}${DOT}" : ""
+        return "${getFieldJSONNameVue(field)}.items";
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {

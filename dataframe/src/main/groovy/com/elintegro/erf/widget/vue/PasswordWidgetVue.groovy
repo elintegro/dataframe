@@ -24,9 +24,9 @@ class PasswordWidgetVue extends WidgetVue {
         String autoComplete = field.autoComplete ?: 'off'
         String errorMessageCode = field.errMessageCode ?: "password.validation.message"
         String errorMessage = getMessageSource().getMessage(errorMessageCode, null, errorMessageCode, LocaleContextHolder.getLocale())
-        String modelString = getModelString(dataframe, field)
+        //String modelString = getModelString(dataframe, field)
         String html = """<v-text-field
-            v-model="$modelString"
+            v-model = "${getFieldJSONModelNameVue(field)}" 
             :append-icon="${fldName}_show ? 'visibility_off' : 'visibility'"
             ${validate(field) ? ":rules = '${fldName}_rule'" : ""}
             :type="${fldName}_show ? 'text' : 'password'"

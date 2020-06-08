@@ -28,11 +28,12 @@ class PhoneNumberWidgetVue extends WidgetVue{
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = getFieldName(dataframe, field)
         boolean isReadOnly = dataframe.isReadOnly(field)
+        //String modelString = dataframe.getFieldJSONModelNameVue(field)
         String label = field.label
         return """
                <v-text-field
                  label="$label"
-                 v-model="${getModelString(dataframe, field)}"
+                 v-model = "${getFieldJSONModelNameVue(field)}" 
                  :rules = "${fldName}_rule"
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}

@@ -49,6 +49,26 @@ var excon = new Vue({
 
         },
 
+        saveToState: function(containerVariable, value=''){
+            if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
+                return
+            }
+            if(store.state.hasOwnProperty(containerVariable)){
+                const obj = eval("store.state."+ containerVariable +"");
+                if(obj.hasOwnProperty(key)){
+                    // store.commit(key,value);
+                    Vue.set(obj, key, value);
+                    /*var obj1 = eval(""+obj+"."+key)
+                    obj1 = value;*/
+                } else {
+                    // const Obj1 = eval(store.state +"."+ containerVariable);
+                    Vue.set(obj,key, value);
+                }
+            } else {
+                Vue.set(store.state, containerVariable, key);
+            }
+
+        },
         getFromStore: function(containerVariable, key=''){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "")){
                 return ""

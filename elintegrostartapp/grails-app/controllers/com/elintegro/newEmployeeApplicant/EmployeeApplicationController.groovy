@@ -16,25 +16,29 @@ class EmployeeApplicationController {
         try {
             def empData = request.getJSON()
             Person applicant = new Person()
-            applicant.firstName = empData.vueNewEmployeeBasicInformationDataframe_person_firstName
-            applicant.lastName = empData.vueNewEmployeeBasicInformationDataframe_person_lastName
-            applicant.email = empData.vueNewEmployeeBasicInformationDataframe_person_email
-            applicant.phone = empData.vueNewEmployeeBasicInformationDataframe_person_phone
+            applicant.firstName = empData.persisters.Person.firstName.value
+            applicant.lastName = empData.persisters.Person.lastName.value
+            applicant.email = empData.persisters.Person.email.value
+            applicant.phone = empData.persisters.Person.phone.value
             applicant.save()
 
             Application application = new Application()
             application.applicant = applicant
-            application.linkedin = empData.vueNewEmployeeBasicInformationDataframe_application_linkedin
-
-
-            for (item in empData.vueNewEmployeeBasicInformationDataframe_person_availablePosition) {
-            //Was in >>>>>>> EWEB-68-refactoring
-//          for (item in empData.vueNewEmployeeBasicInformationDataframe_person_availablePosition_items) {
-                Position availablePosition = Position.findById(item.id)
-                application.addToAvailablePositions(availablePosition)
-                application.save(flush: true)
+            application.linkedin = empData.persisters.Application.linkedin.value
+            //for (item in empData.persisters.Person.availablePosition) { //TODO: it will be in persisters!!
+            for (item in empData.transits.Person.availablePosition) {
+                    Position availablePosition = Position.findById(item.id)
+                    application.addToAvailablePositions(availablePosition)
             }
-            result = [success: true, person_id: applicant.id, application_id: application.id]
+            application.save(flush: true)
+
+            empData.doamin_keys.Person.id = applicant.id
+            empData.doamin_keys.Application.id = application.id
+
+            //Fill JSON data structure with keys and send it back!
+
+            result = [success: true, data: empData]
+
         }catch(Exception e){
             def message = "New Employee introduction: Failed to save Person's data error = " + e
             result = [success: false, message: message]
