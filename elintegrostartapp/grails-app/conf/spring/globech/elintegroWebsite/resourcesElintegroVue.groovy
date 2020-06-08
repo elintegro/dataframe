@@ -306,7 +306,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, application.resume from Application application where application.id=:id"
+        hql = "select application.id,application.resume ,application.avatar from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
@@ -322,12 +322,14 @@ beans {
                          excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSelfAssesmentDataframe-tab-id');
                       """
         addFieldDef = [
-//                "application.avatar":["name":"avatar"
-//                                      ,"widget":"PictureUploadWidgetVue"
-//                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-//                                      ,multiple:false
-//                                      ,editButton: true
-//                                      ,deleteButton:true  ],
+                "application.avatar":["name":"avatar"
+                                      ,"widget":"ImageUploadWidgetVue"
+                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                                      ,multiple:false
+                                      ,editButton: true
+                                      ,deleteButton:true
+                                      ,"accept":"image/*"
+                                       ],
 
                 "application.resume":["name":"resume"
                                       ,"widget":"FilesUploadWidgetVue"
@@ -335,7 +337,7 @@ beans {
                                       , ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                                       , insertAfter: "application.resume"
                                       ,multiple:false
-                                      ,"accept":"image/*,.pdf,.docx,.doc"
+                                      ,"accept":".pdf,.docx,.doc"
 
                                      ]
         ]
