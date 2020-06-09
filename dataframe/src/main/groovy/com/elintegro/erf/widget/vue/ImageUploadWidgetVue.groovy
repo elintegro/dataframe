@@ -3,7 +3,7 @@ package com.elintegro.erf.widget.vue
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.vue.DataframeVue
 
-class ImageUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
+class ImageUploadWidgetVue  extends com.elintegro.erf.widget.vue.WidgetVue {
     @Override
     String getHtml(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
@@ -14,15 +14,14 @@ class ImageUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
         String modelString = getModelString(dataframe, field)
 
         return """
-               <div ${getAttr(field)}>
-               <v-eutil-image-upload 
+              <div $attr>
+               <v-file-input
                   label = $label
-                  v-model="${fldName}" 
-                  @upload-success="${fldName}_uploadImages"                  
-                  ${toolTip(field)}  
+                  v-model="${fldName}"
+                  @change = "${fldName}_uploadFile"
+                  ${toolTip(field)}
                 >
-               </v-eutil-image-upload></div>
-
+               </v-file-input></div>
                """
 
     }
@@ -37,7 +36,7 @@ class ImageUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
         def defaultValue = field.defaultValue?:""
         String genId = fldName+"-file"
         dataframe.getVueJsBuilder().addToMethodScript("""
-                   ${fldName}_uploadImages: function(event){
+                   ${fldName}_uploadFile: function(event){
                               //TODO: for multi file this should be array and not sinfle file, change this code accordingly
                               var fileToUpload =  this.${fldName};
                               this.state.$fldName = fileToUpload.name; //TODO: once we find out why the v-model cannot get state.<fldName>, this line could be deleted!
@@ -53,11 +52,13 @@ class ImageUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                               fileData.append('fileArraySize',1); //TODO: for multi file put the right number here! 
                               fileData.append("$genId[0]", fileToUpload); //TODO: for multi file this should be array and not single file, change this code accordingly
             
-                              axios.post('${field.ajaxFileSaveUrl}',fileData)
-                                        .then(response => {
+                              fetch('${field.ajaxFileSaveUrl}',
+                                 { method:'POST',
+                                   body:fileData 
+                                 }).then(response => {
                                             console.log(response)
                                                     })
-                                        .catch(function(error){
+                                  .catch(function(error){
                                                 console.log(error)
                                                 });                      
                    },

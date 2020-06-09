@@ -88,7 +88,7 @@ class PictureUploadWidgetVue extends WidgetVue{
                             picData.append('fileSize',fileList.length);
                             picData.append('fieldnameToReload','$fieldNameToReload');
                             jQuery.each(allParams, function (key, value) {
-                                    picData.append(key,value);
+                                    picData.append(allParams,value);
                             });
                             picData.append('fldId','$fldName');
                             for (var i = 0; i < fileList.length; i++) {

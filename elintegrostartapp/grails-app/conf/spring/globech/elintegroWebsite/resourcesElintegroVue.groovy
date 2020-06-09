@@ -323,7 +323,7 @@ beans {
                       """
         addFieldDef = [
                 "application.avatar":["name":"avatar"
-                                      ,"widget":"ImageUploadWidgetVue"
+                                      ,"widget":"PictureUploadWidgetVue"
                                       ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                                       ,multiple:false
                                       ,editButton: true
