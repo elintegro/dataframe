@@ -20,7 +20,6 @@ beans {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     def defaultUrl = Holders.grailsApplication.config.grails.serverURL
-    def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
     vueInitDataframe_script(VueJsEntity) { bean ->
         created = """this.setInitPageValues();
                      this.setupHomePage()
@@ -586,17 +585,27 @@ beans {
         computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
     }
     vueElintegroApplicantCVDataframe_script(VueJsEntity){ bean ->
+        def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
+        def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
+        def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
         methods ="""afterRefreshing(response){
+              
                                  var params = response;
                                  var fileName = params.vueElintegroApplicantCVDataframe_application_resume;
                                   var extension = fileName.split('.').pop();
-                                  var fileType = extension;
-                                  if(fileType == 'pdf'){
+                                  if(extension == 'pdf'){
                                     var defaultImageUrlForPdf = '${pathForPdf}'
-                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume',defaultImageUrlForPdf)
-                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume_name',fileName)
+                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume','${pathForPdf}')   
                                   }
-                                 return fileType;
+                                  else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
+                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume','${pathForExcel}')   
+
+                                  }
+                                  else if(extension == 'doc' || extension == 'docx'){
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume','${pathForDocFile}')   
+                                  }
+                                  
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume_name',fileName)
                                  
                                   }
                              

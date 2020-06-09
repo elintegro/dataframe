@@ -5,6 +5,7 @@ import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.util.Holders
 
 class FilesDisplayWidgetVue extends WidgetVue {
+    def contextPath = Holders.grailsApplication.config.rootPath
     @Override
     String getHtml(DataframeVue dataframe, Map field){
         String modelString = getModelString(dataframe, field)
@@ -53,21 +54,23 @@ class FilesDisplayWidgetVue extends WidgetVue {
     }
     private String getFileUrl(){
         String defaultFileLocation = Holders.config.images.storageLocation
-        String urlForFile = defaultFileLocation+'/'
+        String urlForFile = defaultFileLocation+'/images/'
         return urlForFile
     }
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         String fldName = dataVariable
-        File f = new File(fileUrl)
-        String absolute = f.getAbsolutePath()
         dataframe.getVueJsBuilder().addToMethodScript("""
                ${fldName}_url:function(){
-                         var fileLocation = '$absolute'
                          var fileName = this.state.${fldName}_name;
-                         var urlForFile = fileLocation + fileName
-                         window.open(urlForFile,"_blank")
-                         console.log(urlForFile)
-                         return urlForFile
+                         var fileLocation = '$fileUrl'
+                         var fileDetails = fileName + fileLocation 
+                         var self = this;
+                          axios.get('${contextPath}/FileDownload/fileDownload',{
+                             params:{fileName:fileName, fileLocation:fileLocation}
+                              }).then(function(response){
+                            console.log(response);
+                                  });
+
                          }
           
             """)

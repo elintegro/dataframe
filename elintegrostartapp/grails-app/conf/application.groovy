@@ -115,6 +115,10 @@ images {
 	defaultImagePath = "/assets/$defaultImageName"
 	defaultImageForPdf = "defaultPdfIcon.png"
 	defaultImagePathForPdf = "assets/$defaultImageForPdf"
+	defaultImageForExcel = 'defaultExcelFileIcon.png'
+	defaultImagePathForExcel = "assets/$defaultImageForExcel"
+	defaultImageForDocFile = 'defaultDocFileIcon.png'
+	defaultImagePathForDocFile = "assets/$defaultImageForDocFile"
 
 
 }
