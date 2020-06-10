@@ -66,7 +66,8 @@ class PictureUploadWidgetVue extends WidgetVue{
            ${fldName}_uploadImages: function(event){
                         var detailData = event.detail;
                         var fileList = detailData[3];
-                        this.${fldName}_files = fileList; 
+                        this.${fldName}_files = fileList;
+                        excon.saveToStore('${dataframe.dataframeName}','$fldName',fileList[0].name);  
                     },\n
            ${deleteButton?"""${fldName}_beforeRemove: function(event){
                             var detailData = event.detail;
@@ -86,6 +87,7 @@ class PictureUploadWidgetVue extends WidgetVue{
                         if(fileList.length > 0){
                             var picData = new FormData();
                             picData.append('fileSize',fileList.length);
+                            picData.append('fileName',fileList[0].name);
                             picData.append('fieldnameToReload','$fieldNameToReload');
                             jQuery.each(allParams, function (key, value) {
                                     picData.append(allParams,value);
