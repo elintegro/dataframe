@@ -67,7 +67,11 @@ class PictureUploadWidgetVue extends WidgetVue{
                         var detailData = event.detail;
                         var fileList = detailData[3];
                         this.${fldName}_files = fileList;
-                        excon.saveToStore('${dataframe.dataframeName}','$fldName',fileList[0].name);  
+                        if(fileList.length > 0){
+                            for (var i = 0; i < fileList.length; i++){
+                                excon.saveToStore('${dataframe.dataframeName}','$fldName',fileList[i].name);
+                            }
+                        }     
                     },\n
            ${deleteButton?"""${fldName}_beforeRemove: function(event){
                             var detailData = event.detail;
@@ -87,7 +91,6 @@ class PictureUploadWidgetVue extends WidgetVue{
                         if(fileList.length > 0){
                             var picData = new FormData();
                             picData.append('fileSize',fileList.length);
-                            picData.append('fileName',fileList[0].name);
                             picData.append('fieldnameToReload','$fieldNameToReload');
                             jQuery.each(allParams, function (key, value) {
                                     picData.append(allParams,value);
@@ -95,6 +98,7 @@ class PictureUploadWidgetVue extends WidgetVue{
                             picData.append('fldId','$fldName');
                             for (var i = 0; i < fileList.length; i++) {
                                 picData.append("$genId["+i+"]", fileList[i]);
+                                picData.append('fileName["+i+"]',fileList[i].name);
                             }
                             axios.post('${field.ajaxFileSaveUrl}', picData).then(response => {
                               console.log(response)

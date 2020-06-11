@@ -326,7 +326,7 @@ beans {
                 "application.avatar":["name":"avatar"
                                       ,"widget":"PictureUploadWidgetVue"
                                       ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                                      ,multiple:false
+                                      ,multiple:true
                                       ,insertAfter: "application.resume"
                                       ,editButton: true
                                       ,valueMember:"avatar"
