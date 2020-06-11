@@ -67,7 +67,7 @@ class PictureUploadWidgetVue extends WidgetVue{
                         var detailData = event.detail;
                         var fileList = detailData[3];
                         this.${fldName}_files = fileList;
-                        excon.saveToStore('${dataframe.dataframeName}','$fldName',fileList[0].name);  
+                        
                     },\n
            ${deleteButton?"""${fldName}_beforeRemove: function(event){
                             var detailData = event.detail;
@@ -95,6 +95,7 @@ class PictureUploadWidgetVue extends WidgetVue{
                             picData.append('fldId','$fldName');
                             for (var i = 0; i < fileList.length; i++) {
                                 picData.append("$genId["+i+"]", fileList[i]);
+                                excon.saveToStore('${dataframe.dataframeName}','$fldName',fileList[i].name);
                             }
                             axios.post('${field.ajaxFileSaveUrl}', picData).then(response => {
                               console.log(response)
