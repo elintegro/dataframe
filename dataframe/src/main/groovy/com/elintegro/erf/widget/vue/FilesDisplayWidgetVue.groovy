@@ -65,15 +65,23 @@ class FilesDisplayWidgetVue extends WidgetVue {
                          var fileLocation = '$fileUrl'
                          var fileDetails = fileName + fileLocation 
                          var self = this;
-                          axios.get('${contextPath}/FileDownload/fileDownload',{
-                             params:{fileName:fileName, fileLocation:fileLocation}
-                              }).then(function(response){
-                            console.log(response);
-                                  });
+                          axios({
+                                 method:'post',
+                                 url:   '${contextPath}/FileDownload/fileDownload',
+                                 data:{fileName:fileName, fileLocation:fileLocation}
+                          }).then(function(response){
+                                    console.log(response);
+                                    var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                                    var fileLink = document.createElement('a');
+                                    fileLink.href = fileURL;
+                                    fileLink.setAttribute('download', self.state.${fldName}_name);
+                                    document.body.appendChild(fileLink);
+                                    fileLink.click();
+                           });
 
-                         }
+               }
           
-            """)
+        """)
          return ""
     }
 }
