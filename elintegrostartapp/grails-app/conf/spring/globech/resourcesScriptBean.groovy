@@ -507,6 +507,32 @@ beans {
                    }
                           """
     }
+    vueNewEmployeeUploadResumeDataframe_script(VueJsEntity){
+        methods = """
+                 newEmployeeUploadResume(){
+                 console.log("Inside newEmployeeUploadResume")
+                      var details = this.state.vueNewEmployeeUploadResumeDataframe
+                      console.log(details)
+                      var allParams = this.state;
+                      if (this.\$refs.vueNewEmployeeUploadResumeDataframe_form.validate()){
+                      axios({
+                      method:'post',
+                      url:'${contextPath}/EmployeeApplication/applicantDocuments',
+                      data: allParams
+                        }).then(function(responseData){
+                         var response = responseData;
+                            console.log(response)                            
+               });
+               
+                      excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeSelfAssesmentDataframe-tab-id");
+                 }  
+                 else{
+                     alert("Error in saving")
+                 }
+                     
+                 }
+                """
+    }
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
         created = """this.fillApplicationSkillTable();"""
         methods = """

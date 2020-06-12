@@ -306,9 +306,9 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id,application.resume,application.avatar  from Application application where application.id=:id"
+        hql = "select application.id,application.resume from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        saveButton = true
+        saveButton = false
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         tab = true
@@ -344,10 +344,14 @@ beans {
                                      ]
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
+        dataframeButtons = [
+                next:[name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""this.newEmployeeUploadResume()""",
+                      flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6'],url: ""],
+
+
+                previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
                                         flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
-//                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
-//                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
+//
 
         currentFrameLayout = ref("vueNewEmployeeUploadResumeDataframeLayout")
     }

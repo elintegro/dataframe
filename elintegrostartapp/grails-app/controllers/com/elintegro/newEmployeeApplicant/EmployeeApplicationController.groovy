@@ -39,6 +39,12 @@ class EmployeeApplicationController {
         }
         render(result as JSON)
     }
+    def applicantDocuments(){
+        def empDoc = request.getJSON()
+        println(empDoc)
+        render("true")
+    }
+
     def initiateSkillSet() {
         def param = request.getJSON()
         List<ApplicationSkill> appSkill = ApplicationSkill.findAllByApplication(Application.findById(param.id))
