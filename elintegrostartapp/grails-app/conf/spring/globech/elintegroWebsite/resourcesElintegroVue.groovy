@@ -306,9 +306,9 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, application.resume from Application application where application.id=:id"
+        hql = "select application.id,application.resume from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        saveButton = true
+        saveButton = false
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         tab = true
@@ -317,33 +317,33 @@ beans {
             //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rather then insert a new one.                          
             excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
         """
-        doAfterSave = """
-                         excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key", response.nodeId[0]);
-                         excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSelfAssesmentDataframe-tab-id');
-                      """
         addFieldDef = [
-//                "application.avatar":["name":"avatar"
-//                                      ,"widget":"PictureUploadWidgetVue"
-//                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-//                                      ,multiple:false
-//                                      ,editButton: true
-//                                      ,deleteButton:true  ],
+                "application.images":["name":"images"
+                                      ,"widget":"PictureUploadWidgetVue"
+                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                                      ,multiple:true
+                                      ,insertAfter: "application.resume"
+                                      ,editButton: true
+                                      ,valueMember:"avatar"
+                                      ,deleteButton:true
+                                      ,"accept":"image/*"
+                                       ],
 
                 "application.resume":["name":"resume"
                                       ,"widget":"FilesUploadWidgetVue"
                                       ,valueMember: "resume"
-                                      , ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                                      , insertAfter: "application.resume"
+                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                                       ,multiple:false
-                                      ,"accept":"image/*,.pdf,.docx,.doc"
+                                      ,"accept":".pdf,.docx,.doc,.csv"
 
                                      ]
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
+        dataframeButtons = [
+                next:[name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""this.newEmployeeUploadResume()""",
+                      flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6'],url: ""],
+                previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
                                         flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
-//                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
-//                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("vueNewEmployeeUploadResumeDataframeLayout")
     }
