@@ -527,6 +527,7 @@ beans {
                           }).then(function(responseData){
                               var response = responseData;
                               excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_vueNewEmployeeUploadResumeDataframe_application_id_id", response.data['application_id']);
+                              self.vueNewEmployeeUploadResumeDataframe_images_ajaxFileSave(response,allParams);
                               excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeSelfAssesmentDataframe-tab-id");
   
                           });

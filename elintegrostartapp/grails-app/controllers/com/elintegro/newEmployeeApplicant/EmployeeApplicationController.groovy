@@ -54,7 +54,8 @@ class EmployeeApplicationController {
                 application.addToImages(images)
                 application.save(flush: true)
             }
-             resultData = [success: true,application_id: application.id,params:empDoc]
+            def empDocuments = [application: empDoc]
+             resultData = [success: true,application_id: application.id,params:empDoc,newData: empDocuments]
         }catch(Exception e){
             log.error("Failed to save new employee's documents.")
         }
