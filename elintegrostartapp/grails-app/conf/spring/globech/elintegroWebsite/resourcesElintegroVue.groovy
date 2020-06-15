@@ -323,13 +323,13 @@ beans {
                          excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSelfAssesmentDataframe-tab-id');
                       """
         addFieldDef = [
-                "application.avatar":["name":"avatar"
+                "application.images":["name":"images"
                                       ,"widget":"PictureUploadWidgetVue"
                                       ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
                                       ,multiple:true
                                       ,insertAfter: "application.resume"
                                       ,editButton: true
-                                      ,valueMember:"avatar"
+                                      ,valueMember:"images"
                                       ,deleteButton:true
                                       ,"accept":"image/*"
                                        ],

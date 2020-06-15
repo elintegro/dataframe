@@ -3,6 +3,7 @@ package com.elintegro.newEmployeeApplicant
 import com.elintegro.crm.Person
 import com.elintegro.elintegrostartapp.client.Application
 import com.elintegro.elintegrostartapp.hr.ApplicationSkill
+import com.elintegro.elintegrostartapp.hr.Images
 import com.elintegro.elintegrostartapp.hr.Position
 import com.elintegro.elintegrostartapp.hr.Skills
 import grails.converters.JSON
@@ -41,9 +42,26 @@ class EmployeeApplicationController {
     }
     def applicantDocuments(){
         def empDoc = request.getJSON()
-        println(empDoc)
-        render("true")
+        def resultData
+        try {
+            Application application = Application.findById(empDoc.vueNewEmployeeUploadResumeDataframe_application_id)
+            application.resume = empDoc.vueNewEmployeeUploadResumeDataframe_application_resume
+
+            for (item in empDoc.vueNewEmployeeUploadResumeDataframe_avatar) {
+                Images images = new Images()
+                images.name = item
+                images.save()
+                application.addToImages(images)
+                application.save(flush: true)
+            }
+            def empDocuments = [application: empDoc]
+            resultData = [success: true,application_id: application.id,params:empDoc,newData: empDocuments]
+        }catch(Exception e){
+            log.error("Failed to save new employee's documents.")
+        }
+        render (resultData as JSON)
     }
+
 
     def initiateSkillSet() {
         def param = request.getJSON()

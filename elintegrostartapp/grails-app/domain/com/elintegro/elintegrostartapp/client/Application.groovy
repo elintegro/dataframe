@@ -47,7 +47,7 @@ class Application extends ControlField{
     String comments
     String lastComment
 
-    static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills,avatar: Images]
+    static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills,images: Images]
 
     static constraints = {
         applicant (nullable: true)
@@ -61,7 +61,6 @@ class Application extends ControlField{
         facility(nullable: true)
         linkedin(nullable: true)
         resume(nullable: true)
-        avatar(nullable: true)
         question1(nullable: true,length: 4096)
         question2(nullable: true,length: 4096)
         comments(nullable: true,length: 4096)

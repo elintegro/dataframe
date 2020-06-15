@@ -67,7 +67,7 @@ class PictureUploadWidgetVue extends WidgetVue{
                         var detailData = event.detail;
                         var fileList = detailData[3];
                         this.${fldName}_files = fileList;
-                        excon.saveToStore('${dataframe.dataframeName}','$fldName',fileList[0].name);
+                       
      
                     },\n
            ${deleteButton?"""${fldName}_beforeRemove: function(event){

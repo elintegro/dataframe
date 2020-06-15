@@ -509,29 +509,36 @@ beans {
     }
     vueNewEmployeeUploadResumeDataframe_script(VueJsEntity){
         methods = """
-                 newEmployeeUploadResume(){
-                 console.log("Inside newEmployeeUploadResume")
-                      var details = this.state.vueNewEmployeeUploadResumeDataframe
-                      console.log(details)
-                      var allParams = this.state;
-                      if (this.\$refs.vueNewEmployeeUploadResumeDataframe_form.validate()){
-                      axios({
-                      method:'post',
-                      url:'${contextPath}/EmployeeApplication/applicantDocuments',
-                      data: allParams
+                        newEmployeeUploadResume(){
+                        var allParams = this.state;
+                        var avatar = [];
+                        var pictures = this.vueNewEmployeeUploadResumeDataframe_images_files;
+                        for(var i=0; i< pictures.length; i++){
+                        avatar[i] = pictures[i].name;
+                        }
+                        allParams['vueNewEmployeeUploadResumeDataframe_avatar'] = avatar;
+                        allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = excon.getFromStore("vueNewEmployeeBasicInformationDataframe","key_application_id")
+                        var self = this;
+                        if (this.\$refs.vueNewEmployeeUploadResumeDataframe_form.validate()){
+                        axios({
+                        method:'post',
+                        url:'${contextPath}/EmployeeApplication/applicantDocuments',
+                        data: allParams
                         }).then(function(responseData){
-                         var response = responseData;
-                            console.log(response)                            
-               });
-               
-                      excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeSelfAssesmentDataframe-tab-id");
-                 }  
-                 else{
-                     alert("Error in saving")
-                 }
-                     
-                 }
-                """
+                        var response = responseData;
+                        excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_vueNewEmployeeUploadResumeDataframe_application_id_id", response.data['application_id']);
+                        self.vueNewEmployeeUploadResumeDataframe_images_ajaxFileSave(response,allParams);
+                        excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeSelfAssesmentDataframe-tab-id");
+                        
+                        });
+                        
+                        }
+                        else{
+                        alert("Error in saving")
+                        }
+                        
+                        }
+                        """
     }
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
         created = """this.fillApplicationSkillTable();"""
