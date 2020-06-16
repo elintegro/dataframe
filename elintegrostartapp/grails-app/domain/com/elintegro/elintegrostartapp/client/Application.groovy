@@ -15,6 +15,7 @@ package com.elintegro.elintegrostartapp.client
 
 import com.elintegro.auth.User
 import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.hr.Files
 import com.elintegro.elintegrostartapp.hr.Images
 import com.elintegro.elintegrostartapp.hr.Position
 import com.elintegro.elintegrostartapp.hr.Skills
@@ -33,7 +34,6 @@ class Application extends ControlField{
     String referredByPerson
     String referredByOrganisation
     String linkedin
-    String resume
 
 
     Person applicant
@@ -47,7 +47,7 @@ class Application extends ControlField{
     String comments
     String lastComment
 
-    static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills,images: Images]
+    static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills,images: Images,files: Files]
 
     static constraints = {
         applicant (nullable: true)
@@ -60,7 +60,6 @@ class Application extends ControlField{
         referredByOrganisation(nullable: true)
         facility(nullable: true)
         linkedin(nullable: true)
-        resume(nullable: true)
         question1(nullable: true,length: 4096)
         question2(nullable: true,length: 4096)
         comments(nullable: true,length: 4096)

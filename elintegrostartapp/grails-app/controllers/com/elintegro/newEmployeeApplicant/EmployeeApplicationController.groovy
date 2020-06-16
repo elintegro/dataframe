@@ -3,6 +3,7 @@ package com.elintegro.newEmployeeApplicant
 import com.elintegro.crm.Person
 import com.elintegro.elintegrostartapp.client.Application
 import com.elintegro.elintegrostartapp.hr.ApplicationSkill
+import com.elintegro.elintegrostartapp.hr.Files
 import com.elintegro.elintegrostartapp.hr.Images
 import com.elintegro.elintegrostartapp.hr.Position
 import com.elintegro.elintegrostartapp.hr.Skills
@@ -45,7 +46,13 @@ class EmployeeApplicationController {
         def resultData
         try {
             Application application = Application.findById(empDoc.vueNewEmployeeUploadResumeDataframe_application_id)
-            application.resume = empDoc.vueNewEmployeeUploadResumeDataframe_application_resume
+            for (item in empDoc.vueNewEmployeeUploadResumeDataframe_resume) {
+                Files files = new Files()
+                files.fileName = item
+                files.save()
+                application.addToFiles(files)
+                application.save(flush: true)
+            }
 
             for (item in empDoc.vueNewEmployeeUploadResumeDataframe_avatar) {
                 Images images = new Images()

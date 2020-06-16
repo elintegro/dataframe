@@ -8,7 +8,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
     String getHtml(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
         String label = field.label
-//        boolean multiple = field?.multiple
+        boolean multiple = field?.multiple
 //        boolean deleteButton = field?.deleteButton
         String attr = field?.attr
         String modelString = getModelString(dataframe, field)
@@ -17,7 +17,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
               <div $attr>
                <v-file-input
                   label = $label
-                  v-model="${fldName}"
+                  multiple
                   @change = "${fldName}_uploadFile"
                   ${toolTip(field)}
                 >
@@ -28,30 +28,38 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
     String getVueDataVariable(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
         return """
-           ${fldName}: [],
+           ${fldName}_files: [],
             """
     }
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         String fldName = dataVariable
         def defaultValue = field.defaultValue?:""
         String genId = fldName+"-file"
-       dataframe.getVueJsBuilder().addToMethodScript("""
+       dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
+               .addToMethodScript("""
                    ${fldName}_uploadFile: function(event){
                               //TODO: for multi file this should be array and not sinfle file, change this code accordingly
-                              var fileToUpload =  this.${fldName};
-                              this.state.$fldName = fileToUpload.name; //TODO: once we find out why the v-model cannot get state.<fldName>, this line could be deleted!
-                              var fileToUpload =  this.${fldName};                                                                        
+                              this.${fldName}_files =  event;
+                              //this.state.$fldName = fileToUpload.name; //TODO: once we find out why the v-model cannot get state.<fldName>, this line could be deleted!
+                              var fileToUpload =  this.${fldName}_files;
+                              this.state.$fldName = fileToUpload[0].name;
+                              },\n
+                             ${fldName}_ajaxFileSave: function(data, allParams){
+                              var fileList = this.${fldName}_files;
+                              if(fileList.length > 0){                                                                        
                               var fileData = new FormData();
-                              fileData.append('fileName',fileToUpload.name);
-                              fileData.append('fileSize',fileToUpload.size);                              
-                              fileData.append('fileLastModified',fileToUpload.lastModified);
-                              fileData.append('fileLastModifiedDate',fileToUpload.lastModifiedDate);
-                              fileData.append('fileWebKitRelativePath',fileToUpload.webKitRelativePath);
-                              fileData.append('fileType',fileToUpload.type);                              
-                              fileData.append('fldId','$fldName');          
-                              fileData.append('fileArraySize',1); //TODO: for multi file put the right number here! 
-                              fileData.append("$genId[0]", fileToUpload); //TODO: for multi file this should be array and not single file, change this code accordingly
-            
+                              for (var i = 0; i < fileList.length; i++) {
+                              fileData.append('fileName',fileList[i].name);
+                              fileData.append('fileStorageSize',fileList[i].size);                              
+                              fileData.append('fileLastModified',fileList[i].lastModified);
+                              fileData.append('fileLastModifiedDate',fileList[i].lastModifiedDate);
+                              fileData.append('fileWebKitRelativePath',fileList[i].webKitRelativePath);
+                              fileData.append('fileType',fileList[i].type);                              
+                              fileData.append("$genId["+i+"]", fileList[i]);
+                            }
+                            fileData.append('fileSize',fileList.length);
+                            fileData.append('fldId','$fldName');
+                            }
                               fetch('${field.ajaxFileSaveUrl}',
                                  { method:'POST',
                                    body:fileData 
@@ -62,6 +70,16 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                                                 console.log(error)
                                                 });                      
                    },
+                   
+                       ${fldName}_computedFileUploadParams() {
+             var refParams = this.params;
+             var ajaxFileUploadParams = refParams['ajaxFileSave'];
+             if (ajaxFileUploadParams){
+                    ajaxFileUploadParams.push({fieldName:'$fldName'})
+                }else{
+                    refParams['ajaxFileSave'] = [{fieldName:'$fldName'}];
+                } 
+           },\n    
                  
 
        """)

@@ -517,6 +517,12 @@ beans {
                          avatar[i] = pictures[i].name;
                       }
                       allParams['vueNewEmployeeUploadResumeDataframe_avatar'] = avatar;
+                      var doc = [];
+                      var files = this.vueNewEmployeeUploadResumeDataframe_resume_files;
+                      for(var i=0; i< files.length; i++){
+                         doc[i] = files[i].name;
+                      }
+                      allParams['vueNewEmployeeUploadResumeDataframe_resume'] = doc;
                       allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = excon.getFromStore("vueNewEmployeeBasicInformationDataframe","key_application_id")                                                                              
                       var self = this;
                       if (this.\$refs.vueNewEmployeeUploadResumeDataframe_form.validate()){
@@ -528,6 +534,7 @@ beans {
                               var response = responseData;
                               excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_vueNewEmployeeUploadResumeDataframe_application_id_id", response.data['application_id']);
                               self.vueNewEmployeeUploadResumeDataframe_images_ajaxFileSave(response,allParams);
+                              self.vueNewEmployeeUploadResumeDataframe_resume_ajaxFileSave(response,allParams);
                               excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeSelfAssesmentDataframe-tab-id");
   
                           });
