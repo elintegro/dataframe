@@ -58,6 +58,7 @@ class ComboboxVue extends WidgetVue {
     String getStateDataVariable(DataframeVue dataframe, Map field){
 
         String dataVariable = dataframe.getDataVariableForVue(field)
+
         Map result = generateInitialData(dataframe, field)
         String valueMember = field.valueMember?:"id"
         List keys=[]
@@ -74,6 +75,48 @@ class ComboboxVue extends WidgetVue {
                   ${dataVariable}_keys:${keys as JSON},\n
                 """
     }
+
+    Map getStateDataVariablesMap(DataframeVue dataframe, Map field){
+
+        //TODO: no need
+        //String dataVariable = dataframe.getDataVariableForVue(field)
+
+        Map result = generateInitialData(dataframe, field)
+
+        String valueMember = field.valueMember?:"id"
+        List keys=[]
+        List res
+        Map selMap = [:]
+        selMap.put(valueMember,'')
+        if(result){
+            keys = result.keys
+            res = result.result
+            selMap = result.selectedMap
+        }
+
+        Map domainFieldMap = dataframe.domainFieldMap
+        Map fldJSON = null
+        if(dataframe.isDatabaseField(field)){ //Put it to PERSISTERS section
+            Map persisters = domainFieldMap.get(Dataframe.PERSISTERS)
+            Map domainJSON = persisters.get(field.get(Dataframe.FIELD_PROP_DOMAIN_ALIAS))
+            fldJSON = domainJSON.get(field.get(Dataframe.FIELD_PROP_NAME))
+        }else{//Put it to TRANSITS section
+            Map transits = domainFieldMap.get(Dataframe.TRANSITS)
+            fldJSON = transits.get(field.get(Dataframe.FIELD_PROP_NAME))
+        }
+        fldJSON?.put("items", res)
+
+        return domainFieldMap
+/*
+
+        return [$dataVariable:${selMap?selMap as JSON:"\"\""},\n
+                  ${dataVariable}_items:${res as JSON} ,\n
+                  ${dataVariable}_keys:${keys as JSON},\n
+                """
+*/
+
+    }
+
     private Map generateInitialData(DataframeVue dataframe, Map field){
 
         if(!field.initBeforePageLoad){
@@ -337,10 +380,11 @@ class ComboboxVue extends WidgetVue {
         String displayMember = field.displayMember?:'name'
         String valueMember = field.valueMember?:'id'
         //String modelString = getModelString(dataframe, field)
+        String dataVariable = dataframe.getDataVariableForVue(field)
         """
             <v-combobox
           v-model = "${getFieldJSONModelNameVue(field)}"  
-          :items="${getFieldJSONItems(field)}"
+          :items="${dataVariable}_items"
           ${validate(field)?":rules = '${fldName}_rule'":""}
           label="$label"
           ${isDisabled(dataframe, field)?":disabled=true":""}

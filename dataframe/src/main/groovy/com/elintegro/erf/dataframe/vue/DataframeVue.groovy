@@ -63,7 +63,7 @@ import java.util.stream.Collectors
  *
  */
 @Slf4j
-public class DataframeVue extends Dataframe implements Serializable, DataFrameInitialization, DataframeConstants{
+public class DataframeVue extends Dataframe implements Serializable, DataFrameInitialization{
 	private static defaultWidget = new InputWidgetVue()
 	private String currentLanguage = ""
 	List flexGridValues = []
@@ -119,7 +119,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public 	List pkFields = []
 	def groovySql
 	Map writableDomains = [:]
-	Map domainFieldMap = [:]
 	Map defaultRecord = [:]
 	@OverridableByEditor
 	String initScripts="" // This parameter holds possible initialization scripts
@@ -304,191 +303,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return "${dataframeName}-form"
 
 	}
-	/**
-	 * TODO: this method is a MESS!!!
-	 *
-	 * Should be carefully refactored!!!
-	 *
-	 * STORY #1 implementation:
-	 * Retrieves from the domain classes and from the database all information to populate fieldsMetadata and constraintsMetadata
-	 *
-	 * Also builds default fields Map and columnOrder Set, based on fieldsMetadata. Webapp Developer will have power to override or enhance this info in the bean definition
-	 * (resourses.groovy) or/and in the controller
-	 *
-	 * @param domainsClasses domain classes of the application
-	 */
-	void populateMetaData(/* GrailsClass[] domainsClasses */){
-
-		fieldsMetadata = new HashMap<String, MetaField>()
-		parsedHql = new ParsedHql(hql, grailsApplication, sessionFactory)
-
-		List<MetaField> metaFields = metaFieldService.getMetaDataFromFields(parsedHql, dataframeName)
-
-
-		for( MetaField metaField in metaFields){
-			fieldsMetadata.put(metaField.name , metaField)
-			//TODO: check implications!!!
-			 metaField.addFieldDef = addFieldDef
-
-			buildDefaultWidget(metaField)
-			addWritebleDomains(metaField)
-			createDomainFieldMap(metaField)
-			this.defaultRecord.put(metaField.name, metaField.defaultValue)
-		}
-
-		//find all keys and set them to respective writable domain for future use (in saving dataInstances)
-		addKeysToWritableDomain()
-		addNamedParameters()
-		addAdditionalFieldDefinitions()
-
-		try{
-			String testObject = MapUtil.convertMapToJSONString(this.domainFieldMap)
-			log.debug(testObject)
-		}catch(Exception e){
-			log.error("The map is not convertible to JSON for dataframe ${dataframeName}")
-		}
-
-		buildCustomWidgets()
-	}
-
-	private addAdditionalFieldDefinitions() {
-		//TODO: here we will add additional field definitions to domainFieldMap, if needed
-		//Check if there are additional fields that are not Persitant:
-		addFieldDef?.forEach { addFldName, addFldProps ->
-			if (!this.fields.containsKey(addFldName)) {
-				//TODO: check if the field name as a key is the same like in fields!
-				if (!this.domainFieldMap.containsKey(TRANSITS)) {
-					this.domainFieldMap.put(TRANSITS, [:])
-				}
-				Map domainFieldMapTans = this.domainFieldMap.get(TRANSITS);
-
-				//Add placeholder to additional data, if exists:
-				domainFieldMapTans.put(addFldName, ["${VALUE_ENTRY}": null])
-			}//End of if field is not persistent one (transit)
-		}
-	}
-
-	private void addKeysToWritableDomain() {
-
-		this.writableDomains.each{ domainName, domainMap ->
-			Set namedParamKeys = domainMap.get("keys")
-			parsedHql.namedParameters.each{parmName, parValStringArr ->
-				if(domainName.equalsIgnoreCase(parValStringArr[0])){
-					namedParamKeys.add(parmName)
-				}
-			}
-			domainMap.put("keys", namedParamKeys)
-
-			Set domainKeys = domainMap.get("domainKeys")
-			if(!domainKeys || domainKeys.size() == 0) {
-				String[] keyColumnNames = domainMap.get("parsedDomain").getPersister().keyColumnNames
-				keyColumnNames?.each{ keyColumnName ->
-					domainKeys.add(keyColumnName)
-				}
-				domainMap.put("domainKeys", domainKeys)
-			}
-		}
-	}
-
-	private void addWritebleDomains(MetaField field){
-		if(!field.isReadOnly()){
-			String domainAlias = field.domain.getDomainAlias()
-			//keys is the list of Named parameters (as they defined in HQLm after column ":")
-			//domainKeys is the list of PK of the domain as it defined in the db table, in most cases it is field, named "id"
-			this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], domainKeys:[],"domainAlias": domainAlias])
-		}
-	}
-
-	//This Map forms a JSON structure for any Front-end to exchange data with the Back-end!
-	private void createDomainFieldMap(MetaField field){
-		//field.domain.key is actually domain name (like User) TODO: this field should be renamed to "name" to reflect its real meaning
-		if(!this.domainFieldMap.containsKey(PERSISTERS)){
-			this.domainFieldMap.put( PERSISTERS, [:])
-		}
-
-		Map domainFieldMapPers = this.domainFieldMap.get(PERSISTERS);
-		if(!domainFieldMapPers.containsKey(field.domain.key)){
-			domainFieldMapPers.put(field.domain.key, new HashMap()) //TODO: Add may be more parameters to doamin here
-		}
-		Map domainFields = domainFieldMapPers.get(field.domain.key)
-		//TODO: remove this comment if null is acceptable as default value in the JSON converter
-		//domainFields.put(field.name, field.defaultValue ? field.defaultValue : "")
-		domainFields.put(field.name, ["${VALUE_ENTRY}":field.defaultValue]) //TODO: add here rule and dictionary if defined
-
-		if(!this.domainFieldMap.containsKey(DOMAIN_KEYS)){
-			this.domainFieldMap.put( DOMAIN_KEYS, [:])
-		}
-		Map domainFieldMapKeys = this.domainFieldMap.get(DOMAIN_KEYS);
-		if(!domainFieldMapKeys.containsKey(field.domain.key)){
-			domainFieldMapKeys.put(field.domain.key, [:])
-			Map domainKeys = (Map)domainFieldMapKeys.get(field.domain.key)
-
-			//Adding key (PK)
-			//What if keys are not in the select statement? They will be added anyway!
-			Map<String, MetaField> pks = metaFieldService.getPKForTable(field.tableName)
-			pks?.forEach{ pk, pkMetaField ->
-				domainKeys.put(pkMetaField.columnName, pkMetaField.defaultValue )
-			}
-		}
-	}
-
-	void addNamedParameters(){
-		parsedHql.namedParameters
-		if(parsedHql.namedParameters && parsedHql.namedParameters.size() > 0) {
-			domainFieldMap.put(NAMED_PARAM, [:])
-			Map namedParams = domainFieldMap.containsKey(NAMED_PARAM) ? domainFieldMap.get(NAMED_PARAM) : [:]
-			parsedHql.namedParameters?.forEach { namedParamKey, namedParamValue ->
-				DomainClassInfo dom = parsedHql.hqlDomains.get(namedParamValue[0])
-				String[] dbColumnNames = dom.persister.getPropertyColumnNames(namedParamValue[1])
-				String dbColumnName = (dbColumnNames && dbColumnNames.size() > 0)  ? dbColumnNames[0]: namedParamValue[1]
-				MetaField metaFields = metaFieldService.getMetaColumn(dom.persister.tableName, dbColumnName)
-				namedParams.put(namedParamKey, ["${DOMAIN_ENTRY}" : namedParamValue[0], "${FIELD_ENTRY}" : namedParamValue[1], "${VALUE_ENTRY}" : metaFields.defaultValue])
-			}
-		}
-	}
-
-	/**
-	 *
-	 * @param columnName
-	 * @param stmt
-	 * @return
-	 * The method uses database table column name and Statement object and return whether it is unsigned or not
-	 */
-	boolean isUnsigned(String columnName, Statement stmt){
-		ResultSet rs = stmt.executeQuery(parsedHql.getSqlString())
-		ResultSetMetaData rsmd = rs.getMetaData()
-		for(int i=1; i<=  rsmd.getColumnCount(); i++){
-			if(rsmd.getColumnName(i).equals(columnName))
-				return  !rsmd.isSigned(i)
-		}
-		return false
-	}
-
-	/**
-	 * The method uses the domain class and builds a list of Meta Data using all persistent properties
-	 */
-/*
-	List<MetaField> getDomainMetaData(Class clazz){
-		List<MetaField> metaFields = new ArrayList<MetaField>()
-		def domain = new DefaultGrailsDomainClass(clazz)
-		for(property in domain.persistentProperties){
-			if(!property.isAssociation()){
-				MetaField metaField = new MetaField(property.getFieldName())
-				metaField.domain = clazz.getClass().getName()
-				metaField.dataType = MetaField.getDataType( property.getTypePropertyName() )
-				metaFields.add(metaField)
-			}
-		}
-		return metaFields
-	}
-*/
-
 
 	/**
 	 *This method uses meta field to add the widget and put the meta field in fields.Key on fields will be
 	 *dataframename.fieldname
 	 */
-	private void buildDefaultWidget( MetaField fld){
+	protected void buildDefaultWidget( MetaField fld){
 
 		def widget = null
 		def dataType = fld.dataType.toString().toUpperCase()
@@ -567,16 +387,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return result
 	}
 
-	/**
-	 *This method add the custom fields to the fileds maps.
-	 */
-	private void buildCustomWidgets(){
-
-		addFieldDef?.each{key, value->
-			addField(key, value)
-		}
-	}
-
 	List  getHqlResult(def queryHql, def keyValue, Map sessionAttributes){
 		List results = null
 		def sessionHibernate = sessionFactory.openSession()
@@ -605,6 +415,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	 */
 	public Object getTypeCastValueFromHql(String fieldName, def value){
 		def result = value
+		response.setContentType()
 		parsedHql.hqlDomains.each(){domainAlias, domain ->
 			def prop = domain?.value?.getPersistentProperty(fieldName)
 			def typeName = prop?.getTypePropertyName()
@@ -670,30 +481,33 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 	public void addField(String fieldName, Map<String, Object> fieldProp){
 
-		if(fieldProp && fieldName){
-			Map dbMetaFieldPropes = fields?.get(buildFullFieldName(dataframeName, fieldName))
-			if(dbMetaFieldPropes == null){//There is no Database field like this, this field is independent one, we adding name property in it if does not defined like in the key
-				if(!fieldProp.containsKey("name")){
-					fieldProp.put("name", fieldName);
+		if(!fieldProp || !fieldName){
+			return
+		}
+		String fullFieldName = buildFullFieldName(dataframeName, fieldName) //<DataframeName>.<Domain Alias>.<FieldName>
+		if(!fields?.containsKey(fullFieldName)){ //There is no Database field like this, this field is independent one, we adding name property in it if does not defined like in the key
+			if(!fieldProp.containsKey("name")){
+				fieldProp.put("name", fieldName);
+			}
+			fieldProp.put("externalDomainField",true)
+			if(fieldProp.insertAfter){
+				String formattedInsertAfterKey = buildFullFieldName(dataframeName, fieldProp.insertAfter)
+				if(fields.getList().contains(formattedInsertAfterKey)){
+					fields.insertAfter(fullFieldName, fieldProp, formattedInsertAfterKey)
 				}
-				fieldProp.put("externalDomainField",true)
-				if(fieldProp.insertAfter){
-					String formattedInsertAfterKey = buildFullFieldName(dataframeName, fieldProp.insertAfter)
-					if(fields.getList().contains(formattedInsertAfterKey)){
-						fields.insertAfter(buildFullFieldName(dataframeName, fieldName), fieldProp, formattedInsertAfterKey)
-					}
-				}else if(fieldProp.insertBefore){
-					String formattedInsertBeforeKey = buildFullFieldName(dataframeName, fieldProp.insertBefore)
-					if(fields.getList().contains(formattedInsertBeforeKey)){
-						fields.insert(buildFullFieldName(dataframeName, fieldName), fieldProp, formattedInsertBeforeKey)
-					}
-				}else{
-					fields.put(buildFullFieldName(dataframeName, fieldName), fieldProp)
+			}else if(fieldProp.insertBefore){
+				String formattedInsertBeforeKey = buildFullFieldName(dataframeName, fieldProp.insertBefore)
+				if(fields.getList().contains(formattedInsertBeforeKey)){
+					fields.insert(fullFieldName, fieldProp, formattedInsertBeforeKey)
 				}
 			}else{
-				fieldProp.put("name", dbMetaFieldPropes.get("name")); //Since the field is from Database the name should be exactly like in the dbMetaFieldProps
-				dbMetaFieldPropes?.putAll(fieldProp)
+				fields.put(fullFieldName, fieldProp)
 			}
+			addTransitFieldsToDataStructure(fieldName, fieldProp)
+		}else{ //There is a database field, our addFieldDef parameters are to enhance them and/or override default values
+			Map dbMetaFieldPropes = fields?.get(fullFieldName)
+			fieldProp.put("name", dbMetaFieldPropes.get("name")); //Since the field is from Database the name should be exactly like in the dbMetaFieldProps
+			dbMetaFieldPropes?.putAll(fieldProp)
 		}
 	}
 
@@ -1011,7 +825,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		fieldCount++;
 
 		vueDataVariable.append(widget.getVueDataVariable(this, field))
-		vueStateVariable.append(widget.getStateDataVariable(this, field))
+		//We refactoring this concept! Instead of vueStateVAriable being formed as string, we will add whatever needed to DomainFieldMap and it will be converted to JSON file for
+		//transmitting Data between Front-end and Back-end
+		//TODO: So this methid should be depricated as soon as new concept works!
+		//vueStateVariable.append(widget.getStateDataVariable(this, field))
+		widget.getStateDataVariablesMap(this, field) //This method will enhance domainFieldMap with required info, specificaly "items" for dictionary
+
 		vueDataFillScript.append(widget.getValueSetter(this, field, divId, fldId, key))
 		vueDataFillScript.append("\n")
 		vueSaveVariables.append(widget.getVueSaveVariables(this, field))
@@ -1776,6 +1595,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return ""
 	}
 
+/*
 	public class Field{
 		static final String WIDGET_NAME="name"
 		static final String WIDGET_COLUMN_NAME = "columnName"
@@ -1803,6 +1623,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		static final String WIDGET_WIDGET_OBJECT = "widgetObject"
 
 	}
+*/
 
 	public Set<Entry> getNamedParameters(){
 		return this.parsedHql?.namedParameters?.entrySet();

@@ -73,6 +73,11 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return """$dataVariable:\"\",\n"""
     }
 
+    //This method may return additional data for each Widget, by deafault it returns empty Map
+    Map getStateDataVariablesMap(DataframeVue dataframe, Map field){
+        return [:]
+    }
+
     String[] getStateDataProps(DataframeVue dataframe, Map field){
         return [field.domain?.key, field.name, field.defaultValue]
     }
