@@ -401,6 +401,43 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 			}
 		}
 	}
+docker {
+	server.contextPath = "/"
+	rootPath = ""
+	grails.serverURL = "http://95.217.159.62:9090"
+	grails.plugin.springsecurity.ui.register.emailFrom='elintegro@QA'
+	dataSource {
+		logSql = true
+		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+//		dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
+		url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_dev"
+		username = "developer"
+		password = "java1177"
+		logSql = true
+//            pooled = true
+//            jmxExport = true
+//            driverClassName = "com.mysql.jdbc.Driver"
+		properties {
+			jmxEnabled = true
+			initialSize = 5
+			maxActive = 50
+			minIdle = 5
+			maxIdle = 25
+			maxWait = 10000
+			maxAge = 10 * 60000
+			timeBetweenEvictionRunsMillis = 5000
+			minEvictableIdleTimeMillis = 60000
+			validationQuery = "SELECT 1"
+			validationQueryTimeout = 3
+			validationInterval = 15000
+			testOnBorrow = true
+			testWhileIdle = true
+			testOnReturn = false
+			jdbcInterceptors = "ConnectionState"
+			defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
+		}
+	}
+}
 }
 //grails.server.port.https = 9090
 loginWithSpringSecurity = true
