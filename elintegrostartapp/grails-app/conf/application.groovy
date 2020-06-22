@@ -327,17 +327,18 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 	}
 
 	qa {
-		baseUrl = "http://208.75.75.98"
-		rootPath = "elintegrostartapp"
-		grails.serverURL = "http://208.75.75.98"
+		server.contextPath = "/"
+		rootPath = ""
+		grails.serverURL = "https://qa.elintegro.com"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro@QA'
 		dataSource {
+			logSql = true
 			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 //			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
 //			url = " jdbc:mysql://0.tcp.ngrok.io:15905/gcerf"
-			url = "jdbc:mysql://localhost:3306/elintegrostartapp_db"
+			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
 			username = "developer"
-			password = "java11"
+			password = "java1177"
 			logSql = true
 //            pooled = true
 //            jmxExport = true
