@@ -430,7 +430,7 @@ beans {
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         tab = true
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
-        doAfterSave = """self.\$router.push("/vueNewEmployeeThankYouMessageAfterSaveDataframe/0");"""
+        doAfterSave = """self.\$router.push("/thank-you-message/0");"""
         dataframeButtons = [
                 previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
@@ -441,6 +441,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeThankYouMessageAfterSaveDataframe']
         saveButton = false
+        currentRoute = 'thank-you-message'
         route = true
         doBeforeRefresh= """allParams['id'] = excon.getFromStore('vueNewEmployeeAddtionalQuestionsDataframe','key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id');"""
         hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:id"
@@ -729,7 +730,7 @@ beans {
                         , name            : "applicant"
 
                         , hql             : """select application.id as Id, person.firstName as FirstName ,person.lastName as LastName,  person.email as Email, 
-                                                person.phone as Phone from Application application inner join application.applicant person """
+                                                person.phone as Phone from Application application inner join application.applicant person where application.id=:id"""
                         , gridWidth       : 820
                         , showGridSearch  : true
                         , internationalize: true
