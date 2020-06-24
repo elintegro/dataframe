@@ -17,6 +17,7 @@ import com.elintegro.annotation.OverridableByEditor
 import com.elintegro.erf.dataframe.*
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.layout.StandardLayout
+import com.elintegro.erf.layout.abs.Layout
 import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.InputWidgetVue
 import com.elintegro.erf.widget.vue.WidgetVue
@@ -65,159 +66,11 @@ import java.util.stream.Collectors
 @Slf4j
 public class DataframeVue extends Dataframe implements Serializable, DataFrameInitialization{
 	private static defaultWidget = new InputWidgetVue()
+	DataframeVue parent
+
 	private String currentLanguage = ""
 	List flexGridValues = []
 
-	DataframeVue parent
-	String dataframeName
-	String dataframeNameLowercase = ""
-	@OverridableByEditor
-	String hql
-	String sql //TODO: work around to support queries with associations, should be generated correctly out of hql, but for now if we have association in HQL we need to provide sql (outer join problem, ticket #22)
-	String hqlForUpdate
-	@OverridableByEditor
-	boolean initOnPageLoad = true
-	@OverridableByEditor
-	boolean saveButton = true
-	@OverridableByEditor
-	boolean deleteButton = false
-	@OverridableByEditor
-	boolean submitButton = false
-	@OverridableByEditor
-	boolean insertButton = false
-	boolean resetButton = false
-	@OverridableByEditor
-	boolean cancelButton = false
-	@OverridableByEditor
-	boolean wrapInForm = true
-	boolean wrapInDiv = false
-	boolean validateForm = false
-	@OverridableByEditor
-	boolean addButton = false
-	@OverridableByEditor
-	boolean createEnableDisableFunctionForAllFields = false
-	boolean readonly = false
-	@OverridableByEditor
-	String doBeforeSave = ""
-	@OverridableByEditor
-	String doAfterSave = ""
-	String doAfterReset = ""
-	String doAfterRefresh = ""
-	@OverridableByEditor
-	String doBeforeDelete = "false" //by default delete is not allowed, unless somebody defined a script to turn it into true
-	@OverridableByEditor
-	String doAfterDelete = ""
-
-	@OverridableByEditor //This wil make sure the PK field(s) are not presented (and it is a default) unless otherwise is specified by Dataframe descriptor
-	Boolean hidePK = true
-
-	@OverridableByEditor //This wil make sure the PK field(s) are not presented (and it is a default) unless otherwise is specified by Dataframe descriptor
-
-
-
-	ParsedHql parsedHql
-	public 	List pkFields = []
-	def groovySql
-	Map writableDomains = [:]
-	Map defaultRecord = [:]
-	@OverridableByEditor
-	String initScripts="" // This parameter holds possible initialization scripts
-	@OverridableByEditor
-	String headerScripts = "" //This parameter holds possible javascript functions to be used during DataframeVue lifecicle
-	@OverridableByEditor
-	String displayType = "inline" //This parameter defines wether to display the dataframeVue as window or as popup
-	@OverridableByEditor
-	String insertHtmlTo = ""
-	@OverridableByEditor
-	String divIdToDisable = ""
-	@OverridableByEditor
-	String popUpTitle=""
-	@OverridableByEditor
-	Map summaryAfterSave = [showSummary: false]
-
-
-	String dataframeLabelCode = ""
-	private StringBuilder saveScriptJs = new StringBuilder();
-	private StringBuilder doAfterSaveStringBuilder = new StringBuilder();
-	private StringBuilder doAfterDeleteStringBuilder = new StringBuilder();
-//	private StringBuilder additionalParametersScript = new StringBuilder()
-	String vueRoutes = ""
-	//TODO make it injected in Spring way!
-	private DataframeView dataframeView = new DataframeViewJqxVue(this)
-
-	String divID
-	String supportJScriptSource
-
-	String contextPath = Holders.grailsApplication.config.rootPath
-	// This is a default to use DataframeController to perform CRUD operations, could be overwritten in Dataframe bean definition to any other controller operation
-	def ajaxUrl = "${contextPath}/dataframe/ajaxValues";
-	def ajaxSaveUrl = "${contextPath}/dataframe/ajaxSave";
-	//def ajaxDeleteUrl = "/ayalon/dataframe/ajaxDelete"
-	def ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire";
-	def ajaxInsertUrl = "${contextPath}/dataframe/ajaxInsert";
-	def ajaxDefaultUrl = "${contextPath}/dataframe/ajaxDefaultData";
-	def ajaxCreateUrl ="${contextPath}/dataframe/ajaxCreateNew"
-	@OverridableByEditor
-	Map dataframeButtons = [:];
-	@OverridableByEditor
-	Map insertFields=[:];
-	Map dialogBoxActionParams=[:];
-	List<DataframeVue> refDataframes = new ArrayList<DataframeVue>();
-	Map<String,String> ajaxUrlParams = new HashMap<>()
-	def ajaxDynamicSelectionBuildUrl
-
-	//TODO: This should be removed to the Widget class!
-	def ajaxjQTreeLoadUrl = "${contextPath}/dataframe/ajaxjQTreeLoad"
-
-	//this String URL is to refresh when updating dataframe
-	//def dataFrameParamsToRefresh = null
-
-	def connectingFieldName //The field name that other Dataframes are refferred by to this one, it must be equal Table alias
-
-	private Map<String, DataframeVue> embeddetDataframe = new LinkedMap<String, DataframeVue>();
-	List<String> embeddedDataframes = new ArrayList<>()
-	List<String> childrenDataframes = new ArrayList<>()
-	//fieldName should be domain.fldName
-	public void addEmbeddedDataframe(String fieldName, DataframeVue embDf){
-		embeddetDataframe.put(fieldName, embDf)
-	}
-
-	public Map<String, DataframeVue> getEmbeddedDataframe(){
-		return embeddetDataframe;
-	}
-
-
-	def void addButton(String name, String type, String url, String script){
-		DFButton button = new DFButton()
-		button.name = name
-		button.type = type
-		button.script = script
-		button.url = url
-		dataframeButtons.put(name, button)
-	}
-
-	def void addButton(){
-		addButton("", "", "", "")
-	}
-
-	public def getAjaxjQTreeLoadUrl(){
-		return servletContext.contextPath+ajaxjQTreeLoadUrl
-	}
-	Map<String, MetaField> fieldsMetadata
-
-	Map<String, String> constraintsMetadata
-	Map<String, WidgetVue> widgets = [:]
-	//TODO: logger!!! Make it work Logger log = Logger.getInstance(DataframeVue.class)
-
-
-	//Map fields = [:] // Map of fields and their widgets, displayed on the page. Structured like: [field:<name>, properties:[widget:Textfield.class, width:50, div:"d1"]]
-
-	/* This is a map of user defined fields or parameters of the existing fields*/
-	@OverridableByEditor
-	Map addFieldDef =[:]  //add a field to the end of the fields
-	Map addFieldBeforeDef=[:]   //add a field before specific field
-	OrderedMap fields = new OrderedMap()
-	def resultData
 
 //Parameters required by VueJs
 	String scripts = ""
@@ -255,22 +108,13 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String deleteButtonAttr = ""
 	String vueSaveVariablesScriptString = ""
 	boolean wrapButtons = true
+
 	// For vue store
 	private VueJsBuilder vueJsBuilder
 	private Map vueStoreScriptMap
+
 	@OverridableByEditor
 	boolean initOnVueComponentLoad = true
-	/*private void createVueJsEntityObj(){
-		vuejsEntity = new VueJsEntity()
-		vuejsEntity.setAllEntities(vujsLifecycleEntities)
-	}*/
-	String resultPage  = null
-	String currentFldLayout = null
-	@OverridableByEditor
-	LayoutVue currentFrameLayout
-
-	PageRenderer groovyPageRenderer
-	def templateEngine = new SimpleTemplateEngine()
 
 	public DataframeVue(){}
 	public DataframeVue(def dataframeName){
@@ -283,25 +127,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		this.dataframeView.dataframeName = dataframeName
 
 		flexGridValues = flexGridValues?:LayoutVue.defaultGridValues
-	}
-
-
-
-	void init(){
-		if(fieldsMetadata == null || fieldsMetadata.size() == 0 || parsedHql == null){
-			populateMetaData()
-		}
-
-		if(fields.size()==0){
-			buildCustomWidgets()
-		}
-		vueJsBuilder = new VueJsBuilder(this)
-	}
-
-
-	public String getFormId(){
-		return "${dataframeName}-form"
-
 	}
 
 	/**
@@ -355,13 +180,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		def metaFieldMap = fld.toMap()
 		metaFieldMap.put("widget",widget)
-		//metaFieldMap.put("fk",fld.fk)
-		//metaFieldMap.put("fkMetaData",fld.fkMetaData)
-
 		log.info "fld: $fld.name widget:$widget datatype: $fld.dataType"
-		//TODO: see if we can get rid of this map and use only MetaField object instead...
 		fields.put(buildFullFieldName(fld), metaFieldMap )
-
 	}
 
 	/*
@@ -385,149 +205,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			result.add(object)
 		}
 		return result
-	}
-
-	List  getHqlResult(def queryHql, def keyValue, Map sessionAttributes){
-		List results = null
-		def sessionHibernate = sessionFactory.openSession()
-		Transaction tx = sessionHibernate.beginTransaction()
-		Query query =  sessionHibernate.createQuery(queryHql);
-		for (String parameter : query.getNamedParameters()) {
-			if(parameter.indexOf("session_") > -1){
-				def sessionParamValue = DataframeInstance.getSessionParamValue(parameter, sessionAttributes)
-				query.setParameter(parameter, sessionParamValue)
-			}else{
-				query.setParameter(parameter, keyValue)
-			}
-		}
-		results = query.list()
-		tx.commit();
-		sessionHibernate.close();
-		return results
-	}
-
-	/**
-	 * This method uses the field name as per the hql and the corresponding value and return the type
-	 * cast value.
-	 * @param fieldName
-	 * @param value
-	 * @return
-	 */
-	public Object getTypeCastValueFromHql(String fieldName, def value){
-		def result = value
-		response.setContentType()
-		parsedHql.hqlDomains.each(){domainAlias, domain ->
-			def prop = domain?.value?.getPersistentProperty(fieldName)
-			def typeName = prop?.getTypePropertyName()
-			if(prop){
-				result= DbResult.getTypeCastValue( value, prop)
-				return result
-			}
-		}
-		return result
-	}
-
-
-	/**
-	 * This method uses the result data and builds  json format from that.
-	 * @return
-	 */
-	public Map getJsonDefaultResult(){
-
-		Map jsonRet = [:]
-
-		fields.dataMap.each{ fieldKey, fieldObject ->
-			MetaField field = this.fieldsMetadata.get(fieldObject.name)
-			if(!field){
-				log.error("Carramba!!!!")
-
-			}
-			jsonRet.put(fieldKey , field.defaultValue)
-		}
-		return jsonRet
-	}
-
-	public int getFieldIndexByName(String name){
-		return parsedHql.indexOfFileds.get(name)
-	}
-
-
-	def insertGetIds(Map<String, String> params) {
-
-		List result = insert(params)
-		List ret = []
-		result.each {
-			ret.add(it.id)
-
-		}
-		ret
-	}
-
-	public def getTypeCastValue2(refDomainAlias, refFieldName, paramStringValue){
-		def resValue = null;
-		//1. Get domain class
-		def domain = this.parsedHql?.hqlDomains?.get(refDomainAlias)
-		if(domain == null){
-			log.error("No doamin $refDomainAlias found");
-		}
-		//2. Get relevant field:
-//		def prop = domain?.value?.getPersistentProperty(refFieldName)
-		def prop = domain?.value?.getPropertyByName(refFieldName)
-		if(prop){
-			resValue  = DbResult.getTypeCastValue( paramStringValue, prop)
-		}
-		return resValue;
-	}
-
-	public void addField(String fieldName, Map<String, Object> fieldProp){
-
-		if(!fieldProp || !fieldName){
-			return
-		}
-		String fullFieldName = buildFullFieldName(dataframeName, fieldName) //<DataframeName>.<Domain Alias>.<FieldName>
-		if(!fields?.containsKey(fullFieldName)){ //There is no Database field like this, this field is independent one, we adding name property in it if does not defined like in the key
-			if(!fieldProp.containsKey("name")){
-				fieldProp.put("name", fieldName);
-			}
-			fieldProp.put("externalDomainField",true)
-			if(fieldProp.insertAfter){
-				String formattedInsertAfterKey = buildFullFieldName(dataframeName, fieldProp.insertAfter)
-				if(fields.getList().contains(formattedInsertAfterKey)){
-					fields.insertAfter(fullFieldName, fieldProp, formattedInsertAfterKey)
-				}
-			}else if(fieldProp.insertBefore){
-				String formattedInsertBeforeKey = buildFullFieldName(dataframeName, fieldProp.insertBefore)
-				if(fields.getList().contains(formattedInsertBeforeKey)){
-					fields.insert(fullFieldName, fieldProp, formattedInsertBeforeKey)
-				}
-			}else{
-				fields.put(fullFieldName, fieldProp)
-			}
-			addTransitFieldsToDataStructure(fieldName, fieldProp)
-		}else{ //There is a database field, our addFieldDef parameters are to enhance them and/or override default values
-			Map dbMetaFieldPropes = fields?.get(fullFieldName)
-			fieldProp.put("name", dbMetaFieldPropes.get("name")); //Since the field is from Database the name should be exactly like in the dbMetaFieldProps
-			dbMetaFieldPropes?.putAll(fieldProp)
-		}
-	}
-
-
-	/**
-	 * This method builds the javascript and return it.
-	 */
-	public String getJavascript(){
-
-		if(!scripts){
-			prepare(/*currentFldLayout, currentFrameLayout*/) // TODO by Shai: resolve overloading ambiguity issue when both currentFldLayout, currentFrameLayout are null.
-//			def generateDataframeOutputEnv =  grailsApplication.config.generateDataframeOutputEnv
-//			generateDataframeOutputEnv.each( element ->
-
-			if(Environment.current == Environment.DEVELOPMENT){
-
-				DataframeFileUtil.writeStringIntoFile("AppDataframe.vue", scripts.toString())
-			}
-		}
-		return scripts
 	}
 
 	public Map getVueStoreScript(){
@@ -554,110 +231,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return vueRoutes
 	}
 
-	/**
-	 * This method uses the layout(template) to get the build Html for the dataframe using all meta fields in hql.
-	 */
-	public String getHtml(String fieldLayout, String frameLayout){
-
-		if(!resultPage ||  !currentFldLayout || currentFldLayout != fieldLayout || !currentFrameLayout || currentFrameLayout != frameLayout){
-			prepare(fieldLayout, frameLayout)
-		}
-		return getResultPage_()
-	}
-
-	public String getHtml(String fieldLayout){
-
-		if(!resultPage ||  !currentFldLayout || currentFldLayout != fieldLayout){
-			prepare(fieldLayout, currentFrameLayout)
-		}
-		return getResultPage_()
-	}
-
-	public String preparejQTreeHtml(){
-
-	}
-
-	public String getHtml(){
-		def lhcLocale = LocaleContextHolder.getLocale()
-		boolean refresh = false
-//		componentRegistered = false
-		if(lhcLocale.baseLocale.language != currentLanguage){
-			refresh = true
-			currentLanguage = lhcLocale.baseLocale.language
-		}
-		return getHtml(refresh)
-	}
-
-	public String getHtml(boolean refresh){
-
-		if(!resultPage ||  !currentFldLayout  || refresh){
-			prepare(currentFldLayout, currentFrameLayout)
-
-		}
-		return getResultPage_()
-	}
-
-	String getResultPage_(){
-		//TODO: Put SPRING_SECURITY based filter in here
-		return resultPage
-	}
-
-	public String getJSListOfKeyFields() {
-		StringBuilder sb2 = new StringBuilder()
-		sb2.append(" var fullKeyFields = new Object(); \n");
-		if(parsedHql != null && parsedHql.namedParameters != null ){
-			for( Map.Entry entry: parsedHql.namedParameters){
-				String refFieldName_ = buildFullFieldNameKeyParam(this, entry.key);
-				sb2.append("            fullKeyFields['${entry.key}'] = '${refFieldName_}'; \n")
-			}
-		}
-		String sb2_ = sb2.toString()
-		return sb2_
-	}
-
-	public String buildDivParams(){
-		return """jQuery('#$dataframeName-div').find(':input, input:text, input:password, input:file, select, textarea').not("input[type=button]").each(function(){ 
-                       var attributeName = jQuery(this).attr("name");
-                       allParams[attributeName]=jQuery(this).val(); 
-            });"""
-	}
-
-	/**
-	 * Overloading prepare(String fieldLayout, String frameLayout)
-	 * @param fieldLayout
-	 * @param frameLayout
-	 * @return
-	 */
-	private String prepare(){
-		LayoutVue defLayout = new StandardLayout()
-		return prepare(null, defLayout)
-	}
-
-	/**
-	 * Overloading (String fieldLayout, String frameLayout)
-	 * @param fieldLayout
-	 * @param frameLayout
-	 * @return
-	 */
-	private String prepare(String frameLayout){
-		LayoutVue defLayout = new StandardLayout()
-		return prepare(frameLayout, null)
-	}
-
-	/**
-	 * Prepare DataFrame to display
-	 * @param fieldLayout
-	 * @param frameLayout
-	 * @return
-	 */
-	private String prepare(String fieldLayout, String frameLayoutName){
-
-		if(frameLayoutName.indexOf(".")<0){
-			frameLayoutName = "com.elintegro.erf.layout."+frameLayoutName
-		}
-		LayoutVue frameLayout = Class.forName(frameLayoutName)
-		return prepare(fieldLayout, frameLayout)
-	}
 
 	/**
 	 * Load Dataframe that was defined defined by this reference and also return it to the caller  and put it to the refrence Dataframe local collector.
@@ -671,12 +244,15 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	}
 
 	/**
-	 * Prepare DataFrame to display
+	 * Prepare DataFrame internal context to be ready for work
 	 * @param fieldLayout
 	 * @param frameLayout
 	 * @return
 	 */
-	private String prepare(String fieldLayout, LayoutVue frameLayout){
+	protected String prepare(String fieldLayout, Layout frameLayout){
+		if(!frameLayout.getClass() != LayoutVue.class ){
+			throw new DataframeException("For Vue Js make sure the layout parameter object is LayoutVue type. You trying to provide second argument of type: ${frameLayout.getClass()} instead!");
+		}
 
 		init();
 		currentFldLayout = fieldLayout
@@ -1358,94 +934,13 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 		return vueJsEntity
 	}
-	/**
-	 *
-	 * @param hql
-	 * @return
-	 * The method uses hql to convert that hql query to  sql query.
-	 */
-	String hqlToSql(def hql){
-		SessionFactoryImplementor factory = (SessionFactoryImplementor) sessionFactory;
-		QueryTranslatorFactory ast = new ASTQueryTranslatorFactory();
-		QueryTranslator queryTranslator = ast.createQueryTranslator( hql , hql , Collections.EMPTY_MAP, factory, null );
-		queryTranslator.compile( Collections.EMPTY_MAP, true );
-		/*
-		 def retTypes = queryTranslator.getReturnTypes()
-		 def qIdent = queryTranslator.getQueryIdentifier()
-		 def metaClass = queryTranslator.getMetaClass()
-		 def metaProp = queryTranslator.getMetaPropertyValues()
-		 def columns = queryTranslator.getColumnNames()
-		 def aliases = queryTranslator.getReturnAliases()
-		 */
-		return queryTranslator.getSQLString();
-	}
-
-	/**
-	 * Retrieves the hqlForUpdate - if unspecified (as in most cases it shouldn't be, simply returns the hql query starting from the 'from' party
-	 * @author Shai
-	 * */
-	String getHqlForUpdate(){
-		if(!hqlForUpdate){
-			int from = hql.indexOf('from')
-			hqlForUpdate = hql.substring(from)
-		}
-		return hqlForUpdate
-	}
-
-	Map<String, Object> getFieldByName(String name){
-		return fields.get(name)
-	}
-
-	public OrderedMap getFields(){
-		return fields;
-	}
-
-
-	public static DataframeVue  getDataframeBeanFromReference(org.springframework.beans.factory.config.RuntimeBeanReference dataframeRef){
-		ApplicationContext ctx = Holders.getApplicationContext()
-		DataframeVue detailDataframeBean = (DataframeVue) ctx.getBean(dataframeRef.getBeanName());
-		detailDataframeBean.init()
-		return detailDataframeBean;
-	}
-
-
-	public static StringBuffer getParamOfDataframeFields(def detailDataframeBean){
-		def paramList = new StringBuffer()
-		paramList.append("[")
-		int ii = 1, iii = 1;
-
-		def nmParams = detailDataframeBean?.parsedHql?.namedParameters;
-
-		if("ownerDataFrame".equals(detailDataframeBean.dataframeName)){
-			System.out.println();
-		}
-
-		for( Map.Entry entry: nmParams){
-			def paramName = entry.key;
-			paramList.append("'$paramName'")
-			if(iii < nmParams.size()){
-				paramList.append(",")
-			}
-			iii++
-		}
-
-		paramList.append("]")
-		return paramList
-	}
-
-
-	public String getDivId(String key){
-		String divId  =   key+"-Div"
-		divId = divId.replace(DOT, DASH)
-		return divId
-	}
 
 	public String getDataVariableForVue(Map field){
 		String res = buildKeyFieldParam(dataframeName, field);
 		return res
 	}
 
-    //Depricate this one onse the getFieldJSONModelNameVue is ready and in use
+    //Deprecate this one as soon as the getFieldJSONModelNameVue is ready and in use
 	public String getFieldModelNameVue(Map field){
 		String fieldnameStr = field.name.replace(DOT, UNDERSCORE);
 		def doaminNameStr = field.domain?.key
@@ -1453,8 +948,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			fieldnameStr = "${doaminNameStr}${UNDERSCORE}${fieldnameStr}";
 		}
 		return "$dataframeName${UNDERSCORE}$fieldnameStr";
-
-		return res
 	}
 
 	//TODO: EU!!! find right field name JSON!
@@ -1466,243 +959,4 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public String getFieldJSONModelTransitNameVue(Map field){
 		return "${TRANSITS}${DOT}${field.name}.value";
 	}
-
-	public boolean isReadOnly(Map field){
-		if (field?.readOnly || this.readonly){
-			return true
-		}
-		return false
-	}
-
-	public static String buildFullFieldNameKeyParam(Dataframe df, String domainAlias , String dbFieldName, String namedParameter){
-		StringBuilder sb = new StringBuilder();
-		sb.append("key").append(UNDERSCORE).append(df.dataframeName).append(UNDERSCORE).append(domainAlias).append(UNDERSCORE);
-		sb.append(dbFieldName).append(UNDERSCORE).append(namedParameter);
-		return sb.toString();
-	}
-	public static String buildKeyFieldParam(dataframeName, Map field){
-		String fieldnameStr = field.name.replace(DOT, UNDERSCORE);
-		def doaminNameStr = (field.domainAlias == null)?field.domain?.key:field.domainAlias;
-		if(fieldnameStr.indexOf(UNDERSCORE) <= 0 && !"".equals(doaminNameStr) && doaminNameStr != null){
-			fieldnameStr = "${doaminNameStr}${UNDERSCORE}${fieldnameStr}";
-		}
-		return "$dataframeName${UNDERSCORE}$fieldnameStr";
-	}
-
-	public static String buildKeyFieldParam(String dataframeName, String domainAlias, String fieldName){
-		return "$dataframeName${UNDERSCORE}$domainAlias${UNDERSCORE}$fieldName";
-	}
-	public static String buildFullFieldNameKeyParamWithDot(Dataframe df, String domainAlias , String dbFieldName, String namedParameter){
-		StringBuilder sb = new StringBuilder();
-		sb.append("key").append(DOT).append(df.dataframeName).append(DOT).append(domainAlias).append(DOT);
-		sb.append(dbFieldName).append(DOT).append(namedParameter);
-		return sb.toString();
-	}
-
-	public String buildFullFieldName(MetaField field){
-		return buildFullFieldName(dataframeName, field.domainAlias , field.name);
-	}
-
-
-	public static String buildFullFieldName(String dataframeName, String alias, String fieldName){
-		return "${dataframeName}${DataframeVue.DOT}${alias}${DataframeVue.DOT}${fieldName}";
-	}
-
-	public static String buildFullFieldName(String dataframeName, String fieldName){
-		return buildKeyFieldParamForMetaData(dataframeName, fieldName);
-	}
-
-	//This is when fieldName actually comprises from domain.fieldName
-	public static String buildKeyFieldParamForMetaData(String dataframeName, String fieldName){
-		return "$dataframeName${DataframeVue.DOT}$fieldName";
-	}
-
-	/**
-	 *
-	 */
-	public static String buildFullFieldNameKeyParam(DataframeVue df, String namedParameter){
-		String domainName = df.getNamedParamDomainAlias(namedParameter);
-		String fieldName = df.getNamedParamFieldName(namedParameter);
-		StringBuilder sb = new StringBuilder();
-		sb.append("key").append(UNDERSCORE).append(df.dataframeName).append(UNDERSCORE).append(domainName).append(UNDERSCORE);
-		sb.append(fieldName).append(UNDERSCORE).append(namedParameter);
-		return sb.toString();
-	}
-
-	public String getFieldNameFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(UNDERSCORE);
-		def keyWords = ["key", "ref", "parent"];
-		boolean keyWordTrue = fieldArr[0] in keyWords;
-		if(keyWordTrue && fieldArr.size() > 3){
-			return fieldArr[3];
-		}
-		return fieldArr[fieldArr.size() - 1];
-	}
-
-	public String getFieldNameSplitDot(String fieldId){
-		String[] fieldArr = fieldId.split("\\.");
-		def keyWords = ["key", "ref", "parent"];
-		boolean keyWordTrue = fieldArr[0] in keyWords;
-		if(keyWordTrue && fieldArr.size() > 3){
-			return fieldArr[3];
-		}
-		return fieldArr[fieldArr.size() - 1];
-	}
-
-	public String getFieldDoaminFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(UNDERSCORE);
-
-		def keyWords = ["key", "ref", "parent"];
-		boolean keyWordTrue = fieldArr[0] in keyWords;
-		if(keyWordTrue && fieldArr.size() >= 3){
-			return fieldArr[2]; //key-<dataframe>-<domain>- ...
-		}
-
-		if(fieldArr.size() == 3){
-			return fieldArr[1];
-		}
-		return "";
-	}
-
-	public String getFieldDataframeFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(UNDERSCORE);
-		if(fieldArr.size() == 3){
-			return fieldArr[0];
-		}
-		return "";
-	}
-
-	public String getFieldValueFromParametersAndName(Map parameters, Map field){
-		parameters.each{ key, value ->
-			String fullNameKey = getFieldId(field);
-			if(key == fullNameKey ){
-				return value
-			}
-		}
-		return ""
-	}
-
-	public String toString(){
-		return this.dataframeName + "  HQL: " + this.hql
-	}
-
-	public String getFieldValueFromParametersAndName(Map parameters, String fieldShortName){
-		parameters.each{ key, value ->
-			if(key == fieldShortName ){
-				return value
-			}
-		}
-		return ""
-	}
-
-/*
-	public class Field{
-		static final String WIDGET_NAME="name"
-		static final String WIDGET_COLUMN_NAME = "columnName"
-		static final String WIDGET_DOMAIN = "domain"
-		static final String WIDGET_DOMAIN_ALIAS = "domainAlias"
-		static final String WIDGET_TABLE_NAME = "tableName"
-		static final String WIDGET_DOMAIN_CLASS = "domainClass"
-		static final String WIDGET_ALIAS = "alias"
-		static final String WIDGET_TABLE_ALIAS = "tableAlias"
-		static final String WIDGET_LENGTH = "length"
-		static final String WIDGET_DATA_TYPE = "dataType"
-		static final String WIDGET_DEFAULT_VALUE = "defaultValue"
-		static final String WIDGET_PK = "pk"
-		static final String WIDGET_NOT_NULL = "notNull"
-		static final String WIDGET_UNSIGNED = "unsigned"
-		static final String WIDGET_AUTOINCREMENT = "autoincrement"
-		static final String WIDGET_ZEROFILL = "zerofill"
-		static final String WIDGET_charset=null
-		static final String WIDGET_COLLABORATION = "collation"
-		static final String WIDGET_COMMENT = "comment"
-		static final String WIDGET_LABEL_CODE = "labelCode"
-		static final String WIDGET_VALUE = "value"
-		static final String WIDGET_WIDGET = "widget"
-		static final String WIDGET_HQL = "hql"
-		static final String WIDGET_WIDGET_OBJECT = "widgetObject"
-
-	}
-*/
-
-	public Set<Entry> getNamedParameters(){
-		return this.parsedHql?.namedParameters?.entrySet();
-	}
-
-	public Set<Entry> getKeysOfNamedParameters(){
-		return this.parsedHql?.namedParameters?.keySet();
-	}
-
-	public String[] getNamedParameter(String namedParam){
-		return this.parsedHql?.namedParameters?.get(namedParam);
-	}
-
-	public static String getDataFrameDomainAlias(String customFieldName){
-		String[] fieldArr = customFieldName.split("\\.")
-		if (fieldArr.size() == 3){
-			return fieldArr[1]
-		}
-	}
-
-	String getNamedParamDomainAlias(String namedParam){
-		def nmParamDomAl = getNamedParameter(namedParam);
-		if(nmParamDomAl != null){
-			return nmParamDomAl[0];
-		}
-		return null;
-	}
-
-	String getNamedParamFieldName(String namedParam){
-		def nmParamDomAl = getNamedParameter(namedParam);
-		if(nmParamDomAl != null){
-			return nmParamDomAl[1];
-		}
-		return null;
-	}
-	public static String extractSimpleFieldName(String dataframeName,String fullFieldName, String domainAlias){
-		List keyToRemove = [dataframeName,domainAlias]
-		List fieldArrList = (ArrayList)Arrays.asList(fullFieldName.split("\\."))
-		fieldArrList.removeAll(keyToRemove)
-		return fieldArrList[0].toString()
-	}
-
-	public String getDomainAlais(){
-		def nameParams = parsedHql.getNamedParameters().values().toArray()[0]
-		def domainalais = nameParams[0]
-		if (domainalais){return domainalais}
-		return null
-	}
-
-	public static getAliasFieldKey(String domainAlias, String fieldName){
-		return domainAlias + DOT + fieldName;
-	}
-
-	public String getFieldAlias(String domainAlias, String fieldName){
-		return parsedHql.aliasDomainFields.get(getAliasFieldKey(domainAlias, fieldName));
-	}
-
-	public Boolean isWrapInDiv(){
-		if (this.wrapInDiv){
-			return true
-		}else {
-			return false
-		}
-
-	}
-
-/*
-	public def getPersistentPropertyByName(String fieldName){
-		def parentdomainalais = getDomainAlais()
-		def domainMapp = writableDomains.get(parentdomainalais)
-		def domainClass = domainClassFromParseDomain(domainMapp)
-		def prop = domainClass.getPropertyByName(fieldName)
-		return prop
-	}
-
-	public static def domainClassFromParseDomain(Map domainMapp){
-		Map parsedDomain = domainMapp.get("parsedDomain")
-		def domainClass = parsedDomain.get("value")
-		return domainClass
-	}
-*/
 }

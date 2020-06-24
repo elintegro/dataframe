@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -17,12 +17,15 @@ import com.elintegro.annotation.OverridableByEditor
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.frontendlib.DataframeViewJqx
 import com.elintegro.erf.dataframe.vue.DataframeConstants
+import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.layout.StandardLayout
 import com.elintegro.erf.layout.abs.Layout
 
 import com.elintegro.erf.widget.Widget
 import com.elintegro.erf.widget.vue.InputWidgetVue
+import com.elintegro.utils.DataframeFileUtil
 import grails.gsp.PageRenderer
+import grails.util.Environment
 import grails.util.Holders
 //import grails.validation.Validateable
 import groovy.text.SimpleTemplateEngine
@@ -55,16 +58,11 @@ import java.util.Map.Entry
  */
 @Slf4j
 public class Dataframe extends DataframeSuperBean implements Serializable, DataFrameInitialization, DataframeConstants{
-	private static defaultWidget = new InputWidgetVue()
-/*
-	public static final String DASH = "-";
-	public static final String DOT = ".";
-	public static final String UNDERSCORE = "_";
-*/
 	public static final String SESSION_PARAM_NAME_PREFIX = "session_"
 	private String currentLanguage = ""
 	Dataframe parent
 	String dataframeName
+	String dataframeNameLowercase
 	String dataframeLabel = ""
 	Map domainFieldMap = [:] //This is the map corresponding to the JSON structure that we use to exchange data between front-end and server
 	@OverridableByEditor
@@ -225,6 +223,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 			throw new DataframeException("Dataframe name not set.")
 //		log.debug("dataframe created:" +dataframeName);
 		this.dataframeName = dataframeName
+		this.dataframeNameLowercase = dataframeName?dataframeName.toLowerCase():""
 		this.dataframeView.dataframeName = dataframeName
 	}
 
@@ -304,6 +303,13 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		}
 	}
 
+	public boolean isReadOnly(Map field){
+		if (field?.readOnly || this.readonly){
+			return true
+		}
+		return false
+	}
+
 	protected void addWritebleDomains(MetaField field){
 		if(!field.isReadOnly()){
 			String domainAlias = field.domain.getDomainAlias()
@@ -380,8 +386,8 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	 *This method uses meta field to add the widget and put the meta field in fields.Key on fields will be
 	 *dataframename.fieldname
 	 */
-	protecteddashDe99!
-	void buildDefaultWidget( MetaField fld){
+
+	protected void buildDefaultWidget( MetaField fld){
 
 		def widget = null
 		def dataType = fld.dataType.toString().toUpperCase()
@@ -423,29 +429,6 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 	}
 
-	/*
-	 * TODO: refactor it! we need use Widget concept to bring the data and also be ready to do it each time a field that dependent on this one changed
-	 *This method uses the params and return the list for the combobox option/radio buttons.
-	 *The result format is id of the result object will be on key on value will on the key of value.
-	 */
-	public List getSelectOptionList(def params){
-		Map field = fields.dataMap.get(params.fieldName)
-		Connection con = SessionFactoryUtils.getDataSource(sessionFactory).getConnection()
-		PreparedStatement  pstmt =  con.prepareStatement(hqlToSql(field.dictionary))
-		if(params.dependsOn == 'Yes'){
-			pstmt.setString(1,params.id)
-		}
-		ResultSet rs = pstmt.executeQuery()
-		List result=[]
-		while(rs.next()){
-			def object =[:]
-			object.put("key", rs.getString(1))
-			object.put("value", rs.getString(2))
-			result.add(object)
-		}
-		return result
-	}
-
 	/**
 	 *This method add the custom fields to the fileds maps.
 	 */
@@ -476,13 +459,18 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		List results = null
 		def sessionHibernate = sessionFactory.openSession()
 		Transaction tx = sessionHibernate.beginTransaction()
-
 		Query query =  sessionHibernate.createQuery(queryHql);
-		Query query1 = constructQuery(query, keyValue, sessionAttributes)
-		results = query1.list()
-
+		for (String parameter : query.getNamedParameters()) {
+			if(parameter.indexOf("session_") > -1){
+				def sessionParamValue = DataframeInstance.getSessionParamValue(parameter, sessionAttributes)
+				query.setParameter(parameter, sessionParamValue)
+			}else{
+				query.setParameter(parameter, keyValue)
+			}
+		}
+		results = query.list()
 		tx.commit();
-		sessionhibernate.close();
+		sessionHibernate.close();
 		return results
 	}
 
@@ -543,7 +531,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		return parsedHql.indexOfFileds.get(name)
 	}
 
-
+    //TODO: no usage, do we really neetd it?
 	def insertGetIds(Map<String, String> params) {
 
 		List result = insert(params)
@@ -581,29 +569,35 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		domainFieldMapTans.put(fieldName, ["${VALUE_ENTRY}": null])
 	}
 
-	public void addField(String fieldName, Map<String, Object> fieldProp){
+	protected void addField(String fieldName, Map<String, Object> fieldProp){
 
-		if(fieldProp && fieldName){
-			Map dbMetaFieldPropes = fields?.get(buildFullFieldName(dataframeName, fieldName))
-			if(dbMetaFieldPropes == null){//There is no Database field like this, this field is independent one, we adding name property in it if does not defined like in the key
-				if(!fieldProp.containsKey("name")){
-					fieldProp.put("name", fieldName);
-				}
-				fieldProp.put("externalDomainField",true)
-				fields.put(buildFullFieldName(dataframeName, fieldName), fieldProp)
-			}else{
-				fieldProp.put("name", dbMetaFieldPropes.get("name"));
-
-				/*if(dbMetaFieldPropes.containsKey("name") && fieldProp.containsKey("name")){
-				 if(!dbMetaFieldPropes.get("name").equals(fieldProp.get("name"))){
-				 fieldProp.put("name", dbMetaFieldPropes.get("name"));
-				 }
-				 }
-				 */
-
-				dbMetaFieldPropes?.putAll(fieldProp)
-
+		if(!fieldProp || !fieldName){
+			return
+		}
+		String fullFieldName = buildFullFieldName(dataframeName, fieldName) //<DataframeName>.<Domain Alias>.<FieldName>
+		if(!fields?.containsKey(fullFieldName)){ //There is no Database field like this, this field is independent one, we adding name property in it if does not defined like in the key
+			if(!fieldProp.containsKey("name")){
+				fieldProp.put("name", fieldName);
 			}
+			fieldProp.put("externalDomainField",true)
+			if(fieldProp.insertAfter){
+				String formattedInsertAfterKey = buildFullFieldName(dataframeName, fieldProp.insertAfter)
+				if(fields.getList().contains(formattedInsertAfterKey)){
+					fields.insertAfter(fullFieldName, fieldProp, formattedInsertAfterKey)
+				}
+			}else if(fieldProp.insertBefore){
+				String formattedInsertBeforeKey = buildFullFieldName(dataframeName, fieldProp.insertBefore)
+				if(fields.getList().contains(formattedInsertBeforeKey)){
+					fields.insert(fullFieldName, fieldProp, formattedInsertBeforeKey)
+				}
+			}else{
+				fields.put(fullFieldName, fieldProp)
+			}
+			addTransitFieldsToDataStructure(fieldName, fieldProp)
+		}else{ //There is a database field, our addFieldDef parameters are to enhance them and/or override default values
+			Map dbMetaFieldPropes = fields?.get(fullFieldName)
+			fieldProp.put("name", dbMetaFieldPropes.get("name")); //Since the field is from Database the name should be exactly like in the dbMetaFieldProps
+			dbMetaFieldPropes?.putAll(fieldProp)
 		}
 	}
 
@@ -615,6 +609,9 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 		if(!scripts){
 			prepare(/*currentFldLayout, currentFrameLayout*/) // TODO by Shai: resolve overloading ambiguity issue when both currentFldLayout, currentFrameLayout are null.
+			if(Environment.current == Environment.DEVELOPMENT){
+				DataframeFileUtil.writeStringIntoFile("AppDataframe.vue", scripts.toString())
+			}
 		}
 		return scripts
 	}
@@ -638,13 +635,10 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		return resultPage
 	}
 
-	public String preparejQTreeHtml(){
-
-	}
-
 	public String getHtml(){
 		def lhcLocale = LocaleContextHolder.getLocale()
 		boolean refresh = false
+//		componentRegistered = false
 		if(lhcLocale.baseLocale.language != currentLanguage){
 			refresh = true
 			currentLanguage = lhcLocale.baseLocale.language
@@ -658,9 +652,13 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 			prepare(currentFldLayout, currentFrameLayout)
 
 		}
-		return resultPage
+		return getResultPage_()
 	}
 
+	protected String getResultPage_(){
+		//TODO: Put SPRING_SECURITY based filter in here
+		return resultPage
+	}
 
 	/**
 	 * This method return the ajax script for saving the objects as per hql.
@@ -1038,7 +1036,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	 * @param frameLayout
 	 * @return
 	 */
-	private String prepare(){
+	protected String prepare(){
 		Layout defLayout = new StandardLayout()
 		return prepare(null, defLayout)
 	}
@@ -1049,7 +1047,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	 * @param frameLayout
 	 * @return
 	 */
-	private String prepare(String frameLayout){
+	protected String prepare(String frameLayout){
 		Layout defLayout = new StandardLayout()
 		return prepare(frameLayout, null)
 	}
@@ -1060,9 +1058,9 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	 * @param frameLayout
 	 * @return
 	 */
-	private String prepare(String fieldLayout, String frameLayoutName){
+	protected String prepare(String fieldLayout, String frameLayoutName){
 
-		if(frameLayoutName.indexOf(".")<0){
+		if(frameLayoutName.indexOf(".") < 0){
 			frameLayoutName = "com.elintegro.erf.layout."+frameLayoutName
 		}
 		Layout frameLayout = Class.forName(frameLayoutName)
@@ -1081,12 +1079,12 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	}
 
 	/**
-	 * Prepare DataFrame to display
+	 * Prepare DataFrame internal context to be ready for work
 	 * @param fieldLayout
 	 * @param frameLayout
 	 * @return
 	 */
-	private String prepare(String fieldLayout, Layout frameLayout){
+	protected String prepare(String fieldLayout, Layout frameLayout){
 
 
 		init();
@@ -1576,11 +1574,17 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		return buildFullFieldName(dataframeName, field.domainAlias , field.name);
 	}
 
-
 	public static String buildFullFieldName(String dataframeName, String alias, String fieldName){
 		return "${dataframeName}${Dataframe.DOT}${alias}${Dataframe.DOT}${fieldName}";
 	}
 
+
+	public static String buildFullFieldNameKeyParamWithDot(Dataframe df, String domainAlias , String dbFieldName, String namedParameter){
+		StringBuilder sb = new StringBuilder();
+		sb.append("key").append(DOT).append(df.dataframeName).append(DOT).append(domainAlias).append(DOT);
+		sb.append(dbFieldName).append(DOT).append(namedParameter);
+		return sb.toString();
+	}
 
 	public static String buildFullFieldName_(String dataframeName, String alias, String fieldName){
 		return "${dataframeName}${Dataframe.DASH}${alias}${Dataframe.DASH}${fieldName}";
@@ -1589,6 +1593,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	public static String buildFullFieldName(String dataframeName, String fieldName){
 		return buildKeyFieldParamForMetaData(dataframeName, fieldName);
 	}
+
 
 
 	//This is when fieldName actually comprises from domain.fieldName
@@ -1603,6 +1608,82 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		}
 		return "${dataframeName}${Dataframe.DASH}${fieldName}";
 	}
+
+
+
+
+	public static String buildKeyFieldParam(String dataframeName, String domainAlias, String fieldName){
+		return "$dataframeName${UNDERSCORE}$domainAlias${UNDERSCORE}$fieldName";
+	}
+
+	/**
+	 *
+	 */
+	public static String buildFullFieldNameKeyParam(DataframeVue df, String namedParameter){
+		String domainName = df.getNamedParamDomainAlias(namedParameter);
+		String fieldName = df.getNamedParamFieldName(namedParameter);
+		StringBuilder sb = new StringBuilder();
+		sb.append("key").append(UNDERSCORE).append(df.dataframeName).append(UNDERSCORE).append(domainName).append(UNDERSCORE);
+		sb.append(fieldName).append(UNDERSCORE).append(namedParameter);
+		return sb.toString();
+	}
+
+	public String getFieldNameFromFieldId(String fieldId){
+		String[] fieldArr = fieldId.split(UNDERSCORE);
+		def keyWords = ["key", "ref", "parent"];
+		boolean keyWordTrue = fieldArr[0] in keyWords;
+		if(keyWordTrue && fieldArr.size() > 3){
+			return fieldArr[3];
+		}
+		return fieldArr[fieldArr.size() - 1];
+	}
+
+	public String getFieldNameSplitDot(String fieldId){
+		String[] fieldArr = fieldId.split("\\.");
+		def keyWords = ["key", "ref", "parent"];
+		boolean keyWordTrue = fieldArr[0] in keyWords;
+		if(keyWordTrue && fieldArr.size() > 3){
+			return fieldArr[3];
+		}
+		return fieldArr[fieldArr.size() - 1];
+	}
+
+	public String getFieldDoaminFromFieldId(String fieldId){
+		String[] fieldArr = fieldId.split(UNDERSCORE);
+
+		def keyWords = ["key", "ref", "parent"];
+		boolean keyWordTrue = fieldArr[0] in keyWords;
+		if(keyWordTrue && fieldArr.size() >= 3){
+			return fieldArr[2]; //key-<dataframe>-<domain>- ...
+		}
+
+		if(fieldArr.size() == 3){
+			return fieldArr[1];
+		}
+		return "";
+	}
+
+	public String getFieldDataframeFromFieldId(String fieldId){
+		String[] fieldArr = fieldId.split(UNDERSCORE);
+		if(fieldArr.size() == 3){
+			return fieldArr[0];
+		}
+		return "";
+	}
+
+
+	public String getFieldValueFromParametersAndName(Map parameters, Map field){
+		parameters.each{ key, value ->
+			String fullNameKey = getFieldId(field);
+			if(key == fullNameKey ){
+				return value
+			}
+		}
+		return ""
+	}
+
+
+
 
 	/**
 	 *
@@ -1642,64 +1723,21 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	}
 
 
+
+	public static String buildKeyFieldParam(String dataframeName, Map field){
+		String fieldnameStr = field.name.replace(DOT, UNDERSCORE);
+		def doaminNameStr = (field.domainAlias == null)?field.domain?.key:field.domainAlias;
+		if(fieldnameStr.indexOf(UNDERSCORE) <= 0 && !"".equals(doaminNameStr) && doaminNameStr != null){
+			fieldnameStr = "${doaminNameStr}${UNDERSCORE}${fieldnameStr}";
+		}
+		return "$dataframeName${UNDERSCORE}$fieldnameStr";
+	}
+
 	public static String buildFullFieldNameKeyParam(Dataframe df, String domainAlias , String dbFieldName, String namedParameter){
 		StringBuilder sb = new StringBuilder();
 		sb.append("key").append(UNDERSCORE).append(df.dataframeName).append(UNDERSCORE).append(domainAlias).append(UNDERSCORE);
 		sb.append(dbFieldName).append(UNDERSCORE).append(namedParameter);
 		return sb.toString();
-	}
-
-	public String getFieldNameFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(DASH);
-		def keyWords = ["key", "ref", "parent"];
-		boolean keyWordTrue = fieldArr[0] in keyWords;
-		if(keyWordTrue && fieldArr.size() > 3){
-			return fieldArr[3];
-		}
-		return fieldArr[fieldArr.size() - 1];
-	}
-
-	public String getFieldNameSplitDot(String fieldId){
-		String[] fieldArr = fieldId.split("\\.");
-		def keyWords = ["key", "ref", "parent"];
-		boolean keyWordTrue = fieldArr[0] in keyWords;
-		if(keyWordTrue && fieldArr.size() > 3){
-			return fieldArr[3];
-		}
-		return fieldArr[fieldArr.size() - 1];
-	}
-
-	public String getFieldDoaminFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(DASH);
-
-		def keyWords = ["key", "ref", "parent"];
-		boolean keyWordTrue = fieldArr[0] in keyWords;
-		if(keyWordTrue && fieldArr.size() >= 3){
-			return fieldArr[2]; //key-<dataframe>-<domain>- ...
-		}
-
-		if(fieldArr.size() == 3){
-			return fieldArr[1];
-		}
-		return "";
-	}
-
-	public String getFieldDataframeFromFieldId(String fieldId){
-		String[] fieldArr = fieldId.split(DASH);
-		if(fieldArr.size() == 3){
-			return fieldArr[0];
-		}
-		return "";
-	}
-
-	public String getFieldValueFromParametersAndName(Map parameters, Map field){
-		parameters.each{ key, value ->
-			String fullNameKey = getFieldId(field);
-			if(key == fullNameKey ){
-				return value
-			}
-		}
-		return ""
 	}
 
 	public String toString(){
