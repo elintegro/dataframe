@@ -306,9 +306,9 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id,application.resume,application.avatar  from Application application where application.id=:id"
+        //hql = "select application.id,application.resume,application.images from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        saveButton = true
+        saveButton = false
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         tab = true
@@ -316,18 +316,12 @@ beans {
         doBeforeSave = """
             //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rather then insert a new one.                          
             excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
-            allParams['vueNewEmployeeUploadResumeDataframe_application_avatar'] = this.state.vueNewEmployeeUploadResumeDataframe_application_avatar;
         """
-        doAfterSave = """
-                         excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_vueNewEmployeeUploadResumeDataframe_application_id_id", response.newData.application['application.id']);
-                         excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSelfAssesmentDataframe-tab-id');
-                      """
         addFieldDef = [
-                "application.avatar":["name":"avatar"
+                "application.images":["name":"images"
                                       ,"widget":"PictureUploadWidgetVue"
                                       ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                                      ,multiple:false
-                                      ,insertAfter: "application.resume"
+                                      ,multiple:true
                                       ,editButton: true
                                       ,valueMember:"avatar"
                                       ,deleteButton:true
@@ -338,16 +332,17 @@ beans {
                                       ,"widget":"FilesUploadWidgetVue"
                                       ,valueMember: "resume"
                                       ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                                      ,multiple:false
+                                      ,multiple:true
                                       ,"accept":".pdf,.docx,.doc,.csv"
 
                                      ]
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
+        dataframeButtons = [
+                next:[name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""this.newEmployeeUploadResume()""",
+                      flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6'],url: ""],
+                previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
                                         flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
-//                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
-//                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("vueNewEmployeeUploadResumeDataframeLayout")
     }
@@ -435,7 +430,7 @@ beans {
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         tab = true
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
-        doAfterSave = """self.\$router.push("/vueNewEmployeeThankYouMessageAfterSaveDataframe/0");"""
+        doAfterSave = """self.\$router.push("/thank-you-message/0");"""
         dataframeButtons = [
                 previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
@@ -446,8 +441,10 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeThankYouMessageAfterSaveDataframe']
         saveButton = false
+        currentRoute = 'thank-you-message'
         route = true
         doBeforeRefresh= """allParams['id'] = excon.getFromStore('vueNewEmployeeAddtionalQuestionsDataframe','key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id');"""
+        doAfterRefresh = """setTimeout(function(){ self.\$router.push("/home/0");this.location.reload();}, 10000);"""
         hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:id"
         currentFrameLayout = ref("vueNewEmployeeThankYouMessageAfterSaveDataframeLayout")
 
@@ -734,7 +731,7 @@ beans {
                         , name            : "applicant"
 
                         , hql             : """select application.id as Id, person.firstName as FirstName ,person.lastName as LastName,  person.email as Email, 
-                                                person.phone as Phone from Application application inner join application.applicant person """
+                                                person.phone as Phone from Application application inner join application.applicant person"""
                         , gridWidth       : 820
                         , showGridSearch  : true
                         , internationalize: true
