@@ -236,10 +236,6 @@ beans {
         saveButton = false
         initOnPageLoad = false
         route = true
-        addFieldDef = [
-                "name":[name: "name",widget: "InputWidgetVue"],
-
-                "resume":[name:"resume",widget: "FilesDisplayWidgetVue","aspectRatio":"1","height":100,"width":100]]
         //childDataframes = ["vueCareersPageButtonDataframe"]
         currentFrameLayout = ref("vueCareersDataframeLayout")
     }
@@ -807,9 +803,9 @@ beans {
         putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantCVDataframe_prop.key"""
         doAfterRefresh = """self.afterRefreshing(response);"""
-        hql = "select application.id as Id, application.resume from Application application where application.id=:id"
+        hql = "select application.id as Id, files.fileName from Application application inner join application.files as files where application.id=:id"
         addFieldDef = [
-                "application.resume":[name:"resume",widget: "FilesDisplayWidgetVue","aspectRatio":"1","height":100,"width":100]]
+                "files.fileName":[name:"fileName",widget: "FilesDisplayWidgetVue","aspectRatio":"1","height":100,"width":100]]
         dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
                                                                                 \n""", flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6']],
                             previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");

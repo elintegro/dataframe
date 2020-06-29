@@ -507,6 +507,47 @@ beans {
                    }
                           """
     }
+    vueNewEmployeeUploadResumeDataframe_script(VueJsEntity){
+        methods = """
+                 newEmployeeUploadResume(){
+                      var allParams = this.state;
+                      var avatar = [];
+                      var pictures =  this.vueNewEmployeeUploadResumeDataframe_images_files;
+                      for(var i=0; i< pictures.length; i++){
+                         avatar[i] = pictures[i].name;
+                      }
+                      allParams['vueNewEmployeeUploadResumeDataframe_avatar'] = avatar;
+                      var doc = [];
+                      var files = this.vueNewEmployeeUploadResumeDataframe_resume_files;
+                      for(var i=0; i< files.length; i++){
+                         doc[i] = files[i].name;
+                      }
+                      allParams['vueNewEmployeeUploadResumeDataframe_resume'] = doc;
+                      allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = excon.getFromStore("vueNewEmployeeBasicInformationDataframe","key_application_id")                                                                              
+                      var self = this;
+                      if (this.\$refs.vueNewEmployeeUploadResumeDataframe_form.validate()){
+                          axios({
+                              method:'post',
+                              url:'${contextPath}/EmployeeApplication/applicantDocuments',
+                              data: allParams
+                          }).then(function(responseData){
+                              var response = responseData;
+                              excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_vueNewEmployeeUploadResumeDataframe_application_id_id", response.data['application_id']);
+                              self.vueNewEmployeeUploadResumeDataframe_images_ajaxFileSave(response,allParams);
+                              self.vueNewEmployeeUploadResumeDataframe_resume_ajaxFileSave(response,allParams);
+                              excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeSelfAssesmentDataframe-tab-id");
+  
+                          });
+                          
+               
+                      }  
+                      else{
+                           alert("Error in saving")
+                      }
+                     
+                 }
+        """
+    }
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
         created = """this.fillApplicationSkillTable();"""
         methods = """
@@ -600,21 +641,21 @@ beans {
         methods ="""afterRefreshing(response){
               
                                  var params = response;
-                                 var fileName = params.vueElintegroApplicantCVDataframe_application_resume;
+                                 var fileName = params.vueElintegroApplicantCVDataframe_files_fileName;
                                   var extension = fileName.split('.').pop();
                                   if(extension == 'pdf'){
                                     var defaultImageUrlForPdf = '${pathForPdf}'
-                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume','${pathForPdf}')   
+                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForPdf}')   
                                   }
                                   else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
-                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume','${pathForExcel}')   
+                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForExcel}')   
 
                                   }
                                   else if(extension == 'doc' || extension == 'docx'){
-                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume','${pathForDocFile}')   
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForDocFile}')   
                                   }
                                   
-                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_application_resume_name',fileName)
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
                                  
                                   }
                              

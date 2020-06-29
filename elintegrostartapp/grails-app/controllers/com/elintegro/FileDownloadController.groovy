@@ -27,15 +27,15 @@ class FileDownloadController {
 //            }
 //            response.setContentType(contentType)
             try {
-//                response.setContentType("application/octet-stream")
-//                response.setHeader("Content-disposition", "attachment;filename=${file.getName()}")
-//                def outputStream = response.getOutputStream()
-//                outputStream << file.bytes
-//                outputStream.flush()
-//                outputStream.close()
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-disposition", "attachment;filename=${file.getName()}")
+                def outputStream = response.getOutputStream()
+                outputStream << file.bytes
+                outputStream.flush()
+                outputStream.close()
 
 
-                render(contentType: 'application/pdf', file: file, fileName: fileName, encoding: "UTF-8")
+//                render(contentType: 'application/pdf', file: file, fileName: fileName, encoding: "UTF-8")
             }
             catch(Exception e){
                 log.debug("Error downloading file" + e)
