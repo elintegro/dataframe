@@ -614,7 +614,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
         childDataframes=["vueElintegroResetPasswordDataframe"]
-        doAfterSave = """setTimeout(function(){ vueElintegroUserProfileDataframe.\$router.push('/');this.location.reload();}, 3000);"""
+        doAfterSave = """"""
         route = true
         currentRoute = 'user-profile'
         addFieldDef =[
