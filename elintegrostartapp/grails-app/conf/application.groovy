@@ -404,7 +404,7 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 docker {
 	server.contextPath = "/"
 	rootPath = ""
-	grails.serverURL = "http://95.217.159.62:9090"
+	grails.serverURL = "https://web.elintegro.com"
 	grails.plugin.springsecurity.ui.register.emailFrom='elintegro@QA'
 	dataSource {
 		logSql = true
