@@ -136,7 +136,7 @@ images {
 		s3 = false
 	}
 //	storageLocation = "/opt/tomcat-8/webapps"
-	storageLocation = "/opt/tomcat-8/webapps"
+	storageLocation = "/opt/apache-tomcat-9.0.33/webapps"
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
 	defaultImagePath = "/assets/$defaultImageName"

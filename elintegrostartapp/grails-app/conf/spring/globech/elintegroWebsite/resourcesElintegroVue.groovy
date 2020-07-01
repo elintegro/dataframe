@@ -545,15 +545,16 @@ beans {
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doAfterSave = """ excon.saveToStore('vueElintegroNavigationButtonDataframe','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
-                           """
+                           excon.setVisibility("vueElintegroRegisterDataframe", false); """
         addFieldDef =[
                 "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'email.required.message']],"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                 "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname"
                                   ,"validationRules":[[condition:"v => !!v",message:"FirstName.required.message"],[condition: "v => (v && v.length <= 30)",message:"FirstName.must.be.less.than.30"]]],
                 "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname"
                                  ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"],[condition:"v => (v && v.length <= 30)", message:"LastName.must.be.less.than.30"]]]
-                ,"user.password":[widget: "PasswordWidgetVue", "width":"150"
-                                  ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]]
+                ,"user.password":[widget: "PasswordWidgetVue", "width":"150",
+                                  "validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && new RegExp('^(?=.*?[#?!@%^&*-])').test(v))",message:"password.contain.special.character"],
+                                  [condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]]
                 ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password"
                               ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroRegisterDataframe_user_password)",message:"Password.and.Confirm.Password."]]]
         ]
@@ -595,7 +596,7 @@ beans {
 
         ]
 //        this.location.reload();
-        dataframeButtons = [Logout     : [name: "logout", type: "button",attr: """style='background-color:#1976D2; color:white;' """, url: "${contextPath}/logoff", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]],
+        dataframeButtons = [Logout     : [name: "logout", type: "button",attr: """style='background-color:#1976D2; color:white;' """, url: "${contextPath}/logoff", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/home/0");this.location.reload();"""]],
                             editProfile: [name: 'editProfile', type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: false, "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "this.state.vueElintegroProfileMenuDataframe_person_id;", refDataframe: ref('vueElintegroUserProfileDataframe')]]
         currentFrameLayout = ref("vueElintegroProfileMenuDataframeLayout")
     }
@@ -605,8 +606,8 @@ beans {
         bean.constructorArgs = ['vueElintegroUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday,  person.phone from Person as person where person.id=:id"
-        saveButton = true
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday,  person.phone,person.mainPicture from Person as person where person.id=:id"
+        saveButton = false
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         deleteButton = false
@@ -632,7 +633,7 @@ beans {
                 ],
                 "person.bday":[
                         widget: "DateWidgetVue"
-                        ,"required": "required"
+                        ,"locale":"en"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg12', 'xl4']],
                 "person.email":[
                          widget: "EmailWidgetVue"
@@ -677,7 +678,8 @@ beans {
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button",attr: """style='background-color:#1976D2; color:white;' """, url: "", showAsDialog: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueElintegroResetPasswordDataframe")] ]
+        dataframeButtons = [submit: [name:"save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: "this.editProfile();"],
+         resetPassword: [name:"resetPassword", type: "button",attr: """style='background-color:#1976D2; color:white;' """, url: "", showAsDialog: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueElintegroResetPasswordDataframe")] ]
 
         currentFrameLayout = ref("vueElintegroUserProfileDataframeLayout")
 
