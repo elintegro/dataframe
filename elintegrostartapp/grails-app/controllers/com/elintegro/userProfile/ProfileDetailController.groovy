@@ -21,11 +21,11 @@ class ProfileDetailController {
         person.bday = date
         person.mainPicture = profileData.vueElintegroUserProfileDataframe_propertyImages
         person.phone = profileData.vueElintegroUserProfileDataframe_person_phone
-//            for (item in profileData.vueElintegroUserProfileDataframe_person_languages) {
-//                Language languages = Language.findById(item.id)
-//                person.addToLanguages(languages)
+            for (item in profileData.vueElintegroUserProfileDataframe_person_languages) {
+                Language languages = Language.findById(item.id)
+                person.addToLanguages(languages)
              person.save(flush:true)
-//            }
+            }
         def profileDetail = [person: profileData]
          resultData = [success: true,params:profileData,newData: profileDetail]
     }
