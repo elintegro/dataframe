@@ -191,10 +191,38 @@ beans {
                        vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
     }
     vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
+        def imagePath = Holders.grailsApplication.config.images.storageLocation + "/"
         created = """this.vueElintegroProfileMenuDataframeShow();"""
 
         methods = """vueElintegroProfileMenuDataframeShow : function(){
-                  excon.setVisibility("vueElintegroProfileMenuDataframe",false)}
+                  excon.setVisibility("vueElintegroProfileMenuDataframe",false)
+                  },\n
+                  
+                  editProfile : function(){
+                                  var allParams = this.state;
+                                  allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
+                                  var self = this;
+                                  var imageName = this.state.vueElintegroUserProfileDataframe_propertyImages
+                                  var imageUrl = '$imagePath' + imageName
+                                  if (this.\$refs.vueElintegroUserProfileDataframe_form.validate()){
+                                     axios({
+                                           method:'post',
+                                           url:'${contextPath}/ProfileDetail/editProfileData',
+                                           data: allParams
+                                     }).then(function(responseData){
+                                         var response = responseData;
+                                         self.vueElintegroUserProfileDataframe_propertyImages_ajaxFileSave(response,allParams);
+                                         excon.saveToStore('vueElintegroUserProfileDataframe','vueElintegroUserProfileDataframe_person_mainPicture',imageUrl)
+                                         excon.saveToStore('vueElintegroProfileMenuDataframe','vueElintegroProfileMenuDataframe_person_mainPicture',imageUrl)
+                                         console.log(response);
+                                      });
+                
+                                  }   
+                                  else{
+                                       alert("Error in saving")
+                                  }
+                  
+                  }
                   """
     }
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
