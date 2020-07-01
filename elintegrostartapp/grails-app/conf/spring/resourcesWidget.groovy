@@ -6,6 +6,7 @@ import com.elintegro.erf.widget.vue.DataframeWidgetVue
 import com.elintegro.erf.widget.vue.DateWidgetVue
 import com.elintegro.erf.widget.vue.EmailWidgetVue
 import com.elintegro.erf.widget.vue.FKWidgetVue
+import com.elintegro.erf.widget.vue.FilesDisplayWidgetVue
 import com.elintegro.erf.widget.vue.GalleryDisplayWidgetVue
 import com.elintegro.erf.widget.vue.GridWidgetVue
 import com.elintegro.erf.widget.vue.ImageUploadWidgetVue
@@ -51,4 +52,5 @@ beans {
 	TextDisplayWidgetVue(TextDisplayWidgetVue){}
 	FileUploadWidgetVue(FileUploadWidgetVue){}
 	FilesUploadWidgetVue(FilesUploadWidgetVue){}
+	FilesDisplayWidgetVue(FilesDisplayWidgetVue)
 }

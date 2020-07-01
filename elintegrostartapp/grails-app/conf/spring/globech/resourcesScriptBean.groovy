@@ -191,10 +191,38 @@ beans {
                        vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
     }
     vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
+        def imagePath = Holders.grailsApplication.config.images.storageLocation + "/"
         created = """this.vueElintegroProfileMenuDataframeShow();"""
 
         methods = """vueElintegroProfileMenuDataframeShow : function(){
-                  excon.setVisibility("vueElintegroProfileMenuDataframe",false)}
+                  excon.setVisibility("vueElintegroProfileMenuDataframe",false)
+                  },\n
+                  
+                  editProfile : function(){
+                                  var allParams = this.state;
+                                  allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
+                                  var self = this;
+                                  var imageName = this.state.vueElintegroUserProfileDataframe_propertyImages
+                                  var imageUrl = '$imagePath' + imageName
+                                  if (this.\$refs.vueElintegroUserProfileDataframe_form.validate()){
+                                     axios({
+                                           method:'post',
+                                           url:'${contextPath}/ProfileDetail/editProfileData',
+                                           data: allParams
+                                     }).then(function(responseData){
+                                         var response = responseData;
+                                         self.vueElintegroUserProfileDataframe_propertyImages_ajaxFileSave(response,allParams);
+                                         excon.saveToStore('vueElintegroUserProfileDataframe','vueElintegroUserProfileDataframe_person_mainPicture',imageUrl)
+                                         excon.saveToStore('vueElintegroProfileMenuDataframe','vueElintegroProfileMenuDataframe_person_mainPicture',imageUrl)
+                                         console.log(response);
+                                      });
+                
+                                  }   
+                                  else{
+                                       alert("Error in saving")
+                                  }
+                  
+                  }
                   """
     }
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
@@ -507,6 +535,47 @@ beans {
                    }
                           """
     }
+    vueNewEmployeeUploadResumeDataframe_script(VueJsEntity){
+        methods = """
+                 newEmployeeUploadResume(){
+                      var allParams = this.state;
+                      var avatar = [];
+                      var pictures =  this.vueNewEmployeeUploadResumeDataframe_images_files;
+                      for(var i=0; i< pictures.length; i++){
+                         avatar[i] = pictures[i].name;
+                      }
+                      allParams['vueNewEmployeeUploadResumeDataframe_avatar'] = avatar;
+                      var doc = [];
+                      var files = this.vueNewEmployeeUploadResumeDataframe_resume_files;
+                      for(var i=0; i< files.length; i++){
+                         doc[i] = files[i].name;
+                      }
+                      allParams['vueNewEmployeeUploadResumeDataframe_resume'] = doc;
+                      allParams['vueNewEmployeeUploadResumeDataframe_application_id'] = excon.getFromStore("vueNewEmployeeBasicInformationDataframe","key_application_id")                                                                              
+                      var self = this;
+                      if (this.\$refs.vueNewEmployeeUploadResumeDataframe_form.validate()){
+                          axios({
+                              method:'post',
+                              url:'${contextPath}/EmployeeApplication/applicantDocuments',
+                              data: allParams
+                          }).then(function(responseData){
+                              var response = responseData;
+                              excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_vueNewEmployeeUploadResumeDataframe_application_id_id", response.data['application_id']);
+                              self.vueNewEmployeeUploadResumeDataframe_images_ajaxFileSave(response,allParams);
+                              self.vueNewEmployeeUploadResumeDataframe_resume_ajaxFileSave(response,allParams);
+                              excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeSelfAssesmentDataframe-tab-id");
+  
+                          });
+                          
+               
+                      }  
+                      else{
+                           alert("Error in saving")
+                      }
+                     
+                 }
+        """
+    }
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
         created = """this.fillApplicationSkillTable();"""
         methods = """
@@ -559,6 +628,9 @@ beans {
                   }"""
 
     }
+    vueNewEmployeeThankYouMessageAfterSaveDataframe_script(VueJsEntity) { bean ->
+        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_firstName) + " " + excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_lastName)}"""
+    }
 
     vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
         data = "vueElintegroApplicantDetailsDataframe_tab_model : this.tabValue,\nvueElintegroApplicantDetailsDataframe_display: true, \n"
@@ -573,13 +645,49 @@ beans {
         watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
     }
+    vueElintegroApplicantCVDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroApplicantCVDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantCVDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroApplicantCVDataframe(){return this.vueElintegroApplicantCVDataframe_prop.key},"
+    }
     vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
     }
+    vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroCommentPageForApplicantDataframe:{handler: function(val, oldVal) {this.vueElintegroCommentPageForApplicantDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroCommentPageForApplicantDataframe(){return this.vueElintegroCommentPageForApplicantDataframe_prop.key},"
+    }
+
     vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
         computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
+    }
+    vueElintegroApplicantCVDataframe_script(VueJsEntity){ bean ->
+        def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
+        def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
+        def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
+        methods ="""afterRefreshing(response){
+              
+                                 var params = response;
+                                 var fileName = params.vueElintegroApplicantCVDataframe_files_fileName;
+                                  var extension = fileName.split('.').pop();
+                                  if(extension == 'pdf'){
+                                    var defaultImageUrlForPdf = '${pathForPdf}'
+                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForPdf}')   
+                                  }
+                                  else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
+                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForExcel}')   
+
+                                  }
+                                  else if(extension == 'doc' || extension == 'docx'){
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForDocFile}')   
+                                  }
+                                  
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
+                                 
+                                  }
+                             
+                                  """
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
