@@ -775,6 +775,7 @@ beans {
         saveButton = false
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
         initOnPageLoad = true
+        putFillInitDataMethod = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         readonly = true
         addFieldDef =[
@@ -798,6 +799,13 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantCVDataframe']
         tab = true
         saveButton = false
+        initOnPageLoad = true
+        putFillInitDataMethod = true
+        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantCVDataframe_prop.key"""
+        doAfterRefresh = """self.afterRefreshing(response);"""
+        hql = "select application.id as Id, files.fileName from Application application inner join application.files as files where application.id=:id"
+        addFieldDef = [
+                "files.fileName":[name:"fileName",widget: "FilesDisplayWidgetVue","aspectRatio":"1","height":100,"width":100]]
         dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
                                                                                 \n""", flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6']],
                             previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
@@ -810,6 +818,8 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantQuestionAnswerDataframe']
         tab = true
         readonly = true
+        initOnPageLoad = true
+        putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
         saveButton = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -825,6 +835,8 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroCommentPageForApplicantDataframe']
         tab = true
+        initOnPageLoad = true
+        putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroCommentPageForApplicantDataframe_prop.key"""
         saveButton = false
         hql="select application.id,application.comments,application.lastComment from Application application where application.id=:id"

@@ -601,8 +601,7 @@ beans {
 
     }
     vueNewEmployeeThankYouMessageAfterSaveDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_firstName) + " " + excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_lastName)},
-                       """
+        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_firstName) + " " + excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_lastName)}"""
     }
 
     vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
@@ -618,13 +617,49 @@ beans {
         watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
     }
+    vueElintegroApplicantCVDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroApplicantCVDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantCVDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroApplicantCVDataframe(){return this.vueElintegroApplicantCVDataframe_prop.key},"
+    }
     vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
     }
+    vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroCommentPageForApplicantDataframe:{handler: function(val, oldVal) {this.vueElintegroCommentPageForApplicantDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroCommentPageForApplicantDataframe(){return this.vueElintegroCommentPageForApplicantDataframe_prop.key},"
+    }
+
     vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
         computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
+    }
+    vueElintegroApplicantCVDataframe_script(VueJsEntity){ bean ->
+        def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
+        def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
+        def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
+        methods ="""afterRefreshing(response){
+              
+                                 var params = response;
+                                 var fileName = params.vueElintegroApplicantCVDataframe_files_fileName;
+                                  var extension = fileName.split('.').pop();
+                                  if(extension == 'pdf'){
+                                    var defaultImageUrlForPdf = '${pathForPdf}'
+                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForPdf}')   
+                                  }
+                                  else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
+                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForExcel}')   
+
+                                  }
+                                  else if(extension == 'doc' || extension == 'docx'){
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForDocFile}')   
+                                  }
+                                  
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
+                                 
+                                  }
+                             
+                                  """
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
