@@ -7,7 +7,7 @@ interface DataframeConstants {
     static final String SESSION_PARAM_NAME_PREFIX = "session_"
     static final int BIG_TEXT_FIELD_LENGTH = 255;
     static final String PERSISTERS = "persisters"
-    static final String DOMAIN_KEYS = "doamin_keys"
+    static final String DOMAIN_KEYS = "domain_keys"
     static final String VALUE_ENTRY = "value"
     static final String TRANSITS = "transits"
     static final String NAMED_PARAM = "namedParameters"

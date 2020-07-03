@@ -206,6 +206,7 @@ class DataframeController {
 //		ajaxSave(params)
 //
 //	}
+
 	def ajaxSave(){
 		def resultData = ajaxSaveRaw();
 		resultData.remove("dfInstance")
@@ -238,11 +239,11 @@ class DataframeController {
 
 		Map<String, Map> resultAlias = [:]
 		savedResultMap.each { domainAlias, domainObj ->
-			def doamin = domainObj[0]
+			def domain = domainObj[0]
 			def domainInstance = domainObj[1]
-			doamin?.keys?.each{ key ->
+			domain?.keys?.each{ key ->
 				def keyValue = domainInstance."${key}"
-				generatedKeys.put("${doamin.parsedDomain}_${key}", keyValue)
+				generatedKeys.put("${domain.parsedDomain}_${key}", keyValue)
 				generatedKeysArr.add(keyValue)
 			}
 

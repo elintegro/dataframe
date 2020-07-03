@@ -73,7 +73,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 
 //Parameters required by VueJs
-	String scripts = ""
+	String vueRoutes = ""
+	//TODO make it injected in Spring way!
+	private DataframeView dataframeView = new DataframeViewJqxVue(this)
 	boolean route = false // set to make dfr route(change in url) or dynamic
 	boolean tab = false //Is tab view active in dataframe
 	List<String> childDataframes = new ArrayList<>()
@@ -127,6 +129,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		this.dataframeView.dataframeName = dataframeName
 
 		flexGridValues = flexGridValues?:LayoutVue.defaultGridValues
+	}
+
+	void init(){
+		super.init()
+		vueJsBuilder = new VueJsBuilder(this)
 	}
 
 	/**
@@ -250,10 +257,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	 * @return
 	 */
 	protected String prepare(String fieldLayout, Layout frameLayout){
-		if(!frameLayout.getClass() != LayoutVue.class ){
-			throw new DataframeException("For Vue Js make sure the layout parameter object is LayoutVue type. You trying to provide second argument of type: ${frameLayout.getClass()} instead!");
-		}
-
 		init();
 		currentFldLayout = fieldLayout
 		if(frameLayout != null){
@@ -943,9 +946,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
     //Deprecate this one as soon as the getFieldJSONModelNameVue is ready and in use
 	public String getFieldModelNameVue(Map field){
 		String fieldnameStr = field.name.replace(DOT, UNDERSCORE);
-		def doaminNameStr = field.domain?.key
-		if(fieldnameStr.indexOf(UNDERSCORE) <= 0 && !"".equals(doaminNameStr) && doaminNameStr != null){
-			fieldnameStr = "${doaminNameStr}${UNDERSCORE}${fieldnameStr}";
+		def domainNameStr = field.domain?.key
+		if(fieldnameStr.indexOf(UNDERSCORE) <= 0 && !"".equals(domainNameStr) && domainNameStr != null){
+			fieldnameStr = "${domainNameStr}${UNDERSCORE}${fieldnameStr}";
 		}
 		return "$dataframeName${UNDERSCORE}$fieldnameStr";
 	}

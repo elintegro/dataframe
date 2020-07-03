@@ -17,6 +17,7 @@ import com.elintegro.annotation.OverridableByEditor
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.frontendlib.DataframeViewJqx
 import com.elintegro.erf.dataframe.vue.DataframeConstants
+import com.elintegro.erf.dataframe.vue.DataframeViewJqxVue
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.layout.StandardLayout
 import com.elintegro.erf.layout.abs.Layout
@@ -80,6 +81,10 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	@OverridableByEditor
 	boolean insertButton = false
 	@OverridableByEditor
+	boolean resetButton = false
+	@OverridableByEditor
+	boolean cancelButton = false
+	@OverridableByEditor
 	boolean wrapInForm = true
 	boolean wrapInDiv = false
 	boolean validateForm = false
@@ -117,24 +122,33 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	Map summaryAfterSave = [showSummary: false]
 	static int BIG_TEXT_FIELD_LENGTH = 50;
 
-	private StringBuilder saveScriptJs = new StringBuilder();
-	private StringBuilder doAfterSaveStringBuilder = new StringBuilder();
-	private StringBuilder doAfterDeleteStringBuilder = new StringBuilder();
+	@OverridableByEditor
+	protected String currentRoute
+
+	protected StringBuilder saveScriptJs = new StringBuilder();
+	protected StringBuilder doAfterSaveStringBuilder = new StringBuilder();
+	protected StringBuilder doAfterDeleteStringBuilder = new StringBuilder();
 	//TODO make it injected in Spring way!
-	private DataframeView dataframeView = new DataframeViewJqx(this)
+	protected DataframeView dataframeView = new DataframeViewJqx(this)
 
 
 	String divID
 	String supportJScriptSource
 
 	// This is a default to use DataframeController to perform CRUD operations, could be overwritten in Dataframe bean definition to any other controller operation
-	def ajaxUrl = "/seniara/dataframe/ajaxValues";
-	def ajaxSaveUrl = "/seniara/dataframe/ajaxSave";
-	//def ajaxDeleteUrl = "/seniara/dataframe/ajaxDelete"
-	def ajaxDeleteUrl = "/seniara/dataframe/ajaxDeleteExpire";
-	def ajaxInsertUrl = "/seniara/dataframe/ajaxInsert";
-	def ajaxDefaultUrl = "/seniara/dataframe/ajaxDefaultData";
-	def ajaxCreateUrl ="/seniara/dataframe/ajaxCreateNew"
+
+	String contextPath = Holders.grailsApplication.config.rootPath
+	// This is a default to use DataframeController to perform CRUD operations, could be overwritten in Dataframe bean definition to any other controller operation
+	def ajaxUrl = "${contextPath}/dataframe/ajaxValues";
+	def ajaxSaveUrl = "${contextPath}/dataframe/ajaxSave";
+	//def ajaxDeleteUrl = "/ayalon/dataframe/ajaxDelete"
+	def ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire";
+	def ajaxInsertUrl = "${contextPath}/dataframe/ajaxInsert";
+	def ajaxDefaultUrl = "${contextPath}/dataframe/ajaxDefaultData";
+	def ajaxCreateUrl ="${contextPath}/dataframe/ajaxCreateNew"
+
+
+
 	@OverridableByEditor
 	Map dataframeButtons = [:];
 	@OverridableByEditor
@@ -153,6 +167,27 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	def connectingFieldName //The field name that other Dataframes are refferred by to this one, it must be equal Table alias
 
 	private Map<String, Dataframe> embeddetDataframe = new LinkedMap<String, Dataframe>();
+
+	boolean readonly = false
+
+	@OverridableByEditor //This wil make sure the PK field(s) are not presented (and it is a default) unless otherwise is specified by Dataframe descriptor
+	Boolean hidePK = true
+	String dataframeLabelCode = ""
+	String vueRoutes = ""
+	Map<String,String> ajaxUrlParams = new HashMap<>()
+
+
+
+	//this String URL is to refresh when updating dataframe
+	//def dataFrameParamsToRefresh = null
+
+
+
+	List<String> embeddedDataframes = new ArrayList<>()
+	List<String> childrenDataframes = new ArrayList<>()
+
+	//Tempo!!!
+
 
 	//fieldName should be domain.fldName
 	public void addEmbeddedDataframe(String fieldName, Dataframe embDf){
@@ -315,7 +350,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 			String domainAlias = field.domain.getDomainAlias()
 			//keys is the list of Named parameters (as they defined in HQLm after column ":")
 			//domainKeys is the list of PK of the domain as it defined in the db table, in most cases it is field, named "id"
-			this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], domainKeys:[],"domainAlias": domainAlias])
+			this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], domainKeys:[], "domainAlias": domainAlias])
 		}
 	}
 
@@ -548,7 +583,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		//1. Get domain class
 		def domain = this.parsedHql?.hqlDomains?.get(refDomainAlias)
 		if(domain == null){
-			log.error("No doamin $refDomainAlias found");
+			log.error("No domain $refDomainAlias found");
 		}
 		//2. Get relevant field:
 //		def prop = domain?.value?.getPersistentProperty(refFieldName)
@@ -1512,6 +1547,19 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		return fields.get(name)
 	}
 
+	Map<String, Object> getFieldByDomainAliasAndFieldName(String domainAlias, String name){
+		return fields.get(buildFullFieldName(dataframeName, domainAlias, name))
+	}
+
+	Widget getFieldWidget(String domainAlias, String name){
+
+		Map field = fields.get(buildFullFieldName(dataframeName, domainAlias, name))
+
+		return field.widgetObject
+	}
+
+
+
 	public OrderedMap getFields(){
 		return fields;
 	}
@@ -1563,9 +1611,9 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 	public static String buildKeyFieldParam(dataframeName, Map field){
 		String fieldnameStr = field.name.replace(DOT, DASH);
-		def doaminNameStr = (field.domainAlias == null)?field.domain?.key:field.domainAlias;
-		if(fieldnameStr.indexOf(DASH) <= 0 && !"".equals(doaminNameStr) && doaminNameStr != null){
-			fieldnameStr = "${doaminNameStr}${DASH}${fieldnameStr}";
+		def domainNameStr = (field.domainAlias == null)?field.domain?.key:field.domainAlias;
+		if(fieldnameStr.indexOf(DASH) <= 0 && !"".equals(domainNameStr) && domainNameStr != null){
+			fieldnameStr = "${domainNameStr}${DASH}${fieldnameStr}";
 		}
 		return "$dataframeName${Dataframe.DASH}$fieldnameStr";
 	}
@@ -1648,7 +1696,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		return fieldArr[fieldArr.size() - 1];
 	}
 
-	public String getFieldDoaminFromFieldId(String fieldId){
+	public String getFieldDomainFromFieldId(String fieldId){
 		String[] fieldArr = fieldId.split(UNDERSCORE);
 
 		def keyWords = ["key", "ref", "parent"];
@@ -1726,9 +1774,9 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 	public static String buildKeyFieldParam(String dataframeName, Map field){
 		String fieldnameStr = field.name.replace(DOT, UNDERSCORE);
-		def doaminNameStr = (field.domainAlias == null)?field.domain?.key:field.domainAlias;
-		if(fieldnameStr.indexOf(UNDERSCORE) <= 0 && !"".equals(doaminNameStr) && doaminNameStr != null){
-			fieldnameStr = "${doaminNameStr}${UNDERSCORE}${fieldnameStr}";
+		def domainNameStr = (field.domainAlias == null)?field.domain?.key:field.domainAlias;
+		if(fieldnameStr.indexOf(UNDERSCORE) <= 0 && !"".equals(domainNameStr) && domainNameStr != null){
+			fieldnameStr = "${domainNameStr}${UNDERSCORE}${fieldnameStr}";
 		}
 		return "$dataframeName${UNDERSCORE}$fieldnameStr";
 	}
@@ -1878,7 +1926,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 		Map domainFieldMapPers = this.domainFieldMap.get(PERSISTERS);
 		if(!domainFieldMapPers.containsKey(field.domain.domainAlias)){
-			domainFieldMapPers.put(field.domain.domainAlias, new HashMap()) //TODO: Add may be more parameters to doamin here
+			domainFieldMapPers.put(field.domain.domainAlias, new HashMap()) //TODO: Add may be more parameters to domain here
 		}
 		Map domainFields = domainFieldMapPers.get(field.domain.domainAlias)
 		//TODO: remove this comment if null is acceptable as default value in the JSON converter

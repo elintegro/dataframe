@@ -28,9 +28,9 @@ class DomainClassInfo {
 
     def  grailsApplication
     String key  //domain Simple name like "User" TODO: this field should be renamed to "name" to reflect its real meaning
-    HibernatePersistentEntity value // One of the Doamin class representation
+    HibernatePersistentEntity value // One of the Domain class representation
     Class clazz; //java domain class
-    SingleTableEntityPersister persister// One of the Doamin class representation
+    SingleTableEntityPersister persister// One of the Domain class representation
     String tablename
     String domainAlias //Alias as it was defined in the HQL by a developer or by deafault should be equal to the Domain class name
 

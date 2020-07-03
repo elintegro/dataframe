@@ -16,7 +16,9 @@ package com.elintegro.erf.widget
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.vue.DataframeConstants
+import org.grails.datastore.mapping.model.PersistentEntity
 
 /**
  * This abstract could classdefines a main method for each widget;
@@ -32,6 +34,7 @@ abstract class Widget<T> implements DataframeConstants{
 	abstract  String  getHtml(T dataframe, Map field)
 	abstract  String getEnabledDisabledFunction(T dataframe, Map field)
 	abstract String getValueSetter(T dataframe, Map field, String divId, String fldId, String key)
+	abstract boolean populateDomainInstanceValue(PersistentEntity domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue)
 
 	public static final int ONE_SIMBOL_WITH = 6;
 

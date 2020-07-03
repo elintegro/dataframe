@@ -5,6 +5,7 @@ import com.elintegro.elintegrostartapp.client.Application
 import com.elintegro.elintegrostartapp.hr.ApplicationSkill
 import com.elintegro.elintegrostartapp.hr.Position
 import com.elintegro.elintegrostartapp.hr.Skills
+import com.elintegro.erf.dataframe.vue.DataframeConstants
 import grails.converters.JSON
 
 class EmployeeApplicationController {
@@ -23,17 +24,19 @@ class EmployeeApplicationController {
             applicant.save()
 
             Application application = new Application()
+
             application.applicant = applicant
+
             application.linkedin = empData.persisters.Application.linkedin.value
             //for (item in empData.persisters.Person.availablePosition) { //TODO: it will be in persisters!!
-            for (item in empData.transits.Person.availablePosition) {
+            for (item in empData.persisters.application.availablePositions.value) {
                     Position availablePosition = Position.findById(item.id)
                     application.addToAvailablePositions(availablePosition)
             }
             application.save(flush: true)
 
-            empData.doamin_keys.Person.id = applicant.id
-            empData.doamin_keys.Application.id = application.id
+            empData.${DataframeConstants.DOMAIN_KEYS}.Person.id = applicant.id
+            empData.${DataframeConstants.DOMAIN_KEYS}.Application.id = application.id
 
             //Fill JSON data structure with keys and send it back!
 

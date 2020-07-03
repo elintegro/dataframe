@@ -266,7 +266,7 @@ beans {
         hql = "select Person.firstName, Person.lastName, Person.email, Person.phone, application.linkedin, application.availablePositions from Application application inner join application.applicant Person where application.id=:id"
         initOnPageLoad = false
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        saveButton = false
+        saveButton = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         addFieldDef = [
 

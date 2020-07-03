@@ -15,6 +15,7 @@ package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.DFButton
 import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.ScriptBuilder
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.vue.DataframeVue
@@ -24,6 +25,7 @@ import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.erf.widget.Widget
 import grails.util.Holders
 import grails.util.Environment
+import org.grails.datastore.mapping.model.PersistentEntity
 import org.springframework.context.ApplicationContext
 import org.springframework.context.i18n.LocaleContextHolder
 
@@ -37,13 +39,24 @@ import org.springframework.context.i18n.LocaleContextHolder
 abstract class WidgetVue extends Widget<DataframeVue>{
     /** Dependency injection for the springSecurityService. */
 
+    //This assigns a new value and returns true if new value was different then the old one
+    boolean populateDomainInstanceValue(PersistentEntity domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
+        def oldfldVal = domainInstance."${fieldName}"
+        if(oldfldVal == inputValue){
+            return false
+        }
+        domainInstance."${fieldName}" = inputValue
+        return true
+    }
+
+
     String getVuePropVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         return """ '${dataframe.dataframeName}_data' """
 
     }
     public String getFieldJSONNameVue(Map field){
-            String fldDomainAndDot = (field.domain?.key?.size() > 0) ? "${field.domain.key}${DOT}" : ""
+            String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
             String fieldType = field.containsKey("domain") ? PERSISTERS : TRANSITS
             return "state.${fieldType}${DOT}${fldDomainAndDot}${field.name}";
     }
@@ -51,7 +64,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return "${getFieldJSONNameVue(field)}.value";
     }
     public String getFieldJSONItems(Map field){
-        String fldDomainAndDot = (field.domain?.key?.size() > 0) ? "${field.domain.key}${DOT}" : ""
+        String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
         return "${getFieldJSONNameVue(field)}.items";
     }
 

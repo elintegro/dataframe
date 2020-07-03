@@ -4,7 +4,7 @@ class JoinParsed {
     String joinElement
     String joinClause
     String sourceDomain
-    String targetDoamin = ""
+    String targetDomain = ""
     String sourceField = ""
     String targetField = ""
     String onCondition = ""

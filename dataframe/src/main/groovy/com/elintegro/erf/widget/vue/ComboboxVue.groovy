@@ -384,7 +384,7 @@ class ComboboxVue extends WidgetVue {
         """
             <v-combobox
           v-model = "${getFieldJSONModelNameVue(field)}"  
-          :items="${dataVariable}_items"
+          :items="${getFieldJSONItems(field)}"
           ${validate(field)?":rules = '${fldName}_rule'":""}
           label="$label"
           ${isDisabled(dataframe, field)?":disabled=true":""}

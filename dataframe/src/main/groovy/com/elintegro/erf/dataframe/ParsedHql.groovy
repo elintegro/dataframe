@@ -239,12 +239,12 @@ class ParsedHql {
 			if(tblDtl.length == 1){
 				tblDtl = tbl.trim().split(/\s/)
 			}
-			String doaminAlias = tblDtl.length>1?tblDtl[1]:tblDtl[0];
+			String domainAlias = tblDtl.length>1?tblDtl[1]:tblDtl[0];
 			String tableName = tblDtl[0];
 			String domainName = tblDtl[0];
-			DomainClassInfo dci = getDomainFromPath(domainName, doaminAlias, tableName, parentDomain)
+			DomainClassInfo dci = getDomainFromPath(domainName, domainAlias, tableName, parentDomain)
 			String domainShortName = dci.getSimpleDomainName();
-			hqlDomains.put(doaminAlias, dci);
+			hqlDomains.put(domainAlias, dci);
 			hqlDomainsNameMap.put(domainShortName, dci);
 			if(!parentDomain){
 				parentDomain = domainShortName
@@ -338,10 +338,9 @@ class ParsedHql {
 				indexOfFileds.put(field.substring(field.indexOf(".")+1), index)
 			}else{
 				fieldName = field.trim();
-//				def doamin = hqlDomains[ve[0]]
 				def domain = hqlDomains.values().first()
-				String doaminAlias = domain.get("domainAlias");
-				fields.put(fldkey, ["domain": domain, "alias": alias, "domainAlias" : doaminAlias, "name" : fieldName, "tableName" : fldOwner, "fldNmAlias": fldNmAlias])
+				String domainAlias = domain.get("domainAlias");
+				fields.put(fldkey, ["domain": domain, "alias": alias, "domainAlias" : domainAlias, "name" : fieldName, "tableName" : fldOwner, "fldNmAlias": fldNmAlias])
 				indexOfFileds.put(field.trim(), index)
 			}
 			aliasDomainFields.put(Dataframe.getAliasFieldKey(fldOwner, fieldName), alias);

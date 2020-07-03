@@ -71,7 +71,7 @@ class VueStore {
 
     String buildStateJSON(DataframeVue dataframe){
         StringBuilder sbb = new StringBuilder()
-        sbb.append("""$dataframe.dataframeName: \n{""")
+        sbb.append("""$dataframe.dataframeName: \n""")
         sbb.append(MapUtil.convertMapToJSONString(dataframe.domainFieldMap))
         sbb.append(""",\n""")
 
