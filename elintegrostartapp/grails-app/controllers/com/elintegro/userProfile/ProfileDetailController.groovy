@@ -4,10 +4,12 @@ import com.elintegro.crm.Person
 import com.elintegro.elintegrostartapp.hr.Position
 import com.elintegro.ref.Language
 import grails.converters.JSON
+import grails.util.Holders
 
 import java.text.SimpleDateFormat
 
 class ProfileDetailController {
+    def springSecurityService
 
     def editProfileData() {
         def profileData = request.getJSON()
@@ -33,5 +35,27 @@ class ProfileDetailController {
             log.error("Failed to edit profile details "+ e)
         }
         render(resultData as JSON)
+    }
+    def imageData = {
+        def currentUser = springSecurityService.currentUser
+        Person person = Person.findById(currentUser.id)
+        def imageName
+        def imageUrl
+        if(person.mainPicture != null){
+            imageName = person.mainPicture
+            imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/" + imageName
+
+        }
+        else{
+            imageUrl = 'C:/dev/github/elintegro/dataframe/elintegrostartapp/grails-app/assets/images/default_profile.jpg'
+            imageName = Holders.grailsApplication.config.images.defaultImageName
+        }
+        def file = new File(imageUrl)
+        def extension = imageName - ~/.*(?<=\.)/
+        response.setContentType("application/"+extension)
+        response.setContentLength(file.size().toInteger())
+        OutputStream out = response.getOutputStream();
+        out.write(file.bytes);
+        out.close();
     }
 }

@@ -212,17 +212,15 @@ beans {
                                      }).then(function(responseData){
                                          var response = responseData;
                                          self.vueElintegroUserProfileDataframe_propertyImages_ajaxFileSave(response,allParams);
-                                         excon.saveToStore('vueElintegroUserProfileDataframe','vueElintegroUserProfileDataframe_person_mainPicture',imageUrl)
-                                         excon.saveToStore('vueElintegroProfileMenuDataframe','vueElintegroProfileMenuDataframe_person_mainPicture',imageUrl)
-                                         console.log(response);
-                                      });
-                
+                                          setTimeout(function(){this.location.reload();}, 2000);
+                                         });
                                   }   
                                   else{
                                        alert("Error in saving")
                                   }
                   
                   }
+                  
                   """
     }
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
