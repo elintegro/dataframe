@@ -569,6 +569,8 @@ beans {
         createStore = true
         isGlobal = true
         saveButton = false
+        doAfterRefresh = """var imgSrc = "profileDetail/imageData"; excon.saveToStore('vueElintegroProfileMenuDataframe','vueElintegroProfileMenuDataframe_person_mainPicture', imgSrc);"""
+
 //        route = true
         wrapInForm = true
 //        "url":"https://s3.us-east-2.amazonaws.com/elintegro1",
@@ -576,7 +578,7 @@ beans {
                 "person.mainPicture": [
                         "widget" : "PictureDisplayWidgetVue",
                         "layout": "<v-layout align-center justify-center><v-avatar :size=\"90\" style='margin-top:0px;' color=\"grey lighten-4\">[FIELD_SCRIPT]</v-avatar></v-layout>",
-                        "aspectRatio":"2.5",
+                        "aspectRatio":"1.0",
                 ],
                 "person.firstName": [
                         "widget" : "InputWidgetVue",
@@ -614,7 +616,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
         childDataframes=["vueElintegroResetPasswordDataframe"]
-        doAfterSave = """setTimeout(function(){ vueElintegroUserProfileDataframe.\$router.push('/');this.location.reload();}, 3000);"""
+        doAfterRefresh = """var imgSrc = "profileDetail/imageData"; excon.saveToStore('vueElintegroUserProfileDataframe','vueElintegroUserProfileDataframe_person_mainPicture', imgSrc);"""
         route = true
         currentRoute = 'user-profile'
         addFieldDef =[
@@ -648,6 +650,7 @@ beans {
                 ],
                 "person.languages":[
                         widget: "ComboboxVue"
+                        ,initBeforePageLoad  :true
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
                         ,"displayMember":"ename"
