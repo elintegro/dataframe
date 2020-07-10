@@ -199,7 +199,7 @@ beans {
     vueAppsDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueAppsDataframe']
-        dataframeLabelCode = "Our Applications"
+        dataframeLabelCode = "our.application"
         isGlobal = true
         saveButton= false
         initOnPageLoad = false
