@@ -205,10 +205,40 @@ beans {
         initOnPageLoad = false
         route = true
         dataframeButtons = [quizzable  : [name: "quizzable", type: "link",attr:"style='color:black;'",script: """window.open('https://quizzable.elintegro.com/','_blank');""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            translator  : [name: "translator", type: "link",attr:"style='color:black;'","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                            translator  : [name: "translator", type: "link",attr:"style='color:black;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
         currentFrameLayout = ref("vueElintegroAppsDataframeLayout")
     }
+    vueTranslatorAssistantDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueTranslatorAssistantDataframe']
+        dataframeLabelCode ="Translator Assistant"
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = false
+        route = true
+        currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
+    }
+    vueProjectListDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueProjectListDataframe']
+        dataframeLabelCode = "Project.List"
+        createStore = true
+        saveButton = false
+        wrapInForm = true
+        addFieldDef = [
+                "project.list":[
+                        widget: "ComboboxVue"
+                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , hql: """select project.id as id, project.name as name from Project as project"""
+                        ,"displayMember":"name"
+                        , search:true
+                ]
+        ]
+
+        currentFrameLayout = ref("defaultDataframeLayout")
+    }
+
     vueTechnologiesDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTechnologiesDataframe']
