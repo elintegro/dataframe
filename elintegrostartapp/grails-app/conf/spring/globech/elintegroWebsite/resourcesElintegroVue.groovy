@@ -213,15 +213,13 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTranslatorAssistantDataframe']
         dataframeLabelCode ="Translator Assistant"
-        isGlobal = true
         saveButton = false
-        initOnPageLoad = false
+        initOnPageLoad = true
         route = true
         addFieldDef = [
                 "project.list":[
                         widget: "ComboboxVue"
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-                        , hql: """select project.id as id, project.name as name from Project as project where project.id=:id"""
+                        , hql: """select project.id as id, project.name as name from Project as project """
                         ,"displayMember":"name"
                         , search:true
                 ]
@@ -236,9 +234,8 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCreateProjectForTranslationDataframe']
         dataframeLabelCode = "New.Project"
-        createStore = true
+        initOnPageLoad = false
         saveButton = false
-        wrapInForm = true
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = "select project.id , project.name, project.sourceLanguage, project.sourceFile from Project as project"
         addFieldDef=[
