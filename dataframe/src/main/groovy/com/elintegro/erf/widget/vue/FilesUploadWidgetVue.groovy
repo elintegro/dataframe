@@ -16,7 +16,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
         return """
               <div $attr>
                <v-file-input
-                  label = $label
+                  label = "$label"
                   multiple
                   @change = "${fldName}_uploadFile"
                   ${toolTip(field)}

@@ -8,9 +8,11 @@ class Project {
     Date startDate
     Date expirationDate
     String sourceLanguage
+    String sourceFile
 
     static 	hasMany = [users: User, languages: Language]
 
     static constraints = {
+        name(nullable: false)
     }
 }

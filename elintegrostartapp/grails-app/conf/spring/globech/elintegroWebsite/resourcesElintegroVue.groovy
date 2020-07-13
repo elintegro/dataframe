@@ -70,6 +70,7 @@ beans {
                             carrers        : [name: "carrers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             gettingStarted : [name: "gettingStarted", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             technologies   : [name: "techonologies", type: "link",attr:"style='color:#1976D2;'",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            apps           : [name: "Apps", type: "link",attr:"style='color:#1976D2;'",route:true, routeIdScript: "0", refDataframe: ref("vueAppsDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             clientsProjects: [name: "clientsProjects", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             home           : [name: "home", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroBannerDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
@@ -89,6 +90,7 @@ beans {
                             carrers        : [name: "carrers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             gettingStarted : [name: "gettingStarted", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             technologies   : [name: "techonologies", type: "link",attr:"style='color:#1976D2;'",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            apps           : [name: "Apps", type: "link",attr:"style='color:#1976D2;'",route:true, routeIdScript: "0", refDataframe: ref("vueAppsDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             clientsProjects: [name: "clientsProjects", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             home           : [name: "home", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroBannerDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         wrapButtons = false
@@ -194,6 +196,69 @@ beans {
         currentFrameLayout = ref("clientProjectPageDataframeLayout")
 
     }
+    vueAppsDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueAppsDataframe']
+        dataframeLabelCode = "our.application"
+        isGlobal = true
+        saveButton= false
+        initOnPageLoad = false
+        route = true
+        dataframeButtons = [quizzable  : [name: "quizzable", type: "link",attr:"style='color:black;'",script: """window.open('https://quizzable.elintegro.com/','_blank');""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            translator  : [name: "translator", type: "link",attr:"style='color:black;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+
+        currentFrameLayout = ref("vueElintegroAppsDataframeLayout")
+    }
+    vueTranslatorAssistantDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueTranslatorAssistantDataframe']
+        dataframeLabelCode ="Translator Assistant"
+        saveButton = false
+        initOnPageLoad = true
+        route = true
+        addFieldDef = [
+                "project.list":[
+                        widget: "ComboboxVue"
+                        , hql: """select project.id as id, project.name as name from Project as project """
+                        ,"displayMember":"name"
+                        , search:true
+                ]
+        ]
+        dataframeButtons =[
+                createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'] ]
+        ]
+        childDataframes = ["vueCreateProjectForTranslationDataframe"]
+        currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
+    }
+    vueCreateProjectForTranslationDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueCreateProjectForTranslationDataframe']
+        dataframeLabelCode = "New.Project"
+        initOnPageLoad = false
+        saveButton = false
+        flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        hql = "select project.id , project.name, project.sourceLanguage, project.sourceFile from Project as project"
+        addFieldDef=[
+                "project.sourceLanguage":[
+                        widget: "ComboboxVue"
+                        ,initBeforePageLoad  :true
+                        , hql: """select language.id as id, language.ename as ename from Language as language"""
+                        ,"displayMember":"ename"
+                        ,"valueMember":"id"
+                        , search:true
+                        ,multiple: false
+                ],
+                "project.sourceFile":[
+                        widget: "FilesUploadWidgetVue"
+                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                ]
+        ]
+        dataframeButtons=[
+                save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.saveProject()"""]
+        ]
+        currentFrameLayout = ref("vueCreateProjectForTranslationDataframeLayout")
+    }
+
     vueTechnologiesDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTechnologiesDataframe']
@@ -808,9 +873,24 @@ beans {
         putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantCVDataframe_prop.key"""
         doAfterRefresh = """self.afterRefreshing(response);"""
-        hql = "select application.id as Id, files.fileName from Application application inner join application.files as files where application.id=:id"
+        hql = "select application.id as Id, files.fileName, images.name from Application application inner join application.files as files inner join application.images as images where application.id=:id"
         addFieldDef = [
-                "files.fileName":[name:"fileName",widget: "FilesDisplayWidgetVue","aspectRatio":"1","height":100,"width":100]]
+                "files.fileName":[
+                                  name:"fileName"
+                                 ,widget: "FilesDisplayWidgetVue"
+                                 ,"aspectRatio":"1"
+                                 ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6']
+                                 ,"height":100
+                                 ,"width":100],
+                "images.name":[
+                                "widget" : "PictureDisplayWidgetVue",
+                                "aspectRatio":"2.5",
+                                "attr": "contain",
+                                "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'],
+                                "width":200,
+                                "height":200]
+                ]
+
         dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
                                                                                 \n""", flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6']],
                             previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");

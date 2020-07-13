@@ -682,10 +682,14 @@ beans {
                                   }
                                   
                                   excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
+                                  
+                                  var applicantId = response.vueElintegroApplicantCVDataframe_application_id;
+                                  var imageSrc = "/fileDownload/imagePreview/"+applicantId;
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_images_name',imageSrc);    
                                  
-                                  }
-                             
-                                  """
+                                  },\n
+                              
+        """
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
@@ -702,5 +706,21 @@ beans {
                                                                    self.vueElintegroCommentPageForApplicantDataframe_fillInitData()
                                                                    });
                   }"""
+    }
+    vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
+        methods ="""saveProject(){
+                    var allParams = this.state;
+                    var self = this;
+                    allParams['dataframe'] = 'vueCreateProjectForTranslationDataframe';
+                                    axios({
+                                           method:'post',
+                                           url:'${contextPath}/translatorAssistant/saveProjectData',
+                                           data: allParams
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                   self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
+                                                                   this.location.reload();
+                                                                   });
+                    }"""
     }
 }
