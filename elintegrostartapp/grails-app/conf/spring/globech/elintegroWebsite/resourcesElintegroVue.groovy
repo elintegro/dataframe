@@ -217,26 +217,52 @@ beans {
         saveButton = false
         initOnPageLoad = false
         route = true
-        currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
-    }
-    vueProjectListDataframe(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueProjectListDataframe']
-        dataframeLabelCode = "Project.List"
-        createStore = true
-        saveButton = false
-        wrapInForm = true
         addFieldDef = [
                 "project.list":[
                         widget: "ComboboxVue"
                         ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-                        , hql: """select project.id as id, project.name as name from Project as project"""
+                        , hql: """select project.id as id, project.name as name from Project as project where project.id=:id"""
                         ,"displayMember":"name"
                         , search:true
                 ]
         ]
+        dataframeButtons =[
+                createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'] ]
+        ]
+        childDataframes = ["vueCreateProjectForTranslationDataframe"]
+        currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
+    }
+    vueCreateProjectForTranslationDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueCreateProjectForTranslationDataframe']
+        dataframeLabelCode = "New.Project"
+        createStore = true
+        saveButton = false
+        wrapInForm = true
+        flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        hql = "select project.id , project.name, project.sourceLanguage, project.sourceFile from Project as project"
+        addFieldDef=[
+                "project.sourceLanguage":[
+                        widget: "ComboboxVue"
+                        ,initBeforePageLoad  :true
+                        , hql: """select language.id as id, language.ename as ename from Language as language"""
+                        ,"displayMember":"ename"
+                        ,"valueMember":"id"
+                        , search:true
+                        ,multiple: false
+                ],
+                "project.sourceFile":[
+                        "name":"sourceFile"
+                        ,widget: "FilesUploadWidgetVue"
+                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
 
-        currentFrameLayout = ref("defaultDataframeLayout")
+                ]
+
+        ]
+        dataframeButtons=[
+                save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.saveProject()"""]
+        ]
+        currentFrameLayout = ref("vueCreateProjectForTranslationDataframeLayout")
     }
 
     vueTechnologiesDataframe(DataframeVue) { bean ->
