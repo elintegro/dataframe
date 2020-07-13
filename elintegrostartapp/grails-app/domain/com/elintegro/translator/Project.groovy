@@ -13,5 +13,6 @@ class Project {
     static 	hasMany = [users: User, languages: Language]
 
     static constraints = {
+        name(nullable: false)
     }
 }

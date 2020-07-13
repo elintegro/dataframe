@@ -249,12 +249,9 @@ beans {
                         ,multiple: false
                 ],
                 "project.sourceFile":[
-                        "name":"sourceFile"
-                        ,widget: "FilesUploadWidgetVue"
+                        widget: "FilesUploadWidgetVue"
                         ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-
                 ]
-
         ]
         dataframeButtons=[
                 save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.saveProject()"""]
