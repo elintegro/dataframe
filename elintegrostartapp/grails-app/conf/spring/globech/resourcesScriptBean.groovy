@@ -682,31 +682,14 @@ beans {
                                   }
                                   
                                   excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
-                                  var applicantId = response.vueElintegroApplicantCVDataframe_application_id;
-                                  var self = this;
-                                  //var imageSrc = "/fileDownload/imagePreview";
-                                 self.imageSource(applicantId)
                                   
-                               
+                                  var applicantId = response.vueElintegroApplicantCVDataframe_application_id;
+                                  var imageSrc = "/fileDownload/imagePreview/"+applicantId;
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_images_name',imageSrc);    
                                  
                                   },\n
-                                  imageSource(applicantId){
-                                  var allParams = {};
-                                  allParams['id'] = applicantId;
-                                   axios({
-                                           method:'post',
-                                           url:'${contextPath}/fileDownload/imagePreview',
-                                            data: allParams
-                                    }).then(function(response){
-                                       var data = btoa(unescape(encodeURIComponent(response.data)));
-                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_images_name','data:image/png;base64,'+data1);    
-                                       console.log(response)
-                                    });
-                                  
-                                  }
-                                  
-                             
-                                  """
+                              
+        """
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){

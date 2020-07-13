@@ -39,38 +39,42 @@ class FileDownloadController {
 
 //                render(contentType: 'application/pdf', file: file, fileName: fileName, encoding: "UTF-8")
             }
-            catch(Exception e){
+            catch (Exception e) {
                 log.debug("Error downloading file" + e)
             }
 
-        }
-        else {
+        } else {
             log.error("Such file +$fileName+ doesn't exist.")
         }
     }
 
-    def imagePreview(){
-        def params = request.getJSON()
+    def imagePreview() {
+
         def applicantId = params.id
         Set<Images> images = Application.findById(applicantId).images
-        println(images)
-        def imageName = images[0].name
-        def imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/" + imageName
-        def imageFile = new File(imageUrl)
-        if (imageFile.exists()) {
-            try {
-                def extension = imageName - ~/.*(?<=\.)/
-                response.setContentType("application/" + extension)
-                response.setContentLength(imageFile.size().toInteger())
-                OutputStream out = response.getOutputStream();
-                out.write(imageFile.bytes);
-                out.close();
-            }catch(Exception e){
-                log.error("Image couldn't be generated"+e)
+        if (images != null) {
+            for (int i = 0; i < images.size(); i++) {
+                def imageName = images[i].name
+                def imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/" + imageName
+                def imageFile = new File(imageUrl)
+                if (imageFile.exists()) {
+                    try {
+                        def extension = imageName - ~/.*(?<=\.)/
+                        response.setContentType("application/" + extension)
+                        response.setContentLength(imageFile.size().toInteger())
+                        OutputStream out = response.getOutputStream();
+                        out.write(imageFile.bytes);
+                        out.close();
+                    } catch (Exception e) {
+                        log.error("Image couldn't be generated" + e)
+                    }
+                } else {
+                    log.error("Image file doesn't exist")
+                }
             }
         }
         else{
-            log.error("Image doesn't exist")
+            log.error("There is no image for this applicant.")
         }
     }
 }
