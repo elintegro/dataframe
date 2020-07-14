@@ -63,6 +63,9 @@ beans = {
     loadResource "globech/elintegroWebsite/resourcesClientProjectPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesContactUsPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesGettingStartedPageLayoutVue.groovy"
+    loadResource"globech/elintegroWebsite/resourcesTranslationAssistantVue.groovy"
+    loadResource"globech/elintegroWebsite/resourcesTranslationAssistantLayoutVue.groovy"
+
     if (Environment.current == Environment.DEVELOPMENT){
 //        loadResource "resourcesEditor.groovy"
 //        editorBeanLoading(EditorBeanLoading){ bean -> }
