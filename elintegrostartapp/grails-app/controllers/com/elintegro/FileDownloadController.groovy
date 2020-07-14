@@ -1,5 +1,7 @@
 package com.elintegro
 
+import com.elintegro.elintegrostartapp.client.Application
+import com.elintegro.elintegrostartapp.hr.Images
 import grails.util.Holders
 
 class FileDownloadController {
@@ -25,28 +27,34 @@ class FileDownloadController {
             log.error("Such file +$fileName+ doesn't exist.")
         }
     }
-//    Another method:::
-//    fileDownload(){
-//        if (file.exists()) {
-//            def extension = fileName - ~/.*(?<=\.)/
-//            Map fileExtensionContentTypeMap = Holders.getFlatConfig().get('grails.mime.types') as Map
-//            String contentType
-//            if(fileExtensionContentTypeMap.containsKey(extension))
-//            {
-//                contentType = fileExtensionContentTypeMap.get(extension)
-//            }
-//            else {
-//                contentType = "application/octet-stream"
-//            }
-//            response.setContentType(contentType)
-//            try {
-//                response.setContentType("application/octet-stream")
-//                response.setHeader("Content-disposition", "attachment;filename=${file.getName()}")
-//                def outputStream = response.getOutputStream()
-//                outputStream << file.bytes
-//                outputStream.flush()
-//                outputStream.close()
-//
-//
-//            }
+
+    def imagePreview() {
+
+        def applicantId = params.id
+        Set<Images> images = Application.findById(applicantId).images
+        if (images != null) {
+            for (int i = 0; i < images.size(); i++) {
+                def imageName = images[i].name
+                def imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/" + imageName
+                def imageFile = new File(imageUrl)
+                if (imageFile.exists()) {
+                    try {
+                        def extension = imageName - ~/.*(?<=\.)/
+                        response.setContentType("application/" + extension)
+                        response.setContentLength(imageFile.size().toInteger())
+                        OutputStream out = response.getOutputStream();
+                        out.write(imageFile.bytes);
+                        out.close();
+                    } catch (Exception e) {
+                        log.error("Image couldn't be generated" + e)
+                    }
+                } else {
+                    log.error("Image file doesn't exist")
+                }
+            }
+        }
+        else{
+            log.error("There is no image for this applicant.")
+        }
+    }
 }
