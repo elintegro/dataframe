@@ -209,56 +209,6 @@ beans {
 
         currentFrameLayout = ref("vueElintegroAppsDataframeLayout")
     }
-    vueTranslatorAssistantDataframe(DataframeVue){bean->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueTranslatorAssistantDataframe']
-        dataframeLabelCode ="Translator Assistant"
-        saveButton = false
-        initOnPageLoad = true
-        route = true
-        addFieldDef = [
-                "project.list":[
-                        widget: "ComboboxVue"
-                        , hql: """select project.id as id, project.name as name from Project as project """
-                        ,"displayMember":"name"
-                        , search:true
-                ]
-        ]
-        dataframeButtons =[
-                createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'] ]
-        ]
-        childDataframes = ["vueCreateProjectForTranslationDataframe"]
-        currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
-    }
-    vueCreateProjectForTranslationDataframe(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueCreateProjectForTranslationDataframe']
-        dataframeLabelCode = "New.Project"
-        initOnPageLoad = false
-        saveButton = false
-        flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        hql = "select project.id , project.name, project.sourceLanguage, project.sourceFile from Project as project"
-        addFieldDef=[
-                "project.sourceLanguage":[
-                        widget: "ComboboxVue"
-                        ,initBeforePageLoad  :true
-                        , hql: """select language.id as id, language.ename as ename from Language as language"""
-                        ,"displayMember":"ename"
-                        ,"valueMember":"id"
-                        , search:true
-                        ,multiple: false
-                ],
-                "project.sourceFile":[
-                        widget: "FilesUploadWidgetVue"
-                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                ]
-        ]
-        dataframeButtons=[
-                save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.saveProject()"""]
-        ]
-        currentFrameLayout = ref("vueCreateProjectForTranslationDataframeLayout")
-    }
-
     vueTechnologiesDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTechnologiesDataframe']
@@ -483,7 +433,6 @@ beans {
         dataframeButtons = [save: [name:"save", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""this.addNewSkill();""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
         currentFrameLayout = ref("vueNewEmployeeApplicantAddSkillDataframeLayout")
     }
-
     vueNewEmployeeAddtionalQuestionsDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeAddtionalQuestionsDataframe']
@@ -711,7 +660,7 @@ beans {
                 "person.phone":[
                           widget: "PhoneNumberWidgetVue"
                          ,"required": "required"
-                         ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
+                        ,"validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]
                 ],
                 "person.languages":[
                         widget: "ComboboxVue"
