@@ -643,7 +643,7 @@ beans {
                 "person.phone":[
                           widget: "PhoneNumberWidgetVue"
                          ,"required": "required"
-                         ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
+                        ,"validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]
                 ],
                 "person.languages":[
                         widget: "ComboboxVue"

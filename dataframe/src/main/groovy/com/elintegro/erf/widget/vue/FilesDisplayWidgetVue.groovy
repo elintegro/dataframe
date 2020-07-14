@@ -52,33 +52,18 @@ class FilesDisplayWidgetVue extends WidgetVue {
 
         return Holders.config.images.defaultImagePathForPdf
     }
-    private String getFileUrl(){
-        String defaultFileLocation = Holders.config.images.storageLocation
-        String urlForFile = defaultFileLocation+'/images/'
-        return urlForFile
-    }
+
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         String fldName = dataVariable
         dataframe.getVueJsBuilder().addToMethodScript("""
                ${fldName}_url:function(){
-                         var fileName = this.state.${fldName}_name;
-                         var fileLocation = '$fileUrl'
-                         var fileDetails = fileName + fileLocation 
-                         var self = this;
-                          axios({
-                                 method:'post',
-                                 url:   '${contextPath}/FileDownload/fileDownload',
-                                 data:{fileName:fileName, fileLocation:fileLocation}
-                          }).then(function(response){
-                                    console.log(response);
-                                    var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                                    var fileName = this.state.${fldName}_name;
+                                    var fileURL = '/fileDownload/fileDownload/'+fileName
                                     var fileLink = document.createElement('a');
                                     fileLink.href = fileURL;
-                                    fileLink.setAttribute('download', self.state.${fldName}_name);
+                                    fileLink.setAttribute('download', this.state.${fldName}_name);
                                     document.body.appendChild(fileLink);
                                     fileLink.click();
-                           });
-
                }
           
         """)
