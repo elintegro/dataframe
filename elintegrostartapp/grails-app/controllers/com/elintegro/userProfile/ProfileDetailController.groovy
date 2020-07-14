@@ -38,7 +38,7 @@ class ProfileDetailController {
     }
     def imageData = {
         def currentUser = springSecurityService.currentUser
-        Person person = Person.findById(currentUser.id)
+        Person person = Person.findByEmail(currentUser)
         def imageName
         def imageUrl
         if (person.mainPicture != null) {
