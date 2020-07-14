@@ -664,6 +664,7 @@ beans {
         def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
         def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
         def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
+        def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
         methods ="""afterRefreshing(response){
               
                                  var params = response;
@@ -679,6 +680,9 @@ beans {
                                   }
                                   else if(extension == 'doc' || extension == 'docx'){
                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForDocFile}')   
+                                  }
+                                  else if(extension == 'csv' || extension == 'CSV'){
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForCsvFile}')   
                                   }
                                   
                                   excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)

@@ -140,12 +140,15 @@ images {
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
 	defaultImagePath = "/assets/$defaultImageName"
-	defaultImageForPdf = "defaultPdfIcon.png"
+	defaultImageForPdf = "defaultPdfIcon.PNG"
 	defaultImagePathForPdf = "assets/$defaultImageForPdf"
-	defaultImageForExcel = 'defaultExcelFileIcon.png'
+	defaultImageForExcel = 'defaultExcelFileIcon.PNG'
 	defaultImagePathForExcel = "assets/$defaultImageForExcel"
-	defaultImageForDocFile = 'defaultDocFileIcon.png'
+	defaultImageForDocFile = 'defaultDocFileIcon.PNG'
 	defaultImagePathForDocFile = "assets/$defaultImageForDocFile"
+	defaultImageForCsvFile = 'defaultCsvIcon.PNG'
+	defaultImagePathForCsvFile = "assets/$defaultImageForCsvFile"
+
 
 
 }
@@ -311,7 +314,7 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 			logSql = true
 //  	 	dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
+			url = "jdbc:mysql://localhost:3308/elintegro_website_db_dev"
 //			username = "root"
 //			password = "qbohfoj"
 			username = "developer"
