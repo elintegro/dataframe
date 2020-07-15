@@ -40,12 +40,19 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     /** Dependency injection for the springSecurityService. */
 
     //This assigns a new value and returns true if new value was different then the old one
-    boolean populateDomainInstanceValue(PersistentEntity domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
+    @Override
+    boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
+        if(isReadOnly(field)){
+            return false
+        }
         def oldfldVal = domainInstance."${fieldName}"
         if(oldfldVal == inputValue){
             return false
         }
-        domainInstance."${fieldName}" = inputValue
+        if(isMandatory(field) && !inputValue.value){
+            return false
+        }
+        domainInstance."${fieldName}" = inputValue.value
         return true
     }
 
@@ -439,9 +446,4 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return label
     }
 
-    protected boolean isMandatory(Map field){
-        boolean notNull = field.notNull
-        boolean required = field.required
-        return notNull || required
-    }
 }

@@ -16,12 +16,18 @@ package com.elintegro.erf.widget.vue
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DomainClassInfo
+import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DbResult
 import com.elintegro.erf.dataframe.ParsedHql
 import com.elintegro.erf.dfEditor.DfInstance
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import grails.converters.JSON
 import grails.util.Holders
+import org.apache.commons.lang.StringUtils
+import org.grails.web.json.JSONArray
 import org.springframework.context.i18n.LocaleContextHolder
 import org.apache.commons.lang.WordUtils
 
@@ -29,6 +35,79 @@ import org.apache.commons.lang.WordUtils
  * Created by kchapagain on Nov, 2018.
  */
 class ComboboxVue extends WidgetVue {
+
+    //This assigns a new value and returns true if new value was different then the old one
+    @Override
+    boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
+        if(isReadOnly(field)){
+            return false
+        }
+        JSONArray selectedItems = inputValue.value
+        JSONArray availableItems = inputValue.items
+
+        if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
+            def oldfldVal = domainInstance."${fieldName}"
+            if(oldfldVal == inputValue.value) return false
+            domainInstance."${fieldName}" = inputValue.value
+        }else if(domainClassInfo.isToMany(fieldName)){
+            return saveHasManyAssociation(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
+        }else if(domainClassInfo.isToOne(fieldName)){
+            def oldfldVal = domainInstance."${fieldName}".value
+            domainInstance."${fieldName}" = inputValue.value[0] //TODO: check if there is not exception in case of single choice
+        }
+        return true
+    }
+
+    boolean isSelectionEqualsToOld(JSONArray jarr1, JSONArray jarr2){
+        boolean isEqual = true;
+        if (jarr1.size() != jarr2.size()) {
+            return false;
+        } else {
+            Set<Object> s1 = getSetOfIds(jarr1)
+            Set<Object> s2 = getSetOfIds(jarr2)
+            return isSetsEqual(s1, s2)
+        }
+
+        return isEqual
+    }
+
+    Set<Object> getSetOfIds(JSONArray ar1){
+        Set<Object> set1 = new HashSet()
+        ar1.each{el -> set1.add(el.value.id)}
+        return set1
+    }
+    private boolean isSetsEqual(Set s1, Set s2){
+        s1.each{ el->
+            if(!s2.contains(el)){
+                return false
+            }
+        }
+        s2.each{ el->
+            if(!s1.contains(el)){
+                return false
+            }
+        }
+        return true
+    }
+
+    //	saves onetomany and manytomany
+    private boolean saveHasManyAssociation(JSONArray inputValue, def refDomainClass, String fieldName, def domainInstance){
+        JSONArray oldfldVal = new JSONArray(domainInstance."${fieldName}")
+        if(isSelectionEqualsToOld(oldfldVal, inputValue)){
+            return false
+        }
+        domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
+        inputValue.each{val ->
+            val.each{
+                if(it.key == "id"){
+                    def refDomainObj  = refDomainClass.get(Long.valueOf(it.value))
+                    String fn = fieldName.capitalize()
+                    domainInstance."addTo${fieldName.capitalize()}"(refDomainObj)
+                }
+            }
+        }
+        return true
+    }
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
@@ -278,8 +357,11 @@ class ComboboxVue extends WidgetVue {
         String wdgHql = fieldProps?.hql
 
         Map result=[:]
-        if(wdgHql && !fieldProps?.initBeforePageLoad){
-            ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory);
+        if(wdgHql && !fieldProps?.DataframeConstants.FIELD_PROP_INIT_BEFORE_PAGE_LOAD /*TODO: check if this condition correct: if this is true, no reload will happen, so where we are reloading?*/) {
+            if (!fieldProps?.containsKey(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL)){
+                fieldProps?.put(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL,  new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory))
+            }
+            ParsedHql parsedHql = fieldProps?.get(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL)
             DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);
             List resultList = dbRes.getResultList()
             List res = new ArrayList(resultList.size())

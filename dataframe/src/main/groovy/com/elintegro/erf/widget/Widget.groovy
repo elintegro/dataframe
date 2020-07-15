@@ -34,7 +34,7 @@ abstract class Widget<T> implements DataframeConstants{
 	abstract  String  getHtml(T dataframe, Map field)
 	abstract  String getEnabledDisabledFunction(T dataframe, Map field)
 	abstract String getValueSetter(T dataframe, Map field, String divId, String fldId, String key)
-	abstract boolean populateDomainInstanceValue(PersistentEntity domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue)
+	abstract boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue)
 
 	public static final int ONE_SIMBOL_WITH = 6;
 
@@ -91,6 +91,20 @@ abstract class Widget<T> implements DataframeConstants{
 			value = (attrib == null)?defaultVal:Boolean.valueOf(attrib);
 		}
 		return value
+	}
+
+	public static boolean isReadOnly(Map field){
+		if (field?.readOnly){
+			return true
+		}
+		return false
+	}
+
+	public static boolean isMandatory(Map field){
+		if (field?.notNull){
+			return true
+		}
+		return false
 	}
 
 

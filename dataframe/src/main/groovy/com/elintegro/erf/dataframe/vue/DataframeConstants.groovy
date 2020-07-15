@@ -40,5 +40,8 @@ interface DataframeConstants {
     static final String FIELD_PROP_HQL = "hql"
     static final String FIELD_PROP_WIDGET_OBJECT = "widgetObject"
 
+    static final String FIELD_PROP_REF_FIELD_PARSED_HQL = "refFieldParsedHql"
+    static final String FIELD_PROP_INIT_BEFORE_PAGE_LOAD = "initBeforePageLoad"
+
 
 }

@@ -13,6 +13,8 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.dataframe.vue
 
+import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.payment.base.response.Response
@@ -29,14 +31,91 @@ class NewStructureTest extends Specification implements GrailsUnitTest {
     //@Shared DataframeVue dfr
     @Shared Map testMap = [:]
     @Shared DataframeVue dfr
+    @Shared DataframeInstance dfInstance
+
+    @Shared DataframeInstance dfrInst
+    @Shared JSONObject params_
+    @Shared Map params
+    boolean result = true
 
     def setupSpec() {
     }
 
     def setup() {
         dfr = new DataframeVue()
+        dfr.init()
         dfr.hql = "select person.firstName, person.lastName, person.email,person.phone,application.linkedin from Application application inner join application.applicant person where application.id=:id"
-
+        params = [
+                "dataframe": "vueNewEmployeeBasicInformationDataframe",
+                "vueNewEmployeeBasicInformationDataframe":
+                        [
+                                "persisters"     : [
+                                        "Person"     : [
+                                                "firstName": [
+                                                        "value": null
+                                                ],
+                                                "lastName" : [
+                                                        "value": null
+                                                ],
+                                                "phone"    : [
+                                                        "value": null
+                                                ],
+                                                "email"    : [
+                                                        "value": null
+                                                ]
+                                        ],
+                                        "application": [
+                                                "availablePositions": [
+                                                        "value": null,
+                                                        "items": [
+                                                                [
+                                                                        "id"  : 1,
+                                                                        "name": "Back-end Java Developer"
+                                                                ],
+                                                                [
+                                                                        "id"  : 2,
+                                                                        "name": "Front-end Developer"
+                                                                ],
+                                                                [
+                                                                        "id"  : 3,
+                                                                        "name": "Product Owner"
+                                                                ],
+                                                                [
+                                                                        "id"  : 4,
+                                                                        "name": "Scrum Master"
+                                                                ],
+                                                                [
+                                                                        "id"  : 5,
+                                                                        "name": "Site Adminstrator"
+                                                                ],
+                                                                [
+                                                                        "id"  : 6,
+                                                                        "name": "Developer"
+                                                                ]
+                                                        ]
+                                                ],
+                                                "linkedin"          : [
+                                                        "value": null
+                                                ]
+                                        ]
+                                ],
+                                "domain_keys"    : [
+                                        "Person"     : [
+                                                "id": null
+                                        ],
+                                        "application": [
+                                                "id": null
+                                        ]
+                                ],
+                                "namedParameters": [
+                                        "id": [
+                                                "domain": "application",
+                                                "field" : "id",
+                                                "value" : null
+                                        ]
+                                ]
+                        ]
+        ]
 
     }
 
@@ -46,43 +125,18 @@ class NewStructureTest extends Specification implements GrailsUnitTest {
     def "test build State JSON"(){
         given:
 
-        testMap = ["dfrName": [ "namedParams":["id":["domain":"person", "field":"id"]],"domains":["person":["first_name":null, "last_name":null], "application":["linkedIn":""]]] ]
-        dfr.init()
+        params_ = new JSONObject(params)
+        dfInstance = new DataframeInstance(dfr, params_)
 
         when:
 
-        dfr.parsedHql.namedParameters?.forEach { namedParamKey, namedParamValue ->
-            DomainClassInfo dom = parsedHql.hqlDomains.get(namedParamValue[0])
-            SingleTableEntityPersister pers =(SingleTableEntityPersister)dom.persister.properties.get("entityPersister")
-            String[] propNames = dom.persister.getPropertyNames()
-
-
-            propNames.forEach{name ->
-                String col = dom.persister.getPropertyColumnNames(name)
-                println col
-            }
-
-            String dbColumnName = dom.persister.getPropertyColumnNames(namedParamValue[1])
-
-            pers.properties
-            pers.attributes
-            pers.keyColumnNames
-            pers.metaPropertyValues
-            pers.tableName
-            pers.fromTableFragment(pers.tableName)
-            pers.entityMetamodel.properties
-            def pN1 = pers.entityMetamodel.propertyNames
-            def pN2 = pers.entityMetamodel.getPropertyNames()
-            dom.persister.getPropertyNames()
-        }
-
-        dfr.addNamedParameters()
-
-        String testRes = MapUtil.convertMapToJSONString(dfr.domainFieldMap)
+        result = dfInstance.save(false)
 
         then:
 
-        testRes == "???"
+        result == true
+
+        //testRes == "???"
 
     }
 
