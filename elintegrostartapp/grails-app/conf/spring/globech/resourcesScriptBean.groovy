@@ -664,6 +664,7 @@ beans {
         def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
         def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
         def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
+        def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
         methods ="""afterRefreshing(response){
               
                                  var params = response;
@@ -680,12 +681,19 @@ beans {
                                   else if(extension == 'doc' || extension == 'docx'){
                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForDocFile}')   
                                   }
+                                  else if(extension == 'csv' || extension == 'CSV'){
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForCsvFile}')   
+                                  }
                                   
                                   excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
+                                  
+                                  var applicantId = response.vueElintegroApplicantCVDataframe_application_id;
+                                  var imageSrc = "/fileDownload/imagePreview/"+applicantId;
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_images_name',imageSrc);    
                                  
-                                  }
-                             
-                                  """
+                                  },\n
+                              
+        """
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
@@ -702,5 +710,21 @@ beans {
                                                                    self.vueElintegroCommentPageForApplicantDataframe_fillInitData()
                                                                    });
                   }"""
+    }
+    vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
+        methods ="""saveProject(){
+                    var allParams = this.state;
+                    var self = this;
+                    allParams['dataframe'] = 'vueCreateProjectForTranslationDataframe';
+                                    axios({
+                                           method:'post',
+                                           url:'${contextPath}/translatorAssistant/saveProjectData',
+                                           data: allParams
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                   self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
+                                                                   this.location.reload();
+                                                                   });
+                    }"""
     }
 }
