@@ -51,7 +51,7 @@ beans {
                                          temporary
                                          width = "min-content">
                                          <vueElintegroNavigationFirstTwoButtonDataframe/>
-                                         <div style="margin-right:70px;margin-bottom: -20px; padding:0px 0px 0px 0px;"><vueElintegroAppsDataframe/></div>
+                                         <div style="margin-right:95px;margin-bottom: -20px;"><vueElintegroAppsDataframe/></div>
                                          <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                          <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/>
                                      </v-navigation-drawer>
