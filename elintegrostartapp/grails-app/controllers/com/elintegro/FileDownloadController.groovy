@@ -18,12 +18,11 @@ class FileDownloadController {
             try {
                 render(contentType: 'application/octet-stream', file: file, fileName: fileName, encoding: "UTF-8")
             }
-            catch(Exception e){
+            catch (Exception e) {
                 log.debug("Error downloading file" + e)
             }
 
-        }
-        else {
+        } else {
             log.error("Such file +$fileName+ doesn't exist.")
         }
     }
