@@ -11,8 +11,8 @@ beans {
 				,"vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe","vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 				"vueElintegroResetPasswordDataframe","vueElintegroUserProfileDataframe","vueElintegroProfileMenuDataframe","vueCareersPageButtonDataframe",
 				"vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe","vueElintegroApplicantDetailsDataframe",
-				"vueTechnologiesDataframe","vueClientProjectDataframe","vueCreateProjectForTranslationDataframe","vueTranslatorDataframe","vueTranslatorAssistantDataframe","vueAppsDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueElintegroApplicantsDataframe",
-				"vueContactUsPageDataframe","vueElintegroLoginDataframe","vueElintegroRegisterDataframe","vueElintegroNavigationButtonDataframe","vueElintegroNavigationButtonAfterLoggedInDataframe","vueElintegroAppBarDataframe","vueElintegroLogoDataframe",
+				"vueTechnologiesDataframe","vueClientProjectDataframe","vueCreateProjectForTranslationDataframe","vueTranslatorDataframe","vueTranslatorAssistantDataframe","vueElintegroSubMenuDataframe","vueElintegroAppsDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueElintegroApplicantsDataframe",
+				"vueContactUsPageDataframe","vueElintegroLoginDataframe","vueElintegroRegisterDataframe","vueElintegroNavigationFirstTwoButtonDataframe","vueElintegroNavigationButtonBeforeLoggedInDataframe","vueElintegroNavigationButtonAfterLoggedInDataframe","vueElintegroAppBarDataframe","vueElintegroLogoDataframe",
         ]
 		dataframesToShowInMainPage = []
 		containerLayout = "vueElintegroContainerLayout" //outermost layout name
