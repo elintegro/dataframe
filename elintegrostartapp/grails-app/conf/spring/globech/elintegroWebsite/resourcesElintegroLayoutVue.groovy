@@ -45,13 +45,16 @@ beans {
     vueElintegroNavigationDrawerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>
-                        <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
-                           <v-navigation-drawer v-model="drawer"
-        app
-        temporary
-        width = "min-content">
-       <vueElintegroAppBarDataframe/>       
-       </v-navigation-drawer>
+                                     <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
+                                     <v-navigation-drawer v-model="drawer"
+                                         app
+                                         temporary
+                                         width = "min-content">
+                                         <vueElintegroNavigationFirstTwoButtonDataframe/>
+                                         <div style="margin-right:70px;margin-bottom: -20px; padding:0px 0px 0px 0px;"><vueElintegroAppsDataframe/></div>
+                                         <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                         <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/>
+                                     </v-navigation-drawer>
        </div>"""
     }
     vueElintegroMidSectionLayout(ColumnLayoutVue){bean ->
@@ -71,17 +74,34 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex>
                                 <v-toolbar-items >
-                                 <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
-                                 <vueElintegroNavigationButtonDataframe v-else/>    
-                                </v-toolbar-items></v-flex>
-                               """
+                                  <vueElintegroNavigationFirstTwoButtonDataframe/>
+                                  <div style="padding: 40px 0px 0px 0px;"><vueElintegroAppsDataframe/></div>
+                                  <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                  <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/>    
+                                </v-toolbar-items>
+        </v-flex> """
 
     }
-    vueElintegroAppsDataframeLayout(ColumnLayoutVue) { bean ->
+    vueElintegroAppsDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="blue darken-2" height="100px" style="margin-bottom:30px;">
-                                 <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
-                                  </v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]
+        layoutPlaceHolder = """ <div class="text-center" >
+                                 <v-menu open-on-hover offset-y tile z-index = 101 >
+                                     <template v-slot:activator="{ on, attrs }">
+                                         <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">Apps</v-btn>
+                                     </template>
+                                     <v-list width="min-content" style="margin-left:-10px;">
+                                         <v-list-item  @click="">
+                                         <v-list-item-title><vueElintegroSubMenuDataframe/></v-list-item-title>
+                                         </v-list-item>
+                                     </v-list>
+                                 </v-menu>
+        </div>"""
+
+    }
+    vueElintegroSubMenuDataframeLayout(ColumnLayoutVue) { bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
+                                  [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                   </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
