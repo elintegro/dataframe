@@ -85,7 +85,7 @@ beans {
     vueElintegroAppsDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """ <div class="text-center" >
-                                 <v-menu open-on-hover offset-y tile z-index = 101 >
+                                 <v-menu offset-y tile z-index = 101 close-on-content-click>
                                      <template v-slot:activator="{ on, attrs }">
                                          <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">Apps</v-btn>
                                      </template>
