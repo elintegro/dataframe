@@ -25,7 +25,7 @@ class ProfileDetailController {
                 person.mainPicture = profileData.vueElintegroUserProfileDataframe_propertyImages
             }
             person.phone = profileData.vueElintegroUserProfileDataframe_person_phone
-            for (item in profileData.vueElintegroUserProfileDataframe_languages_ename) {
+            for (item in profileData.vueElintegroUserProfileDataframe_person_languages) {
                 Language languages = Language.findById(item.id)
                 person.addToLanguages(languages)
             }
