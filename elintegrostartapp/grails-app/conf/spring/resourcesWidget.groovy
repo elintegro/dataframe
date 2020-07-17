@@ -11,6 +11,7 @@ import com.elintegro.erf.widget.vue.GalleryDisplayWidgetVue
 import com.elintegro.erf.widget.vue.GridWidgetVue
 import com.elintegro.erf.widget.vue.ImageUploadWidgetVue
 import com.elintegro.erf.widget.vue.InputWidgetVue
+import com.elintegro.erf.widget.vue.ListWidgetVue
 import com.elintegro.erf.widget.vue.MapWidgetVue
 import com.elintegro.erf.widget.vue.MultiSelectComboboxVue
 import com.elintegro.erf.widget.vue.NumberInputWidgetVue
@@ -24,6 +25,7 @@ import com.elintegro.erf.widget.vue.FileUploadWidgetVue
 import com.elintegro.erf.widget.vue.FilesUploadWidgetVue
 import com.elintegro.erf.widget.vue.TextDisplayWidgetVue
 import com.elintegro.erf.widget.vue.TreeWidgetVue
+
 
 beans {
 
@@ -52,5 +54,7 @@ beans {
 	TextDisplayWidgetVue(TextDisplayWidgetVue){}
 	FileUploadWidgetVue(FileUploadWidgetVue){}
 	FilesUploadWidgetVue(FilesUploadWidgetVue){}
-	FilesDisplayWidgetVue(FilesDisplayWidgetVue)
+	FilesDisplayWidgetVue(FilesDisplayWidgetVue){}
+	ListWidgetVue(ListWidgetVue){}
+
 }
