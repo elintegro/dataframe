@@ -21,13 +21,16 @@ class ProfileDetailController {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             Date date = inputFormat.parse(profileData.vueElintegroUserProfileDataframe_person_bday)
             person.bday = date
-            person.mainPicture = profileData.vueElintegroUserProfileDataframe_propertyImages
+            if(profileData.vueElintegroUserProfileDataframe_propertyImages != null && profileData.vueElintegroUserProfileDataframe_propertyImages != "" ) {
+                person.mainPicture = profileData.vueElintegroUserProfileDataframe_propertyImages
+            }
             person.phone = profileData.vueElintegroUserProfileDataframe_person_phone
             for (item in profileData.vueElintegroUserProfileDataframe_person_languages) {
                 Language languages = Language.findById(item.id)
                 person.addToLanguages(languages)
-                person.save(flush: true)
             }
+            person.save(flush: true)
+
             def profileDetail = [person: profileData]
             resultData = [success: true, params: profileData, newData: profileDetail]
         }
