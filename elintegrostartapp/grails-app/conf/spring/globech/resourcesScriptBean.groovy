@@ -727,4 +727,20 @@ beans {
                                                                    });
                     }"""
     }
+    vueTranslatorDataframe_script(VueJsEntity){
+        methods = """ addLanguage(){
+                                    var allParams = this.state;
+                                    var self = this;
+                                    allParams['dataframe'] = 'vueTranslatorDataframe';
+                                    axios({
+                                           method:'post',
+                                           url:'${contextPath}/translatorAssistant/addLanguage',
+                                           data: allParams
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                   });
+
+        }
+       """
+    }
 }
