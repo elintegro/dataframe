@@ -737,6 +737,7 @@ beans {
                                            url:'${contextPath}/translatorAssistant/addLanguage',
                                            data: allParams
                                     }).then(function(responseData){
+                                                                   self.vueTranslatorDataframe_fillInitData()
                                                                    var response = responseData.data;
                                                                    });
 

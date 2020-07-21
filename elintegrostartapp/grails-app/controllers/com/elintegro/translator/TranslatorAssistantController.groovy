@@ -14,12 +14,12 @@ class TranslatorAssistantController {
     def addLanguage(){
         def selectedLanguage = request.getJSON()
         println(selectedLanguage)
-        Text text = new Text()
         for(item in selectedLanguage.vueTranslatorDataframe_target_language){
-            println(item)
+            Text text = new Text()
             text.language = item.ename
+            text.save(flush:true)
         }
-        text.save(flush:true)
 
+     render(sucess:true)
     }
 }

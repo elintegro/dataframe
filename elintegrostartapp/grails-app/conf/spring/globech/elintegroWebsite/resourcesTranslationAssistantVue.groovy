@@ -74,6 +74,13 @@ beans{
                         , search:true
                         ,multiple: true
                         ,valueMember:"id"
+                ],
+                "text.language":[
+                        widget: "ListWidgetVue"
+                        , hql: """select text.id as id, text.language as language from Text text group by language"""
+                        ,"displayMember":"language"
+                        ,internationalize: true
+                        ,valueMember:"id"
                 ]
         ]
         dataframeButtons = [add:[name:"add",type:"button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.addLanguage()"""]]
