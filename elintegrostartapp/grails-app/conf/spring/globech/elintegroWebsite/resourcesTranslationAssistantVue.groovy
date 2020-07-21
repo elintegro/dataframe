@@ -65,6 +65,8 @@ beans{
         saveButton = false
         route = true
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        doBeforeRefresh = """var projectDetails = excon.getFromStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list')
+                         allParams['projectId']= parseInt(projectDetails.id,10) """
         addFieldDef =[
                 "target.language":[
                         widget: "ComboboxVue"
