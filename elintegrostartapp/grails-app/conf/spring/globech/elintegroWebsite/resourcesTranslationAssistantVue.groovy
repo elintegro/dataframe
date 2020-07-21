@@ -49,7 +49,7 @@ beans{
                 ],
                 "project.sourceFile":[
                         widget: "FilesUploadWidgetVue"
-                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                        ,ajaxFileSaveUrl: "${contextPath}/translatorAssistant/fileUpload"
                 ]
         ]
         dataframeButtons=[
