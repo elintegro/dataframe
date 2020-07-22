@@ -66,9 +66,12 @@ beans{
         route = true
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doBeforeRefresh = """var projectDetails = excon.getFromStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list')
-                         allParams['projectId']= parseInt(projectDetails.id,10) """
+                         allParams['projectId']= projectDetails.id """
+        hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
         addFieldDef =[
-                "target.language":[
+                "project.name":[widget:"InputWidgetVue",readOnly:true],
+                "project.sourceLanguage":[widget:"InputWidgetVue",readOnly:true],
+                "project.languages":[
                         widget: "ComboboxVue"
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
                         ,"displayMember":"ename"
@@ -76,17 +79,25 @@ beans{
                         , search:true
                         ,multiple: true
                         ,valueMember:"id"
+                        ,"flexGridValues":['xs11', 'sm11', 'md11', 'lg11', 'xl11'],
                 ],
-                "text.language":[
+                "add":[
+                        "widget"     : "ButtonWidgetVue",
+                        "insertAfter":"project.languages",
+                        script       : """ this.addLanguage()""",
+                        "attr"       :"style='background-color:#1976D2; color:white; margin-top:13px;margin-left:-20px;'",
+                        "flexGridValues":['xs1', 'sm1', 'md1', 'lg1', 'xl1'],
+                ],
+                "project.language":[
                         widget: "ListWidgetVue"
-                        , hql: """select text.id as id, text.language as language from Text text group by language"""
+                        , hql: """select text.language as language from Text text  where project_id = :projectId group by language"""
                         ,"displayMember":"language"
                         ,internationalize: true
-                        ,valueMember:"id"
+                        ,valueMember:"projectId"
                 ]
         ]
-        dataframeButtons = [add:[name:"add",type:"button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.addLanguage()"""]]
-        currentFrameLayout=ref("vueElintegroTranslatorDataframeLayout")
+//        dataframeButtons = [add:[name:"add",type:"button",attr: """style='background-color:#1976D2; color:white; margin-bottom:-550px;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.addLanguage()"""]]
+        currentFrameLayout= ref("vueElintegroTranslatorDataframeLayout")
 
     }
 }
