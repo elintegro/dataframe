@@ -79,14 +79,14 @@ beans{
                         , search:true
                         ,multiple: true
                         ,valueMember:"id"
-                        ,"flexGridValues":['xs11', 'sm11', 'md11', 'lg11', 'xl11'],
+                        ,"flexGridValues":['xs12', 'sm12', 'md10', 'lg10', 'xl10'],
                 ],
                 "add":[
                         "widget"     : "ButtonWidgetVue",
                         "insertAfter":"project.languages",
                         script       : """ this.addLanguage()""",
-                        "attr"       :"style='background-color:#1976D2; color:white; margin-top:13px;margin-left:-20px;'",
-                        "flexGridValues":['xs1', 'sm1', 'md1', 'lg1', 'xl1'],
+                        "attr"       :"style='background-color:#1976D2; color:white; margin-top:13px;'",
+                        "flexGridValues":['xs12', 'sm12', 'md1', 'lg1', 'xl1'],
                 ],
                 "project.language":[
                         widget: "ListWidgetVue"
