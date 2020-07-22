@@ -3,6 +3,7 @@ package com.elintegro.translator
 import com.elintegro.gc.FileUploadController
 import grails.converters.JSON
 
+
 class TranslatorAssistantController {
     def translatorService
 
