@@ -30,5 +30,18 @@ class TranslatorAssistantController {
         render(success:true)
 
     }
+    def addLanguage(){
+        def selectedLanguage = request.getJSON()
+        Project project = Project.findById(selectedLanguage.projectId)
+        println(selectedLanguage)
+        for(item in selectedLanguage.vueTranslatorDataframe_project_languages){
+            Text text = new Text()
+            text.project = project
+            text.language = item.ename
+            text.save(flush:true)
+        }
+
+        render(sucess:true)
+    }
 
 }
