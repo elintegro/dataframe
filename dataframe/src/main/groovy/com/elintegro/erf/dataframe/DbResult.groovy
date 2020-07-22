@@ -168,8 +168,8 @@ class DbResult {
 				}
 				def keyValue = inputParams.get(parameter) //TODO what if the parameter namespace is not respected?
 				namedParmeters.put(parameter, keyValue)
-				keyValue = getNamedTypeCastValue(parameter, keyValue)
-				query.setParameter(parameter, keyValue)
+				def keyValue_ = getNamedTypeCastValue(parameter, keyValue)
+				query.setParameter(parameter, keyValue_)
 				log.debug("parameter:"+parameter );
 			}
 		}
