@@ -16,15 +16,15 @@ class TranslatorService {
                 if (keyValue.length == 2) {
                     String key = keyValue[0]
                     String sourceText = keyValue[1]
-                Project project = Project.findByName(projectName)
-                Text text = new Text()
-                text._key = key
-                text.text = sourceText
-                text.project = project
-                text.language = language
+                    Project project = Project.findByName(projectName)
+                    Text text = new Text()
+                    text._key = key
+                    text.text = sourceText
+                    text.project = project
+                    text.language = language
                     text.save(flush: true)
+                }
             }
-        }
         }
     }
     boolean validateTextRecord(String record,String fileName, String language, String projectName) {
