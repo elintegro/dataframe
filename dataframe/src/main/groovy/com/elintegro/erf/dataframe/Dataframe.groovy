@@ -296,7 +296,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	protected void populateMetaData(/* GrailsClass[] domainsClasses */){
 
 		fieldsMetadata = new HashMap<String, MetaField>()
-		parsedHql = new ParsedHql(hql, grailsApplication, sessionFactory)
+		parsedHql = new ParsedHql(hql, grailsApplication, sessionFactory, this.dataframeName)
 
 		List<MetaField> metaFields = metaFieldService.getMetaDataFromFields(parsedHql, dataframeName)
 

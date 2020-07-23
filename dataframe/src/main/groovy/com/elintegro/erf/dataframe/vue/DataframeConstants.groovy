@@ -13,6 +13,7 @@ interface DataframeConstants {
     static final String NAMED_PARAM = "namedParameters"
     static final String DOMAIN_ENTRY = "domain"
     static final String FIELD_ENTRY = "field"
+    static final String PARSED_DOMAIN="parsedDomain"
 
 
     static final String FIELD_PROP_NAME="name"

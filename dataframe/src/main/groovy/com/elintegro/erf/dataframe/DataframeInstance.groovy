@@ -438,51 +438,30 @@ class DataframeInstance {
 	 */
 
 	@Transactional
-	public List commit() throws DataManipulationException {
+	public boolean commit() throws DataManipulationException {
+		boolean ret = true
 		for ( Map.Entry<String, Object> domainInstanceName : savedDomainsMap.entrySet()) {
 			def domainToSave = domainInstanceName.value[1]
-			domainToSave.save()
+			ret = domainToSave.save() && ret
 		}
+		return ret
 	}
 
 
-	public List save() throws DataManipulationException{
+	public boolean save() throws DataManipulationException{
 		return save(true)
 	}
 
-	public List save(boolean doCommit) throws DataManipulationException{
-
+	public boolean save(boolean doCommit) throws DataManipulationException{
 		saveEmbeddedDataframe()
-
 		return saveWritableDomains(doCommit)
-
-		//TODO: bellow code may me needed in future for one-to-many and bidirectional relational domain save
-//		if (hasManyDomainsList.size() > 0){
-//			hasManyDomainsList.each { embdfr ->
-//				String domainAlias = embdfr.hql?embdfr.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0):""
-//				def parentFieldName = df.hql?df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0):""
-//				def keyFldNameToPopulateWithValue = Dataframe.buildFullFieldName_(embdfr.dataframeName, domainAlias, parentFieldName)
-//				String keyCurrentValue = requestParams.get(keyFldNameToPopulateWithValue)
-//				def parentNameParams = df.parsedHql.getNamedParameters().values().toArray()[0]
-//				def dbFieldname = parentNameParams[1]
-//				domainInstancesForSave.each{ domainInst ->
-//					String newValue = String.valueOf(domainInst."${dbFieldname}")
-//					if(!newValue.equals(keyCurrentValue)){
-//						requestParams.put(keyFldNameToPopulateWithValue, newValue)
-//					}
-//				}
-//				def dfInstance1 = new DataframeInstance(embdfr, requestParams)
-//				def res = dfInstance1.save()
-//
-//			}
-//		}
 	}
 
-	private Map saveWritableDomains(boolean doCommit){
+	private boolean saveWritableDomains(boolean doCommit){
 		List domainInstancesForSave = []
 		df.writableDomains.each { domainName, domain ->
 
-			DomainClassInfo domainClassInfo = domain.get("parsedDomain");
+			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
 
 			if (!(savedDomainsMap.containsKey(domainClassInfo.getDomainAlias()))) {
 				//2. Get domain Key fields to decide if this insert or update
@@ -490,22 +469,42 @@ class DataframeInstance {
 				def domainInstance = null;
 				def historyDomainInstance = null
 				if (isInsert) { //Create new domain Instance
-					insertOccured = true;
 					domainInstance = createNewDomainInstance(domainClassInfo);
 				} else { //Retrieve domain Instance
 					domainInstance = retrieveDomainInstanceForUpdate(domainClassInfo);
 					historyDomainInstance = createNewDomainInstanceForHistoryDomain(domainClassInfo)
 				}
 
-				if (applyNewValuesToDomainInstanceAndSave(domainInstance, requestParams, domainClassInfo, historyDomainInstance, doCommit)) {
-					domainInstancesForSave.add(domainInstance);
-					savedDomainsMap.put(domainClassInfo.getDomainAlias(), [domain, domainInstance]);
+				if (applyNewValuesToDomainInstance(domainInstance, requestParams, domainClassInfo, historyDomainInstance)) {
+					if (commitDomainInstance(domainInstance, doCommit)) {
+						//domainInstancesForSave.add(domainInstance);
+						//TODO: see if we can use one of those structures instead of 2 of them!!! - domainInstancesForSave we use in controller, so once refactoring, we will
+						//use savedDomainsMap, retrieving from domainInstance and deprcate domainInstancesForSave
+						savedDomainsMap.put(domainClassInfo.getDomainAlias(), [domain, domainInstance, isInsert]);
+					}
 				}
 			}
 		}
-		return domainInstancesForSave
+		return true
 	}
 
+	private boolean commitDomainInstance(domainInstance, isChanged){
+		if(isChanged){
+			try{
+//				historyDomainInstance.close()
+				domainInstance.save(flush: true)
+				return true
+			}catch(Throwable ee){
+				log.error("Error saving " + domainInstance.toString() + "for params: " + keysNamesAndValue)
+				return false
+			}
+		}else{
+			log.warn("Somebody hit the save button but never changed a thing, so we will not invoke save ! ")
+			return true
+		}
+
+		return false
+	}
 	private void saveEmbeddedDataframe() {
 //Run save for embedded DFs first:
 		for (Map.Entry<String, DataframeVue> emdDfEntry : df.getEmbeddedDataframe()) {
@@ -547,14 +546,29 @@ class DataframeInstance {
 
 
 	public boolean isInsertOccured() {
-		return insertOccured;
+		return insertOccured
 	}
 
 
 	public def getSavedDomainsMap(){
-		return savedDomainsMap;
+		return savedDomainsMap
 	}
 
+	public def isMultipleDomainsToSave(){
+		return (savedDomainsMap?.size() > 1)
+	}
+
+	public boolean setInterDomainRelationships(Map savedDomainMap) {
+		if (!isMultipleDomainsToSave() || !isInsertOccured()) {return false}
+		df?.parsedHql?.joins?.forEach{ -> join1
+			JoinParsed join = (JoinParsed)join1
+			String srcDomain = savedDomainMap.get(join.sourceDomain)
+			def defSrcDomainInstance = srcDomain[1]
+			def targetDomainInstance = savedDomainMap.get(join.targetDomain)
+			defSrcDomainInstance."${join.sourceField}" = targetDomainInstance
+		}
+		return true
+	}
 
 	private def createNewDomainInstance(DomainClassInfo  domainClassInfo){
 		PersistentEntity  queryDomain = domainClassInfo.getValue();
@@ -629,17 +643,19 @@ class DataframeInstance {
 		return domainClass.newInstance()."${findFuncName.toString()}"
 	}
 
-	private boolean isInsertDomainInstance(DomainClassInfo domainClassInfo) {
+	public boolean isInsertDomainInstance(DomainClassInfo domainClassInfo) {
 
 		String domainAlias = domainClassInfo.getDomainAlias()
 		Map domainKeys = requestParams?.domain_keys?."${domainAlias}"
 
+
 		for(def value:  domainKeys.values()){
 			if(!value || StringUtils.isEmpty(value.toString()) || value.toString().toLowerCase() == "new"){
+				insertOccured = true
 				return true
 			}
 		}
-		return false;
+		return insertOccured;
 	}
 
 	private Map<String, String> getParentRefNames(DataframeVue refDataframe) {
@@ -744,7 +760,7 @@ class DataframeInstance {
 		return ClassUtils.getShortClassName(clazz);
 	}
 
-	public boolean applyNewValuesToDomainInstanceAndSave(def domainInstance, JSONObject requestParams, DomainClassInfo domainClassInfo, def historyDomainInstance, boolean doCommit){
+	public boolean applyNewValuesToDomainInstance(def domainInstance, JSONObject requestParams, DomainClassInfo domainClassInfo, def historyDomainInstance){
 
 		boolean isChanged = false
 		boolean isValidate = true
@@ -757,8 +773,8 @@ class DataframeInstance {
 		}
 
 		//*************   MAIN LOOP on PARAMETERS!!!! **************
-		Map parsiters = requestParams?.persisters?."${myDomainAlias}"
-		parsiters?.each() { fieldName, inputValue ->
+		Map persisters = requestParams?.persisters?."${myDomainAlias}"
+		persisters?.each() { fieldName, inputValue ->
 
 			Widget widget = df.getFieldWidget(myDomainAlias, fieldName)
 			Map field = df.getFieldByDomainAliasAndFieldName(myDomainAlias, fieldName)
@@ -797,145 +813,13 @@ class DataframeInstance {
 					//todo: check validation for field latest grails version 3.3.0
 					throw new DataframeException("Field validation Failed")
 				}
-
-				if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
-					def refDomainClass = prop.associatedEntity.getJavaClass()
-					def savedInstance = saveHasManyAssociation(inputValue,refDomainClass,fieldName,historyDomainInstance)
-					historyDomainInstance = savedInstance
-				}
-
-
+			/**
+			 * This is the hearyt of this method: applying the value to the domain for saving later!
+			 */
 			isChanged = widget.populateDomainInstanceValue(domainInstance, domainClassInfo, fieldName, field, inputValue) || isChanged
 
-
-/*
-			if(!df.metaFieldService.isAssociation(prop)){
-
-					//fldVal = DbResult.getTypeCastValue( paramValue, prop)
-					//if(oldfldVal == null || !oldfldVal.equals(fldVal)){
-						//if(fldVal != null){
-							isValidate = fieldValidate(field, inputValue)
-							if (!isValidate){
-								//todo: check validation for field latest grails version 3.3.0
-								throw new DataframeException("Field validation Failed")
-							}
-							//EU!!! cll widget!
-							//domainInstance."${fieldName}" = fldVal
-							isChanged = widget.populateDomainInstanceValue(domainInstance, parsedDomain, fieldName, field, inputValue) || isChanged
-
-						//}
-						//isChanged = true
-					//}
-				}else {
-
-					if(fieldName.startsWith("ref")){ //I'm looking into
-						inputValue = getReferencedFieldValue(requestParams, fieldName);
-					}
-
-					try{
-//						if(StringUtils.isEmpty(paramValue)){
-//							fldVal = 0L;
-//						}else{
-						if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
-							def refDomainClass = prop.associatedEntity.getJavaClass()
-							def savedInstance = saveHasManyAssociation(inputValue,refDomainClass,fieldName,domainInstance)
-							domainInstance = savedInstance
-							isChanged = true
-
-						}else{
-
-
-							if(StringUtils.isEmpty(inputValue)){
-								fldVal = 0L;
-							}else {
-								fldVal = Long.valueOf(inputValue)//df.getTypeCastValue( paramValue, prop)
-							}
-							if(oldfldVal == null || !oldfldVal.id.equals(fldVal)){
-								def nestedInstance = prop.getType().get(Long.valueOf(fldVal))
-								domainInstance."${fieldName}" = nestedInstance
-								isChanged = true
-							}
-						}
-
-//						}
-
-					}catch(Exception e){
-						log.debug"Debugging: ${e.message}", e
-						throw new DataframeException(" Converting parameter value of ${inputValue} to Long was failed");
-					}
-*/
-
-//					boolean qq = (oldfldVal == null || !oldfldVal.id.equals(fldVal) && !(prop.isManyToMany() || prop.isOneToMany()));
-
-
-				//}
-			//}
-
 		} //persisters.each() { fieldName, fieldValue ->
-		//		applying Insert Fields
-		if(isInsertOccured()){
-			df.insertFields.each{fldName, fldValue->
-				def fldList = fldName.toString().split('\\.',-1)
-				def domain = fldList.getAt(0)
-				def field =  fldList.getAt(1)
-				def valueToSave
-				if(fldValue.indexOf("session_") > -1){
-					valueToSave = getSession().getAttribute(fldValue.toString().substring(fldValue.indexOf("_") + 1))?:(long)Holders.grailsApplication.config.guestUserId
-
-				}else{
-					valueToSave = fldValue
-				}
-				try{
-//					if(domainClass.hasPersistentProperty(field)){
-					if(hasPersistentProperty(field, hibernetPersistentEntity)){
-						def propr = hibernetPersistentEntity.getPropertyByName(field)
-						if(!(df.metaFieldService.isAssociation(propr))){
-							def fldVal = DbResult.getTypeCastValue( valueToSave, propr)
-							domainInstance."$field" = fldVal
-						}else{
-//							def clz = propr.referencedPropertyType
-							def clz = propr.associatedEntity.getJavaClass()
-							def associationClass = clz.findById(Long.valueOf(valueToSave))
-							if(associationClass){
-								if(propr.getType()== Set){
-									field = field.toLowerCase().capitalize()
-									domainInstance."addTo${field}"(associationClass)
-								}else{
-									def fldVal = propr.getType().get(Long.valueOf(valueToSave))
-									domainInstance."$field" = fldVal
-								}
-							}else{
-								log.error("Error: No field found for Id: "+valueToSave+" in Domain: "+hibernetPersistentEntity.getShortName())
-							}
-						}
-
-					}else{
-						log.error("Error: Field "+field+" not available for domain: "+hibernetPersistentEntity.getShortName())
-					}
-				}catch(Exception e){
-					log.error("Error: Saving Insert Data, Failed with exception: "+e)
-				}
-			}
-		}
-
-		if(isChanged){
-			try{
-//				historyDomainInstance.close()
-				if(doCommit) {
-					domainInstance.save(flush: true)
-				}
-				return true
-			}catch(Throwable ee){
-				println "error----------"+ee
-				log.error("Error saving " + domainInstance.toString() + "for params: " + keysNamesAndValue)
-				return false
-			}
-		}else{
-			log.warn("Somebody hit the save button but never changed a thing, so we will not invoke save ! ")
-			return true
-		}
-
-		return false
+		return isChanged
 	}//End of method applyNewValuesToDomainInstance
 
 	private static Boolean hasPersistentProperty(String propertyName, HibernatePersistentEntity domainClass){

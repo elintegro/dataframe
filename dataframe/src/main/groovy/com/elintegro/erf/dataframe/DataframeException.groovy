@@ -17,6 +17,8 @@ import groovy.util.logging.Slf4j
 
 @Slf4j
 class DataframeException extends Exception {
+	Dataframe dfr
+
 	public DataframeException (String message) {		
 		super (message);
 		log.error("DataframeException:" + message)
@@ -31,4 +33,38 @@ class DataframeException extends Exception {
 		super (message, cause);
 		log.error("DataframeException:" + message + " Original Exception: " + cause)
 	}
+
+	public DataframeException (Dataframe dfr, String message) {
+		super (message);
+		this.dfr = dfr
+		log.error("DataframeException for dataframe: ${dfr.dataframeName}" + message)
+	}
+
+	public DataframeException (Dataframe dfr, Throwable cause) {
+		super (cause);
+		this.dfr = dfr
+		log.error("DataframeException for dataframe: ${dfr.dataframeName}:" + cause)
+	}
+
+	public DataframeException (Dataframe dfr, String message, Throwable cause) {
+		super (message, cause);
+		this.dfr = dfr
+		log.error("DataframeException for dataframe: ${dfr.dataframeName}:" + message + " Original Exception: " + cause)
+	}
+	public DataframeException (String dfrName, String message) {
+		super (message);
+		log.error("DataframeException for dataframe: ${dfrName}" + message)
+	}
+
+	public DataframeException (Throwable cause, String dfrName) {
+		super (cause);
+		log.error("DataframeException for dataframe: ${dfrName}:" + cause)
+	}
+
+	public DataframeException (String dfrName, String message, Throwable cause) {
+		super (message, cause);
+		this.dfr = dfr
+		log.error("DataframeException for dataframe: ${dfrName}:" + message + " Original Exception: " + cause)
+	}
+
 }

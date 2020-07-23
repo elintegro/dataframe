@@ -91,10 +91,13 @@ class ComboboxVue extends WidgetVue {
     }
 
     //	saves onetomany and manytomany
-    private boolean saveHasManyAssociation(JSONArray inputValue, def refDomainClass, String fieldName, def domainInstance){
-        JSONArray oldfldVal = new JSONArray(domainInstance."${fieldName}")
-        if(isSelectionEqualsToOld(oldfldVal, inputValue)){
-            return false
+    private boolean saveHasManyAssociation(JSONArray inputValue, def refDomainClass, String fieldName, def domainInstance) {
+        def oldfldVal = domainInstance."${fieldName}"
+        if (oldfldVal) {
+            JSONArray oldfldValArr = new JSONArray(domainInstance."${fieldName}")
+            if (isSelectionEqualsToOld(oldfldVal, inputValue)) {
+                return false
+            }
         }
         domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
         inputValue.each{val ->

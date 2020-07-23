@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -14,7 +14,10 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.gerf
 
 import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DomainClassInfo
+import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.service.JavascriptService
 import com.elintegro.erf.dataframe.service.TreeService
@@ -202,51 +205,61 @@ class DataframeController {
 	 * object.Return a json as per the success or failure of the save.
 	 * @return
 	 */
-//	def ajaxSave(){
-//		ajaxSave(params)
-//
-//	}
-
 	def ajaxSave(){
-		def resultData = ajaxSaveRaw();
-		resultData.remove("dfInstance")
+		def resultData = saveRaw();
+		//resultData.remove("dfInstance")
 		def converter = resultData as JSON
 		converter.render(response)
 	}
 
-	def ajaxSaveRaw(){
-		def _params = request.getJSON()
-		Dataframe dataframe = getDataframe(_params)
-		def dfInstance = new DataframeInstance(dataframe, _params)
+	private def saveRaw(){
+		def requestParams = request.getJSON()
+		Dataframe dataframe = getDataframe(requestParams)
+		def dataframeInstance = new DataframeInstance(dataframe, requestParams)
 		def operation = 'U'; //Update
 		def result;
 
 		try {
-			result = dfInstance.save(true);
+			result = dataframeInstance.save(true);
 		}catch(Exception e){
-			log.error("Failed to save data for dataframe ${dfInstance.df.dataframeName} Error : \n " + e)
+			log.error("Failed to save data for dataframe ${dataframeInstance.df.dataframeName} Error : \n " + e)
 		}
 
-		if(dfInstance.isInsertOccured()){
+		if(dataframeInstance.isInsertOccured()){
 			operation = "I";
 		}
 
-		def resultData
+		def responseData
 		def generatedKeys = [:]
 		def generatedKeysArr = []
 
-		Map savedResultMap = dfInstance.getSavedDomainsMap();
+		Map savedResultMap = dataframeInstance.getSavedDomainsMap();
 
 		Map<String, Map> resultAlias = [:]
 		savedResultMap.each { domainAlias, domainObj ->
 			def domain = domainObj[0]
 			def domainInstance = domainObj[1]
+			boolean isInsertDomainInstance = domainObj[2]
+			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
 			domain?.keys?.each{ key ->
 				def keyValue = domainInstance."${key}"
+				//TODO: we put key in requestParams sowe probably ddonot need this generatedKey
 				generatedKeys.put("${domain.parsedDomain}_${key}", keyValue)
 				generatedKeysArr.add(keyValue)
-			}
+				//EU!!! here
 
+				String myDomainAlias = domainClassInfo.getDomainAlias()
+				def keyOldValue = requestParams?.domain_keys?."${myDomainAlias}"."${key}"
+				if(keyOldValue == null ) {
+					requestParams?.domain_keys?."${myDomainAlias}".put(key, keyValue)
+				}else if(keyOldValue != keyValue){
+					//EU!!!
+					throw new DataframeException("Save is trying to change Key Value (and it is not Insert!) Could be hacker's attack!")
+				}
+				domainObj.add(keyOldValue)
+
+
+			}
 			Map record = [:];
 			def properties = getAllProperties(domainInstance)
 			properties.each { fieldName, value ->
@@ -258,26 +271,27 @@ class DataframeController {
 			resultAlias.put(String.valueOf(domainAlias), record)
 		}
 
-/*
-		result?.each{ record->
-			def _id = record.id
-			generatedKeys.add record.id
+		//TODO: continue here:
+		if (dataframeInstance.isMultipleDomainsToSave() && dataframeInstance.isInsertOccured()){
+			//TODO: inter-domain relationship
+			dataframeInstance.setInterDomainRelationships(savedResultMap)
 		}
-*/
+
+
 		//TODO: why do we need this? May be it is failing render process?
-		_params.remove("controller")
-		_params.remove("action")
+		requestParams.remove("controller")
+		requestParams.remove("action")
 
 		MessageSource messageSource = dataframe.messageSource
 
 		if(result) {
 			String msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
-			resultData = ['success': true, 'msg': msg, generatedKeys: generatedKeys, nodeId: generatedKeysArr, operation: operation, newData: resultAlias, params: _params, dfInstance: dfInstance]
+			responseData = ['success': true, 'msg': msg, generatedKeys: generatedKeys, nodeId: generatedKeysArr, operation: operation, newData: resultAlias, params: requestParams, dfInstance: dataframeInstance]
 		} else {
 			String msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
-			resultData = ['msg': msg, 'success': false]
+			responseData = ['msg': msg, 'success': false]
 		}
-		return resultData
+		return responseData
 	}
 
 	/**

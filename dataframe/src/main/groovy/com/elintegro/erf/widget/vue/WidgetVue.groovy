@@ -46,7 +46,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
             return false
         }
         def oldfldVal = domainInstance."${fieldName}"
-        if(oldfldVal == inputValue){
+        if(oldfldVal == inputValue.value){
             return false
         }
         if(isMandatory(field) && !inputValue.value){
