@@ -727,7 +727,8 @@ beans {
                                                                    });
                     }"""
     }
-    vueTranslatorDataframe_script(VueJsEntity){
+    vueTranslatorDataframe_script(VueJsEntity){ bean ->
+        data = """isHidden : false """
         methods = """ addLanguage(){
                                     var allParams = this.state;
                                     var self = this;
@@ -742,7 +743,36 @@ beans {
                                                                    var response = responseData.data;
                                                                    });
 
+        },\n
+        translatedText(params){
+        excon.saveToStore('vueGridOfTranslatedTextDataframe','targetLanguage',params.language)
+        excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
+        excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
+        this.isHidden = !this.isHidden;
+        var allParams = this.state;
+        var self = this;
         }
        """
+    }
+    vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
+        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true"""
+        methods = """
+                  retrieveTranslatedText(){
+                  var allParams = this.state;
+                  var self = this;
+                   axios({
+                                           method:'post',
+                                           url:'${contextPath}/translatorAssistant/translateWithGoogle',
+                                           data: allParams
+                                    }).then(function(responseData){
+                                                                   self.vueGridOfTranslatedTextDataframe_fillInitData();
+                                                                   self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                                                   var response = responseData.data;
+                                                                   });
+                  
+                
+                  }
+                  """
+
     }
 }

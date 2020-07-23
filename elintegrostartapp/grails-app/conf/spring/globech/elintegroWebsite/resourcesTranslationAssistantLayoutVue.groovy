@@ -26,8 +26,18 @@ beans{
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="blue darken-2" height="100px" style="margin-bottom:30px;">
                                  <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
                                   </v-toolbar>
-                                  <v-flex xs12 sm12 md4 lg4 xl4>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>
+                                  <v-row>
+                                  <v-col cols="4">[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-col>
+                                  <v-col cols="8"><vueGridOfTranslatedTextDataframe v-if="isHidden"/></v-col></v-row>
                                   </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+    }
+    vueGridOfTranslatedTextDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
+                                 [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
+                                 </v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
     }
 }

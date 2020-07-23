@@ -43,5 +43,11 @@ class TranslatorAssistantController {
 
         render(sucess:true)
     }
+    def translateWithGoogle(){
+        def param = request.getJSON()
+        translatorService.translationWithGoogle(param.projectId, param.sourceLanguage, param.targetLanguage)
+        render(success:true)
+
+    }
 
 }

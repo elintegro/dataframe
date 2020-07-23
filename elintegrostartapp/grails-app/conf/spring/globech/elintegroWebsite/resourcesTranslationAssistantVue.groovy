@@ -26,7 +26,7 @@ beans{
                 translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs12', 'sm12', 'md10', 'lg10', 'xl10'] ],
                 createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2'] ]
         ]
-        childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
+        childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe','vueGridOfTranslatedTextDataframe']
         currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
     }
     vueCreateProjectForTranslationDataframe(DataframeVue){bean ->
@@ -94,10 +94,35 @@ beans{
                         ,"displayMember":"language"
                         ,internationalize: true
                         ,valueMember:"projectId"
-                ]
+                        ,OnClick:"translatedText(item)"
+
+                ],
         ]
-//        dataframeButtons = [add:[name:"add",type:"button",attr: """style='background-color:#1976D2; color:white; margin-bottom:-550px;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.addLanguage()"""]]
+        childDataframes = ['vueGridOfTranslatedTextDataframe']
         currentFrameLayout= ref("vueElintegroTranslatorDataframeLayout")
 
     }
+    vueGridOfTranslatedTextDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueGridOfTranslatedTextDataframe']
+        saveButton = false
+        initOnPageLoad = true
+        flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        doBeforeRefresh = """allParams['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
+                           allParams['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
+                           allParams['sourceLanguage'] =excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage'); """
+        addFieldDef = ["translatedText":[
+                                     widget: "GridWidgetVue"
+                                     ,name: "translatedText"
+                                     , hql             : """select text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :targetLanguage"""
+                                     , gridWidth       : 820
+                                     , showGridSearch  : true
+                                     , internationalize: true
+                                     , sortable        : true]]
+        dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_translateWithGoogle' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""]
+        ]
+        currentFrameLayout= ref("vueGridOfTranslatedTextDataframeLayout")
+
+    }
+
 }
