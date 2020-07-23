@@ -745,12 +745,10 @@ beans {
 
         },\n
         translatedText(params){
-        excon.saveToStore('vueGridOfTranslatedTextDataframe','targetLanguage',params.language)
-        excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
-        excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
-        this.isHidden = !this.isHidden;
-        var allParams = this.state;
-        var self = this;
+                               excon.saveToStore('vueGridOfTranslatedTextDataframe','targetLanguage',params.language)
+                               excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
+                               excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
+                               this.isHidden = !this.isHidden;
         }
        """
     }
