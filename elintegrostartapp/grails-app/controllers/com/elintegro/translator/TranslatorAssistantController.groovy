@@ -43,5 +43,8 @@ class TranslatorAssistantController {
 
         render(sucess:true)
     }
+ def translate(){
+     translatorService.translate()
+ }
 
 }

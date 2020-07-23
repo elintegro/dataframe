@@ -96,7 +96,7 @@ beans{
                         ,valueMember:"projectId"
                 ]
         ]
-//        dataframeButtons = [add:[name:"add",type:"button",attr: """style='background-color:#1976D2; color:white; margin-bottom:-550px;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.addLanguage()"""]]
+        dataframeButtons = [googleTranslate:[name:"googleTranslate",type:"button",attr: """style='background-color:#1976D2; color:white; margin-bottom:-550px;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.googleTranslate()"""]]
         currentFrameLayout= ref("vueElintegroTranslatorDataframeLayout")
 
     }
