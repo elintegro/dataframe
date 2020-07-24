@@ -5,7 +5,7 @@ import grails.util.Holders
 class TranslatorService {
 
     def loadTexts(String fileName, String language, String projectName){
-        def file = Holders.grailsApplication.config.images.storageLocation+"/images/"+fileName
+        def file = Holders.grailsApplication.config.images.storageLocation+"/images/"+"${projectName}"+"/"+fileName
         File sourceFile = new File(file);
         def lines = sourceFile.readLines()
         def targetLabels = []

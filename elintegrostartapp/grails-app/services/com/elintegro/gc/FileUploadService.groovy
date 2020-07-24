@@ -30,10 +30,10 @@ class FileUploadService {
     }
     private static final String SEPARATOR = "/"
 
-    public def imageSave(def inputFile, HttpServletRequest request){
+    public def imageSave(def inputFile, HttpServletRequest request,String projectName){
 
 //        String filePath = request.getServletContext().getRealPath(Holders.grailsApplication.config.images.storageLocation)
-        String filePath = Holders.grailsApplication.config.images.storageLocation + "/" + Holders.grailsApplication.config.images.imageDirectory
+        String filePath = Holders.grailsApplication.config.images.storageLocation + "/" + Holders.grailsApplication.config.images.imageDirectory + "/" + "${projectName}"
 //        Path folder = Paths.get(System.getProperty("upload.location"));
         def testPath = request.getServletContext()
         File saveLocation = new File(filePath)
