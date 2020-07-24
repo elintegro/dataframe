@@ -111,18 +111,50 @@ beans{
         doBeforeRefresh = """allParams['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
                            allParams['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
                            allParams['sourceLanguage'] =excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage'); """
+        doAfterRefresh = """self.buttonShowHide(response);"""
         addFieldDef = ["translatedText":[
                                      widget: "GridWidgetVue"
                                      ,name: "translatedText"
-                                     , hql             : """select text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :targetLanguage"""
+                                     , hql             : """select text.id as Id, text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :targetLanguage"""
                                      , gridWidth       : 820
                                      , showGridSearch  : true
                                      , internationalize: true
-                                     , sortable        : true]]
+                                     , sortable        : true
+                                     ,onClick :[showAsDialog: true, refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
+                                     ,editButton: true
+                                     ,onButtonClick   : [
+                                                        ['actionName': 'Edit Text', 'buttons': [
+                                                        [name        : "edit"
+                                                        ,MaxWidth: 500
+                                                        ,showAsDialog: true
+                                                        ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
+                                                        ,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe")
+                                                        ,vuetifyIcon : [name: "edit"]
+                                     ]]]]
+        ]]
         dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_translateWithGoogle' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""]
         ]
+        childDataframes = ["vueEditTranslatedRecordsOfGridDataframe"]
         currentFrameLayout= ref("vueGridOfTranslatedTextDataframeLayout")
 
+    }
+
+    vueEditTranslatedRecordsOfGridDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueEditTranslatedRecordsOfGridDataframe']
+        saveButton = true
+        initOnPageLoad = true
+        putFillInitDataMethod = true
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        doBeforeRefresh =  """allParams['id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
+        doBeforeSave = """allParams['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
+        doAfterSave = """ excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
+                          excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'vueGridOfTranslatedTextDataframe_translatedText', 'U');
+                      """
+        hql = """select text.id as Id, text._key as Key, text.text as Text from Text text where text.id =:id"""
+        addFieldDef = ["text._key":[readOnly: true]]
+        currentFrameLayout = ref("vueEditTranslatedRecordsOfGridDataframeLayout")
     }
 
 }

@@ -314,7 +314,7 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 			logSql = true
 //	  	 	dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev?useUnicode=true&amp;characterEncoding=UTF-8"
+			url = "jdbc:mysql://localhost:3308/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
 //			username = "root"
 //			password = "qbohfoj"
 			username = "developer"
@@ -372,7 +372,7 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 //			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
 //			url = " jdbc:mysql://0.tcp.ngrok.io:15905/gcerf"
-			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
+			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
 			username = "developer"
 			password = "java1177"
 			logSql = true
@@ -410,7 +410,7 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 			logSql = true
 //			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
+			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
 			username = "developer"
 			password = "java1177"
 
@@ -446,7 +446,7 @@ docker {
 		logSql = true
 		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 //		dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-		url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_dev"
+		url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
 		username = "developer"
 		password = "java1177"
 		logSql = true

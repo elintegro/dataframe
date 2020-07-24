@@ -755,22 +755,30 @@ beans {
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
         data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true"""
         methods = """
-                  retrieveTranslatedText(){
-                  var allParams = this.state;
-                  var self = this;
-                   axios({
-                                           method:'post',
-                                           url:'${contextPath}/translatorAssistant/translateWithGoogle',
-                                           data: allParams
-                                    }).then(function(responseData){
-                                                                   self.vueGridOfTranslatedTextDataframe_fillInitData();
-                                                                   self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
-                                                                   var response = responseData.data;
-                                                                   });
-                  
-                
-                  }
-                  """
+                  buttonShowHide(response){
+                        var retrivedData = response.additionalData.vueGridOfTranslatedTextDataframe_translatedText.dictionary;
+                        if(retrivedData.length > 1){
+                           this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                        }
+                  },\n
+                                    retrieveTranslatedText(){
+                                         var allParams = this.state;
+                                         var self = this;
+                                         axios({
+                                              method:'post',
+                                              url:'${contextPath}/translatorAssistant/translateWithGoogle',
+                                              data: allParams
+                                         }).then(function(responseData){
+                                              self.vueGridOfTranslatedTextDataframe_fillInitData();
+                                              self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                              var response = responseData.data;
+                                         });
+                                    }
+        """
 
+    }
+    vueEditTranslatedRecordsOfGridDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueEditTranslatedRecordsOfGridDataframe:{handler: function(val, oldVal) {this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();}},"""
+        computed = "refreshVueEditTranslatedRecordsOfGridDataframe(){return this.vueEditTranslatedRecordsOfGridDataframe_prop.key},"
     }
 }
