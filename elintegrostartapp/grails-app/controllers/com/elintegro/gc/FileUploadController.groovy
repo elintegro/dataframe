@@ -51,7 +51,7 @@ class FileUploadController {
         }
         render imagePath as JSON
     }
-    def ajaxFileSaveWithParams(params){
+    def ajaxFileSaveWithParams(params,String projectName){
         def fileUploadService = new FileUploadService()
         def fldId = params.fldId
         ArrayList inputFile = []
@@ -61,7 +61,7 @@ class FileUploadController {
             for(int i=0; i<fileSize; i++){
                 inputFile.add(params."$fldId-file[$i]")
             }
-            imagePath = fileUploadService.imageSave(inputFile, request)
+            imagePath = fileUploadService.fileSaveWithFolder(inputFile, request,projectName)
             if (saveFileRecord(imagePath)){
                 imagePath.put('success',true)
             }else {

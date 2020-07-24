@@ -85,6 +85,60 @@ class FileUploadService {
             return null
         }
     }
+    public def fileSaveWithFolder(def inputFile, HttpServletRequest request,String projectName){
+
+        String filePath = Holders.grailsApplication.config.images.storageLocation + "/" + Holders.grailsApplication.config.images.imageDirectory + "/" + "${projectName}"
+        def testPath = request.getServletContext()
+        File saveLocation = new File(filePath)
+        String filesAbsolutePath = saveLocation.getAbsolutePath()
+        boolean saveToLocal = Holders.grailsApplication.config.images.saveLocation.local
+        boolean saveToS3 = Holders.grailsApplication.config.images.saveLocation.s3
+
+        if( !saveLocation.exists() ){
+            if(saveLocation.mkdirs()){
+                log.debug("SUCCESS: temporary storage location created in local")
+            }else{
+                log.debug( "FAILED: couldn't create temporary storage location.")
+            }
+        }
+
+        ArrayList<Map> s3Url1 = [] //TODO check if the arrayList decraration is correct
+        ArrayList<Map> localUrl1 = []
+        // Store file
+        if(!inputFile?.isEmpty()){
+            inputFile.each{
+                String docName = generateFileName(it)
+                if(saveToS3){
+                    File multiPartToFile = convertMutlipartToNormalFile(it)
+                    String returnUrl = imageSaveToS3(multiPartToFile,"${docName}")
+//                    fl.delete()
+                    s3Url1.add([url:returnUrl, name:docName])
+                }
+                if (saveToLocal){
+//                    String returnUrl = imageSaveToS3(multiPartToFile,"${docName}")
+//                    String path = "${filesAbsolutePath}/${docName}"
+                    // File fl = new File(path)
+//                    it.transferTo(fl) //Todo make it working for saving files locally
+                    File file = new File(filePath, "${docName}");
+
+                    try  {
+                        InputStream input = it.getInputStream()
+                        Files.copy(input, file.toPath());
+                    }catch(Exception e){
+                        log.debug(e.getMessage())
+                    }
+                    localUrl1.add([url:  "${saveLocation}/${docName}", name: docName])
+//                    s3Url1.add([url:returnUrl, name:docName])
+                }
+
+            }
+            return [localUrlList:localUrl1, s3UrlList:s3Url1]
+        }else{
+            log.debug("File: ${inputFile.inspect()} is empty")
+            return null
+        }
+    }
+
     public static File convertMutlipartToNormalFile(MultipartFile file) throws IOException {
         File fl = new File(file.getOriginalFilename());
         fl.createNewFile();

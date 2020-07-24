@@ -25,6 +25,9 @@ tr.selected td {
 .applicant th, .applicant td{
     font-size: 20px;
 }
+.translatedText th, .translatedText td{
+    font-size: 20px;
+}
 /*.first-banner{*/
 /*    background-size:cover;*/
 /*    height:auto;*/
