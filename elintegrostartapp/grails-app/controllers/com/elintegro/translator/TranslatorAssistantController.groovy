@@ -21,11 +21,11 @@ class TranslatorAssistantController {
 
     def fileUpload(){
         def projectId = params.allParams
-        def result = new FileUploadController().ajaxFileSaveWithParams(params)
         Project project = Project.findById(projectId)
         String projectName = project.name
         String language = project.sourceLanguage
         String fileName = project.sourceFile
+        def result = new FileUploadController().ajaxFileSaveWithParams(params,projectName)
         translatorService.loadTexts(fileName,language,projectName)
         render(success:true)
 
@@ -42,6 +42,12 @@ class TranslatorAssistantController {
         }
 
         render(sucess:true)
+    }
+    def translateWithGoogle(){
+        def param = request.getJSON()
+        translatorService.translationWithGoogle(param.projectId, param.sourceLanguage, param.targetLanguage)
+        render(success:true)
+
     }
 
 }

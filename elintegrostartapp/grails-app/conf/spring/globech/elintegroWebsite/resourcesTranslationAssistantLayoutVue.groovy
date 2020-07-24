@@ -26,8 +26,27 @@ beans{
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="blue darken-2" height="100px" style="margin-bottom:30px;">
                                  <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
                                   </v-toolbar>
-                                  <v-flex xs12 sm12 md4 lg4 xl4>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>
+                                  <v-row>
+                                  <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4">[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-col>
+                                  <v-col cols="12" xs="12" sm="12" md="8" xl="8" lg="8"><vueGridOfTranslatedTextDataframe v-if="isHidden"/></v-col></v-row>
                                   </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+    }
+    vueGridOfTranslatedTextDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
+                                 [DATAFRAME_SCRIPT]
+                                 <v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions>
+                                 </v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
+    }
+
+    vueEditTranslatedRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' >
+                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
+                                </v-btn><span>Close</span></v-tooltip></v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
 }
