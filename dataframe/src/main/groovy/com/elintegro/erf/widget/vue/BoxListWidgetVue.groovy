@@ -42,7 +42,7 @@ class BoxListWidgetVue extends WidgetVue {
         StringBuilder requestFieldParams = new StringBuilder()
         StringBuilder fieldParams = new StringBuilder();
         StringBuilder onclickDfrBuilder = new StringBuilder();
-        ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory);
+        ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory, "${dataframe.dataframeName}: ${field?.name}");
         List<MetaField> fieldMetaData = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
         field.put("gridMetaData", fieldMetaData);
         field.put("parsedHql", parsedHql);
@@ -198,7 +198,7 @@ class BoxListWidgetVue extends WidgetVue {
                 if(fieldProps.containsKey(key)){
                     String hql = fieldProps.get(key)
 //                inputData << sessionParams
-                    ParsedHql parsedHql1 = new ParsedHql(hql, dataframe.grailsApplication, dataframe.sessionFactory)
+                    ParsedHql parsedHql1 = new ParsedHql(hql, dataframe.grailsApplication, dataframe.sessionFactory, "${dataframe.dataframeName}: ${key}")
                     DbResult dbRes = new DbResult(hql, inputData, dataframe.sessionFactory.openSession(), parsedHql1)
                     List resultList = dbRes.getResultList()
                     resultList.each {Map result->
@@ -449,7 +449,7 @@ class BoxListWidgetVue extends WidgetVue {
 
         List result = new ArrayList();
 
-        ParsedHql pHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory);
+        //ParsedHql pHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory, "${df.dataframeName}");
 
         fieldMetaData.each{ metaField ->
             Map columnProp = addColumnMap(df, metaField);

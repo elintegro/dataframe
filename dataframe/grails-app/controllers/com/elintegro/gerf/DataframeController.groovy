@@ -208,8 +208,8 @@ class DataframeController {
 	def ajaxSave(){
 		def resultData = saveRaw();
 		//resultData.remove("dfInstance")
-		def converter = resultData as JSON
-		converter.render(response)
+		def rsp = resultData as JSON
+		render(rsp)
 	}
 
 	private def saveRaw(){
@@ -286,7 +286,7 @@ class DataframeController {
 
 		if(result) {
 			String msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
-			responseData = ['success': true, 'msg': msg, generatedKeys: generatedKeys, nodeId: generatedKeysArr, operation: operation, newData: resultAlias, params: requestParams, dfInstance: dataframeInstance]
+			responseData = ['success': true, 'msg': msg, generatedKeys: generatedKeys, nodeId: generatedKeysArr, operation: operation, data: resultAlias, params: requestParams]
 		} else {
 			String msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
 			responseData = ['msg': msg, 'success': false]

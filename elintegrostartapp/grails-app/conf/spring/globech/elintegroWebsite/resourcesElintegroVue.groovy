@@ -268,6 +268,11 @@ beans {
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+
+        doAfterSave = """                         
+                         excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id");
+                      """
+
         addFieldDef = [
 
 //                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue"],

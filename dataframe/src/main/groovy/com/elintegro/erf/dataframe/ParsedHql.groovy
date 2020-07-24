@@ -43,6 +43,7 @@ class ParsedHql {
 
 	String fieldStr
 	String fromStr
+	String fromStr_
 	String joinStr
 	List<JoinParsed> joins = []
 	String groupByStr
@@ -87,13 +88,20 @@ class ParsedHql {
 		print "Emty constructor, called for tests!"
 	}
 
-	ParsedHql(String hql, def grailsApplication, def sessionFactory, String dataframeName){
+	private void init(String hql, def grailsApplication, def sessionFactory, String dataframeName){
 		this.hql = hql?hql.trim().replaceAll("(?!.)\\s", ""):"";
 		this.grailsApplication=grailsApplication
 		this.sessionFactory = sessionFactory
 		this.dataframeName = dataframeName
-
 		parseHQLInit()
+	}
+
+	ParsedHql(String hql, def grailsApplication, def sessionFactory){
+		init(hql, grailsApplication, sessionFactory, "unknown")
+	}
+
+	ParsedHql(String hql, def grailsApplication, def sessionFactory, String dataframeName){
+		init(hql, grailsApplication, sessionFactory, dataframeName)
 	}
 
 	private buildRegexToParseHql(){
@@ -117,8 +125,11 @@ class ParsedHql {
 
 		String whereExists = hql.toLowerCase().find(/\s+where\s+/)
 		int whereInd = 0
-		if(whereExists){hqlExtractRegexSb.append(whereRegexPart)}
-		whereInd = hql.toLowerCase().indexOf(whereExists)
+		if(whereExists){
+			hqlExtractRegexSb.append(whereRegexPart)
+			whereInd = hql.toLowerCase().indexOf(whereExists)
+		}
+
 		String groupByClause = hql.toLowerCase().find(/group\s+by/)
 		int groupByInd = 0
 		if(groupByClause){
@@ -189,17 +200,17 @@ class ParsedHql {
 			}
 
 			//TODO: this code should be depricated and extractParts method will do the job!
-			//def HqlFldMatcher = (hql =~ /^(?i)select\s(.+?)\s(?i)from\s.*/)
-			//def HqlFromMatcher = (hql =~ /.*(?i)from\s(.+?)\s(?i)where\s.*/)
-			//fieldStr = HqlFldMatcher.matches()?HqlFldMatcher[0][1]:""//
-			//fromStr = HqlFromMatcher.matches()?HqlFromMatcher[0][1]:""//
-			//if(fromStr.length()==0){
-			//	HqlFromMatcher = (hql =~ /.*(?i)from\s(.*)/)
-			//	fromStr = HqlFromMatcher.matches()?HqlFromMatcher[0][1]:""//
-			//}
-			//if(fromStr.matches(/.*(?i)join\s(.+?).*/)){
-			//	fromStr = getReplacedJoinString(fromStr)
-			//}
+			def HqlFldMatcher = (hql =~ /^(?i)select\s(.+?)\s(?i)from\s.*/)
+			def HqlFromMatcher = (hql =~ /.*(?i)from\s(.+?)\s(?i)where\s.*/)
+			fieldStr = HqlFldMatcher.matches()?HqlFldMatcher[0][1]:""//
+			fromStr = HqlFromMatcher.matches()?HqlFromMatcher[0][1]:""//
+			if(fromStr.length()==0){
+				HqlFromMatcher = (hql =~ /.*(?i)from\s(.*)/)
+				fromStr = HqlFromMatcher.matches()?HqlFromMatcher[0][1]:""//
+			}
+			if(fromStr.matches(/.*(?i)join\s(.+?).*/)){
+				fromStr = getReplacedJoinString(fromStr)
+			}
 
 			if (!extractParts(hql)){
 				throw DataframeException("There is a parsing error of hql: ${hql}")
@@ -243,7 +254,7 @@ class ParsedHql {
 				}
 
 				fieldStr = extractClause(hqlMatcher,"select")
-				fromStr = extractClause(hqlMatcher,"from")
+				fromStr_ = extractClause(hqlMatcher,"from")
 				whereStr = extractClause(hqlMatcher,"where")
 				whereClauseStr = extractClause(hqlMatcher,"whereClause")
 				joinStr = extractClause(hqlMatcher, "join")
@@ -254,6 +265,8 @@ class ParsedHql {
 				orderByClauseStr = extractClause(hqlMatcher, "orderbyClause")
 
 				extractJoins(joinStr)
+
+				//fromStr = fromStr_
 
 				return true
 			}
@@ -287,8 +300,10 @@ class ParsedHql {
 			if(!StringUtils.isEmpty(joinClause)) {
 				int joinClauseInd = joinStr_.indexOf(joinClause)
 				String joinElementWordWithOption = joinStr_.substring(0, joinClauseInd) //TODO: maybe -1 here?
-				joins.add(new JoinParsed(joinElementWordWithOption, joinClause, this))
+				JoinParsed jp =new JoinParsed(joinElementWordWithOption, joinClause, this)
+				joins.add(jp)
 				joinStr_ = joinStr_.substring(joinElementWordWithOption.length() + joinClause.length())
+				fromStr_ += ",${jp.targetDomain} ${jp.targetDomain}"
 			}
 		}
 	}

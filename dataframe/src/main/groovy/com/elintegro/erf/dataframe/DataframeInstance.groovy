@@ -560,12 +560,12 @@ class DataframeInstance {
 
 	public boolean setInterDomainRelationships(Map savedDomainMap) {
 		if (!isMultipleDomainsToSave() || !isInsertOccured()) {return false}
-		df?.parsedHql?.joins?.forEach{ -> join1
-			JoinParsed join = (JoinParsed)join1
-			String srcDomain = savedDomainMap.get(join.sourceDomain)
+		for(JoinParsed join : df?.parsedHql?.joins){
+			def srcDomain = savedDomainMap.get(join.sourceDomain)
 			def defSrcDomainInstance = srcDomain[1]
 			def targetDomainInstance = savedDomainMap.get(join.targetDomain)
-			defSrcDomainInstance."${join.sourceField}" = targetDomainInstance
+			defSrcDomainInstance."${join.sourceField}" = targetDomainInstance[1]
+			defSrcDomainInstance.save(flush: true)
 		}
 		return true
 	}

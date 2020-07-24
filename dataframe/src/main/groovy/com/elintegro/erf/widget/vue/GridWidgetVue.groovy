@@ -103,7 +103,7 @@ $fieldParams
         StringBuilder requestFieldParams   = new StringBuilder()
         StringBuilder fieldParams          = new StringBuilder();
 
-        ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory);
+        ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory, "${dataframe.dataframeName}:${field.name}" );
         List<MetaField> fieldMetaData      = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
         field.put("gridMetaData", fieldMetaData);
         field.put("parsedHql", parsedHql);
