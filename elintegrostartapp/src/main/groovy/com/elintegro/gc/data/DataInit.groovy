@@ -103,7 +103,8 @@ class DataInit {
 			new Language(code: "fr", ename: "French", name: "Français", description: "French.", inuse: true).save(failOnError: true)
 			new Language(code: "he", ename: "Hebrew", name: "עברית", description: "Hebrew.", inuse: true).save(failOnError: true)
 			new Language(code: "ar", ename: "Arabic", name: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629", description: "Arabic.", inuse: false).save(failOnError: true)
-			new Language(code: "sp", ename: "Spanish", name: "español", description: "Spanish.", inuse: false).save(failOnError: true)
+			new Language(code: "es", ename: "Spanish", name: "español", description: "Spanish.", inuse: false).save(failOnError: true)
+			new Language(code: "ne", ename: "Nepali", name: "Nepali", description: "Nepali.", inuse: false).save(failOnError: true)
 		}
 
 		List languages = Language.findAllByInuse(true);

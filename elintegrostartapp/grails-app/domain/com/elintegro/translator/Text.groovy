@@ -6,6 +6,11 @@ class Text {
     String _key
     String text
 
+    static mapping = {
+        text sqlType: 'longText'
+    }
+
     static constraints = {
+        text(size: 1..15000)
     }
 }

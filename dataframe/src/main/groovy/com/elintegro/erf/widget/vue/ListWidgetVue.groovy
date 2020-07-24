@@ -305,15 +305,16 @@ class ListWidgetVue extends WidgetVue {
         String displayMember = field.displayMember ?: 'name'
         String valueMember = field.valueMember ?: 'id'
         String modelString = getModelString(dataframe, field)
+        String onClick = field.OnClick?:""
         """
            <v-list ${isDisabled(dataframe, field) ? "disabled" : ""}>
                   <v-subheader>$label</v-subheader>
-                  <v-list-item-group v-model = "$modelString" >
+                  <v-list-item-group >
                        <v-list-item  v-for="(item, i) in ${modelString}_items" :key="i">
                           <v-list-item-content>
-                               <v-list-item-title v-text="item.${displayMember}">
+                               <v-list-item-title v-model = "$modelString" v-text="item.${displayMember}"  @click.stop="${onClick}">
                                ${validate(field) ? ":rules = '${fldName}_rule'" : ""}
-                            </v-list-item-title>
+                               </v-list-item-title>
                           </v-list-item-content>
                        </v-list-item>
                   </v-list-item-group>
