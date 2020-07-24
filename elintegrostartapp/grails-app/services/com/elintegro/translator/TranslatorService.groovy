@@ -6,26 +6,35 @@ import grails.util.Holders
 class TranslatorService {
 
     def loadTexts(String fileName, String language, String projectName){
-        def file = Holders.grailsApplication.config.images.storageLocation+"/images/"+fileName
+        def file = Holders.grailsApplication.config.images.storageLocation+"/images/"+"${projectName}"+"/"+fileName
         File sourceFile = new File(file);
-        def lines = sourceFile.readLines()
-        def targetLabels = []
-        lines.each { record ->
-            def a =validateTextRecord( record,fileName,language,projectName)
-            if(a==true) {
-                String[] keyValue = record.split("=")
-                if (keyValue.length == 2) {
-                    String key = keyValue[0]
-                    String sourceText = keyValue[1]
-                    Project project = Project.findByName(projectName)
-                    Text text = new Text()
-                    text._key = key
-                    text.text = sourceText
-                    text.project = project
-                    text.language = language
-                    text.save(flush: true)
+        if(sourceFile.exists()) {
+            try {
+                def lines = sourceFile.readLines()
+                def targetLabels = []
+                lines.each { record ->
+                    def a = validateTextRecord(record, fileName, language, projectName)
+                    if (a == true) {
+                        String[] keyValue = record.split("=")
+                        if (keyValue.length == 2) {
+                            String key = keyValue[0]
+                            String sourceText = keyValue[1]
+                            Project project = Project.findByName(projectName)
+                            Text text = new Text()
+                            text._key = key
+                            text.text = sourceText
+                            text.project = project
+                            text.language = language
+                            text.save(flush: true)
+                        }
+                    }
                 }
+            }catch(Exception e){
+                log.error("File not found exception"+e)
             }
+        }
+        else {
+            log.error("File doesn't exist.")
         }
     }
     boolean validateTextRecord(String record,String fileName, String language, String projectName) {
@@ -55,7 +64,7 @@ class TranslatorService {
 
     }
     def translateFromGoogle(String langFrom, String langTo, String text)throws IOException{
-        String urlStr = "https://script.google.com/macros/s/AKfycbxEPInMGiFG6_a7VRgeaN1MbtfvGRZmjIm9A3g7-yC0vyGoIAYM/exec" +
+        String urlStr = "https://script.google.com/macros/s/AKfycbzrh674fnfPJsjkfHP5NwvKG5brOg_46-X2a9o9voJ6tgjBtLo0/exec" +
                 "?q=" + URLEncoder.encode(text, "UTF-8") +
                 "&target=" + langTo +
                 "&source=" + langFrom;
