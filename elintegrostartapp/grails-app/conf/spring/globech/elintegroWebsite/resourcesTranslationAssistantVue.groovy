@@ -116,22 +116,31 @@ beans{
                                      widget: "GridWidgetVue"
                                      ,name: "translatedText"
                                      , hql             : """select text.id as Id, text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :targetLanguage"""
-                                     , gridWidth       : 820
+                                     , gridWidth       : 420
                                      , showGridSearch  : true
                                      , internationalize: true
                                      , sortable        : true
                                      ,onClick :[showAsDialog: true, refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,editButton: true
                                      ,onButtonClick   : [
-                                                        ['actionName': 'Edit Text', 'buttons': [
+                                                        ['actionName': 'Actions', 'buttons': [
                                                         [name        : "edit"
-                                                        ,MaxWidth: 500
                                                         ,showAsDialog: true
                                                         ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
                                                         ,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe")
                                                         ,vuetifyIcon : [name: "edit"]
-                                     ]]]]
-        ]]
+                                                        ],
+                                                        [name:"googleTranslate"
+                                                         ,showAsDialog: true
+                                                         ,tooltip: [message:"tooltip.grid.googleTranslate",internationalization: true]
+                                                         ,refDataframe: ref("vueGoogleTranslateRecordsOfGridDataframe")
+                                                         ,vuetifyIcon:[name: "translate"]
+                                                        ]]]]
+                                     ,addClassesToHeader:  [sortOrder : "hidden"]
+                                     ,attr: "pa-1"
+                                     ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        ],
+        ]
         dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_translateWithGoogle' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""]
         ]
         childDataframes = ["vueEditTranslatedRecordsOfGridDataframe"]
@@ -155,6 +164,16 @@ beans{
         hql = """select text.id as Id, text._key as Key, text.text as Text from Text text where text.id =:id"""
         addFieldDef = ["text._key":[readOnly: true]]
         currentFrameLayout = ref("vueEditTranslatedRecordsOfGridDataframeLayout")
+    }
+    vueGoogleTranslateRecordsOfGridDataframe(DataframeVue){bean ->
+        bean.parent =dataFrameSuper
+        bean.constructorArgs = ['vueGoogleTranslateRecordsOfGridDataframe']
+        saveButton = true
+        initOnPageLoad = true
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
+        currentFrameLayout =ref("vueGoogleTranslateRecordsOfGridDataframeLayout")
     }
 
 }
