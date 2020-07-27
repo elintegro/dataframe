@@ -753,12 +753,13 @@ beans {
        """
     }
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
-        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true"""
+        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false"""
         methods = """
                   buttonShowHide(response){
                         var retrivedData = response.additionalData.vueGridOfTranslatedTextDataframe_translatedText.dictionary;
                         if(retrivedData.length > 1){
                            this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                           this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=true;
                         }
                   },\n
                                     retrieveTranslatedText(){
@@ -773,6 +774,17 @@ beans {
                                               self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
                                               var response = responseData.data;
                                          });
+                                    },\n
+                                    downloadTargetFile(){
+                                    var allParams = this.state;
+                                    var self = this;
+                                    //var fileName = 
+                                    var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
+                                    var fileLink = document.createElement('a');
+                                    fileLink.href = fileURL;
+                                    //fileLink.setAttribute('download');
+                                    document.body.appendChild(fileLink);
+                                    fileLink.click();
                                     }
         """
 

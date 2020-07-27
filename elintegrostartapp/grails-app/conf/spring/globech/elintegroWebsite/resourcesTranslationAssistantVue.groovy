@@ -90,7 +90,7 @@ beans{
                 ],
                 "project.language":[
                         widget: "ListWidgetVue"
-                        , hql: """select text.language as language from Text text  where project_id = :projectId group by language"""
+                        , hql: """select text.language as language from Text text inner join text.project project  where project_id = :projectId and text.language != project.sourceLanguage group by language"""
                         ,"displayMember":"language"
                         ,internationalize: true
                         ,valueMember:"projectId"
@@ -115,7 +115,7 @@ beans{
         addFieldDef = ["translatedText":[
                                      widget: "GridWidgetVue"
                                      ,name: "translatedText"
-                                     , hql             : """select text.id as Id, text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :targetLanguage"""
+                                     , hql             : """select text.id as Id, text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :targetLanguage and text._key != null"""
                                      , gridWidth       : 820
                                      , showGridSearch  : true
                                      , internationalize: true
@@ -132,7 +132,8 @@ beans{
                                                         ,vuetifyIcon : [name: "edit"]
                                      ]]]]
         ]]
-        dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_translateWithGoogle' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""]
+        dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_translateWithGoogle' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""],
+                            downloadTargetPropertyFile: [name: "downloadTargetPropertyFile",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.downloadTargetFile()"""]
         ]
         childDataframes = ["vueEditTranslatedRecordsOfGridDataframe"]
         currentFrameLayout= ref("vueGridOfTranslatedTextDataframeLayout")
