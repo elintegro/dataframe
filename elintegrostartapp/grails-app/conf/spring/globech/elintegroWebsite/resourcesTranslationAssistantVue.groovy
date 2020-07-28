@@ -147,6 +147,7 @@ beans{
         initOnPageLoad = true
         putFillInitDataMethod = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doBeforeRefresh =  """allParams['id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
         doBeforeSave = """allParams['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
@@ -155,6 +156,9 @@ beans{
                       """
         hql = """select text.id as Id, text._key as Key, text.text as Text from Text text where text.id =:id"""
         addFieldDef = ["text._key":[readOnly: true]]
+        dataframeButtons = [googleTranslate: [name: "googleTranslate",type: "button",attr: """style='background-color:#1976D2; color:white;'""",script: """ this.googleTranslateForEachRecord();""",flexGridValues:['xs12', 'sm12', 'md4', 'lg4', 'xl4']],
+                            restore: [name: "restore",type: "button",attr:"""style='background-color:#1976D2; color:white;'""",script: """this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();""", flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2']]
+        ]
         currentFrameLayout = ref("vueEditTranslatedRecordsOfGridDataframeLayout")
     }
 
