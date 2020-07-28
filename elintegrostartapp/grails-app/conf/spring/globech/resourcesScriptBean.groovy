@@ -792,5 +792,26 @@ beans {
     vueEditTranslatedRecordsOfGridDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueEditTranslatedRecordsOfGridDataframe:{handler: function(val, oldVal) {this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();}},"""
         computed = "refreshVueEditTranslatedRecordsOfGridDataframe(){return this.vueEditTranslatedRecordsOfGridDataframe_prop.key},"
+        methods ="""
+                    googleTranslateForEachRecord(){
+                    var allParams = this.state;
+                    var self = this;
+                    allParams['sourceLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage');
+                    allParams['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
+                    allParams['projectId'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
+                    allParams['dataframe'] = 'vueEditTranslatedRecordsOfGridDataframe';
+
+                     axios({
+                                           method:'post',
+                                           url:'${contextPath}/translatorAssistant/translateEachRecordWithGoogle',
+                                           data: allParams
+                                    }).then(function(responseData){
+                                                                   self.vueEditTranslatedRecordsOfGridDataframe_fillInitData()
+                                                                   var response = responseData.data;
+                                                                   excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'vueGridOfTranslatedTextDataframe_translatedText', 'U');
+
+                                                                   });
+                    }
+                    """
     }
 }
