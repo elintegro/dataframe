@@ -91,9 +91,22 @@ class TranslatorAssistantController {
             log.error("Such file +$fileName+ doesn't exist.")
         }
     }
-
-
-
+     def translateEachRecordWithGoogle(){
+         def param = request.getJSON()
+         Language language = Language.findByEname(param.sourceLanguage)
+         String sourceLanguageCode = language.code
+         Language language1 = Language.findByEname(param.targetLanguage)
+         String targetLanguageCode = language1.code
+         Project project = Project.findById(param.projectId)
+         Text text = Text.findByProjectAndLanguageAnd_key(project,param.sourceLanguage,param.vueEditTranslatedRecordsOfGridDataframe_text__key)
+         def translatedText = translatorService.translateFromGoogle(sourceLanguageCode, targetLanguageCode, text.text)
+         Text text1 = Text.findByProjectAndLanguageAnd_key(project,param.targetLanguage,param.vueEditTranslatedRecordsOfGridDataframe_text__key)
+         text1.text= translatedText
+         text1.save(flush:true)
+         def newDataAfterSave = [Key:param.vueEditTranslatedRecordsOfGridDataframe_text__key,Id:text1.id,Text:translatedText]
+         def resultData = [success: true,newData:[translatedText:newDataAfterSave]]
+         render(resultData as JSON)
+     }
 
 }
 
