@@ -822,6 +822,13 @@ beans {
                                                                    var response = responseData.data;
                                                                    excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text', response.translatedText); 
                                                                    });
+                    },\n
+                    confirmationMessage(){
+                     var result = confirm("Are you sure want to abandon the changes?");
+                     if(result){
+                                excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
+                     }
+                     return false;
                     }
                     """
     }
