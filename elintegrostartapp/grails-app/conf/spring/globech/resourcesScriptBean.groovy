@@ -809,7 +809,6 @@ beans {
                                                                    self.vueEditTranslatedRecordsOfGridDataframe_fillInitData()
                                                                    var response = responseData.data;
                                                                    excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'vueGridOfTranslatedTextDataframe_translatedText', 'U');
-
                                                                    });
                     }
                     """
