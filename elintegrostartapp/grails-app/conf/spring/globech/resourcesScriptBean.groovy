@@ -742,26 +742,39 @@ beans {
                                                                    self.vueTranslatorDataframe_fillInitData()
                                                                    var response = responseData.data;
                                                                    });
+                                    },\n
+                                    translatedText(params){
+                                        var previouslyClickedValue = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage')
+                                        if(previouslyClickedValue == ""){
+                                        this.isHidden = !this.isHidden
+                                        }else{
+                                        this.isHidden = true
+                                        }
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','targetLanguage',params.language)
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
 
-        },\n
-        translatedText(params){
-                               excon.saveToStore('vueGridOfTranslatedTextDataframe','targetLanguage',params.language)
-                               excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
-                               excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
-                               this.isHidden = !this.isHidden;
-        }
+}
+
        """
     }
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
         data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false"""
+        watch = """ refreshVueGridOfTranslatedTextDataframe:{handler: function(val, oldVal) {this.vueGridOfTranslatedTextDataframe_fillInitData();}},"""
+        computed = """refreshVueGridOfTranslatedTextDataframe(){var targetLanguage = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
+                            return targetLanguage;}"""
         methods = """
                   buttonShowHide(response){
-                        var retrivedData = response.additionalData.vueGridOfTranslatedTextDataframe_translatedText.dictionary;
-                        if(retrivedData.length > 1){
-                           this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
-                           this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=true;
-                        }
-                  },\n
+                                        var retrivedData = response.additionalData.vueGridOfTranslatedTextDataframe_translatedText.dictionary;
+                                        if(retrivedData.length > 1){
+                                        this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=true;
+                                        this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                        }
+                                        else{
+                                        this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=true;
+                                        this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=false;
+                                        }
+                                    },\n
                                     retrieveTranslatedText(){
                                          var allParams = this.state;
                                          var self = this;
@@ -806,9 +819,8 @@ beans {
                                            url:'${contextPath}/translatorAssistant/translateEachRecordWithGoogle',
                                            data: allParams
                                     }).then(function(responseData){
-                                                                   self.vueEditTranslatedRecordsOfGridDataframe_fillInitData()
                                                                    var response = responseData.data;
-                                                                   excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'vueGridOfTranslatedTextDataframe_translatedText', 'U');
+                                                                   excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text', response.translatedText); 
                                                                    });
                     }
                     """
