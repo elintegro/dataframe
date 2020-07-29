@@ -486,6 +486,30 @@ beans {
     vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
     }
+    vueElintegroSubMenuDataframe_script(VueJsEntity){bean->
+        methods = """
+                     quizzableApp(){
+                     if(this.\$store.state.vueInitDataframe.loggedIn){
+                          var allParams = this.state;
+                          allParams['dataframe'] = 'vueElintegroSubMenuDataframe';
+                          axios ({
+                               method: 'post',
+                               url: '${contextPath}/quizzableLogin/quizzableLoginFromElintegro',
+                               data: allParams
+                               }).then(function(responseData){
+                                    var response = responseData;
+                                    console.log(response)
+                               });
+                     }
+                     else{
+                         window.open('https://quizzable.elintegro.com/','_blank');
+                     }
+                     
+                     
+        }
+
+        """
+    }
     vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->
         data = "vueNewEmployeeApplicantDataframe_tab_model : this.tabValue,\nvueNewEmployeeApplicantDataframe_display: true, \n"
         computed = """tabValue(){return this.\$store.state.vueNewEmployeeApplicantDataframe.vueNewEmployeeApplicantDataframe_tab_model}"""
