@@ -69,8 +69,8 @@ beans{
                          allParams['projectId']= projectDetails.id """
         hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
         addFieldDef =[
-                "project.name":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
-                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
+                "project.name":[widget:"TextDisplayWidgetVue",displayWithLabel:true,"flexGridValues":['xs12', 'sm12', 'md10', 'lg10', 'xl10']],
+                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true,"flexGridValues":['xs12', 'sm12', 'md10', 'lg10', 'xl10']],
                 "project.languages":[
                         widget: "ComboboxVue"
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
