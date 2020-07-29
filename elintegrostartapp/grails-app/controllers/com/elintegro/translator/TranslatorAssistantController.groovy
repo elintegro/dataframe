@@ -100,11 +100,7 @@ class TranslatorAssistantController {
          Project project = Project.findById(param.projectId)
          Text text = Text.findByProjectAndLanguageAnd_key(project,param.sourceLanguage,param.vueEditTranslatedRecordsOfGridDataframe_text__key)
          def translatedText = translatorService.translateFromGoogle(sourceLanguageCode, targetLanguageCode, text.text)
-         Text text1 = Text.findByProjectAndLanguageAnd_key(project,param.targetLanguage,param.vueEditTranslatedRecordsOfGridDataframe_text__key)
-         text1.text= translatedText
-         text1.save(flush:true)
-         def newDataAfterSave = [Key:param.vueEditTranslatedRecordsOfGridDataframe_text__key,Id:text1.id,Text:translatedText]
-         def resultData = [success: true,newData:[translatedText:newDataAfterSave]]
+         def resultData = [success: true,translatedText:translatedText]
          render(resultData as JSON)
      }
 
