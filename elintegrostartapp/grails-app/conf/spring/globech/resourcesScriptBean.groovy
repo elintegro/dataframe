@@ -711,6 +711,20 @@ beans {
                                                                    });
                   }"""
     }
+    vueTranslatorAssistantDataframe_script(VueJsEntity) {
+        data = """itemExists:false,"""
+        watch = """itemExistOrNot:function(val){ if(val == true){this.itemExists = true}else{this.itemExists = false}}"""
+        computed = """ itemExistOrNot(){
+                                            var items = excon.getFromStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list')
+                                            if(items !=null){
+                                            return true;
+                                            }
+                                            else{
+                                            return false;
+                                            }
+                                      }
+                                 """
+    }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(){
                     var allParams = this.state;
@@ -723,7 +737,9 @@ beans {
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
                                                                    self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
-                                                                   this.location.reload();
+                                                                   excon.saveToStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list',response.params.name);
+                                                                   excon.saveToStore('vueTranslatorAssistantDataframe','currentProjectId',response.params.id)
+                                                                   excon.setVisibility('vueCreateProjectForTranslationDataframe',false);
                                                                    });
                     }"""
     }

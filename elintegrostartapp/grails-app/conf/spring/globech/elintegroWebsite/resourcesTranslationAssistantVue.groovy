@@ -23,7 +23,7 @@ beans{
                 ]
         ]
         dataframeButtons =[
-                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs12', 'sm12', 'md10', 'lg10', 'xl10'] ],
+                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' v-bind:disabled='!itemExists' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs12', 'sm12', 'md10', 'lg10', 'xl10'] ],
                 createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe','vueGridOfTranslatedTextDataframe']
@@ -66,11 +66,15 @@ beans{
         route = true
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doBeforeRefresh = """var projectDetails = excon.getFromStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list')
-                         allParams['projectId']= projectDetails.id """
+                         if(projectDetails.id == "" || projectDetails.id == undefined){
+                         allParams['projectId'] =excon.getFromStore('vueTranslatorAssistantDataframe','currentProjectId')
+                         }
+                         else{
+                                allParams['projectId']= projectDetails.id} """
         hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
         addFieldDef =[
-                "project.name":[widget:"TextDisplayWidgetVue",displayWithLabel:true,"flexGridValues":['xs12', 'sm12', 'md10', 'lg10', 'xl10']],
-                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true,"flexGridValues":['xs12', 'sm12', 'md10', 'lg10', 'xl10']],
+                "project.name":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
+                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
                 "project.languages":[
                         widget: "ComboboxVue"
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
