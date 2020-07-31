@@ -486,6 +486,32 @@ beans {
     vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
     }
+    vueElintegroSubMenuDataframe_script(VueJsEntity){bean->
+        methods = """
+                     quizzableApp(){
+                     if(this.\$store.state.vueInitDataframe.loggedIn){
+                          var allParams = this.state;
+                          allParams['dataframe'] = 'vueElintegroSubMenuDataframe';
+                          axios ({
+                               method: 'post',
+                               url: '${contextPath}/quizzableLogin/quizzableLoginFromElintegro',
+                               data: allParams
+                          }).then(function(response){
+                                   var token = response.data.accessToken
+                                   var serverUrl = response.data.serverUrl
+                                   window.open(serverUrl+'/login/authenticateWithToken/'+token,'_blank')
+                          });
+                     }
+                     else{
+                          
+                         window.open('https://quizzable.elintegro.com/','_blank');
+                     }
+                     
+                     
+        }
+
+        """
+    }
     vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->
         data = "vueNewEmployeeApplicantDataframe_tab_model : this.tabValue,\nvueNewEmployeeApplicantDataframe_display: true, \n"
         computed = """tabValue(){return this.\$store.state.vueNewEmployeeApplicantDataframe.vueNewEmployeeApplicantDataframe_tab_model}"""
@@ -807,11 +833,9 @@ beans {
                                     downloadTargetFile(){
                                     var allParams = this.state;
                                     var self = this;
-                                    //var fileName = 
                                     var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
                                     var fileLink = document.createElement('a');
                                     fileLink.href = fileURL;
-                                    //fileLink.setAttribute('download');
                                     document.body.appendChild(fileLink);
                                     fileLink.click();
                                     }

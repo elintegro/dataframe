@@ -217,7 +217,7 @@ beans {
         isGlobal = true
         saveButton= false
         initOnPageLoad = false
-        dataframeButtons = [quizzable  : [name: "quizzable", type: "link",attr:"style='color:#1976D2;'",script: """window.open('https://quizzable.elintegro.com/','_blank');""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+        dataframeButtons = [quizzable  : [name: "quizzable", type: "link",attr:"style='color:#1976D2;'",script: """this.quizzableApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             translator  : [name: "translator", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
         currentFrameLayout = ref("vueElintegroSubMenuDataframeLayout")
