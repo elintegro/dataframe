@@ -53,7 +53,6 @@ class QuizzableLoginController {
 //        }catch(e){
 //              log.error("Some error"+e)
 //        }
-        //Todo : create a token(permanent)
 
 //      POST REQUEST:
         String urlParameters  = "userName=${userName}&firstName=${firstName}&lastName=${lastName}&email=${email}&token=${accessToken}";
