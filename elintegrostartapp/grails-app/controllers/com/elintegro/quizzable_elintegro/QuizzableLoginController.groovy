@@ -1,5 +1,8 @@
 package com.elintegro.quizzable_elintegro
 
+import com.elintegro.accessToken.AccessTokenCode
+import com.elintegro.auth.OAuthID
+import com.elintegro.auth.User
 import grails.converters.JSON
 import grails.util.Environment
 import grails.util.Holders
@@ -15,14 +18,28 @@ class QuizzableLoginController {
         def firstName = currentUser.firstName
         def lastName = currentUser.lastName
         def email = currentUser.email
-        def param = request.getJSON()
+        def serverUrl
         def quizzableUrl
         if(Environment.current == Environment.DEVELOPMENT) {
-            quizzableUrl = "http://localhost:8090/login/userDetailsFromElintegro"
+            serverUrl = "http://localhost:8090/"
+            quizzableUrl = serverUrl+"login/userDetailsFromElintegro"
         }
         else
         {
-            quizzableUrl = Holders.grailsApplication.config.quizzableUrl+"login/userDetailsFromElintegro"
+            serverUrl = Holders.grailsApplication.config.quizzableUrl
+            quizzableUrl = serverUrl+"login/userDetailsFromElintegro"
+        }
+        def accessToken
+        AccessTokenCode accessTokenCode = AccessTokenCode.findByUsername(userName)
+        if(!accessTokenCode) {
+            AccessTokenCode newAccessTokenCode = new AccessTokenCode()
+            newAccessTokenCode.username = currentUser.username
+            newAccessTokenCode.token = UUID.randomUUID().toString().replaceAll('-', '')
+            newAccessTokenCode.save(flush: true)
+            accessToken = newAccessTokenCode.token
+        }
+        else{
+            accessToken = accessTokenCode.token
         }
 //        GET REQUEST:
 //        try {
@@ -36,9 +53,10 @@ class QuizzableLoginController {
 //        }catch(e){
 //              log.error("Some error"+e)
 //        }
+        //Todo : create a token(permanent)
 
 //      POST REQUEST:
-        String urlParameters  = "userName=${userName}&firstName=${firstName}&lastName=${lastName}&email=${email}";
+        String urlParameters  = "userName=${userName}&firstName=${firstName}&lastName=${lastName}&email=${email}&token=${accessToken}";
         byte[] postData       = urlParameters.getBytes(Charset.forName("UTF-8"))
         int    postDataLength = postData.length;
         String request        = quizzableUrl;
@@ -60,5 +78,7 @@ class QuizzableLoginController {
         }catch(e){
             log.error("Cann't send request to the quizzable."+e)
         }
+        def resultData = [success: true, accessToken: accessToken,serverUrl:serverUrl]
+        render(resultData as JSON)
     }
 }

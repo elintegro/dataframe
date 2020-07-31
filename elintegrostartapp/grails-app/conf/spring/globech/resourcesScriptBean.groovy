@@ -496,12 +496,14 @@ beans {
                                method: 'post',
                                url: '${contextPath}/quizzableLogin/quizzableLoginFromElintegro',
                                data: allParams
-                               }).then(function(responseData){
-                                    var response = responseData;
-                                    console.log(response)
-                               });
+                          }).then(function(response){
+                                   var token = response.data.accessToken
+                                   var serverUrl = response.data.serverUrl
+                                   window.open(serverUrl+'/login/authenticateWithToken/'+token,'_blank')
+                          });
                      }
                      else{
+                          
                          window.open('https://quizzable.elintegro.com/','_blank');
                      }
                      
