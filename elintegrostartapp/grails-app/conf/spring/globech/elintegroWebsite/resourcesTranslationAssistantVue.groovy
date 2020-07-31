@@ -14,16 +14,19 @@ beans{
         saveButton = false
         initOnPageLoad = true
         route = true
+
         addFieldDef = [
                 "project.list":[
                         widget: "ComboboxVue"
                         , hql: """select project.id as id, project.name as name from Project as project """
                         ,"displayMember":"name"
                         , search:true
+                        ,onSelect:[methodScript:"this.disableTranslationButton();"]
+
                 ]
         ]
         dataframeButtons =[
-                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' v-bind:disabled='!itemExists' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs12', 'sm12', 'md10', 'lg10', 'xl10'] ],
+                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' :disabled='disableWhenItemExists' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs12', 'sm12', 'md10', 'lg10', 'xl10'] ],
                 createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe','vueGridOfTranslatedTextDataframe']

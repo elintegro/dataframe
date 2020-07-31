@@ -712,17 +712,17 @@ beans {
                   }"""
     }
     vueTranslatorAssistantDataframe_script(VueJsEntity) {
-        data = """itemExists:false,"""
-        watch = """itemExistOrNot:function(val){ if(val == true){this.itemExists = true}else{this.itemExists = false}}"""
-        computed = """ itemExistOrNot(){
-                                            var items = excon.getFromStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list')
-                                            if(items !=null){
-                                            return true;
-                                            }
-                                            else{
-                                            return false;
-                                            }
-                                      }
+        data = """disableWhenItemExists:true,"""
+        methods = """ disableTranslationButton(){
+                            console.log("successsfully enter into this");
+                            if(this.state.vueTranslatorAssistantDataframe_project_list == null || this.state.vueTranslatorAssistantDataframe_project_list == undefined ){
+                                console.log(this.disableWhenItemExists)
+                                this.disableWhenItemExists = true;
+                            }else{
+                                console.log(this.disableWhenItemExists)
+                                this.disableWhenItemExists = false;
+                                }
+                            },
                                  """
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
