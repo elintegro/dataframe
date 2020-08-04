@@ -3,6 +3,7 @@ package com.elintegro.quizzable_elintegro
 import com.elintegro.accessToken.AccessTokenCode
 import com.elintegro.auth.OAuthID
 import com.elintegro.auth.User
+import com.elintegro.auth.UserRole
 import grails.converters.JSON
 import grails.util.Environment
 import grails.util.Holders
@@ -18,6 +19,7 @@ class QuizzableLoginController {
         def firstName = currentUser.firstName
         def lastName = currentUser.lastName
         def email = currentUser.email
+        UserRole userRole = UserRole.findByUser(User.findByUsername(userName))
         def serverUrl
         def quizzableUrl
         if(Environment.current == Environment.DEVELOPMENT) {
@@ -55,7 +57,7 @@ class QuizzableLoginController {
 //        }
 
 //      POST REQUEST:
-        String urlParameters  = "userName=${userName}&firstName=${firstName}&lastName=${lastName}&email=${email}&token=${accessToken}";
+        String urlParameters  = "userName=${userName}&firstName=${firstName}&lastName=${lastName}&email=${email}&userRole=${userRole.role}&token=${accessToken}";
         byte[] postData       = urlParameters.getBytes(Charset.forName("UTF-8"))
         int    postDataLength = postData.length;
         String request        = quizzableUrl;
