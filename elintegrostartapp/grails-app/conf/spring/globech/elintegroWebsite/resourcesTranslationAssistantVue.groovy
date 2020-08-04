@@ -157,6 +157,7 @@ beans{
         doAfterRefresh = """excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.vueEditTranslatedRecordsOfGridDataframe_text_text);"""
         doBeforeSave = """allParams['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
         doAfterSave = """ excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
+                          excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.params.vueEditTranslatedRecordsOfGridDataframe_text_text);
                           excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'vueGridOfTranslatedTextDataframe_translatedText', 'U');
                       """
         hql = """select text.id as Id, text._key as Key, text.text as Text from Text text where text.id =:id"""
