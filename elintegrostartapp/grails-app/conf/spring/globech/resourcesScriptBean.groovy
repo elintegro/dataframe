@@ -864,11 +864,18 @@ beans {
                                                                    });
                     },\n
                     confirmationMessage(){
-                     var result = confirm("Are you sure want to abandon the changes?");
-                     if(result){
+                     var textBeforeEditing = excon.getFromStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing')
+                     var textAfterEditing = this.state.vueEditTranslatedRecordsOfGridDataframe_text_text;
+                     if(textBeforeEditing != textAfterEditing){
+                       var result = confirm("Are you sure want to abandon the changes?");
+                        if(result){
+                                excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text',textBeforeEditing)
                                 excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
+                        }
+                         return false;
                      }
-                     return false;
+                          excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
+                     
                     }
                     """
     }
