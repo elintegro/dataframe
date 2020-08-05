@@ -11,7 +11,7 @@ beans {
 				,"vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe","vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 				"vueElintegroResetPasswordDataframe","vueElintegroUserProfileDataframe","vueElintegroProfileMenuDataframe","vueCareersPageButtonDataframe",
 				"vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe","vueElintegroApplicantDetailsDataframe",
-				"vueTechnologiesDataframe","vueClientProjectDataframe","vueCreateProjectForTranslationDataframe","vueEditTranslatedRecordsOfGridDataframe","vueGridOfTranslatedTextDataframe","vueTranslatorDataframe","vueTranslatorAssistantDataframe","vueElintegroSubMenuDataframe","vueElintegroAppsDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueElintegroApplicantsDataframe",
+				"vueTechnologiesDataframe","vueClientProjectDataframe","vueCreateProjectForTranslationDataframe","vueAddNewRecordForCurrentProjectDataframe","vueEditTranslatedRecordsOfGridDataframe","vueGridOfTranslatedTextDataframe","vueTranslatorDataframe","vueTranslatorAssistantDataframe","vueElintegroSubMenuDataframe","vueElintegroAppsDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueElintegroApplicantsDataframe",
 				"vueContactUsPageDataframe","vueElintegroLoginDataframe","vueElintegroRegisterDataframe","vueElintegroNavigationFirstTwoButtonDataframe","vueElintegroNavigationButtonBeforeLoggedInDataframe","vueElintegroNavigationButtonAfterLoggedInDataframe","vueElintegroAppBarDataframe","vueElintegroLogoDataframe",
         ]
 		dataframesToShowInMainPage = []

@@ -103,6 +103,42 @@ class TranslatorAssistantController {
          def resultData = [success: true,translatedText:translatedText]
          render(resultData as JSON)
      }
+    def translateNewlyAddedRecord(){
+        def param = request.getJSON()
+        Language language = Language.findByEname(param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
+        String sourceLanguageCode = language.code
+        Language language1 = Language.findByEname(param.targetLanguage)
+        String targetLanguageCode = language1.code
+        def translatedText = translatorService.translateFromGoogle(sourceLanguageCode, targetLanguageCode, param.vueAddNewRecordForCurrentProjectDataframe_text )
+        def dataAfterTranslation = [targetLanguage:param.targetLanguage, text:translatedText]
+        def resultData = [success: true, newData: [textToTranslate:dataAfterTranslation],params:param]
+        render(resultData as JSON)
+    }
+    def saveNewlyAddedRecord(){
+        def param = request.getJSON()
+        println(param)
+        Project project = Project.findById(param.vueAddNewRecordForCurrentProjectDataframe_project_id)
+        Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project,param.vueAddNewRecordForCurrentProjectDataframe_key,param.vueAddNewRecordForCurrentProjectDataframe_text,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
+        if(text == null) {
+            Text newText = new Text()
+            newText.project = project
+            newText._key = param.vueAddNewRecordForCurrentProjectDataframe_key
+            newText.text = param.vueAddNewRecordForCurrentProjectDataframe_text
+            newText.language = param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage
+            newText.save(flush: true)
+        }
+        for(item in param.vueAddNewRecordForCurrentProjectDataframe_textToTranslate_items){
+            if(item.text != null){
+            Text text1 = new Text()
+            text1.project = project
+            text1.language = item.targetLanguage
+            text1._key = param.vueAddNewRecordForCurrentProjectDataframe_key
+            text1.text = item.text
+            text1.save(flush: true)
+        }}
+        def resultData = [success: true, params: param]
+        render(resultData as JSON)
+    }
 
 }
 

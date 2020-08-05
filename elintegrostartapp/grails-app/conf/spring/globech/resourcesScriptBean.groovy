@@ -800,6 +800,38 @@ beans {
 
        """
     }
+    vueAddNewRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
+        methods = """
+                    translateText(params){
+                    excon.saveToStore('vueAddNewRecordForCurrentProjectDataframe','vueAddNewRecordForCurrentProjectDataframe_textToTranslate_selectedrow',params)
+                    var allParams = this.state;
+                    allParams['targetLanguage'] = params.targetLanguage;
+                    allParams['dataframe'] = 'vueAddNewRecordForCurrentProjectDataframe';
+                    axios({
+                           method:'post',
+                           url:'${contextPath}/translatorAssistant/translateNewlyAddedRecord',
+                           data: allParams
+                    }).then(function(responseData){
+                             var response = responseData.data;
+                             excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
+                    })
+                    },\n
+                    saveNewlyAddedRecord(){
+                           var allParams = this.state;
+                           var self = this;
+                           axios({
+                           method:'post',
+                           url:'${contextPath}/translatorAssistant/saveNewlyAddedRecord',
+                           data: allParams
+                    }).then(function(responseData){
+                             var response = responseData.data;
+                             excon.setVisibility('vueAddNewRecordForCurrentProjectDataframe',false);
+
+                    })
+                    
+                    }
+                  """
+    }
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
         data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false"""
         watch = """ refreshVueGridOfTranslatedTextDataframe:{handler: function(val, oldVal) {this.vueGridOfTranslatedTextDataframe_fillInitData();}},"""
