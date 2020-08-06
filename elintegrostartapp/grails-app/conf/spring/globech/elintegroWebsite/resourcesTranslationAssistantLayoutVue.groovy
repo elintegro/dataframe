@@ -1,6 +1,7 @@
 package spring.globech.elintegroWebsite
 
 import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.layout.ColumnLayout
 import com.elintegro.erf.layout.ColumnLayoutVue
 import com.elintegro.erf.layout.RowLayoutVue
 import grails.util.Holders
@@ -32,6 +33,19 @@ beans{
                                   </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
     }
+    vueAddNewRecordForCurrentProjectDataframeLayout(ColumnLayoutVue){ bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' >
+                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeVueAddNewRecordForCurrentProjectDataframe()"><v-icon medium >close</v-icon>
+                                </v-btn><span>Close</span></v-tooltip></v-flex>[DATAFRAME_SCRIPT]<v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+    }
+    vueEditTextOfNewlyAddedRecordForCurrentProjectDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' >
+                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe()"><v-icon medium >close</v-icon>
+                                </v-btn><span>Close</span></v-tooltip></v-flex>[DATAFRAME_SCRIPT]<v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-flex> """
+    }
     vueGridOfTranslatedTextDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
@@ -45,7 +59,7 @@ beans{
     vueEditTranslatedRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' >
-                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="confirmationMessage();"><v-icon medium >close</v-icon>
+                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeVueEditTranslatedRecordsOfGridDataframe();"><v-icon medium >close</v-icon>
                                 </v-btn><span>Close</span></v-tooltip></v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
