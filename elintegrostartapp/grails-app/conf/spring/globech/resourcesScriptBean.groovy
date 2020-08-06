@@ -803,34 +803,78 @@ beans {
     vueAddNewRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
         methods = """
                     translateText(params){
-                    excon.saveToStore('vueAddNewRecordForCurrentProjectDataframe','vueAddNewRecordForCurrentProjectDataframe_textToTranslate_selectedrow',params)
-                    var allParams = this.state;
-                    allParams['targetLanguage'] = params.targetLanguage;
-                    allParams['dataframe'] = 'vueAddNewRecordForCurrentProjectDataframe';
-                    axios({
-                           method:'post',
-                           url:'${contextPath}/translatorAssistant/translateNewlyAddedRecord',
-                           data: allParams
-                    }).then(function(responseData){
-                             var response = responseData.data;
-                             excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
-                    })
+                                        excon.saveToStore('vueAddNewRecordForCurrentProjectDataframe','vueAddNewRecordForCurrentProjectDataframe_textToTranslate_selectedrow',params)
+                                        var allParams = this.state;
+                                        allParams['targetLanguage'] = params.targetLanguage;
+                                        allParams['dataframe'] = 'vueAddNewRecordForCurrentProjectDataframe';
+                                        axios({
+                                               method:'post',
+                                               url:'${contextPath}/translatorAssistant/translateNewlyAddedRecord',
+                                               data: allParams
+                                        }).then(function(responseData){
+                                                 var response = responseData.data;
+                                                 excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
+                                        })
                     },\n
                     saveNewlyAddedRecord(){
-                           var allParams = this.state;
-                           var self = this;
-                           axios({
-                           method:'post',
-                           url:'${contextPath}/translatorAssistant/saveNewlyAddedRecord',
-                           data: allParams
-                    }).then(function(responseData){
-                             var response = responseData.data;
-                             excon.setVisibility('vueAddNewRecordForCurrentProjectDataframe',false);
-
-                    })
+                                       var allParams = this.state;
+                                       var self = this;
+                                       if(this.state.vueAddNewRecordForCurrentProjectDataframe_key != "" && this.state.vueAddNewRecordForCurrentProjectDataframe_text != ""){
+                                           axios({
+                                               method:'post',
+                                               url:'${contextPath}/translatorAssistant/saveNewlyAddedRecord',
+                                               data: allParams
+                                           }).then(function(responseData){
+                                               var response = responseData.data;
+                                               excon.setVisibility('vueAddNewRecordForCurrentProjectDataframe',false);
+                                           })
+                                      }
+                                      else{
+                                            alert("Key and Source Text shouldn't be empty.");
+                                      }
                     
-                    }
+                    },\n
+                    closeVueAddNewRecordForCurrentProjectDataframe(){
+                                    var allParams = this.state;
+                                    if(this.state.vueAddNewRecordForCurrentProjectDataframe_key != "" && this.state.vueAddNewRecordForCurrentProjectDataframe_text != ""){
+                                       var confirmMessage = confirm("Are you sure want to abandon the changes?");
+                                       if(confirmMessage){
+                                                excon.setVisibility("vueAddNewRecordForCurrentProjectDataframe", false);
+                                       }return false;
+                                    }
+                                    else{
+                                       excon.setVisibility("vueAddNewRecordForCurrentProjectDataframe", false);
+                                    }
+                    },\n
+                   
+        """
+    }
+    vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
+        watch = """ refreshVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe:{handler: function(val, oldVal) {this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_fillInitData();}},"""
+        computed = """refreshVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(){var textToEdit = this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text;
+                            return textToEdit;}"""
+        methods = """
+                   updateEditedTextInGrid(){
+                                      var translatedData = {text:this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text, targetLanguage:this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.targetLanguage};
+                                      var response = {newData:{textToTranslate:translatedData}};
+                                      excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
+                                      excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
+                   },\n
+                   closeVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(){
+                                     if(this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text != this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text){
+                                       var confirmMessage = confirm("Are you sure want to abandon the changes?");
+                                       if(confirmMessage){
+                                                excon.saveToStore("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe","vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text",this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text )
+                                                excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
+                                       }return false;
+                                    }
+                                    else{
+                                       excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
+                                    }
+                                     
+                   },\n
                   """
+
     }
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
         data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false"""
@@ -895,7 +939,7 @@ beans {
                                                                    excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text', response.translatedText); 
                                                                    });
                     },\n
-                    confirmationMessage(){
+                    closeVueEditTranslatedRecordsOfGridDataframe(){
                      var textBeforeEditing = excon.getFromStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing')
                      var textAfterEditing = this.state.vueEditTranslatedRecordsOfGridDataframe_text_text;
                      if(textBeforeEditing != textAfterEditing){

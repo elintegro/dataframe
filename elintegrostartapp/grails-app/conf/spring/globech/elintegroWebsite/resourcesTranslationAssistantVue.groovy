@@ -125,14 +125,13 @@ beans{
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = """select project.id ,project.sourceLanguage from Project project where project.id = :projectId """
         addFieldDef = [
-                "project._key":[name: 'key', widget:"InputWidgetVue"],
-                "project.text":[name: 'text', widget:"InputWidgetVue"],
+                "project.key":[name: 'key', widget:"InputWidgetVue","validationRules":[[condition:"v => !!v",message:"key.required.message"],[condition:"v =>  (v && new RegExp(/^\\S+\$/).test(v))",message:"key.donot.have.space"]]],
+                "project.sourceText":[ widget:"InputWidgetVue","validationRules":[[condition:"v => !!v",message:"text.required.message"]]],
                 "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true,insertAfter:'project.text'],
                 "textToTranslate":[
                           name: 'textToTranslate'
                         , widget: "GridWidgetVue"
                         , hql:"""select text.language as targetLanguage,text.text as text from Text text inner join text.project project  where project_id = :projectId and text.language != project.sourceLanguage  group by language"""
-                        , showGridSearch  : true
                         , internationalize: true
                         , sortable        : true
                         ,editButton       : true
@@ -141,6 +140,7 @@ beans{
                                 [ name        : "edit"
                                  ,MaxWidth: 500
                                  ,showAsDialog: true
+                                 ,refDataframe: ref('vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe')
                                  ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
                                  ,vuetifyIcon : [name: "edit"]
                                 ],
@@ -159,7 +159,23 @@ beans{
         dataframeButtons=[
                 save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6'],script:"this.saveNewlyAddedRecord();"]
         ]
+        childDataframes = ['vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe']
         currentFrameLayout = ref("vueAddNewRecordForCurrentProjectDataframeLayout")
+    }
+    vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe']
+        initOnPageLoad = true
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        saveButton = false
+        doBeforeRefresh = """ allParams['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId');
+                              this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text = this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text;
+                          """
+        addFieldDef = ["text.text":[ widget: "TextAreaWidgetVue"]]
+        dataframeButtons=[
+                save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6'],script:"this.updateEditedTextInGrid();"]
+        ]
+        currentFrameLayout = ref("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframeLayout")
     }
     vueGridOfTranslatedTextDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
