@@ -5,6 +5,9 @@ import com.elintegro.ref.Language
 import grails.converters.JSON
 import grails.util.Holders
 
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+
 
 class TranslatorAssistantController {
     def translatorService
@@ -91,6 +94,41 @@ class TranslatorAssistantController {
             log.error("Such file +$fileName+ doesn't exist.")
         }
     }
+    def downloadAll() {
+        println(params)
+        def projectId = 1
+        def targetLanguage = 'Hebrew'
+        Language language = Language.findByEname(targetLanguage)
+        Project project = Project.findById(projectId)
+        def outputFileName = "OutPut"+language.code+".zip"
+        def fileName = "messages_" + language.code + ".properties"
+        def outFile = ""
+        def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"
+        def zipFileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"+outputFileName
+        createZipFile( fileLocation,zipFileLocation)
+        render(success:true)
+
+
+
+
+    }
+
+        public static void createZipFile(String inputDir, String zipFilePath){
+            ZipOutputStream zipFile = new ZipOutputStream(new FileOutputStream(zipFilePath))
+            new File(inputDir).eachFile() { file ->
+                if (file.isFile()){
+                    zipFile.putNextEntry(new ZipEntry(file.name))
+                    def buffer = new byte[file.size()]
+                    file.withInputStream {
+                        zipFile.write(buffer, 0, it.read(buffer))
+                    }
+                    zipFile.closeEntry()
+                }
+            }
+            zipFile.close()
+        }
+
+
      def translateEachRecordWithGoogle(){
          def param = request.getJSON()
          Language language = Language.findByEname(param.sourceLanguage)

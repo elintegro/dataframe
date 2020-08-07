@@ -796,7 +796,18 @@ beans {
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
 
-}
+                            },
+                            downloadAll(){
+                                    var allParams = this.state;
+                                    var self = this;   
+                                    var check = allParams.vueTranslatorDataframe_project_name
+                                    var fileURL = '/translatorAssistant/downloadAll/'+check
+                                    var fileLink = document.createElement('a');
+                                    fileLink.href = fileURL;
+                                    document.body.appendChild(fileLink);
+                                    fileLink.click();      
+                               }
+
 
        """
     }
