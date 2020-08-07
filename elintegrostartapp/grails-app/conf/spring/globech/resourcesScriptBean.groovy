@@ -770,7 +770,19 @@ beans {
                     }"""
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
-        data = """isHidden : false """
+        data = """isHidden : false ,vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles:false,"""
+        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){
+                                                                               this.vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles = true;
+                                                                               }else{
+                                                                                  this.vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles = false;
+                                                                               }
+                    }},"""
+        computed = """showOrHideDownloadAllFilesButton(){
+                               if(this.state.vueTranslatorDataframe_project_language_items.length > 1){
+                                   return true;
+                               }return false;
+                            }
+                            """
         methods = """ addLanguage(){
                                     var allParams = this.state;
                                     var self = this;
@@ -796,7 +808,26 @@ beans {
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
 
-}
+                                   },\n
+                                    downloadAllTranslatedFiles(){
+                                        var allParams = this.state;
+                                        var self = this;   
+                                         axios({
+                                                method:'post',
+                                                url:'${contextPath}/translatorAssistant/compressAllFilesInZip',
+                                                data: allParams
+                                         }).then(function(responseData){
+                                                var response = responseData.data;
+                                                var fileURL = '/translatorAssistant/downloadZipFile/'+response.projectId
+                                                var fileLink = document.createElement('a');
+                                                fileLink.href = fileURL;
+                                                document.body.appendChild(fileLink);
+                                                fileLink.click();      
+                                        });
+                                        
+                                        
+                                    },\n
+
 
        """
     }
