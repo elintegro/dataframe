@@ -5,6 +5,9 @@ import com.elintegro.ref.Language
 import grails.converters.JSON
 import grails.util.Holders
 
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+
 
 class TranslatorAssistantController {
     def translatorService
@@ -52,7 +55,30 @@ class TranslatorAssistantController {
     def translateWithGoogle() {
         def param = request.getJSON()
         translatorService.translationWithGoogle(param.projectId, param.sourceLanguage, param.targetLanguage)
+        prepareTargetFile(param)
         render(success: true)
+
+    }
+    def prepareTargetFile(param){
+        println(param)
+        Language language = Language.findByEname(param.targetLanguage)
+        Project project = Project.findById(param.projectId)
+        def fileName = "messages_" + language.code + ".properties"
+        def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
+        File targetFile = new File(fileLocation)
+        def  targetLabels = []
+        def translatedRecords = Text.findAllByProjectAndLanguage(project, param.targetLanguage)
+        for(item in translatedRecords) {
+            if (item._key != null && item.text != null) {
+                targetLabels.add(item._key + "=" + item.text)
+            }
+        }
+        BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));
+        for(int i = 0; i<targetLabels.size();i++) {
+            String val =  targetLabels.get(i);
+            writer.write(val+"\n");
+        }
+        writer.close();
 
     }
 
@@ -66,19 +92,6 @@ class TranslatorAssistantController {
         def fileName = "messages_" + language.code + ".properties"
         def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
         File targetFile = new File(fileLocation)
-        def  targetLabels = []
-        def translatedRecords = Text.findAllByProjectAndLanguage(project, targetLanguage)
-        for(item in translatedRecords) {
-            if (item._key != null && item.text != null) {
-                targetLabels.add(item._key + "=" + item.text)
-            }
-        }
-        BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));
-        for(int i = 0; i<targetLabels.size();i++) {
-            String val =  targetLabels.get(i);
-            writer.write(val+"\n");
-        }
-        writer.close();
         if (targetFile.exists()) {
             try {
                 render(contentType: 'application/octet-stream', file: targetFile, fileName: fileName, encoding: "UTF-8")
@@ -138,6 +151,53 @@ class TranslatorAssistantController {
         def resultData = [success: true, params: param]
         render(resultData as JSON)
     }
+    def compressAllFilesInZip() {
+        def param = request.getJSON()
+        def projectId = param.projectId
+        Project project = Project.findById(projectId)
+        def outputFileName = "${project.name}"+".zip"
+        def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"
+        def zipFileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"+outputFileName
+        createZipFile( fileLocation,zipFileLocation)
+        def resultData = [success: true, zipFileName:outputFileName,projectId:param.projectId]
+        render(resultData as JSON)
+    }
+
+    public static void createZipFile(String inputDir, String zipFilePath){
+        ZipOutputStream zipFile = new ZipOutputStream(new FileOutputStream(zipFilePath))
+        new File(inputDir).eachFile() { file ->
+            if (file.isFile()){
+                zipFile.putNextEntry(new ZipEntry(file.name))
+                def buffer = new byte[file.size()]
+                file.withInputStream {
+                    zipFile.write(buffer, 0, it.read(buffer))
+                }
+                zipFile.closeEntry()
+            }
+        }
+        zipFile.close()
+    }
+    def downloadZipFile(){
+        def projectId = params.id
+        Project project = Project.findById(projectId)
+        def zipFileName = "${project.name}"+".zip"
+        def zipFileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"+ zipFileName
+        File zipFile = new File(zipFileLocation)
+        if (zipFile.exists()) {
+            try {
+                render(contentType: 'application/octet-stream', file: zipFile, fileName: zipFileName, encoding: "UTF-8")
+            }
+            catch (Exception e) {
+                log.debug("Error downloading file" + e)
+            }
+
+        } else {
+            log.error("Such file +$zipFileName+ doesn't exist.")
+        }
+
+
+    }
+
 
 }
 
