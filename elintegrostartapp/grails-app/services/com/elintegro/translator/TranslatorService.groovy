@@ -80,8 +80,18 @@ class TranslatorService {
         ine.close();
         return response.toString();
     }
+    boolean validateSourceFile(params, String projectName,String fileName) {
+        String language = "English"
+        def file = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${projectName}" + "/" + fileName
+        def lines = file.readLines()
+        lines.each { record ->
+            String[] keyValue = record.split("=")
+            if (keyValue.length == 2) {
+                String key = keyValue[0]
+                println(key)
+            }
+        }
 
-
-
+    }
 
 }

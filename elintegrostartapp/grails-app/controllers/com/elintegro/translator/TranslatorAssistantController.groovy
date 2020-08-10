@@ -30,9 +30,13 @@ class TranslatorAssistantController {
         String projectName = project.name
         String language = project.sourceLanguage
         String fileName = project.sourceFile
-        def result = new FileUploadController().ajaxFileSaveWithParams(params, projectName)
-        translatorService.loadTexts(fileName, language, projectName)
-        render(success: true)
+        def validateEnglish = translatorService.validateSourceFile(params,projectName,fileName)
+        if (validateEnglish == true) {
+            def result = new FileUploadController().ajaxFileSaveWithParams(params, projectName)
+            translatorService.loadTexts(fileName, language, projectName)
+            render(success: true)
+        }else
+            render(success:false)
 
     }
 
