@@ -42,6 +42,7 @@ class GridWidgetVue extends WidgetVue {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
+    public String ajaxSaveUrl = "${contextPath}/dataframe/ajaxSave"
     String embDDfr = "";
 
     @Override
@@ -100,9 +101,10 @@ $fieldParams
         String headerWidth = field.headerWidth?:''
         String valueMember = field?.valueMember
         boolean internationalize = field.internationalize?true:false
+        String editableField = field.editableField?:""
         StringBuilder requestFieldParams   = new StringBuilder()
         StringBuilder fieldParams          = new StringBuilder();
-
+        String onClickMethod    = " "
         ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory);
         List<MetaField> fieldMetaData      = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
         field.put("gridMetaData", fieldMetaData);
@@ -144,13 +146,42 @@ $fieldParams
                         }
                     }
                 }
+                if(editableField == headerText){
+
+                    tdString = """\n<td class ='$headerClass' ><v-edit-dialog
+                                     :return-value.sync="props.item.$propItemText"
+                                     large
+                                     persistent
+                                     @save="save()"
+                                     @cancel="cancel"
+                                     @open="open"
+                                     @close="close">
+                                     <div >{{ props.item.$propItemText }}</div>
+                                    <template v-slot:input>
+                                    <div class="mt-4 title">Update $editableField</div>
+                                    </template>
+                                    <template v-slot:input>
+                                    <v-text-field
+                                    v-model="props.item.$propItemText"
+                                     label="Edit"
+                                     single-line
+                                     counter
+                                      autofocus >
+                                      </v-text-field>
+                                  </template>
+                                  </v-edit-dialog> 
+                                  </td>
+                    """
+
+
+                }
+
                 fieldParams.append(tdString)
             }
             requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
         field.put("dataHeader", dataHeader);
         def parentDataframeName = dataframe.dataframeName
-        String onClickMethod    = " "
         String refDataframeName = ""
         List gridDataframeList= []
         if (onClick){
@@ -179,6 +210,46 @@ $fieldParams
         if(showRefreshMethod){
             dataframe.getVueJsBuilder().addToMethodScript(refreshGrid(fldName, refDataframeName, dataframe))
         }
+        if(editableField){
+            dataframe.getVueJsBuilder().addToDataScript("""
+                snack: false,
+                snackColor: '',
+                snackText: '',
+           """).addToMethodScript("""
+                save () {
+                 var allParams = this.state;
+                 allParams['dataframe'] = '$dataframe.dataframeName'
+                 var self = this;
+                 axios({
+                                           method:'post',
+                                           url:'$ajaxSaveUrl',
+                                           data: allParams
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                    self.snack = true
+                                                                    self.snackColor = 'success'
+                                                                    self.snackText = 'Data saved'
+                                                                   });
+               
+            },\n
+            cancel () {
+                this.snack = true
+                this.snackColor = 'error'
+                this.snackText = 'Canceled'
+            },\n
+            open () {
+                this.snack = true
+                this.snackColor = 'info'
+                this.snackText = 'Dialog opened'
+            },\n
+            close () {
+                console.log('Dialog closed')
+            },\n
+              """)
+
+
+        }
+
 
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
         return """

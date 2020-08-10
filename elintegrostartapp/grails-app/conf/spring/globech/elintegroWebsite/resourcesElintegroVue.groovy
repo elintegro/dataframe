@@ -195,6 +195,8 @@ beans {
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
                         ,url:'/'
+                        ,editableField : 'Description'
+                        ,onClick: ""
 
                 ]
         ]
