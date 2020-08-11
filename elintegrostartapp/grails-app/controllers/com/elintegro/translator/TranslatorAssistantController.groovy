@@ -11,6 +11,7 @@ import java.util.zip.ZipOutputStream
 
 class TranslatorAssistantController {
     def translatorService
+    def fileValidationService
 
     def saveProjectData() {
         def param = request.getJSON()
@@ -30,13 +31,15 @@ class TranslatorAssistantController {
         String projectName = project.name
         String language = project.sourceLanguage
         String fileName = project.sourceFile
-        def validateEnglish = translatorService.validateSourceFile(params,projectName,fileName)
-        if (validateEnglish == true) {
-            def result = new FileUploadController().ajaxFileSaveWithParams(params, projectName)
+        def result = new FileUploadController().ajaxFileSaveWithParams(params, projectName)
+        boolean validateEnglish = fileValidationService.validateSourceFile(projectName,fileName)
+        if(validateEnglish== true) {
             translatorService.loadTexts(fileName, language, projectName)
             render(success: true)
-        }else
+        }else{
             render(success:false)
+        }
+
 
     }
 

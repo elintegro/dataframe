@@ -763,6 +763,9 @@ beans {
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
                                                                    self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
+                                                                   if(response.success == false){
+                                                                    alert("Please modify your keys to English language");
+                                                                   }
                                                                    excon.saveToStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list',response.params.name);
                                                                    excon.saveToStore('vueTranslatorAssistantDataframe','currentProjectId',response.params.id)
                                                                    excon.setVisibility('vueCreateProjectForTranslationDataframe',false);
