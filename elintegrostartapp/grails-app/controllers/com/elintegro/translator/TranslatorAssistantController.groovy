@@ -131,12 +131,12 @@ class TranslatorAssistantController {
         def param = request.getJSON()
         println(param)
         Project project = Project.findById(param.vueAddNewRecordForCurrentProjectDataframe_project_id)
-        Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project,param.vueAddNewRecordForCurrentProjectDataframe_key,param.vueAddNewRecordForCurrentProjectDataframe_text,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
+        Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project,param.vueAddNewRecordForCurrentProjectDataframe_key,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
         if(text == null) {
             Text newText = new Text()
             newText.project = project
             newText._key = param.vueAddNewRecordForCurrentProjectDataframe_key
-            newText.text = param.vueAddNewRecordForCurrentProjectDataframe_text
+            newText.text = param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText
             newText.language = param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage
             newText.save(flush: true)
         }

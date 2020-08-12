@@ -36,6 +36,7 @@ class EmailWidgetVue extends WidgetVue{
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}
                  style="width:${getWidth(field)}; height:${getHeight(field, '30px')};"   
+                 ${getAttr(field)}
                 ></v-text-field>
                """
     }
