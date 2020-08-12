@@ -51,8 +51,10 @@ beans{
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
                                  [DATAFRAME_SCRIPT]
                                  <v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions>
+                                 <vueElintegroProgressBarDataframe v-if="progressBarEnable"/>
                                  </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
 
     }
 
