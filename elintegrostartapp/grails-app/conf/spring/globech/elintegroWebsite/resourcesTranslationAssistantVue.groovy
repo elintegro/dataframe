@@ -79,6 +79,13 @@ beans{
                          excon.saveToStore('vueTranslatorDataframe','projectId',selectedProjectId)"""
         hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
         addFieldDef =[
+                "projectManager":[
+                        "widget"     : "ButtonWidgetVue",
+                        "insertBefore":"project.name",
+                        script       : """this.\$router.push("/translator-assistant/0");""",
+                        "attr"       :"style='background-color:#1976D2; color:white; text-transform: capitalize;'",
+                        "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
+                ],
                 "project.name":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
                 "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
                 "project.languages":[
