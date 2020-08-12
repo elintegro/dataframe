@@ -35,6 +35,16 @@ beans {
 
         currentFrameLayout = ref("vueElintegroAppBarDataframeLayout")
     }
+    vueElintegroProgressBarDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ["vueElintegroProgressBarDataframe"]
+        saveButton = false
+        wrapInForm=false
+        initOnPageLoad = false
+        isGlobal = true
+        currentFrameLayout = ref("vueElintegroProgressBarLayout")
+
+    }
  /*   vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']

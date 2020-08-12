@@ -908,7 +908,7 @@ beans {
 
     }
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
-        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false"""
+        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false,progressBarEnable:false,"""
         watch = """ refreshVueGridOfTranslatedTextDataframe:{handler: function(val, oldVal) {this.vueGridOfTranslatedTextDataframe_fillInitData();}},"""
         computed = """refreshVueGridOfTranslatedTextDataframe(){var targetLanguage = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
                             return targetLanguage;}"""
@@ -925,6 +925,8 @@ beans {
                                         }
                                     },\n
                                     retrieveTranslatedText(){
+                                         this.progressBarEnable = true;
+                                         this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
                                          var allParams = this.state;
                                          var self = this;
                                          axios({
@@ -935,6 +937,7 @@ beans {
                                               self.vueGridOfTranslatedTextDataframe_fillInitData();
                                               self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
                                               var response = responseData.data;
+                                              self.progressBarEnable = false;
                                          });
                                     },\n
                                     downloadTargetFile(){

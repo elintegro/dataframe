@@ -82,6 +82,28 @@ beans {
         </v-flex> """
 
     }
+    vueElintegroProgressBarLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                                        <v-container >
+                                                <v-row class="fill-height" align-content="center" justify="center">
+                                                  <v-col class="subtitle-1 text-center" cols="12">
+                                                    Loading...
+                                                  </v-col>
+                                                  <v-col cols="12">
+                                                       <v-progress-linear
+                                                              color="deep-purple accent-4"
+                                                              indeterminate
+                                                              rounded
+                                                              height="10">
+                                                       </v-progress-linear>
+                                                  </v-col>
+                                                </v-row>
+                                        </v-container>
+                              </v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+
+    }
     vueElintegroAppsDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """ <div class="text-center" >
