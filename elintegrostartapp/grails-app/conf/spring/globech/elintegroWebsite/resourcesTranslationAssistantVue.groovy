@@ -126,7 +126,7 @@ beans{
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = """select project.id ,project.sourceLanguage from Project project where project.id = :projectId """
         addFieldDef = [
-                "project.key":[name: 'key', widget:"InputWidgetVue","validationRules":[[condition:"v => !!v",message:"key.required.message"],[condition:"v =>  (v && new RegExp(/^\\S+\$/).test(v))",message:"key.donot.have.space"]]],
+                "project.key":[name: 'key', widget:"InputWidgetVue",attr: "autofocus","validationRules":[[condition:"v => !!v",message:"key.required.message"],[condition:"v =>  (v && new RegExp(/^\\S+\$/).test(v))",message:"key.donot.have.space"]]],
                 "project.sourceText":[ widget:"InputWidgetVue","validationRules":[[condition:"v => !!v",message:"text.required.message"]]],
                 "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true,insertAfter:'project.text'],
                 "textToTranslate":[
