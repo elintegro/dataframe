@@ -188,7 +188,7 @@ beans {
 //    }
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
         computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_lastName)},
-                       vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
+                       vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email},\n"""
     }
     vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
         def imagePath = Holders.grailsApplication.config.images.storageLocation + "/"
