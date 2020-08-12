@@ -217,10 +217,6 @@ class DataframeController {
 		def _params = request.getJSON()
 		Dataframe dataframe = getDataframe(_params)
 		def dfInstance = new DataframeInstance(dataframe, _params)
-		if(dataframe.hql == null){
-			def a = dataframe.addFieldDef["clientProject"].hql
-			dataframe.hql = a
-		}
 		def operation = 'U'; //Update
 		def result;
 

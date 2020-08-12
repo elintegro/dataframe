@@ -42,7 +42,7 @@ class GridWidgetVue extends WidgetVue {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
-    public String ajaxSaveUrl = "${contextPath}/dataframe/ajaxSave"
+    public String gridSaveUrl = "${contextPath}/gridDataframe/saveGridData"
     String embDDfr = "";
 
     @Override
@@ -102,6 +102,7 @@ $fieldParams
         String valueMember = field?.valueMember
         boolean internationalize = field.internationalize?true:false
         String editableField = field.editableField?:""
+        boolean saveEditedFieldData = field.saveEditedFieldData?:false
         StringBuilder requestFieldParams   = new StringBuilder()
         StringBuilder fieldParams          = new StringBuilder();
         String onClickMethod    = " "
@@ -148,30 +149,27 @@ $fieldParams
                 }
                 if(editableField == headerText){
 
-                    tdString = """\n<td class ='$headerClass' ><v-edit-dialog
-                                     :return-value.sync="props.item.$propItemText"
-                                     large
-                                     persistent
-                                     @save="save()"
-                                     @cancel="cancel"
-                                     @open="open"
-                                     @close="close">
-                                     <div >{{ props.item.$propItemText }}</div>
-                                    <template v-slot:input>
-                                    <div class="mt-4 title">Update $editableField</div>
-                                    </template>
-                                    <template v-slot:input>
-                                    <v-text-field
-                                    v-model="props.item.$propItemText"
-                                     label="Edit"
-                                     single-line
-                                     counter
-                                      autofocus >
-                                      </v-text-field>
-                                  </template>
-                                  </v-edit-dialog> 
-                                  </td>
-                    """
+                    tdString = """\n<td class ='$headerClass' >
+                                    <v-edit-dialog
+                                          :return-value.sync="props.item.$propItemText"
+                                          large persistent
+                                          @save="save(props.item)"
+                                          @cancel="cancel"
+                                          @open="open"
+                                          @close="close">
+                                          <div >{{ props.item.$propItemText }}</div>
+                                          <template v-slot:input>
+                                              <div class="mt-4 title">Update $editableField</div>
+                                          </template>
+                                          <template v-slot:input>
+                                             <v-text-field
+                                                v-model="props.item.$propItemText"
+                                                label="Edit" single-line counter autofocus >
+                                             </v-text-field>
+                                          </template>
+                                                                  
+                                    </v-edit-dialog> 
+                    </td> """
 
 
                 }
@@ -216,20 +214,28 @@ $fieldParams
                 snackColor: '',
                 snackText: '',
            """).addToMethodScript("""
-                save () {
+                save (data) {
                  var allParams = this.state;
+                 allParams['dataOfSelectedRow'] = data;
                  allParams['dataframe'] = '$dataframe.dataframeName'
                  var self = this;
-                 axios({
+                 if($saveEditedFieldData == true){
+                                     axios({
                                            method:'post',
-                                           url:'$ajaxSaveUrl',
+                                           url:'$gridSaveUrl',
                                            data: allParams
-                                    }).then(function(responseData){
-                                                                   var response = responseData.data;
-                                                                    self.snack = true
-                                                                    self.snackColor = 'success'
-                                                                    self.snackText = 'Data saved'
-                                                                   });
+                                     }).then(function(responseData){
+                                             var response = responseData.data;
+                                             self.snack = true
+                                             self.snackColor = 'success'
+                                             self.snackText = 'Data saved'
+                                     });
+                 }                    
+                 else{
+                      this.snack = true
+                      this.snackColor = 'success'
+                      this.snackText = 'Data updated'
+                 }          
                
             },\n
             cancel () {
@@ -245,6 +251,10 @@ $fieldParams
             close () {
                 console.log('Dialog closed')
             },\n
+            savedChangeData(){
+              var allParams = this.state;
+              console.log("Inside saved change data");
+            }
               """)
 
 
@@ -255,7 +265,7 @@ $fieldParams
         return """
 
         <template slot="item" slot-scope="props">
-          <tr @click.stop="${onClickMethod}" :key="props.item.$valueMember">
+          <tr @click.stop="${onClickMethod}" @change = "savedChangeData();" :key="props.item.$valueMember">
             $draggIndicator ${fieldParams.toString()}
           </tr>  
         </template>

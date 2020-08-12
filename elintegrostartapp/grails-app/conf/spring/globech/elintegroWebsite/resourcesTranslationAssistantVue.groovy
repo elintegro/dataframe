@@ -136,6 +136,7 @@ beans{
                         , internationalize: true
                         , sortable        : true
                         ,editButton       : true
+                        ,editableField    : "Text"
                         ,onButtonClick   : [
                         ['actionName': 'Edit/Translate', 'buttons': [
                                 [ name        : "edit"

@@ -179,7 +179,7 @@ beans {
                         widget            : "GridWidgetVue"
                         , name            : "clientProject"
 
-                        ,hql             : """select clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
+                        ,hql             : """select clientProject.id as Id ,clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
                                                 clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
 
 
@@ -195,8 +195,6 @@ beans {
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
                         ,url:'/'
-                        ,editableField : 'Description'
-                        ,onClick: ""
 
                 ]
         ]
