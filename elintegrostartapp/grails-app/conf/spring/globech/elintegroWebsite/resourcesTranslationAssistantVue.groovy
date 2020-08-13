@@ -214,12 +214,22 @@ beans{
                                                         ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
                                                         ,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe")
                                                         ,vuetifyIcon : [name: "edit"]
-                                     ]]]]
+                                     ],
+                                                        [deleteButton:true
+                                                         ,maxWidth:500
+                                                         ,valueMember: 'Id'
+                                                         ,ajaxDeleteUrl:"${contextPath}/translatorAssistant/deleteRecord"
+                                                         ,doBeforeDelete:"""allParams['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');"""
+                                                         ,doAfterDelete:"""self.vueGridOfTranslatedTextDataframe_fillInitData();"""
+                                                         ,tooltip: [message:"tooltip.grid.delete",internationalization: true]
+                                                         ,refDataframe: ref("vueDeleteTranslatedRecordsOfGridDataframe")
+                                                         ,vuetifyIcon: [name: "delete"]
+                                                        ]]]]
         ]]
         dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_translateWithGoogle' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""],
                             downloadTargetPropertyFile: [name: "downloadTargetPropertyFile",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.downloadTargetFile()"""]
         ]
-        childDataframes = ["vueEditTranslatedRecordsOfGridDataframe"]
+        childDataframes = ["vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe"]
         currentFrameLayout= ref("vueGridOfTranslatedTextDataframeLayout")
 
     }
@@ -246,6 +256,13 @@ beans{
                             restore: [name: "restore",type: "button",attr:"""style='background-color:#1976D2; color:white;'""",script: """this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();""", flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2']]
         ]
         currentFrameLayout = ref("vueEditTranslatedRecordsOfGridDataframeLayout")
+    }
+    vueDeleteTranslatedRecordsOfGridDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueDeleteTranslatedRecordsOfGridDataframe']
+        saveButton = false
+        hql = "select text.id from Text text where text.id=:id"
+        currentFrameLayout =ref("vueDeleteTranslatedRecordsOfGridDataframeLayout")
     }
 
 }
