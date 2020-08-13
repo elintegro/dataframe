@@ -11,18 +11,35 @@ import java.util.zip.ZipOutputStream
 
 class TranslatorAssistantController {
     def translatorService
+    def springSecurityService
 
     def saveProjectData() {
         def param = request.getJSON()
         println(param)
+        def currentUser = springSecurityService.currentUser
+        println(currentUser)
         Project project = new Project()
         project.name = param.vueCreateProjectForTranslationDataframe_project_name
         project.sourceLanguage = param.vueCreateProjectForTranslationDataframe_project_sourceLanguage.ename
         project.sourceFile = param.vueCreateProjectForTranslationDataframe_project_sourceFile
+        if(currentUser){
+            project.addToUsers(currentUser)
+        }
+
         project.save(flush: true)
         def resultData = [sucess: true, newData: project, params: project]
         render(resultData as JSON)
     }
+    def userInfo(){
+        def currentUser = springSecurityService.currentUser
+        if(currentUser){
+        render(currentUser as JSON)
+    }
+        else{
+            render(success:false)
+        }
+    }
+
 
     def fileUpload() {
         def projectId = params.allParams
