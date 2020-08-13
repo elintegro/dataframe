@@ -15,7 +15,6 @@ class TranslatorAssistantController {
 
     def saveProjectData() {
         def param = request.getJSON()
-        println(param)
         def currentUser = springSecurityService.currentUser
         println(currentUser)
         Project project = new Project()
@@ -85,7 +84,6 @@ class TranslatorAssistantController {
         render progress
     }
     def prepareTargetFile(param){
-        println(param)
         Language language = Language.findByEname(param.targetLanguage)
         Project project = Project.findById(param.projectId)
         def fileName = "messages_" + language.code + ".properties"
