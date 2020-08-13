@@ -11,18 +11,34 @@ import java.util.zip.ZipOutputStream
 
 class TranslatorAssistantController {
     def translatorService
+    def springSecurityService
 
     def saveProjectData() {
         def param = request.getJSON()
-        println(param)
+        def currentUser = springSecurityService.currentUser
+        println(currentUser)
         Project project = new Project()
         project.name = param.vueCreateProjectForTranslationDataframe_project_name
         project.sourceLanguage = param.vueCreateProjectForTranslationDataframe_project_sourceLanguage.ename
         project.sourceFile = param.vueCreateProjectForTranslationDataframe_project_sourceFile
+        if(currentUser){
+            project.addToUsers(currentUser)
+        }
+
         project.save(flush: true)
         def resultData = [sucess: true, newData: project, params: project]
         render(resultData as JSON)
     }
+    def userInfo(){
+        def currentUser = springSecurityService.currentUser
+        if(currentUser){
+        render(currentUser as JSON)
+    }
+        else{
+            render(success:false)
+        }
+    }
+
 
     def fileUpload() {
         def projectId = params.allParams
@@ -59,8 +75,15 @@ class TranslatorAssistantController {
         render(success: true)
 
     }
+    def intermediateRequest(){
+        def param = request.getJSON()
+        Project project = Project.findById(param.projectId)
+        def totalRecords = Text.countByProjectAndLanguage(project,param.sourceLanguage)
+        def translatedRecords = Text.countByProjectAndLanguage(project,param.targetLanguage)
+        def progress = (translatedRecords / totalRecords)*100
+        render progress
+    }
     def prepareTargetFile(param){
-        println(param)
         Language language = Language.findByEname(param.targetLanguage)
         Project project = Project.findById(param.projectId)
         def fileName = "messages_" + language.code + ".properties"

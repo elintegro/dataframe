@@ -14,5 +14,6 @@ class Project {
 
     static constraints = {
         name(nullable: false)
+        users(nullable: true)
     }
 }
