@@ -92,10 +92,10 @@ beans {
                                                   </v-col>
                                                   <v-col cols="12">
                                                        <v-progress-linear
-                                                              color="deep-purple accent-4"
-                                                              indeterminate
-                                                              rounded
-                                                              height="10">
+                                                              color="#1976D2"
+                                                              v-model = this.progressBarValue
+                                                              height="25">
+                                                               <strong>{{ Math.ceil(this.progressBarValue) }}%</strong>
                                                        </v-progress-linear>
                                                   </v-col>
                                                 </v-row>
