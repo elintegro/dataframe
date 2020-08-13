@@ -73,6 +73,11 @@ beans {
         data = "newApplication_display:true,\n"
 
     }
+    vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
+        data = """progressBarValue:1"""
+        watch =  """progressBarValueChanged:{handler: function(val, oldVal) {this.progressBarValue = val;}},\n"""
+        computed = """progressBarValueChanged(){var progressBarValue = excon.getFromStore('vueElintegroProgressBarDataframe','progressValue'); return progressBarValue;},\n"""
+    }
 
     loginNavigationVue_script(VueJsEntity) { bean ->
         data = "loginNavigationVue_show:true,"
@@ -923,12 +928,24 @@ beans {
                                         this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=true;
                                         this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=false;
                                         }
-                                    },\n
+                  },\n
                                     retrieveTranslatedText(){
                                          this.progressBarEnable = true;
                                          this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
                                          var allParams = this.state;
                                          var self = this;
+                                         var myVar = setInterval(function(){
+                                               axios({
+                                                      method:'post',
+                                                      url:'${contextPath}/translatorAssistant/intermediateRequest',
+                                                      data: allParams
+                                               }).then(function(responseData){
+                                                      var response = Math.round(responseData.data);
+                                                      excon.saveToStore('vueElintegroProgressBarDataframe','progressValue',response)
+                                                      if(response == 100){clearInterval(myVar)}
+                                               });
+                                         } ,1000);
+                                         
                                          axios({
                                               method:'post',
                                               url:'${contextPath}/translatorAssistant/translateWithGoogle',
@@ -941,13 +958,13 @@ beans {
                                          });
                                     },\n
                                     downloadTargetFile(){
-                                    var allParams = this.state;
-                                    var self = this;
-                                    var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
-                                    var fileLink = document.createElement('a');
-                                    fileLink.href = fileURL;
-                                    document.body.appendChild(fileLink);
-                                    fileLink.click();
+                                            var allParams = this.state;
+                                            var self = this;
+                                            var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
+                                            var fileLink = document.createElement('a');
+                                            fileLink.href = fileURL;
+                                            document.body.appendChild(fileLink);
+                                            fileLink.click();
                                     }
         """
 
