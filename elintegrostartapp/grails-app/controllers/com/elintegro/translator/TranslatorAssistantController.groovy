@@ -197,6 +197,17 @@ class TranslatorAssistantController {
 
 
     }
+    def deleteRecord(){
+        def params = request.getJSON()
+        String recordId = params["id"]
+        String projectId =params["projectId"]
+        Project project = Project.findById(projectId)
+        Text text = Text.findByProjectAndId(project,recordId)
+        text.delete(flush: true)
+        render(success:true)
+
+
+    }
 
 
 }
