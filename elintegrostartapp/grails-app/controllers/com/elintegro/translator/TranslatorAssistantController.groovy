@@ -76,11 +76,15 @@ class TranslatorAssistantController {
 
     }
     def intermediateRequest(){
-        def param = request.getJSON()
-        Project project = Project.findById(param.projectId)
-        def totalRecords = Text.countByProjectAndLanguage(project,param.sourceLanguage)
-        def translatedRecords = Text.countByProjectAndLanguage(project,param.targetLanguage)
-        def progress = (translatedRecords / totalRecords)*100
+        long totalRecordsToTranslate =  session.getAttribute("TA_NUMBER_OF_RECORDS_TO_TRANSLATE")
+        long translatedRecords = session.getAttribute("TA_NUMBER_OF_TRANSLATED_RECORDS")
+        long progress
+        if(translatedRecords!=0){
+         progress = (translatedRecords / totalRecordsToTranslate) * 100
+        }
+        else{
+            progress = 0
+        }
         render progress
     }
     def prepareTargetFile(param){

@@ -2,8 +2,14 @@ package com.elintegro.translator
 
 import com.elintegro.ref.Language
 import grails.util.Holders
+import javax.servlet.http.HttpSession
+import org.springframework.web.context.request.RequestContextHolder;
+
 
 class TranslatorService {
+
+
+    HttpSession session = RequestContextHolder.currentRequestAttributes().getSession()
 
     def loadTexts(String fileName, String language, String projectName){
         def file = Holders.grailsApplication.config.images.storageLocation+"/images/"+"${projectName}"+"/"+fileName
@@ -51,14 +57,20 @@ class TranslatorService {
         String targetLanguageCode = language1.code
         Project project = Project.findById(projectId)
         def sourceRecords = Text.findAllByProjectAndLanguage(project,sourceLanguage)
-            sourceRecords.each { sourceRecord ->
-                def translatedText = translateFromGoogle(sourceLanguageCode, targetLanguageCode, sourceRecord.text)
+        session.setAttribute("TA_NUMBER_OF_RECORDS_TO_TRANSLATE",sourceRecords.size())
+        long counter = 0
+            for(Text record:sourceRecords){
+                if(counter % 5 == 0) {
+                    session.setAttribute("TA_NUMBER_OF_TRANSLATED_RECORDS", counter)
+                }
+                def translatedText = translateFromGoogle(sourceLanguageCode, targetLanguageCode, record.text)
                 Text text = new Text()
-                text._key = sourceRecord._key
+                text._key = record._key
                 text.text = translatedText
                 text.language = targetLanguage
                 text.project = project
                 text.save(flush: true)
+                counter++
             }
 
 
