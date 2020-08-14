@@ -33,13 +33,14 @@ class TranslatorAssistantController {
         String fileName = project.sourceFile
         def result = new FileUploadController().ajaxFileSaveWithParams(params, projectName)
         boolean validateEnglish = fileValidationService.validateSourceFile(projectName,fileName)
+        boolean success = false
+        String msg = "$fileName was successfully uploaded.No records are saved.Make Sure your keys are in English language Where key should have english letters and some special characters like . - _"
         if(validateEnglish== true) {
             translatorService.loadTexts(fileName, language, projectName)
-            render(success: true)
-        }else{
-            render(success:false)
+            success = true
+            msg = "$fileName was successfully uploaded.All records are saved."
         }
-
+        render([success: success,msg:msg]as JSON)
 
     }
 
