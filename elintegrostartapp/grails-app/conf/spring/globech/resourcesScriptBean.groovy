@@ -74,7 +74,7 @@ beans {
 
     }
     vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
-        data = """progressBarValue:1"""
+        data = """progressBarValue:'' """
         watch =  """progressBarValueChanged:{handler: function(val, oldVal) {this.progressBarValue = val;}},\n"""
         computed = """progressBarValueChanged(){var progressBarValue = excon.getFromStore('vueElintegroProgressBarDataframe','progressValue'); return progressBarValue;},\n"""
     }
@@ -743,18 +743,16 @@ beans {
                   }"""
     }
     vueTranslatorAssistantDataframe_script(VueJsEntity) {
-        data = """itemExists:false,"""
-        watch = """itemExistOrNot:function(val){ if(val == true){this.itemExists = true}else{this.itemExists = false}}"""
-        computed = """ itemExistOrNot(){
-                                            var items = excon.getFromStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list')
-                                            if(items !=null){
-                                            return true;
-                                            }
-                                            else{
-                                            return false;
-                                            }
-                                      }
-                                 """
+        data = """disableWhenItemNotExist:true,"""
+        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.enableDisableTranstaleButton(); }}"""
+        computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantDataframe_project_list;}"""
+        methods = """ enableDisableTranstaleButton(){
+                            if(this.state.vueTranslatorAssistantDataframe_project_list == null || this.state.vueTranslatorAssistantDataframe_project_list == undefined ){
+                                this.disableWhenItemNotExist = true;
+                             }else{
+                                this.disableWhenItemNotExist = false;
+                             }
+                   },\n"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(){
@@ -942,7 +940,7 @@ beans {
                                                }).then(function(responseData){
                                                       var response = Math.round(responseData.data);
                                                       excon.saveToStore('vueElintegroProgressBarDataframe','progressValue',response)
-                                                      if(response == 100){clearInterval(myVar)}
+                                                      if(self.progressBarEnable == false){clearInterval(myVar)}
                                                });
                                          } ,1000);
                                          
