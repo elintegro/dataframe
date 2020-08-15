@@ -351,6 +351,20 @@ var excon = new Vue({
         reset: function(dataframeName){
 
             let oldData = store.getters.getState(dataframeName);
+        },
+        enableDisableButton:function (dataframeName , valueToObserve){
+            let state = store.getters.getState(dataframeName);
+            let dataToChange;
+            if(valueToObserve == null && valueToObserve == undefined){
+                 dataToChange = true
+            }
+            else if (valueToObserve && valueToObserve.length == 0){
+                dataToChange = true
+            }
+            else {
+                dataToChange = false
+            }
+            return dataToChange
         }
     }
 
