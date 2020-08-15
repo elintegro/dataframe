@@ -20,7 +20,6 @@ beans{
                         , hql: """select project.id as id, project.name as name from Project as project """
                         ,"displayMember":"name"
                         , search:true
-                        ,onSelect:[methodScript:"this.enableDisableTranstaleButton();"]
 
                 ]
         ]
@@ -105,6 +104,7 @@ beans{
                         "insertAfter":"project.languages",
                         script       : """ this.addLanguage()""",
                         "attr"       :"style='background-color:#1976D2; color:white; margin-top:13px;'",
+                        disabled     :"disableAddButtonWhenItemNotSelect",
                         "flexGridValues":['xs12', 'sm12', 'md1', 'lg1', 'xl1'],
                 ],
                 "project.language":[
@@ -118,7 +118,7 @@ beans{
                 ],
         ]
         dataframeButtons=[
-                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'showDownloadAllTranslatedFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6'],]
         ]
         childDataframes = ['vueAddNewRecordForCurrentProjectDataframe','vueGridOfTranslatedTextDataframe']
