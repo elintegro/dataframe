@@ -46,6 +46,7 @@ class GridDataframeController {
         def dataframe = params.dataframe
         def paramz = params
         def keys = params.keys
+
         if (dataframe=="participantsGrid"){
             GridDataFrame gridDataframe = getGridDataframe(params)
             // TODO get the hql from gridDataframe

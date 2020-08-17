@@ -14,30 +14,23 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.register
 
 import com.elintegro.auth.Role
-import com.elintegro.auth.User
 import com.elintegro.auth.UserRole
-import com.elintegro.gc.data.DataInit
+import com.elintegro.erf.dataframe.service.DataframeService
 import com.elintegro.gerf.DataframeController
 import com.elintegro.elintegrostartapp.Facility
-import com.elintegro.elintegrostartapp.FacilityUserRegistration
-import com.sun.org.apache.bcel.internal.generic.RETURN
+import com.elintegro.model.DataframeResponse
 import grails.gorm.transactions.Transactional
-import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.ui.RegisterCommand
 //import grails.plugin.springsecurity.ui.RegistrationCode
-import grails.plugin.springsecurity.ui.SpringSecurityUiService
-import grails.util.Holders
-import org.springframework.transaction.interceptor.TransactionAspectSupport
-import sun.security.tools.keytool.Pair
-
 @Transactional
 class RegisterService{
 
     def messageSource
     def mailService
     def springSecurityService
+    DataframeService dataframeService
 
-    def registerUser(RegisterCommand command, Role role, Facility facility) {
+    def registerUser(request, RegisterCommand command, Role role, Facility facility) {
         def serviceMessage
         DataframeController dataframeController = new DataframeController()
         com.elintegro.auth.User user = null
@@ -50,23 +43,25 @@ class RegisterService{
                 //resultData = ['msg': errMesg, 'success': false]
             }
         }else {
-            def resultData = dataframeController.ajaxSaveRaw()
-            Map domainInstanceMap = resultData?.dfInstance.getSavedDomainsMap();
-            def savedDomainInstances = domainInstanceMap.values()
+            DataframeResponse resultData = dataframeService.saveRaw(request)
+            user  = resultData?.dataframeInstance?.savedDomainsMap?.get("user")
 
-            if (savedDomainInstances) {
-                user = getRegisterUserInstance(savedDomainInstances, user)
+            //Map domainInstanceMap = resultData?.dfInstance.getSavedDomainsMap();
+            //def savedDomainInstances = domainInstanceMap.values()
+
+            //if (savedDomainInstances) {
+                //user = getRegisterUserInstance(savedDomainInstances, user)
                 UserRole.create(user, role)
-                if (facility) {
-                    facility.addToUsers(user)
-                }
-            }
+                //if (facility) {
+                //    facility.addToUsers(user)
+                //}
+            //}
         }
 
         return new grails.util.Pair(user, serviceMessage)
     }
 
-    private static def getRegisterUserInstance(savedDomainInstances, user){
+/*    private static def getRegisterUserInstance(savedDomainInstances, user){
         String userDomainClassName = SpringSecurityUtils.securityConfig.userLookup.userDomainClassName
         Class clazz = Holders.grailsApplication.getDomainClass(userDomainClassName).clazz
         for (def instance:savedDomainInstances){
@@ -76,5 +71,5 @@ class RegisterService{
             }
         }
         return user
-    }
+    }*/
 }

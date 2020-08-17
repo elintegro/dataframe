@@ -26,6 +26,7 @@ import com.elintegro.erf.widget.Widget
 import grails.util.Holders
 import grails.util.Environment
 import org.grails.datastore.mapping.model.PersistentEntity
+import org.grails.web.json.JSONObject
 import org.springframework.context.ApplicationContext
 import org.springframework.context.i18n.LocaleContextHolder
 
@@ -56,6 +57,10 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return true
     }
 
+    @Override
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName){
+        jData?.persisters?."${domainAlias}"."${fieldName}".value = value
+    }
 
     String getVuePropVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)

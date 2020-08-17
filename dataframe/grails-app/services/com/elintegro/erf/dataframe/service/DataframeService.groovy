@@ -16,10 +16,17 @@ package com.elintegro.erf.dataframe.service
 import com.elintegro.erf.dataframe.DataFrameInitialization
 import com.elintegro.erf.dataframe.DataManipulationException
 import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.dataframe.DataframeException
+import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.ParsedHql
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.db.types.DataType
+import com.elintegro.erf.dataframe.vue.DataframeConstants
+import com.elintegro.model.DataframeResponse
 import org.grails.core.DefaultGrailsDomainClass
+import org.springframework.context.MessageSource
+import org.springframework.context.i18n.LocaleContextHolder
 
 class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	Dataframe parent
@@ -280,4 +287,72 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	   scripts =  resultPageJs.toString()
 	   return resultPage
    }
+
+	public def saveRaw(def request){
+		def requestParams = request.getJSON()
+		Dataframe dataframe = getDataframe(requestParams)
+		def dataframeInstance = new DataframeInstance(dataframe, requestParams)
+		def operation = 'U'; //Update
+		def result;
+
+		try {
+			result = dataframeInstance.save(true);
+		}catch(Exception e){
+			log.error("Failed to save data for dataframe ${dataframeInstance.df.dataframeName} Error : \n " + e)
+		}
+
+		if(dataframeInstance.isInsertOccured()){
+			operation = "I";
+		}
+
+		def responseData
+		def generatedKeys = [:]
+		def generatedKeysArr = []
+
+		Map savedResultMap = dataframeInstance.getSavedDomainsMap();
+
+		savedResultMap.each { domainAlias, domainObj ->
+			def domain = domainObj[0]
+			def domainInstance = domainObj[1]
+			boolean isInsertDomainInstance = domainObj[2]
+			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
+			domain?.keys?.each{ key ->
+				def keyValue = domainInstance."${key}"
+				String myDomainAlias = domainClassInfo.getDomainAlias()
+				def keyOldValue = requestParams?.domain_keys?."${myDomainAlias}"."${key}"
+				if(keyOldValue == null ) {
+					requestParams?.domain_keys?."${myDomainAlias}".put(key, keyValue)
+				}else if(keyOldValue != keyValue){
+					//EU!!!
+					throw new DataframeException("Save is trying to change Key Value (and it is not Insert!) Could be hacker's attack!")
+				}
+				domainObj.add(keyOldValue)
+
+
+			}
+		}
+
+		if (dataframeInstance.isMultipleDomainsToSave() && dataframeInstance.isInsertOccured()){
+			//inter-domain relationship
+			dataframeInstance.setInterDomainRelationships(savedResultMap)
+		}
+
+		MessageSource messageSource = dataframe.messageSource
+		DataframeResponse response = new DataframeResponse()
+		response.operation = operation
+		response.data = requestParams
+		String msg
+		if(result) {
+			msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
+		} else {
+			response.result = false
+			msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
+		}
+		response.message = msg
+		response.dataframeInstance = dataframeInstance
+
+		return response
+	}
+
+
 }

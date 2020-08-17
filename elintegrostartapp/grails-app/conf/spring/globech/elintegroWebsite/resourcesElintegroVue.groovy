@@ -275,15 +275,9 @@ beans {
 
         addFieldDef = [
 
-//                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue"],
-//                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],],
-//                "person.email":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'email.required.message']]],
-//                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]],
                    "Person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
-//                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']]],
                 "application.availablePositions"  :[
                         "widget"             :"ComboboxVue"
-//                        ,"name"              :"person.availablePosition"
                         ,internationalize    :true
                         ,initBeforePageLoad  :true
                         ,multiple            :true
@@ -296,10 +290,6 @@ beans {
 
 
         ]
-        dataframeButtons = [
-                next:[name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:'this.newEmployeeBasicInformation()',
-                      flexGridValues: ['xs12', 'sm12', 'md1', 'lg1', 'xl1'], url:""]]
-
 
         currentFrameLayout = ref("vueNewEmployeeBasicInformationDataframeLayout")
 
@@ -557,7 +547,7 @@ beans {
                 ,"user.password":[widget: "PasswordWidgetVue", "width":"150"
                                   ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]]
                 ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password"
-                              ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroRegisterDataframe_user_password)",message:"Password.and.Confirm.Password."]]]
+                              ,"validationRules":[[condition:"v => !!(v == excon.getStateDataframeFieldValue(this, 'user', 'password') )",message:"Password.and.Confirm.Password."]]]
         ]
 
         currentFrameLayout = ref("vueElintegroRegisterDataframeLayout")
