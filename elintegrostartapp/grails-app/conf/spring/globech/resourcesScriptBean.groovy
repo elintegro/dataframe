@@ -744,15 +744,8 @@ beans {
     }
     vueTranslatorAssistantDataframe_script(VueJsEntity) {
         data = """disableWhenItemNotExist:true,"""
-        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.enableDisableTranstaleButton(); }}"""
+        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantDataframe',val) }}"""
         computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantDataframe_project_list;}"""
-        methods = """ enableDisableTranstaleButton(){
-                            if(this.state.vueTranslatorAssistantDataframe_project_list == null || this.state.vueTranslatorAssistantDataframe_project_list == undefined ){
-                                this.disableWhenItemNotExist = true;
-                             }else{
-                                this.disableWhenItemNotExist = false;
-                             }
-                   },\n"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(){
@@ -773,20 +766,14 @@ beans {
                     }"""
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
-        data = """isHidden : false ,vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles:false,"""
-        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){
-                                                                               this.vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles = true;
-                                                                               }else{
-                                                                                  this.vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles = false;
-                                                                               }
-                    }},"""
-        computed = """showOrHideDownloadAllFilesButton(){
-                               if(this.state.vueTranslatorDataframe_project_language_items.length > 1){
-                                   return true;
-                               }return false;
-                            }
-                            """
-        methods = """ addLanguage(){
+        data = """isHidden : false ,showDownloadAllTranslatedFilesButton:false,disableAddButtonWhenItemNotSelect:true,"""
+        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
+                    enableDisableAddButton:{handler: function(val){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
+                    """
+        computed = """showOrHideDownloadAllFilesButton(){if(this.state.vueTranslatorDataframe_project_language_items.length > 1){return true;}return false;},\n
+                      enableDisableAddButton(){return this.state.vueTranslatorDataframe_project_languages;},\n
+                   """
+        methods = """addLanguage(){
                                     var allParams = this.state;
                                     var self = this;
                                     allParams['dataframe'] = 'vueTranslatorDataframe';
@@ -799,8 +786,8 @@ beans {
                                                                    self.vueTranslatorDataframe_fillInitData()
                                                                    var response = responseData.data;
                                                                    });
-                                    },\n
-                                    translatedText(params){
+                             },\n
+                             translatedText(params){
                                         var previouslyClickedValue = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage')
                                         if(previouslyClickedValue == ""){
                                         this.isHidden = !this.isHidden
@@ -811,8 +798,8 @@ beans {
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
 
-                                   },\n
-                                    downloadAllTranslatedFiles(){
+                             },\n
+                             downloadAllTranslatedFiles(){
                                         var allParams = this.state;
                                         var self = this;   
                                          axios({
@@ -829,7 +816,7 @@ beans {
                                         });
                                         
                                         
-                                    },\n
+                             },\n
 
 
        """

@@ -25,6 +25,7 @@ class ButtonWidgetVue extends WidgetVue{
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = getFieldName(dataframe, field)
         def onClick = field.onClick
+        def disabled = field.disabled
         String refHtml = ""
 
         if(onClick && field.get('onClick')){
@@ -38,7 +39,7 @@ class ButtonWidgetVue extends WidgetVue{
                                         $script
                                },\n""")
         //Add security access for the button
-        String ret = wrapWithSpringSecurity(field, """$refHtml<v-btn ${getAttr(field)} ${toolTip(field)} :disabled="${isDisabled(dataframe, field)}" id='$fldName' @click.stop='${fldName}_method'>${getLabel(field)}</v-btn>\n""")
+        String ret = wrapWithSpringSecurity(field, """$refHtml<v-btn ${getAttr(field)} ${toolTip(field)} :disabled="$disabled" id='$fldName' @click.stop='${fldName}_method'>${getLabel(field)}</v-btn>\n""")
         return ret;
     }
 
