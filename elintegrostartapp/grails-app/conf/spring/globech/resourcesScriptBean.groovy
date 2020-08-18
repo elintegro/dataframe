@@ -764,14 +764,11 @@ beans {
                                                                    var response = responseData.data;
                                                                    self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
                                                                    excon.saveToStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list',response.params.name);
-                                                                   excon.saveToStore('vueTranslatorAssistantDataframe','currentProjectId',response.params.id)
-                                                                   excon.setVisibility('vueCreateProjectForTranslationDataframe',false);
+                                                                   excon.saveToStore('vueTranslatorAssistantDataframe','currentProjectId',response.params.id);
+                                                                   setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, 4000);
                                                                    });
-                    },\n
-                    showMessage(response){
-                           
-                            excon.showAlertMessage(response.data);
-                    }
+                  
+                   }
                     """
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->

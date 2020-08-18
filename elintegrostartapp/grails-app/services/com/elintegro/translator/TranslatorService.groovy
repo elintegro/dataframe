@@ -5,20 +5,8 @@ import grails.util.Holders
 
 class TranslatorService {
 
-    def loadTexts(String fileName, String language, String projectName){
-        def file = Holders.grailsApplication.config.images.storageLocation+"/images/"+"${projectName}"+"/"+fileName
-        File sourceFile = new File(file);
-        if(sourceFile.exists()) {
-            try {
-                def lines = sourceFile.readLines()
-                def targetLabels = []
-                lines.each { record ->
-                    def a = validateTextRecord(record, fileName, language, projectName)
-                    if (a == true) {
-                        String[] keyValue = record.split("=")
-                        if (keyValue.length == 2) {
-                            String key = keyValue[0]
-                            String sourceText = keyValue[1]
+    def loadTexts(String key,String sourceText, String language, String projectName){
+
                             Project project = Project.findByName(projectName)
                             Text text = new Text()
                             text._key = key
@@ -26,16 +14,7 @@ class TranslatorService {
                             text.project = project
                             text.language = language
                             text.save(flush: true)
-                        }
-                    }
-                }
-            }catch(Exception e){
-                log.error("File not found exception"+e)
-            }
-        }
-        else {
-            log.error("File doesn't exist.")
-        }
+
     }
     boolean validateTextRecord(String record,String fileName, String language, String projectName) {
         if (record?.indexOf("=") > 0){

@@ -51,7 +51,10 @@ beans{
                 "project.sourceFile":[
                         widget: "FilesUploadWidgetVue"
                         ,ajaxFileSaveUrl: "${contextPath}/translatorAssistant/fileUpload"
-                        ,doAfterSave:"""self.showMessage(response)"""
+                        ,doAfterSave:"""self.showMessage(response);"""
+                ],
+                "project.alertMesssage":[
+                        widget: "SnackbarWidgetVue"
                 ]
         ]
         dataframeButtons=[
