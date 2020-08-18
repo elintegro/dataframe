@@ -14,11 +14,19 @@ beans{
         saveButton = false
         initOnPageLoad = true
         route = true
+        childDataframes = ["vueTranslatorAssistantAfterLoggedInDataframe","vueTranslatorAssistantBeforeLoggedInDataframe"]
+        currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
+    }
+    vueTranslatorAssistantBeforeLoggedInDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueTranslatorAssistantBeforeLoggedInDataframe']
+        saveButton = false
+        initOnPageLoad = true
         addFieldDef = [
                 "project.list":[
                         widget: "ComboboxVue"
-                        , hql: """select project.id as id, project.name as name from Project as project """
-                        ,"displayMember":"name"
+                        , hql: """select proj.id as projectId, proj.name as Name from Project proj where proj.id not in  (select pro.id from Project pro inner join pro.users u)"""
+                        ,"displayMember":"Name"
                         , search:true
 
                 ]
@@ -28,8 +36,32 @@ beans{
                 createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
-        currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
+        currentFrameLayout = ref("vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout")
     }
+    vueTranslatorAssistantAfterLoggedInDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueTranslatorAssistantAfterLoggedInDataframe']
+        saveButton = false
+        initOnPageLoad = true
+        addFieldDef = [
+                "project.list":[
+                        widget: "ComboboxVue"
+                        , hql: """select project.id as projectId , project.name as Name , users.id as Id from Project project inner join project.users users where users.id = :session_userid"""
+                        ,"displayMember":"Name"
+                        , search:true
+
+
+
+                ]
+        ]
+        dataframeButtons =[
+                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs12', 'sm12', 'md10', 'lg10', 'xl10'] ],
+                createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2'] ]
+        ]
+        childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
+        currentFrameLayout = ref("vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout")
+    }
+
     vueCreateProjectForTranslationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCreateProjectForTranslationDataframe']
@@ -67,16 +99,9 @@ beans{
         route = true
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doBeforeRefresh = """
-                         var selectedProjectId;
-                         var projectDetails = excon.getFromStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list')
-                         if(projectDetails.id == "" || projectDetails.id == undefined){
-                            selectedProjectId = excon.getFromStore('vueTranslatorAssistantDataframe','currentProjectId')
-                            allParams['projectId']= selectedProjectId;
-                         }
-                         else{
-                                selectedProjectId = projectDetails.id
-                                allParams['projectId']= selectedProjectId
-                         } 
+                         var projectDetails = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject')
+                         var selectedProjectId = projectDetails.projectId
+                         allParams['projectId']= selectedProjectId
                          excon.saveToStore('vueTranslatorDataframe','projectId',selectedProjectId)"""
         hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
         addFieldDef =[

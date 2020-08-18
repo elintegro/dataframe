@@ -742,10 +742,15 @@ beans {
                                                                    });
                   }"""
     }
-    vueTranslatorAssistantDataframe_script(VueJsEntity) {
+    vueTranslatorAssistantAfterLoggedInDataframe_script(VueJsEntity) {
         data = """disableWhenItemNotExist:true,"""
-        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantDataframe',val) }}"""
-        computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantDataframe_project_list;}"""
+        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantAfterLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
+        computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantAfterLoggedInDataframe_project_list;}"""
+    }
+    vueTranslatorAssistantBeforeLoggedInDataframe_script(VueJsEntity) {
+        data = """disableWhenItemNotExist:true,"""
+        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantBeforeLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
+        computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantBeforeLoggedInDataframe_project_list;}"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(){
@@ -758,9 +763,10 @@ beans {
                                            data: allParams
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
+                                                                   var currentlySaveProject = {Name:response.params.name,projectId:response.params.id}
                                                                    self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
-                                                                   excon.saveToStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list',response.params.name);
-                                                                   excon.saveToStore('vueTranslatorAssistantDataframe','currentProjectId',response.params.id)
+                                                                   excon.saveToStore('vueTranslatorAssistantBeforeLoggedInDataframe','vueTranslatorAssistantBeforeLoggedInDataframe_project_list',currentlySaveProject);
+                                                                   excon.saveToStore('vueTranslatorAssistantAfterLoggedInDataframe','vueTranslatorAssistantAfterLoggedInDataframe_project_list',currentlySaveProject);
                                                                    excon.setVisibility('vueCreateProjectForTranslationDataframe',false);
                                                                    });
                     }"""
