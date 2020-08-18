@@ -11,9 +11,17 @@ beans{
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="blue darken-2" height="100px" style="margin-bottom:30px;">
                                  <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
-                                  </v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]
+                                  </v-toolbar><vueTranslatorAssistantAfterLoggedInDataframe v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                  <vueTranslatorAssistantBeforeLoggedInDataframe v-else/>
+                                  [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                   </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+    }
+    vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout(ColumnLayoutVue){bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+
     }
     vueCreateProjectForTranslationDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name

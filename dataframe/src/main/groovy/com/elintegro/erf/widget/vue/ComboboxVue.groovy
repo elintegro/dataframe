@@ -236,6 +236,10 @@ class ComboboxVue extends WidgetVue {
 
         Map result=[:]
         if(wdgHql && !fieldProps?.initBeforePageLoad){
+            Map sessionParams = dfInst.sessionParams
+            if (sessionParams){
+                inputData << sessionParams
+            }
             ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory);
             DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);
             List resultList = dbRes.getResultList()
