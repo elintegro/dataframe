@@ -110,6 +110,8 @@ class TranslatorAssistantController {
     }
 
     def downloadTargetFile() {
+        def currentUser = springSecurityService.currentUser
+        if(currentUser){
         def projectDetails = params.id
         String[] str = projectDetails.split('(?=[A-Z])')
         def projectId = str[0]
@@ -129,6 +131,11 @@ class TranslatorAssistantController {
 
         } else {
             log.error("Such file +$fileName+ doesn't exist.")
+        }
+    }
+        else{
+            render(view: '/error')
+
         }
     }
      def translateEachRecordWithGoogle(){
@@ -156,7 +163,6 @@ class TranslatorAssistantController {
     }
     def saveNewlyAddedRecord(){
         def param = request.getJSON()
-        println(param)
         Project project = Project.findById(param.vueAddNewRecordForCurrentProjectDataframe_project_id)
         Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project,param.vueAddNewRecordForCurrentProjectDataframe_key,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
         if(text == null) {

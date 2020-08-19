@@ -82,10 +82,9 @@ beans{
     }
     vueDialogBoxForNotLoggedInUserDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl2><v-card round class='rounded-card' >
-                                <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
-                                <h5>Please, login or register to continue ... </h5>
-                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl2']
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                               <v-row><v-col cols="12" xs="0" sm="0" md="3" xl="3" lg="3"></v-col><v-col cols="12" xs="0" sm="0" md="6" xl="6" lg="6"><v-card><v-row><v-card-actions class="justify-center"><h1 style="margin-left:20px;">You must be logged in to download...</h1></v-card-actions></v-row><br><v-row><v-col cols="12" style="margin-left:10px;">[BUTTON_SCRIPT]</v-col></v-row></v-card></v-col><v-col  cols="12" xs="0" sm="0" md="3" xl="3" lg="3"></v-col></v-row>
+                                </v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
 }
