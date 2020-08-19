@@ -55,12 +55,15 @@ class SnackbarWidgetVue extends WidgetVue{
         String y = field?.y?:"top"
         String x = field?.x?:"right"
         def timeout = field?.timeout?:6000
-   /*     dataframe.getVueJsBuilder().addToComputedScript("""
-              alertProp(){
-               return this.\$store.state.${dataframe.dataframeName}.alertProp;
-           },\n
-        """)*/
+
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
+        store.addToState("""
+            alertProp:{
+                snackbar: false,
+                alert_type: '',
+                alert_message: ''
+            },\n
+                """)
         dataframe.getVueJsBuilder().addToDataScript("""
              alertProp:{
                 snackbar: false,
@@ -68,22 +71,18 @@ class SnackbarWidgetVue extends WidgetVue{
                 alert_message: ''
             },\n
         """)
-        dataframe.getVueJsBuilder().addToMethodScript("""
-         showMessage(responseData){
-                var response = responseData.data;
-                Vue.set(this.alertProp,'snackbar',true);
-                Vue.set(this.alertProp,'alert_type',response.alert_type);
-                Vue.set(this.alertProp,'alert_message',response.msg);
-         }
-        """)
+        dataframe.getVueJsBuilder().addToWatchScript("""
+                showAlertMessage:{handler: function(val, oldVal){}},\n
+                """)
+        dataframe.getVueJsBuilder().addToComputedScript("""
+                showAlertMessage(){
+                 this.alertProp.snackbar = this.state.alertProp.snackbar
+                  this.alertProp.alert_type = this.state.alertProp.alert_type
+                  this.alertProp.alert_message = this.state.alertProp.alert_message
+                 
+                },\n
+                """)
 
-        /*store.addToMutation("""
-            alertMessage(state, payload) {  
-                state.${dataframe.dataframeName}.alertProp.snackbar = payload.snackbar;
-                state.${dataframe.dataframeName}.alertProp.alert_type = payload.alert_type;
-                state.${dataframe.dataframeName}.alertProp.alert_message = payload.alert_message;
-            },\n
-        """)*/
         return """
             y: '$y',
             x: '$x',

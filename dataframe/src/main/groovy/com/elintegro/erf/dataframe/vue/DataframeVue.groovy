@@ -488,6 +488,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		addFieldDef?.each{key, value->
 			addField(key, value)
 		}
+		addField("alertMesssage", [widget: "SnackbarWidgetVue"])
+
 	}
 
 	List  getHqlResult(def queryHql, def keyValue, Map sessionAttributes){

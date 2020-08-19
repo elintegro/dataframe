@@ -36,7 +36,6 @@ beans{
         initOnPageLoad = false
         saveButton = false
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-
         hql = "select project.id , project.name, project.sourceLanguage, project.sourceFile from Project as project"
         addFieldDef=[
                 "project.sourceLanguage":[
@@ -51,10 +50,7 @@ beans{
                 "project.sourceFile":[
                         widget: "FilesUploadWidgetVue"
                         ,ajaxFileSaveUrl: "${contextPath}/translatorAssistant/fileUpload"
-                        ,doAfterSave:"""self.showMessage(response);"""
-                ],
-                "project.alertMesssage":[
-                        widget: "SnackbarWidgetVue"
+                        ,doAfterSave:"""excon.showMessage(response,'vueCreateProjectForTranslationDataframe');"""
                 ]
         ]
         dataframeButtons=[
