@@ -951,11 +951,23 @@ beans {
                                     downloadTargetFile(){
                                             var allParams = this.state;
                                             var self = this;
-                                            var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
-                                            var fileLink = document.createElement('a');
-                                            fileLink.href = fileURL;
-                                            document.body.appendChild(fileLink);
-                                            fileLink.click();
+                                            axios({
+                                                  method:'post',
+                                                  url:'${contextPath}/translatorAssistant/userInfo',
+                                                  data:allParams
+                                            }).then(function(responseData){
+                                                var response = responseData.data;
+                                                if(response.success == true){
+                                                    var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
+                                                    var fileLink = document.createElement('a');
+                                                    fileLink.href = fileURL;
+                                                    document.body.appendChild(fileLink);
+                                                    fileLink.click();
+                                                }
+                                                else{
+                                                     excon.setVisibility('vueDialogBoxForNotLoggedInUserDataframe',true);
+                                                }
+                                            });
                                     }
         """
 

@@ -32,7 +32,7 @@ class TranslatorAssistantController {
     def userInfo(){
         def currentUser = springSecurityService.currentUser
         if(currentUser){
-        render(currentUser as JSON)
+        render(success: true)
     }
         else{
             render(success:false)

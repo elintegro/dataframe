@@ -254,9 +254,9 @@ beans{
                                                         ]]]]
         ]]
         dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_translateWithGoogle' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""],
-                            downloadTargetPropertyFile: [name: "downloadTargetPropertyFile",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.downloadTargetFile()"""]
+                            downloadTargetPropertyFile: [name: "downloadTargetPropertyFile",type: "button",refDataframe: ref("vueDialogBoxForNotLoggedInUserDataframe"), attr: """style='background-color:#1976D2; color:white;' v-show = 'vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.downloadTargetFile()"""]
         ]
-        childDataframes = ["vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe"]
+        childDataframes = ["vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe","vueDialogBoxForNotLoggedInUserDataframe"]
         currentFrameLayout= ref("vueGridOfTranslatedTextDataframeLayout")
 
     }
@@ -290,6 +290,16 @@ beans{
         saveButton = false
         hql = "select text.id from Text text where text.id=:id"
         currentFrameLayout =ref("vueDeleteTranslatedRecordsOfGridDataframeLayout")
+    }
+    vueDialogBoxForNotLoggedInUserDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueDialogBoxForNotLoggedInUserDataframe']
+        saveButton = false
+        dataframeButtons = [register: [name: "register",type: "button", showAsDialog: true, attr:"""style='background-color:#1976D2; color:white;'""", refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                            login: [name: "login",type:"button",showAsDialog: true,attr:"""style='background-color:#1976D2; color:white;'""",refDataframe: ref("vueElintegroLoginDataframe"),tooltip: [message: 'Login'], flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
+        ]
+        currentFrameLayout =ref("vueDialogBoxForNotLoggedInUserDataframeLayout")
+
     }
 
 }
