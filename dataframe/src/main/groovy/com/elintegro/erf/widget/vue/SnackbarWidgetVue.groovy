@@ -28,22 +28,22 @@ class SnackbarWidgetVue extends WidgetVue{
 
         return """
       <v-snackbar
-        v-model="alertProp.snackbar"
+        v-model="state.alertProp.snackbar"
         :bottom="y === 'bottom'"
         :left="x === 'left'"
         :multi-line="mode === 'multi-line'"
         :right="x === 'right'"
         :timeout="timeout"
         :top="y === 'top'"
-        :color="alertProp.alert_type"
+        :color="state.alertProp.alert_type"
         :vertical="mode === 'vertical'"
       >
-        {{ alertProp.alert_message }}
+        {{ state.alertProp.alert_message }}
         <v-spacer></v-spacer>
         <v-btn
           dark
           text
-          @click="alertProp.snackbar = false"
+          @click="state.alertProp.snackbar = false"
         >
           <v-icon medium >close</v-icon>
         </v-btn>
@@ -63,24 +63,6 @@ class SnackbarWidgetVue extends WidgetVue{
                 alert_type: '',
                 alert_message: ''
             },\n
-                """)
-        dataframe.getVueJsBuilder().addToDataScript("""
-             alertProp:{
-                snackbar: false,
-                alert_type: '',
-                alert_message: ''
-            },\n
-        """)
-        dataframe.getVueJsBuilder().addToWatchScript("""
-                showAlertMessage:{handler: function(val, oldVal){}},\n
-                """)
-        dataframe.getVueJsBuilder().addToComputedScript("""
-                showAlertMessage(){
-                 this.alertProp.snackbar = this.state.alertProp.snackbar
-                  this.alertProp.alert_type = this.state.alertProp.alert_type
-                  this.alertProp.alert_message = this.state.alertProp.alert_message
-                 
-                },\n
                 """)
 
         return """
