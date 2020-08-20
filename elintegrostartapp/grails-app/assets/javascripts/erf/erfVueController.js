@@ -373,6 +373,14 @@ var excon = new Vue({
                 dataToChange = false
             }
             return dataToChange
+        },
+        redirectPage:function (dataFrame,pageToRedirect,routeId){
+            if(routeId == null){
+            dataFrame.$router.push('/'+pageToRedirect+'/0');
+        }
+            else {
+                dataFrame.$router.push('/'+pageToRedirect+'/'+routeId);
+            }
         }
     }
 
