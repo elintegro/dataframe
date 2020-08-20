@@ -73,6 +73,11 @@ beans {
         data = "newApplication_display:true,\n"
 
     }
+    vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
+        data = """progressBarValue:'' """
+        watch =  """progressBarValueChanged:{handler: function(val, oldVal) {this.progressBarValue = val;}},\n"""
+        computed = """progressBarValueChanged(){var progressBarValue = excon.getFromStore('vueElintegroProgressBarDataframe','progressValue'); return progressBarValue;},\n"""
+    }
 
     loginNavigationVue_script(VueJsEntity) { bean ->
         data = "loginNavigationVue_show:true,"
@@ -188,7 +193,7 @@ beans {
 //    }
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
         computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_lastName)},
-                       vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
+                       vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email},\n"""
     }
     vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
         def imagePath = Holders.grailsApplication.config.images.storageLocation + "/"
@@ -737,19 +742,15 @@ beans {
                                                                    });
                   }"""
     }
-    vueTranslatorAssistantDataframe_script(VueJsEntity) {
-        data = """itemExists:false,"""
-        watch = """itemExistOrNot:function(val){ if(val == true){this.itemExists = true}else{this.itemExists = false}}"""
-        computed = """ itemExistOrNot(){
-                                            var items = excon.getFromStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list')
-                                            if(items !=null){
-                                            return true;
-                                            }
-                                            else{
-                                            return false;
-                                            }
-                                      }
-                                 """
+    vueTranslatorAssistantAfterLoggedInDataframe_script(VueJsEntity) {
+        data = """disableWhenItemNotExist:true,"""
+        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantAfterLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
+        computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantAfterLoggedInDataframe_project_list;}"""
+    }
+    vueTranslatorAssistantBeforeLoggedInDataframe_script(VueJsEntity) {
+        data = """disableWhenItemNotExist:true,"""
+        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantBeforeLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
+        computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantBeforeLoggedInDataframe_project_list;}"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(){
@@ -762,30 +763,24 @@ beans {
                                            data: allParams
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
+                                                                   var currentlySaveProject = {Name:response.params.name,projectId:response.params.id}
                                                                    self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
-                                                                   excon.saveToStore('vueTranslatorAssistantDataframe','vueTranslatorAssistantDataframe_project_list',response.params.name);
-                                                                   excon.saveToStore('vueTranslatorAssistantDataframe','currentProjectId',response.params.id);
+                                                                   excon.saveToStore('vueTranslatorAssistantBeforeLoggedInDataframe','vueTranslatorAssistantBeforeLoggedInDataframe_project_list',currentlySaveProject);
+                                                                   excon.saveToStore('vueTranslatorAssistantAfterLoggedInDataframe','vueTranslatorAssistantAfterLoggedInDataframe_project_list',currentlySaveProject);
                                                                    setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, 4000);
+
                                                                    });
-                  
-                   }
-                    """
+                    }"""
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
-        data = """isHidden : false ,vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles:false,"""
-        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){
-                                                                               this.vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles = true;
-                                                                               }else{
-                                                                                  this.vueElintegroTranslatorDataframe_button_downloadAllTranslatedFiles = false;
-                                                                               }
-                    }},"""
-        computed = """showOrHideDownloadAllFilesButton(){
-                               if(this.state.vueTranslatorDataframe_project_language_items.length > 1){
-                                   return true;
-                               }return false;
-                            }
-                            """
-        methods = """ addLanguage(){
+        data = """isHidden : false ,showDownloadAllTranslatedFilesButton:false,disableAddButtonWhenItemNotSelect:true,"""
+        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
+                    enableDisableAddButton:{handler: function(val){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
+                    """
+        computed = """showOrHideDownloadAllFilesButton(){if(this.state.vueTranslatorDataframe_project_language_items.length > 1){return true;}return false;},\n
+                      enableDisableAddButton(){return this.state.vueTranslatorDataframe_project_languages;},\n
+                   """
+        methods = """addLanguage(){
                                     var allParams = this.state;
                                     var self = this;
                                     allParams['dataframe'] = 'vueTranslatorDataframe';
@@ -798,8 +793,8 @@ beans {
                                                                    self.vueTranslatorDataframe_fillInitData()
                                                                    var response = responseData.data;
                                                                    });
-                                    },\n
-                                    translatedText(params){
+                             },\n
+                             translatedText(params){
                                         var previouslyClickedValue = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage')
                                         if(previouslyClickedValue == ""){
                                         this.isHidden = !this.isHidden
@@ -810,8 +805,8 @@ beans {
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
 
-                                   },\n
-                                    downloadAllTranslatedFiles(){
+                             },\n
+                             downloadAllTranslatedFiles(){
                                         var allParams = this.state;
                                         var self = this;   
                                          axios({
@@ -828,7 +823,7 @@ beans {
                                         });
                                         
                                         
-                                    },\n
+                             },\n
 
 
        """
@@ -910,7 +905,7 @@ beans {
 
     }
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
-        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false"""
+        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false,progressBarEnable:false,"""
         watch = """ refreshVueGridOfTranslatedTextDataframe:{handler: function(val, oldVal) {this.vueGridOfTranslatedTextDataframe_fillInitData();}},"""
         computed = """refreshVueGridOfTranslatedTextDataframe(){var targetLanguage = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
                             return targetLanguage;}"""
@@ -925,10 +920,24 @@ beans {
                                         this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=true;
                                         this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=false;
                                         }
-                                    },\n
+                  },\n
                                     retrieveTranslatedText(){
+                                         this.progressBarEnable = true;
+                                         this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
                                          var allParams = this.state;
                                          var self = this;
+                                         var myVar = setInterval(function(){
+                                               axios({
+                                                      method:'post',
+                                                      url:'${contextPath}/translatorAssistant/intermediateRequest',
+                                                      data: allParams
+                                               }).then(function(responseData){
+                                                      var response = Math.round(responseData.data);
+                                                      excon.saveToStore('vueElintegroProgressBarDataframe','progressValue',response)
+                                                      if(self.progressBarEnable == false){clearInterval(myVar)}
+                                               });
+                                         } ,1000);
+                                         
                                          axios({
                                               method:'post',
                                               url:'${contextPath}/translatorAssistant/translateWithGoogle',
@@ -937,16 +946,17 @@ beans {
                                               self.vueGridOfTranslatedTextDataframe_fillInitData();
                                               self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
                                               var response = responseData.data;
+                                              self.progressBarEnable = false;
                                          });
                                     },\n
                                     downloadTargetFile(){
-                                    var allParams = this.state;
-                                    var self = this;
-                                    var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
-                                    var fileLink = document.createElement('a');
-                                    fileLink.href = fileURL;
-                                    document.body.appendChild(fileLink);
-                                    fileLink.click();
+                                            var allParams = this.state;
+                                            var self = this;
+                                            var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
+                                            var fileLink = document.createElement('a');
+                                            fileLink.href = fileURL;
+                                            document.body.appendChild(fileLink);
+                                            fileLink.click();
                                     }
         """
 
@@ -988,4 +998,5 @@ beans {
                     }
                     """
     }
+
 }

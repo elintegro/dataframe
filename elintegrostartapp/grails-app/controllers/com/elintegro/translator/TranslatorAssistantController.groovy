@@ -15,11 +15,16 @@ class TranslatorAssistantController {
 
     def saveProjectData() {
         def param = request.getJSON()
-        println(param)
+        def currentUser = springSecurityService.currentUser
+        println(currentUser)
         Project project = new Project()
         project.name = param.vueCreateProjectForTranslationDataframe_project_name
         project.sourceLanguage = param.vueCreateProjectForTranslationDataframe_project_sourceLanguage.ename
         project.sourceFile = param.vueCreateProjectForTranslationDataframe_project_sourceFile
+        if(currentUser){
+            project.addToUsers(currentUser)
+        }
+
         project.save(flush: true)
         def resultData = [sucess: true, newData: project, params: project]
         render(resultData as JSON)
@@ -60,8 +65,19 @@ class TranslatorAssistantController {
         render(success: true)
 
     }
+    def intermediateRequest(){
+        long totalRecordsToTranslate =  session.getAttribute("TA_NUMBER_OF_RECORDS_TO_TRANSLATE")
+        long translatedRecords = session.getAttribute("TA_NUMBER_OF_TRANSLATED_RECORDS")
+        long progress
+        if(translatedRecords!=0){
+         progress = (translatedRecords / totalRecordsToTranslate) * 100
+        }
+        else{
+            progress = 0
+        }
+        render progress
+    }
     def prepareTargetFile(param){
-        println(param)
         Language language = Language.findByEname(param.targetLanguage)
         Project project = Project.findById(param.projectId)
         def fileName = "messages_" + language.code + ".properties"
@@ -132,12 +148,12 @@ class TranslatorAssistantController {
         def param = request.getJSON()
         println(param)
         Project project = Project.findById(param.vueAddNewRecordForCurrentProjectDataframe_project_id)
-        Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project,param.vueAddNewRecordForCurrentProjectDataframe_key,param.vueAddNewRecordForCurrentProjectDataframe_text,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
+        Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project,param.vueAddNewRecordForCurrentProjectDataframe_key,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
         if(text == null) {
             Text newText = new Text()
             newText.project = project
             newText._key = param.vueAddNewRecordForCurrentProjectDataframe_key
-            newText.text = param.vueAddNewRecordForCurrentProjectDataframe_text
+            newText.text = param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText
             newText.language = param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage
             newText.save(flush: true)
         }
@@ -195,6 +211,17 @@ class TranslatorAssistantController {
         } else {
             log.error("Such file +$zipFileName+ doesn't exist.")
         }
+
+
+    }
+    def deleteRecord(){
+        def params = request.getJSON()
+        String recordId = params["id"]
+        String projectId =params["projectId"]
+        Project project = Project.findById(projectId)
+        Text text = Text.findByProjectAndId(project,recordId)
+        text.delete(flush: true)
+        render(success:true)
 
 
     }
