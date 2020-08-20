@@ -12,6 +12,7 @@ import java.util.zip.ZipOutputStream
 class TranslatorAssistantController {
     def translatorService
     def springSecurityService
+    def fileValidationService
 
     def saveProjectData() {
         def param = request.getJSON()
@@ -29,26 +30,16 @@ class TranslatorAssistantController {
         def resultData = [sucess: true, newData: project, params: project]
         render(resultData as JSON)
     }
-    def userInfo(){
-        def currentUser = springSecurityService.currentUser
-        if(currentUser){
-        render(currentUser as JSON)
-    }
-        else{
-            render(success:false)
-        }
-    }
-
 
     def fileUpload() {
         def projectId = params.allParams
         Project project = Project.findById(projectId)
         String projectName = project.name
-        String language = project.sourceLanguage
+        String sourceLanguage = project.sourceLanguage
         String fileName = project.sourceFile
         def result = new FileUploadController().ajaxFileSaveWithParams(params, projectName)
-        translatorService.loadTexts(fileName, language, projectName)
-        render(success: true)
+        def validateEnglish = fileValidationService.validateSourceFile(projectName,fileName,sourceLanguage)
+        render (validateEnglish as JSON)
 
     }
 
