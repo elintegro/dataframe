@@ -29,16 +29,6 @@ class TranslatorAssistantController {
         def resultData = [sucess: true, newData: project, params: project]
         render(resultData as JSON)
     }
-    def userInfo(){
-        def currentUser = springSecurityService.currentUser
-        if(currentUser){
-        render(success: true)
-    }
-        else{
-            render(success:false)
-        }
-    }
-
 
     def fileUpload() {
         def projectId = params.allParams
