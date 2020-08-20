@@ -822,6 +822,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				(fieldLayout, fieldCount) = buildWidget(field, key, fieldLayout, resultPageHtml, fieldsHtmlBuilder, fieldCount, vueDataVariable, vueStateVariable, vueDataFillScript, vueSaveVariables, vueJsBuilder)
 
 			}else{
+				fields.getList().remove(key)
 				log.error("No widget for the field $field.name")
 			}
 
