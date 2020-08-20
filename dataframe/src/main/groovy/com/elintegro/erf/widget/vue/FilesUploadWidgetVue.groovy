@@ -34,6 +34,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         String fldName = dataVariable
         def defaultValue = field.defaultValue?:""
+        def doAfterSave = field.doAfterSave?:""
         String genId = fldName+"-file"
         dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
                 .addToMethodScript("""
@@ -62,10 +63,12 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                             if(data.params != null){
                             fileData.append('allParams',data.params.id);}
                             }
-                              fetch('${field.ajaxFileSaveUrl}',
-                                 { method:'POST',
-                                   body:fileData 
+                            let self = this;
+                              axios({ method:'post',
+                                        url:'${field.ajaxFileSaveUrl}',
+                                        data:fileData 
                                  }).then(response => {
+                                            ${doAfterSave}
                                             console.log(response)
                                                     })
                                   .catch(function(error){
