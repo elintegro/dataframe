@@ -61,7 +61,7 @@ class TranslatorAssistantController {
 
     def translateWithGoogle() {
         def param = request.getJSON()
-        translatorService.translationWithGoogle(param.projectId, param.sourceLanguage, param.targetLanguage)
+        translatorService.translationWithGoogle(param.projectId, param.sourceLanguage, param.targetLanguage, session)
         prepareTargetFile(param)
         render(success: true)
 

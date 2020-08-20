@@ -812,8 +812,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		List fldsList = fields.getList()
 		int seq = 0
 		int fieldCount = 0;
-
-		for(String key: fields.getList()){
+		List<String> list = fields.getList()
+		for(Iterator<String> iterator = list.iterator();iterator.hasNext();){
+			String key = iterator.next()
 			// TODO  make sure the javascript sourcecode aligns
 			Map field = fields.dataMap.get(key)
 
@@ -821,7 +822,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 				(fieldLayout, fieldCount) = buildWidget(field, key, fieldLayout, resultPageHtml, fieldsHtmlBuilder, fieldCount, vueDataVariable, vueStateVariable, vueDataFillScript, vueSaveVariables, vueJsBuilder)
 
-			}else{
+			}else if(key.isEmpty()){
+				iterator.remove()
+			}
+			else{
+
 				log.error("No widget for the field $field.name")
 			}
 
