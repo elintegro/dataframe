@@ -8,6 +8,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 class TranslatorService {
 
+    HttpSession session = RequestContextHolder.currentRequestAttributes().getSession()
+
     def loadTexts(String key,String sourceText, String language, String projectName){
 
                             Project project = Project.findByName(projectName)

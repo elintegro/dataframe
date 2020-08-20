@@ -11,6 +11,7 @@ import java.util.zip.ZipOutputStream
 
 class TranslatorAssistantController {
     def translatorService
+    def springSecurityService
     def fileValidationService
 
     def saveProjectData() {
