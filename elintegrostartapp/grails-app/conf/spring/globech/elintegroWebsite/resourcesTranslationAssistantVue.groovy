@@ -113,7 +113,10 @@ beans{
                         "attr"       :"style='background-color:#1976D2; color:white; text-transform: capitalize;'",
                         "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
                 ],
-                "project.name":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
+                "project.name":[ widget: "ComboboxVue"
+                                 , hql: """select proj.id as projectId, proj.name as Name from Project proj where proj.id not in  (select pro.id from Project pro inner join pro.users u)"""
+                                 ,"displayMember":"Name"
+                                 ,search:true],
                 "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
                 "project.languages":[
                         widget: "ComboboxVue"
