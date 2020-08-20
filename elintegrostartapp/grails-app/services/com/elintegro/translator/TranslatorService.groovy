@@ -2,13 +2,11 @@ package com.elintegro.translator
 
 import com.elintegro.ref.Language
 import grails.util.Holders
+
 import javax.servlet.http.HttpSession
-import org.springframework.web.context.request.RequestContextHolder;
 
 
 class TranslatorService {
-
-    HttpSession session = RequestContextHolder.currentRequestAttributes().getSession()
 
     def loadTexts(String key,String sourceText, String language, String projectName){
 
@@ -28,7 +26,7 @@ class TranslatorService {
         log.warn("Translating project ${projectName} from ${language} , while loading file ${fileName}: the following line is corrupted: ${record} . The record will not be inserted into the database!")
         return false
     }
-    def translationWithGoogle(def projectId, def sourceLanguage, def targetLanguage) {
+    def translationWithGoogle(def projectId, def sourceLanguage, def targetLanguage, HttpSession session) {
         Language language = Language.findByEname(sourceLanguage)
         String sourceLanguageCode = language.code
         Language language1 = Language.findByEname(targetLanguage)
