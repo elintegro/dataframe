@@ -959,7 +959,7 @@ beans {
                                                     fileLink.click();
                                             }
                                            else{
-                                                  self.\$router.push("/login-page/0");
+                                                  excon.redirectPage(self,"login-page")
                                            }
                                            
                                     }
