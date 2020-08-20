@@ -952,11 +952,17 @@ beans {
                                     downloadTargetFile(){
                                             var allParams = this.state;
                                             var self = this;
-                                            var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
-                                            var fileLink = document.createElement('a');
-                                            fileLink.href = fileURL;
-                                            document.body.appendChild(fileLink);
-                                            fileLink.click();
+                                            if(this.\$store.state.vueInitDataframe.loggedIn){
+                                                    var fileURL = '/translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
+                                                    var fileLink = document.createElement('a');
+                                                    fileLink.href = fileURL;
+                                                    document.body.appendChild(fileLink);
+                                                    fileLink.click();
+                                            }
+                                           else{
+                                                  excon.redirectPage(self,"login-page")
+                                           }
+                                           
                                     }
         """
 

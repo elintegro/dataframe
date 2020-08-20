@@ -67,10 +67,10 @@ class TranslatorAssistantController {
 
     }
     def intermediateRequest(){
-        long totalRecordsToTranslate =  session.getAttribute("TA_NUMBER_OF_RECORDS_TO_TRANSLATE")
-        long translatedRecords = session.getAttribute("TA_NUMBER_OF_TRANSLATED_RECORDS")
-        long progress
-        if(translatedRecords!=0){
+        def totalRecordsToTranslate =  session.getAttribute("TA_NUMBER_OF_RECORDS_TO_TRANSLATE")
+        def translatedRecords = session.getAttribute("TA_NUMBER_OF_TRANSLATED_RECORDS")
+        def progress
+        if(translatedRecords!=0 && translatedRecords!=null && totalRecordsToTranslate !=0 && totalRecordsToTranslate!=null){
          progress = (translatedRecords / totalRecordsToTranslate) * 100
         }
         else{
@@ -101,25 +101,31 @@ class TranslatorAssistantController {
     }
 
     def downloadTargetFile() {
-        def projectDetails = params.id
-        String[] str = projectDetails.split('(?=[A-Z])')
-        def projectId = str[0]
-        def targetLanguage = str[1]
-        Language language = Language.findByEname(targetLanguage)
-        Project project = Project.findById(projectId)
-        def fileName = "messages_" + language.code + ".properties"
-        def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
-        File targetFile = new File(fileLocation)
-        if (targetFile.exists()) {
-            try {
-                render(contentType: 'application/octet-stream', file: targetFile, fileName: fileName, encoding: "UTF-8")
-            }
-            catch (Exception e) {
-                log.debug("Error downloading file" + e)
-            }
+        def currentUser = springSecurityService.currentUser
+        if(currentUser){
+                def projectDetails = params.id
+                String[] str = projectDetails.split('(?=[A-Z])')
+                def projectId = str[0]
+                def targetLanguage = str[1]
+                Language language = Language.findByEname(targetLanguage)
+                Project project = Project.findById(projectId)
+                def fileName = "messages_" + language.code + ".properties"
+                def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
+                File targetFile = new File(fileLocation)
+                if (targetFile.exists()) {
+                    try {
+                        render(contentType: 'application/octet-stream', file: targetFile, fileName: fileName, encoding: "UTF-8")
+                    }
+                    catch (Exception e) {
+                        log.debug("Error downloading file" + e)
+                    }
 
-        } else {
-            log.error("Such file +$fileName+ doesn't exist.")
+                } else {
+                    log.error("Such file +$fileName+ doesn't exist.")
+                }
+        }else{
+            render(view: '/error')
+
         }
     }
      def translateEachRecordWithGoogle(){
@@ -147,7 +153,6 @@ class TranslatorAssistantController {
     }
     def saveNewlyAddedRecord(){
         def param = request.getJSON()
-        println(param)
         Project project = Project.findById(param.vueAddNewRecordForCurrentProjectDataframe_project_id)
         Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project,param.vueAddNewRecordForCurrentProjectDataframe_key,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
         if(text == null) {
