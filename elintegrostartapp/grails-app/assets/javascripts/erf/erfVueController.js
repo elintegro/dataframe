@@ -157,6 +157,14 @@ var excon = new Vue({
                 }
             }
         },
+        showMessage: function(responseData,dataframeName){
+            let response = responseData.data;
+            let stateDataOfThisDataframe = store.getters.getState(dataframeName);
+            let alertProps = stateDataOfThisDataframe.alertProp;
+            Vue.set(alertProps,'snackbar',true);
+            Vue.set(alertProps,'alert_type',response.alert_type);
+            Vue.set(alertProps,'alert_message',response.msg);
+        },
 
         closeDataframe: function(dataframeName){
             var dfNameDisplay = dataframeName +"_display";
