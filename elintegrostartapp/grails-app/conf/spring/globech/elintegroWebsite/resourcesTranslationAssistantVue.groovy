@@ -302,7 +302,6 @@ beans{
                             login: [name: "login",type:"button",showAsDialog: true,attr:"""style='background-color:#1976D2; color:white;'""",refDataframe: ref("vueElintegroLoginDataframe"),tooltip: [message: 'Login'], flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
         ]
         currentFrameLayout =ref("vueDialogBoxForNotLoggedInUserDataframeLayout")
-
     }
 
 }
