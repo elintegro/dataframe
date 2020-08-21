@@ -178,12 +178,29 @@ class TranslatorAssistantController {
         def param = request.getJSON()
         def projectId = param.projectId
         Project project = Project.findById(projectId)
-        def outputFileName = "${project.name}"+".zip"
-        def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"
-        def zipFileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"+outputFileName
-        createZipFile( fileLocation,zipFileLocation)
-        def resultData = [success: true, zipFileName:outputFileName,projectId:param.projectId]
-        render(resultData as JSON)
+        def counter = 0
+        def resultData
+        for (item in param.vueTranslatorDataframe_project_language_items) {
+            Language language = Language.findByEname(item.language)
+            def fileName = "messages_" + language.code + ".properties"
+            def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
+            File file = new File(fileLocation)
+            if (file.exists()) {
+                counter = counter + 1
+            }
+        }
+        if (counter >= 2) {
+            def outputFileName = "${project.name}" + ".zip"
+            def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"
+            def zipFileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + outputFileName
+            createZipFile(fileLocation, zipFileLocation)
+             resultData = [success: true, zipFileName: outputFileName, projectId: param.projectId]
+            render(resultData as JSON)
+        }
+        else{
+            resultData = [success:false,alert_type:"error",msg:"You must translate your file in 2 or more language to download Zip file."]
+            render(resultData as JSON)
+        }
     }
 
     public static void createZipFile(String inputDir, String zipFilePath){
