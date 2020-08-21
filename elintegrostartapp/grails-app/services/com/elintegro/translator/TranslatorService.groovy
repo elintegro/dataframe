@@ -1,9 +1,12 @@
 package com.elintegro.translator
 
 import com.elintegro.ref.Language
+import grails.converters.JSON
 import grails.util.Holders
 
 import javax.servlet.http.HttpSession
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 
 class TranslatorService {
@@ -67,6 +70,69 @@ class TranslatorService {
         }
         ine.close();
         return response.toString();
+    }
+
+    def prepareTargetFile(def projectId , def targetLanguage, def fileName){
+        Project project = Project.findById(projectId)
+        def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
+        File targetFile = new File(fileLocation)
+        def  targetLabels = []
+        def translatedRecords = Text.findAllByProjectAndLanguage(project,targetLanguage)
+        for(item in translatedRecords) {
+            if (item._key != null && item.text != null) {
+                targetLabels.add(item._key + "=" + item.text)
+            }
+        }
+        BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));
+        for(int i = 0; i<targetLabels.size();i++) {
+            String val =  targetLabels.get(i);
+            writer.write(val+"\n");
+        }
+        writer.close();
+
+    }
+    def compressAllFilesInZIP(param){
+        long projectId = param.projectId
+        Project project = Project.findById(projectId)
+        def counter = 0
+        def resultData
+        for (item in param.vueTranslatorDataframe_project_language_items) {
+            Language language = Language.findByEname(item.language)
+            def fileName = "messages_" + language.code + ".properties"
+            def text = Text.findAll("from Text text where text.language = ${item.language} and project_id = ${project} and text._key != null and text.text != null ")
+            if (text.size() != 0) {
+                prepareTargetFile(projectId , item.language,fileName)
+                counter = counter + 1
+            }
+        }
+        if (counter >= 2) {
+            def outputFileName = "${project.name}" + ".zip"
+            def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"
+            def zipFileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + outputFileName
+            createZipFile(fileLocation, zipFileLocation)
+            resultData = [success: true, zipFileName: outputFileName, projectId: param.projectId]
+             return resultData
+        }
+        else{
+            resultData = [success:false,alert_type:"error",msg:"You must translate your file in 2 or more language to download Zip file."]
+            return resultData
+        }
+
+    }
+
+    public static void createZipFile(String inputDir, String zipFilePath){
+        ZipOutputStream zipFile = new ZipOutputStream(new FileOutputStream(zipFilePath))
+        new File(inputDir).eachFile() { file ->
+            if (file.isFile()){
+                zipFile.putNextEntry(new ZipEntry(file.name))
+                def buffer = new byte[file.size()]
+                file.withInputStream {
+                    zipFile.write(buffer, 0, it.read(buffer))
+                }
+                zipFile.closeEntry()
+            }
+        }
+        zipFile.close()
     }
 
 

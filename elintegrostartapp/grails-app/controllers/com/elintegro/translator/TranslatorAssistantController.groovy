@@ -74,7 +74,6 @@ class TranslatorAssistantController {
     def translateWithGoogle() {
         def param = request.getJSON()
         translatorService.translationWithGoogle(param.projectId, param.sourceLanguage, param.targetLanguage, session)
-        prepareTargetFile(param)
         render(success: true)
 
     }
@@ -90,27 +89,7 @@ class TranslatorAssistantController {
         }
         render progress
     }
-    def prepareTargetFile(param){
-        Language language = Language.findByEname(param.targetLanguage)
-        Project project = Project.findById(param.projectId)
-        def fileName = "messages_" + language.code + ".properties"
-        def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
-        File targetFile = new File(fileLocation)
-        def  targetLabels = []
-        def translatedRecords = Text.findAllByProjectAndLanguage(project, param.targetLanguage)
-        for(item in translatedRecords) {
-            if (item._key != null && item.text != null) {
-                targetLabels.add(item._key + "=" + item.text)
-            }
-        }
-        BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile));
-        for(int i = 0; i<targetLabels.size();i++) {
-            String val =  targetLabels.get(i);
-            writer.write(val+"\n");
-        }
-        writer.close();
 
-    }
 
     def downloadTargetFile() {
         def currentUser = springSecurityService.currentUser
@@ -122,6 +101,7 @@ class TranslatorAssistantController {
                 Language language = Language.findByEname(targetLanguage)
                 Project project = Project.findById(projectId)
                 def fileName = "messages_" + language.code + ".properties"
+                translatorService.prepareTargetFile(projectId, targetLanguage, fileName)
                 def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
                 File targetFile = new File(fileLocation)
                 if (targetFile.exists()) {
@@ -188,47 +168,17 @@ class TranslatorAssistantController {
     }
     def compressAllFilesInZip() {
         def param = request.getJSON()
-        def projectId = param.projectId
-        Project project = Project.findById(projectId)
-        def counter = 0
-        def resultData
-        for (item in param.vueTranslatorDataframe_project_language_items) {
-            Language language = Language.findByEname(item.language)
-            def fileName = "messages_" + language.code + ".properties"
-            def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + fileName
-            File file = new File(fileLocation)
-            if (file.exists()) {
-                counter = counter + 1
-            }
-        }
-        if (counter >= 2) {
-            def outputFileName = "${project.name}" + ".zip"
-            def fileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/"
-            def zipFileLocation = Holders.grailsApplication.config.images.storageLocation + "/images/" + "${project.name}" + "/" + outputFileName
-            createZipFile(fileLocation, zipFileLocation)
-             resultData = [success: true, zipFileName: outputFileName, projectId: param.projectId]
-            render(resultData as JSON)
+        def currentUser = springSecurityService.currentUser
+        if (currentUser) {
+            def fileCompression = translatorService.compressAllFilesInZIP(param)
+            render(fileCompression as JSON)
         }
         else{
-            resultData = [success:false,alert_type:"error",msg:"You must translate your file in 2 or more language to download Zip file."]
-            render(resultData as JSON)
+            render(view: '/error')
         }
     }
 
-    public static void createZipFile(String inputDir, String zipFilePath){
-        ZipOutputStream zipFile = new ZipOutputStream(new FileOutputStream(zipFilePath))
-        new File(inputDir).eachFile() { file ->
-            if (file.isFile()){
-                zipFile.putNextEntry(new ZipEntry(file.name))
-                def buffer = new byte[file.size()]
-                file.withInputStream {
-                    zipFile.write(buffer, 0, it.read(buffer))
-                }
-                zipFile.closeEntry()
-            }
-        }
-        zipFile.close()
-    }
+
     def downloadZipFile(){
         def projectId = params.id
         Project project = Project.findById(projectId)
