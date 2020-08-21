@@ -270,7 +270,7 @@ class ParsedHql {
 				fieldName = field.trim();
 //				def doamin = hqlDomains[ve[0]]
 				def domain = hqlDomains.values().first()
-				String doaminAlias = domain.get("domainAlias");
+				String doaminAlias = domain.getAt("domainAlias");
 				fields.put(fldkey, ["domain": domain, "alias": alias, "domainAlias" : doaminAlias, "name" : fieldName, "tableName" : fldOwner, "fldNmAlias": fldNmAlias])
 				indexOfFileds.put(field.trim(), index)
 			}
