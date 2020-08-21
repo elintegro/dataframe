@@ -117,7 +117,7 @@ beans{
                 "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true],
                 "project.languages":[
                         widget: "ComboboxVue"
-                        , hql: """select language.id as id, language.ename as ename from Language as language"""
+                        , hql: """select language.id as id, language.ename as ename  from Language as language where language.ename not in (select text.language as language from Text as text where project_id =:projectId  group by language)"""
                         ,"displayMember":"ename"
                         ,internationalize: true
                         , search:true
