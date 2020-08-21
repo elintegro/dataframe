@@ -444,8 +444,8 @@ docker {
 	grails.plugin.springsecurity.ui.register.emailFrom='elintegro@QA'
 	dataSource {
 		logSql = true
-		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
-//		dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
+//		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+		dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
 		url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
 		username = "developer"
 		password = "java1177"
