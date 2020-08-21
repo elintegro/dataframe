@@ -812,24 +812,29 @@ beans {
 
                              },\n
                              downloadAllTranslatedFiles(){
-                                        var allParams = this.state;
-                                        var self = this;   
-                                         axios({
-                                                method:'post',
-                                                url:'${contextPath}/translatorAssistant/compressAllFilesInZip',
-                                                data: allParams
-                                         }).then(function(responseData){
-                                                var response = responseData.data;
-                                                if(response.success == true){
-                                                    var fileURL = '/translatorAssistant/downloadZipFile/'+response.projectId
-                                                    var fileLink = document.createElement('a');
-                                                    fileLink.href = fileURL;
-                                                    document.body.appendChild(fileLink);
-                                                    fileLink.click();
-                                                }else{
-                                                     excon.showMessage(responseData,'vueTranslatorDataframe');
-                                                }      
-                                        });
+                                       var allParams = this.state;
+                                       var self = this;
+                                       if(this.\$store.state.vueInitDataframe.loggedIn){                    
+                                                         axios({
+                                                                method:'post',
+                                                                url:'${contextPath}/translatorAssistant/compressAllFilesInZip',
+                                                                data: allParams
+                                                         }).then(function(responseData){
+                                                                var response = responseData.data;
+                                                                if(response.success == true){
+                                                                    var fileURL = '/translatorAssistant/downloadZipFile/'+response.projectId
+                                                                    var fileLink = document.createElement('a');
+                                                                    fileLink.href = fileURL;
+                                                                    document.body.appendChild(fileLink);
+                                                                    fileLink.click();
+                                                                }else{
+                                                                     excon.showMessage(responseData,'vueTranslatorDataframe');
+                                                                }      
+                                                        });
+                                       }
+                                       else{
+                                             excon.redirectPage(self,"login-page")
+                                       }                 
                                         
                                         
                              },\n
