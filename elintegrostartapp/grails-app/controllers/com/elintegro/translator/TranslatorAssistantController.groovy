@@ -16,19 +16,31 @@ class TranslatorAssistantController {
 
     def saveProjectData() {
         def param = request.getJSON()
-        def currentUser = springSecurityService.currentUser
-        println(currentUser)
-        Project project = new Project()
-        project.name = param.vueCreateProjectForTranslationDataframe_project_name
-        project.sourceLanguage = param.vueCreateProjectForTranslationDataframe_project_sourceLanguage.ename
-        project.sourceFile = param.vueCreateProjectForTranslationDataframe_project_sourceFile
-        if(currentUser){
-            project.addToUsers(currentUser)
-        }
+        Project projectAlreadyExist = Project.findByNameAndSourceLanguageAndSourceFile(param.vueCreateProjectForTranslationDataframe_project_name, param.vueCreateProjectForTranslationDataframe_project_sourceLanguage.ename, param.vueCreateProjectForTranslationDataframe_project_sourceFile)
+        if (projectAlreadyExist == null) {
+            Project projectNameAlreadyTaken = Project.findByName(param.vueCreateProjectForTranslationDataframe_project_name)
+            if (projectNameAlreadyTaken != null && projectNameAlreadyTaken.name == param.vueCreateProjectForTranslationDataframe_project_name) {
+                def result = [success: false, alert_type: "error", msg: "Project name is already taken."]
+                render(result as JSON)
+            } else {
+                def currentUser = springSecurityService.currentUser
+                Project project = new Project()
+                project.name = param.vueCreateProjectForTranslationDataframe_project_name
+                project.sourceLanguage = param.vueCreateProjectForTranslationDataframe_project_sourceLanguage.ename
+                project.sourceFile = param.vueCreateProjectForTranslationDataframe_project_sourceFile
+                if (currentUser) {
+                    project.addToUsers(currentUser)
+                }
 
-        project.save(flush: true)
-        def resultData = [sucess: true, newData: project, params: project]
-        render(resultData as JSON)
+                project.save(flush: true)
+                def resultData = [success: true, newData: project, params: project]
+                render(resultData as JSON)
+            }
+        }
+        else{
+            def result = [success:false,alert_type:"error",msg:"This project is already created."]
+            render (result as JSON)
+        }
     }
 
     def fileUpload() {
