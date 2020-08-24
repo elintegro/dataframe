@@ -494,26 +494,34 @@ beans {
     vueElintegroSubMenuDataframe_script(VueJsEntity){bean->
         methods = """
                      quizzableApp(){
-                     if(this.\$store.state.vueInitDataframe.loggedIn){
-                          var allParams = this.state;
-                          allParams['dataframe'] = 'vueElintegroSubMenuDataframe';
-                          axios ({
-                               method: 'post',
-                               url: '${contextPath}/quizzableLogin/quizzableLoginFromElintegro',
-                               data: allParams
-                          }).then(function(response){
-                                   var token = response.data.accessToken
-                                   var serverUrl = response.data.serverUrl
-                                   window.open(serverUrl+'/login/authenticateWithToken/'+token,'_blank')
-                          });
+                             if(this.\$store.state.vueInitDataframe.loggedIn){
+                                  var allParams = this.state;
+                                  allParams['dataframe'] = 'vueElintegroSubMenuDataframe';
+                                  axios ({
+                                       method: 'post',
+                                       url: '${contextPath}/quizzableLogin/quizzableLoginFromElintegro',
+                                       data: allParams
+                                  }).then(function(response){
+                                           var token = response.data.accessToken
+                                           var serverUrl = response.data.serverUrl
+                                           window.open(serverUrl+'/login/authenticateWithToken/'+token,'_blank')
+                                  });
+                             }
+                             else{
+                                  
+                                 window.open('https://quizzable.elintegro.com/','_blank');
+                             }
+                     },\n
+                     ecommerceApp(){
+                             var self = this;
+                             if(this.\$store.state.vueInitDataframe.loggedIn){
+                             
+                             }
+                             else{
+                                 excon.redirectPage(self,"login-page")
+                             }
                      }
-                     else{
-                          
-                         window.open('https://quizzable.elintegro.com/','_blank');
-                     }
-                     
-                     
-        }
+        
 
         """
     }
