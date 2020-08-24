@@ -31,7 +31,7 @@ beans {
                           var defaultUrl = '${defaultUrl}/#/';
                           if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == true){
                           if(currentUrl == defaultUrl){
-                            let homePage = "vueElintegroBannerDataframe";
+                            let homePage = "vueElintegroHomeDataframe";
                             let routeId = 0;
                             this.\$router.push({
                                   name: homePage,
