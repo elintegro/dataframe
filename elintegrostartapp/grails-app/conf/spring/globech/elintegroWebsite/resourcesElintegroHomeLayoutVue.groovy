@@ -108,13 +108,14 @@ beans{
                                             <v-row>
                                             <v-col cols="1"></v-col>
                                             <v-col cols ="10" style="background-color:#E1F5FE; border-radius:20px;"><v-row></v-row><br><br><br>
-                                                <v-row ><v-col cols="2"></v-col><v-col cols="7"><v-card-actions class="justify-center"><h1 style="font-family: sans-serif;font-size:36px;"><p>“From concept to development, it was a pleasure to work with Elintegro.They delivered my product on time and on budget. I’d definitely hire them again”</p></h1></v-card-actions></v-col><v-col cols="1"></v-col></v-row>
+                                                <v-row ><v-col cols="2"></v-col><v-col cols="7"><v-card-actions class="justify-center"><h1 style="font-family: sans-serif;font-size:36px;"><p id="quotes">“From concept to development, it was a pleasure to work with Elintegro.They delivered my product on time and on budget. I’d definitely hire them again”</p></h1></v-card-actions></v-col><v-col cols="1"></v-col></v-row>
                                                 
-                                                <v-row><v-col cols="5"></v-col><v-col cols="2" style = "font-family: sans-serif;font-size:14px;">Drasko Raicevic,</v-col><v-col cols="3"></v-col></v-row>
-                                                <v-row><v-col cols="5"></v-col><v-col cols="2" style = "font-family: sans-serif;font-size:14px;">Quickbody Fitness</v-col><v-col cols="3"></v-col></v-row><br>
-                                                <v-row><v-col cols="3"></v-col><v-col cols="2"><a><v-img src="assets/home/coachClone.png" style="background-color:#E1F5FE;"></v-img></a></v-col><v-col cols="1"></v-col><v-col cols="2"><a><v-img src="assets/home/weBus.jpg" style="background-color:#E1F5FE;"></v-img></a></v-col><v-col cols="2"></v-col></v-row>
+                                                <v-row><v-col cols="5"></v-col><v-col cols="2" style = "font-family: sans-serif;font-size:14px;"><span id = "nameOfPerson">Drasko Raicevic,</span></v-col><v-col cols="3"></v-col></v-row>
+                                                <v-row><v-col cols="5"></v-col><v-col cols="2" style = "font-family: sans-serif;font-size:14px;"><span id = "jobTitle">Quickbody Fitness</span></v-col><v-col cols="3"></v-col></v-row><br>
+                                                
+                                                <v-row><v-col cols="3"></v-col><v-col cols="2"><a v-on:click="hello('coachClone');"><v-img id = "coachClone"src="assets/home/coachClone.png" style="background-color:#E1F5FE;opacity: 0.25;"></v-img></a></v-col><v-col cols="1"></v-col><v-col cols="2"><a v-on:click="hello('weBus');"><v-img id= "weBus" src="assets/home/weBus.jpg" style="background-color:#E1F5FE;opacity: 0.25;"></v-img></a></v-col><v-col cols="2"></v-col></v-row>
                                             
-                                            </v-col>
+                                            <br><br><v-row></v-row></v-col>
                                             <v-col cols="1"></v-col>
                                             </v-row>
                                         </v-container><br>
@@ -199,7 +200,7 @@ beans{
                                             
                                         </v-container>
                                     </v-container>
-                                    
+                                    [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                 </v-card></v-flex>
                                 
                                 """
