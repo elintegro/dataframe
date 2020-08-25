@@ -516,6 +516,18 @@ beans {
                              var self = this;
                              if(this.\$store.state.vueInitDataframe.loggedIn){
                              
+                                  var allParams = this.state;
+                                  allParams['dataframe'] = 'vueElintegroSubMenuDataframe';
+                                  axios ({
+                                       method: 'post',
+                                       url: '${contextPath}/ELcommerceLogin/elCommerceLoginFromElintegro',
+                                       data: allParams
+                                  }).then(function(response){
+                                           var token = response.data.accessToken
+                                           var serverUrl = response.data.serverUrl
+                                           window.open(serverUrl+'/login/authenticateWithToken/'+token,'_blank')
+                                  });
+                             
                              }
                              else{
                                  excon.redirectPage(self,"login-page")
