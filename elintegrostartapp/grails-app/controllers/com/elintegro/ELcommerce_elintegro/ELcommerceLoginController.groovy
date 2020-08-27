@@ -22,13 +22,13 @@ class ELcommerceLoginController {
         def serverUrl
         def quizzableUrl
         if(Environment.current == Environment.DEVELOPMENT) {
-            serverUrl = "http://localhost:9264/"
-            quizzableUrl = serverUrl+"Elintegro_Ecommerce/userDetailsFromElintegro"
+            serverUrl = "http://localhost:8098/hilo/"
+            quizzableUrl = serverUrl+"Elintegro_ELcommerce/userDetailsFromElintegro"
         }
         else
         {
             serverUrl = Holders.grailsApplication.config.quizzableUrl
-            quizzableUrl = serverUrl+"Elintegro_Ecommerce/userDetailsFromElintegro"
+            quizzableUrl = serverUrl+"elintegro_ELcommerce/userDetailsFromElintegro"
         }
         def accessToken
         AccessTokenCode accessTokenCode = AccessTokenCode.findByUsername(userName)

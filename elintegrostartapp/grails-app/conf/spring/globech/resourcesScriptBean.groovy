@@ -525,7 +525,7 @@ beans {
                                   }).then(function(response){
                                            var token = response.data.accessToken
                                            var serverUrl = response.data.serverUrl
-                                           window.open(serverUrl+'/login/authenticateWithToken/'+token,'_blank')
+                                           window.open(serverUrl+'elintegro_ELcommerce/authenticateWithToken/'+token,'_blank')
                                   });
                              
                              }
