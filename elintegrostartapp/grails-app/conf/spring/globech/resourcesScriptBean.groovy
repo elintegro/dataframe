@@ -203,6 +203,20 @@ beans {
     }
     vueElintegroRegisterDataframe_script(VueJsEntity) { bean ->
         data = "vueElintegroRegisterDataframe_display:true,\n checkboxSelected: [],\n"
+        methods = """
+                   showAlertMessageToUser(response){
+                   if(response.success == true){
+                         response['alert_type'] = 'success'
+                         var responseData = {data:response}
+                         excon.showMessage(responseData,'vueElintegroRegisterDataframe');
+                         setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe', false);}, 6000);
+                   }else{
+                         response['alert_type'] = 'error';
+                         var responseData = {data:response}
+                         excon.showMessage(response,'vueElintegroRegisterDataframe');
+                         setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe', false);}, 6000);
+                   }
+        },\n """
     }
 
 //    vueRegisterDataframe_script(VueJsEntity) { bean ->
