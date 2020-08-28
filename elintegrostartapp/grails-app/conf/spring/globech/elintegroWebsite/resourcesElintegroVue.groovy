@@ -768,7 +768,15 @@ beans {
         putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
-        addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]]]
+        addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]],
+                       "person.selectedPosition":[widget: "ListWidgetVue"
+                                                 ,hql:"select application.id as Id, availablePositions.name as Name from Application application  inner join application.availablePositions as availablePositions where application.id=:id"
+                                                 ,"displayMember":"Name"
+                                                 ,internationalize: true
+                                                 ,valueMember:"id"
+                                                 ,attr: """v-show = false """
+                       ]
+        ]
         dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
                                                                                 \n""",flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6'], url: ""]]
 
