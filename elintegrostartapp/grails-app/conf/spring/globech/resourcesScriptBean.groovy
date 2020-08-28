@@ -83,11 +83,50 @@ beans {
                                     document.getElementById("weBus").style.opacity =1;
                                     document.getElementById("coachClone").style.opacity =0.25;
                                }     
-
-                               
-
+                    },\n
+                    scrollToQuiz(){
+                            let element = document.getElementById('quiz_placeholder');
+                             element.scrollIntoView({ behavior: 'smooth' });
                     }
                     """
+    }
+    vueElintegroAboutUsMenuDataframe_script(VueJsEntity){ bean ->
+        methods = """scrollTo(param){
+           
+            if(param =='ourClientsProjects'){
+                 excon.redirectPage(this,"client-project");
+            }else if (param == 'our_Technologies'){
+                 excon.redirectPage(this,"technologies");
+            }else{
+                let element = document.getElementById(param);
+                if(element != null){
+                    switch(param){
+                    case 'our_work' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'our_process' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'collaboration' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'our_framework' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'quiz_placeholder'  :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    default : 
+                        excon.redirectPage(this,'home');                                
+                    }
+                }else{
+                       excon.redirectPage(this,'home');                                
+                }   
+            }
+  
+            
+        }
+        """
     }
 
     vueToolbarDataframe_script(VueJsEntity) { bean ->

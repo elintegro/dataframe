@@ -7,7 +7,7 @@ beans{
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                                     <v-container>
-                                        <v-container class="firstContainer"
+                                        <v-container class="firstContainer">
                                             <v-row><v-col cols="1"></v-col>
                                                 <v-col cols="10"><div class = "hidden-sm-and-down"><h1 style ='font-size: 70px;font-family:sans-serif;'>Hey! <br>Looks Like You Haven't <br>
                                                 <span class="text-span" style ='color: #29b6f6;'>Built </span>Any Apps With Us<br> 
@@ -20,10 +20,10 @@ beans{
                                                     <span style ='color: black; font-size: 37px;font-family:sans-serif;'>But, we can develop your app for you - so you won't have to!</span></div></v-flex>
                                             </v-row><br><br> 
                                             <v-row><v-flex xs12 sm12 md12 lg12 x12 class = "text-center">  
-                                                    <v-btn style="background-color: #29b6f6; color:white;font-family:sans-serif; font-size:inherit; padding-top:28px; padding-bottom:28px; padding-right:35px; padding-left:35px;">Build your first app</v-btn></v-flex>
+                                                    <v-btn  v-on:click="scrollToQuiz('coachClone');" style="background-color: #29b6f6; color:white;font-family:sans-serif; font-size:inherit; padding-top:28px; padding-bottom:28px; padding-right:35px; padding-left:35px;">Build your first app</v-btn></v-flex>
                                             </v-row>
                                         </v-container><br><br>
-                                        <v-container class = "our_work">
+                                        <v-container  id ="our_work" class = "our_work">
                                             <v-row class="pa-md-0" style="padding:10%"><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
                                                 <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" >
                                                     <v-row class="label" style = 'color: #29b6f6;font-size:14px;'>OUR WORK</v-row>
@@ -42,7 +42,7 @@ beans{
                                              <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>      
                                             </v-row>
                                         </v-container><br><br>
-                                        <v-container class="our_process">
+                                        <v-container id="our_process" class="our_process">
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                 <v-row class="text-center">
                                                    <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12" class="label" style = 'color: #29b6f6;font-size:14px;'>OUR PROCESS</v-col>
@@ -61,7 +61,7 @@ beans{
                                                 </v-row>
                                             </v-flex>
                                         </v-container><br>
-                                        <v-container class="collaboration">
+                                        <v-container id="collaboration" class="collaboration">
                                             <v-flex xs12 sm12 md12 lg12 x12 class="hidden-sm-and-down">
                                                 <v-row>
                                                     <v-col cols="1"></v-col><v-col cols="5">
@@ -101,7 +101,7 @@ beans{
                                                 </v-row>       
                                             </v-flex>
                                         </v-container><br>
-                                        <v-container class = "our_framework">
+                                        <v-container id="our_framework" class = "our_framework">
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                 <v-row>
                                                     <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
@@ -130,7 +130,7 @@ beans{
                                             </v-flex>
                                         </v-container><br><br><br>
                                         
-                                        <v-container class="Quotes">
+                                        <v-container id="Quotes" class="Quotes">
                                              <v-flex xs12 sm12 md12 lg12 x12>
                                                  <v-row>
                                                     <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
@@ -149,7 +149,7 @@ beans{
                                                  </v-row>
                                              </v-flex>       
                                         </v-container><br>
-                                        <v-container class="our_Technologies">
+                                        <v-container id="our_Technologies" class="our_Technologies">
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                  <v-row class="text-center">
                                                    <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12" class="label" style = 'color: #29b6f6;font-size:14px;'>OUR TECHNOLOGIES</v-col>
@@ -198,7 +198,7 @@ beans{
                                                 </v-row>
                                             </v-flex>
                                         </v-container><br>
-                                        <v-container class="Quiz Placeholder" style ="background-color:#01579b;max-width:100%;">
+                                        <v-container id="quiz_placeholder" class="Quiz Placeholder" style ="background-color:#01579b;max-width:100%;">
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                <v-row></v-row><br><br><br>
                                                <v-row>
