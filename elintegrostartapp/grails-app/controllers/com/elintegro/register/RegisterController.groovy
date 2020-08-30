@@ -14,6 +14,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.register
 
 import com.elintegro.auth.Role
+import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.gc.data.DataInit
 import com.elintegro.gerf.DataframeController
 import com.elintegro.elintegrostartapp.Facility
@@ -62,7 +63,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 //        }else{ //expected User is registering for the facility and expected role is correct
 
             RegisterCommand command =  getRegisterValidationObj(requestParams)
-            grails.util.Pair result = registerService.registerUser(command, regRole, null)
+            grails.util.Pair result = registerService.registerUser(request, command, regRole, null)
 
             com.elintegro.auth.User user = result.getaValue()
             def returnedMessage = result.getbValue()
@@ -289,15 +290,16 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     }
 
     private static RegisterCommand getRegisterValidationObj(requestParams){
-        String dataframeName = requestParams.dataframe
+        //String dataframeName = requestParams.dataframe
         RegisterCommand command  = new RegisterCommand()
-        String emailKey = dataframeName + "_user_email"
-        String passwordKey = dataframeName + "_user_password"
-        String password2Key = dataframeName + "_password2"
-        command.email = requestParams.get(emailKey)
+
+        //String emailKey = DataframeInstance.getPersisterField(requestparams, "user", "email")   //dataframeName + "_user_email"
+        //String passwordKey =  //dataframeName + "_user_password"
+        //String password2Key = dataframeName + "_password2"
+        command.email = DataframeInstance.getPersisterField(requestParams, "user", "email") //requestParams.get(emailKey)
         command.username = command.email
-        command.password = requestParams.get(passwordKey)
-        command.password2 = requestParams.get(password2Key)
+        command.password = DataframeInstance.getPersisterField(requestParams, "user", "password") //requestParams.get(passwordKey)
+        command.password2 = DataframeInstance.getTransitField(requestParams, "password2")//requestParams.get(password2Key)
         return command
     }
 

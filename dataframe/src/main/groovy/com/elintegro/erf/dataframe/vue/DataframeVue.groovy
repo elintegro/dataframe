@@ -716,6 +716,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                       }).then(function (responseData) {
                         self.${dataframeName}_save_loading = false;
                         var response = responseData.data;
+                        
+                        //TODO: add here assignment of response object to the proper vue structure
+                        self.${dataframeName}.state = responseData.data;
+
+                        //EU!!! Check what is this is doing, and probably remove or modify it for new JSON structure!!!
                         ${doAfterSaveStringBuilder.toString()}
                         excon.showAlertMessage(response);
 			            	if(response.success) {

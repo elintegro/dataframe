@@ -28,6 +28,7 @@ import grails.converters.JSON
 import grails.util.Holders
 import org.apache.commons.lang.StringUtils
 import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 import org.springframework.context.i18n.LocaleContextHolder
 import org.apache.commons.lang.WordUtils
 
@@ -57,6 +58,13 @@ class ComboboxVue extends WidgetVue {
         }
         return true
     }
+
+    @Override
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
+        jData?.persisters?."${domainAlias}"."${fieldName}".value = value
+        //jData?.persisters?."${domainAlias}"."${fieldName}".items = value
+    }
+
 
     boolean isSelectionEqualsToOld(JSONArray jarr1, JSONArray jarr2){
         boolean isEqual = true;
@@ -349,8 +357,9 @@ class ComboboxVue extends WidgetVue {
 //        }
     }
 
-    public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){
+    public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData){
         Dataframe df = dfInst.df;
+        def session = dfInst.sessionHibernate
         Map fieldProps = df.fields.get(fieldnameToReload)
         String enumFileName = fieldProps.enumFileName
         if(enumFileName){
@@ -381,6 +390,9 @@ class ComboboxVue extends WidgetVue {
             fieldProps["dictionary"] = res
             result = buildData(dfInst, inputData, fieldProps, fieldnameToReload)
         }
+        //TODO: Populate right field of jDate (either persisters or transits
+        //with results
+        //Check that results have the right structure
         return result
     }
 
@@ -464,26 +476,28 @@ class ComboboxVue extends WidgetVue {
         String multiple = field.multiple?"multiple":''
         String displayMember = field.displayMember?:'name'
         String valueMember = field.valueMember?:'id'
-        //String modelString = getModelString(dataframe, field)
-        String dataVariable = dataframe.getDataVariableForVue(field)
-        """
+        String itemsStr = getFieldJSONItems(field)
+        String modelString1 = getModelString(dataframe, field) //TODO: decide which one is correct?
+        String modelString = getFieldJSONModelNameVue(field)
+        String dataVariable = dataframe.getDataVariableForVue(field)//TODO: may be we do not need it!
+        return """
             <v-combobox
-          v-model = "${getFieldJSONModelNameVue(field)}"  
-          :items="${getFieldJSONItems(field)}"
-          ${validate(field)?":rules = '${fldName}_rule'":""}
-          label="$label"
-          ${isDisabled(dataframe, field)?":disabled=true":""}
-          item-text="${displayMember}"
-          item-value="${valueMember}"
-          small-chips
-          $multiple
-          hide-no-data
-          hide-selected
-          ${isReadOnly?"readonly":''}
-          ${toolTip(field)}
-           $onSelect
-          $typeString
-        ></v-combobox>
+                  v-model = "${modelString}"  
+                  :items="${itemsStr}"
+                  ${validate(field)?":rules = '${fldName}_rule'":""}
+                  label="$label"
+                  ${isDisabled(dataframe, field)?":disabled=true":""}
+                  item-text="${displayMember}"
+                  item-value="${valueMember}"
+                  small-chips
+                  $multiple
+                  hide-no-data
+                  hide-selected
+                  ${isReadOnly?"readonly":''}
+                  ${toolTip(field)}
+                   $onSelect
+                  $typeString
+            ></v-combobox>
         """
     }
 }

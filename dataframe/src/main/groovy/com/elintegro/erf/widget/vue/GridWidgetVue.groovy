@@ -16,6 +16,7 @@ package com.elintegro.erf.widget.vue
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.ResultPageHtmlBuilder
 import com.elintegro.erf.dataframe.vue.DataMissingException
 import com.elintegro.erf.dataframe.vue.DataframeVue
@@ -27,6 +28,7 @@ import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.utils.MapUtil
 import grails.converters.JSON
 import grails.util.Holders
+import org.grails.web.json.JSONArray
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.i18n.LocaleContextHolder
@@ -43,6 +45,30 @@ class GridWidgetVue extends WidgetVue {
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
     String embDDfr = "";
+
+
+    //This assigns a new value and returns true if new value was different then the old one
+    @Override
+    boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
+        if(isReadOnly(field)){
+            return false
+        }
+        JSONArray selectedItems = inputValue.value
+        JSONArray availableItems = inputValue.items
+
+        if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
+            def oldfldVal = domainInstance."${fieldName}"
+            if(oldfldVal == inputValue.value) return false
+            domainInstance."${fieldName}" = inputValue.value
+        }else if(domainClassInfo.isToMany(fieldName)){
+            return saveHasManyAssociation(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
+        }else if(domainClassInfo.isToOne(fieldName)){
+            def oldfldVal = domainInstance."${fieldName}".value
+            domainInstance."${fieldName}" = inputValue.value[0] //TODO: check if there is not exception in case of single choice
+        }
+        return true
+    }
+
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
@@ -238,9 +264,11 @@ $fieldParams
         }
         String fldName = dataframe.getDataVariableForVue(field);
         String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
-        dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){if(this.state.${dataVariable}_items.length){
-                  return true;
-               }},\n""")
+        dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){
+                                                                    if(this.state.transits.${field.domainAlias}.items){
+                                                                        return true;
+                                                                    }
+                                                                  },\n""")
         return """
                $namedParamKey 
               """

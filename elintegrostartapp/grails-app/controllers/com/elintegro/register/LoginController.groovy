@@ -19,6 +19,7 @@ import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 //import grails.plugin.springsecurity.rest.oauth.OauthUser
 import org.springframework.security.authentication.AccountExpiredException
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.CredentialsExpiredException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.LockedException
@@ -70,6 +71,9 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
             }
             else if (exception instanceof LockedException) {
                 msg = messageSource.getMessage('springSecurity.errors.login.locked', null, "Account Locked", request.locale)
+            }
+            else if (exception instanceof BadCredentialsException) {
+                msg = messageSource.getMessage('springSecurity.errors.login.locked', null, "Bad Credentials", request.locale)
             }
             else {
                 msg = messageSource.getMessage('springSecurity.errors.login.fail', null, "Authentication Failure", request.locale)

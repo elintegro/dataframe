@@ -34,6 +34,7 @@ import groovy.util.logging.Slf4j
 import org.apache.commons.collections.map.LinkedMap
 import org.apache.commons.lang.StringUtils
 import org.grails.core.DefaultGrailsDomainClass
+import org.grails.web.json.JSONObject
 import org.hibernate.Query
 import org.hibernate.Transaction
 import org.hibernate.engine.spi.SessionFactoryImplementor
@@ -147,7 +148,13 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	def ajaxDefaultUrl = "${contextPath}/dataframe/ajaxDefaultData";
 	def ajaxCreateUrl ="${contextPath}/dataframe/ajaxCreateNew"
 
+	public static Dataframe getDataframeByName(String dataframeName){
+		return (Dataframe) Holders.grailsApplication.mainContext.getBean(dataframeName)
+	}
 
+	public static Dataframe getDataframeByName(JSONObject params){
+		return getDataframeByName(params.dataframe)
+	}
 
 	@OverridableByEditor
 	Map dataframeButtons = [:];
@@ -1899,15 +1906,15 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	}
 
 	public def getPersistentPropertyByName(String fieldName){
-		def parentdomainalais = getDomainAlais()
-		def domainMapp = writableDomains.get(parentdomainalais)
-		def domainClass = domainClassFromParseDomain(domainMapp)
+		def parentDomainAlais = getDomainAlais()
+		def domainMap = writableDomains.get(parentDomainAlais)
+		def domainClass = domainClassFromParseDomain(domainMap)
 		def prop = domainClass.getPropertyByName(fieldName)
 		return prop
 	}
 
-	public static def domainClassFromParseDomain(Map domainMapp){
-		Map parsedDomain = domainMapp.get("parsedDomain")
+	public static def domainClassFromParseDomain(Map domainMap){
+		Map parsedDomain = domainMap.get("parsedDomain")
 		def domainClass = parsedDomain.get(VALUE_ENTRY)
 		return domainClass
 	}

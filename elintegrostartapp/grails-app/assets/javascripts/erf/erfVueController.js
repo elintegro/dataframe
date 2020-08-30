@@ -49,6 +49,24 @@ var excon = new Vue({
 
         },
 
+        /**
+         *
+         * @param dataframeComponent
+         * @param domain
+         * @param field
+         */
+        getStateDataframeFieldValue: function(dataframeComponent, domain, field){
+            var ret = null
+            try {
+                ret = dataframeComponent.state.persisters[domain][field]['value'];
+            } catch (e) {
+                log.console("Problem to retrieve variable " + domain + "." + field)
+                //TODO: send here error to the backend!
+            }finally{
+                return ret;
+            }
+
+        },
         saveToState: function(containerVariable, value=''){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
                 return

@@ -17,6 +17,7 @@ import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.DomainClassInfo
+import com.elintegro.erf.dataframe.service.DataframeService
 import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.service.JavascriptService
@@ -41,6 +42,7 @@ class DataframeController {
 	ApplicationContext ctx;
 	TreeService treeService;
 	JavascriptService javascriptService;
+	DataframeService dataframeService
 
 	public static String TreeId_DELIMITER = "-";
 
@@ -82,8 +84,9 @@ class DataframeController {
 	def ajaxValues() {
 		def jsonMap = ajaxValuesRaw()
 		def converter = jsonMap as JSON
-		converter.render(response)
+		render(jsonMap)
 	}
+
 	/*def ajaxValuesVue(){
 		def jsonMap = ajaxValuesRawVue()
 		def converter = jsonMap as JSON
@@ -206,92 +209,20 @@ class DataframeController {
 	 * @return
 	 */
 	def ajaxSave(){
-		def resultData = saveRaw();
+		def resultData = dataframeService.saveRaw(request);
 		//resultData.remove("dfInstance")
-		def rsp = resultData as JSON
-		render(rsp)
-	}
-
-	private def saveRaw(){
-		def requestParams = request.getJSON()
-		Dataframe dataframe = getDataframe(requestParams)
-		def dataframeInstance = new DataframeInstance(dataframe, requestParams)
-		def operation = 'U'; //Update
-		def result;
-
-		try {
-			result = dataframeInstance.save(true);
-		}catch(Exception e){
-			log.error("Failed to save data for dataframe ${dataframeInstance.df.dataframeName} Error : \n " + e)
-		}
-
-		if(dataframeInstance.isInsertOccured()){
-			operation = "I";
-		}
-
-		def responseData
-		def generatedKeys = [:]
-		def generatedKeysArr = []
-
-		Map savedResultMap = dataframeInstance.getSavedDomainsMap();
-
-		Map<String, Map> resultAlias = [:]
-		savedResultMap.each { domainAlias, domainObj ->
-			def domain = domainObj[0]
-			def domainInstance = domainObj[1]
-			boolean isInsertDomainInstance = domainObj[2]
-			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
-			domain?.keys?.each{ key ->
-				def keyValue = domainInstance."${key}"
-				//TODO: we put key in requestParams sowe probably ddonot need this generatedKey
-				generatedKeys.put("${domain.parsedDomain}_${key}", keyValue)
-				generatedKeysArr.add(keyValue)
-				//EU!!! here
-
-				String myDomainAlias = domainClassInfo.getDomainAlias()
-				def keyOldValue = requestParams?.domain_keys?."${myDomainAlias}"."${key}"
-				if(keyOldValue == null ) {
-					requestParams?.domain_keys?."${myDomainAlias}".put(key, keyValue)
-				}else if(keyOldValue != keyValue){
-					//EU!!!
-					throw new DataframeException("Save is trying to change Key Value (and it is not Insert!) Could be hacker's attack!")
-				}
-				domainObj.add(keyOldValue)
-
-
-			}
-			Map record = [:];
-			def properties = getAllProperties(domainInstance)
-			properties.each { fieldName, value ->
-				String alias = dataframe.getFieldAlias(domainAlias, fieldName)
-				if (alias){
-					record.put(alias, value);
-				}
-			}
-			resultAlias.put(String.valueOf(domainAlias), record)
-		}
-
-		//TODO: continue here:
-		if (dataframeInstance.isMultipleDomainsToSave() && dataframeInstance.isInsertOccured()){
-			//TODO: inter-domain relationship
-			dataframeInstance.setInterDomainRelationships(savedResultMap)
-		}
-
-
-		//TODO: why do we need this? May be it is failing render process?
-		requestParams.remove("controller")
-		requestParams.remove("action")
-
-		MessageSource messageSource = dataframe.messageSource
-
+/*
 		if(result) {
 			String msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
-			responseData = ['success': true, 'msg': msg, generatedKeys: generatedKeys, nodeId: generatedKeysArr, operation: operation, data: resultAlias, params: requestParams]
+			responseData = ['success': true, 'msg': msg, operation: operation, data: requestParams, params: requestParams]
 		} else {
 			String msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
 			responseData = ['msg': msg, 'success': false]
 		}
-		return responseData
+*/
+		//TODO: check if this is OK
+		def rsp = resultData as JSON
+		render(rsp)
 	}
 
 	/**

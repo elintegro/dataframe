@@ -358,8 +358,8 @@ beans {
         ]
 
         dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#loginDataframe';
-                                                                                                                                allParams["username"] = this.vueLoginDataframe_user_username;
-                                                                                                                               allParams["password"] = this.vueLoginDataframe_user_password;
+                                                                                                                                allParams["username"] = this.state.persiters.user.username.value;
+                                                                                                                               allParams["password"] = this.state.persiters.user.password.value;
                                                                                                                                allParams["remember-me"] = this.vueLoginDataframe_rememberMe;
                                                                                                                                 """,
                                     /* url: "/elintegrostartapp/login/loginUser" name:"login", type: "button",attr: "color='cyan'", script: """layout: " layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>",
