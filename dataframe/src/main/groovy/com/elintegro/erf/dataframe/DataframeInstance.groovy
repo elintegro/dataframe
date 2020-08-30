@@ -318,7 +318,6 @@ class DataframeInstance implements DataframeConstants{
 			df.fields.getList().each{ fieldName ->
 				Map fieldProps = df.fields.get(fieldName)
 				String myDomainAlias = null
-
 				convertPersisters(fieldProps, fieldName)
 				//Try to load Additional Data:
 				convertAdditionalData(fieldName, fieldProps)
@@ -381,7 +380,7 @@ class DataframeInstance implements DataframeConstants{
 		if (jsonAdditionalDataField) {
 			//TODO: next line we will remove!
 			jsonAdditionalData.put(fieldName.replace(Dataframe.DOT, DataframeVue.UNDERSCORE), jsonAdditionalDataField);
-			// Changed Dash to underscore for vue
+
 			//Populate Items with the additional data this widget requires data from
 			setFieldItems(jData, fieldProps, jsonAdditionalData)
 		}
@@ -1232,6 +1231,5 @@ class DataframeInstance implements DataframeConstants{
 		}
 		return false;
 	}
-
 
 }

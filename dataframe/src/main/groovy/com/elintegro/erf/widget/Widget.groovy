@@ -37,7 +37,6 @@ abstract class Widget<T> implements DataframeConstants{
 	abstract String getValueSetter(T dataframe, Map field, String divId, String fldId, String key)
 	abstract boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue)
 	abstract boolean setPersistedValueToResponse(JSONObject inputValue, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap)
-
 	public static final int ONE_SIMBOL_WITH = 6;
 
 	public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldName, Map inputData, def dbSession){

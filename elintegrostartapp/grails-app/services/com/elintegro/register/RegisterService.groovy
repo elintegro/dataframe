@@ -45,7 +45,6 @@ class RegisterService{
         }else {
             DataframeResponse resultData = dataframeService.saveRaw(request)
             user  = resultData?.dataframeInstance?.savedDomainsMap?.user[1]
-
             //Map domainInstanceMap = resultData?.dfInstance.getSavedDomainsMap();
             //def savedDomainInstances = domainInstanceMap.values()
 
