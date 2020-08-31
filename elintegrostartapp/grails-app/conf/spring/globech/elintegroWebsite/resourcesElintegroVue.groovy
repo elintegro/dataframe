@@ -45,35 +45,14 @@ beans {
         currentFrameLayout = ref("vueElintegroProgressBarLayout")
 
     }
- /*   vueElintegroNavigationButtonDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
-        isGlobal = true
-        saveButton = false
-        initOnPageLoad = true
-        dataframeButtons = [home           : [name: "home", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroBannerDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            clientsProjects: [name: "clientsProjects", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            technologies   : [name: "techonologies", type: "link",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            gettingStarted : [name: "gettingStarted", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            carrers        : [name: "carrers", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link",showAsDialog: true,script:""" this.vueElintegroLoginDataframe_display = true; \n  drfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroLoginDataframe_display', true);\n""",
-                                              refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            register       : [name: "register", type: "link", showAsDialog: true, attr:"text", script:""" this.vueElintegroRegisterDataframe_display = true;\n  drfExtCont.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', true);\n""",
-                                              refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
-        wrapButtons = false
-
-
-        currentFrameLayout = ref("elintegroNavigationButtonLayout")
-    }*/
     vueElintegroNavigationFirstTwoButtonDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationFirstTwoButtonDataframe']
         isGlobal = true
         saveButton = false
         initOnPageLoad = true
-        dataframeButtons = [ clientsProjects: [name: "clientsProjects", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueClientProjectDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                             home           : [name: "home", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroBannerDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        dataframeButtons = [
+                             home           : [name: "home", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroHomeDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("elintegroNavigationButtonLayout")
     }
     vueElintegroNavigationButtonBeforeLoggedInDataframe(DataframeVue) { bean ->
@@ -88,8 +67,6 @@ beans {
                                               refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             contactUs      : [name: "contactUs", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             careers        : [name: "careers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            gettingStarted : [name: "gettingStarted", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            technologies   : [name: "techonologies", type: "link",attr:"style='color:#1976D2;'",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                            ]
         wrapButtons = false
 
@@ -106,9 +83,8 @@ beans {
                             contactUs      : [name: "contactUs", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             applicants     : [name: "applicants", type: "link",attr:"style='color:#1976D2;'",route: true, routeIdScript: "0", refDataframe: ref("vueElintegroApplicantsDataframe"), roles: "ROLE_ADMIN", accessType: "ifAnyGranted", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             careers        : [name: "careers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            gettingStarted : [name: "gettingStarted", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueGettingStartedDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            technologies   : [name: "techonologies", type: "link",attr:"style='color:#1976D2;'",route:true, routeIdScript: "0", refDataframe: ref("vueTechnologiesDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
-        wrapButtons = false
+                            ]
+                            wrapButtons = false
 
 
         currentFrameLayout = ref("elintegroNavigationButtonAfterLoggedInLayout")
@@ -146,32 +122,15 @@ beans {
         currentFrameLayout = ref("appNameDataframeLayout")
 
     }
-    vueElintegroBannerDataframe(DataframeVue) { bean ->
+    vueElintegroHomeDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroBannerDataframe']
+        bean.constructorArgs = ['vueElintegroHomeDataframe']
         isGlobal = true
         saveButton = false
         initOnPageLoad = false
         route = true
         currentRoute = 'home'
-        addFieldDef = [
-                "banner": [
-                        "widget"      : "PictureDisplayWidgetVue",
-                        "url"         : "${contextPath}/assets/elintegro_banner.jpg",
-                        flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-
-
-                ]
-//                "person.firstName":[
-//                        widget: "InputWidgetVue",
-//                        "required": "required"
-//                        ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 10) || 'FirstName must be less than 10'"]]
-//                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']],
-//
-// yesko dataframe ma arko kei use garera background image ma banner dina paryo vane layout ma gayera background image dine
-//                or class banayera class ko properties css ma lekhne
-        ]
-        currentFrameLayout = ref("appNameDataframeLayout")
+        currentFrameLayout = ref("vueElintegroHomeDataframeLayout")
 
     }
 
@@ -221,6 +180,24 @@ beans {
 
         currentFrameLayout = ref("vueElintegroAppsDataframeLayout")
     }
+    vueElintegroAboutUsMenuDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroAboutUsMenuDataframe']
+        isGlobal = true
+        saveButton= false
+        initOnPageLoad = false
+        dataframeButtons = [contactQuiz:[name: "contactQuiz", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('quiz_placeholder');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            technologiesInUse:[name: "technologiesInUse", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('our_Technologies');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            ourClientsProjects:[name: "ourClientsProjects", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('ourClientsProjects');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            ourFramework:[name: "ourFramework", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('our_framework');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            collaboration:[name: "collaboration", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('collaboration');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            ourProcess  : [name: "ourProcess", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('our_process');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            ourWork  : [name: "ourWork", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('our_work');""" , "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+
+        currentFrameLayout = ref("vueElintegroSubMenuDataframeLayout")
+
+    }
+
     vueElintegroSubMenuDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroSubMenuDataframe']

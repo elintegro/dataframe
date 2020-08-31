@@ -28,7 +28,7 @@ beans {
     }
     vueElintegroNavigationLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex><v-app-bar flat color="white"  tabs style="z-index:99;">
+        layoutPlaceHolder = """<v-flex><v-app-bar fixed  dense  outline elevate-on-scroll scroll-target="#scrolling-techniques-7" flat color="white"  tabs style="z-index:99;">
                                    <vueElintegroNavigationDrawerDataframe/>
                                    <v-toolbar-title style="position:relative;" ><vueElintegroLogoDataframe/></v-toolbar-title>
                                  
@@ -50,10 +50,12 @@ beans {
                                          app
                                          temporary
                                          width = "min-content">
-                                         <vueElintegroNavigationFirstTwoButtonDataframe/>
-                                         <div style="margin-right:95px;margin-bottom: -20px;"><vueElintegroAppsDataframe/></div>
-                                         <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
-                                         <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/>
+                                     <v-list>    
+                                      <v-list-item style="margin-left:-9px;"><vueElintegroNavigationFirstTwoButtonDataframe/></v-list-item>
+                                      <v-list-item style="margin-bottom: -40px;margin-top: -10px;">   <vueElintegroAppsDataframe/> </v-list-item>
+                                      <v-list-item style="margin-left:-9px;">   <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                         <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
+                                     </v-list>
                                      </v-navigation-drawer>
        </div>"""
     }
@@ -106,18 +108,29 @@ beans {
     }
     vueElintegroAppsDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """ <div class="text-center" >
-                                 <v-menu offset-y tile z-index = 101 close-on-content-click>
-                                     <template v-slot:activator="{ on, attrs }">
-                                         <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">Apps</v-btn>
-                                     </template>
-                                     <v-list width="min-content" style="margin-left:-10px;">
-                                         <v-list-item  @click="">
-                                         <v-list-item-title><vueElintegroSubMenuDataframe/></v-list-item-title>
-                                         </v-list-item>
-                                     </v-list>
-                                 </v-menu>
-        </div>"""
+        layoutPlaceHolder = """ <div >
+                                     <v-menu offset-y tile z-index = 101 close-on-content-click>
+                                         <template v-slot:activator="{ on, attrs }">
+                                             <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">About Us</v-btn>
+                                         </template>
+                                         <v-list width="min-content" style=" margin-right: -39px;margin-left: -37px;">
+                                             <v-list-item  @click="">
+                                             <v-list-item-title><vueElintegroAboutUsMenuDataframe/></v-list-item-title>
+                                             </v-list-item>
+                                         </v-list>
+                                     </v-menu>
+                                     <v-menu offset-y tile z-index = 101 close-on-content-click>
+                                         <template v-slot:activator="{ on, attrs }">
+                                             <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">Apps</v-btn>
+                                         </template>
+                                         <v-list width="min-content" style=" margin-right: -39px;margin-left: -37px;">
+                                             <v-list-item  @click="">
+                                             <v-list-item-title><vueElintegroSubMenuDataframe/></v-list-item-title>
+                                             </v-list-item>
+                                         </v-list>
+                                     </v-menu>
+                                </div>
+                             """
 
     }
     vueElintegroSubMenuDataframeLayout(ColumnLayoutVue) { bean ->

@@ -31,7 +31,7 @@ beans {
                           var defaultUrl = '${defaultUrl}/#/';
                           if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == true){
                           if(currentUrl == defaultUrl){
-                            let homePage = "vueElintegroBannerDataframe";
+                            let homePage = "vueElintegroHomeDataframe";
                             let routeId = 0;
                             this.\$router.push({
                                   name: homePage,
@@ -67,6 +67,66 @@ beans {
                                                } ,  \n
                                                                                                      
                                 """
+    }
+    vueElintegroHomeDataframe_script(VueJsEntity){bean ->
+        methods="""
+                    hello(params){
+                                                               
+                               document.getElementById("nameOfPerson").innerHTML = ' Name of the Person,';
+                               document.getElementById("jobTitle").innerHTML = 'Job Title';
+                               if(params=='coachClone'){
+                                    document.getElementById("quotes").innerHTML = '"Elintegro are awesome and Shai is a very nice person."';
+                                    document.getElementById("coachClone").style.opacity =1;
+                                    document.getElementById("weBus").style.opacity =0.25;
+                               }else{
+                                    document.getElementById("quotes").innerHTML = '"Elintegro are fantastic and Shai is a very nice person."';
+                                    document.getElementById("weBus").style.opacity =1;
+                                    document.getElementById("coachClone").style.opacity =0.25;
+                               }     
+                    },\n
+                    scrollToQuiz(){
+                            let element = document.getElementById('quiz_placeholder');
+                             element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    """
+    }
+    vueElintegroAboutUsMenuDataframe_script(VueJsEntity){ bean ->
+        methods = """scrollTo(param){
+           
+            if(param =='ourClientsProjects'){
+                 excon.redirectPage(this,"client-project");
+            }else if (param == 'our_Technologies'){
+                 excon.redirectPage(this,"technologies");
+            }else{
+                let element = document.getElementById(param);
+                if(element != null){
+                    switch(param){
+                    case 'our_work' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'our_process' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'collaboration' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'our_framework' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'quiz_placeholder'  :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    default : 
+                        excon.redirectPage(this,'home');                                
+                    }
+                }else{
+                       excon.redirectPage(this,'home');                                
+                }   
+            }
+  
+            
+        }
+        """
     }
 
     vueToolbarDataframe_script(VueJsEntity) { bean ->
