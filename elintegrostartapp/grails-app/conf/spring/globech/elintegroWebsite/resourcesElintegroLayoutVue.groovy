@@ -28,7 +28,7 @@ beans {
     }
     vueElintegroNavigationLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex><v-app-bar flat color="white"  tabs style="z-index:99;">
+        layoutPlaceHolder = """<v-flex><v-app-bar fixed  dense  outline elevate-on-scroll scroll-target="#scrolling-techniques-7" flat color="white"  tabs style="z-index:99;">
                                    <vueElintegroNavigationDrawerDataframe/>
                                    <v-toolbar-title style="position:relative;" ><vueElintegroLogoDataframe/></v-toolbar-title>
                                  
