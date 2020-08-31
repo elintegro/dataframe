@@ -50,10 +50,12 @@ beans {
                                          app
                                          temporary
                                          width = "min-content">
-                                         <vueElintegroNavigationFirstTwoButtonDataframe/>
-                                         <div><vueElintegroAppsDataframe/></div>
-                                         <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
-                                         <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/>
+                                     <v-list>    
+                                      <v-list-item style="margin-left:-9px;"><vueElintegroNavigationFirstTwoButtonDataframe/></v-list-item>
+                                      <v-list-item style="margin-bottom: -40px;margin-top: -10px;">   <vueElintegroAppsDataframe/> </v-list-item>
+                                      <v-list-item style="margin-left:-9px;">   <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                         <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
+                                     </v-list>
                                      </v-navigation-drawer>
        </div>"""
     }
@@ -106,7 +108,7 @@ beans {
     }
     vueElintegroAppsDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """ <div class="text-center">
+        layoutPlaceHolder = """ <div >
                                      <v-menu offset-y tile z-index = 101 close-on-content-click>
                                          <template v-slot:activator="{ on, attrs }">
                                              <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">About Us</v-btn>
