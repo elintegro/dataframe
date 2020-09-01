@@ -83,8 +83,13 @@ beans {
                                     document.getElementById("weBus").style.opacity =1;
                                     document.getElementById("coachClone").style.opacity =0.25;
                                }     
-                    },\n
-                    scrollToQuiz(){
+                    },
+               
+                    """
+    }
+    vueFirstContainerDataframe_script(VueJsEntity){bean ->
+        methods = """
+                          scrollToQuiz(){
                             let element = document.getElementById('quiz_placeholder');
                              element.scrollIntoView({ behavior: 'smooth' });
                     }
