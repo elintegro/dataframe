@@ -14,59 +14,10 @@ beans{
                                          <vueCollaborationContainerDataframe/><br>
                                          <vueOurFrameworkContainerDataframe/><br><br><br>
                                          <vueQuotesContainerDataframe/><br>
-                                         <v-container id="our_Technologies" class="our_Technologies">
-                                            <v-flex xs12 sm12 md12 lg12 x12>
-                                                 <v-row class="text-center">
-                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12" class="label" style = 'color: #29b6f6;font-size:14px;'>OUR TECHNOLOGIES</v-col>
-                                                </v-row>
-                                                <v-row class ="text-center">
-                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><h2 class="heading-2" style ="font-size:45px;">This is how we do it</h2></v-col>
-                                                </v-row><br><br>
-                                                <v-row>
-                                                    <v-col cols="1"></v-col>
-                                                    <v-col cols="3" style="align-self: center;">    
-                                                        <v-img src="assets/home/java.png"></v-img>
-                                                    </v-col>
-                                                    <v-col cols="1"></v-col>
-                                                        <v-col cols="2" style="align-self: center;"><v-img src="assets/home/javascript.png"></v-img>
-                                                    </v-col> 
-                                                    <v-col cols="1"></v-col> 
-                                                        <v-col cols="3" style="align-self: center;"><v-img src="assets/home/grails.png"></v-img>
-                                                    </v-col>
-                                                    <v-col cols="1"></v-col> 
-                                                </v-row>
-                                                 <v-row>
-                                                    <v-col cols="1"></v-col>
-                                                        <v-col cols="2" style="align-self: center;">
-                                                        <v-img src="assets/home/vue.png"></v-img>
-                                                    </v-col>
-                                                    <v-col cols="1"></v-col>
-                                                        <v-col cols="3" style="align-self: center;"><v-img src="assets/home/kafka.png"></v-img>
-                                                    </v-col>
-                                                    <v-col cols="1"></v-col> 
-                                                        <v-col cols="3" style="align-self: center;"><v-img src="assets/home/oracle.png"></v-img>
-                                                    </v-col>
-                                                    <v-col cols="1"></v-col>
-                                                </v-row>
-                                                 <v-row>
-                                                    <v-col cols="1"></v-col> 
-                                                    <v-col cols="3" style="align-self: center;">
-                                                        <v-img src="assets/home/nodejs.png"></v-img>
-                                                    </v-col>
-                                                    <v-col cols="1"></v-col> 
-                                                        <v-col cols="2" style="align-self: center;"><v-img src="assets/home/kubernetes.png"></v-img>
-                                                    </v-col> 
-                                                    <v-col cols="1"></v-col> 
-                                                        <v-col cols="3" style="align-self: center;"><v-img src="assets/home/mysql.png"></v-img>
-                                                    </v-col>
-                                                    <v-col cols="1"></v-col> 
-                                                </v-row>
-                                            </v-flex>
-                                         </v-container><br>
+                                         <vueOurTechnologiesContainerDataframe/><br>
                                          <vueQuizPlaceholderContainerDataframe/><br>
                                          <vueFooterContainerDataframe/>   
                                     </v-container>
-                                    [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                 </v-flex>
                                 
                                 """
@@ -242,6 +193,60 @@ beans{
                                              </v-flex>       
                                         </v-container>
                             
+                            """
+    }
+    vueOurTechnologiesContainerDataframeLayout(ColumnLayoutVue){bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """
+                                          <v-container id="our_Technologies" class="our_Technologies">
+                                            <v-flex xs12 sm12 md12 lg12 x12>
+                                                 <v-row class="text-center">
+                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12" class="label">[labelOurTechnologies]</v-col>
+                                                </v-row>
+                                                <v-row class ="text-center">
+                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><h2 class="heading-2">[thisIsHow]</h2></v-col>
+                                                </v-row><br><br>
+                                                <v-row>
+                                                    <v-col cols="1"></v-col>
+                                                    <v-col cols="3" style="align-self: center;">    
+                                                        <v-img src="assets/home/java.png"></v-img>
+                                                    </v-col>
+                                                    <v-col cols="1"></v-col>
+                                                        <v-col cols="2" style="align-self: center;"><v-img src="assets/home/javascript.png"></v-img>
+                                                    </v-col> 
+                                                    <v-col cols="1"></v-col> 
+                                                        <v-col cols="3" style="align-self: center;"><v-img src="assets/home/grails.png"></v-img>
+                                                    </v-col>
+                                                    <v-col cols="1"></v-col> 
+                                                </v-row>
+                                                 <v-row>
+                                                    <v-col cols="1"></v-col>
+                                                        <v-col cols="2" style="align-self: center;">
+                                                        <v-img src="assets/home/vue.png"></v-img>
+                                                    </v-col>
+                                                    <v-col cols="1"></v-col>
+                                                        <v-col cols="3" style="align-self: center;"><v-img src="assets/home/kafka.png"></v-img>
+                                                    </v-col>
+                                                    <v-col cols="1"></v-col> 
+                                                        <v-col cols="3" style="align-self: center;"><v-img src="assets/home/oracle.png"></v-img>
+                                                    </v-col>
+                                                    <v-col cols="1"></v-col>
+                                                </v-row>
+                                                 <v-row>
+                                                    <v-col cols="1"></v-col> 
+                                                    <v-col cols="3" style="align-self: center;">
+                                                        <v-img src="assets/home/nodejs.png"></v-img>
+                                                    </v-col>
+                                                    <v-col cols="1"></v-col> 
+                                                        <v-col cols="2" style="align-self: center;"><v-img src="assets/home/kubernetes.png"></v-img>
+                                                    </v-col> 
+                                                    <v-col cols="1"></v-col> 
+                                                        <v-col cols="3" style="align-self: center;"><v-img src="assets/home/mysql.png"></v-img>
+                                                    </v-col>
+                                                    <v-col cols="1"></v-col> 
+                                                </v-row>
+                                            </v-flex>
+                                         </v-container>
                             """
     }
     vueQuizPlaceholderContainerDataframeLayout(ColumnLayoutVue){bean ->

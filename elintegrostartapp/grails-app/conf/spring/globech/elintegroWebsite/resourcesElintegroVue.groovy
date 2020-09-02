@@ -132,7 +132,8 @@ beans {
         currentRoute = 'home'
         childDataframes=['vueFirstContainerDataframe','vueOurWorkContainerDataframe','vueOurProcessContainerDataframe',
                          "vueCollaborationContainerDataframe",'vueOurFrameworkContainerDataframe',
-                         'vueQuotesContainerDataframe','vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
+                         'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe',
+                         'vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
         currentFrameLayout = ref("vueElintegroHomeDataframeLayout")
 
     }
@@ -328,6 +329,25 @@ beans {
                 ],
         ]
         currentFrameLayout = ref("vueQuotesContainerDataframeLayout")
+    }
+    vueOurTechnologiesContainerDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueOurTechnologiesContainerDataframe']
+        saveButton = false
+        addFieldDef = [
+                labelOurTechnologies:["widget":"TextDisplayWidgetVue"
+                                   ,"name":"labelOurTechnologies"
+                                   ,attr: """ style = 'color: #29b6f6;font-size:14px;' """
+                                   ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
+                thisIsHow:["widget":"TextDisplayWidgetVue"
+                                      ,"name":"thisIsHow"
+                                      ,attr: """ style ="font-size:45px;" """
+                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
+        ]
+        currentFrameLayout = ref("vueOurTechnologiesContainerDataframeLayout")
+
     }
     vueQuizPlaceholderContainerDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
