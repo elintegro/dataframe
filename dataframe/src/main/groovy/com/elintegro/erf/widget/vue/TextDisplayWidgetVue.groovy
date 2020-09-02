@@ -53,7 +53,7 @@ class TextDisplayWidgetVue extends WidgetVue{
             return """<v-row style="margin:auto;">$displayPlaceholder:$html</v-row>"""
         }
         else {
-            return """<span>$displayPlaceholder</span>"""
+            return """<span $attr >$displayPlaceholder</span>"""
         }
     }
 }
