@@ -38,6 +38,8 @@ class BootStrap {
             DataInit.initElintegroClientProject()
             DataInit.initelintegrostartappSkills()
             DataInit.initelintegrostartappPosition()
+            DataInit.initelintegrostartappQuestionTable()
+            DataInit.initelintegrostartappAnswerTable()
         }
 
         //DataInit.initNotification()

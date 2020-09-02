@@ -561,6 +561,26 @@ beans {
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressLine = result[0].formatted_address;
                     },"""
     }
+    vueElintegroSignUpQuizDataframe_script(VueJsEntity){bean ->
+        methods = """saveSignUpForm(){
+                                    var allParams = this.state;
+                                    allParams['dataframe'] = 'vueElintegroSignUpQuizDataframe';
+                                    var self = this;
+                                    axios({ 
+                                          method: 'post',
+                                          url:'${contextPath}/register/createLeadUser',
+                                          data:allParams
+                                    }).then(function(responseData){
+                                           console.log(responseData);
+                                            this.location.reload();
+                                    })
+                                    
+
+
+
+
+                                    },\n"""
+    }
 
     vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
