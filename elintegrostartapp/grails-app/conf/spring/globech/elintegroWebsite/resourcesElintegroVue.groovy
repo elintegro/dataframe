@@ -407,7 +407,7 @@ beans {
         addFieldDef = [
                 InitialQuote:["widget":"TextDisplayWidgetVue"
                                    ,"name":"InitialQuote"
-                                   ,attr: """ style="padding-left:5%;"><h1 style="font-family: sans-serif;font-size:36px;" """
+                                   ,attr: """ style="padding-left:5%;font-family: sans-serif;font-size:36px;" """
                                    ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 nameOfPerson:["widget":"TextDisplayWidgetVue"

@@ -81,12 +81,12 @@ beans{
                                                    <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12" class="label">[labelOurProcess]</v-col>
                                                 </v-row>
                                                 <v-row class ="text-center">
-                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><h2 class="heading-2">[youDeserve]<br>[efficiency]</h2></v-col>
+                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><h2 class="heading-2">[youDeserve][efficiency]</h2></v-col>
                                                 </v-row>
                                                 <v-row class="text-center" >
                                                    <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12" ><p>[ourProcessTextOne]
-                                                   <br>[ourProcessTextTwo]<br>
-                                                   [ourProcessTextThree]<br>
+                                                   [ourProcessTextTwo]<br>
+                                                   [ourProcessTextThree]
                                                    [ourProcessTextFour]</p></v-col>
                                                 </v-row>
                                                 <v-row class="text-center">
