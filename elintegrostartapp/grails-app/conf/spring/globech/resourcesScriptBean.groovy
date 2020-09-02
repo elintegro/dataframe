@@ -68,7 +68,7 @@ beans {
                                                                                                      
                                 """
     }
-    vueElintegroHomeDataframe_script(VueJsEntity){bean ->
+    vueQuotesContainerDataframe_script(VueJsEntity){bean ->
         methods="""
                     hello(params){
                                                                

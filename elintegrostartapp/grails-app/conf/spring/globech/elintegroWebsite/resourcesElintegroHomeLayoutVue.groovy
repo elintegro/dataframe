@@ -81,7 +81,7 @@ beans{
                                                    <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12" class="label">[labelOurProcess]</v-col>
                                                 </v-row>
                                                 <v-row class ="text-center">
-                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><h2 class="heading-2" >[youDeserve]<br>[efficiency]</h2></v-col>
+                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><h2 class="heading-2">[youDeserve]<br>[efficiency]</h2></v-col>
                                                 </v-row>
                                                 <v-row class="text-center" >
                                                    <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12" ><p>[ourProcessTextOne]
@@ -197,7 +197,7 @@ beans{
                                                     <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
                                                     <v-col cols ="12" xs="10" sm="10" md="10" xl="10" lg="10" style="background-color:#E1F5FE; border-radius:20px;"><v-row></v-row><br><br><br>
                                                         <v-row> <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col>
-                                                          <v-col cols="12" xs="10" sm="10" md="7" xl="7" lg="7" class="text-center"><p id="quotes">[InitialQuote]</p></h1></v-col>
+                                                          <v-col cols="12" xs="10" sm="10" md="7" xl="7" lg="7" class="text-center"><h1><p id="quotes">[InitialQuote]</p></h1></v-col>
                                                           <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>
                                                         </v-row>
                                                         <v-row><v-col cols="12" xs="10" sm="10" md="10" xl="10" lg="10" style = "font-family: sans-serif;font-size:14px;" class="text-center" id = "nameOfPerson">[nameOfPerson]</v-col></v-row>
