@@ -17,7 +17,9 @@ import com.elintegro.auth.Role
 import com.elintegro.auth.User
 import com.elintegro.auth.UserRole
 import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.hr.AnswerTable
 import com.elintegro.elintegrostartapp.hr.Position
+import com.elintegro.elintegrostartapp.hr.QuestionTable
 import com.elintegro.elintegrostartapp.hr.Skills
 import com.elintegro.ref.Address
 import com.elintegro.ref.Language
@@ -65,6 +67,7 @@ class DataInit {
 			new Role(authority: "ROLE_CARE_GIVER", isEmployee: true).save(failOnError: true)
             new Role(authority: "ROLE_MANAGER", isEmployee: true).save(failOnError: true)
 			new Role(authority: "ROLE_DIRECTOR", isEmployee: true).save(failOnError: true)
+			new Role(authority: "ROLE_LEAD", isEmployee: true).save(failOnError: true)
 		}
 
 		User adminUser = User.findByUsername("eugenelip@gmail.com")
@@ -155,6 +158,33 @@ class DataInit {
 		new Position(_code:"sm", name:"Scrum Master",description: "Nothing").save()
 		new Position(_code:"sa", name:"Site Adminstrator",description: "Nothing").save()
 		new Position(_code:"do", name:"Developer",description: "Nothing").save()
+
+	}
+	static  def initelintegrostartappQuestionTable(){
+		new QuestionTable(questionKey:"Which describes you best ?",questionName:"leadDescription").save()
+		new QuestionTable(questionKey:"What stage is your app in ?",questionName:"leadStage").save()
+		new QuestionTable(questionKey:"What is your budget ?",questionName:"leadBudget").save()
+	}
+	static def initelintegrostartappAnswerTable(){
+		QuestionTable question = QuestionTable.findByQuestionName("leadDescription")
+		new AnswerTable(question:question,answerKey:"I want to build an app for my business.").save()
+		new AnswerTable(question:question,answerKey: "I work at a company who is looking to build an app.").save()
+		new AnswerTable(question:question,answerKey: "We are a software company looking to outsource some technology.").save()
+
+		QuestionTable question1 = QuestionTable.findByQuestionName("leadStage")
+		new AnswerTable(question:question1,answerKey:"I have the spec all agile and ready !").save()
+		new AnswerTable(question:question1,answerKey: "I don't have a detailed spec but I do have some documentation with requirements and I want help with a spec.").save()
+		new AnswerTable(question:question1,answerKey: "What's a spec?").save()
+		new AnswerTable(question:question1,answerKey: "I want to brainstorm ideas?").save()
+
+		QuestionTable question2= QuestionTable.findByQuestionName("leadBudget")
+		new AnswerTable(question:question2,answerKey:"\$250K and up").save()
+		new AnswerTable(question:question2,answerKey: "\$100K - \$250K").save()
+		new AnswerTable(question:question2,answerKey: "\$50K - \$100K").save()
+		new AnswerTable(question:question2,answerKey: "\$25K - \$50K").save()
+		new AnswerTable(question:question2,answerKey: "\$10K - \$25K").save()
+		new AnswerTable(question:question2,answerKey: "Under \$10K").save()
+
 
 	}
 

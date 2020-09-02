@@ -133,7 +133,7 @@ beans {
         childDataframes=['vueFirstContainerDataframe','vueOurWorkContainerDataframe','vueOurProcessContainerDataframe',
                          "vueCollaborationContainerDataframe",'vueOurFrameworkContainerDataframe',
                          'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe',
-                         'vueElintegroSignUpQuizDataframe','vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
+                         'vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
         currentFrameLayout = ref("vueElintegroHomeDataframeLayout")
 
     }
@@ -468,6 +468,7 @@ beans {
                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
         ]
+        childDataframes = ['vueElintegroSignUpQuizDataframe']
         currentFrameLayout = ref("vueQuizPlaceholderContainerDataframeLayout")
     }
     vueElintegroSignUpQuizDataframe(DataframeVue){ bean->

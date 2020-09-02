@@ -311,4 +311,10 @@ beans{
                                 
                             """
     }
+    vueElintegroSignUpQuizDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT]<v-card-actions class="justify-center">[BUTTON_SCRIPT]</v-card-actions></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+
+    }
 }
