@@ -130,7 +130,47 @@ beans {
         initOnPageLoad = false
         route = true
         currentRoute = 'home'
+        childDataframes = ['vueElintegroSignUpQuizDataframe']
         currentFrameLayout = ref("vueElintegroHomeDataframeLayout")
+
+    }
+    vueElintegroSignUpQuizDataframe(DataframeVue){ bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroSignUpQuizDataframe']
+        saveButton = false
+        initOnPageLoad = false
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        hql = """select  application.leadDescription, application.leadStage, application.leadBudget, person.firstName, person.lastName, person.email , person.phone from Application application inner join application.applicant person  where application.id=:id"""
+        addFieldDef = ["application.leadDescription":[
+                                          widget:"ComboboxVue"
+                                         ,internationalize    :true
+                                          ,initBeforePageLoad  :true
+                                         ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
+                                         ,"displayMember": "Answer"
+                                         ,"valueMember"  : "id"
+                                         ,search:true],
+                           "application.leadStage":[
+                                       widget:"ComboboxVue"
+                                       ,internationalize    :true
+                                       ,initBeforePageLoad  :true
+                                       ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadStage'"""
+                                       ,"displayMember": "Answer"
+                                       ,"valueMember"  : "id"
+                                       ,search:true],
+                       "application.leadBudget":[
+                               widget:"ComboboxVue"
+                               ,initBeforePageLoad  :true
+                               ,internationalize    :true
+                               ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadBudget'"""
+                               ,"displayMember": "Answer"
+                               ,"valueMember"  : "id"
+                               ,search:true],
+                       "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
+
+        ]
+        dataframeButtons = [
+                           submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }
 
@@ -205,7 +245,8 @@ beans {
         saveButton= false
         initOnPageLoad = false
         dataframeButtons = [quizzable  : [name: "quizzable", type: "link",attr:"style='color:#1976D2;'",script: """this.quizzableApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            translator  : [name: "translator", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                            translator  : [name: "translator", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            ecommerce  : [name: "ecommerce", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: 0,script: """this.ecommerceApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
         currentFrameLayout = ref("vueElintegroSubMenuDataframeLayout")
 
@@ -518,7 +559,12 @@ beans {
                                                            this.location.reload();
                                                           //Dataframe.showHideDataframesBasedOnUserType(data);
                                                        """,
-                                                     failureScript:""" if(!response.msg){ this.location.reload();}"""],"flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                                                     failureScript:"""if(response.success == false){
+                                                                         response['alert_type'] = 'error';
+                                                                         var responseData = {data:response};
+                                                                         excon.showMessage(responseData,'vueElintegroLoginDataframe');
+                                                                         setTimeout(function(){excon.setVisibility('vueElintegroLoginDataframe', false);this.location.reload();}, 6000);} 
+                                                                         if(!response.msg){ this.location.reload();}"""],"flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                              forgetPassword:[name: "forgetPassword", type: "button", attr:"""style="background-color:#1976D2; color:white; margin-left:2px;" """, script:""" console.log("Forget Password Clicked");""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
                                              layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],
                              logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
@@ -560,8 +606,7 @@ beans {
         wrapInForm=true
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doAfterSave = """ excon.saveToStore('vueElintegroNavigationButtonDataframe','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueElintegroRegisterDataframe_display', false);\n
-                           excon.setVisibility("vueElintegroRegisterDataframe", false); """
+        doAfterSave = """ self.showAlertMessageToUser(response);"""
         addFieldDef =[
                 "user.email":[widget: "EmailWidgetVue",attr: "autofocus", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'email.required.message']],"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                 "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname"
@@ -783,7 +828,15 @@ beans {
         putFillInitDataMethod = true
         doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
-        addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]]]
+        addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]],
+                       "person.selectedPosition":[widget: "ListWidgetVue"
+                                                 ,hql:"select application.id as Id, availablePositions.name as Name from Application application  inner join application.availablePositions as availablePositions where application.id=:id"
+                                                 ,"displayMember":"Name"
+                                                 ,internationalize: true
+                                                 ,valueMember:"id"
+                                                 ,attr: """v-show = false """
+                       ]
+        ]
         dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
                                                                                 \n""",flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6'], url: ""]]
 

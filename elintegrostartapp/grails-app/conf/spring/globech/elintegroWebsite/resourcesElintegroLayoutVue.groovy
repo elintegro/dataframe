@@ -266,7 +266,12 @@ beans {
     }
     vueElintegroApplicantGeneralInformationDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]<v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
+        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]
+                          <v-flex style="margin-top:-50px; margin-left: 1%;"><v-row>
+                          <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><span style='color:#757575;'>Selected Positions</span>:&nbsp; {{vueElintegroApplicantGeneralInformationDataframe_person_selectedposition}}</v-col>
+                          </v-row>
+                          </v-flex>
+                          <v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
     }
     vueElintegroApplicantQuestionAnswerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name

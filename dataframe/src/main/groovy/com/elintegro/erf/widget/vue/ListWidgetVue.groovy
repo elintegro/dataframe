@@ -307,7 +307,7 @@ class ListWidgetVue extends WidgetVue {
         String modelString = getModelString(dataframe, field)
         String onClick = field.OnClick?:""
         """
-           <v-list ${isDisabled(dataframe, field) ? "disabled" : ""} flat>
+           <v-list ${isDisabled(dataframe, field) ? "disabled" : ""} flat ${getAttr(field)}>
                   <v-subheader>$label</v-subheader>
                   <v-list-item-group color="#1976D2">
                        <v-list-item  v-for="(item, i) in ${modelString}_items" :key="i">

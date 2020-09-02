@@ -1239,7 +1239,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                         self.${dataframeName}_save_loading = false;
                         var response = responseData.data;
                         ${doAfterSaveStringBuilder.toString()}
-                        excon.showAlertMessage(response);
+                        excon.showAlertMessageWithResponse(response);
 			            	if(response.success) {
                                ${doAfterSave}
                         	}

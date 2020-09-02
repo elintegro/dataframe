@@ -14,6 +14,8 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.register
 
 import com.elintegro.auth.Role
+import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.client.Application
 import com.elintegro.gc.data.DataInit
 import com.elintegro.gerf.DataframeController
 import com.elintegro.elintegrostartapp.Facility
@@ -299,6 +301,31 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         command.password = requestParams.get(passwordKey)
         command.password2 = requestParams.get(password2Key)
         return command
+    }
+    def createLeadUser(){
+        def result
+        try{
+            def params = request.getJSON()
+            Person applicant = new Person()
+            applicant.firstName = params.vueElintegroSignUpQuizDataframe_person_firstName
+            applicant.lastName = params.vueElintegroSignUpQuizDataframe_person_lastName
+            applicant.email = params.vueElintegroSignUpQuizDataframe_person_email
+            applicant.phone = params.vueElintegroSignUpQuizDataframe_person_phone
+            applicant.save()
+
+            Application application = new Application()
+            application.applicant = applicant
+            application.leadDescription = params.vueElintegroSignUpQuizDataframe_application_leadDescription['Answer']
+            application.leadStage = params.vueElintegroSignUpQuizDataframe_application_leadStage['Answer']
+            application.leadBudget = params.vueElintegroSignUpQuizDataframe_application_leadBudget['Answer']
+            application.save(flush:true)
+            result = [success: true, person_id: applicant.id, application_id: application.id]
+        }catch(Exception e){
+            def message = "New Employee introduction: Failed to save Person's data error = " + e
+            result = [success: false, message: message]
+            log.error(message)
+        }
+    render(result as JSON)
     }
 
 
