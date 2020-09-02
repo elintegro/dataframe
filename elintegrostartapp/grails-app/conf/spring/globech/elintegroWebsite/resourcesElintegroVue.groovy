@@ -133,7 +133,7 @@ beans {
         childDataframes=['vueFirstContainerDataframe','vueOurWorkContainerDataframe','vueOurProcessContainerDataframe',
                          "vueCollaborationContainerDataframe",'vueOurFrameworkContainerDataframe',
                          'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe',
-                         'vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
+                         'vueElintegroSignUpQuizDataframe','vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
         currentFrameLayout = ref("vueElintegroHomeDataframeLayout")
 
     }
@@ -470,6 +470,46 @@ beans {
         ]
         currentFrameLayout = ref("vueQuizPlaceholderContainerDataframeLayout")
     }
+    vueElintegroSignUpQuizDataframe(DataframeVue){ bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroSignUpQuizDataframe']
+        saveButton = false
+        initOnPageLoad = false
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        hql = """select  application.leadDescription, application.leadStage, application.leadBudget, person.firstName, person.lastName, person.email , person.phone from Application application inner join application.applicant person  where application.id=:id"""
+        addFieldDef = ["application.leadDescription":[
+                widget:"ComboboxVue"
+                ,internationalize    :true
+                ,initBeforePageLoad  :true
+                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
+                ,"displayMember": "Answer"
+                ,"valueMember"  : "id"
+                ,search:true],
+                       "application.leadStage":[
+                               widget:"ComboboxVue"
+                               ,internationalize    :true
+                               ,initBeforePageLoad  :true
+                               ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadStage'"""
+                               ,"displayMember": "Answer"
+                               ,"valueMember"  : "id"
+                               ,search:true],
+                       "application.leadBudget":[
+                               widget:"ComboboxVue"
+                               ,initBeforePageLoad  :true
+                               ,internationalize    :true
+                               ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadBudget'"""
+                               ,"displayMember": "Answer"
+                               ,"valueMember"  : "id"
+                               ,search:true],
+                       "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
+
+        ]
+        dataframeButtons = [
+                submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
+
+    }
+
     vueFooterContainerDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFooterContainerDataframe']

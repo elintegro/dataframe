@@ -281,8 +281,8 @@ beans{
                                                     </v-col>
                                                  <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>
                                                     <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" style="padding:6%" class="pa-md-0">
-                                                       <v-card style="height: 300px;color:#f1f1f1">
-                                                            <v-card-actions class="justify-center" style="border:0px;"><p>[contactQuiz]</p></v-card-actions>
+                                                       <v-card style="color:#f1f1f1">
+                                                            <vueElintegroSignUpQuizDataframe/>
                                                        </v-card>
                                                     </v-col>
                                                 <v-col cols="12" xs="1" sm="1" md="2" xl="2" lg="2"></v-col>
