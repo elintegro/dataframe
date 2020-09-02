@@ -8,7 +8,7 @@ beans{
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                                     <v-container>
-                                         <vueFirstContainerDataframe/><br><br>
+                                         <br><br><vueFirstContainerDataframe/><br><br>
                                          <vueOurWorkContainerDataframe/><br><br>
                                          <vueOurProcessContainerDataframe/><br>  
                                          <vueCollaborationContainerDataframe/><br>
@@ -30,15 +30,21 @@ beans{
                                         <v-col cols="10"><div class = "hidden-sm-and-down"><h1 style ='font-size: 70px;font-family:sans-serif;'>
                                             [hey][LooksLike]<v-row style="padding-left: 12px;margin-right: 190px;">[Built][AnyApps]</v-row>[Yet]
                                         </h1></div></v-col><v-col cols="1"></v-col>
-                                        <v-flex><div class = "hidden-md-and-up"><div class="text-center"><h1 style ='font-size: 70px;'>
-                                            [hey][LooksLike]<v-row>[Built][AnyApps]</v-row>[Yet]  
-                                        </h1></div></div></v-flex>      
+                                        <vueFirstContainerResizeDataframe/>    
                                     </v-row>
                                     <v-row class="text-center">[youWont]</v-row><br><br>
                                     <v-row class="text-center">[buildApp]</v-row>
                                    
                                 </v-container>
 
+                            """
+    }
+    vueFirstContainerResizeDataframeLayout(ColumnLayoutVue) { bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """
+                                     <v-flex><div class = "hidden-md-and-up"><div class="text-center"><h1 style ='font-size: 63px;'>
+                                            [hey][LooksLike]<v-row>[Built][AnyApps]</v-row>[Yet]  
+                                        </h1></div></div></v-flex>      
                             """
     }
     vueOurWorkContainerDataframeLayout(ColumnLayoutVue){bean->
@@ -115,6 +121,14 @@ beans{
                                                 </v-row>       
                                              <v-col cols="1"></v-col>    
                                             </v-flex>
+                                            <vueCollaborationContainerResizeDataframe/>
+                                        </v-container>
+                            
+                            """
+    }
+    vueCollaborationContainerResizeDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """
                                             <v-flex xs12 sm12 md12 lg12 x12 class="hidden-md-and-up">
                                                 <v-row>
                                                     <v-col cols="12" style="padding:8%;">
@@ -133,8 +147,6 @@ beans{
                                                     </v-col>
                                                 </v-row>       
                                             </v-flex>
-                                        </v-container>
-                            
                             """
     }
     vueOurFrameworkContainerDataframeLayout(ColumnLayoutVue){bean ->
@@ -151,14 +163,9 @@ beans{
                                                                 <p>[ourFrameworkTextFirstParagraph]
                                                                 </p><p>[ourFrameworkTextSecondParagraph]
                                                                 </p><br>
-                                                                <v-btn>[buttonDataframeOnGithub]</v-btn>
+                                                                <v-row class="text-center">[buttonDataframeOnGithub]</v-row>
                                                         </v-row>
-                                                        <v-row style="font-family:inherit;" class="hidden-sm-and-down">
-                                                                <p>[ourFrameworkTextFirstParagraph]
-                                                                </p><p>[ourFrameworkTextSecondParagraph]
-                                                                </p><br>
-                                                                <v-btn>[buttonDataframeOnGithub]</v-btn>
-                                                        </v-row>
+                                                        <vueOurFrameworkContainerResizeDataframe/>
                                                     </v-col>
                                                     <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
                                                     <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
@@ -169,6 +176,17 @@ beans{
                                             </v-flex>
                                         </v-container>
                                 """
+    }
+    vueOurFrameworkContainerResizeDataframeLayout(ColumnLayoutVue){bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder ="""
+                                     <v-row style="font-family:inherit;" class="hidden-sm-and-down">
+                                                                <p>[ourFrameworkTextFirstParagraph]
+                                                                </p><p>[ourFrameworkTextSecondParagraph]
+                                                                </p><br>
+                                                                [buttonDataframeOnGithub]
+                                                        </v-row>
+                            """
     }
     vueQuotesContainerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
