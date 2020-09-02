@@ -242,6 +242,20 @@ beans {
     }
     vueElintegroRegisterDataframe_script(VueJsEntity) { bean ->
         data = "vueElintegroRegisterDataframe_display:true,\n checkboxSelected: [],\n"
+        methods = """
+                   showAlertMessageToUser(response){
+                   if(response.success == true){
+                         response['alert_type'] = 'success'
+                         var responseData = {data:response}
+                         excon.showMessage(responseData,'vueElintegroRegisterDataframe');
+                         setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe', false);}, 6000);
+                   }else{
+                         response['alert_type'] = 'error';
+                         var responseData = {data:response}
+                         excon.showMessage(response,'vueElintegroRegisterDataframe');
+                         setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe', false);}, 6000);
+                   }
+        },\n """
     }
 
 //    vueRegisterDataframe_script(VueJsEntity) { bean ->
@@ -748,16 +762,21 @@ beans {
     }
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantGeneralInformationDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantGeneralInformationDataframe_fillInitData();}},"""
-        computed = "refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},"
+        computed = """refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},\n
+                   vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
+                                        var positions = [];
+                                        var items = this.state.vueElintegroApplicantGeneralInformationDataframe_person_selectedPosition_items;
+                                        for(i=0;i<items.length;i++){
+                                           positions[i] = items[i].Name;
+                                        }
+                                        var selectedPosition = positions.join(",\t\t");
+                                        return selectedPosition;}"""
     }
     vueElintegroApplicantSelfAssessmentDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
     }
-    vueElintegroApplicantCVDataframe_script(VueJsEntity){bean ->
-        watch = """ refreshVueElintegroApplicantCVDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantCVDataframe_fillInitData();}},"""
-        computed = "refreshVueElintegroApplicantCVDataframe(){return this.vueElintegroApplicantCVDataframe_prop.key},"
-    }
+
     vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
@@ -776,6 +795,8 @@ beans {
         def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
         def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
         def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
+        watch = """ refreshVueElintegroApplicantCVDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantCVDataframe_fillInitData();}},\n"""
+        computed = "refreshVueElintegroApplicantCVDataframe(){return this.vueElintegroApplicantCVDataframe_prop.key},\n"
         methods ="""afterRefreshing(response){
               
                                  var params = response;

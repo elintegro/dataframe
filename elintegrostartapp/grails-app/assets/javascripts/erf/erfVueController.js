@@ -146,7 +146,7 @@ var excon = new Vue({
             }
         },
 
-        showAlertMessage: function(response){
+        showAlertMessageWithResponse: function(response){
             if(response.success) {
                 if(response.msg){
                     store.commit('alertMessage', {'snackbar':true, 'alert_type':'success', 'alert_message':response.msg});
