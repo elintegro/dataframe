@@ -577,7 +577,8 @@ beans {
                                           data:allParams
                                     }).then(function(responseData){
                                            console.log(responseData);
-                                            this.location.reload();
+                                           excon.showMessage(responseData,'vueElintegroSignUpQuizDataframe');
+                                           setTimeout(function(){this.location.reload();}, 6000);
                                     })
                                     
 
