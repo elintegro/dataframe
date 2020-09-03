@@ -879,7 +879,7 @@ beans {
         computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantBeforeLoggedInDataframe_project_list;}"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
-        methods ="""saveProject(){
+        methods ="""saveProject(timeOut){
                     var allParams = this.state;
                     var self = this;
                     allParams['dataframe'] = 'vueCreateProjectForTranslationDataframe';
@@ -894,7 +894,7 @@ beans {
                                                                    self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
                                                                    excon.saveToStore('vueTranslatorAssistantBeforeLoggedInDataframe','vueTranslatorAssistantBeforeLoggedInDataframe_project_list',currentlySaveProject);
                                                                    excon.saveToStore('vueTranslatorAssistantAfterLoggedInDataframe','vueTranslatorAssistantAfterLoggedInDataframe_project_list',currentlySaveProject);
-                                                                   setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, 6000);
+                                                                   setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, timeOut);
                                                      }
                                                      else{
                                                           excon.showMessage(responseData,'vueCreateProjectForTranslationDataframe');
