@@ -67,7 +67,7 @@ class DataInit {
 			new Role(authority: "ROLE_CARE_GIVER", isEmployee: true).save(failOnError: true)
             new Role(authority: "ROLE_MANAGER", isEmployee: true).save(failOnError: true)
 			new Role(authority: "ROLE_DIRECTOR", isEmployee: true).save(failOnError: true)
-			new Role(authority: "ROLE_LEAD", isEmployee: true).save(failOnError: true)
+			new Role(authority: "ROLE_LEAD").save(failOnError: true)
 		}
 
 		User adminUser = User.findByUsername("eugenelip@gmail.com")
