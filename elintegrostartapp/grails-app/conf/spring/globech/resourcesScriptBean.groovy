@@ -97,7 +97,14 @@ beans {
                             var text = document.getElementById("buildsData").innerHTML;
                             var texts = text.split(',');
                         setInterval(function(){
-                                var rand = Math.floor(Math.random() * 4);
+                                var rand = Math.floor(Math.random() * 6);
+                                if(texts[rand] == 'Design' || texts[rand] == 'Deliver' ){
+                                    document.getElementById("builtRow").style.marginRight = "115px"; 
+                                }else if(texts[rand] == 'Built'){
+                                    document.getElementById("builtRow").style.marginRight = "190px"; 
+                                }else{
+                                    document.getElementById("builtRow").style.marginRight = "60px"; 
+                                }
                                 document.getElementById("text").innerHTML = texts[rand];
                                 }, 2000);
                      }           
@@ -109,7 +116,7 @@ beans {
                             var text = document.getElementById("buildsDataResize").innerHTML;
                             var texts = text.split(',');
                             setInterval(function(){
-                                var rand = Math.floor(Math.random() * 4);
+                                var rand = Math.floor(Math.random() * 6);
                                 document.getElementById("textResize").innerHTML = texts[rand];
                                 }, 2000);
                      }           
