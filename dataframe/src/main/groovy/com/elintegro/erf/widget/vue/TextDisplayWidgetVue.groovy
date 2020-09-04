@@ -30,6 +30,7 @@ class TextDisplayWidgetVue extends WidgetVue{
         String labelCode = field.labelCode?:fldName
         boolean isDynamic = field.isDynamic?true:false
         String modelString = getModelString(dataframe, field)
+        String elementId = field.elementId
         String attr = field.attr
         String html = """<v-text-field
             flat
@@ -53,7 +54,7 @@ class TextDisplayWidgetVue extends WidgetVue{
             return """<v-row style="margin:auto;">$displayPlaceholder:$html</v-row>"""
         }
         else {
-            return """<span $attr >$displayPlaceholder</span>"""
+            return """<span id='$elementId' $attr >$displayPlaceholder</span>"""
         }
     }
 }

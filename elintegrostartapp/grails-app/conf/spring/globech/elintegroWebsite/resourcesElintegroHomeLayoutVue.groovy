@@ -28,7 +28,7 @@ beans{
         layoutPlaceHolder = """<v-container>
                                     <v-row><v-col cols="1"></v-col>
                                         <v-col cols="10"><div class = "hidden-sm-and-down"><h1 style ='font-size: 70px;font-family:sans-serif;'>
-                                            [hey][LooksLike]<v-row style="padding-left: 12px;margin-right: 190px;">[Built][AnyApps]</v-row>[Yet]
+                                            [hey][LooksLike]<v-row style="padding-left: 12px;margin-right: 190px;">[Built][buildsData][AnyApps]</v-row>[Yet]
                                         </h1></div></v-col><v-col cols="1"></v-col>
                                         <vueFirstContainerResizeDataframe/>    
                                     </v-row>
@@ -43,7 +43,7 @@ beans{
         layoutBeanName = bean.name
         layoutPlaceHolder = """
                                      <v-flex><div class = "hidden-md-and-up"><div class="text-center"><h1 style ='font-size: 63px;'>
-                                            [hey][LooksLike]<v-row>[Built][AnyApps]</v-row>[Yet]  
+                                            [hey][LooksLike]<v-row>[Built][buildsData][AnyApps]</v-row>[Yet]  
                                         </h1></div></div></v-flex>      
                             """
     }
