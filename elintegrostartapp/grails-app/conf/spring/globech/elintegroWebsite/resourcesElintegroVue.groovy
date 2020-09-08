@@ -510,6 +510,27 @@ beans {
         currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }
+    vueElintegroChangePasswordAfterSignUpDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroChangePasswordAfterSignUpDataframe']
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        currentRoute = "change-password"
+        saveButton = false
+        initOnPageLoad = false
+        route = true
+        addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue"],
+                       "newPassword":[name:"newPassword"
+                                      ,widget:"PasswordWidgetVue"
+                                      ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && new RegExp('^(?=.*?[#?!@%^&*-])').test(v))",message:"password.contain.special.character"]
+                                                          ,[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]],
+                       "confirmPassword":[name:"confirmPassword"
+                                          ,widget:"PasswordWidgetVue"
+                                          , "insertAfter":"newPassword"
+                                          ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroChangePasswordAfterSignUpDataframe_newPassword)",message:"Password.and.Confirm.Password."]]],
+        ]
+        dataframeButtons = [submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        currentFrameLayout = ref("vueElintegroChangePasswordAfterSignUpDataframeLayout")
+    }
 
     vueFooterContainerDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper

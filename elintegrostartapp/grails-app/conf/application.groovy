@@ -587,6 +587,18 @@ contactUsEmailService.emailWithInformation = '''Hello $name,<br/>
 This is the test for email sending service.
 Thank you for choosing us. Your registration is almost complete.
 '''
+
+registerService.emailInfoAfterSignUp = '''Hi ${name}, <br/>
+We created a temporary password for you so you can start defining your app and making it reality! <br/>
+
+Username:\t ${currentUser} <br/>
+Password:\t ${password} <br/>
+Click <a href="$url">here</a> to auto-login. <br/>
+Click <a href="$urlToChangePassword">here</a> to change your password.
+'''
+registerService.emailSubjectAfterSignUp = ''' ${name}, 
+welcome. Next steps to build your app.
+'''
 elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com,sumanneupane19982055@gmail.com, shai@gmail.com,rabindra@gmail.com"
 
 
