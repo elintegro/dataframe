@@ -594,7 +594,7 @@ We created a temporary password for you so you can start defining your app and m
 Username:\t ${currentUser} <br/>
 Password:\t ${password} <br/>
 Click <a href="$url">here</a> to auto-login. <br/>
-Click <a href="#">here</a> to change your password.
+Click <a href="$urlToChangePassword">here</a> to change your password.
 '''
 registerService.emailSubjectAfterSignUp = ''' ${name}, 
 welcome. Next steps to build your app.
