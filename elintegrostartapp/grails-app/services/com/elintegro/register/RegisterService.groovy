@@ -127,14 +127,15 @@ class RegisterService{
         return  result
 
     }
-    def sendingEmailAfterSignUp(String firstName, String password, String email,String url) {
+    def sendingEmailAfterSignUp(String firstName, String password, String email,String url,String token) {
         def resultData
         def msg
         try {
             def conf = Holders.grailsApplication.config
             String emailBody = conf.registerService.emailInfoAfterSignUp
             String emailSubject = conf.registerService.emailSubjectAfterSignUp
-            Map emailParams = [name: firstName, password: password, currentUser: email,url:url]
+            String urlToChangePassword = conf.grails.serverURL+"/#/change-password/0?$token"
+            Map emailParams = [name: firstName, password: password, currentUser: email,url:url,urlToChangePassword:urlToChangePassword]
             msg = messageSource.getMessage( 'sign.up.success.mail',null,'Success',LocaleContextHolder.getLocale())
             emailService.sendingMailWithSubject(email, emailParams, emailBody, emailSubject)
             resultData = [success: true, msg:msg,alert_type: "success"]

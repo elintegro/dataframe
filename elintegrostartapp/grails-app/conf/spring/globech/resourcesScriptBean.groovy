@@ -29,20 +29,20 @@ beans {
                 """  setupHomePage: function(){
                           var currentUrl = window.location.href;
                           var defaultUrl = '${defaultUrl}/#/';
-                          if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == true){
+//                          if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == false){
                           if(currentUrl == defaultUrl){
                             let homePage = "vueElintegroHomeDataframe";
                             let routeId = 0;
                             this.\$router.push({
                                   name: homePage,
-                                path: homePage,
+                                path: '/',
                                 params: {
-                                      routeId: routeId
+                                      routeId: ""
                                 }
                             })
                             }
-                            sessionStorage.initialRefresh = false;
-                          }//End of if
+//                            sessionStorage.initialRefresh = false;
+//                          }//End of if
                      }
                ,\nsetInitPageValues:function(){
                                                
@@ -583,6 +583,32 @@ beans {
                                     
 
 
+
+
+                                    },\n"""
+    }
+    vueElintegroChangePasswordAfterSignUpDataframe_script(VueJsEntity){bean ->
+        methods = """saveSignUpForm(){
+                                    var allParams = this.state;
+                                    allParams['dataframe'] = 'vueElintegroChangePasswordAfterSignUpDataframe';
+                                    var self = this;
+                                    var currentLocation = window.location.href;
+                                    var location = currentLocation.split("/change-password/0?")
+                                    allParams['token'] = location[1]
+                                    axios({ 
+                                          method: 'post',
+                                          url:'${contextPath}/register/changePassword',
+                                          data:allParams
+                                    }).then(function(responseData){
+                                           var response = responseData.data;
+                                           excon.showMessage(responseData,'vueElintegroChangePasswordAfterSignUpDataframe');
+                                           if(response.success == true){
+                                              setTimeout(function(){window.open("/","_self");}, 2000);
+                                           }else{
+                                                setTimeout(function(){this.location.reload();},3000);
+                                           }
+                                           
+                                    })
 
 
                                     },\n"""

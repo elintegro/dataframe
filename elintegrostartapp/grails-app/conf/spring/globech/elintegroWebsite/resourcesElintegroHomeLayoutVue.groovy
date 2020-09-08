@@ -323,4 +323,13 @@ beans{
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
 
     }
+    vueElintegroChangePasswordAfterSignUpDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex><v-row><v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col>
+                              <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" style="padding-top:5%;"> <v-card>[DATAFRAME_SCRIPT]<v-card-actions class="justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-col>
+                               <v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col></v-row></v-flex>"""
+
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+
+    }
 }
