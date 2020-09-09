@@ -723,6 +723,15 @@ beans {
                         , search:true
 
                 ],
+                "person.language"  :[
+                        "widget"             :"LanguageSelectorWidgetVue"
+                        ,internationalize    :true
+                        ,initBeforePageLoad  :true
+                        ,multiple            :true
+                        , search:true
+                        ,onSelect:[methodScript:"this.selectLanguage(_params);"]
+
+                ],
 
 
         ]

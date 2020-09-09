@@ -707,6 +707,9 @@ beans {
                   else{
                       alert("Error in saving")
                   }
+                   },\n
+                   selectLanguage(items){
+                        console.log(items);                   
                    }
                           """
     }
