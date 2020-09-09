@@ -56,6 +56,7 @@ beans = {
     loadResource "globech/applicationManagement/resourcesApplicationManagement.groovy"
     loadResource "globech/userManagement/resourcesUserManagement.groovy"
     loadResource "globech/elintegroWebsite/resourcesElintegroVue.groovy"
+    loadResource "globech/elintegroWebsite/resourcesElintegroHomeVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesElintegroHomeLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesElintegroLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesNavigationButtonLayoutVue.groovy"
