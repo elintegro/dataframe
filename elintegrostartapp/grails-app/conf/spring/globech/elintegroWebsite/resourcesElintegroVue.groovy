@@ -73,6 +73,26 @@ beans {
 
         currentFrameLayout = ref("elintegroNavigationButtonLayout")
     }
+    vueElintegroLanguageSelectorDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroLanguageSelectorDataframe']
+        initOnPageLoad = true
+        isGlobal = true
+        saveButton = false
+        addFieldDef = [
+                "languages":[
+                        widget: "LanguageSelectorWidgetVue"
+                        ,"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                        , hql: """select language.id as id, language.ename as ename from Language as language"""
+                        ,"displayMember":"ename"
+                        ,"valueMember":"id"
+                        , search:true
+                        ,attr: """style='max-width:min-content;margin-top=-2%;'"""
+                        ,onSelect:[methodScript:"this.selectedLanguage(_params);"]
+                ],]
+        currentFrameLayout = ref("vueElintegroLanguageSelectorDataframeLayout")
+
+    }
     vueElintegroNavigationButtonAfterLoggedInDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationButtonAfterLoggedInDataframe']
@@ -119,7 +139,7 @@ beans {
                 ]
 
         ]
-        currentFrameLayout = ref("appNameDataframeLayout")
+        currentFrameLayout = ref("vueElintegroLogoDataframeLayout")
 
     }
     vueElintegroHomeDataframe(DataframeVue) { bean ->

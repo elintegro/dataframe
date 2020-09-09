@@ -4,6 +4,7 @@ import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.layout.ColumnLayoutVue
 import com.elintegro.erf.layout.RowLayoutVue
 import grails.util.Holders
+import org.h2.table.Column
 
 beans {
     def contextPath = Holders.grailsApplication.config.rootPath
@@ -30,7 +31,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex><v-app-bar fixed  dense  outline elevate-on-scroll scroll-target="#scrolling-techniques-7" flat color="white"  tabs style="z-index:99;">
                                    <vueElintegroNavigationDrawerDataframe/>
-                                   <v-toolbar-title style="position:relative;" ><vueElintegroLogoDataframe/></v-toolbar-title>
+                                   <v-toolbar-title style="position:relative;padding-top:30px;" ><vueElintegroLogoDataframe/></v-toolbar-title>
                                  
                                    <v-spacer></v-spacer>
                                  
@@ -72,17 +73,28 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """ """
     }
+    vueElintegroLogoDataframeLayout(RowLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT]</v-flex>"""
+    }
     vueElintegroAppBarDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex>
                                 <v-toolbar-items >
+                                <v-row style="align-items:baseline;padding-top:6%">
                                   <vueElintegroNavigationFirstTwoButtonDataframe/>
                                   <div style="padding: 40px 0px 0px 0px;"><vueElintegroAppsDataframe/></div>
                                   <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
-                                  <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/>    
+                                  <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/> 
+                                  <div><vueElintegroLanguageSelectorDataframe/></div>
+                                  </v-row> 
                                 </v-toolbar-items>
         </v-flex> """
 
+    }
+    vueElintegroLanguageSelectorDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs 0 sm0 md0 lg0 xl0>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
     }
     vueElintegroProgressBarLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
