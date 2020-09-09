@@ -613,6 +613,13 @@ beans {
 
                                     },\n"""
     }
+    vueElintegroLanguageSelectorDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   selectedLanguage(params){
+                           console.log(params);
+                   }
+                  """
+    }
 
     vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
