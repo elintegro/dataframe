@@ -29,93 +29,46 @@ beans{
                 'hey':[ "widget":"TextDisplayWidgetVue"
                         ,"name":"hey"
                         ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                        ,attr: """ style ='font-size: 40px;font-family:system-ui;' """
                 ],
                 'LooksLike':["widget":"TextDisplayWidgetVue"
                              ,"name":"LooksLike"
                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                             ,attr: """ style ='font-size: 40px;font-family:system-ui;' """
                 ],
-                'Built':["widget":"TextDisplayWidgetVue"
-                         ,"name":"Built"
-                         ,attr: """ style='color:#29b6f6;' """
-                         ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                ],
-                "AnyApps":["widget":"TextDisplayWidgetVue"
-                           ,"name":"AnyApps"
-                           ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                'BuiltAnyApps':["widget":"TextDisplayWidgetVue"
+                                ,"name":"BuiltAnyApps"
+                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                                ,attr: """ style ='font-size: 40px;font-family:system-ui;' """
                 ],
                 "Yet":["widget":"TextDisplayWidgetVue"
                        ,"name":"Yet"
                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                       ,attr: """ style ='font-size: 40px;font-family:system-ui;' """
                 ],
                 "youWont":["widget":"TextDisplayWidgetVue"
                            ,"name":"youWont"
                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                           ,attr: """ style ='color: black; font-size: 27px;font-family:sans-serif;' """
+                           ,attr: """ style ='color: black; font-size: 18px;font-family:ui-rounded;' """
                 ],
                 "buildApp":["widget":"ButtonWidgetVue"
                             ,"name":"buildApp"
-                            ,attr: """ style="background-color: #29b6f6; color:white;font-family:sans-serif; font-size:inherit; padding-top:28px; padding-bottom:28px; padding-right:35px; padding-left:35px;" """
+                            ,attr: """ style="background-color: #29b6f6; color:white;font-family:sans-serif; font-size:inherit; padding-top:20px; padding-bottom:20px; padding-right:20px; padding-left:20px;" """
                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                             ,script: """ this.scrollToQuiz('coachClone');"""
                 ]
 
         ]
-        childDataframes = ['vueFirstContainerResizeDataframe']
         currentFrameLayout = ref('vueFirstContainerDataframeLayout')
 
     }
-    vueFirstContainerResizeDataframe(DataframeVue){ bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueFirstContainerResizeDataframe']
-        saveButton = false
-        addFieldDef = [
-                'hey':[ "widget":"TextDisplayWidgetVue"
-                        ,"name":"hey"
-                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                ],
-                'LooksLike':["widget":"TextDisplayWidgetVue"
-                             ,"name":"LooksLike"
-                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                ],
-                'Built':["widget":"TextDisplayWidgetVue"
-                         ,"name":"Built"
-                         ,attr: """ style='color:#29b6f6;' """
-                         ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                ],
-                "AnyApps":["widget":"TextDisplayWidgetVue"
-                           ,"name":"AnyApps"
-                           ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                ],
-                "Yet":["widget":"TextDisplayWidgetVue"
-                       ,"name":"Yet"
-                       ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                ],
-                "youWont":["widget":"TextDisplayWidgetVue"
-                           ,"name":"youWont"
-                           ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                           ,attr: """ style ='color: black; font-size: 27px;font-family:sans-serif;' """
-                ],
-                "buildApp":["widget":"ButtonWidgetVue"
-                            ,"name":"buildApp"
-                            ,attr: """ style="background-color: #29b6f6; color:white;font-family:sans-serif; font-size:inherit; padding-top:28px; padding-bottom:28px; padding-right:35px; padding-left:35px;" """
-                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                            ,script: """ this.scrollToQuiz('coachClone');"""
-                ]
 
-        ]
-        currentFrameLayout = ref('vueFirstContainerResizeDataframeLayout')
-
-    }
     vueOurWorkContainerDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueOurWorkContainerDataframe']
         saveButton = false
         addFieldDef =[
-                labelOurWork:["widget":"TextDisplayWidgetVue"
-                              ,"name":"labelOurWork"
-                              ,attr: """ style = 'color: #29b6f6;font-size:14px;' """
-                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+
                 weDeliver:["widget":"TextDisplayWidgetVue"
                            ,"name":"weDeliver"
                            ,attr: """ style ="font-size:45px;" """
@@ -139,11 +92,6 @@ beans{
         bean.constructorArgs =['vueOurProcessContainerDataframe']
         saveButton = false
         addFieldDef = [
-                labelOurProcess:["widget":"TextDisplayWidgetVue"
-                                 ,"name":"labelOurProcess"
-                                 ,attr: """ style = 'color: #29b6f6;font-size:14px;' """
-                                 ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
                 youDeserve:["widget":"TextDisplayWidgetVue"
                             ,"name":"youDeserve"
                             ,attr: """ style ="font-size:45px;" """
@@ -164,16 +112,7 @@ beans{
                                     ,attr: """ style="font-size: large;font-family: sans-serif;" """
                                     ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
-                ourProcessTextThree: ["widget":"TextDisplayWidgetVue"
-                                      ,"name":"ourProcessTextThree"
-                                      ,attr: """ style="font-size: large;font-family: sans-serif;" """
-                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                ourProcessTextFour: ["widget":"TextDisplayWidgetVue"
-                                     ,"name":"ourProcessTextFour"
-                                     ,attr: """ style="font-size: large;font-family: sans-serif;" """
-                                     ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+
         ]
         currentFrameLayout = ref("vueOurProcessContainerDataframeLayout")
     }
@@ -182,11 +121,7 @@ beans{
         bean.constructorArgs = ['vueCollaborationContainerDataframe']
         saveButton = false
         addFieldDef =[
-                labelCollaboration:["widget":"TextDisplayWidgetVue"
-                                    ,"name":"labelCollaboration"
-                                    ,attr: """ style = 'color: #29b6f6;font-size:14px;' """
-                                    ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+
                 agilityAsService:["widget":"TextDisplayWidgetVue"
                                   ,"name":"agilityAsService"
                                   ,attr: """ style ="font-size:45px;" """
@@ -201,89 +136,37 @@ beans{
                                               ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
         ]
-        childDataframes = ['vueCollaborationContainerResizeDataframe']
+
         currentFrameLayout = ref("vueCollaborationContainerDataframeLayout")
     }
-    vueCollaborationContainerResizeDataframe(DataframeVue){ bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueCollaborationContainerResizeDataframe']
-        saveButton = false
-        addFieldDef =[
-                labelCollaboration:["widget":"TextDisplayWidgetVue"
-                                    ,"name":"labelCollaboration"
-                                    ,attr: """ style = 'color: #29b6f6;font-size:14px;' """
-                                    ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                agilityAsService:["widget":"TextDisplayWidgetVue"
-                                  ,"name":"agilityAsService"
-                                  ,attr: """ style ="font-size:45px;" """
-                                  ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                collaborationFirstParagraph:["widget":"TextDisplayWidgetVue"
-                                             ,"name":"collaborationFirstParagraph"
-                                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                collaborationSecondParagraph:["widget":"TextDisplayWidgetVue"
-                                              ,"name":"collaborationSecondParagraph"
-                                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-        ]
-        currentFrameLayout = ref("vueCollaborationContainerResizeDataframeLayout")
-    }
+
     vueOurFrameworkContainerDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueOurFrameworkContainerDataframe']
         saveButton = false
         addFieldDef = [
-                labelOurFrameWork:["widget":"TextDisplayWidgetVue"
-                                   ,"name":"labelOurFrameWork"
-                                   ,attr: """ style = 'color: #29b6f6;font-size:14px;' """
-                                   ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+
                 QualityBuilt:["widget":"TextDisplayWidgetVue"
                               ,"name":"QualityBuilt"
-                              ,attr: """ style ="font-size:45px;" """
+                              ,attr: """ style ="font-size:45px;color:white;" """
                               ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 ourFrameworkTextFirstParagraph:["widget":"TextDisplayWidgetVue"
                                                 ,"name":"ourFrameworkTextFirstParagraph"
+                                                ,attr: """ style ="color:white;" """
                                                 ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 ourFrameworkTextSecondParagraph:["widget":"TextDisplayWidgetVue"
                                                  ,"name":"ourFrameworkTextSecondParagraph"
+                                                 ,attr: """ style ="color:white;" """
                                                  ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                buttonDataframeOnGithub:["widget":"ButtonWidgetVue"
-                                         ,"name":"buttonDataframeOnGithub"
-                                         ,attr: """ style="background-color: #29b6f6; color:white;"  """
-                                         ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+                ]
+
         ]
-        childDataframes =['vueOurFrameworkContainerResizeDataframe']
+
         currentFrameLayout = ref("vueOurFrameworkContainerDataframeLayout")
     }
-    vueOurFrameworkContainerResizeDataframe(DataframeVue){ bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueOurFrameworkContainerResizeDataframe']
-        saveButton = false
-        addFieldDef =[
-                ourFrameworkTextFirstParagraph:["widget":"TextDisplayWidgetVue"
-                                                ,"name":"ourFrameworkTextFirstParagraph"
-                                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                ourFrameworkTextSecondParagraph:["widget":"TextDisplayWidgetVue"
-                                                 ,"name":"ourFrameworkTextSecondParagraph"
-                                                 ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                buttonDataframeOnGithub:["widget":"ButtonWidgetVue"
-                                         ,"name":"buttonDataframeOnGithub"
-                                         ,attr: """ style="background-color: #29b6f6; color:white;font-family:sans-serif; font-size:inherit; padding-top:28px; padding-bottom:28px; padding-right:35px; padding-left:35px;" """
-                                         ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ]
-        ]
-        currentFrameLayout = ref("vueOurFrameworkContainerResizeDataframeLayout")
 
-    }
     vueQuotesContainerDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuotesContainerDataframe']
@@ -331,20 +214,10 @@ beans{
         bean.constructorArgs = ['vueQuizPlaceholderContainerDataframe']
         saveButton = false
         addFieldDef = [
-                quizLabel:["widget":"TextDisplayWidgetVue"
-                           ,"name":"quizLabel"
-                           ,attr: """ style = 'color:#ffffff;font-size:14px;' """
-                           ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                tellUs:["widget":"TextDisplayWidgetVue"
-                        ,"name":"tellUs"
-                        ,attr: """ style ="font-size:45px;color:#ffffff;" """
-                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                need:["widget":"TextDisplayWidgetVue"
-                      ,"name":"need"
-                      ,attr: """ style ="font-size:45px;color:#ffffff;" """
-                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                letsTalk:["widget":"TextDisplayWidgetVue"
+                             ,"name":"letsTalk"
+                             ,attr: """ style='color:#2ab6f6;font-size:52pxpx;' """
+                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 contactQuiz:["widget":"TextDisplayWidgetVue"
                              ,"name":"contactQuiz"
@@ -421,14 +294,15 @@ beans{
         bean.constructorArgs = ['vueFooterContainerDataframe']
         saveButton = false
         addFieldDef = [
-                footerCopyright:["widget":"TextDisplayWidgetVue"
-                                 ,"name":"footerCopyright"
-                                 ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
                 footerPrivacy:["widget":"TextDisplayWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,attr: """ style="color:black;" """
-                               ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                               ,attr: """ style="color:#2ab6f6;" """
+                               ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
+                termAndConditions:["widget":"TextDisplayWidgetVue"
+                               ,"name":"termAndConditions"
+                               ,attr: """ style="color:#2ab6f6;" """
+                               ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
                 ]
         ]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
