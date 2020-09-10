@@ -56,13 +56,14 @@ beans {
                                       <v-list-item style="margin-bottom: -40px;margin-top: -10px;">   <vueElintegroAppsDataframe/> </v-list-item>
                                       <v-list-item style="margin-left:-9px;">   <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                          <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
+                                      <v-list-item style="margin-left:-9px;"><vueElintegroLanguageSelectorDataframe/></v-list-item>
                                      </v-list>
                                      </v-navigation-drawer>
        </div>"""
     }
     vueElintegroMidSectionLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex style="margin-top:30px;"><v-content>
+        layoutPlaceHolder = """<v-flex style="margin-top:70px;"><v-content>
                              <router-view :key="\$route.fullPath"></router-view>
                              </v-content>
                                 </v-flex>

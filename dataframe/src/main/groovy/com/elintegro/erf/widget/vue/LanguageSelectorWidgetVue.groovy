@@ -325,6 +325,7 @@ class LanguageSelectorWidgetVue extends WidgetVue {
                             $field.onSelect.methodScript
              },\n """)
         }
+        dataframe.getVueJsBuilder().addToDataScript("""defaultLanguage:'English',""")
         boolean isReadOnly = dataframe.isReadOnly(field)
         String typeString = ""
         if(!isSearchable(field)){
@@ -342,7 +343,7 @@ class LanguageSelectorWidgetVue extends WidgetVue {
                   <v-col cols="6">
                       <v-select
                           class = "underLine"
-                          v-model = "$modelString" 
+                          v-model = "defaultLanguage" 
                           :items="${modelString}_items"
                           ${validate(field)?":rules = '${fldName}_rule'":""}
                           label="$label"

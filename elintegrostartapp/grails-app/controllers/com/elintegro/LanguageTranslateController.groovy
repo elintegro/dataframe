@@ -13,6 +13,9 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro
 
+import com.elintegro.ref.Language
+import org.springframework.context.i18n.LocaleContextHolder
+
 class LanguageTranslateController {
 
     def index() {
@@ -24,5 +27,10 @@ class LanguageTranslateController {
 
     private def findPropertiesFile(language){
 
+    }
+    def languageTranslator(){
+        Language language1 = Language.findByEname(params.id)
+//      '/?lang=ne'
+        redirect(uri:'?lang='+language1.code)
     }
 }

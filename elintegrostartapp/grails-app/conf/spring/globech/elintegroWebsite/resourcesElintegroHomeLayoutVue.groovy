@@ -8,7 +8,7 @@ beans{
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                                     <v-container>
-                                         <br><br><vueFirstContainerDataframe/><br><br>
+                                         <vueFirstContainerDataframe/><br><br>
                                          <vueOurWorkContainerDataframe/><br><br>
                                          <vueOurProcessContainerDataframe/><br>  
                                          <vueCollaborationContainerDataframe/><br>

@@ -29,20 +29,18 @@ beans {
                 """  setupHomePage: function(){
                           var currentUrl = window.location.href;
                           var defaultUrl = '${defaultUrl}/#/';
-//                          if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == false){
-                          if(currentUrl == defaultUrl){
+                          var a = currentUrl.split('#')
+                          if(currentUrl == defaultUrl || a[1] == '/'){
                             let homePage = "vueElintegroHomeDataframe";
                             let routeId = 0;
                             this.\$router.push({
                                   name: homePage,
                                 path: '/',
                                 params: {
-                                      routeId: ""
+                                   routeId: ""
                                 }
                             })
-                            }
-//                            sessionStorage.initialRefresh = false;
-//                          }//End of if
+                          }
                      }
                ,\nsetInitPageValues:function(){
                                                
@@ -616,8 +614,28 @@ beans {
     vueElintegroLanguageSelectorDataframe_script(VueJsEntity){bean ->
         methods = """
                    selectedLanguage(params){
+                             var url = '/languageTranslate/languageTranslator/'+params
+                             var link = document.createElement('a');
+                             link.href = url;
+                             document.body.appendChild(link);
+                             link.click();
+                   },\n
+                   changeSelectedLanguageValue(params){
                            console.log(params);
-                   }
+                           var currentUrl = window.location.href;
+                           var splittedCurrentUrl = currentUrl.split("#");
+                           var replacedCurrentUrl = splittedCurrentUrl[0].replace('$defaultUrl/','');
+                           if(replacedCurrentUrl != null || replacedCurrentUrl != undefined || replacedCurrentUrl != ""){
+                                 var langCode = replacedCurrentUrl.replace("?lang=",'');
+                                 var langItems = this.state.vueElintegroLanguageSelectorDataframe_languages_items;
+                                 for(i=0;i<langItems.length;i++){
+                                     if(langCode == langItems[i].code){
+                                        this.defaultLanguage = langItems[i].ename;
+                                     }
+                                 }
+                           }
+                   },\n
+                           
                   """
     }
 
