@@ -164,6 +164,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFirstContainerDataframe']
         saveButton = false
+        doAfterRefresh = """self.displayText();"""
         addFieldDef = [
                         'hey':[ "widget":"TextDisplayWidgetVue"
                                 ,"name":"hey"
@@ -175,9 +176,17 @@ beans {
                                      ],
                         'Built':["widget":"TextDisplayWidgetVue"
                                  ,"name":"Built"
+                                 ,elementId: 'text'
                                  ,attr: """ style='color:#29b6f6;' """
                                  ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                                  ],
+                        "buildsData":[
+                                "widget":"TextDisplayWidgetVue"
+                                ,name:"buildsData"
+                                ,attr: """v-show = false"""
+                                ,elementId:'buildsData'
+                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                        ],
                         "AnyApps":["widget":"TextDisplayWidgetVue"
                                    ,"name":"AnyApps"
                                    ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
@@ -207,6 +216,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFirstContainerResizeDataframe']
         saveButton = false
+        doAfterRefresh = """self.displayTextResize();"""
         addFieldDef = [
                 'hey':[ "widget":"TextDisplayWidgetVue"
                         ,"name":"hey"
@@ -218,8 +228,16 @@ beans {
                 ],
                 'Built':["widget":"TextDisplayWidgetVue"
                          ,"name":"Built"
+                         ,elementId: 'textResize'
                          ,attr: """ style='color:#29b6f6;' """
                          ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                "buildsData":[
+                        "widget":"TextDisplayWidgetVue"
+                        ,name:"buildsData"
+                        ,attr: """v-show = false"""
+                        ,elementId:'buildsDataResize'
+                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                 ],
                 "AnyApps":["widget":"TextDisplayWidgetVue"
                            ,"name":"AnyApps"
