@@ -8,7 +8,9 @@ beans {
 		allDataframesList = [
 				"vueInitDataframe","vueElintegroProgressBarDataframe","vueFirstContainerResizeDataframe","vueFirstContainerDataframe",
 				"vueOurWorkContainerDataframe","vueOurProcessContainerDataframe","vueCollaborationContainerResizeDataframe","vueCollaborationContainerDataframe",
-				"vueOurFrameworkContainerResizeDataframe","vueOurFrameworkContainerDataframe","vueQuotesContainerDataframe","vueOurTechnologiesContainerDataframe","vueElintegroSignUpQuizDataframe","vueElintegroChangePasswordAfterSignUpDataframe","vueQuizPlaceholderContainerDataframe","vueFooterContainerDataframe","vueElintegroHomeDataframe","vueElintegroNavigationDrawerDataframe",
+				"vueOurFrameworkContainerResizeDataframe","vueOurFrameworkContainerDataframe","vueQuotesContainerDataframe","vueOurTechnologiesContainerDataframe",
+				"vueElintegroSignUpQuizDataframe","vueElintegroChangePasswordAfterSignUpDataframe","vueQuizPlaceholderContainerDataframe","vueFooterContainerDataframe",
+				"vueElintegroHomeDataframe","vueElintegroLanguageSelectorDataframe","vueElintegroNavigationDrawerDataframe",
 				"vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe","vueNewEmployeeApplicantAddSkillDataframe"
 				,"vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe","vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 				"vueElintegroResetPasswordDataframe","vueElintegroUserProfileDataframe","vueElintegroProfileMenuDataframe","vueCareersPageButtonDataframe",

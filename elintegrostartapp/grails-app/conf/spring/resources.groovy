@@ -1,3 +1,4 @@
+import com.elintegro.LanguageTranslateController
 import com.elintegro.auth.UserPasswordEncoderListener
 
 // Place your Spring DSL code here

@@ -8,7 +8,7 @@ beans{
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                                     <v-container>
-                                         <br><br><vueFirstContainerDataframe/><br><br>
+                                         <vueFirstContainerDataframe/><br><br>
                                          <vueOurWorkContainerDataframe/><br><br>
                                          <vueOurProcessContainerDataframe/><br>  
                                          <vueCollaborationContainerDataframe/><br>
@@ -28,8 +28,8 @@ beans{
         layoutPlaceHolder = """<v-container>
                                     <v-row><v-col cols="1"></v-col>
                                         <v-col cols="10"><div class = "hidden-sm-and-down"><h1 style ='font-size: 70px;font-family:sans-serif;'>
-                                            [hey][LooksLike]<v-row style="padding-left: 12px;margin-right: 190px;">[Built][AnyApps]</v-row>[Yet]
-                                        </h1></div></v-col><v-col cols="1"></v-col>
+                                            [hey][LooksLike]<v-row  id='builtRow' style="padding-left: 12px;margin-right: 190px;">[Built][AnyApps]</v-row>[Yet]
+                                        </h1>[buildsData]</div></v-col><v-col cols="1"></v-col>
                                         <vueFirstContainerResizeDataframe/>    
                                     </v-row>
                                     <v-row class="text-center">[youWont]</v-row><br><br>
@@ -44,7 +44,7 @@ beans{
         layoutPlaceHolder = """
                                      <v-flex><div class = "hidden-md-and-up"><div class="text-center"><h1 style ='font-size: 63px;'>
                                             [hey][LooksLike]<v-row>[Built][AnyApps]</v-row>[Yet]  
-                                        </h1></div></div></v-flex>      
+                                        </h1></div></div>[buildsData]</v-flex>      
                             """
     }
     vueOurWorkContainerDataframeLayout(ColumnLayoutVue){bean->

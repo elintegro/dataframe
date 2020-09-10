@@ -73,6 +73,29 @@ beans {
 
         currentFrameLayout = ref("elintegroNavigationButtonLayout")
     }
+    vueElintegroLanguageSelectorDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroLanguageSelectorDataframe']
+        initOnPageLoad = true
+        def languageCodeFromConfigFile = Holders.grailsApplication.config.application.languages
+        def languageCode = languageCodeFromConfigFile.replace('"""','')
+        isGlobal = true
+        saveButton = false
+        doAfterRefresh = """self.changeSelectedLanguageValue(response);"""
+        addFieldDef = [
+                "languages":[
+                        widget: "LanguageSelectorWidgetVue"
+                        ,"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                        , hql: """select language.id as id,language.code as code, language.ename as ename from Language as language where language.code in (${languageCode})"""
+                        ,"displayMember":"ename"
+                        ,"valueMember":"ename"
+                        , search:true
+                        ,attr: """style='max-width:min-content;margin-top=-2%;'"""
+                        ,onSelect:[methodScript:"this.selectedLanguage(_params);"]
+                ],]
+        currentFrameLayout = ref("vueElintegroLanguageSelectorDataframeLayout")
+
+    }
     vueElintegroNavigationButtonAfterLoggedInDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationButtonAfterLoggedInDataframe']
@@ -119,7 +142,7 @@ beans {
                 ]
 
         ]
-        currentFrameLayout = ref("appNameDataframeLayout")
+        currentFrameLayout = ref("vueElintegroLogoDataframeLayout")
 
     }
     vueElintegroHomeDataframe(DataframeVue) { bean ->
@@ -141,6 +164,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFirstContainerDataframe']
         saveButton = false
+        doAfterRefresh = """self.displayText();"""
         addFieldDef = [
                         'hey':[ "widget":"TextDisplayWidgetVue"
                                 ,"name":"hey"
@@ -152,9 +176,17 @@ beans {
                                      ],
                         'Built':["widget":"TextDisplayWidgetVue"
                                  ,"name":"Built"
+                                 ,elementId: 'text'
                                  ,attr: """ style='color:#29b6f6;' """
                                  ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                                  ],
+                        "buildsData":[
+                                "widget":"TextDisplayWidgetVue"
+                                ,name:"buildsData"
+                                ,attr: """v-show = false"""
+                                ,elementId:'buildsData'
+                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                        ],
                         "AnyApps":["widget":"TextDisplayWidgetVue"
                                    ,"name":"AnyApps"
                                    ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
@@ -184,6 +216,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFirstContainerResizeDataframe']
         saveButton = false
+        doAfterRefresh = """self.displayTextResize();"""
         addFieldDef = [
                 'hey':[ "widget":"TextDisplayWidgetVue"
                         ,"name":"hey"
@@ -195,8 +228,16 @@ beans {
                 ],
                 'Built':["widget":"TextDisplayWidgetVue"
                          ,"name":"Built"
+                         ,elementId: 'textResize'
                          ,attr: """ style='color:#29b6f6;' """
                          ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                "buildsData":[
+                        "widget":"TextDisplayWidgetVue"
+                        ,name:"buildsData"
+                        ,attr: """v-show = false"""
+                        ,elementId:'buildsDataResize'
+                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                 ],
                 "AnyApps":["widget":"TextDisplayWidgetVue"
                            ,"name":"AnyApps"

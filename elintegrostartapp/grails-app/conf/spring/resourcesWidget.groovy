@@ -11,6 +11,7 @@ import com.elintegro.erf.widget.vue.GalleryDisplayWidgetVue
 import com.elintegro.erf.widget.vue.GridWidgetVue
 import com.elintegro.erf.widget.vue.ImageUploadWidgetVue
 import com.elintegro.erf.widget.vue.InputWidgetVue
+import com.elintegro.erf.widget.vue.LanguageSelectorWidgetVue
 import com.elintegro.erf.widget.vue.ListWidgetVue
 import com.elintegro.erf.widget.vue.MapWidgetVue
 import com.elintegro.erf.widget.vue.MultiSelectComboboxVue
@@ -56,5 +57,6 @@ beans {
 	FilesUploadWidgetVue(FilesUploadWidgetVue){}
 	FilesDisplayWidgetVue(FilesDisplayWidgetVue){}
 	ListWidgetVue(ListWidgetVue){}
+	LanguageSelectorWidgetVue(LanguageSelectorWidgetVue){}
 
 }

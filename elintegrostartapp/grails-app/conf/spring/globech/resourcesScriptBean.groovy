@@ -29,20 +29,18 @@ beans {
                 """  setupHomePage: function(){
                           var currentUrl = window.location.href;
                           var defaultUrl = '${defaultUrl}/#/';
-//                          if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == false){
-                          if(currentUrl == defaultUrl){
+                          var a = currentUrl.split('#')
+                          if(currentUrl == defaultUrl || a[1] == '/'){
                             let homePage = "vueElintegroHomeDataframe";
                             let routeId = 0;
                             this.\$router.push({
                                   name: homePage,
                                 path: '/',
                                 params: {
-                                      routeId: ""
+                                   routeId: ""
                                 }
                             })
-                            }
-//                            sessionStorage.initialRefresh = false;
-//                          }//End of if
+                          }
                      }
                ,\nsetInitPageValues:function(){
                                                
@@ -92,7 +90,34 @@ beans {
                           scrollToQuiz(){
                             let element = document.getElementById('quiz_placeholder');
                              element.scrollIntoView({ behavior: 'smooth' });
-                    }
+                    },\n
+                    displayText(){
+                            var text = document.getElementById("buildsData").innerHTML;
+                            var texts = text.split(',');
+                        setInterval(function(){
+                                var rand = Math.floor(Math.random() * 6);
+                                if(texts[rand] == 'Design' || texts[rand] == 'Deliver' ){
+                                    document.getElementById("builtRow").style.marginRight = "115px"; 
+                                }else if(texts[rand] == 'Built'){
+                                    document.getElementById("builtRow").style.marginRight = "190px"; 
+                                }else{
+                                    document.getElementById("builtRow").style.marginRight = "60px"; 
+                                }
+                                document.getElementById("text").innerHTML = texts[rand];
+                                }, 2000);
+                     }           
+                    """
+    }
+    vueFirstContainerResizeDataframe_script(VueJsEntity){bean ->
+        methods = """
+                     displayTextResize(){
+                            var text = document.getElementById("buildsDataResize").innerHTML;
+                            var texts = text.split(',');
+                            setInterval(function(){
+                                var rand = Math.floor(Math.random() * 6);
+                                document.getElementById("textResize").innerHTML = texts[rand];
+                                }, 2000);
+                     }           
                     """
     }
     vueElintegroAboutUsMenuDataframe_script(VueJsEntity){ bean ->
@@ -613,6 +638,33 @@ beans {
 
                                     },\n"""
     }
+    vueElintegroLanguageSelectorDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   selectedLanguage(params){
+                             var url = '/languageTranslate/languageTranslator/'+params
+                             var link = document.createElement('a');
+                             link.href = url;
+                             document.body.appendChild(link);
+                             link.click();
+                   },\n
+                   changeSelectedLanguageValue(params){
+                           console.log(params);
+                           var currentUrl = window.location.href;
+                           var splittedCurrentUrl = currentUrl.split("#");
+                           var replacedCurrentUrl = splittedCurrentUrl[0].replace('$defaultUrl/','');
+                           if(replacedCurrentUrl != null || replacedCurrentUrl != undefined || replacedCurrentUrl != ""){
+                                 var langCode = replacedCurrentUrl.replace("?lang=",'');
+                                 var langItems = this.state.vueElintegroLanguageSelectorDataframe_languages_items;
+                                 for(i=0;i<langItems.length;i++){
+                                     if(langCode == langItems[i].code){
+                                        this.defaultLanguage = langItems[i].ename;
+                                     }
+                                 }
+                           }
+                   },\n
+                           
+                  """
+    }
 
     vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
@@ -906,7 +958,7 @@ beans {
         computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantBeforeLoggedInDataframe_project_list;}"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
-        methods ="""saveProject(){
+        methods ="""saveProject(timeOut){
                     var allParams = this.state;
                     var self = this;
                     allParams['dataframe'] = 'vueCreateProjectForTranslationDataframe';
@@ -921,7 +973,7 @@ beans {
                                                                    self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
                                                                    excon.saveToStore('vueTranslatorAssistantBeforeLoggedInDataframe','vueTranslatorAssistantBeforeLoggedInDataframe_project_list',currentlySaveProject);
                                                                    excon.saveToStore('vueTranslatorAssistantAfterLoggedInDataframe','vueTranslatorAssistantAfterLoggedInDataframe_project_list',currentlySaveProject);
-                                                                   setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, 6000);
+                                                                   setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, timeOut);
                                                      }
                                                      else{
                                                           excon.showMessage(responseData,'vueCreateProjectForTranslationDataframe');
