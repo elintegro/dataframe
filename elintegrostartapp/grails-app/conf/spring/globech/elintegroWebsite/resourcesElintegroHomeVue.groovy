@@ -29,31 +29,30 @@ beans{
                 'hey':[ "widget":"TextDisplayWidgetVue"
                         ,"name":"hey"
                         ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                        ,attr: """ style ='font-size: 40px;font-family:system-ui;' """
+
                 ],
                 'LooksLike':["widget":"TextDisplayWidgetVue"
                              ,"name":"LooksLike"
                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                             ,attr: """ style ='font-size: 40px;font-family:system-ui;' """
+
                 ],
                 'BuiltAnyApps':["widget":"TextDisplayWidgetVue"
                                 ,"name":"BuiltAnyApps"
                                 ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                                ,attr: """ style ='font-size: 40px;font-family:system-ui;' """
+
                 ],
                 "Yet":["widget":"TextDisplayWidgetVue"
                        ,"name":"Yet"
                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                       ,attr: """ style ='font-size: 40px;font-family:system-ui;' """
+
                 ],
                 "youWont":["widget":"TextDisplayWidgetVue"
                            ,"name":"youWont"
                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                           ,attr: """ style ='color: black; font-size: 18px;font-family:ui-rounded;' """
+
                 ],
                 "buildApp":["widget":"ButtonWidgetVue"
                             ,"name":"buildApp"
-                            ,attr: """ style="background-color: #29b6f6; color:white;font-family:sans-serif; font-size:inherit; padding-top:20px; padding-bottom:20px; padding-right:20px; padding-left:20px;" """
                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                             ,script: """ this.scrollToQuiz('coachClone');"""
                 ]
@@ -62,7 +61,6 @@ beans{
         currentFrameLayout = ref('vueFirstContainerDataframeLayout')
 
     }
-
     vueOurWorkContainerDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueOurWorkContainerDataframe']
@@ -71,17 +69,14 @@ beans{
 
                 weDeliver:["widget":"TextDisplayWidgetVue"
                            ,"name":"weDeliver"
-                           ,attr: """ style ="font-size:45px;" """
                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 WeDeliverTextParagraphOne:["widget":"TextDisplayWidgetVue"
                                            ,"name":"WeDeliverTextParagraphOne"
-                                           ,attr: """ style ="font-size:18px;" """
                                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 WeDeliverTextParagraphTwo:["widget":"TextDisplayWidgetVue"
                                            ,"name":"WeDeliverTextParagraphTwo"
-                                           ,attr: """ style ="font-size:18px;" """
                                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
         ]
@@ -94,22 +89,15 @@ beans{
         addFieldDef = [
                 youDeserve:["widget":"TextDisplayWidgetVue"
                             ,"name":"youDeserve"
-                            ,attr: """ style ="font-size:45px;" """
                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
-                efficiency:["widget":"TextDisplayWidgetVue"
-                            ,"name":"efficiency"
-                            ,attr: """ style ="font-size:45px;" """
-                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+
                 ourProcessTextOne: ["widget":"TextDisplayWidgetVue"
                                     ,"name":"ourProcessTextOne"
-                                    ,attr: """ style="font-size: large;font-family: sans-serif;" """
                                     ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 ourProcessTextTwo: ["widget":"TextDisplayWidgetVue"
                                     ,"name":"ourProcessTextTwo"
-                                    ,attr: """ style="font-size: large;font-family: sans-serif;" """
                                     ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
 
@@ -124,7 +112,6 @@ beans{
 
                 agilityAsService:["widget":"TextDisplayWidgetVue"
                                   ,"name":"agilityAsService"
-                                  ,attr: """ style ="font-size:45px;" """
                                   ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 collaborationFirstParagraph:["widget":"TextDisplayWidgetVue"
@@ -139,7 +126,6 @@ beans{
 
         currentFrameLayout = ref("vueCollaborationContainerDataframeLayout")
     }
-
     vueOurFrameworkContainerDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueOurFrameworkContainerDataframe']
@@ -148,17 +134,14 @@ beans{
 
                 QualityBuilt:["widget":"TextDisplayWidgetVue"
                               ,"name":"QualityBuilt"
-                              ,attr: """ style ="font-size:45px;color:white;" """
                               ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 ourFrameworkTextFirstParagraph:["widget":"TextDisplayWidgetVue"
                                                 ,"name":"ourFrameworkTextFirstParagraph"
-                                                ,attr: """ style ="color:white;" """
                                                 ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 ourFrameworkTextSecondParagraph:["widget":"TextDisplayWidgetVue"
                                                  ,"name":"ourFrameworkTextSecondParagraph"
-                                                 ,attr: """ style ="color:white;" """
                                                  ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ]
 
@@ -166,28 +149,11 @@ beans{
 
         currentFrameLayout = ref("vueOurFrameworkContainerDataframeLayout")
     }
-
     vueQuotesContainerDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuotesContainerDataframe']
         saveButton = false
-        addFieldDef = [
-                InitialQuote:["widget":"TextDisplayWidgetVue"
-                              ,"name":"InitialQuote"
-                              ,attr: """ style="padding-left:5%;font-family: sans-serif;font-size:36px;" """
-                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                nameOfPerson:["widget":"TextDisplayWidgetVue"
-                              ,"name":"nameOfPerson"
-                              ,attr: """ style="padding-left:5%;" """
-                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                jobTitle:["widget":"TextDisplayWidgetVue"
-                          ,"name":"jobTitle"
-                          ,attr: """ style="padding-left:5%;" """
-                          ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-        ]
+
         currentFrameLayout = ref("vueQuotesContainerDataframeLayout")
     }
     vueOurTechnologiesContainerDataframe(DataframeVue){ bean ->
@@ -195,14 +161,9 @@ beans{
         bean.constructorArgs = ['vueOurTechnologiesContainerDataframe']
         saveButton = false
         addFieldDef = [
-                labelOurTechnologies:["widget":"TextDisplayWidgetVue"
-                                      ,"name":"labelOurTechnologies"
-                                      ,attr: """ style = 'color: #29b6f6;font-size:14px;' """
-                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+
                 thisIsHow:["widget":"TextDisplayWidgetVue"
                            ,"name":"thisIsHow"
-                           ,attr: """ style ="font-size:45px;" """
                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
         ]
@@ -216,12 +177,6 @@ beans{
         addFieldDef = [
                 letsTalk:["widget":"TextDisplayWidgetVue"
                              ,"name":"letsTalk"
-                             ,attr: """ style='color:#2ab6f6;font-size:52pxpx;' """
-                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-                contactQuiz:["widget":"TextDisplayWidgetVue"
-                             ,"name":"contactQuiz"
-                             ,attr: """ style="color:black;padding:25%" """
                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
         ]
@@ -296,12 +251,10 @@ beans{
         addFieldDef = [
                 footerPrivacy:["widget":"TextDisplayWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,attr: """ style="color:#2ab6f6;" """
                                ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
                 termAndConditions:["widget":"TextDisplayWidgetVue"
                                ,"name":"termAndConditions"
-                               ,attr: """ style="color:#2ab6f6;" """
                                ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
                 ]
         ]
