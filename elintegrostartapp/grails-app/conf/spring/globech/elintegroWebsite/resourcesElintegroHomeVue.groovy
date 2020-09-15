@@ -26,26 +26,10 @@ beans{
         bean.constructorArgs = ['vueFirstContainerDataframe']
         saveButton = false
         addFieldDef = [
-                'hey':[ "widget":"TextDisplayWidgetVue"
-                        ,"name":"hey"
+                'we.build.apps':[ "widget":"TextDisplayWidgetVue"
+                        ,"name":"we.build.apps"
                         ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-
-                ],
-                'LooksLike':["widget":"TextDisplayWidgetVue"
-                             ,"name":"LooksLike"
-                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-
-                ],
-                'BuiltAnyApps':["widget":"TextDisplayWidgetVue"
-                                ,"name":"BuiltAnyApps"
-                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-
-                ],
-                "Yet":["widget":"TextDisplayWidgetVue"
-                       ,"name":"Yet"
-                       ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-
-                ],
+                        ],
                 "youWont":["widget":"TextDisplayWidgetVue"
                            ,"name":"youWont"
                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']

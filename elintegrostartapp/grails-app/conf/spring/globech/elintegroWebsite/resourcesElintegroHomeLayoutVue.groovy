@@ -26,54 +26,57 @@ beans{
     vueFirstContainerDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-container id ="our_home" class = "our_home" fluid>
-                                    <v-row class="pa-md-0"><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                         <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4">
-                                            <v-row>
-                                               <h1 class="heading-2">[hey]</h1>
-                                            </v-row>
-                                            <v-row>
-                                               <h1 class= "heading-2">
-                                                   [LooksLike][BuiltAnyApps] [Yet]
-                                               </h1>
-                                            </v-row>
-                                         </v-col> 
-                                    </v-row>
-                                    <v-row class="pa-md-0"><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                        <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4">
-                                            <v-row class= "youWont">
-                                                [youWont]
-                                            </v-row><br>
-                                        </v-col>
-                                    </v-row>       
-                                    <v-row class="pa-md-0"><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                        <v-col cols="12" xs="10" sm="10" md="0" xl="0" lg="0">
-                                            <v-row class="buildApp">
-                                                [buildApp]
-                                            </v-row><br>
-                                        </v-col>
-                                    </v-row> 
+                                    <v-flex xs12 sm12 md12 lg12 x12>
+                                        <v-row>
+                                            <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
+                                            <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4">
+                                                <v-row><h2 class="heading-2">[we.build.apps]</h2></v-row><br>
+                                                <v-row>
+                                                   <p class="paragraph">[youWont]
+                                                   </p>
+                                                </v-row>
+                                                <v-row class="buildApp">
+                                                    [buildApp]
+                                                </v-row>
+                                            </v-col>
+                                            <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
+                                            <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
+                                               <v-img alt ="our_frameworks"  src="assets/home/mobile-new-copy.png"
+                                                    srcset="assets/home/mobile-new-copy-p-500.png 500w, assets/home/mobile-new-copy-p-800.png 800w, assets/home/mobile-new-copy-p-1080.png 1080w, assets/home/mobile-new-copy-p-1600.png 1600w, assets/home/mobile-new-copy-p-2000.png 2000w, assets/home/mobile-new-copy.png 2048w"
+                                                    sizes="(max-width: 479px) 91vw, (max-width: 767px) 400px, (max-width: 991px) 297.796875px, 400px"
+                                                    >
+                                               </v-img>
+                                            </v-col>
+                                            <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>        
+                                        </v-row>
+                                    </v-flex>
                                 </v-container>
                             """
     }
-
     vueOurWorkContainerDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
                                 <v-container id ="our_work" class = "our_work" fluid>
-                                    <v-row class="pa-md-0"><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                         <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" >
-                                                    <v-row>
-                                                        <h2 class="heading-2">[weDeliver]</h2>
-                                                    </v-row>
-                                                    <v-row>
-                                                            <p class="paragraph">
-                                                                [WeDeliverTextParagraphOne]<br>
-                                                                [WeDeliverTextParagraphTwo]
-                                                            </p>
-                                                    </v-row></v-col>
-                                         </v-col> 
-                                                
-                                    </v-row>
+                                    <v-flex xs12 sm12 md12 lg12 x12>
+                                        <v-row><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+                                             <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" align-self = 'center'>
+                                                        <v-row>
+                                                            <h2 class="heading-2">[weDeliver]</h2>
+                                                        </v-row><br>
+                                                        <v-row>
+                                                                <p class="paragraph">
+                                                                    [WeDeliverTextParagraphOne]<br>
+                                                                    [WeDeliverTextParagraphTwo]
+                                                                </p>
+                                                        </v-row>
+                                             </v-col>
+                                             <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
+                                             <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
+                                                <v-img alt ="our_frameworks"  src="assets/home/Rectangle-3.png"></v-img>
+                                             </v-col>
+                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>  
+                                        </v-row>
+                                    </v-flex>    
                                 </v-container>
                             """
     }
@@ -83,19 +86,23 @@ beans{
                                 <v-container id="our_process" class="our_process" fluid>
                                        <v-flex xs12 sm12 md12 lg12 x12>
                                             <v-row>
-                                                 <v-col cols="1" ></v-col>
-                                                    <v-col cols="4">
+                                                 <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+                                                 <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" align-self = 'center'>
                                                        <v-row >
                                                             <h2 class="heading-2">[youDeserve]</h2><br>
-                                                       </v-row>
+                                                       </v-row><br>
                                                        <v-row style="font-size:104%; font-family:sans-serif;">
                                                                 <p class="paragraph">[ourProcessTextOne]
                                                                 </p><p class="paragraph">[ourProcessTextTwo]
                                                                 </p>
                                                        </v-row>
-                                                 </v-col> 
+                                                 </v-col>
+                                                 <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
+                                                 <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
+                                                    <v-img alt ="our_frameworks"  src="assets/home/Rectangle-14.png"></v-img>
+                                                 </v-col>
+                                                 <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>  
                                             </v-row>       
-                                            <v-col cols="1"></v-col>    
                                        </v-flex>
                                 </v-container>
                                 
@@ -105,28 +112,30 @@ beans{
         layoutBeanName = bean.name
         layoutPlaceHolder ="""
                              <v-container id="collaboration" class="collaboration" fluid>
-                                            <v-flex xs12 sm12 md12 lg12 x12>
+                                 <v-flex xs12 sm12 md12 lg12 x12>
+                                      <v-row>
+                                            <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+                                            <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" align-self = 'center'>
                                                 <v-row>
-                                                    <v-col cols="1" ></v-col>
-                                                    <v-col cols="4">
-                                                        <v-row>
-                                                            <h2 class="heading-2">[agilityAsService]</h2><br>
-                                                        </v-row>
-                                                        <v-row>
-                                                                <p class="paragraph">[collaborationFirstParagraph]
-                                                                </p><p class="paragraph">[collaborationSecondParagraph]
-                                                                </p>
-                                                        </v-row>
-                                                    </v-col> 
-                                                </v-row>       
-                                             <v-col cols="1"></v-col>    
-                                            </v-flex>
-                                           
-                                        </v-container>
+                                                    <h2 class="heading-2">[agilityAsService]</h2><br>
+                                                </v-row><br>
+                                                <v-row>
+                                                    <p class="paragraph">[collaborationFirstParagraph]
+                                                    </p><p class="paragraph">[collaborationSecondParagraph]
+                                                    </p>
+                                                </v-row>
+                                            </v-col>
+                                            <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
+                                            <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
+                                                        <v-img alt ="our_frameworks"  src="assets/home/Rectangle-15.png"></v-img>
+                                            </v-col>
+                                            <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>  
+                                      </v-row>       
+                                 </v-flex>
+                             </v-container>
                             
                             """
     }
-
     vueOurFrameworkContainerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
@@ -134,31 +143,40 @@ beans{
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                 <v-row>
                                                     <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
-                                                    <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="pa-md-0">
+                                                    <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" align-self = 'center'>
                                                         <v-row><h2 class="heading-2">[QualityBuilt]</h2></v-row><br>
                                                         <v-row>
                                                                 <p class="paragraph">[ourFrameworkTextFirstParagraph]
                                                                 </p><p class="paragraph">[ourFrameworkTextSecondParagraph]
                                                                 </p><br>
                                                         </v-row>
-                                                        
                                                     </v-col>
                                                     <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
                                                     <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-                                                                <v-img alt ="our_frameworks"  src="assets/home/our_framework.svg"></v-img>
+                                                                <v-img alt ="our_frameworks"  src="assets/home/Rectangle-16.png"></v-img>
                                                     </v-col>
                                                     <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>        
                                                 </v-row>
                                             </v-flex>
-                                        </v-container>
+                                   </v-container>
                                 """
     }
-
     vueQuotesContainerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
                             <v-container id="Quotes" class="Quotes" fluid>
-                                I m Quotes
+                                <v-flex xs12 sm12 md12 lg12 x12>
+                                    <v-row>
+                                        <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
+                                            <v-col class = "midColumn" cols="12" xs="12" sm="12" md="8" xl="8" lg="8">
+                                                <v-row><h1 class="heading">That's whats our customer say about us</h1></v-row>
+                                                <v-row>
+                                                
+                                                </v-row>
+                                            </v-col>
+                                        <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col>        
+                                    </v-row>
+                                </v-flex>
                             </v-container>
                             
                             """

@@ -5,7 +5,7 @@
     font-size: 40px;
     font-family: system-ui;
 }
-.mainContainer .our_home .youWont{
+.mainContainer .our_home .paragraph{
     color: black;
     font-size: 18px;
     font-family:ui-rounded;
@@ -65,7 +65,13 @@
     color:white;
 }
 .mainContainer .Quotes{
-    background-color: #f6fe75
+    background-color: white;
+}
+.mainContainer .Quotes .midColumn{
+    background-color: #2ab6f6;
+}
+.mainContainer .Quotes .midColumn .row{
+    justify-content: center;
 }
 .mainContainer .our_Technologies{
     background-color: #f5f5f5;
