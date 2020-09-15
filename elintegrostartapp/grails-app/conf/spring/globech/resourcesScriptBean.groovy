@@ -236,6 +236,57 @@ beans {
                     console.log("login dataframe close button.");
                     },"""
     }
+    vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   forgotPassword(){
+                                  var allParams = this.state;
+                                  if(this.state.vueElintegroForgetPasswordDataframe_user_email == "" || this.state.vueElintegroForgetPasswordDataframe_user_email == null || this.state.vueElintegroForgetPasswordDataframe_user_email == undefined){
+                                       var response = {};
+                                       response['alert_type'] = 'error'
+                                       response['msg'] = 'You must enter your email.';
+                                       var responseData = {data:response};
+                                       excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                  }else{
+                                        allParams['email'] = this.state.vueElintegroForgetPasswordDataframe_user_email;
+                                        axios({
+                                           method:'post',
+                                           url:'${contextPath}/register/forgotPassword',
+                                           data: allParams
+                                        }).then(function(responseData){
+                                                var response = responseData.data;
+                                                excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                        
+                                        })
+                                  }
+                   },\n
+                  """
+    }
+    vueElintegroChangeForgotPasswordDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   changeForgotPassword(){
+                                    var allParams = this.state;
+                                    allParams['dataframe'] = 'vueElintegroChangeForgotPasswordDataframe';
+                                    var self = this;
+                                    var currentLocation = window.location.href;
+                                    var location = currentLocation.split("/change-forget-password/0?")
+                                    allParams['token'] = location[1]
+                                                    axios({ 
+                                          method: 'post',
+                                          url:'${contextPath}/register/changeForgotPassword',
+                                          data:allParams
+                                    }).then(function(responseData){
+                                           var response = responseData.data;
+                                           excon.showMessage(responseData,'vueElintegroChangeForgotPasswordDataframe');
+                                           if(response.success == true){
+                                             excon.setVisibility('vueElintegroLoginDataframe',true);
+                                           }else{
+                                                alert("Fail vayo");
+                                           }
+                                           
+                                    })
+                   }
+                  """
+    }
 
     vueAfterLoggedinDataframe_script(VueJsEntity) { bean ->
         data = "avatarSize : 40,\n"
