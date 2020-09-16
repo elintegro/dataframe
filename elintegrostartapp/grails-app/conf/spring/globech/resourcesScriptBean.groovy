@@ -55,6 +55,9 @@ beans {
                                                        var loggedIn = responseData.data.loggedIn
 //                                                     vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
                                                        var urlLocation = window.location.href;
+                                                       if(loggedIn == true && urlLocation.includes('change-forget-password') == true){
+                                                           excon.redirectPage(vueInitDataframeVar,'home');
+                                                       }
                                                        if(loggedIn == false){
 //                                                        vueInitDataframeVar.\$router.push("/");this.location.reload();
                                                        }
@@ -248,6 +251,7 @@ beans {
                                        excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
                                   }else{
                                         allParams['email'] = this.state.vueElintegroForgetPasswordDataframe_user_email;
+                                        var self = this;
                                         axios({
                                            method:'post',
                                            url:'${contextPath}/register/forgotPassword',
@@ -255,7 +259,11 @@ beans {
                                         }).then(function(responseData){
                                                 var response = responseData.data;
                                                 excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
-                                        
+                                                if(response.success == true){
+                                                  setTimeout(function(){excon.redirectPage(self,"home");},6000);
+                                                }else{
+                                                     setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe',true);},4000);
+                                                }
                                         })
                                   }
                    },\n
@@ -280,7 +288,7 @@ beans {
                                            if(response.success == true){
                                              excon.setVisibility('vueElintegroLoginDataframe',true);
                                            }else{
-                                                alert("Fail vayo");
+                                                alert("Failed to change password.");
                                            }
                                            
                                     })
