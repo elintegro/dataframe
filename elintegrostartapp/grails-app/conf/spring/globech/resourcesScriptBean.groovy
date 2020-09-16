@@ -55,6 +55,9 @@ beans {
                                                        var loggedIn = responseData.data.loggedIn
 //                                                     vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
                                                        var urlLocation = window.location.href;
+                                                       if(loggedIn == true && urlLocation.includes('change-forget-password') == true){
+                                                           excon.redirectPage(vueInitDataframeVar,'home');
+                                                       }
                                                        if(loggedIn == false){
 //                                                        vueInitDataframeVar.\$router.push("/");this.location.reload();
                                                        }
@@ -235,6 +238,62 @@ beans {
         methods = """dialogBoxClose(){
                     console.log("login dataframe close button.");
                     },"""
+    }
+    vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   forgotPassword(){
+                                  var allParams = this.state;
+                                  if(this.state.vueElintegroForgetPasswordDataframe_user_email == "" || this.state.vueElintegroForgetPasswordDataframe_user_email == null || this.state.vueElintegroForgetPasswordDataframe_user_email == undefined){
+                                       var response = {};
+                                       response['alert_type'] = 'error'
+                                       response['msg'] = 'You must enter your email.';
+                                       var responseData = {data:response};
+                                       excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                  }else{
+                                        allParams['email'] = this.state.vueElintegroForgetPasswordDataframe_user_email;
+                                        var self = this;
+                                        axios({
+                                           method:'post',
+                                           url:'${contextPath}/register/forgotPassword',
+                                           data: allParams
+                                        }).then(function(responseData){
+                                                var response = responseData.data;
+                                                excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                                if(response.success == true){
+                                                  setTimeout(function(){excon.redirectPage(self,"home");},6000);
+                                                }else{
+                                                     setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe',true);},4000);
+                                                }
+                                        })
+                                  }
+                   },\n
+                  """
+    }
+    vueElintegroChangeForgotPasswordDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   changeForgotPassword(){
+                                    var allParams = this.state;
+                                    allParams['dataframe'] = 'vueElintegroChangeForgotPasswordDataframe';
+                                    var self = this;
+                                    var currentLocation = window.location.href;
+                                    var location = currentLocation.split("/change-forget-password/0?")
+                                    allParams['token'] = location[1]
+                                                    axios({ 
+                                          method: 'post',
+                                          url:'${contextPath}/register/changeForgotPassword',
+                                          data:allParams
+                                    }).then(function(responseData){
+                                           var response = responseData.data;
+                                           excon.showMessage(responseData,'vueElintegroChangeForgotPasswordDataframe');
+                                           if(response.success == true){
+                                             excon.setVisibility('vueElintegroLoginDataframe',true);
+                                           }else{
+                                                alert("Failed to change password.");
+                                           }
+                                           
+                                    })
+                   }
+                  """
     }
 
     vueAfterLoggedinDataframe_script(VueJsEntity) { bean ->
