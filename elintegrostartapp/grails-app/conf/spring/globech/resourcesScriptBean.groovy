@@ -58,6 +58,16 @@ beans {
                                                        if(loggedIn == true && urlLocation.includes('change-forget-password') == true){
                                                            excon.redirectPage(vueInitDataframeVar,'home');
                                                        }
+                                                       if(loggedIn == true && urlLocation.includes('login-page') == true){
+                                                         axios.get('${contextPath}/translatorAssistant/getProjectDetailsFromSessionAfterLoggedIn').then(function (responseData) {
+                                                             var response = responseData.data;
+                                                             if(response.success == true){
+                                                                excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',response.projectDetails);
+                                                                excon.showMessage(responseData,'vueTranslatorDataframe');
+                                                                excon.redirectPage(vueInitDataframeVar,'translator');
+                                                             }
+                                                         })
+                                                       }
                                                        if(loggedIn == false){
 //                                                        vueInitDataframeVar.\$router.push("/");this.location.reload();
                                                        }
@@ -1096,8 +1106,15 @@ beans {
                                                                 }      
                                                         });
                                        }
-                                       else{
-                                             excon.redirectPage(self,"login-page")
+                                       else{ 
+                                            allParams['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                            axios({ 
+                                                 method:'post',
+                                                 url:'${contextPath}/translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
+                                                 data:allParams
+                                            }).then(function(responseData){
+                                                 excon.redirectPage(self,"login-page");
+                                            })
                                        }                 
                                         
                                         
@@ -1237,8 +1254,15 @@ beans {
                                                     document.body.appendChild(fileLink);
                                                     fileLink.click();
                                             }
-                                           else{
-                                                  excon.redirectPage(self,"login-page")
+                                            else{
+                                                      allParams['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                                      axios({ 
+                                                             method:'post',
+                                                             url:'${contextPath}/translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
+                                                             data:allParams
+                                                      }).then(function(responseData){
+                                                              excon.redirectPage(self,"login-page");
+                                                      })
                                            }
                                            
                                     }
