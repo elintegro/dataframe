@@ -137,7 +137,32 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuotesContainerDataframe']
         saveButton = false
+        flexGridValues= ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        addFieldDef = [
+                quotes: ["widget":"CarouselWidgetVue"
+                        ,"name":"quotes"
+                        ,"height":"250"
+                        ,"content":""" 
+                                    <v-card
+                                         height="100%"
+                                         tile
+                                         align="center"
+                                         justify="center"
+                                         class="contentQuotes"
+                                    >
+                                         <v-row
+                                            align="center"
+                                            justify="center"
+                                         >
+                                            <v-col cols="12" xs="1"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
+                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.quote}}</v-col>
+                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},{{item.title}}</v-col>
+                                         </v-row>
+                                    </v-card>
+                                    """
+                        ],
 
+        ]
         currentFrameLayout = ref("vueQuotesContainerDataframeLayout")
     }
     vueOurTechnologiesContainerDataframe(DataframeVue){ bean ->

@@ -1,13 +1,16 @@
+ .row{
+    margin-right: 12px;
+    margin-left: 12px;
+}
 .mainContainer .our_home{
     background-color:white;
 }
 .mainContainer .our_home .heading-2{
-    font-size: 40px;
-    font-family: system-ui;
+    font-size: 38px;
 }
 .mainContainer .our_home .paragraph{
     color: black;
-    font-size: 18px;
+    font-size: 14px;
     font-family:ui-rounded;
 }
 .mainContainer .our_home #vueFirstContainerDataframe_buildApp{
@@ -18,51 +21,48 @@
     padding: 20px;
 }
 .mainContainer .our_work{
-    background-color:#385ffa;
+    background-color:white;
 }
 .mainContainer .our_work .heading-2{
-    font-size:45px;
-    color:white;
+    font-size:38px;
+    color:black;
 }
 .mainContainer .our_work .paragraph{
-    font-size:18px;
-    color:white;
+    font-size:14px;
+    color:black;
 }
 .mainContainer .our_process{
-    background-color:#d88c91;
+    background-color:white;
 }
 .mainContainer .our_process .heading-2{
-    font-size:45px;
-    color:white;
+    font-size:38px;
+    color:black;
 }
 .mainContainer .our_process .paragraph{
-    font-size: large;
-    font-family: sans-serif;
-    color:white;
+    font-size: 14px;
+    color:black;
 }
 .mainContainer .collaboration{
-    background-color:#f5bf41;
+    background-color:white;
 }
 .mainContainer .collaboration .heading-2{
-    font-size:45px;
-    color:white;
+    font-size:38px;
+    color:black;
 }
 .mainContainer .collaboration .paragraph{
-    font-size: large;
-    font-family: sans-serif;
-    color:white;
+    font-size: 14px;
+    color:black;
 }
 .mainContainer .our_framework{
-    background-color:#4fd5fe
+    background-color:white;
 }
 .mainContainer .our_framework .heading-2{
-    font-size:45px;
-    color:white;
+    font-size:38px;
+    color:black;
 }
 .mainContainer .our_framework .paragraph{
-    font-size: large;
-    font-family: sans-serif;
-    color:white;
+    font-size: 14px;
+    color:black;
 }
 .mainContainer .Quotes{
     background-color: white;
@@ -73,11 +73,16 @@
 .mainContainer .Quotes .midColumn .row{
     justify-content: center;
 }
+.mainContainer .Quotes .midColumn .contentQuotes{
+    padding:0px;
+    background-color:#2ab6f6;
+    font-size: 14px;
+}
 .mainContainer .our_Technologies{
     background-color: #f5f5f5;
 }
 .mainContainer  .our_Technologies .heading-2{
-    font-size:45px;
+    font-size:38px;
 }
 .mainContainer .our_Technologies .images{
     align-self: center;
@@ -92,7 +97,7 @@
 }
 .mainContainer .Quiz_Placeholder .columnLeft .heading-1{
     color:#2ab6f6;
-    font-size:52px;
+    font-size:38px;
 }
 .mainContainer .Quiz_Placeholder .pa-md-0{
     padding:6%

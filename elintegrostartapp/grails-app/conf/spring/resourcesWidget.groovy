@@ -56,5 +56,6 @@ beans {
 	FilesUploadWidgetVue(FilesUploadWidgetVue){}
 	FilesDisplayWidgetVue(FilesDisplayWidgetVue){}
 	ListWidgetVue(ListWidgetVue){}
+	CarouselWidgetVue(CarouselWidgetVue){}
 
 }

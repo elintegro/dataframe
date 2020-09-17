@@ -6,7 +6,7 @@ import com.elintegro.erf.layout.ColumnLayoutVue
 beans{
     vueElintegroHomeDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-row>
                                     <v-container class = "mainContainer" fluid>
                                          <br><br><vueFirstContainerDataframe/>
                                          <vueOurWorkContainerDataframe/>
@@ -17,20 +17,21 @@ beans{
                                          <vueOurTechnologiesContainerDataframe/>
                                          <vueQuizPlaceholderContainerDataframe/>
                                          <vueFooterContainerDataframe/>   
-                                    </v-container>
+                                    </v-container></v-row>
                                 </v-flex>
                                 
                                 """
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
     }
     vueFirstContainerDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-container id ="our_home" class = "our_home" fluid>
                                     <v-flex xs12 sm12 md12 lg12 x12>
-                                        <v-row>
-                                            <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
-                                            <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4">
-                                                <v-row><h2 class="heading-2">[we.build.apps]</h2></v-row><br>
+                                        <v-row><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+                                             <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" align-self = 'center'>
+                                                <v-row>
+                                                    <h2 class="heading-2">[we.build.apps]</h2>
+                                                </v-row><br>
                                                 <v-row>
                                                    <p class="paragraph">[youWont]
                                                    </p>
@@ -41,11 +42,7 @@ beans{
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
                                             <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-                                               <v-img alt ="our_frameworks"  src="assets/home/mobile-new-copy.png"
-                                                    srcset="assets/home/mobile-new-copy-p-500.png 500w, assets/home/mobile-new-copy-p-800.png 800w, assets/home/mobile-new-copy-p-1080.png 1080w, assets/home/mobile-new-copy-p-1600.png 1600w, assets/home/mobile-new-copy-p-2000.png 2000w, assets/home/mobile-new-copy.png 2048w"
-                                                    sizes="(max-width: 479px) 91vw, (max-width: 767px) 400px, (max-width: 991px) 297.796875px, 400px"
-                                                    >
-                                               </v-img>
+                                               <v-img alt ="our_frameworks"  src="assets/home/mobile.png"></v-img>
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>        
                                         </v-row>
@@ -91,7 +88,7 @@ beans{
                                                        <v-row >
                                                             <h2 class="heading-2">[youDeserve]</h2><br>
                                                        </v-row><br>
-                                                       <v-row style="font-size:104%; font-family:sans-serif;">
+                                                       <v-row>
                                                                 <p class="paragraph">[ourProcessTextOne]
                                                                 </p><p class="paragraph">[ourProcessTextTwo]
                                                                 </p>
@@ -142,8 +139,8 @@ beans{
                                    <v-container id="our_framework" class = "our_framework" fluid>
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                 <v-row>
-                                                    <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
-                                                    <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" align-self = 'center'>
+                                                    <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col> 
+                                                    <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" align-self = 'center'>
                                                         <v-row><h2 class="heading-2">[QualityBuilt]</h2></v-row><br>
                                                         <v-row>
                                                                 <p class="paragraph">[ourFrameworkTextFirstParagraph]
@@ -167,14 +164,14 @@ beans{
                             <v-container id="Quotes" class="Quotes" fluid>
                                 <v-flex xs12 sm12 md12 lg12 x12>
                                     <v-row>
-                                        <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
-                                            <v-col class = "midColumn" cols="12" xs="12" sm="12" md="8" xl="8" lg="8">
+                                        <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
+                                            <v-col class = "midColumn" cols="12" xs="12" sm="12" md="10" xl="10" lg="10">
                                                 <v-row><h1 class="heading">That's whats our customer say about us</h1></v-row>
                                                 <v-row>
-                                                
+                                                    [DATAFRAME_SCRIPT]
                                                 </v-row>
                                             </v-col>
-                                        <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col>        
+                                        <v-col cols="12" xs="0" sm="0" md="0" xl="0" lg="0"></v-col>        
                                     </v-row>
                                 </v-flex>
                             </v-container>
@@ -251,13 +248,13 @@ beans{
                                                         <v-row></v-row>
                                                         <v-row><h2 class="heading-1">[letsTalk]</h2></v-row>
                                                     </v-col>
-                                                 <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>
-                                                    <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" class="pa-md-0">
+                                                 <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col>
+                                                    <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4">
                                                        <v-card class="v-card">
                                                             <vueElintegroSignUpQuizDataframe/>
                                                        </v-card>
                                                     </v-col>
-                                                <v-col cols="12" xs="1" sm="1" md="2" xl="2" lg="2"></v-col>
+                                                <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>
                                                 </v-row>
                                                <br><br><br><v-row></v-row>
                                             </v-flex>
