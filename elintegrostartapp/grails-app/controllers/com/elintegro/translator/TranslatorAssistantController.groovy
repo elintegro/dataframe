@@ -120,6 +120,24 @@ class TranslatorAssistantController {
 
         }
     }
+    def saveProjectDetailsInSessionForNotLoggedInUser(){
+        def param = request.getJSON()
+        session.setAttribute("CURRENTLY_SELECTED_PROJECT",param.projectDetails)
+        def resultData = [success:true]
+        render(resultData as JSON)
+    }
+    def getProjectDetailsFromSessionAfterLoggedIn(){
+        def currentUser = springSecurityService.currentUser
+        def projectDetails = session.getAttribute("CURRENTLY_SELECTED_PROJECT");
+        Project project = Project.findByIdAndName(projectDetails.projectId,projectDetails.Name)
+        if(currentUser){
+            project.addToUsers(currentUser)
+            project.save(flush:true)
+        }
+
+        def result = [success: true,projectDetails:projectDetails,alert_type:"success",msg:"Please click Download to download your file(s)."]
+        render(result as JSON)
+    }
      def translateEachRecordWithGoogle(){
          def param = request.getJSON()
          Language language = Language.findByEname(param.sourceLanguage)
