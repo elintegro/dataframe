@@ -73,6 +73,29 @@ beans {
 
         currentFrameLayout = ref("elintegroNavigationButtonLayout")
     }
+    vueElintegroLanguageSelectorDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroLanguageSelectorDataframe']
+        initOnPageLoad = true
+        def languageCodeFromConfigFile = Holders.grailsApplication.config.application.languages
+        def languageCode = languageCodeFromConfigFile.replace('"""','')
+        isGlobal = true
+        saveButton = false
+        doAfterRefresh = """self.changeSelectedLanguageValue(response);"""
+        addFieldDef = [
+                "languages":[
+                        widget: "LanguageSelectorWidgetVue"
+                        ,"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                        , hql: """select language.id as id,language.code as code, language.ename as ename from Language as language where language.code in (${languageCode})"""
+                        ,"displayMember":"ename"
+                        ,"valueMember":"ename"
+                        , search:true
+                        ,attr: """style='max-width:min-content;margin-top=-2%;'"""
+                        ,onSelect:[methodScript:"this.selectedLanguage(_params);"]
+                ],]
+        currentFrameLayout = ref("vueElintegroLanguageSelectorDataframeLayout")
+
+    }
     vueElintegroNavigationButtonAfterLoggedInDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationButtonAfterLoggedInDataframe']
@@ -119,9 +142,12 @@ beans {
                 ]
 
         ]
-        currentFrameLayout = ref("appNameDataframeLayout")
+        currentFrameLayout = ref("vueElintegroLogoDataframeLayout")
 
     }
+
+
+
 
     vueClientProjectDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
@@ -514,7 +540,7 @@ beans {
                                                                          excon.showMessage(responseData,'vueElintegroLoginDataframe');
                                                                          setTimeout(function(){excon.setVisibility('vueElintegroLoginDataframe', false);this.location.reload();}, 6000);} 
                                                                          if(!response.msg){ this.location.reload();}"""],"flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                             forgetPassword:[name: "forgetPassword", type: "button", attr:"""style="background-color:#1976D2; color:white; margin-left:2px;" """, script:""" console.log("Forget Password Clicked");""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
+                             forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
                                              layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],
                              logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
 //                                                                                             var url = "/elintegrostartapp/oauth/authenticate/google";
@@ -535,6 +561,48 @@ beans {
 
         currentFrameLayout = ref("vueElintegroLoginDataframeLayout")
     }
+    vueElintegroForgetPasswordDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroForgetPasswordDataframe']
+        hql = "select user.email from User as user where user.id=:id"
+        dataframeLabelCode = "Forget.Password"
+        initOnPageLoad = false
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        saveButton = false
+        currentRoute = 'forget-password'
+        route = true
+        isGlobal = true
+        doAfterRefresh = """excon.setVisibility('vueElintegroLoginDataframe',false);"""
+        addFieldDef =[
+                "user.email":[widget: "EmailWidgetVue",attr: "autofocus", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'email.required.message']]],
+        ]
+        dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.forgotPassword();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
+        currentFrameLayout = ref("vueElintegroForgetPasswordDataframeLayout")
+    }
+    vueElintegroChangeForgotPasswordDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroChangeForgotPasswordDataframe']
+        dataframeLabelCode = "Forget.Password"
+        initOnPageLoad = false
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        saveButton = false
+        currentRoute = 'change-forget-password'
+        route = true
+        isGlobal = true
+        addFieldDef =[
+                "newPassword":[name:"newPassword"
+                               ,widget:"PasswordWidgetVue"
+                               ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && new RegExp('^(?=.*?[#?!@%^&*-])').test(v))",message:"password.contain.special.character"]
+                                                   ,[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]],
+                "confirmPassword":[name:"confirmPassword"
+                                   ,widget:"PasswordWidgetVue"
+                                   , "insertAfter":"newPassword"
+                                   ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroChangeForgotPasswordDataframe_newPassword)",message:"Password.and.Confirm.Password."]]],
+        ]
+        dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.changeForgotPassword();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
+        currentFrameLayout = ref("vueElintegroForgetPasswordDataframeLayout")
+    }
+
 
     vueElintegroRegisterDataframe(DataframeVue){ bean ->
 

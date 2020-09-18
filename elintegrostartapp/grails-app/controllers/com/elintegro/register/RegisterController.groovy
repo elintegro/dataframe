@@ -138,37 +138,46 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 
 
     def forgotPassword() {
+        def params = request.getJSON()
 
         ForgotPasswordCommand forgotPasswordCommand = getForgetPasswordCommandObject(params.email)
         def user = findUserByUsername(forgotPasswordCommand.username)
         def jsonMap
         String msg
         if (!user) {
-            msg = getMessageFromCode('spring.security.ui.forgotPassword.user.notFound')
+            msg = getMessageFromCode('register.forgotPassword.email.not.found')
 
-            jsonMap = [error: true, msg: msg, forgotPasswordCommand: forgotPasswordCommand]
+            jsonMap = [success: false, error: true,alert_type: "error", msg: msg, forgotPasswordCommand: forgotPasswordCommand]
         }
+        else {
 
-        String email = uiPropertiesStrategy.getProperty(user, 'email')
-        if (!email) {
-            msg = getMessageFromCode('spring.security.ui.forgotPassword.noEmail')
+            String email = uiPropertiesStrategy.getProperty(user, 'email')
+            if (!email) {
+                msg = getMessageFromCode('register.forgotPassword.email.not.found')
 
-            jsonMap = [error: true, msg: msg, forgotPasswordCommand: forgotPasswordCommand]
-        }
-        if (user && email) {
-            RegistrationCode registrationCode = uiRegistrationCodeStrategy.sendForgotPasswordMail(
-                    forgotPasswordCommand.username, email) { String registrationCodeToken ->
-
-                String url = generateLink('openResetPasswordPage', [t: registrationCodeToken, userId: user.username])
-                String body = forgotPasswordEmailBody
-                if (body.contains('$')) {
-                    body = evaluate(body, [user: user, url: url])
-                }
-
-                body
+                jsonMap = [success: false,alert_type: "error", error: true, msg: msg, forgotPasswordCommand: forgotPasswordCommand]
             }
-            msg = getMessageFromCode('register.forgotPassword.email.sent.success')
-            jsonMap = [success: true, msg: msg, emailSent: true, forgotPasswordCommand: forgotPasswordCommand]
+            else {
+                if (user && email) {
+                    RegistrationCode registrationCode = uiRegistrationCodeStrategy.sendForgotPasswordMail(
+                            forgotPasswordCommand.username, email) { String registrationCodeToken ->
+
+                        String urlToChangePW = Holders.grailsApplication.config.grails.serverURL + "/#/change-forget-password/0?$registrationCodeToken"
+                        String body = forgotPasswordEmailBody
+                        if (body.contains('$')) {
+                            body = evaluate(body, [user: user, url: urlToChangePW])
+                        }
+
+                        body
+                    }
+                    msg = getMessageFromCode('register.forgotPassword.email.sent.success')
+                    jsonMap = [success: true, msg: msg, emailSent: true, alert_type: "success", forgotPasswordCommand: forgotPasswordCommand]
+                } else {
+                    msg = getMessageFromCode('register.forgotPassword.email.not.found')
+                    jsonMap = [success: false, msg: msg, emailSent: false, alert_type: "error"]
+
+                }
+            }
         }
         def converter = jsonMap as JSON
         converter.render(response)
@@ -184,6 +193,31 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         forgotPasswordCommand.username = email
         return forgotPasswordCommand
     }
+   def changeForgotPassword() {
+       def resultData
+       def msg
+       def param = request.getJSON()
+       RegistrationCode registrationCode = RegistrationCode.findByToken(param.token)
+       if (registrationCode) {
+           try {
+               User user1 = User.findByUsername(registrationCode.username)
+               user1.password = param.vueElintegroChangeForgotPasswordDataframe_newPassword
+               user1.save(flush: true)
+               registrationCode.delete(flush: true)
+               msg = message(code: 'password.changed.successfully')
+               resultData = [success: true, msg: msg, alert_type: "success"]
+           } catch (Exception e) {
+               log.error("Couldn't find this user" + e)
+               msg = message(code: "something.is.went.wrong")
+               resultData = [success: false, msg: msg, alert_type: "error"]
+           }
+       } else {
+           msg = message(code: 'unable.to.change.password')
+           resultData = [success: false, msg: msg, alert_type: "error"]
+       }
+
+       render(resultData as JSON)
+   }
 
     public def openResetPasswordPage() {
         String token = params.t

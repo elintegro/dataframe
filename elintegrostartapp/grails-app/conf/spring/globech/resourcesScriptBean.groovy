@@ -29,20 +29,18 @@ beans {
                 """  setupHomePage: function(){
                           var currentUrl = window.location.href;
                           var defaultUrl = '${defaultUrl}/#/';
-//                          if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == false){
-                          if(currentUrl == defaultUrl){
+                          var a = currentUrl.split('#')
+                          if(currentUrl == defaultUrl || a[1] == '/'){
                             let homePage = "vueElintegroHomeDataframe";
                             let routeId = 0;
                             this.\$router.push({
                                   name: homePage,
                                 path: '/',
                                 params: {
-                                      routeId: ""
+                                   routeId: ""
                                 }
                             })
-                            }
-//                            sessionStorage.initialRefresh = false;
-//                          }//End of if
+                          }
                      }
                ,\nsetInitPageValues:function(){
                                                
@@ -57,6 +55,19 @@ beans {
                                                        var loggedIn = responseData.data.loggedIn
 //                                                     vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
                                                        var urlLocation = window.location.href;
+                                                       if(loggedIn == true && urlLocation.includes('change-forget-password') == true){
+                                                           excon.redirectPage(vueInitDataframeVar,'home');
+                                                       }
+                                                       if(loggedIn == true && urlLocation.includes('login-page') == true){
+                                                         axios.get('${contextPath}/translatorAssistant/getProjectDetailsFromSessionAfterLoggedIn').then(function (responseData) {
+                                                             var response = responseData.data;
+                                                             if(response.success == true){
+                                                                excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',response.projectDetails);
+                                                                excon.showMessage(responseData,'vueTranslatorDataframe');
+                                                                excon.redirectPage(vueInitDataframeVar,'translator');
+                                                             }
+                                                         })
+                                                       }
                                                        if(loggedIn == false){
 //                                                        vueInitDataframeVar.\$router.push("/");this.location.reload();
                                                        }
@@ -75,6 +86,7 @@ beans {
                             let element = document.getElementById('quiz_placeholder');
                              element.scrollIntoView({ behavior: 'smooth' });
                     },\n
+
                     changeWords(){
                             var text = document.getElementById("buildData").innerHTML;
                             var build = document.getElementById("build");
@@ -85,20 +97,10 @@ beans {
                             }, 2000);
                             
                      },\n           
+
                     """
     }
-    vueFirstContainerResizeDataframe_script(VueJsEntity){bean ->
-        methods = """
-                     displayTextResize(){
-                            var text = document.getElementById("buildsDataResize").innerHTML;
-                            var texts = text.split(',');
-                            setInterval(function(){
-                                var rand = Math.floor(Math.random() * 6);
-                                document.getElementById("textResize").innerHTML = texts[rand];
-                                }, 2000);
-                     }           
-                    """
-    }
+
     vueElintegroAboutUsMenuDataframe_script(VueJsEntity){ bean ->
         methods = """scrollTo(param){
            
@@ -214,6 +216,62 @@ beans {
         methods = """dialogBoxClose(){
                     console.log("login dataframe close button.");
                     },"""
+    }
+    vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   forgotPassword(){
+                                  var allParams = this.state;
+                                  if(this.state.vueElintegroForgetPasswordDataframe_user_email == "" || this.state.vueElintegroForgetPasswordDataframe_user_email == null || this.state.vueElintegroForgetPasswordDataframe_user_email == undefined){
+                                       var response = {};
+                                       response['alert_type'] = 'error'
+                                       response['msg'] = 'You must enter your email.';
+                                       var responseData = {data:response};
+                                       excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                  }else{
+                                        allParams['email'] = this.state.vueElintegroForgetPasswordDataframe_user_email;
+                                        var self = this;
+                                        axios({
+                                           method:'post',
+                                           url:'${contextPath}/register/forgotPassword',
+                                           data: allParams
+                                        }).then(function(responseData){
+                                                var response = responseData.data;
+                                                excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                                if(response.success == true){
+                                                  setTimeout(function(){excon.redirectPage(self,"home");},6000);
+                                                }else{
+                                                     setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe',true);},4000);
+                                                }
+                                        })
+                                  }
+                   },\n
+                  """
+    }
+    vueElintegroChangeForgotPasswordDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   changeForgotPassword(){
+                                    var allParams = this.state;
+                                    allParams['dataframe'] = 'vueElintegroChangeForgotPasswordDataframe';
+                                    var self = this;
+                                    var currentLocation = window.location.href;
+                                    var location = currentLocation.split("/change-forget-password/0?")
+                                    allParams['token'] = location[1]
+                                                    axios({ 
+                                          method: 'post',
+                                          url:'${contextPath}/register/changeForgotPassword',
+                                          data:allParams
+                                    }).then(function(responseData){
+                                           var response = responseData.data;
+                                           excon.showMessage(responseData,'vueElintegroChangeForgotPasswordDataframe');
+                                           if(response.success == true){
+                                             excon.setVisibility('vueElintegroLoginDataframe',true);
+                                           }else{
+                                                alert("Failed to change password.");
+                                           }
+                                           
+                                    })
+                   }
+                  """
     }
 
     vueAfterLoggedinDataframe_script(VueJsEntity) { bean ->
@@ -617,6 +675,33 @@ beans {
 
                                     },\n"""
     }
+    vueElintegroLanguageSelectorDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   selectedLanguage(params){
+                             var url = '/languageTranslate/languageTranslator/'+params
+                             var link = document.createElement('a');
+                             link.href = url;
+                             document.body.appendChild(link);
+                             link.click();
+                   },\n
+                   changeSelectedLanguageValue(params){
+                           console.log(params);
+                           var currentUrl = window.location.href;
+                           var splittedCurrentUrl = currentUrl.split("#");
+                           var replacedCurrentUrl = splittedCurrentUrl[0].replace('$defaultUrl/','');
+                           if(replacedCurrentUrl != null || replacedCurrentUrl != undefined || replacedCurrentUrl != ""){
+                                 var langCode = replacedCurrentUrl.replace("?lang=",'');
+                                 var langItems = this.state.vueElintegroLanguageSelectorDataframe_languages_items;
+                                 for(i=0;i<langItems.length;i++){
+                                     if(langCode == langItems[i].code){
+                                        this.defaultLanguage = langItems[i].ename;
+                                     }
+                                 }
+                           }
+                   },\n
+                           
+                  """
+    }
 
     vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
@@ -910,7 +995,7 @@ beans {
         computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantBeforeLoggedInDataframe_project_list;}"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
-        methods ="""saveProject(){
+        methods ="""saveProject(timeOut){
                     var allParams = this.state;
                     var self = this;
                     allParams['dataframe'] = 'vueCreateProjectForTranslationDataframe';
@@ -925,7 +1010,7 @@ beans {
                                                                    self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
                                                                    excon.saveToStore('vueTranslatorAssistantBeforeLoggedInDataframe','vueTranslatorAssistantBeforeLoggedInDataframe_project_list',currentlySaveProject);
                                                                    excon.saveToStore('vueTranslatorAssistantAfterLoggedInDataframe','vueTranslatorAssistantAfterLoggedInDataframe_project_list',currentlySaveProject);
-                                                                   setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, 6000);
+                                                                   setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, timeOut);
                                                      }
                                                      else{
                                                           excon.showMessage(responseData,'vueCreateProjectForTranslationDataframe');
@@ -989,8 +1074,15 @@ beans {
                                                                 }      
                                                         });
                                        }
-                                       else{
-                                             excon.redirectPage(self,"login-page")
+                                       else{ 
+                                            allParams['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                            axios({ 
+                                                 method:'post',
+                                                 url:'${contextPath}/translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
+                                                 data:allParams
+                                            }).then(function(responseData){
+                                                 excon.redirectPage(self,"login-page");
+                                            })
                                        }                 
                                         
                                         
@@ -1130,8 +1222,15 @@ beans {
                                                     document.body.appendChild(fileLink);
                                                     fileLink.click();
                                             }
-                                           else{
-                                                  excon.redirectPage(self,"login-page")
+                                            else{
+                                                      allParams['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                                      axios({ 
+                                                             method:'post',
+                                                             url:'${contextPath}/translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
+                                                             data:allParams
+                                                      }).then(function(responseData){
+                                                              excon.redirectPage(self,"login-page");
+                                                      })
                                            }
                                            
                                     }

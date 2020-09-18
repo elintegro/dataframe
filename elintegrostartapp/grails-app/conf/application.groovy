@@ -573,7 +573,7 @@ grails.plugin.springsecurity.ui.forgotPassword.emailBody = '''\
 Hi $user.firstName,<br/>
 <br/>
 Please, click
-click&nbsp;<a href="$url">here</a> to reset your password.
+&nbsp;<a href="$url">here</a> to reset your password.s
 <br/><br/>
 '''
 emailService.emailWithPassword = '''\
@@ -689,4 +689,6 @@ grails.plugin.springsecurity.oauth2.domainClass = 'com.elintegro.auth.OAuthID'
 
 dataframe.right_to_left_language = false
 quizzableUrl = "https://quizzable.elintegro.com/"
+
+application.languages = """'ne','en','es'"""
 

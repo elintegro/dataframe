@@ -6,6 +6,7 @@ import com.elintegro.erf.layout.ColumnLayoutVue
 beans{
     vueElintegroHomeDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
+
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-row>
                                     <v-container class = "mainContainer" fluid>
                                          <br><br><vueFirstContainerDataframe/>
@@ -16,6 +17,7 @@ beans{
                                          <vueQuotesContainerDataframe/>
                                          <vueOurTechnologiesContainerDataframe/>
                                          <vueQuizPlaceholderContainerDataframe/>
+
                                          <vueFooterContainerDataframe/>   
                                     </v-container></v-row>
                                 </v-flex>
@@ -25,6 +27,7 @@ beans{
     }
     vueFirstContainerDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
+
         layoutPlaceHolder = """<v-container id ="our_home" class = "our_home" fluid>
                                     <v-flex xs12 sm12 md12 lg12 x12>
                                         <v-row><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
@@ -48,6 +51,7 @@ beans{
                                         </v-row>
                                     </v-flex>
                                 </v-container>
+
                             """
     }
     vueOurWorkContainerDataframeLayout(ColumnLayoutVue){bean->
