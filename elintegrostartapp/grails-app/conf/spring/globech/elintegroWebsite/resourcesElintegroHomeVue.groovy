@@ -25,15 +25,22 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFirstContainerDataframe']
         saveButton = false
+        doAfterRefresh = """self.changeWords();"""
         addFieldDef = [
-                'we.build.apps':[ "widget":"TextDisplayWidgetVue"
-                        ,"name":"we.build.apps"
-                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                "build":["widget":"TextDisplayWidgetVue"
+                            ,"name":"build"
+                            ,elementId: "build"
+                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                'buildData':[ "widget":"TextDisplayWidgetVue"
+                            ,"name":"buildData"
+                            ,attr: """v-show = false"""
+                            ,elementId:'buildData'
+                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                         ],
                 "youWont":["widget":"TextDisplayWidgetVue"
                            ,"name":"youWont"
                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-
                 ],
                 "buildApp":["widget":"ButtonWidgetVue"
                             ,"name":"buildApp"

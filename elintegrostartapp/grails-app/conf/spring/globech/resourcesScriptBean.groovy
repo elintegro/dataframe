@@ -74,7 +74,29 @@ beans {
                           scrollToQuiz(){
                             let element = document.getElementById('quiz_placeholder');
                              element.scrollIntoView({ behavior: 'smooth' });
-                    }
+                    },\n
+                    changeWords(){
+                            var text = document.getElementById("buildData").innerHTML;
+                            var build = document.getElementById("build");
+                            var texts = text.split(',');
+                            var stop =setInterval(function(){
+                                var rand = Math.floor(Math.random() * 3);
+                                build.innerHTML = texts[rand];
+                            }, 2000);
+                            
+                     },\n           
+                    """
+    }
+    vueFirstContainerResizeDataframe_script(VueJsEntity){bean ->
+        methods = """
+                     displayTextResize(){
+                            var text = document.getElementById("buildsDataResize").innerHTML;
+                            var texts = text.split(',');
+                            setInterval(function(){
+                                var rand = Math.floor(Math.random() * 6);
+                                document.getElementById("textResize").innerHTML = texts[rand];
+                                }, 2000);
+                     }           
                     """
     }
     vueElintegroAboutUsMenuDataframe_script(VueJsEntity){ bean ->
