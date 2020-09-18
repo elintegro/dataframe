@@ -141,7 +141,7 @@ beans{
         addFieldDef = [
                 quotes: ["widget":"CarouselWidgetVue"
                         ,"name":"quotes"
-                        ,"height":"250"
+                        ,"height":"400"
                         ,"content":""" 
                                     <v-card
                                          height="100%"
@@ -149,6 +149,7 @@ beans{
                                          align="center"
                                          justify="center"
                                          class="contentQuotes"
+                                         flat
                                     >
                                          <v-row
                                             align="center"
@@ -156,6 +157,15 @@ beans{
                                          >
                                             <v-col cols="12" xs="1"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.quote}}</v-col>
+                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
+                                                <v-avatar
+                                                        
+                                                        color="white"
+                                                        size="150"
+                                                >
+                                                    <img :src="item.src">
+                                                </v-avatar>
+                                            </v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},{{item.title}}</v-col>
                                          </v-row>
                                     </v-card>

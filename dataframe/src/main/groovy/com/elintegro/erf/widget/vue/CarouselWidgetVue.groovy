@@ -42,12 +42,15 @@ class CarouselWidgetVue extends WidgetVue{
                                                                 {
                                                                     quote: "${quote}",
                                                                     name: "${name}",
-                                                                    title: "${title}"
+                                                                    title: "${title}",
+                                                                    src:'assets/home/shai.png'
                                                                 },
                                                                 {
-                                                                     quote: "${quote1}",
+                                                                    quote: "${quote1}",
                                                                     name: "${name1}",
-                                                                    title: "${title1}"
+                                                                    title: "${title1}",
+                                                                    src:'assets/home/eugene.png'
+                                                                    
                                                                 },
                                                     ],
                                                 """
