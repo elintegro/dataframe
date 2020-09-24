@@ -484,7 +484,9 @@ beans {
                        ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px']
         ]
 
-        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
+        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
+                                     doBeforeSave:""" 
+                                     var elementId = '#vueElintegroLoginDataframe';
                                      allParams["username"] = this.state.persisters.user.username.value;
                                      allParams["password"] = this.state.persisters.user.password.value;
                                      allParams["remember-me"] = this.state.transits.rememberMe.value;

@@ -26,6 +26,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import grails.converters.JSON
 import grails.util.Holders
+import groovy.util.logging.Slf4j
 import org.apache.commons.lang.StringUtils
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
@@ -35,6 +36,7 @@ import org.apache.commons.lang.WordUtils
 /**
  * Created by kchapagain on Nov, 2018.
  */
+@Slf4j
 class ComboboxVue extends WidgetVue {
 
     //This assigns a new value and returns true if new value was different then the old one
@@ -178,10 +180,12 @@ class ComboboxVue extends WidgetVue {
         List res
         Map selMap = [:]
         selMap.put(valueMember,'')
-        if(result){
+        if(result && result.size() > 0){
             keys = result.keys
             res = result.result
             selMap = result.selectedMap
+        }else{
+            log.error("This data is empty, please check data is provided in underliing database or enum class or other datasource. Check descriptor of Dataframe ${dataframe.dataframeName}")
         }
 
         Map domainFieldMap = dataframe.domainFieldMap
@@ -324,18 +328,6 @@ class ComboboxVue extends WidgetVue {
         if(!(field.hql || dictionary || field?.isEnumType || field.enumFileName)){
             throw new DataframeException(" Hql field is empty for the Dataframe :${dataframe.dataframeName}")
         }
-/*
-        return """
-               var fullFieldName = '$fullFieldName';
-               if(!\$.isEmptyObject(response.additionalData)){
-               var data = response.additionalData[fullFieldName]['dictionary'];
-               var keys = response.additionalData[fullFieldName]['keys'];
-               var selectedData = response.additionalData[fullFieldName]['selectedData'];
-               this.$dataVariable = (selectedData!=null || selectedData!=undefined || selectedData != {})?selectedData:'';
-               this.${dataVariable}_items = data;
-               }
-              """
-*/
         return ""
     }
 
@@ -344,17 +336,9 @@ class ComboboxVue extends WidgetVue {
         String valueMember = field.valueMember?:"id"
         String dataVariable = dataframe.getDataVariableForVue(field)
         boolean isEnumType = field?.isEnumType
-//        if (isEnumType || field?.dictionary){
-//            super.getVueSaveVariables(dataframe, field)
-//        }else {
-
-        //Since we assign to the allParams storage values, that were predefined in retrieve, we do not need to assign a value to the allParams field entry.
-        //
-        return """
-            //allParams['$dataVariable'] = this.state.$dataVariable?this.state.$dataVariable.$valueMember:''; \n
+        return """            
             if(!this.state.$dataVariable){allParams['$dataVariable'] = '';}
-        """
-//        }
+                """
     }
 
     public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData){

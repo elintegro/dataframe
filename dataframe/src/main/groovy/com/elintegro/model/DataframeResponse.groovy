@@ -17,11 +17,11 @@ class DataframeResponse {
 
      */
 
-    boolean result = true
+    boolean success = true
     String message = ""
     String operation = "I"//TODO switch to enum!!!
     JSONObject data
-    DataframeInstance dataframeInstance
+    //DataframeInstance dataframeInstance
 
-    static transients = ["dataframeInstance"]
+    //static transients = ["dataframeInstance"]
 }

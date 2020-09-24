@@ -590,9 +590,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		createVueStore(vueJsBuilder) //create vueStore
 		VueStore vueStore1 = vueJsBuilder.getVueStore()
 
-		//EU!!! TODO: Remove it as soon as refactoring works!
-		//String state = vueStore1.buildState(dataframeName)
-
 		//NEW
 		String state = vueStore1.buildStateJSON(this)
 
@@ -683,6 +680,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				}
 			}
 		}
+		/* TODO: remove it after tests
 		String addKeyToVueStore
 		if(!putFillInitDataMethod){
 			addKeyToVueStore = """var nodeArr = response.nodeId; if(nodeArr && Array.isArray(nodeArr) && nodeArr.length){excon.saveToStore("$dataframeName", "key", response.nodeId[0]);}\n"""
@@ -693,11 +691,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                        for(let i in ajaxFileSave) {
                          const value = ajaxFileSave[i];
                          $vueFileSaveVariables
-  						 self[value.fieldName+'_ajaxFileSave'](responseData, allParams); 	
+  						 self[value.fieldName+'_ajaxFileSave'](responseData, allParams);
 					   }
-                    } 
+                    }
                   $addKeyToVueStore
 				""")
+				*/
 		return """
               ${dataframeName}_save: function(){
                   let allParams = this.state;                                    
@@ -718,16 +717,14 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                         var response = responseData.data;
                         
                         //TODO: add here assignment of response object to the proper vue structure
-                        self.${dataframeName}.state = responseData.data;
+                        self.state.domain_keys = responseData.data.data.domain_keys;
 
-                        //EU!!! Check what is this is doing, and probably remove or modify it for new JSON structure!!!
-                        ${doAfterSaveStringBuilder.toString()}
                         excon.showAlertMessage(response);
-			            	if(response.success) {
+			            	if(response.success){
                                ${doAfterSave}
                         	}
                       }).catch(function (error) {
-                        self.${dataframeName}_save_loading = false;
+                              self.${dataframeName}_save_loading = false;
                               console.log(error);
                       });
                   }

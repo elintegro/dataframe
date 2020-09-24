@@ -288,7 +288,7 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	   return resultPage
    }
 
-	public def saveRaw(def request){
+	public DataframeResponse saveRaw(def request){
 		def requestParams = request.getJSON()
 
 		Dataframe dataframe = Dataframe.getDataframeByName(requestParams)
@@ -346,11 +346,11 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 		if(result) {
 			msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
 		} else {
-			response.result = false
+			response.success = false
 			msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
 		}
 		response.message = msg
-		response.dataframeInstance = dataframeInstance
+		//response.dataframeInstance = dataframeInstance
 
 		return response
 	}

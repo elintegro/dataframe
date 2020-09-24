@@ -114,57 +114,67 @@ class DataInit {
 		Person person = new Person(email: user.email, firstName: user.firstName, lastName: user.lastName, user: user).save(flush: true)
 	}
 	static def initElintegroClientProject(){
-		ClientProject clientProject = new ClientProject(clientName:"" ,projectName:"Globe Chalet" ,logo:"assets/clientsProjectImages/globeChalet.PNG" ,
-				description:"Software to manage Associations\n" +
-				"of real estate properties and communities\n" +
-				"\n" ,linkToWebsite:"www.globeChalet.com" ).save()
-		 new ClientProject(clientName:"Coach Clone" ,projectName:"Coach Clone application" ,logo:"assets/clientsProjectImages/coachClone.PNG" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros" ,linkToWebsite:"https://www.coachclone.com/" ).save()
-		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"" ,logo:"assets/clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
-		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"" ,logo:"assets/clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
+		if (!ClientProject.count()) {
+			ClientProject clientProject = new ClientProject(clientName: "", projectName: "Globe Chalet", logo: "assets/clientsProjectImages/globeChalet.PNG",
+					description: "Software to manage Associations\n" +
+							"of real estate properties and communities\n" +
+							"\n", linkToWebsite: "www.globeChalet.com").save()
+			new ClientProject(clientName: "Coach Clone", projectName: "Coach Clone application", logo: "assets/clientsProjectImages/coachClone.PNG", description: "All In One Lifestyle Coaching Tool for Fitness Pros", linkToWebsite: "https://www.coachclone.com/").save()
+			ClientProject clientProject2 = new ClientProject(clientName: "Morgan Stanley", projectName: "", logo: "assets/clientsProjectImages/morganStanley.PNG", description: "Nothing here ", linkToWebsite: "https://www.morganstanley.com/").save()
+			ClientProject clientProject3 = new ClientProject(clientName: "Yellow Pages", projectName: "", logo: "assets/clientsProjectImages/yellowPages.PNG", description: "Nothing here", linkToWebsite: "https://www.yellopages.com/").save()
+		}
 	}
-	static def initelintegrostartappSkills(){
-		new Skills(code:"java",name:"Java",description: "Nothing").save()
-		new Skills(code:"spring",name:"Spring Framework",description: "Nothing").save()
-		new Skills(code:"hibernate",name:"Hibernate",description: "Nothing").save()
-		new Skills(code:"sql",name:"SQL",description: "Nothing").save()
-		new Skills(code:"js",name:"Javascript",description: "Nothing").save()
-		new Skills(code:"jq",name:"JQuery",description: "Nothing").save()
-		new Skills(code:"html",name:"HTML",description: "Nothing").save()
-		new Skills(code:"css",name:"CSS",description: "Nothing").save()
-		new Skills(code:"unix",name:"UNIX/Linux (including scripting)",description: "Nothing").save()
-		new Skills(code:"mvn",name:"Maven",description: "Nothing").save()
-		new Skills(code:"git",name:"Git",description: "Nothing").save()
-		new Skills(code:"eclipse",name:"Eclipse",description: "Nothing").save()
-		new Skills(code:"intellij",name:"Intellij",description: "Nothing").save()
-		new Skills(code:"agile",name:"Agile",description: "Nothing").save()
-		new Skills(code:"grails",name:"Grails",description: "Nothing").save()
-		new Skills(code:"angular",name:"Angular",description: "Nothing").save()
-		new Skills(code:"react",name:"React",description: "Nothing").save()
-		new Skills(code:"python",name:"Python",description: "Nothing").save()
-		new Skills(code:"php",name:"PHP",description: "Nothing").save()
-		new Skills(code:"mongodb",name:"MongoDB",description: "Nothing").save()
-		new Skills(code:"vuejs",name:"VueJs",description: "Nothing").save()
-		new Skills(code:"jenkins",name:"Jenkins",description: "Nothing").save()
-
-	}
-	static def initelintegrostartappPosition(){
-		new Position(_code:"be", name:"Back-end Java Developer",description: "Nothing").save()
-		new Position(_code: "fe", name:"Front-end Developer",description: "Nothing").save()
-		new Position(_code:"po", name:"Product Owner",description: "Nothing").save()
-		new Position(_code:"sm", name:"Scrum Master",description: "Nothing").save()
-		new Position(_code:"sa", name:"Site Adminstrator",description: "Nothing").save()
-		new Position(_code:"do", name:"Developer",description: "Nothing").save()
+	static def initElintegroWebsiteSkills(){
+		if (!Skills.count()) {
+			new Skills(code: "java", name: "Java", description: "Nothing").save()
+			new Skills(code: "spring", name: "Spring Framework", description: "Nothing").save()
+			new Skills(code: "hibernate", name: "Hibernate", description: "Nothing").save()
+			new Skills(code: "sql", name: "SQL", description: "Nothing").save()
+			new Skills(code: "js", name: "Javascript", description: "Nothing").save()
+			new Skills(code: "jq", name: "JQuery", description: "Nothing").save()
+			new Skills(code: "html", name: "HTML", description: "Nothing").save()
+			new Skills(code: "css", name: "CSS", description: "Nothing").save()
+			new Skills(code: "unix", name: "UNIX/Linux (including scripting)", description: "Nothing").save()
+			new Skills(code: "mvn", name: "Maven", description: "Nothing").save()
+			new Skills(code: "git", name: "Git", description: "Nothing").save()
+			new Skills(code: "eclipse", name: "Eclipse", description: "Nothing").save()
+			new Skills(code: "intellij", name: "Intellij", description: "Nothing").save()
+			new Skills(code: "agile", name: "Agile", description: "Nothing").save()
+			new Skills(code: "grails", name: "Grails", description: "Nothing").save()
+			new Skills(code: "angular", name: "Angular", description: "Nothing").save()
+			new Skills(code: "react", name: "React", description: "Nothing").save()
+			new Skills(code: "python", name: "Python", description: "Nothing").save()
+			new Skills(code: "php", name: "PHP", description: "Nothing").save()
+			new Skills(code: "mongodb", name: "MongoDB", description: "Nothing").save()
+			new Skills(code: "vuejs", name: "VueJs", description: "Nothing").save()
+			new Skills(code: "jenkins", name: "Jenkins", description: "Nothing").save()
+		}
 
 	}
+	static def initElintegroWebsitePosition(){
+		if (!Position.count()) {
+			new Position(_code: "be", name: "Back-end Java Developer", description: "Back-end Java Developer").save()
+			new Position(_code: "fe", name: "Front-end Developer", description: "Front-end Developer").save()
+			new Position(_code: "po", name: "Product Owner", description: "Product Owner").save()
+			new Position(_code: "sm", name: "Scrum Master", description: "Scrum Master").save()
+			new Position(_code: "sa", name: "Site Adminstrator", description: "Site Adminstrator").save()
+			new Position(_code: "do", name: "Developer", description: "Developer").save()
+			new Position(_code: "tl", name: "Technical Lead", description: "Technical Lead").save()
+			new Position(_code: "qa", name: "Quality Assurance", description: "Quality Assurance specialist").save()
+			new Position(_code: "pm", name: "Project Manager", description: "Project Manager").save()
+			new Position(_code: "pm", name: "Devop", description: "Developer Operator").save()
+		}
+	}
 
 
-	static def initelintegrostartappReferences(def userList) {
-
-		new ApplicationStatus(code: "ACCEPTED", name: "Accepted", description: "Application accepted and a new client is created").save(failOnError: true)
-		new ApplicationStatus(code: "IN_REVIEW", name: "In Review", description: "Application in procee opf the review").save(failOnError: true)
-		new ApplicationStatus(code: "WAITING_LIST", name: "Waiting List", description: "Application is in waiting list until an expiration date").save(failOnError: true)
-		new ApplicationStatus(code: "REJECTED", name: "Rejected", description: "Application is rejected ...").save(failOnError: true)
-		new ApplicationStatus(code: "APPLIED", name: "Applied", description: "Application is application ...").save(failOnError: true)
+	static def initElintegroWebsiteReferences(def userList) {
+		if (!ApplicationStatus.count()) {
+			new ApplicationStatus(code: "ACCEPTED", name: "Accepted", description: "Application accepted and a new client is created").save(failOnError: true)
+			new ApplicationStatus(code: "IN_REVIEW", name: "In Review", description: "Application in procee opf the review").save(failOnError: true)
+			new ApplicationStatus(code: "WAITING_LIST", name: "Waiting List", description: "Application is in waiting list until an expiration date").save(failOnError: true)
+			new ApplicationStatus(code: "REJECTED", name: "Rejected", description: "Application is rejected ...").save(failOnError: true)
+			new ApplicationStatus(code: "APPLIED", name: "Applied", description: "Application is application ...").save(failOnError: true)
+		}
 
 
 		new FacilityType(code: "nursing_home", name: "Nursing Home", description: "Nursing Home").save(failOnError: true)

@@ -60,12 +60,6 @@ beans {
                                                  <vueafterloggedindataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                                  <vueloginnavigation v-else/>                                  
                                 </v-toolbar-items>"""
-        /*layoutPlaceHolder = """<v-toolbar-items dark class="hidden-xs-and-down"><v-card color="light-blue darken-2" text>
-                [BUTTON_SCRIPT][REF_FIELD]</v-card><v-spacer style=" width: 100px; "></v-spacer><v-layout row align-center justify-end>
-                                         <vueafterloggedindataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
-                                         <vueloginnavigation v-else/>
-                                   </v-layout>
-        </v-toolbar-items>"""*/
     }
 
     loginLogoutNavigationLayout(ColumnLayoutVue){bean ->

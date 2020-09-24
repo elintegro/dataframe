@@ -471,12 +471,6 @@ beans {
                        var details = this.state.vueNewEmployeeBasicInformationDataframe
                        console.log(details)
                        var allParams = this.state;
-                       //allParams['firstName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_firstName;
-                       //allParams['lastName'] = this.state.vueNewEmployeeBasicInformationDataframe_person_lastName;
-                       //allParams['email'] = this.state.vueNewEmployeeBasicInformationDataframe_person_email;
-                       //allParams['phone'] = this.state.vueNewEmployeeBasicInformationDataframe_person_phone;
-                       //allParams['linkedin'] = this.state.vueNewEmployeeBasicInformationDataframe_application_linkedin;
-                       //allParams['availablePosition'] = this.state.vueNewEmployeeBasicInformationDataframe_person_availablePosition;
                        allParams['dataframe'] = 'vueNewEmployeeBasicInformationDataframe';
                        console.log(allParams)                       
                        console.log("do you see all params?")
@@ -487,13 +481,6 @@ beans {
                        data: allParams
                          }).then(function(responseData){
                           var response = responseData;
-                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","vueNewEmployeeUploadResumeDataframe_resume_id",response.data.id)
-                          //Here is I put generated keys to the Vue component Store of this Vue component (dataframe) in order to other dataframes be 
-                          // able to use them to complete the data for the same records...  
-                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_person_id",response.data.person_id)
-                          //excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key_application_id",response.data.application_id)
-                          //excon.saveToStore("vueNewEmployeeBasicInformationDataframe","key_person_id",response.data.person_id)
-                          //excon.saveToStore("vueNewEmployeeBasicInformationDataframe","key_application_id",response.data.application_id)
                           excon.saveToStore("vueNewEmployeeBasicInformationDataframe","state",response.data.data)                                                                                                            
                           console.log(response)                            
                 });
