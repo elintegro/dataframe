@@ -147,9 +147,10 @@ beans{
         flexGridValues= ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
                 quotes: ["widget":"CarouselWidgetVue"
-                        ,"name":"quotes"
-                        ,"height":"400"
-                        ,"content":""" 
+                            ,"name":"quotes"
+                            ,"height":"400"
+                            ,hql:""" select testimonials.id as id ,testimonials.quote as quote, testimonials.name as name , testimonials.title as title, testimonials.customerImage as customerImage from Testimonials testimonials  """
+                            ,"content":""" 
                                     <v-card
                                          height="100%"
                                          tile
@@ -170,7 +171,7 @@ beans{
                                                         color="white"
                                                         size="150"
                                                 >
-                                                    <img :src="item.src">
+                                                    <img :src="item.customerImage">
                                                 </v-avatar>
                                             </v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},{{item.title}}</v-col>
