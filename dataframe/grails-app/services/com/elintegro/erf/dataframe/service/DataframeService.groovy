@@ -13,20 +13,18 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.dataframe.service
 
-import com.elintegro.erf.dataframe.DataFrameInitialization
-import com.elintegro.erf.dataframe.DataManipulationException
-import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.DataframeException
-import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.DomainClassInfo
-import com.elintegro.erf.dataframe.ParsedHql
+import com.elintegro.erf.dataframe.*
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.db.types.DataType
 import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.model.DataframeResponse
+import grails.util.Holders
+import grails.web.servlet.mvc.GrailsParameterMap
 import org.grails.core.DefaultGrailsDomainClass
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
+
+import javax.servlet.http.HttpSession
 
 class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	Dataframe parent
@@ -261,11 +259,9 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 
 	
    public String getHtml(String layout){
-	   println ">>>>>> dataframe service ------ In getHtml()"
 	   if(!resultPage ||  !currentLayout || currentLayout != layout){
 	   	prepare(layout)
 	   }
-	   println "resultpage: "+ resultPage
 	   return resultPage  
    }
   
@@ -306,10 +302,6 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 			operation = "I";
 		}
 
-		def responseData
-		def generatedKeys = [:]
-		def generatedKeysArr = []
-
 		Map savedResultMap = dataframeInstance.getSavedDomainsMap();
 
 		savedResultMap.each { domainAlias, domainObj ->
@@ -317,7 +309,7 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 			def domainInstance = domainObj[1]
 			boolean isInsertDomainInstance = domainObj[2]
 			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
-			domain?.keys?.each{ key ->
+			domain?.domainKeys?.each{ key ->
 				def keyValue = domainInstance."${key}"
 				String myDomainAlias = domainClassInfo.getDomainAlias()
 				def keyOldValue = requestParams?.domain_keys?."${myDomainAlias}"."${key}"
@@ -328,8 +320,6 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 					throw new DataframeException("Save is trying to change Key Value (and it is not Insert!) Could be hacker's attack!")
 				}
 				domainObj.add(keyOldValue)
-
-
 			}
 		}
 
@@ -356,4 +346,26 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	}
 
 
+	def ajaxValuesRaw(Dataframe dataframe, HttpSession session, GrailsParameterMap params) {
+
+		def userId = getSessionUserId(session)
+
+		def dfInstance = new DataframeInstance(dataframe, params)
+
+		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
+
+		def jsonMap = dfInstance.readAndGetJson()
+
+		def inp = dfInstance.getFieldValuesAsKeyValueMap()
+		return jsonMap
+	}
+
+	public static long getSessionUserId(def session) {
+		String userId = session.getAttribute("userid")
+		if ( userId == null ) {
+			userId = (long) Holders.grailsApplication.config.guestUserId
+			session.setAttribute("userid", userId)
+		}
+		return userId
+	}
 }

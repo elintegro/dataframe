@@ -14,22 +14,15 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.gerf
 
 import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.service.DataframeService
-import com.elintegro.erf.dataframe.vue.DataframeConstants
-import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.service.JavascriptService
 import com.elintegro.erf.dataframe.service.TreeService
+import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.converters.JSON
-import grails.test.mixin.gorm.Domain
 import grails.util.Holders
-import org.springframework.context.MessageSource
-import org.springframework.context.i18n.LocaleContextHolder
-//import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.ApplicationContext
-
+//import org.codehaus.groovy.grails.commons.ApplicationHolder
 /**
  * Created with IntelliJ IDEA.
  * User: Shai- Eugenel
@@ -82,69 +75,16 @@ class DataframeController {
 	 * @return
 	 */
 	def ajaxValues() {
-		def jsonMap = ajaxValuesRaw()
-		def converter = jsonMap as JSON
+
+		Dataframe dataframe = getDataframe(params)
+
+		def jsonMap = dataframeService.ajaxValuesRaw(dataframe, session, params)
+
+		//def converter = jsonMap as JSON
+
 		render(jsonMap)
 	}
 
-	/*def ajaxValuesVue(){
-		def jsonMap = ajaxValuesRawVue()
-		def converter = jsonMap as JSON
-		converter.render(response)
-	}*/
-
-	def ajaxValuesRaw() {
-
-		Dataframe dataframe = getDataframe(params)
-
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//Actual data, retrieved from Database:
-		//
-
-		def userId = session.getAttribute("userid")
-		if (userId == null) {
-			session.setAttribute("userid", (long) grailsApplication.config.guestUserId)
-		}
-		userId = session.getAttribute("userid")
-
-		def p = params
-		def s = session
-
-		def dfInstance = new DataframeInstance(dataframe, params)
-
-		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
-
-		def jsonMap = dfInstance.readAndGetJson()
-
-		def inp = dfInstance.getFieldValuesAsKeyValueMap()
-		return jsonMap
-	}
-	/*def ajaxValuesRawVue(){
-
-		Dataframe dataframe = getDataframe(params)
-
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//Actual data, retrieved from Database:
-		//
-
-		def userId = session.getAttribute("userid")
-		if(userId == null){
-			session.setAttribute("userid", (long)grailsApplication.config.guestUserId)
-		}
-		userId = session.getAttribute("userid")
-
-		def p = params
-		def s = session
-
-		def dfInstance = new DataframeInstance(dataframe, params)
-
-		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
-
-		def jsonMap = dfInstance.readAndGetJson()
-
-		def inp = dfInstance.getFieldValuesAsKeyValueMap()
-		return jsonMap
-	}*/
 	/**
 	 * This method uses the parameter in the given hql of Dataframe object and retrieve the corresponding
 	 * values from database. If there is no match for the parameter then a blank list will be return other
@@ -178,10 +118,9 @@ class DataframeController {
 	 */
 	def ajaxCreateNew() {
 		Dataframe dataframe = getDataframe(params)
-		def userId = session.getAttribute("userid")
-		if (userId == null) {
-			session.setAttribute("userid", (long) grailsApplication.config.guestUserId)
-		}
+
+		def userId = dataframeService.getSessionUserId(session)
+
 		def dfInstance = new DataframeInstance(dataframe, params)
 		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
 		def jsonMap = dfInstance.createAndGetJson()
@@ -192,16 +131,6 @@ class DataframeController {
 		}
 		render jsonMap as JSON
 	}
-
-
-	public static long getSessionUserId(def session) {
-		String userId = session.getAttribute("userid")
-		if ( userId == null ) {
-			session.setAttribute("userid", (long) Holders.grailsApplication.config.guestUserId)
-		}
-		return Long.valueOf(userId)
-	}
-
 
 	/**
 	 * This method uses the parameter to update/insert the fields mention on hql of the Dataframe

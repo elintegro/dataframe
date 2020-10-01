@@ -13,29 +13,19 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
-import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.DataframeException
-import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.DomainClassInfo
-import com.elintegro.erf.dataframe.ResultPageHtmlBuilder
+import com.elintegro.erf.dataframe.*
+import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.vue.DataMissingException
 import com.elintegro.erf.dataframe.vue.DataframeVue
-import com.elintegro.erf.dataframe.DbResult
-import com.elintegro.erf.dataframe.ParsedHql
-import com.elintegro.erf.dataframe.db.fields.MetaField
-import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.utils.MapUtil
 import grails.converters.JSON
 import grails.util.Holders
+import org.apache.commons.lang.WordUtils
 import org.grails.web.json.JSONArray
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.i18n.LocaleContextHolder
-import org.apache.commons.lang.WordUtils
-import groovy.util.logging.Slf4j
-
-
 /**
  * Created by kchapagain on Nov, 2018.
  */
@@ -135,7 +125,7 @@ $fieldParams
         field.put("parsedHql", parsedHql);
         List dataHeader = []
         boolean showRefreshMethod = false
-        fieldMetaData.each {metaField ->
+            fieldMetaData.each {metaField ->
             def propItemText = metaField.alias?:metaField.name
             def propItemVal  = metaField.name
             String headerText = propItemText.capitalize()

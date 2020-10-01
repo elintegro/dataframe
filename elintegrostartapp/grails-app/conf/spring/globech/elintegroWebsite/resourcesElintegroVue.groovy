@@ -1,7 +1,6 @@
 package spring.globech.elintegroWebsite
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
-import com.elintegro.erf.widget.vue.GridWidgetVue
 import grails.util.Holders
 
 beans {
@@ -269,14 +268,18 @@ beans {
         saveButton = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
-        doAfterSave = """                         
-                         excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id");
+        doAfterSave = """
+                        allParams["id"] = excon.getFromStore("vueNewEmployeeBasicInformationDataframe", "domain_keys.application.id")                 
+                        excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeUploadResumeDataframe");
                       """
+
+        doBeforeSave = """
+                       """
 
         addFieldDef = [
 
                    "Person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
-                "application.availablePositions"  :[
+                    "application.availablePositions"  :[
                         "widget"             :"ComboboxVue"
                         ,internationalize    :true
                         ,initBeforePageLoad  :true
@@ -487,7 +490,7 @@ beans {
         dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
                                      doBeforeSave:""" 
                                      var elementId = '#vueElintegroLoginDataframe';
-                                     allParams["username"] = this.state.persisters.user.username.value;
+                                     lalParams["username"] = this.state.persisters.user.username.value;
                                      allParams["password"] = this.state.persisters.user.password.value;
                                      allParams["remember-me"] = this.state.transits.rememberMe.value;
                                       """,

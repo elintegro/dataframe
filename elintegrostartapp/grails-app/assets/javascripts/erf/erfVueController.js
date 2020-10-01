@@ -22,12 +22,10 @@ var excon = new Vue({
             });
             return json;
         },
-
         capitalize: function(s) {
             if (typeof s !== 'string') return '';
             return s.charAt(0).toUpperCase() + s.slice(1);
         },
-
         saveToStore: function(containerVariable, key, value=''){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
                 return
@@ -48,6 +46,11 @@ var excon = new Vue({
             }
 
         },
+        goToTab: function(containerDataframe, targetDataframe) {
+            //key_<dfname>_<domain>_id_id
+            excon.saveToStore(containerDataframe, containerDataframe + "_tab_model", targetDataframe + "-tab-id");
+        },
+
 
         /**
          *
@@ -98,14 +101,33 @@ var excon = new Vue({
                 if(key == undefined || key == ''){
                     return obj
                 }
-                if(obj.hasOwnProperty(key)){
-                    let obj1 = contaVar + "." + key;
-                    let evalobj1 = eval(obj1);
-                    return  evalobj1;
-                } else {
-                    return "";
-                }
+                return this.getValuePropertyNested(obj, key);
             }
+        },
+
+        /**
+         * Looking for the value for a path in the JSON object and returns its value
+         * @param obj JSON Object
+         * @param key is the path in a JSON object, example: 'persisters.application.linkedIn.value'
+         * @returns {*} value of the key entry of the object, null if no path found
+         * throws "No object for the path" error if no 'key' path exist in the obj
+         */
+        getValuePropertyNested: function(obj, key){
+            var keyWords = key.split(".");
+            if(keyWords && keyWords.length > 0){
+                let i;
+                let curr = obj;
+                for (i = 0; i < keyWords.length; i++) {
+                    var keyElem = keyWords[i];
+                    if(curr.hasOwnProperty(keyElem)){
+                        curr = curr[keyElem];
+                    }else{
+                        throw "No object for the path " + key + " at element " + keyElem;
+                    }
+                }
+                return curr;
+            }
+            throw "No object for the path " + key;
         },
 
         matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {

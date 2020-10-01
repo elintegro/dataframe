@@ -16,44 +16,24 @@ package com.elintegro.erf.dataframe.vue
 import com.elintegro.annotation.OverridableByEditor
 import com.elintegro.erf.dataframe.*
 import com.elintegro.erf.dataframe.db.fields.MetaField
-import com.elintegro.erf.layout.StandardLayout
 import com.elintegro.erf.layout.abs.Layout
 import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.InputWidgetVue
 import com.elintegro.erf.widget.vue.WidgetVue
 import com.elintegro.utils.DataframeFileUtil
-import com.elintegro.utils.MapUtil
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.sun.xml.internal.bind.v2.TODO
-import grails.converters.JSON
-import grails.gsp.PageRenderer
-import grails.util.Environment
 import grails.util.Holders
-import groovy.json.JsonBuilder
-import groovy.text.SimpleTemplateEngine
-//import grails.validation.Validateable
 import groovy.util.logging.Slf4j
-import org.apache.commons.collections.map.LinkedMap
+
+//import grails.validation.Validateable
 import org.apache.commons.lang.WordUtils
-import org.grails.core.DefaultGrailsDomainClass
-import org.grails.web.json.JSONArray
-import org.grails.web.json.JSONObject
-import org.hibernate.Query
-import org.hibernate.Transaction
-import org.hibernate.engine.spi.SessionFactoryImplementor
-import org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory
-import org.hibernate.hql.spi.QueryTranslator
-import org.hibernate.hql.spi.QueryTranslatorFactory
-import org.hibernate.persister.entity.SingleTableEntityPersister
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
-import org.springframework.context.ApplicationContext
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.orm.hibernate5.SessionFactoryUtils
 
-import java.sql.*
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
 import java.util.Map.Entry
-import java.util.stream.Collectors
-
 /**
  *This class along with its subsidaries is responsible for retrieve a and provide Meta data for the Dataframe.
  *
@@ -714,11 +694,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                           data: allParams
                       }).then(function (responseData) {
                         self.${dataframeName}_save_loading = false;
-                        var response = responseData.data;
-                        
-                        //TODO: add here assignment of response object to the proper vue structure
-                        self.state.domain_keys = responseData.data.data.domain_keys;
-
+                        var response = responseData.data;                        
+                        //TODO: add here assignment of response object to the proper vue structure                                                
+                        excon.saveToStore("${dataframeName}", "domain_keys", responseData.data.data.domain_keys);
                         excon.showAlertMessage(response);
 			            	if(response.success){
                                ${doAfterSave}

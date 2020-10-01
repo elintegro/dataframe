@@ -69,7 +69,7 @@ class DataframeInstance implements DataframeConstants{
 		this.requestParams = requestParams
 		this.df = df
 //		sessionHibernate = SessionFactoryUtils.getSession(df.parsedHql.sessionFactory, true)
-		sessionHibernate = df.parsedHql.sessionFactory.openSession()
+		sessionHibernate = df.sessionFactory.openSession()
 	}
 
 	public void setSessionParameters(Map<String, Object> sessionParams){
