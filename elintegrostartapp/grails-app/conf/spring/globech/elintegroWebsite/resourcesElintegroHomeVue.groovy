@@ -44,6 +44,7 @@ beans{
                 ],
                 "buildApp":["widget":"ButtonWidgetVue"
                             ,"name":"buildApp"
+
                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                             ,script: """ this.scrollToQuiz('coachClone');"""
                 ]
@@ -66,10 +67,7 @@ beans{
                                            ,"name":"WeDeliverTextParagraphOne"
                                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
-                WeDeliverTextParagraphTwo:["widget":"TextDisplayWidgetVue"
-                                           ,"name":"WeDeliverTextParagraphTwo"
-                                           ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+
         ]
         currentFrameLayout = ref("vueOurWorkContainerDataframeLayout")
     }
