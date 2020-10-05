@@ -52,7 +52,7 @@ beans {
         saveButton = false
         initOnPageLoad = true
         dataframeButtons = [
-                             home           : [name: "home", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroHomeDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                             home : [name: "home", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroHomeDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("elintegroNavigationButtonLayout")
     }
     vueElintegroNavigationButtonBeforeLoggedInDataframe(DataframeVue) { bean ->

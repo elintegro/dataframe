@@ -45,7 +45,7 @@ beans{
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
                                             <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-                                               <v-img alt ="our_home"  src="assets/home/elintegro_mobile.png"></v-img>
+                                               <v-img alt ="our_home"  src="assets/home/mobile1.png"></v-img>
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>        
                                         </v-row>
@@ -128,7 +128,7 @@ beans{
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
                                             <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-                                                        <v-img alt ="our_frameworks"  src="assets/home/agilityAsService.png"></v-img>
+                                                        <v-img alt ="our_frameworks"  src="assets/home/qualityBuilt.png"></v-img>
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>  
                                       </v-row>       
@@ -154,7 +154,7 @@ beans{
                                                     </v-col>
                                                     <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
                                                     <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-                                                                <v-img alt ="our_frameworks"  src="assets/home/qualityBuilt.png"></v-img>
+                                                                <v-img alt ="our_frameworks"  src="assets/home/agilityAsService.png"></v-img>
                                                     </v-col>
                                                     <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>        
                                                 </v-row>

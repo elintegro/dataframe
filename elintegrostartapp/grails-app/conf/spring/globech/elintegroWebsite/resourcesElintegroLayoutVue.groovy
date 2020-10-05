@@ -31,7 +31,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex><v-app-bar fixed  dense  outline elevate-on-scroll scroll-target="#scrolling-techniques-7" flat color="white"  tabs >
                                    <vueElintegroNavigationDrawerDataframe/>
-                                   <v-toolbar-title style="position:relative;padding-top:30px;" ><vueElintegroLogoDataframe/></v-toolbar-title>
+                                   <v-toolbar-title style="position:relative;padding-top:50px;" ><vueElintegroLogoDataframe/></v-toolbar-title>
                                  
                                    <v-spacer></v-spacer>
                                  
@@ -88,7 +88,7 @@ beans {
                                   <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                   <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/> 
                                   <div><vueElintegroLanguageSelectorDataframe/></div>
-                                  </v-row> 
+                                </v-row> 
                                 </v-toolbar-items>
         </v-flex> """
 
