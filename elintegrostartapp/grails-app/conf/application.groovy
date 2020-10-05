@@ -136,7 +136,7 @@ images {
 		s3 = false
 	}
 //	storageLocation = "/opt/tomcat-8/webapps"
-	storageLocation = "/opt/apache-tomcat-9.0.33/webapps"
+	storageLocation = "/usr/local/opt/apache-tomcat-9.0.33/webapps"
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
 	defaultImagePath = "/assets/$defaultImageName"
@@ -372,7 +372,7 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 //			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
 //			url = " jdbc:mysql://0.tcp.ngrok.io:15905/gcerf"
-			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
+			url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_qa?useUnicode=true&characterEncoding=UTF-8"
 			username = "developer"
 			password = "java1177"
 			logSql = true
@@ -404,13 +404,13 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 	production {
 		server.contextPath = "/"
 		rootPath = ""
-		grails.serverURL = "https://qa.elintegro.com"
+		grails.serverURL = "https://www.elintegro.com"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro.himalaya'
 		dataSource {
 			logSql = true
 //			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
+			url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_prod?useUnicode=true&characterEncoding=UTF-8"
 			username = "developer"
 			password = "java1177"
 
