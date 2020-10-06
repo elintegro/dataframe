@@ -17,10 +17,13 @@ beans{
                                          <vueQuotesContainerDataframe/>
                                          <vueOurTechnologiesContainerDataframe/>
                                          <vueQuizPlaceholderContainerDataframe/>
-
-                                         <vueFooterContainerDataframe/>   
-                                    </v-container></v-row>
+                                    </v-container>
+                                    <v-container class="footerContainer" fluid>
+                                        <vueFooterContainerDataframe/>
+                                    </v-container>     
+                                    </v-row>
                                 </v-flex>
+                                
                                 
                                 """
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
