@@ -276,11 +276,11 @@ beans{
         addFieldDef = [
                 footerPrivacy:["widget":"TextDisplayWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
+                               ,flexGridValues:['xs6', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
                 termAndConditions:["widget":"TextDisplayWidgetVue"
                                ,"name":"termAndConditions"
-                               ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
+                               ,flexGridValues:['xs6', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")

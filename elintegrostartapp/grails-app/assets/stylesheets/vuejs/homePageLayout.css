@@ -141,3 +141,6 @@
     height: 50px;
     color:#2ab6f6;
 }
+.footerContainer .footer .footerTexts .flex{
+    text-align: end;
+}

@@ -132,7 +132,7 @@ beans {
         addFieldDef = [
                 "logo": [
                         "widget"      : "PictureDisplayWidgetVue",
-                        "url"         : "${contextPath}/assets/elintegro_logo.png",
+                        "url"         : "${contextPath}/assets/home/logo.jpg",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "attr"        : " contain ",
                         "height"      : "auto",
@@ -145,8 +145,6 @@ beans {
         currentFrameLayout = ref("vueElintegroLogoDataframeLayout")
 
     }
-
-
 
 
     vueClientProjectDataframe(DataframeVue){bean ->

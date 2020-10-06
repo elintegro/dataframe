@@ -46,9 +46,9 @@ beans{
                                                     [buildApp]
                                                 </v-row>
                                             </v-col>
-                                            <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col> 
-                                            <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-                                               <v-img alt ="our_home"  src="assets/home/mobile1.png"></v-img>
+                                            <v-col cols="12" xs="0" sm="1" md="0" xl="0" lg="0"></v-col> 
+                                            <v-col cols="12" xs="12" sm="12" md="6" xl="6" lg="6" class="text-center">
+                                               <v-img alt ="our_home"  src="assets/home/mob.png"></v-img>
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>        
                                         </v-row>
@@ -225,18 +225,18 @@ beans{
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="2"></v-col> 
-                                                    <v-col cols="2" class="images">
+                                                    <v-col cols="1" class="images">
                                                         <v-img src="assets/home/javascript.png"></v-img>
                                                     </v-col>
-                                                    <v-col cols="1"></v-col> 
+                                                    <v-col cols="2"></v-col> 
                                                         <v-col cols="2" class="images">
                                                         <v-img src="assets/home/oracle.png"></v-img>
                                                     </v-col> 
                                                     <v-col cols="1"></v-col> 
-                                                        <v-col cols="3" class="images">
+                                                        <v-col cols="2" class="images">
                                                         <v-img src="assets/home/kafka.png"></v-img>
                                                     </v-col>
-                                                    <v-col cols="1"></v-col> 
+                                                    <v-col cols="2"></v-col> 
                                                 </v-row>
                                             </v-flex>
                                          </v-container>
