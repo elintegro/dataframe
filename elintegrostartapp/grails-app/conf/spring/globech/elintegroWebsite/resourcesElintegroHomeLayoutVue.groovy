@@ -210,7 +210,7 @@ beans{
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="2"></v-col>
-                                                        <v-col cols="1" class="images">
+                                                        <v-col cols="2" class="images">
                                                         <v-img src="assets/home/vue.png"></v-img>
                                                     </v-col>
                                                     <v-col cols="1"></v-col>
@@ -221,11 +221,11 @@ beans{
                                                         <v-col cols="2"  class="images">
                                                         <v-img src="assets/home/kubernetes.png"></v-img>
                                                     </v-col>
-                                                    <v-col cols="2"></v-col>
+                                                    <v-col cols="1"></v-col>
                                                 </v-row>
                                                 <v-row>
                                                     <v-col cols="2"></v-col> 
-                                                    <v-col cols="1" class="images">
+                                                    <v-col cols="2" class="images">
                                                         <v-img src="assets/home/javascript.png"></v-img>
                                                     </v-col>
                                                     <v-col cols="2"></v-col> 
@@ -236,7 +236,7 @@ beans{
                                                         <v-col cols="2" class="images">
                                                         <v-img src="assets/home/kafka.png"></v-img>
                                                     </v-col>
-                                                    <v-col cols="2"></v-col> 
+                                                    <v-col cols="1"></v-col> 
                                                 </v-row>
                                             </v-flex>
                                          </v-container>
