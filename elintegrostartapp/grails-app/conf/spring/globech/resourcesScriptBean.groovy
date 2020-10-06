@@ -58,6 +58,16 @@ beans {
                                                        if(loggedIn == true && urlLocation.includes('change-forget-password') == true){
                                                            excon.redirectPage(vueInitDataframeVar,'home');
                                                        }
+                                                       if(loggedIn == true && urlLocation.includes('login-page') == true){
+                                                         axios.get('${contextPath}/translatorAssistant/getProjectDetailsFromSessionAfterLoggedIn').then(function (responseData) {
+                                                             var response = responseData.data;
+                                                             if(response.success == true){
+                                                                excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',response.projectDetails);
+                                                                excon.showMessage(responseData,'vueTranslatorDataframe');
+                                                                excon.redirectPage(vueInitDataframeVar,'translator');
+                                                             }
+                                                         })
+                                                       }
                                                        if(loggedIn == false){
 //                                                        vueInitDataframeVar.\$router.push("/");this.location.reload();
                                                        }
@@ -69,60 +79,28 @@ beans {
                                                                                                      
                                 """
     }
-    vueQuotesContainerDataframe_script(VueJsEntity){bean ->
-        methods="""
-                    hello(params){
-                                                               
-                               document.getElementById("nameOfPerson").innerHTML = ' Name of the Person,';
-                               document.getElementById("jobTitle").innerHTML = 'Job Title';
-                               if(params=='coachClone'){
-                                    document.getElementById("quotes").innerHTML = '"Elintegro are awesome and Shai is a very nice person."';
-                                    document.getElementById("coachClone").style.opacity =1;
-                                    document.getElementById("weBus").style.opacity =0.25;
-                               }else{
-                                    document.getElementById("quotes").innerHTML = '"Elintegro are fantastic and Shai is a very nice person."';
-                                    document.getElementById("weBus").style.opacity =1;
-                                    document.getElementById("coachClone").style.opacity =0.25;
-                               }     
-                    },
-               
-                    """
-    }
+
     vueFirstContainerDataframe_script(VueJsEntity){bean ->
         methods = """
                           scrollToQuiz(){
                             let element = document.getElementById('quiz_placeholder');
                              element.scrollIntoView({ behavior: 'smooth' });
                     },\n
-                    displayText(){
-                            var text = document.getElementById("buildsData").innerHTML;
+
+                    changeWords(){
+                            var text = document.getElementById("buildData").innerHTML;
+                            var build = document.getElementById("build");
                             var texts = text.split(',');
-                        setInterval(function(){
-                                var rand = Math.floor(Math.random() * 6);
-                                if(texts[rand] == 'Design' || texts[rand] == 'Deliver' ){
-                                    document.getElementById("builtRow").style.marginRight = "115px"; 
-                                }else if(texts[rand] == 'Built'){
-                                    document.getElementById("builtRow").style.marginRight = "190px"; 
-                                }else{
-                                    document.getElementById("builtRow").style.marginRight = "60px"; 
-                                }
-                                document.getElementById("text").innerHTML = texts[rand];
-                                }, 2000);
-                     }           
+                            var stop =setInterval(function(){
+                                var rand = Math.floor(Math.random() * 3);
+                                build.innerHTML = texts[rand];
+                            }, 2000);
+                            
+                     },\n           
+
                     """
     }
-    vueFirstContainerResizeDataframe_script(VueJsEntity){bean ->
-        methods = """
-                     displayTextResize(){
-                            var text = document.getElementById("buildsDataResize").innerHTML;
-                            var texts = text.split(',');
-                            setInterval(function(){
-                                var rand = Math.floor(Math.random() * 6);
-                                document.getElementById("textResize").innerHTML = texts[rand];
-                                }, 2000);
-                     }           
-                    """
-    }
+
     vueElintegroAboutUsMenuDataframe_script(VueJsEntity){ bean ->
         methods = """scrollTo(param){
            
@@ -1096,8 +1074,15 @@ beans {
                                                                 }      
                                                         });
                                        }
-                                       else{
-                                             excon.redirectPage(self,"login-page")
+                                       else{ 
+                                            allParams['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                            axios({ 
+                                                 method:'post',
+                                                 url:'${contextPath}/translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
+                                                 data:allParams
+                                            }).then(function(responseData){
+                                                 excon.redirectPage(self,"login-page");
+                                            })
                                        }                 
                                         
                                         
@@ -1237,8 +1222,15 @@ beans {
                                                     document.body.appendChild(fileLink);
                                                     fileLink.click();
                                             }
-                                           else{
-                                                  excon.redirectPage(self,"login-page")
+                                            else{
+                                                      allParams['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                                      axios({ 
+                                                             method:'post',
+                                                             url:'${contextPath}/translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
+                                                             data:allParams
+                                                      }).then(function(responseData){
+                                                              excon.redirectPage(self,"login-page");
+                                                      })
                                            }
                                            
                                     }

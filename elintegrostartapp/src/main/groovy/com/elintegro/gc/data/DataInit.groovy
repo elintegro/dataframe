@@ -17,6 +17,7 @@ import com.elintegro.auth.Role
 import com.elintegro.auth.User
 import com.elintegro.auth.UserRole
 import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.Testimonials
 import com.elintegro.elintegrostartapp.hr.AnswerTable
 import com.elintegro.elintegrostartapp.hr.Position
 import com.elintegro.elintegrostartapp.hr.QuestionTable
@@ -102,12 +103,12 @@ class DataInit {
 	static List<Language> initLanguage() {
 		if (!Language.count()) {
 			new Language(code: "en", ename: "English", name: "English", description: "English is used in many countries. Also it is a language of international communication.", inuse: true).save(failOnError: true)
-			new Language(code: "ru", ename: "Russian", name: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439", description: "Russian.", inuse: true).save(failOnError: true)
+			new Language(code: "ru", ename: "Russian", name: "русский", description: "Russian.", inuse: true).save(failOnError: true)
 			new Language(code: "fr", ename: "French", name: "Français", description: "French.", inuse: true).save(failOnError: true)
 			new Language(code: "he", ename: "Hebrew", name: "עברית", description: "Hebrew.", inuse: true).save(failOnError: true)
-			new Language(code: "ar", ename: "Arabic", name: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629", description: "Arabic.", inuse: false).save(failOnError: true)
+			new Language(code: "ar", ename: "Arabic", name: "عربى", description: "Arabic.", inuse: false).save(failOnError: true)
 			new Language(code: "es", ename: "Spanish", name: "español", description: "Spanish.", inuse: false).save(failOnError: true)
-			new Language(code: "ne", ename: "Nepali", name: "Nepali", description: "Nepali.", inuse: false).save(failOnError: true)
+			new Language(code: "ne", ename: "Nepali", name: "नेपाली", description: "Nepali.", inuse: false).save(failOnError: true)
 		}
 
 		List languages = Language.findAllByInuse(true);
@@ -125,6 +126,11 @@ class DataInit {
 		 new ClientProject(clientName:"Coach Clone" ,projectName:"Coach Clone application" ,logo:"assets/clientsProjectImages/coachClone.PNG" ,description:"All In One Lifestyle Coaching Tool for Fitness Pros" ,linkToWebsite:"https://www.coachclone.com/" ).save()
 		ClientProject clientProject2 = new ClientProject(clientName:"Morgan Stanley" ,projectName:"" ,logo:"assets/clientsProjectImages/morganStanley.PNG" ,description:"Nothing here ",linkToWebsite:"https://www.morganstanley.com/" ).save()
 		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"" ,logo:"assets/clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
+	}
+	static  def initTestimonials(){
+		new Testimonials(quote:"From concept to development, it was a pleasure to work with Elintegro.They delivered my product on time and on budget. I’d definitely hire them again.",name:"Drasko Raicevic",title: "Quickbody Fitness",customerImage:"assets/home/avatar.png").save()
+		new Testimonials(quote:"The Dating app Elintegro developed for me was perfect. It was exactly what I needed, and more.",name:"Lev",title: "Matchmaker",customerImage:"assets/home/avatar.png").save(flush:true)
+
 	}
 	static def initelintegrostartappSkills(){
 		new Skills(code:"java",name:"Java",description: "Nothing").save()
@@ -293,4 +299,5 @@ class DataInit {
 			new FrequencyUnit(name: "Year", description: "year").save(flush:true)
 		}
 	}
+
 }
