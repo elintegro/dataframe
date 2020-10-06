@@ -29,7 +29,7 @@ beans {
     }
     vueElintegroNavigationLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex><v-app-bar fixed  dense  outline elevate-on-scroll scroll-target="#scrolling-techniques-7" flat color="white"  tabs >
+        layoutPlaceHolder = """<v-flex><v-app-bar class="appBar" fixed  dense  outline elevate-on-scroll scroll-target="#scrolling-techniques-7" flat color="white"  tabs >
                                    <vueElintegroNavigationDrawerDataframe/>
                                    <v-toolbar-title style="position:relative;padding-top:50px;" ><vueElintegroLogoDataframe/></v-toolbar-title>
                                  
@@ -56,7 +56,7 @@ beans {
                                       <v-list-item style="margin-left:5%;position:fixed;height:auto;"><vueElintegroAppsDataframe/> </v-list-item>
                                       <v-list-item style="margin-top: 40%;" ><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                          <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
-                                      <v-list-item style="margin-top:-12%;" ><vueElintegroLanguageSelectorDataframe/></v-list-item>
+                                      <v-list-item style="margin-top:-12%;margin-left:-10%" ><vueElintegroLanguageSelectorDataframe/></v-list-item>
                                      </v-list>
                                      </v-navigation-drawer>
        </div>"""

@@ -312,8 +312,8 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro@localhost'
 		dataSource {
 			logSql = true
-//	  	 	dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
-			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
+	  	 	dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+//			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
 			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
 //			username = "root"
 //			password = "qbohfoj"
