@@ -1,3 +1,4 @@
+import com.elintegro.LanguageTranslateController
 import com.elintegro.auth.UserPasswordEncoderListener
 
 // Place your Spring DSL code here
@@ -56,6 +57,8 @@ beans = {
     loadResource "globech/applicationManagement/resourcesApplicationManagement.groovy"
     loadResource "globech/userManagement/resourcesUserManagement.groovy"
     loadResource "globech/elintegroWebsite/resourcesElintegroVue.groovy"
+    loadResource "globech/elintegroWebsite/resourcesElintegroHomeVue.groovy"
+    loadResource "globech/elintegroWebsite/resourcesElintegroHomeLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesElintegroLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesNavigationButtonLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesCareersPageLayoutVue.groovy"
@@ -63,6 +66,9 @@ beans = {
     loadResource "globech/elintegroWebsite/resourcesClientProjectPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesContactUsPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesGettingStartedPageLayoutVue.groovy"
+    loadResource"globech/elintegroWebsite/resourcesTranslationAssistantVue.groovy"
+    loadResource"globech/elintegroWebsite/resourcesTranslationAssistantLayoutVue.groovy"
+
     if (Environment.current == Environment.DEVELOPMENT){
 //        loadResource "resourcesEditor.groovy"
 //        editorBeanLoading(EditorBeanLoading){ bean -> }

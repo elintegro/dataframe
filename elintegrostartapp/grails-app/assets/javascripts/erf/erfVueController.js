@@ -146,7 +146,7 @@ var excon = new Vue({
             }
         },
 
-        showAlertMessage: function(response){
+        showAlertMessageWithResponse: function(response){
             if(response.success) {
                 if(response.msg){
                     store.commit('alertMessage', {'snackbar':true, 'alert_type':'success', 'alert_message':response.msg});
@@ -156,6 +156,14 @@ var excon = new Vue({
                     store.commit('alertMessage', {'snackbar':true, 'alert_type':'error', 'alert_message':response.msg})
                 }
             }
+        },
+        showMessage: function(responseData,dataframeName){
+            let response = responseData.data;
+            let stateDataOfThisDataframe = store.getters.getState(dataframeName);
+            let alertProps = stateDataOfThisDataframe.alertProp;
+            Vue.set(alertProps,'snackbar',true);
+            Vue.set(alertProps,'alert_type',response.alert_type);
+            Vue.set(alertProps,'alert_message',response.msg);
         },
 
         closeDataframe: function(dataframeName){
@@ -351,6 +359,28 @@ var excon = new Vue({
         reset: function(dataframeName){
 
             let oldData = store.getters.getState(dataframeName);
+        },
+        enableDisableButton:function (dataframeName , valueToObserve){
+            let state = store.getters.getState(dataframeName);
+            let dataToChange;
+            if(valueToObserve == null && valueToObserve == undefined){
+                 dataToChange = true
+            }
+            else if (valueToObserve && valueToObserve.length == 0){
+                dataToChange = true
+            }
+            else {
+                dataToChange = false
+            }
+            return dataToChange
+        },
+        redirectPage:function (dataFrame,pageToRedirect,routeId){
+            if(routeId == null){
+            dataFrame.$router.push('/'+pageToRedirect+'/0');
+        }
+            else {
+                dataFrame.$router.push('/'+pageToRedirect+'/'+routeId);
+            }
         }
     }
 

@@ -14,6 +14,10 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.register
 
 import com.elintegro.auth.Role
+import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.client.Application
+import com.elintegro.auth.User
+import com.elintegro.auth.UserRole
 import com.elintegro.gc.data.DataInit
 import com.elintegro.gerf.DataframeController
 import com.elintegro.elintegrostartapp.Facility
@@ -35,6 +39,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     def mailService
     def springSecurityService
     def registerService
+    def passwordEncoder
 
     //@Transactional(propagation=Propagation.REQUIRES_NEW)
     def register() {
@@ -61,44 +66,44 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 //
 //        }else{ //expected User is registering for the facility and expected role is correct
 
-            RegisterCommand command =  getRegisterValidationObj(requestParams)
-            grails.util.Pair result = registerService.registerUser(command, regRole, null)
+        RegisterCommand command = getRegisterValidationObj(requestParams)
+        grails.util.Pair result = registerService.registerUser(command, regRole, null)
 
-            com.elintegro.auth.User user = result.getaValue()
-            def returnedMessage = result.getbValue()
-            def errorMessage = message(code: returnedMessage)
+        com.elintegro.auth.User user = result.getaValue()
+        def returnedMessage = result.getbValue()
+        def errorMessage = message(code: returnedMessage)
 
-            if(user == null){
-                resultData = ['msg': errorMessage, 'success': false]
-                def converter = resultData as JSON
-                converter.render(response)
-                return
-            }
+        if (user == null) {
+            resultData = ['msg': errorMessage, 'success': false]
+            def converter = resultData as JSON
+            converter.render(response)
+            return
+        }
 
 
-            DataInit.initStructuresForRegisteredUser(user)
-            RegistrationCode registrationCode = registrationCode(user)
-            if (registrationCode == null || registrationCode.hasErrors()) {
-                flash.error = message(code: 'spring.security.ui.register.miscError')
-                flash.chainedParams = params
-                return
-            }
+        DataInit.initStructuresForRegisteredUser(user)
+        RegistrationCode registrationCode = registrationCode(user)
+        if (registrationCode == null || registrationCode.hasErrors()) {
+            flash.error = message(code: 'spring.security.ui.register.miscError')
+            flash.chainedParams = params
+            return
+        }
 
-            try {
-                sendVerifyRegistrationMail registrationCode, user, command.email
-                verificationEmailMessage = message(code: 'registration.mail.success')
-                resultData = ['msg': verificationEmailMessage, 'success': true]
-            } catch (Exception e) {
-                log.error(e)
-                verificationEmailMessage = message(code: 'registration.mail.noConnection')
-                resultData = ['msg': verificationEmailMessage, 'success': false]
-            }
+        try {
+            sendVerifyRegistrationMail registrationCode, user, command.email
+            verificationEmailMessage = message(code: 'registration.mail.success')
+            resultData = ['msg': verificationEmailMessage, 'success': true]
+        } catch (Exception e) {
+            log.error(e)
+            verificationEmailMessage = message(code: 'registration.mail.noConnection')
+            resultData = ['msg': verificationEmailMessage, 'success': false]
+        }
 
         def converter = resultData as JSON
         converter.render(response)
     }
 
-    @Transactional(propagation=Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     def verifyRegistration() {
         String token = params.t
 
@@ -126,95 +131,129 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 //        Person p = new Person(firstName:user.firstName, lastName:user.lastName, email:user.username, user:user).save(flush:true)
 
         flash.message = message(code: 'spring.security.ui.register.complete')
+
         redirect uri: registerPostRegisterUrl ?: successHandlerDefaultTargetUrl
         ////////////////////////////////////////////
     }
 
 
-
-
     def forgotPassword() {
+        def params = request.getJSON()
 
         ForgotPasswordCommand forgotPasswordCommand = getForgetPasswordCommandObject(params.email)
         def user = findUserByUsername(forgotPasswordCommand.username)
         def jsonMap
         String msg
         if (!user) {
-            msg = getMessageFromCode('spring.security.ui.forgotPassword.user.notFound')
+            msg = getMessageFromCode('register.forgotPassword.email.not.found')
 
-            jsonMap = [error:true, msg:msg, forgotPasswordCommand: forgotPasswordCommand]
+            jsonMap = [success: false, error: true,alert_type: "error", msg: msg, forgotPasswordCommand: forgotPasswordCommand]
         }
+        else {
 
-        String email = uiPropertiesStrategy.getProperty(user, 'email')
-        if (!email) {
-            msg = getMessageFromCode('spring.security.ui.forgotPassword.noEmail')
+            String email = uiPropertiesStrategy.getProperty(user, 'email')
+            if (!email) {
+                msg = getMessageFromCode('register.forgotPassword.email.not.found')
 
-            jsonMap = [error:true, msg:msg, forgotPasswordCommand: forgotPasswordCommand]
-        }
-        if(user && email){
-            RegistrationCode registrationCode = uiRegistrationCodeStrategy.sendForgotPasswordMail(
-                    forgotPasswordCommand.username, email) { String registrationCodeToken ->
-
-                String url = generateLink('openResetPasswordPage', [t: registrationCodeToken, userId: user.username])
-                String body = forgotPasswordEmailBody
-                if (body.contains('$')) {
-                    body = evaluate(body, [user: user, url: url])
-                }
-
-                body
+                jsonMap = [success: false,alert_type: "error", error: true, msg: msg, forgotPasswordCommand: forgotPasswordCommand]
             }
-             msg = getMessageFromCode('register.forgotPassword.email.sent.success')
-            jsonMap = [success:true, msg:msg, emailSent: true, forgotPasswordCommand: forgotPasswordCommand]
+            else {
+                if (user && email) {
+                    RegistrationCode registrationCode = uiRegistrationCodeStrategy.sendForgotPasswordMail(
+                            forgotPasswordCommand.username, email) { String registrationCodeToken ->
+
+                        String urlToChangePW = Holders.grailsApplication.config.grails.serverURL + "/#/change-forget-password/0?$registrationCodeToken"
+                        String body = forgotPasswordEmailBody
+                        if (body.contains('$')) {
+                            body = evaluate(body, [user: user, url: urlToChangePW])
+                        }
+
+                        body
+                    }
+                    msg = getMessageFromCode('register.forgotPassword.email.sent.success')
+                    jsonMap = [success: true, msg: msg, emailSent: true, alert_type: "success", forgotPasswordCommand: forgotPasswordCommand]
+                } else {
+                    msg = getMessageFromCode('register.forgotPassword.email.not.found')
+                    jsonMap = [success: false, msg: msg, emailSent: false, alert_type: "error"]
+
+                }
+            }
         }
         def converter = jsonMap as JSON
         converter.render(response)
     }
 
-    private String getMessageFromCode(String msgCode){
-       return messageSource.getMessage(msgCode,null, LocaleContextHolder.getLocale())
+    private String getMessageFromCode(String msgCode) {
+        return messageSource.getMessage(msgCode, null, LocaleContextHolder.getLocale())
 
     }
-    private getForgetPasswordCommandObject(email){
+
+    private getForgetPasswordCommandObject(email) {
         ForgotPasswordCommand forgotPasswordCommand = new ForgotPasswordCommand()
         forgotPasswordCommand.username = email
         return forgotPasswordCommand
     }
+   def changeForgotPassword() {
+       def resultData
+       def msg
+       def param = request.getJSON()
+       RegistrationCode registrationCode = RegistrationCode.findByToken(param.token)
+       if (registrationCode) {
+           try {
+               User user1 = User.findByUsername(registrationCode.username)
+               user1.password = param.vueElintegroChangeForgotPasswordDataframe_newPassword
+               user1.save(flush: true)
+               registrationCode.delete(flush: true)
+               msg = message(code: 'password.changed.successfully')
+               resultData = [success: true, msg: msg, alert_type: "success"]
+           } catch (Exception e) {
+               log.error("Couldn't find this user" + e)
+               msg = message(code: "something.is.went.wrong")
+               resultData = [success: false, msg: msg, alert_type: "error"]
+           }
+       } else {
+           msg = message(code: 'unable.to.change.password')
+           resultData = [success: false, msg: msg, alert_type: "error"]
+       }
 
-    public def openResetPasswordPage(){
+       render(resultData as JSON)
+   }
+
+    public def openResetPasswordPage() {
         String token = params.t
         String userId = params.userId
         /*Calendar cal = Calendar.getInstance()
           if ((tokn.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
             return "token expired";
         }*/
-       redirect(controller: "main", action: "show" , params: [token:token])
+        redirect(controller: "main", action: "show", params: [token: token])
     }
 
     @Transactional
-    public def resetUserPassword(){
+    public def resetUserPassword() {
         println params
         Map resultData = [:]
         def errorMessage
         String token = params.t
-        if(token){
+        if (token) {
             ResetPasswordCommand resetPasswordCommand = getResetPasswordValidationObj(params)
             resultData = resetPassword(resetPasswordCommand)
-        }else{
-            ResetPasswordCommand resetPasswordCommand  = getResetPasswordValidationObj(params)
+        } else {
+            ResetPasswordCommand resetPasswordCommand = getResetPasswordValidationObj(params)
             resetPasswordCommand.validate()
 
             if (!resetPasswordCommand.validate()) {
                 def error = resetPasswordCommand?.errors?.getFieldError()
                 errorMessage = message(error: error)?.toString()
                 resultData = ['msg': errorMessage, 'success': false]
-            }else{
+            } else {
                 def user = findUserByUsername(resetPasswordCommand.username)
                 user.password = resetPasswordCommand.password
                 user.save(flush: true)
                 if (user.hasErrors()) {
                     errorMessage = message(code: 'vueElintegroUserProfileDataframe.resetPassword.failure')
                     resultData = ['msg': errorMessage, 'success': false]
-                }else{
+                } else {
                     errorMessage = message(code: 'vueElintegroUserProfileDataframe.resetPassword.success')
                     resultData = ['msg': errorMessage, 'success': true]
 
@@ -249,15 +288,15 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
             def error = resetPasswordCommand?.errors?.getFieldError()
             errorMessage = message(error: error)?.toString()
             resultData = ['msg': errorMessage, 'success': false]
-        }else{
-        def user = uiRegistrationCodeStrategy.resetPassword(resetPasswordCommand, registrationCode)
+        } else {
+            def user = uiRegistrationCodeStrategy.resetPassword(resetPasswordCommand, registrationCode)
             if (user.hasErrors()) {
                 errorMessage = message(code: 'vueElintegroUserProfileDataframe.resetPassword.failure')
                 resultData = ['msg': errorMessage, 'success': false]
-            }else{
+            } else {
                 errorMessage = message(code: 'vueElintegroUserProfileDataframe.resetPassword.success')
                 def url = createLink(controller: 'main', action: 'show')
-                resultData = ['msg': errorMessage, 'success': true, 'redirect':true, 'redirectUrl': "$url"]
+                resultData = ['msg': errorMessage, 'success': true, 'redirect': true, 'redirectUrl': "$url"]
 
             }
 
@@ -266,8 +305,8 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         return resultData
     }
 
-    private static ResetPasswordCommand getResetPasswordValidationObj(requestParams){
-        ResetPasswordCommand command  = new ResetPasswordCommand()
+    private static ResetPasswordCommand getResetPasswordValidationObj(requestParams) {
+        ResetPasswordCommand command = new ResetPasswordCommand()
         command.username = requestParams.get("vueElintegroResetPasswordDataframe_user_email")
         command.password = requestParams.get("vueElintegroResetPasswordDataframe_user_password")
         command.password2 = requestParams.get("vueElintegroResetPasswordDataframe_password2")
@@ -282,15 +321,15 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         String usernameFieldName = SpringSecurityUtils.securityConfig.userLookup.usernamePropertyName
         def registrationCode = new RegistrationCode(username: user."$usernameFieldName")
         if (!registrationCode.save()) {
-            new SpringSecurityUiService().warnErrors( registrationCode, messageSource)
+            new SpringSecurityUiService().warnErrors(registrationCode, messageSource)
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()
         }
         return registrationCode
     }
 
-    private static RegisterCommand getRegisterValidationObj(requestParams){
+    private static RegisterCommand getRegisterValidationObj(requestParams) {
         String dataframeName = requestParams.dataframe
-        RegisterCommand command  = new RegisterCommand()
+        RegisterCommand command = new RegisterCommand()
         String emailKey = dataframeName + "_user_email"
         String passwordKey = dataframeName + "_user_password"
         String password2Key = dataframeName + "_password2"
@@ -301,5 +340,53 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         return command
     }
 
+    def createLeadUser() {
+        def param = request.getJSON()
+        def result = registerService.createLeadUser(param)
+        RegistrationCode registrationCode = registrationCode(result.user)
+        String url = generateLink('verifyRegistration', [t: registrationCode.token])
+        if (registrationCode == null || registrationCode.hasErrors()) {
+            flash.error = message(code: 'spring.security.ui.register.miscError') as Object
+            flash.chainedParams = params
+            return
+        }
+        def resultData = registerService.sendingEmailAfterSignUp(result.user.firstName, result.password, result.user.email, url, registrationCode.token)
+        render(resultData as JSON)
+    }
 
+    def changePassword() {
+        def resultData
+        def msg
+        def param = request.getJSON()
+        RegistrationCode registrationCode = RegistrationCode.findByToken(param.token)
+        if(registrationCode) {
+            User user1 = User.findByUsername(registrationCode.username)
+            def isCurrentPasswordValid = passwordEncoder.isPasswordValid(user1.password, param.vueElintegroChangePasswordAfterSignUpDataframe_currentPassword, null)
+            if (isCurrentPasswordValid == true) {
+                user1.password = param.vueElintegroChangePasswordAfterSignUpDataframe_newPassword
+                user1.save(flush: true)
+
+                try {
+                    springSecurityService.reauthenticate(user1.username, user1.password)
+                    registrationCode.delete(flush: true)
+                    msg = message(code: 'password.changed.successfully')
+                    resultData = [success: true, msg:msg, alert_type: "success"]
+                } catch (Exception e) {
+                    log.error("Couldn't authenticate this user" + e)
+                    msg = message(code:  "password.cannot.be.changed")
+                    resultData = [success: false, msg:msg , alert_type: "error"]
+                }
+
+
+            } else {
+                msg = message(code: 'incorrect.current.password')
+                resultData = [success: false, msg: msg, alert_type: "error"]
+            }
+        }else{
+            msg = message(code: 'you.cannot.change.password.this.way')
+            resultData = [success: false, msg: msg, alert_type: "error"]
+        }
+
+        render(resultData as JSON)
+    }
 }

@@ -25,6 +25,18 @@ tr.selected td {
 .applicant th, .applicant td{
     font-size: 20px;
 }
+.translatedText th, .translatedText td{
+    font-size: 20px;
+}
+.underLine.v-text-field>.v-input__control>.v-input__slot:before {
+    border-style: none;
+}
+.underLine.v-text-field>.v-input__control>.v-input__slot:after {
+    border-style: none;
+}
+.underLine.v-text-field>.v-input__control>.v-input__slot>.v-select__slot>.v-select__selections {
+    color: #1976D2;
+}
 /*.first-banner{*/
 /*    background-size:cover;*/
 /*    height:auto;*/

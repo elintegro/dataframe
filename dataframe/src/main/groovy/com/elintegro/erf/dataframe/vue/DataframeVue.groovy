@@ -488,6 +488,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		addFieldDef?.each{key, value->
 			addField(key, value)
 		}
+		addField("alertMesssage", [widget: "SnackbarWidgetVue"])
+
 	}
 
 	List  getHqlResult(def queryHql, def keyValue, Map sessionAttributes){
@@ -810,8 +812,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		List fldsList = fields.getList()
 		int seq = 0
 		int fieldCount = 0;
-
-		for(String key: fields.getList()){
+		List<String> list = fields.getList()
+		for(Iterator<String> iterator = list.iterator();iterator.hasNext();){
+			String key = iterator.next()
 			// TODO  make sure the javascript sourcecode aligns
 			Map field = fields.dataMap.get(key)
 
@@ -819,7 +822,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 				(fieldLayout, fieldCount) = buildWidget(field, key, fieldLayout, resultPageHtml, fieldsHtmlBuilder, fieldCount, vueDataVariable, vueStateVariable, vueDataFillScript, vueSaveVariables, vueJsBuilder)
 
-			}else{
+			}else if(key.isEmpty()){
+				iterator.remove()
+			}
+			else{
+
 				log.error("No widget for the field $field.name")
 			}
 
@@ -1232,7 +1239,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                         self.${dataframeName}_save_loading = false;
                         var response = responseData.data;
                         ${doAfterSaveStringBuilder.toString()}
-                        excon.showAlertMessage(response);
+                        excon.showAlertMessageWithResponse(response);
 			            	if(response.success) {
                                ${doAfterSave}
                         	}
