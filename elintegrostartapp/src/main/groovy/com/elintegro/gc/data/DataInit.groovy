@@ -128,8 +128,8 @@ class DataInit {
 		ClientProject clientProject3 = new ClientProject(clientName:"Yellow Pages" ,projectName:"" ,logo:"assets/clientsProjectImages/yellowPages.PNG" ,description:"Nothing here" ,linkToWebsite:"https://www.yellopages.com/").save()
 	}
 	static  def initTestimonials(){
-		new Testimonials(quote:"From concept to development, it was a pleasure to work with Elintegro.They delivered my product on time and on budget. I’d definitely hire them again.",name:"Drasko Raicevic",title: "Quickbody Fitness",customerImage:"assets/home/shai.png").save()
-		new Testimonials(quote:"The Dating app Elintegro developed for me was perfect. It was exactly what I needed, and more.",name:"Lev",title: "Matchmaker",customerImage:"assets/home/eugene.png").save(flush:true)
+		new Testimonials(quote:"From concept to development, it was a pleasure to work with Elintegro. They delivered my product on time and on budget. I’d definitely hire them again.",name:"Drasko Raicevic",title: " Quickbody Fitness",customerImage:"assets/home/avatar.png").save()
+		new Testimonials(quote:"The Dating app Elintegro developed for me was perfect. It was exactly what I needed, and more.",name:"Lev",title: " Matchmaker",customerImage:"assets/home/avatar.png").save(flush:true)
 
 	}
 	static def initelintegrostartappSkills(){

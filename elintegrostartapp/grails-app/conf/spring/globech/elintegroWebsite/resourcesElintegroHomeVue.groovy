@@ -146,7 +146,7 @@ beans{
         addFieldDef = [
                 quotes: ["widget":"CarouselWidgetVue"
                             ,"name":"quotes"
-                            ,"height":"400"
+                            ,"height":"250"
                             ,hql:""" select testimonials.id as id ,testimonials.quote as quote, testimonials.name as name , testimonials.title as title, testimonials.customerImage as customerImage from Testimonials testimonials  """
                             ,"content":""" 
                                     <v-card
@@ -164,15 +164,9 @@ beans{
                                             <v-col cols="12" xs="1"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.quote}}</v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
-                                                <v-avatar
-                                                        
-                                                        color="white"
-                                                        size="150"
-                                                >
-                                                    <img :src="item.customerImage">
-                                                </v-avatar>
+                                                
                                             </v-col>
-                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},{{item.title}}</v-col>
+                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},  {{item.title}}</v-col>
                                          </v-row>
                                     </v-card>
                                     """
@@ -276,11 +270,11 @@ beans{
         addFieldDef = [
                 footerPrivacy:["widget":"TextDisplayWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
+                               ,flexGridValues:['xs6', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
                 termAndConditions:["widget":"TextDisplayWidgetVue"
                                ,"name":"termAndConditions"
-                               ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
+                               ,flexGridValues:['xs6', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")

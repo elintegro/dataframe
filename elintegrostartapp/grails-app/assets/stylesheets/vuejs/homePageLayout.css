@@ -2,6 +2,12 @@
     margin-right: 12px;
     margin-left: 12px;
 }
+ .mainContainer{
+     width: 100%;
+     padding: 0px;
+     margin-right: auto;
+     margin-left: auto;
+ }
 .mainContainer .our_home{
     background-color:white;
     padding-bottom: 100px;
@@ -121,10 +127,20 @@
 .mainContainer .Quiz_Placeholder .v-card{
     color:#f1f1f1
 }
-.mainContainer .footer{
-    background-color:#212121;
+.footerContainer{
+    width: 100%;
+    padding: 0px;
+    margin-right: auto;
+    margin-left: auto;
 }
-.mainContainer .footer .footerTexts{
+.footerContainer .footer{
+    background-color:#212121;
+    padding: -12px;
+}
+.footerContainer .footer .footerTexts{
     height: 50px;
     color:#2ab6f6;
+}
+.footerContainer .footer .footerTexts .flex{
+    text-align: end;
 }
