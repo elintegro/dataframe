@@ -92,7 +92,7 @@ beans {
                             var build = document.getElementById("build");
                             var texts = text.split(',');
                             var stop =setInterval(function(){
-                                var rand = Math.floor(Math.random() * 3);
+                                var rand = Math.floor(Math.random() * 5);
                                 build.innerHTML = texts[rand];
                             }, 2000);
                             

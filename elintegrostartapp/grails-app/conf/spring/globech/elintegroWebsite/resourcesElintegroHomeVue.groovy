@@ -144,6 +144,10 @@ beans{
         saveButton = false
         flexGridValues= ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
+                customerSay:["widget":"TextDisplayWidgetVue"
+                              ,"name":"customerSay"
+                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
                 quotes: ["widget":"CarouselWidgetVue"
                             ,"name":"quotes"
                             ,"height":"250"
