@@ -166,7 +166,7 @@ beans{
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
                                                 
                                             </v-col>
-                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},{{item.title}}</v-col>
+                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},  {{item.title}}</v-col>
                                          </v-row>
                                     </v-card>
                                     """
