@@ -172,7 +172,7 @@ beans{
                                     <v-row>
                                         <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
                                             <v-col class = "midColumn" cols="12" xs="12" sm="12" md="10" xl="10" lg="10">
-                                                <v-row><h1 class="heading">That's whats our customer say about us</h1></v-row>
+                                                <v-row><h1 class="heading">[customerSay]</h1></v-row>
                                                 <v-row>
                                                     [DATAFRAME_SCRIPT]
                                                 </v-row>
