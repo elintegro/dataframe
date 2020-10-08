@@ -106,8 +106,6 @@ beans {
            
             if(param =='ourClientsProjects'){
                  excon.redirectPage(this,"client-project");
-            }else if (param == 'our_Technologies'){
-                 excon.redirectPage(this,"technologies");
             }else{
                 let element = document.getElementById(param);
                 if(element != null){
@@ -124,6 +122,9 @@ beans {
                     case 'our_framework' : 
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
+                    case 'our_Technologies' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;      
                     case 'quiz_placeholder'  :
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
