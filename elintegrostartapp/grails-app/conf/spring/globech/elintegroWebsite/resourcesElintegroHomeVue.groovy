@@ -272,16 +272,26 @@ beans{
         bean.constructorArgs = ['vueFooterContainerDataframe']
         saveButton = false
         addFieldDef = [
-                footerPrivacy:["widget":"TextDisplayWidgetVue"
+                footerPrivacy:["widget":"ButtonWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,flexGridValues:['xs6', 'sm4', 'md4', 'lg4', 'xl4'],
+                               ,"attr":"""small text tile"""
+                               ,onClick:[showAsDialog: true, refDataframe: ref("vueFooterPrivacyDataframe")]
+                               ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
-                termAndConditions:["widget":"TextDisplayWidgetVue"
+                termAndConditions:["widget":"ButtonWidgetVue"
                                ,"name":"termAndConditions"
-                               ,flexGridValues:['xs6', 'sm4', 'md4', 'lg4', 'xl4'],
+                               ,"attr":"""small text tile"""
+                               ,onClick:[showAsDialog: true, refDataframe: ref("vueFooterPrivacyDataframe")]
+                               ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
+    }
+    vueFooterPrivacyDataframe(DataframeVue){ bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueFooterPrivacyDataframe']
+        saveButton = false
+        currentFrameLayout = ref("defaultDataframeLayout")
     }
 
 }
