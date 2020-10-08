@@ -122,6 +122,9 @@ beans {
                     case 'our_framework' : 
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
+                    case 'Quotes' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;    
                     case 'our_Technologies' :
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;      
