@@ -334,8 +334,8 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 	develop {
 		dataSource {
 			//CHANGE DATASOURCE HERE
-			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
-//			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
+//			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
 			url = "jdbc:mysql://localhost:3306/elintegrostartapp_db" // todo:change after fix the server
 			username = "root"
 			password = "root"
