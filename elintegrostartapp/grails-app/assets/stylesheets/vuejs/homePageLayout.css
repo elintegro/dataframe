@@ -176,3 +176,15 @@
      background-color:#212121;
      text-transform: none;
  }
+ .privacyPolicyHeadingText{
+     color:#2ab6f6;
+     align-items: center;
+     font-size:30px;
+     padding-bottom: 10px;
+ }
+ .termAndConditionHeadinggText{
+     color:#2ab6f6;
+     align-items: center;
+     font-size:30px;
+     padding-bottom: 10px;
+ }
