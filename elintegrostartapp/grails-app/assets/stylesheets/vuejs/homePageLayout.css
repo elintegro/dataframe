@@ -170,6 +170,8 @@
 .footerContainer .footer .row .photoCol {
     position: absolute;
     margin-left: -36px;
+    padding-bottom: 0px;
+    margin-bottom: -12px;
 }
 .footerContainer .footer .footerTexts{
     height: 50px;
