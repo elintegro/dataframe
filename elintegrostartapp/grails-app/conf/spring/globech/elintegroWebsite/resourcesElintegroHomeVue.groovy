@@ -272,16 +272,59 @@ beans{
         bean.constructorArgs = ['vueFooterContainerDataframe']
         saveButton = false
         addFieldDef = [
-                footerPrivacy:["widget":"TextDisplayWidgetVue"
+                footerPrivacy:["widget":"ButtonWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,flexGridValues:['xs6', 'sm4', 'md4', 'lg4', 'xl4'],
+                               ,"attr":"""small text tile"""
+                               ,onClick:[showAsDialog: true, refDataframe: ref("vueFooterPrivacyDataframe")]
+                               ,script: """excon.setVisibility('vueFooterPrivacyDataframe',true);"""
+                               ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
-                termAndConditions:["widget":"TextDisplayWidgetVue"
+                termAndConditions:["widget":"ButtonWidgetVue"
                                ,"name":"termAndConditions"
-                               ,flexGridValues:['xs6', 'sm4', 'md4', 'lg4', 'xl4'],
+                               ,"attr":"""small text tile"""
+                               ,onClick:[showAsDialog: true, refDataframe: ref("vueTermAndConditionDataframe")]
+                               ,script: """excon.setVisibility('vueTermAndConditionDataframe',true);"""
+                               ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
+        childDataframes = ["vueFooterPrivacyDataframe","vueTermAndConditionDataframe"]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
+    }
+    vueFooterPrivacyDataframe(DataframeVue){ bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueFooterPrivacyDataframe']
+        saveButton = false
+        initOnPageLoad = false
+        addFieldDef = [
+                privacyPolicyHeading:["widget":"TextDisplayWidgetVue"
+                                      ,"name":"privacyPolicyHeading"
+                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                loremEpsumText:["widget":"TextDisplayWidgetVue"
+                          ,"name":"loremEpsumText"
+                          ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
+        ]
+        currentFrameLayout = ref("vueFooterPrivacyDataframeLayout")
+    }
+    vueTermAndConditionDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueTermAndConditionDataframe']
+        saveButton = false
+        initOnPageLoad = false
+        addFieldDef = [
+                termAndConditionHeading:["widget":"TextDisplayWidgetVue"
+                                      ,"name":"termAndConditionHeading"
+                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                loremEpsumText:["widget":"TextDisplayWidgetVue"
+                                ,"name":"loremEpsumText"
+                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
+        ]
+        currentFrameLayout = ref("vueTermAndConditionDataframeLayout")
+
+
     }
 
 }

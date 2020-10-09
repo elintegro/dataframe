@@ -280,16 +280,45 @@ beans{
         layoutPlaceHolder = """
                                     <v-container class="footer" fluid>
                                         <v-row>
-                                            <v-col cols="12" xs= "12" sm="12" md="12" lg="12">
+                                            <v-col class="photoCol" cols="12" xs= "12" sm="12" md="6" lg="6">
+                                                <v-img src="assets/home/plant.png"></v-img>
+                                            </v-col>
+                                            <v-col cols="12" xs= "12" sm="12" md="12" lg="12">    
                                                 <v-row class = "footerTexts" align="center" justify="end"
                                                 >
                                                     [footerPrivacy][termAndConditions]
                                                 </v-row>
-                                             </v-col>
+                                            </v-col>
                                         </v-row>                  
                                     </v-container>
                                 
                             """
+    }
+    vueFooterPrivacyDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 ><v-card round class='rounded-card' color="default"  style="overflow: hidden;">
+                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
+                                </v-btn><span>Close</span></v-tooltip></v-flex>
+                                <v-row>
+                                <v-row class="privacyPolicyHeadingText">[privacyPolicyHeading]</v-row>
+                                <v-row>[loremEpsumText]</v-row>
+                                </v-row>
+                                [DATAFRAME_SCRIPT]
+                                <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+    }
+    vueTermAndConditionDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 ><v-card round class='rounded-card' color="default"  style="overflow: hidden;">
+                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
+                                </v-btn><span>Close</span></v-tooltip></v-flex>
+                                <v-row>
+                                <v-row class="termAndConditionHeadinggText">[termAndConditionHeading]</v-row>
+                                <v-row>[loremEpsumText]</v-row>
+                                </v-row>
+                                [DATAFRAME_SCRIPT]
+                                <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
     vueElintegroSignUpQuizDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
