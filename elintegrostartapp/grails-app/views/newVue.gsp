@@ -34,9 +34,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Elintegro Start App</title>
+    <title>Elintegro App Factory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="https://qa.elintegro.com/assets/elintegro_logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.elintegro.com/assets/home/logoWithoutText.jpg" type="image/x-icon">
 
     <asset:stylesheet href="/vuejs/tooltip.css"/>
     <asset:javascript src="jquery/jquery-1.11.2.js"/>
