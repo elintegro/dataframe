@@ -53,7 +53,7 @@ beans {
                                          width = "min-content">
                                      <v-list>    
                                       <v-list-item><vueElintegroNavigationFirstTwoButtonDataframe/></v-list-item>
-                                      <v-list-item style="margin-left:5%;position:fixed;height:auto;"><vueElintegroAppsDataframe/> </v-list-item>
+                                      <v-list-item style="margin-left:5%;position:fixed;height:auto;line-height:10px;"><vueElintegroAppsDataframe/> </v-list-item>
                                       <v-list-item style="margin-top: 40%;" ><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                          <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
                                       <v-list-item style="margin-top:-12%;margin-left:-10%" ><vueElintegroLanguageSelectorDataframe/></v-list-item>
@@ -126,7 +126,7 @@ beans {
                                          <template v-slot:activator="{ on, attrs }">
                                              <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">About Us</v-btn>
                                          </template>
-                                         <v-list width="min-content" style=" margin-right: -39px;margin-left: -37px;">
+                                         <v-list width="min-content" style=" margin-right: -39px;margin-left: -30px;">
                                              <v-list-item  @click="">
                                              <v-list-item-title><vueElintegroAboutUsMenuDataframe/></v-list-item-title>
                                              </v-list-item>
@@ -149,7 +149,8 @@ beans {
     vueElintegroSubMenuDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
-                                  [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
+                                  [DATAFRAME_SCRIPT]
+                                  <div style="margin-top:-40px">[BUTTON_SCRIPT]</div>
                                   </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
