@@ -28,6 +28,10 @@ class UrlMappings {
         "/hqlTest"(controller:"main",action:"hqlTest")
         "/"(controller: "test", action: "show")
         "/test"(controller: "test", action: "test")
+        "/system-user"(controller: "customerCare", action: "systemUser")
+        "/chat-user"(controller: "customerCare", action: "chatUser")
+        "/chat-message"(controller: "customerCare", action: "chatMessage")
+        "/update-profile"(controller: "customerCare", action: "updatePerson")
         "500"(view:'/error')
     }
 }
