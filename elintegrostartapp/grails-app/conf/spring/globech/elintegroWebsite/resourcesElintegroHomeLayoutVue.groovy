@@ -36,7 +36,7 @@ beans{
                                         <v-row><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
                                              <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" align-self = 'center'>
                                                 <v-row>
-                                                    <h2 class="heading-2">[build]</h2>[buildData]
+                                                    <h2 class="heading-2">[build]</h2><div class='console-underscore' id='console'>&#95;</div>[buildData]
                                                 </v-row>
                                                 <v-row>
                                                    <p class="paragraph">[youWont]
