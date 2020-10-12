@@ -11,37 +11,17 @@
 .mainContainer .our_home{
     background-color:white;
     padding-bottom: 100px;
+    padding-top: 110px;
 }
 .mainContainer .our_home .heading-2{
     font-size: 45px;
     color:#3898ed;
 }
-.mainContainer .our_home .heading-2 #build{
-    animation: build 7s infinite;
-    animation-timing-function: ease-in;
-}
- @keyframes build {
-    0%{
-        opacity: 0;
-    }
-     25%{
-         color: red;
-         letter-spacing: 2px;
-         opacity: 0.25;
-     }
-    50%{
-        color: yellow;
-        opacity: 0.5;
-    }
-     75%{
-         color:blue;
-         opacity: 0.75;
-     }
-    100%{
-        color:maroon;
-        opacity: 1;
-    }
-}
+ .mainContainer .our_home #console{
+     left:10px;
+     font-size: 45px;
+     color: #3898ed;
+ }
 .mainContainer .our_home .paragraph{
     color: black;
     font-size: 25px;
@@ -86,8 +66,8 @@
 }
 .mainContainer .collaboration{
     background-color:white;
-    padding-bottom: 100px;
-    padding-top: 100px;
+    padding-bottom: 110px;
+    padding-top: 110px;
 }
 .mainContainer .collaboration .heading-2{
     font-size:38px;
@@ -99,7 +79,7 @@
 }
 .mainContainer .our_framework{
     background-color:white;
-    padding-bottom: 100px;
+    padding-bottom: 110px;
     padding-top: 100px;
 }
 .mainContainer .our_framework .heading-2{

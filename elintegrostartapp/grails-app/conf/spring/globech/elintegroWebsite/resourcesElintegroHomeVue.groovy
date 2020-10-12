@@ -30,7 +30,7 @@ beans{
                 "build":["widget":"TextDisplayWidgetVue"
                             ,"name":"build"
                             ,elementId: "build"
-                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                            ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
                 'buildData':[ "widget":"TextDisplayWidgetVue"
                             ,"name":"buildData"
@@ -44,8 +44,7 @@ beans{
                 ],
                 "buildApp":["widget":"ButtonWidgetVue"
                             ,"name":"buildApp"
-
-                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                            ,flexGridValues:['xs0', 'sm0', 'md6', 'lg6', 'xl6']
                             ,script: """ this.scrollToQuiz('coachClone');"""
                 ]
 
