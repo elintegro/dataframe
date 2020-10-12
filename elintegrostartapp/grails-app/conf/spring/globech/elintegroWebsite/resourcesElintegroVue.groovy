@@ -199,16 +199,16 @@ beans {
         isGlobal = true
         saveButton= false
         initOnPageLoad = false
-        dataframeButtons = [contactQuiz:[name: "contactQuiz", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('quiz_placeholder');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            technologiesInUse:[name: "technologiesInUse", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('our_Technologies');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            ourClientsProjects:[name: "ourClientsProjects", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('ourClientsProjects');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            testimonials:[name:"testimonials",type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('Quotes')""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            ourFramework:[name: "ourFramework", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('our_framework');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            collaboration:[name: "collaboration", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('collaboration');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            ourProcess  : [name: "ourProcess", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('our_process');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+        dataframeButtons = [contactQuiz:[name: "contactQuiz", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.scrollTo('quiz_placeholder');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            technologiesInUse:[name: "technologiesInUse", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.scrollTo('our_Technologies');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            ourClientsProjects:[name: "ourClientsProjects", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.scrollTo('ourClientsProjects');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            testimonials:[name:"testimonials",type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.scrollTo('Quotes')""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            ourFramework:[name: "ourFramework", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.scrollTo('our_framework');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            collaboration:[name: "collaboration", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.scrollTo('collaboration');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            ourProcess  : [name: "ourProcess", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.scrollTo('our_process');""","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             ourWork  : [name: "ourWork", type: "link",attr:"style='color:#1976D2;'",script: """this.scrollTo('our_work');""" , "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
-        currentFrameLayout = ref("vueElintegroSubMenuDataframeLayout")
+        currentFrameLayout = ref("vueElintegroAboutUsMenuDataframeLayout")
 
     }
 
@@ -220,7 +220,7 @@ beans {
         initOnPageLoad = false
         dataframeButtons = [
 //                quizzable  : [name: "quizzable", type: "link",attr:"style='color:#1976D2;'",script: """this.quizzableApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            translator  : [name: "translator", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            translator  : [name: "translator", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             ecommerce  : [name: "ecommerce", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: 0,script: """this.ecommerceApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
         currentFrameLayout = ref("vueElintegroSubMenuDataframeLayout")
