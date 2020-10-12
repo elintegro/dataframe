@@ -54,7 +54,7 @@ class ProfileDetailController {
             if (serverUrl == "http://localhost:8099") {
                 imageUrl = '/dev/github/elintegro/dataframe/elintegrostartapp/grails-app/assets/images/default_profile.jpg'
             } else {
-                imageUrl = Holders.grailsApplication.config.images.storageLocation + "/ROOT/assets/default_profile.jpg"
+                imageUrl ="/usr/local/tomcat/webapps/ROOT/assets/default_profile.jpg"
             }
 
         }

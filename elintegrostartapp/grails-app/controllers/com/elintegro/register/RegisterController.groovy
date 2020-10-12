@@ -383,7 +383,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
                 resultData = [success: false, msg: msg, alert_type: "error"]
             }
         }else{
-            msg = message(code: 'you.cannot.change.password.this.way')
+            msg = message(code: 'this.link.has.been.expired')
             resultData = [success: false, msg: msg, alert_type: "error"]
         }
 

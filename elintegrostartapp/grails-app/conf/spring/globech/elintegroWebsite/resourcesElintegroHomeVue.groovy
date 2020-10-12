@@ -44,6 +44,7 @@ beans{
                 ],
                 "buildApp":["widget":"ButtonWidgetVue"
                             ,"name":"buildApp"
+
                             ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                             ,script: """ this.scrollToQuiz('coachClone');"""
                 ]
@@ -66,10 +67,7 @@ beans{
                                            ,"name":"WeDeliverTextParagraphOne"
                                            ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
-                WeDeliverTextParagraphTwo:["widget":"TextDisplayWidgetVue"
-                                           ,"name":"WeDeliverTextParagraphTwo"
-                                           ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
+
         ]
         currentFrameLayout = ref("vueOurWorkContainerDataframeLayout")
     }
@@ -146,10 +144,15 @@ beans{
         saveButton = false
         flexGridValues= ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
+                customerSay:["widget":"TextDisplayWidgetVue"
+                              ,"name":"customerSay"
+                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
                 quotes: ["widget":"CarouselWidgetVue"
-                        ,"name":"quotes"
-                        ,"height":"400"
-                        ,"content":""" 
+                            ,"name":"quotes"
+                            ,"height":"250"
+                            ,hql:""" select testimonials.id as id ,testimonials.quote as quote, testimonials.name as name , testimonials.title as title, testimonials.customerImage as customerImage from Testimonials testimonials  """
+                            ,"content":""" 
                                     <v-card
                                          height="100%"
                                          tile
@@ -165,15 +168,9 @@ beans{
                                             <v-col cols="12" xs="1"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.quote}}</v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
-                                                <v-avatar
-                                                        
-                                                        color="white"
-                                                        size="150"
-                                                >
-                                                    <img :src="item.src">
-                                                </v-avatar>
+                                                
                                             </v-col>
-                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},{{item.title}}</v-col>
+                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},  {{item.title}}</v-col>
                                          </v-row>
                                     </v-card>
                                     """
@@ -275,16 +272,59 @@ beans{
         bean.constructorArgs = ['vueFooterContainerDataframe']
         saveButton = false
         addFieldDef = [
-                footerPrivacy:["widget":"TextDisplayWidgetVue"
+                footerPrivacy:["widget":"ButtonWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
+                               ,"attr":"""small text tile"""
+                               ,onClick:[showAsDialog: true, refDataframe: ref("vueFooterPrivacyDataframe")]
+                               ,script: """excon.setVisibility('vueFooterPrivacyDataframe',true);"""
+                               ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
-                termAndConditions:["widget":"TextDisplayWidgetVue"
+                termAndConditions:["widget":"ButtonWidgetVue"
                                ,"name":"termAndConditions"
-                               ,flexGridValues:['xs4', 'sm0', 'md0', 'lg0', 'xl0'],
+                               ,"attr":"""small text tile"""
+                               ,onClick:[showAsDialog: true, refDataframe: ref("vueTermAndConditionDataframe")]
+                               ,script: """excon.setVisibility('vueTermAndConditionDataframe',true);"""
+                               ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
+        childDataframes = ["vueFooterPrivacyDataframe","vueTermAndConditionDataframe"]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
+    }
+    vueFooterPrivacyDataframe(DataframeVue){ bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueFooterPrivacyDataframe']
+        saveButton = false
+        initOnPageLoad = false
+        addFieldDef = [
+                privacyPolicyHeading:["widget":"TextDisplayWidgetVue"
+                                      ,"name":"privacyPolicyHeading"
+                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                loremEpsumText:["widget":"TextDisplayWidgetVue"
+                          ,"name":"loremEpsumText"
+                          ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
+        ]
+        currentFrameLayout = ref("vueFooterPrivacyDataframeLayout")
+    }
+    vueTermAndConditionDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueTermAndConditionDataframe']
+        saveButton = false
+        initOnPageLoad = false
+        addFieldDef = [
+                termAndConditionHeading:["widget":"TextDisplayWidgetVue"
+                                      ,"name":"termAndConditionHeading"
+                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                loremEpsumText:["widget":"TextDisplayWidgetVue"
+                                ,"name":"loremEpsumText"
+                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                ],
+        ]
+        currentFrameLayout = ref("vueTermAndConditionDataframeLayout")
+
+
     }
 
 }

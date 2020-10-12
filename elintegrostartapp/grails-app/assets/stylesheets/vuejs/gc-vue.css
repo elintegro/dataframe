@@ -37,6 +37,9 @@ tr.selected td {
 .underLine.v-text-field>.v-input__control>.v-input__slot>.v-select__slot>.v-select__selections {
     color: #1976D2;
 }
+.appBar{
+    height: 65px;
+}
 /*.first-banner{*/
 /*    background-size:cover;*/
 /*    height:auto;*/

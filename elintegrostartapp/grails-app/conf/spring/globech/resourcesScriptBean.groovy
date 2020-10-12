@@ -92,7 +92,7 @@ beans {
                             var build = document.getElementById("build");
                             var texts = text.split(',');
                             var stop =setInterval(function(){
-                                var rand = Math.floor(Math.random() * 3);
+                                var rand = Math.floor(Math.random() * 5);
                                 build.innerHTML = texts[rand];
                             }, 2000);
                             
@@ -106,8 +106,6 @@ beans {
            
             if(param =='ourClientsProjects'){
                  excon.redirectPage(this,"client-project");
-            }else if (param == 'our_Technologies'){
-                 excon.redirectPage(this,"technologies");
             }else{
                 let element = document.getElementById(param);
                 if(element != null){
@@ -124,6 +122,12 @@ beans {
                     case 'our_framework' : 
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
+                    case 'Quotes' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;    
+                    case 'our_Technologies' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;      
                     case 'quiz_placeholder'  :
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
