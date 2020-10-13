@@ -34,9 +34,9 @@ beans{
         layoutPlaceHolder = """<v-container id ="our_home" class = "our_home" fluid>
                                     <v-flex xs12 sm12 md12 lg12 x12>
                                         <v-row><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                             <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="4" align-self = 'center'>
+                                             <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
                                                 <v-row>
-                                                    <h2 class="heading-2">[build]</h2>[buildData]
+                                                    <h2 class="heading-2">[build]</h2><div class='console-underscore' id='console'>&#95;</div>[buildData]
                                                 </v-row>
                                                 <v-row>
                                                    <p class="paragraph">[youWont]
@@ -46,11 +46,9 @@ beans{
                                                     [buildApp]
                                                 </v-row>
                                             </v-col>
-
-                                            <v-col cols="12" xs="0" sm="1" md="0" xl="0" lg="0"></v-col> 
-                                            <v-col cols="12" xs="12" sm="12" md="6" xl="6" lg="6" class="text-center">
+                                            
+                                            <v-col cols="12" xs="12" sm="12" md="5" xl="5" lg="5" class="text-center">
                                                <v-img alt ="our_home"  src="assets/home/mob.png"></v-img>
-
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>        
                                         </v-row>
@@ -92,7 +90,11 @@ beans{
                                 <v-container id="our_process" class="our_process" fluid>
                                        <v-flex xs12 sm12 md12 lg12 x12>
                                             <v-row>
-                                                 <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+                                                 <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>
+                                                 <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
+                                                    <v-img alt ="our_frameworks"  src="assets/home/factoryGrade.png"></v-img>
+                                                 </v-col>
+                                                 <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col> 
                                                  <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
                                                        <v-row >
                                                             <h2 class="heading-2">[youDeserve]</h2>
@@ -102,10 +104,6 @@ beans{
                                                                 </p><p class="paragraph">[ourProcessTextTwo]
                                                                 </p>
                                                        </v-row>
-                                                 </v-col>
-                                                 <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
-                                                 <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-                                                    <v-img alt ="our_frameworks"  src="assets/home/factoryGrade.png"></v-img>
                                                  </v-col>
                                                  <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>  
                                             </v-row>       
@@ -150,20 +148,20 @@ beans{
                                    <v-container id="our_framework" class = "our_framework" fluid>
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                 <v-row>
+                                                    <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
+                                                       <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
+
+                                                                <v-img alt ="our_frameworks"  src="assets/home/agilityAsService.png"></v-img>
+
+                                                    </v-col>
                                                     <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col> 
-                                                    <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
+                                                       <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
                                                         <v-row><h2 class="heading-2">[QualityBuilt]</h2></v-row><br>
                                                         <v-row>
                                                                 <p class="paragraph">[ourFrameworkTextFirstParagraph]
                                                                 </p><p class="paragraph">[ourFrameworkTextSecondParagraph]
                                                                 </p><br>
                                                         </v-row>
-                                                    </v-col>
-                                                    <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
-                                                    <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-
-                                                                <v-img alt ="our_frameworks"  src="assets/home/agilityAsService.png"></v-img>
-
                                                     </v-col>
                                                     <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>        
                                                 </v-row>
