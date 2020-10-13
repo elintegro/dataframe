@@ -45,7 +45,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="google-signin-client_id" content="252139291193-dv3ekugm57up532d0e0g1lg1jp4fpir4.apps.googleusercontent.com">
     <title>Elintegro App Factory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/home/logoWithoutText.jpg" type="image/x-icon">
@@ -103,7 +102,6 @@ ${constructedPageHtml}
 <asset:javascript src="/vuejs/v-eutil.min.js"/>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.googleMapsApi.apiKey}">
 </script>
-<script src="https://apis.google.com/js/platform.js" async defer></script>
 <asset:javascript src="/erf/i18Messages.js"/>
 <asset:javascript src="/erf/erfVueController.js"/>
 <asset:javascript src="/vuejs/vuex.js"/>
