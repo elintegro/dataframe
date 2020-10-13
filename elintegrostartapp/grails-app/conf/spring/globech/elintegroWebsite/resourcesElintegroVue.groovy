@@ -132,7 +132,7 @@ beans {
         addFieldDef = [
                 "logo": [
                         "widget"      : "PictureDisplayWidgetVue",
-                        "url"         : "${contextPath}/assets/home/logo.jpg",
+                        "url"         : "assets/home/logo.jpg",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "attr"        : " contain ",
                         "height"      : "auto",
@@ -235,15 +235,15 @@ beans {
         initOnPageLoad = false
         route = true
         addFieldDef = [
-                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/java.PNG", "aspectRatio":"1.5"],
-                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/javascript.PNG", "aspectRatio":"1.5"],
-                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/grailsphoto.PNG", "aspectRatio":"1.5"],
-                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/vuejs.PNG", "aspectRatio":"1.0"],
-                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kafka.PNG", "aspectRatio":"1.0"],
-                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/oracle.PNG", "aspectRatio":"1.0"],
-                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/nodejs.PNG", "aspectRatio":"1.0"],
-                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/kubernetes.PNG", "aspectRatio":"1.0"],
-                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "${contextPath}/assets/mysql.PNG", "aspectRatio":"1.0"],
+                "java"      : ["widget": "PictureDisplayWidgetVue", "url": "assets/java.PNG", "aspectRatio":"1.5"],
+                "javascript": ["widget": "PictureDisplayWidgetVue", "url": "assets/javascript.PNG", "aspectRatio":"1.5"],
+                "grails"    : ["widget": "PictureDisplayWidgetVue", "url": "assets/grailsphoto.PNG", "aspectRatio":"1.5"],
+                "vuejs"     : ["widget": "PictureDisplayWidgetVue", "url": "assets/vuejs.PNG", "aspectRatio":"1.0"],
+                "kafka"     : ["widget": "PictureDisplayWidgetVue", "url": "assets/kafka.PNG", "aspectRatio":"1.0"],
+                "oracle"    : ["widget": "PictureDisplayWidgetVue", "url": "assets/oracle.PNG", "aspectRatio":"1.0"],
+                "nodejs"    : ["widget": "PictureDisplayWidgetVue", "url": "assets/nodejs.PNG", "aspectRatio":"1.0"],
+                "kubernetes": ["widget": "PictureDisplayWidgetVue", "url": "assets/kubernetes.PNG", "aspectRatio":"1.0"],
+                "mysql"     : ["widget": "PictureDisplayWidgetVue", "url": "assets/mysql.PNG", "aspectRatio":"1.0"],
 
         ]
         currentFrameLayout = ref("vueTechnologiesDataframeDataframeLayout")
@@ -352,7 +352,7 @@ beans {
         addFieldDef = [
                 "application.images":["name":"images"
                                       ,"widget":"PictureUploadWidgetVue"
-                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                                      ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                                       ,multiple:true
                                       ,editButton: true
                                       ,valueMember:"avatar"
@@ -363,7 +363,7 @@ beans {
                 "application.resume":["name":"resume"
                                       ,"widget":"FilesUploadWidgetVue"
                                       ,valueMember: "resume"
-                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                                      ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                                       ,multiple:true
                                       ,"accept":".pdf,.docx,.doc,.csv"
 
@@ -500,7 +500,7 @@ beans {
         addFieldDef = [
                 "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue",validate: true]]
 
-        //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"${contextPath}/ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
 
         currentFrameLayout = ref("contactUsPageDataframeLayout")
@@ -517,7 +517,7 @@ beans {
         isGlobal = true
 
         boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
-        String loginAuthenticateUrl = loginWithSpringSecurity?"${contextPath}/login/authenticate" : "${contextPath}/login/loginUser"
+        String loginAuthenticateUrl = loginWithSpringSecurity?"login/authenticate" : "login/loginUser"
 
         addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150]
                        ,"user.username":["widget" : "EmailWidgetVue",attr: "autofocus", "name": "user.username", autoComplete:"on", "width":150,placeholder:"Enter your email", "errMessage":"Username should be an email"]
@@ -526,7 +526,7 @@ beans {
 
         dataframeButtons = [logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
 //                                                                                             var url = "/elintegrostartapp/oauth/authenticate/google";
-                                                                                             var url = "${contextPath}/springSecurityOAuth2/authenticate?provider=google";
+                                                                                             var url = "springSecurityOAuth2/authenticate?provider=google";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                              /*if(childWindow){
                                                                                                 window.opener.location.reload();
@@ -535,7 +535,7 @@ beans {
                                                                                               """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                              logInWithFacebook:[name: "logInWithFacebook", type: "image", attr: "style=\"margin-top:3px;\"", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl", width: '135px', height: '43px'],script:"""
                                                                                              var provider = 'facebook';
-                                                                                             var url = "${contextPath}/springSecurityOAuth2/authenticate?provider="+provider+"";
+                                                                                             var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                               """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                                      login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
@@ -611,7 +611,7 @@ beans {
 
         hql = "select user.email, user.password, user.firstName, user.lastName from User as user where user.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/register/register"
+        ajaxSaveUrl = "register/register"
 
         dataframeLabelCode = "User.Registration"
         //These are values, that overrides the default ones
@@ -676,7 +676,7 @@ beans {
 
         ]
 //        this.location.reload();
-        dataframeButtons = [Logout     : [name: "logout", type: "button",attr: """style='background-color:#1976D2; color:white;' """, url: "${contextPath}/logoff", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/home/0");this.location.reload();"""]],
+        dataframeButtons = [Logout     : [name: "logout", type: "button",attr: """style='background-color:#1976D2; color:white;' """, url: "logoff", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/home/0");this.location.reload();"""]],
                             editProfile: [name: 'editProfile', type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: false, "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "this.state.vueElintegroProfileMenuDataframe_person_id;", refDataframe: ref('vueElintegroUserProfileDataframe')]]
         currentFrameLayout = ref("vueElintegroProfileMenuDataframeLayout")
     }
@@ -749,7 +749,7 @@ beans {
                         "widget" : "PictureUploadWidgetVue"
                         ,name:"propertyImages"
                         , valueMember: "mainPicture"
-                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                        ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                         ,insertAfter: "person.mainPicture"
                         ,multiple:false
                         ,editButton: true
@@ -789,7 +789,7 @@ beans {
                 "user.password":[widget: "PasswordWidgetVue", "width":"150", "height":"25"],
                 "password2":[widget: "PasswordWidgetVue", "width":"150", "height":"25"]
         ]
-        dataframeButtons = [ Submit: [name:"submit", type: "button",attr:"""style='background-color:#1976D2; color:white;'""" , url: "${contextPath}/register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
+        dataframeButtons = [ Submit: [name:"submit", type: "button",attr:"""style='background-color:#1976D2; color:white;'""" , url: "register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
                                                                                                                             var t = url.searchParams.get("token"); 
                                                                                                                             if(t != undefined || t != null){ allParams['t']=t;}
                                                                                           allParams['vueElintegroResetPasswordDataframe_user_email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();

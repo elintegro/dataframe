@@ -82,7 +82,7 @@ beans{
                 ],
                 "project.sourceFile":[
                         widget: "FilesUploadWidgetVue"
-                        ,ajaxFileSaveUrl: "${contextPath}/translatorAssistant/fileUpload"
+                        ,ajaxFileSaveUrl: "/translatorAssistant/fileUpload"
                         ,doAfterSave:"""excon.showMessage(response,'vueCreateProjectForTranslationDataframe');"""
                 ]
         ]
@@ -246,7 +246,7 @@ beans{
                                                         [deleteButton:true
                                                          ,maxWidth:500
                                                          ,valueMember: 'Id'
-                                                         ,ajaxDeleteUrl:"${contextPath}/translatorAssistant/deleteRecord"
+                                                         ,ajaxDeleteUrl:"/translatorAssistant/deleteRecord"
                                                          ,doBeforeDelete:"""allParams['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');"""
                                                          ,doAfterDelete:"""self.vueGridOfTranslatedTextDataframe_fillInitData();"""
                                                          ,tooltip: [message:"tooltip.grid.delete",internationalization: true]
