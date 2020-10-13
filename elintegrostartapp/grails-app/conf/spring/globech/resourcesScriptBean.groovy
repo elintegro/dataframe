@@ -187,7 +187,7 @@ beans {
 
     }
     vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
-        data = """progressBarValue:'' """
+        data = """progressBarValue:'',"""
         watch =  """progressBarValueChanged:{handler: function(val, oldVal) {this.progressBarValue = val;}},\n"""
         computed = """progressBarValueChanged(){var progressBarValue = excon.getFromStore('vueElintegroProgressBarDataframe','progressValue'); return progressBarValue;},\n"""
     }
