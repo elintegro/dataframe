@@ -487,8 +487,8 @@ grails{
 			oauth2{
 				providers{
 					google {
-						api_key = '482906574403-seedi2p2ae3s9obm2ohb8bevq693jl3n.apps.googleusercontent.com'
-						api_secret= 'MEqtVZxols8l8o0e6waQ5E48'
+						api_key = '252139291193-dv3ekugm57up532d0e0g1lg1jp4fpir4.apps.googleusercontent.com'
+						api_secret= '9Iqwxj02b3F4c86FCle8z8w0'
 						successUri= "/springSecurityOAuth2/onSuccess?provider=google"
 						failureUri= "/oauth2/google/error"
 						callback= "/oauth2/google/callback"
