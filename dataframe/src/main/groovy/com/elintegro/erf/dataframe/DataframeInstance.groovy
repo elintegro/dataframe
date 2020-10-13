@@ -396,8 +396,9 @@ class DataframeInstance implements DataframeConstants{
 				//jsonMapDf.put(fieldName.replace(Dataframe.DOT,DataframeVue.UNDERSCORE), fldValue) //Chnaged Dot to Underscore for vue
 
 				myDomainAlias = fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
-				Widget widget = df.getFieldWidget(myDomainAlias, fieldName)
-				widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, fieldName, additionalDataRequestParamMap)
+				Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
+				String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
+				widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, additionalDataRequestParamMap)
 
 			}
 			//def fldDefaultValue = fieldProps.defaultValue

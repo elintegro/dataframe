@@ -633,9 +633,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                         let resData = responseData.data;
                         let response = resData?resData.data:'';
                        if(response != null && response != '' && response  != undefined){
-                           response["stateName"] = "$dataframeName";
-                           ${dataframeName}Var.updateState(response);
-                           ${dataframeName}Var.${dataframeName}_populateJSONData(response);
+//                           response["stateName"] = "$dataframeName";
+//                           ${dataframeName}Var.updateState(response);
+//                           ${dataframeName}Var.${dataframeName}_populateJSONData(response);
+							 excon.saveToStore("${dataframeName}", "persisters", response.persisters);
                         }
                         $doAfterRefresh 
                    self.overlay_dataframe = false;

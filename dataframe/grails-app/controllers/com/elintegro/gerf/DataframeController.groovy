@@ -82,7 +82,7 @@ class DataframeController {
 
 		//def converter = jsonMap as JSON
 
-		render(jsonMap)
+		render(jsonMap as JSON)
 	}
 
 	/**
