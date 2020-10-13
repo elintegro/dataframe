@@ -525,7 +525,7 @@ beans {
         ]
 
         dataframeButtons = [logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
-//                                                                                             var url = "/elintegrostartapp/oauth/authenticate/google";
+//                                                                                             var url = "elintegrostartapp/oauth/authenticate/google";
                                                                                              var url = "springSecurityOAuth2/authenticate?provider=google";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                              /*if(childWindow){

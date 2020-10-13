@@ -41,8 +41,8 @@ class GridWidgetVue extends WidgetVue {
     private static final Logger log = LoggerFactory.getLogger(GridWidgetVue.class);
 
     def contextPath = Holders.grailsApplication.config.rootPath
-    public String ajaxDeleteUrl = "/dataframe/ajaxDeleteExpire"
-    public String gridSaveUrl = "/gridDataframe/saveGridData"
+    public String ajaxDeleteUrl = "dataframe/ajaxDeleteExpire"
+    public String gridSaveUrl = "gridDataframe/saveGridData"
     String embDDfr = "";
 
     @Override
