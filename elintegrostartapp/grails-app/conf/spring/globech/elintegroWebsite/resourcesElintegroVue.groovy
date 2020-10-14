@@ -521,10 +521,10 @@ beans {
 
         addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150]
                        ,"user.username":["widget" : "EmailWidgetVue",attr: "autofocus", "name": "user.username", autoComplete:"on", "width":150,placeholder:"Enter your email", "errMessage":"Username should be an email"]
-                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px']
+                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px',flexGridValues: ['xs11', 'sm11', 'md11', 'lg11', 'xl11'],]
         ]
 
-        dataframeButtons = [logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
+        dataframeButtons = [logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:10px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'120px', height: '35px'], script:"""
 //                                                                                             var url = "elintegrostartapp/oauth/authenticate/google";
                                                                                              var url = "springSecurityOAuth2/authenticate?provider=google";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
@@ -532,13 +532,13 @@ beans {
                                                                                                 window.opener.location.reload();
                                                                                                 close();
                                                                                              }*/
-                                                                                              """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                             logInWithFacebook:[name: "logInWithFacebook", type: "image", attr: "style=\"margin-top:3px;\"", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl", width: '135px', height: '43px'],script:"""
+                                                                                              """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                             logInWithFacebook:[name: "logInWithFacebook", type: "image", attr: """style='margin-top:3px;margin-left: -10px;'""", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl", width: '120px', height: '35px'],script:"""
                                                                                              var provider = 'facebook';
                                                                                              var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
-                                                                                              """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                                     login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
+                                                                                              """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                                     login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs6 sm6 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark rounded style="width: 10px; margin-left:65px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
                                      allParams["username"] = this.state.vueElintegroLoginDataframe_user_username;
                                      allParams["password"] = this.state.vueElintegroLoginDataframe_user_password;
                                      allParams["remember-me"] = this.state.vueElintegroLoginDataframe_rememberMe;
@@ -555,7 +555,7 @@ beans {
                                                                          setTimeout(function(){excon.setVisibility('vueElintegroLoginDataframe', false);this.location.reload();}, 6000);} 
                                                                          if(!response.msg){ this.location.reload();}"""],"flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                                                 forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
-                                                                layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],]
+                                                                layout: "<v-flex xs6 sm6 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],]
 
 
 

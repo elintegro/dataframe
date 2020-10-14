@@ -488,7 +488,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		addFieldDef?.each{key, value->
 			addField(key, value)
 		}
-		addField("alertMesssage", [widget: "SnackbarWidgetVue"])
+		addField("alertMesssage", [widget: "SnackbarWidgetVue",flexGridValues: ['xs0', 'sm0', 'md0', 'lg0', 'xl0'],])
 
 	}
 
