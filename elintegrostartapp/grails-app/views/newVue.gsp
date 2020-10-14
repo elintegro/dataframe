@@ -48,7 +48,7 @@
     <title>Elintegro App Factory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/home/logoWithoutText.jpg" type="image/x-icon">
-
+    <meta name="google-signin-client_id" content="482906574403-seedi2p2ae3s9obm2ohb8bevq693jl3n.apps.googleusercontent.com">
     <asset:stylesheet href="/vuejs/tooltip.css"/>
     <asset:javascript src="jquery/jquery-1.11.2.js"/>
     <asset:javascript src="jquery/dateformat.js"/>
@@ -102,7 +102,7 @@ ${constructedPageHtml}
 <asset:javascript src="/vuejs/v-eutil.min.js"/>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.googleMapsApi.apiKey}">
 </script>
-<asset:javascript src="/erf/i18Messages.js"/>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <asset:javascript src="/erf/erfVueController.js"/>
 <asset:javascript src="/vuejs/vuex.js"/>
 ${constructedPageScript}

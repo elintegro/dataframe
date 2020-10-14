@@ -28,6 +28,7 @@ class UrlMappings {
         "/hqlTest"(controller:"main",action:"hqlTest")
         "/"(controller: "test", action: "show")
         "/test"(controller: "test", action: "test")
+        "/getHtml"(controller: "saaS", action: "getHtml")
         "500"(view:'/error')
     }
 }

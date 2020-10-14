@@ -147,13 +147,13 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 	String contextPath = Holders.grailsApplication.config.rootPath
 	// This is a default to use DataframeController to perform CRUD operations, could be overwritten in Dataframe bean definition to any other controller operation
-	def ajaxUrl = "${contextPath}/dataframe/ajaxValues";
-	def ajaxSaveUrl = "${contextPath}/dataframe/ajaxSave";
+	def ajaxUrl = "dataframe/ajaxValues";
+	def ajaxSaveUrl = "dataframe/ajaxSave";
 	//def ajaxDeleteUrl = "/ayalon/dataframe/ajaxDelete"
-	def ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire";
-	def ajaxInsertUrl = "${contextPath}/dataframe/ajaxInsert";
-	def ajaxDefaultUrl = "${contextPath}/dataframe/ajaxDefaultData";
-	def ajaxCreateUrl ="${contextPath}/dataframe/ajaxCreateNew"
+	def ajaxDeleteUrl = "dataframe/ajaxDeleteExpire";
+	def ajaxInsertUrl = "dataframe/ajaxInsert";
+	def ajaxDefaultUrl = "dataframe/ajaxDefaultData";
+	def ajaxCreateUrl ="dataframe/ajaxCreateNew"
 	@OverridableByEditor
 	Map dataframeButtons = [:];
 	@OverridableByEditor
@@ -164,7 +164,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	def ajaxDynamicSelectionBuildUrl
 
 	//TODO: This should be removed to the Widget class!
-	def ajaxjQTreeLoadUrl = "${contextPath}/dataframe/ajaxjQTreeLoad"
+	def ajaxjQTreeLoadUrl = "dataframe/ajaxjQTreeLoad"
 
 	//this String URL is to refresh when updating dataframe
 	//def dataFrameParamsToRefresh = null
@@ -488,7 +488,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		addFieldDef?.each{key, value->
 			addField(key, value)
 		}
-		addField("alertMesssage", [widget: "SnackbarWidgetVue"])
+		addField("alertMesssage", [widget: "SnackbarWidgetVue",flexGridValues: ['xs0', 'sm0', 'md0', 'lg0', 'xl0'],])
 
 	}
 
