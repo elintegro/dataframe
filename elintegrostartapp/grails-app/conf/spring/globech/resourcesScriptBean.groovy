@@ -173,7 +173,8 @@ beans {
                         excon.redirectPage(this,'home');                                
                     }
                 }else{
-                       excon.redirectPage(this,'home');                                
+                       excon.redirectPage(this,'home');
+                       this.\$nextTick(()=> window.document.getElementById(param).scrollIntoView()); 
                 }   
             }
   
