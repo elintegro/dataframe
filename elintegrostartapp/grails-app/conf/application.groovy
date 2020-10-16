@@ -502,7 +502,7 @@ grails{
 					}
 				}
 				registration {
-					askToLinkOrCreateAccountUri = "/login/loginWithGoogle"
+					askToLinkOrCreateAccountUri = "/loginWithGoogle/linkYourElintegroAccountWithGoogle"
 				}
 			}
 			successHandler {
