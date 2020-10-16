@@ -502,6 +502,9 @@ grails{
 					}
 				}
 			}
+			registration {
+				askToLinkOrCreateAccountUri = "login/ask"
+			}
 			successHandler {
 				defaultTargetUrl = "${grails.serverURL}/login/success"
 				//defaultTargetUrl = "${grails.serverURL}/authSuccessHandler/success"

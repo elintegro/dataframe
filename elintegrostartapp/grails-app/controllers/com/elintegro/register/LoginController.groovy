@@ -187,4 +187,7 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
 
         return userInfo
     }
+    def loginWithGoogle(){
+        render(view:  "/auth/ask")
+    }
 }
