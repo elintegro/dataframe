@@ -501,9 +501,9 @@ grails{
 						callback= "/oauth2/facebook/callback"
 					}
 				}
-			}
-			registration {
-				askToLinkOrCreateAccountUri = "login/ask"
+				registration {
+					askToLinkOrCreateAccountUri = "login/ask"
+				}
 			}
 			successHandler {
 				defaultTargetUrl = "${grails.serverURL}/login/success"
