@@ -176,7 +176,7 @@ class DataframeInstance implements DataframeConstants{
 
 			def namedParameterFromRequestJsonValue = getNamedParameterFromRequestJson(requestParams, parameter, refDomainAlias, refFieldName)
 
-			namedParmeters.put(parameter, new String(namedParameterFromRequestJsonValue))
+			namedParmeters.put(parameter, namedParameterFromRequestJsonValue.toString())
 			//TODO: check if the string represantation works corrrectly for each value type!
 			query.setParameter(parameter, namedParameterFromRequestJsonValue)
 		}
@@ -333,10 +333,10 @@ class DataframeInstance implements DataframeConstants{
 		jsonDefaults.put("additionalData", jsonAdditionalData)
 
 		//These are for refresh parent dataframe, if provided (aka requested):
-		def parentDataframe = requestParams.get('parentDataframe')
-		def parentNode = requestParams.get('parentNode')
-		def parentLevel = requestParams.get('level')
-		def parentFieldName = requestParams.get('parentFieldName')
+		def parentDataframe = requestParams?.parentDataframe
+		def parentNode = requestParams?.parentNode
+		def parentLevel = requestParams?.level
+		def parentFieldName = requestParams?.parentFieldName
 		def parentNodeLevel = getLevelFromUiIdConstruct(parentNode)
 
 		log.debug("\n *******   Request Params: when retrieved \n" + reqParamPrintout(requestParams) + "\n ***************\n")
@@ -1142,35 +1142,44 @@ class DataframeInstance implements DataframeConstants{
 		//Serach for Session:
 		if(namedParameter.indexOf(Dataframe.SESSION_PARAM_NAME_PREFIX) > -1){
 			String paramStringValue = getSessionParamValue(namedParameter, sessionParams)
-			return df.getTypeCastValue2(refDomainAlias, refFieldName, paramStringValue);
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, paramStringValue);
 		}
 
 		if(!requestParams) return null
 
 		//Search in request parameters:
-		Map requestNamedParams = requestParams.request_parameters?."${namedParameter}"
-		if(requestNamedParams?.containsKey(namedParameter)){return requestNamedParams.get(namedParameter)}
+		if (requestParams.containsKey(namedParameter)){
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, requestParams.get(namedParameter))
+		}
+
+		//Search in request parameters:
+//		Map requestNamedParams = requestParams.request_parameters?."${namedParameter}"
+//		if(requestNamedParams?.containsKey(namedParameter)){return requestNamedParams.get(namedParameter)}
 
 		//Search in Persisters:
 		def pField = getPersisterField(requestParams, refDomainAlias, refFieldName)
-		if(pField) {return pField}
+		if(pField) {return typeCastNamedParameterValue(refDomainAlias, refFieldName, pField)}
 
 		//Search in transits:
 		def tField = getTransitField(requestParams, namedParameter)
-		if(tField) {return tField}
+		if(tField) {return typeCastNamedParameterValue(refDomainAlias, refFieldName, tField)}
 
 		//Search in domain Keys:
 		Map domainKeys = requestParams.domain_keys?."${refDomainAlias}"
-		if(domainKeys?.containsKey(refFieldName)){return domainKeys.get(refFieldName).value}
+		if(domainKeys?.containsKey(refFieldName)){return typeCastNamedParameterValue(refDomainAlias, refFieldName, domainKeys.get(refFieldName).value)}
 
 		//Serch in old style requestparameters for back compitability:
 		String buildParamName = Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, namedParameter);
 		if(requestParams.containsKey(buildParamName)){
-			return requestParams.get(buildParamName)
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, requestParams.get(buildParamName))
 		}
 
 		return null
 	}//End of method applyNewValuesToDomainInstance
+
+	private def typeCastNamedParameterValue(refDomainAlias, refFieldName, paramValue){
+		return df.getTypeCastValue2(refDomainAlias, refFieldName, paramValue);
+	}
 
 	static def getPersisterField(JSONObject requestParams, String domainAlias, String fieldName){
 		Map persisters = getPersisters(requestParams)

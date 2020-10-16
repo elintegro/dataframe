@@ -346,11 +346,11 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	}
 
 
-	def ajaxValuesRaw(Dataframe dataframe, HttpSession session, GrailsParameterMap params) {
-
+	def ajaxValuesRaw(def request, HttpSession session) {
+		def requestParams = request.getJSON()
+		Dataframe dataframe = Dataframe.getDataframeByName(requestParams)
 		def userId = getSessionUserId(session)
-
-		def dfInstance = new DataframeInstance(dataframe, params)
+		def dfInstance = new DataframeInstance(dataframe, requestParams)
 
 		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
 

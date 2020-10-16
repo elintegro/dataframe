@@ -614,7 +614,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return """
              ${dataframeName}_fillInitData: function(){
                 excon.saveToStore('$dataframeName','doRefresh',false);
-                let allParams = {};\n
+                let allParams = this.state;\n
                 const propData = this.${dataframeName}_prop;
                  if(propData){
                     allParams = propData; 
@@ -627,9 +627,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                 $doBeforeRefresh
                 this.overlay_dataframe = true;
                 let self = this;
-                axios.get('$df.ajaxUrl', {
-                    params: allParams
-                }).then(function (responseData) {
+				axios({
+                          method:'post',
+                          url:'$df.ajaxUrl',
+                          data: allParams
+                      }).then(function (responseData) {
                         let resData = responseData.data;
                         let response = resData?resData.data:'';
                        if(response != null && response != '' && response  != undefined){

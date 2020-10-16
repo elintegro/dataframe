@@ -76,9 +76,9 @@ class DataframeController {
 	 */
 	def ajaxValues() {
 
-		Dataframe dataframe = getDataframe(params)
+//		Dataframe dataframe = getDataframe(params)
 
-		def jsonMap = dataframeService.ajaxValuesRaw(dataframe, session, params)
+		def jsonMap = dataframeService.ajaxValuesRaw(request, session)
 
 		//def converter = jsonMap as JSON
 
