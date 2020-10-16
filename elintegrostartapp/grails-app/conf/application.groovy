@@ -501,6 +501,10 @@ grails{
 						callback= "/oauth2/facebook/callback"
 					}
 				}
+				registration {
+					askToLinkOrCreateAccountUri = "/loginWithGoogle/linkYourElintegroAccountWithGoogle"
+				}
+
 			}
 			successHandler {
 				defaultTargetUrl = "${grails.serverURL}/login/success"
