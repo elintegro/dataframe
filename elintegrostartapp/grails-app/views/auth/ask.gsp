@@ -62,8 +62,8 @@
 
     <g:form action="linkAccount" method="post" autocomplete="off">
         <fieldset>
-            <legend><g:message code="springSecurity.oauth.registration.login.legend"
-                               default="Link to an existing account"/></legend>
+            <legend><g:message code="springSecurity.oauth.login.googleSignIn"
+                               default="Link to elintegro account"/></legend>
 
             <div class="fieldcontain ${hasErrors(bean: linkAccountCommand, field: 'username', 'error')} ">
                 <label for='username'><g:message code="OAuthLinkAccountCommand.username.label"
