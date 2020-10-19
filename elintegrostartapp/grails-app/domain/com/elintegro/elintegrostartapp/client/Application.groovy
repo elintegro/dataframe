@@ -47,9 +47,6 @@ class Application extends ControlField{
     String comments
     String lastComment
 
-    String leadDescription
-    String leadStage
-    String leadBudget
 
     static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills,images: Images,files: Files]
 

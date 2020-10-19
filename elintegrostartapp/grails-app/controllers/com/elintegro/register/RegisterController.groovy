@@ -342,15 +342,25 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 
     def createLeadUser() {
         def param = request.getJSON()
-        def result = registerService.createLeadUser(param)
-        RegistrationCode registrationCode = registrationCode(result.user)
-        String url = generateLink('verifyRegistration', [t: registrationCode.token])
-        if (registrationCode == null || registrationCode.hasErrors()) {
-            flash.error = message(code: 'spring.security.ui.register.miscError') as Object
-            flash.chainedParams = params
-            return
+        def resultData
+        User user1 = User.findByUsername(param.vueElintegroSignUpQuizDataframe_person_email)
+        Role role = Role.findByName("ROLE_LEAD")
+        UserRole userRole = UserRole.findByRoleAndUser(role, user1)
+        if (!userRole) {
+            def result = registerService.createLeadUser(param)
+            RegistrationCode registrationCode = registrationCode(result.user)
+            String url = generateLink('verifyRegistration', [t: registrationCode.token])
+            if (registrationCode == null || registrationCode.hasErrors()) {
+                flash.error = message(code: 'spring.security.ui.register.miscError') as Object
+                flash.chainedParams = params
+                return
+            }
+         resultData = registerService.sendingEmailAfterSignUp(result.user.firstName, result.password, result.user.email, url, registrationCode.token)
+
         }
-        def resultData = registerService.sendingEmailAfterSignUp(result.user.firstName, result.password, result.user.email, url, registrationCode.token)
+        else{
+            resultData = [success: false, msg: message(code: "request.has.been.already.submitted"),alert_type: "info"]
+        }
         render(resultData as JSON)
     }
 
