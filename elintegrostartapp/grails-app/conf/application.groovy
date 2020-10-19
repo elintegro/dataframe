@@ -494,8 +494,8 @@ grails{
 						callback= "/oauth2/google/callback"
 					}
 					facebook {
-						api_key = '307223053378607'
-						api_secret= '76e7d4e29923c37fa4c39f1c3d239bee'
+						api_key = '3331166770333939'
+						api_secret= '6b4892fbb53f6cce09c2ad83d1d5f44c'
 						successUri= "/springSecurityOAuth2/onSuccess?provider=facebook"
 						failureUri= "/oauth2/facebook/error"
 						callback= "/oauth2/facebook/callback"
