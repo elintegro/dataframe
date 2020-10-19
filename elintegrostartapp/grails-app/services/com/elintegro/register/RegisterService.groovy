@@ -18,6 +18,7 @@ import com.elintegro.auth.User
 import com.elintegro.auth.UserRole
 import com.elintegro.crm.Person
 import com.elintegro.elintegrostartapp.client.Application
+import com.elintegro.elintegrostartapp.client.Lead
 import com.elintegro.gc.data.DataInit
 import com.elintegro.gerf.DataframeController
 import com.elintegro.elintegrostartapp.Facility
@@ -33,6 +34,8 @@ import grails.util.Holders
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 import sun.security.tools.keytool.Pair
+
+import java.text.SimpleDateFormat
 
 @Transactional
 class RegisterService{
@@ -108,16 +111,19 @@ class RegisterService{
             applicant.user = user1
             applicant.save()
 
-            Application application = new Application()
-            application.applicant = applicant
-            application.leadDescription = param.vueElintegroSignUpQuizDataframe_application_leadDescription['Answer']
-            application.leadStage = param.vueElintegroSignUpQuizDataframe_application_leadStage['Answer']
-            application.leadBudget = param.vueElintegroSignUpQuizDataframe_application_leadBudget['Answer']
-            application.save()
+            Lead lead = new Lead()
+            lead.applicant = applicant
+            lead.leadDescription = param.vueElintegroSignUpQuizDataframe_lead_leadDescription['Answer']
+            lead.leadStage = param.vueElintegroSignUpQuizDataframe_lead_leadStage['Answer']
+            lead.leadBudget = param.vueElintegroSignUpQuizDataframe_lead_leadBudget['Answer']
+            lead.nameOfProject = param.vueElintegroSignUpQuizDataframe_lead_nameOfProject
+            lead.descriptionOfProject = param.vueElintegroSignUpQuizDataframe_lead_descriptionOfProject
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            Date date = inputFormat.parse(param.vueElintegroSignUpQuizDataframe_lead_deadline)
+            lead.deadline = date
+            lead.save()
 
-
-
-            result = [success: true, person_id: applicant.id, application_id: application.id,userId: user1.id,user:user1,password:password]
+            result = [success: true, person_id: applicant.id, application_id: lead.id,userId: user1.id,user:user1,password:password]
         }
         catch(Exception e){
             def msg = " Failed to save Person's data error = " + e

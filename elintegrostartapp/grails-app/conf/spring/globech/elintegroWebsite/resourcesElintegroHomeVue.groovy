@@ -211,16 +211,17 @@ beans{
         saveButton = false
         initOnPageLoad = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        hql = """select  application.leadDescription, application.leadStage, application.leadBudget, person.firstName, person.lastName, person.email , person.phone from Application application inner join application.applicant person  where application.id=:id"""
-        addFieldDef = ["application.leadDescription":[
-                widget:"ComboboxVue"
-                ,internationalize    :true
-                ,initBeforePageLoad  :true
-                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
-                ,"displayMember": "Answer"
-                ,"valueMember"  : "id"
-                ,search:true],
-                       "application.leadStage":[
+        hql = """select  lead.leadDescription, lead.leadStage, lead.leadBudget,lead.nameOfProject, lead.descriptionOfProject,lead.deadline, person.firstName, person.lastName, person.email , person.phone from Lead lead inner join lead.applicant person  where lead.id=:id"""
+        addFieldDef = [
+                        "lead.leadDescription":[
+                                widget:"ComboboxVue"
+                                ,internationalize    :true
+                                ,initBeforePageLoad  :true
+                                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
+                                ,"displayMember": "Answer"
+                                ,"valueMember"  : "id"
+                                ,search:true],
+                       "lead.leadStage":[
                                widget:"ComboboxVue"
                                ,internationalize    :true
                                ,initBeforePageLoad  :true
@@ -228,7 +229,7 @@ beans{
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
                                ,search:true],
-                       "application.leadBudget":[
+                       "lead.leadBudget":[
                                widget:"ComboboxVue"
                                ,initBeforePageLoad  :true
                                ,internationalize    :true
@@ -236,7 +237,20 @@ beans{
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
                                ,search:true],
-                       "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
+                       "lead.nameOfProject":[
+                               widget:"InputWidgetVue"
+                               ,name: "nameOfProject"
+                               ],
+                       "lead.descriptionOfProject":[
+                               widget:"TextAreaWidgetVue"
+                               ,name: "descriptionOfProject"
+                       ],
+                       "lead.deadline":[
+                               widget:"DateWidgetVue"
+                               ,name: "deadline"
+                       ],
+
+                       "person.phone":["name":"phone","widget":"PhoneNumberWidgetVue",validate: true],
 
         ]
         dataframeButtons = [
