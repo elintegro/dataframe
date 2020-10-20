@@ -45,27 +45,39 @@ beans {
                      }
                ,\nsetInitPageValues:function(){
                                                
-                                                axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
-                                                     excon.saveToStore("vueInitDataframe", "key", '');
-                                                     excon.saveToStore("vueElintegroProfileMenuDataframe", "key", '');
-                                                     excon.saveToStore("vueInitDataframe", "loggedIn", responseData.data.loggedIn);
-                                                     excon.saveToStore("loggedIn", responseData.data.loggedIn);
-//                                                     vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
-//                                                     Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
-//                                                     Vue.set(vueInitDataframeVar.\$store.state.vueElintegroProfileMenuDataframe, "key", '');
-                                                       var loggedIn = responseData.data.loggedIn
-//                                                     vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
-                                                       var urlLocation = window.location.href;
-                                                       if(loggedIn == false){
-//                                                        vueInitDataframeVar.\$router.push("/");this.location.reload();
-                                                       }
-                                                     
-                                                 }).catch(function (error) {
-                                                     console.log(error);
-                                                 });
-                                               } ,  \n
-                                                                                                     
-                                """
+                       axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
+                            excon.saveToStore("vueInitDataframe", "key", '');
+                            excon.saveToStore("vueElintegroProfileMenuDataframe", "key", '');
+                            const res = responseData.data;
+                            excon.saveToStore("vueInitDataframe", "loggedIn", res.loggedIn);
+                            excon.saveToStore("loggedIn", res.loggedIn);
+                            const personId = res.personId;
+                            if(personId){
+                                let userProfileMenu = excon.getFromStore("vueElintegroProfileMenuDataframe");
+                                userProfileMenu.persisters.person.id = personId;
+                                excon.saveToStore("vueElintegroProfileMenuDataframe", "persisters", userProfileMenu);
+                                let userProfile = excon.getFromStore("vueElintegroUserProfileDataframe");
+                                userProfile.persisters.person.id = personId;
+                                userProfile.domain_keys.person.id = personId;
+                                userProfile.namedParameters.id.value = personId;
+                                excon.saveToStore("vueElintegroUserProfileDataframe", userProfile);
+                            }
+//                            vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
+//                            Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
+//                            Vue.set(vueInitDataframeVar.\$store.state.vueElintegroProfileMenuDataframe, "key", '');
+                              var loggedIn = responseData.data.loggedIn
+//                            vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
+                              var urlLocation = window.location.href;
+                              if(loggedIn == false){
+//                               vueInitDataframeVar.\$router.push("/");this.location.reload();
+                              }
+                            
+                        }).catch(function (error) {
+                            console.log(error);
+                        });
+                      } ,  \n
+                                                                            
+        """
     }
 
     vueToolbarDataframe_script(VueJsEntity) { bean ->

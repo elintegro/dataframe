@@ -14,6 +14,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.register
 
 import com.elintegro.auth.User
+import com.elintegro.crm.Person
 import com.elintegro.gc.AuthenticationService
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
@@ -132,7 +133,8 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
 //            firstname = userDetails.firstName
 //            userInfo = [success: true, loggedIn:true, isTenant: isTenant,  username: authentication.name, firstname:firstname, isOwner:isOwner, isGuestUser:isGuestUser, isTenant:isTenant, isPropManager:isPropManager, isServiceProvider:isServiceProvider, isAdmin:isAdmin]
 
-            userInfo = [success: true, loggedIn: true, name: getFullName(userDetails), authentication: "DAO"]
+        Person person = Person.findByUser(userDetails)
+        userInfo = [success: true, loggedIn: true, name: getFullName(userDetails), personId: person.id, authentication: "DAO"]
 //        }
         return userInfo
     }
@@ -183,7 +185,8 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
         if(session.userid){
             User userDetails = User.get((long)session.userid)
             boolean loggedIn = (boolean)session.loggedIn
-            userInfo = [success: true, loggedIn: loggedIn, name: getFullName(userDetails), authentication: "DAO"]
+            Person person = Person.findByUser(userDetails)
+            userInfo = [success: true, loggedIn: loggedIn, name: getFullName(userDetails), personId:person.id, authentication: "DAO"]
         }else {
             userInfo = [success: false, loggedIn: false]
 

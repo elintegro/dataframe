@@ -602,7 +602,7 @@ beans {
         bean.constructorArgs = ['vueElintegroUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages from Person as person where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone from Person as person where person.id=:id"
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -612,6 +612,7 @@ beans {
         childDataframes=["vueElintegroResetPasswordDataframe"]
         doAfterSave = """setTimeout(function(){ vueElintegroUserProfileDataframe.\$router.push('/');this.location.reload();}, 3000);"""
         route = true
+        initOnPageLoad = true
         addFieldDef =[
                 "person.id":[
                         widget: "NumberInputWidgetVue",
@@ -641,7 +642,7 @@ beans {
                          ,"required": "required"
                          ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
                 ],
-                "person.languages":[
+                "languages":[
                         widget: "ComboboxVue"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
@@ -659,7 +660,7 @@ beans {
                         "width":200,
                         "height":200],
 
-                "person.uploadPicture":[
+                "uploadPicture":[
                         "widget" : "PictureUploadWidgetVue"
                         ,name:"propertyImages"
                         , valueMember: "mainPicture"

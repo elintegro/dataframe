@@ -200,8 +200,8 @@ class VueStore {
         return """
     refreshData : ({commit},params) => {
        excon.callApi(params.url, params.method, params).then((response) =>{
-          commit("updateData",response);
-          params["doAfterRefresh"](response); 
+          commit("updateData",response.data.data);
+          params["doAfterRefresh"](response.data.data); 
        }) 
       .catch(function (error) {
           console.log(error);
