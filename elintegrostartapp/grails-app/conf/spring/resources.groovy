@@ -65,6 +65,7 @@ beans = {
     loadResource "globech/elintegroWebsite/resourcesClientProjectPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesContactUsPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesGettingStartedPageLayoutVue.groovy"
+    loadResource "globech/elintegroWebsite/resourcesRefactorTest.groovy"
     if (Environment.current == Environment.DEVELOPMENT){
 //        loadResource "resourcesEditor.groovy"
 //        editorBeanLoading(EditorBeanLoading){ bean -> }

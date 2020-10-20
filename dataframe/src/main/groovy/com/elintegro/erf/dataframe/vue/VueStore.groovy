@@ -25,12 +25,14 @@ class VueStore {
     private StringBuilder state = null
     private StringBuilder mutation = null
     private StringBuilder getter = null
+    private StringBuilder actions = null
     private StringBuilder dataframeVisibilityMap = new StringBuilder()
 
     VueStore(){
         state = new StringBuilder()
         getter = new StringBuilder()
         mutation = new StringBuilder()
+        actions = new StringBuilder("")
     }
 
     String getState(){
@@ -72,6 +74,7 @@ class VueStore {
     String buildStateJSON(DataframeVue dataframe){
         StringBuilder sbb = new StringBuilder()
         sbb.append("""$dataframe.dataframeName: \n""")
+        dataframe.domainFieldMap["dataframe"] = dataframe.dataframeName
         sbb.append(MapUtil.convertMapToJSONString(dataframe.domainFieldMap))
         sbb.append(""",\n""")
 
@@ -89,8 +92,17 @@ class VueStore {
     }
 
 
-        void addToMutation(String value){
+    void addToMutation(String value){
         mutation.append(value)
+    }
+
+    String getActions() {
+        return actions.toString()
+    }
+
+
+    void addToActions(String value){
+        actions.append(value)
     }
 
     String getGetters(){
@@ -112,4 +124,98 @@ class VueStore {
         return sbb.toString()
     }*/
 
+    public static String createStoreGetterScript() {
+        return """
+             getState: (state) => (stateVar) => {
+                return state[stateVar]; 
+             },
+             getVisibility: (state) => (dataframeName) => {
+                return state.visibility[dataframeName]; 
+             },
+             getVisibilities: (state) => {
+                return state['visibility']; 
+             },
+             """
+    }
+    public static String createStoreSetterScript(){
+        return """
+                 
+             setVisibility(state, dataframeName){
+                return state.visibility[dataframeName] = true; 
+             },
+             unsetVisibility(state, dataframeName){
+                return state.visibility[dataframeName] = false; 
+             },
+        updateState(state, response){
+            if(!response){ return }
+
+            if(typeof response === 'object' || response instanceof Map) {
+                if(!response.stateName) {console.log("Error: statename missing")}
+                let stateVar = state[response.stateName];
+                if(!stateVar){console.log("Error: state variable missing for this dataframe")}
+                for (let i in response) {
+                    console.log(i);
+                    if(i === 'additionalData') {
+                        const additionalData = response[i];
+                        Object.keys(additionalData).forEach(function (key) {
+                            const dafrKey = additionalData[key];
+                            if (dafrKey.hasOwnProperty('data')){
+                                if (dafrKey.data.hasOwnProperty('additionalData') && dafrKey.data.additionalData.data) {
+                                    // Todo make recursive for handling inner additonial datas for embedded dfrs
+                                } else {
+                                }
+                            } else {
+                              if(dafrKey){
+                                  const dictionary = dafrKey['dictionary'];
+                                  stateVar[key + '_items'] = dictionary;
+                                  const headers = dafrKey['headers'];
+                                  if(headers){
+                                      stateVar[key + '_headers'] = dafrKey['headers'];
+                                  } else {
+                                      const selectedData = dafrKey['selectedData']; 
+                                      stateVar[key] = selectedData;
+                                  }
+                              }
+                            }
+
+                        });
+                    } else {
+                        Vue.set(stateVar, i, response[i]);
+                    }
+                }
+            } else {
+                console.log("PupulateState() method only works for object or map as of now");
+            }
+        },
+        updateData(state, response){
+            if(!response){ return }
+          const dataframe = response?response.dataframe:"";
+          if(dataframe){
+           state[dataframe]["persisters"] = response.persisters;   
+          }
+        },
+               """
+    }
+    public static String createStoreActionsScript(){
+        return """
+    refreshData : ({commit},params) => {
+       excon.callApi(params.url, params.method, params).then((response) =>{
+          commit("updateData",response);
+          params["doAfterRefresh"](response); 
+       }) 
+      .catch(function (error) {
+          console.log(error);
+      });
+    },
+    saveData : ({commit}, params) => {
+       excon.callApi(params.url, "POST", params).then((response) =>{
+          params["doAfterSave"](response); 
+          excon.showAlertMessage(response);
+       }) 
+      .catch(function (error) {
+          console.log(error);
+      });
+    },
+"""
+    }
 }

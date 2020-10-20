@@ -43,6 +43,8 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     //This assigns a new value and returns true if new value was different then the old one
     @Override
     boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
+        if(inputValue.value == null || inputValue.value == "") return true
+
         if(isReadOnly(field)){
             return false
         }
@@ -82,11 +84,11 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
-        String validationString = ""
+        String dataVariable = dataframe.getDataVariableForVue(field)
+        String validationString = """ ${dataVariable}_rule: "",\n"""
         if(validate(field)){
             String validationRules = validationRules(field)
             //TODO: Here we need to use right variable from our state structure! And need to check in any Widget!
-            String dataVariable = dataframe.getDataVariableForVue(field)
             validationString = """ ${dataVariable}_rule: $validationRules,\n"""
         }
         return """$validationString"""

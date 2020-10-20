@@ -29,7 +29,7 @@ class CheckboxWidgetVue extends WidgetVue{
         }
         String modelString = getModelString(dataframe, field)
         return """<v-checkbox
-      v-model = "$modelString" 
+      v-model = "${getFieldJSONModelNameVue(field)}" 
       ${validate(field)?":rules = '${fldName}_rule'":""}
       ${isDisabled(dataframe, field)?":disabled = true":""}
       label="${getLabel(field)}"

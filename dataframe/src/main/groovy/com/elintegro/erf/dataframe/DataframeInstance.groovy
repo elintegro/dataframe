@@ -495,10 +495,11 @@ class DataframeInstance implements DataframeConstants{
 		if(isChanged){
 			try{
 //				historyDomainInstance.close()
-				domainInstance.save(flush: true)
+				domainInstance.save(failOnError:true)
 				return true
 			}catch(Throwable ee){
-				log.error("Error saving " + domainInstance.toString() + "for params: " + keysNamesAndValue)
+				println(ee.getMessage())
+				log.error("Error saving " + domainInstance.toString() + "for params: " + keysNamesAndValue + " : "+ee.getMessage())
 				return false
 			}
 		}else{
@@ -707,7 +708,7 @@ class DataframeInstance implements DataframeConstants{
 		if(inputData.containsKey(keyFieldName)){
 			String paramValue = inputData.get(keyFieldName)
 			keysNamesAndValue.put(keyFieldName, paramValue)
-			}else{
+		}else{
 			getKeysNamesAndValueForPk(keysNamesAndValue, domain, inputData)
 		}
 		return keysNamesAndValue
@@ -803,28 +804,28 @@ class DataframeInstance implements DataframeConstants{
 
 			//boolean isParameterRelatedToDomain = this.isParameterRelatedToDomain(domainClass, myDomainAlias, paramName)
 			//if(isParameterRelatedToDomain){
-				PersistentProperty prop = domainClassInfo.getPropertyByName(fieldName)
-				def oldfldVal = domainInstance."${fieldName}";
-				if(historyDomainInstance){
-					if(!(df.metaFieldService.isAssociation(prop))) {
-						historyDomainInstance."${fieldName}" = oldfldVal //Saving the old data to history table
-					}else{
-						if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
-							def refDomainClass = domainClassInfo.getRefDomainClass(fieldName)
-							def savedInstance = saveHasManyAssociation(inputValue,refDomainClass,fieldName,historyDomainInstance)
-							historyDomainInstance = savedInstance
-						}
+			PersistentProperty prop = domainClassInfo.getPropertyByName(fieldName)
+			def oldfldVal = domainInstance."${fieldName}";
+			if(historyDomainInstance){
+				if(!(df.metaFieldService.isAssociation(prop))) {
+					historyDomainInstance."${fieldName}" = oldfldVal //Saving the old data to history table
+				}else{
+					if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
+						def refDomainClass = domainClassInfo.getRefDomainClass(fieldName)
+						def savedInstance = saveHasManyAssociation(inputValue,refDomainClass,fieldName,historyDomainInstance)
+						historyDomainInstance = savedInstance
 					}
-					//                Saving the historyDomainInstance
-					historyDomainInstance.save(failOnError: true)
 				}
-				def fldVal = null
+				//                Saving the historyDomainInstance
+				historyDomainInstance.save(failOnError: true)
+			}
+			def fldVal = null
 
-				isValidate = fieldValidate(field, inputValue)
-				if (!isValidate){
-					//todo: check validation for field latest grails version 3.3.0
-					throw new DataframeException("Field validation Failed")
-				}
+			isValidate = fieldValidate(field, inputValue)
+			if (!isValidate){
+				//todo: check validation for field latest grails version 3.3.0
+				throw new DataframeException("Field validation Failed for: "+fieldName)
+			}
 			/**
 			 * This is the heart of this method: applying the value to the domain for saving later!
 			 */
@@ -1073,6 +1074,7 @@ class DataframeInstance implements DataframeConstants{
 
 		def fldValStr = fldVal?.value?.toString()
 		if(field.get("notNull") && fldValStr == null){
+			if(field.get("pk")) return true
 			return false
 		}
 		if (field.containsKey("regex")){
@@ -1204,7 +1206,7 @@ class DataframeInstance implements DataframeConstants{
 	}
 
 	static Map getTransits(JSONObject requestParams){
-			return requestParams.transits
+		return requestParams.transits
 	}
 
 	static String getDomainKeyField(JSONObject requestParams, String domainAlias, String fieldName){

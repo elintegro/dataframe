@@ -156,42 +156,42 @@ var excon = new Vue({
 
         updateStoreState: function(response, stateVar, propKey){
 
-                var dataframe = response.dataframe;
-                let stateVarDf = stateVar+"."+dataframe;
-                var response = response.data
-                let id = response.keys["id"]?response.keys["id"]:'';
-                let stateVarObj1 = eval(stateVarDf);
+            var dataframe = response.dataframe;
+            let stateVarDf = stateVar+"."+dataframe;
+            var response = response.data
+            let id = response.keys["id"]?response.keys["id"]:'';
+            let stateVarObj1 = eval(stateVarDf);
 
-                if(stateVarObj1){
-                    Vue.set(eval(' stateVarObj1'), 'key', id);
-                }
-                if(response.hasOwnProperty('additionalData') ) {
-                    Object.keys(response.additionalData).forEach(function (key) {
-                        var embDfr = response.additionalData[key];
-                        if (embDfr.hasOwnProperty('data')){
-                            if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
-                                this.updateStoreState(embDfr, stateVar)
-                            } else {
-                                dataframe = embDfr.dataframe;
-                                if(dataframe){
+            if(stateVarObj1){
+                Vue.set(eval(' stateVarObj1'), 'key', id);
+            }
+            if(response.hasOwnProperty('additionalData') ) {
+                Object.keys(response.additionalData).forEach(function (key) {
+                    var embDfr = response.additionalData[key];
+                    if (embDfr.hasOwnProperty('data')){
+                        if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
+                            this.updateStoreState(embDfr, stateVar)
+                        } else {
+                            dataframe = embDfr.dataframe;
+                            if(dataframe){
 
-                                    let stateVarDf =stateVar + "." + dataframe;
-                                    if(embDfr.data.hasOwnProperty('keys')){
-                                        let id = embDfr.data.keys["id"];
-                                        let stateVarObj2 = eval(stateVarDf);
-                                        if(stateVarObj2){
-                                            Vue.set(eval('stateVarObj2'), 'key', id);
-                                            let propKey1 = propKey +"." +dataframe + "_data";
-                                            Vue.set(eval(propKey1), 'key', id);
-                                        }
+                                let stateVarDf =stateVar + "." + dataframe;
+                                if(embDfr.data.hasOwnProperty('keys')){
+                                    let id = embDfr.data.keys["id"];
+                                    let stateVarObj2 = eval(stateVarDf);
+                                    if(stateVarObj2){
+                                        Vue.set(eval('stateVarObj2'), 'key', id);
+                                        let propKey1 = propKey +"." +dataframe + "_data";
+                                        Vue.set(eval(propKey1), 'key', id);
                                     }
-
                                 }
+
                             }
                         }
+                    }
 
-                    });
-                }
+                });
+            }
         },
 
         showAlertMessage: function(success, msg){
@@ -230,10 +230,16 @@ var excon = new Vue({
             return Math.random() * 100;
         },
 
-
-        callApi: function(_params){
-            return axios(_params);
+        callApi: function(url, method, params){
+            console.log(params)
+            method = method || 'post';
+            return axios({
+                method:method,
+                url: url,
+                data: params
+            })
         },
+
         formatData:function(param){
             var allParams = [];
 
@@ -422,4 +428,4 @@ var excon = new Vue({
             let oldData = store.getters.getState(dataframeName);
         }
     }
-    });
+});

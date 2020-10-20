@@ -575,8 +575,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		String mutation = vueStore1.getMutation()
 		String getters = vueStore1.getGetters()
+		String actions = vueStore1.getActions()
 		String globalState = vueStore1.getGlobalState()
-		this.vueStoreScriptMap = ["state":state, getters:getters, "mutation":mutation, "globalState": globalState]
+		this.vueStoreScriptMap = ["state":state, getters:getters, "mutation":mutation, "actions":actions, "globalState": globalState]
 
 	}
 	private String getStateAccessor(){
@@ -591,9 +592,45 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return """ updateState: function(response){
                     this.\$store.commit("updateState", response)
                 },
+                refreshData : function(response){
+                   this.\$store.dispatch("refreshData", response); 
+                },
+                saveData : function(params){
+                   this.\$store.dispatch("saveData", params); 
+                },
                """
 	}
 	public String getJsonDataFillScript(df){
+		String dataframeName = df.dataframeName
+		StringBuilder allParamsSb = new StringBuilder()
+		String namedParamKey = mainNamedParamKey?:"id"
+		if(route){
+			allParamsSb.append("allParams['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
+		}else{
+			allParamsSb.append("""allParams["$namedParamKey"] = eval(this.namedParamKey);\n""")
+		}
+		if(!ajaxUrlParams.isEmpty()){
+			for(Map.Entry entry: ajaxUrlParams){
+				allParamsSb.append("allParams['$entry.key'] = '$entry.value';\n")
+			}
+		}
+		String updateStoreScriptcaller = ""
+		if(createStore){
+//			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n excon.updateStoreState(resData, stateVar,${dataframeName}Var);"""
+		}
+		return """
+             ${dataframeName}_fillInitData: function(){
+                 let params = this.state;    
+                 if(!params) return;
+                 params["url"] =  '$df.ajaxUrl';
+                 params["method"] = "POST";
+                 params["doAfterRefresh"] = function(){console.log("Inside doAfterRefresh")};                               
+				 this.refreshData(params);
+             },\n
+              """
+	}
+
+	public String getJsonDataFillScriptbackup(df){
 		String dataframeName = df.dataframeName
 		StringBuilder allParamsSb = new StringBuilder()
 		String namedParamKey = mainNamedParamKey?:"id"
@@ -650,8 +687,29 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
              },\n
               """
 	}
-
 	public String getSaveDataScript(df, vueSaveVariables, vueFileSaveVariables){
+		String dataframeName = df.dataframeName
+		StringBuilder embdSaveParms = new StringBuilder("")
+		if(embeddedDataframes.size()>0){
+			embeddedDataframes.each{
+				if(it.trim() != ""){
+					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it}_ref") && this.\$refs.${it}_ref){for(var a in this.\$refs.${it}_ref.\$data){\n
+                                              var dashA = a.split('_').join('-');
+                                              allParams[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
+				}
+			}
+		}
+		return """
+              ${dataframeName}_save: function(){
+                  let params = this.state;                                    
+                 params["url"] =  '$df.ajaxSaveUrl';
+                 params["method"] = "GET";
+                 params["doAfterSave"] = function(){console.log("Inside doAfterSave")};                               
+				  this.saveData(params);
+               },\n"""
+	}
+
+	public String getSaveDataScriptbackup(df, vueSaveVariables, vueFileSaveVariables){
 		String dataframeName = df.dataframeName
 		StringBuilder embdSaveParms = new StringBuilder("")
 		if(embeddedDataframes.size()>0){
@@ -799,7 +857,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		Set<String> registeredComponents = ResultPageHtmlBuilder.registeredComponents
 		if(childrenDataframes){
 			childrenDataframes.each{
-				if(it.trim()!="" && !registeredComponents.contains(it)){
+				if(it && it.trim()!="" && !registeredComponents.contains(it)){
 					vueJsBuilder.addToComponentScript(VueJsBuilder.createCompRegistrationString(it))
 				}
 			}
