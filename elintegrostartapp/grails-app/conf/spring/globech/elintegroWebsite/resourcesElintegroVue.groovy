@@ -277,7 +277,7 @@ beans {
 
                    "Person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
                 "application.availablePositions"  :[
-                        "widget"             :"ComboboxVue"
+                        "widget"             :"RadioButtonWidgetVue"
                         ,internationalize    :true
                         ,initBeforePageLoad  :true
                         ,multiple            :true
