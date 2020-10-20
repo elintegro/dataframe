@@ -14,9 +14,15 @@ beans {
         route = true
         vueStore = ["state": "loggedIn: false,\n"]
 
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday,  person.phone from Person as person where person.id=:id"
-/*
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday,  person.phone, person.languages from Person as person where person.id=:id"
         addFieldDef = [
+                "person.languages":[
+                        "widget"      : "ComboboxVue"
+                        ,initBeforePageLoad  :true
+                        , hql: """select language.id as id, language.ename as ename from Language as language"""
+                        ,"displayMember":"ename"
+                        ,"valueMember":"id"
+                ]/*,
                 "inputText": [
                         "widget"      : "InputWidgetVue"
                 ],
@@ -52,14 +58,13 @@ beans {
                 "comboboxwidget": [
                         "widget"      : "ComboboxVue",
                         hql:"select language.ename from Language language"
-                ],
+                ]*//*,
                 "mapWidget": [
 
                         "widget"      : "MapWidgetVue",
-                ]
+                ]*/
 
         ]
-*/
         putFillInitDataMethod = false
         currentFrameLayout = ref("defaultDataframeLayout")
     }

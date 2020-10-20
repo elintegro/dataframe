@@ -495,7 +495,7 @@ class DataframeInstance implements DataframeConstants{
 		if(isChanged){
 			try{
 //				historyDomainInstance.close()
-				domainInstance.save(failOnError:true)
+				domainInstance.save(flush: true, failOnError:true)
 				return true
 			}catch(Throwable ee){
 				println(ee.getMessage())
@@ -1168,7 +1168,9 @@ class DataframeInstance implements DataframeConstants{
 
 		//Search in domain Keys:
 		Map domainKeys = requestParams.domain_keys?."${refDomainAlias}"
-		if(domainKeys?.containsKey(refFieldName)){return typeCastNamedParameterValue(refDomainAlias, refFieldName, domainKeys.get(refFieldName).value)}
+		if(domainKeys?.containsKey(refFieldName)){
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, domainKeys.get(refFieldName).value)
+		}
 
 		//Serch in old style requestparameters for back compitability:
 		String buildParamName = Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, namedParameter);

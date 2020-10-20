@@ -31,7 +31,7 @@ class DateWidgetVue extends WidgetVue {
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = getFieldName(dataframe, field)
         boolean isReadOnly = dataframe.isReadOnly(field)
-        String locale = field.locale?:"he"
+        String locale = field.locale?:"en"
         String localeString = locale?"locale='$locale'":""
         String dateFormatPlaceholder = getMessageSource().getMessage("date.format.hint", null, "date.format.hint", LocaleContextHolder.getLocale())
         String menuAttr = field.menuAttr?:""
