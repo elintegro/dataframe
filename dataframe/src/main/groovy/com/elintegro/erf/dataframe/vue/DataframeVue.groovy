@@ -589,14 +589,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	}
 
 	private String getStateSetter(){
-		return """ updateState: function(response){
+		return """ 
+                 updateState: function(response){
                     this.\$store.commit("updateState", response)
-                },
-                refreshData : function(params){
-                   this.\$store.dispatch("refreshData", params); 
-                },
-                saveData : function(params){
-                   this.\$store.dispatch("saveData", params); 
                 },
                """
 	}
@@ -625,7 +620,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                  params["url"] =  '$df.ajaxUrl';
                  params["doBeforeRefresh"] = function(){console.log(" Put any doBeforeRefresh scripts here"); ${doBeforeRefresh}};                               
                  params["doAfterRefresh"] = function(){console.log("Inside doAfterRefresh. Put any doAfterRefresh scripts here"); ${doAfterRefresh}};                               
-				 this.refreshData(params);
+				 excon.refreshData(params);
              },\n
               """
 	}
@@ -704,8 +699,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
                  params["doBeforeSave"] = function(){console.log("Put any doBeforeSave Scripts here"); ${doBeforeSave} }
-                 params["doAfterSave"] = function(){console.log("Inside doAfterSave. Put any doAfterSave scripts here"); ${doAfterSave} };                               
-				 this.saveData(params);
+                 params["doAfterSave"] = function(){console.log("Inside doAfterSave. Put any doAfterSave scripts here"); 
+                 ${doAfterSave} 
+                 excon.saveToStore("${dataframeName}", "domain_keys", responseData.data.data.domain_keys);}
+				 excon.saveData(params);
                },\n"""
 	}
 

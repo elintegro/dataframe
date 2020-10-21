@@ -55,7 +55,9 @@ beans {
                             if(personId){
                                 let userProfileMenu = excon.getFromStore("vueElintegroProfileMenuDataframe");
                                 userProfileMenu.persisters.person.id = personId;
-                                excon.saveToStore("vueElintegroProfileMenuDataframe", "persisters", userProfileMenu.persisters);
+                                userProfileMenu.domain_keys.person.id = personId;
+                                userProfile.namedParameters.session_userid.value = personId;
+                                excon.saveToStore("vueElintegroProfileMenuDataframe", userProfileMenu);
                                 let userProfile = excon.getFromStore("vueElintegroUserProfileDataframe");
                                 userProfile.persisters.person.id = personId;
                                 userProfile.domain_keys.person.id = personId;
@@ -198,8 +200,8 @@ beans {
 //        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
 //    }
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.state.vueElintegroProfileMenuDataframe_person_lastName)},
-                       vueElintegroProfileMenuDataframe_person_email(){return this.state.vueElintegroProfileMenuDataframe_person_email}"""
+        computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},
+                       vueElintegroProfileMenuDataframe_person_email(){return this.state.persisters.person.email.value}"""
     }
     vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
         created = """this.vueElintegroProfileMenuDataframeShow();"""

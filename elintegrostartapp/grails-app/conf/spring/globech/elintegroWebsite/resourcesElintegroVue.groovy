@@ -565,6 +565,7 @@ beans {
         createStore = true
         isGlobal = true
         saveButton = false
+        initOnPageLoad=true
 //        route = true
         wrapInForm = true
 //        "url":"https://s3.us-east-2.amazonaws.com/elintegro1",

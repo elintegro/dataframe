@@ -230,6 +230,15 @@ var excon = new Vue({
             return Math.random() * 100;
         },
 
+        updateState: function(response){
+            store.commit("updateState", response)
+        },
+        refreshData : function(params){
+            store.dispatch("refreshData", params);
+        },
+        saveData : function(params){
+            store.dispatch("saveData", params);
+        },
         callApi: function(url, method, params){
             console.log(params)
             method = method || 'post';

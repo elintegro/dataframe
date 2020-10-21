@@ -16,6 +16,7 @@ package com.elintegro.erf.widget.vue
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.util.Holders
+import org.grails.web.json.JSONObject
 
 class PictureDisplayWidgetVue extends WidgetVue{
     @Override
@@ -27,7 +28,7 @@ class PictureDisplayWidgetVue extends WidgetVue{
         String aspectRatio  = field.aspectRatio?field.aspectRatio:"2.75"
         String heightString = height?"height=$height":""
         String widthString  = width?"""width=$width """:""
-        String modelString = getModelString(dataframe, field)
+        String modelString = getFieldJSONModelNameVue(field)
         String html =  """<v-img
            id = "$fldParam"
           :src="$modelString"
@@ -53,6 +54,14 @@ class PictureDisplayWidgetVue extends WidgetVue{
         return """$fldParam:'$url',\n
                   ${fldParam}_alt:'$alt',\n"""
 
+    }
+
+    @Override
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
+        String defImgUrl = getDefaultImageName()
+        String url = value?:defImgUrl
+        String alt = value?:defImgUrl
+        jData?.persisters?."${domainAlias}"."${fieldName}".value = url
     }
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
