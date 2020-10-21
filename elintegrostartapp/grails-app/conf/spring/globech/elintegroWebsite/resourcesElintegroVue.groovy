@@ -269,7 +269,7 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
         doAfterSave = """
-                        allParams["id"] = excon.getFromStore("vueNewEmployeeBasicInformationDataframe", "domain_keys.application.id")                 
+                                 
                         excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeUploadResumeDataframe");
                       """
 
@@ -301,7 +301,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, application.resume from Application application where application.id=:id"
+        hql = "select application.id, files.fileName from Application application inner join application.files files where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
@@ -313,10 +313,13 @@ beans {
         doBeforeSave = """
             //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rather then insert a new one.                          
             excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
+              const applicantId = excon.getFromStore("vueNewEmployeeBasicInformationDataframe", "domain_keys.application.id")  
+              params.persisters.application.id.value = applicantId;
+              params.namedParameters.id.value = applicantId;
+              params.domain_keys.application.id = applicantId;    
         """
         doAfterSave = """
-                         excon.saveToStore("vueNewEmployeeUploadResumeDataframe","key", response.nodeId[0]);
-                         excon.saveToStore('vueNewEmployeeApplicantDataframe','vueNewEmployeeApplicantDataframe_tab_model','vueNewEmployeeSelfAssesmentDataframe-tab-id');
+                         excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeSelfAssesmentDataframe");
                       """
         addFieldDef = [
 //                "application.avatar":["name":"avatar"
@@ -326,11 +329,9 @@ beans {
 //                                      ,editButton: true
 //                                      ,deleteButton:true  ],
 
-                "application.resume":["name":"resume"
+                "files.fileName":["name":"fileName"
                                       ,"widget":"FilesUploadWidgetVue"
-                                      ,valueMember: "resume"
                                       , ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                                      , insertAfter: "application.resume"
                                       ,multiple:false
                                       ,"accept":"image/*,.pdf,.docx,.doc"
 
@@ -353,7 +354,7 @@ beans {
         tab = true
         saveButton = false
         flexGridValuesForSaveButton =['xs6', 'sm6', 'md6', 'lg6', 'xl6']
-        doBeforeRefresh = """allParams['id']= excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id');
+        doBeforeRefresh = """params['id']= excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id');
                              """
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeAddtionalQuestionsDataframe","key", response.nodeId[0]);
@@ -394,8 +395,8 @@ beans {
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         initOnPageLoad = true
         putFillInitDataMethod = true
-        doBeforeRefresh = """allParams['id']= this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
-        doBeforeSave = """allParams['key_vueNewEmployeeApplicantEditSkillDataframe_applicationSkill_id_id'] = this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
+        doBeforeRefresh = """params['id']= this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
+        doBeforeSave = """params['key_vueNewEmployeeApplicantEditSkillDataframe_applicationSkill_id_id'] = this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
         doAfterSave = """ excon.setVisibility("vueNewEmployeeApplicantEditSkillDataframe", false);
                           excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'U');
                       """
@@ -421,7 +422,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeAddtionalQuestionsDataframe']
         initOnPageLoad = false
-        doBeforeSave = """allParams['key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id');"""
+        doBeforeSave = """params['key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id');"""
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         saveButton = true
@@ -440,7 +441,7 @@ beans {
         bean.constructorArgs = ['vueNewEmployeeThankYouMessageAfterSaveDataframe']
         saveButton = false
         route = true
-        doBeforeRefresh= """allParams['id'] = excon.getFromStore('vueNewEmployeeAddtionalQuestionsDataframe','key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id');"""
+        doBeforeRefresh= """params['id'] = excon.getFromStore('vueNewEmployeeAddtionalQuestionsDataframe','key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id');"""
         hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:id"
         currentFrameLayout = ref("vueNewEmployeeThankYouMessageAfterSaveDataframeLayout")
 
@@ -490,9 +491,9 @@ beans {
         dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
                                      doBeforeSave:""" 
                                      var elementId = '#vueElintegroLoginDataframe';
-                                     allParams["username"] = this.state.persisters.user.username.value;
-                                     allParams["password"] = this.state.persisters.user.password.value;
-                                     allParams["remember-me"] = this.state.transits.rememberMe.value;
+                                     params["username"] = this.state.persisters.user.username.value;
+                                     params["password"] = this.state.persisters.user.password.value;
+                                     params["remember-me"] = this.state.transits.rememberMe.value;
                                       """,
                                     callBackParams: [successScript: """
                                                           console.log("Login Callback");
@@ -706,8 +707,8 @@ beans {
         ]
         dataframeButtons = [ Submit: [name:"submit", type: "button",attr:"""style='background-color:#1976D2; color:white;'""" , url: "${contextPath}/register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
                                                                                                                             var t = url.searchParams.get("token"); 
-                                                                                                                            if(t != undefined || t != null){ allParams['t']=t;}
-                                                                                          allParams['vueElintegroResetPasswordDataframe_user_email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();
+                                                                                                                            if(t != undefined || t != null){ params['t']=t;}
+                                                                                          params['vueElintegroResetPasswordDataframe_user_email']=jQuery("#vueElintegroUserProfileDataframe_person_email").val();
                                                                                          """, callBackParams:[successScript:"""if(data.redirect){window.location.href=data.redirectUrl;}
                                                                                                                                jQuery('#resetPassword-Div').jqxWindow('close');"""]],
                              Cancel:[name:"cancel", type:"button",attr: """style='background-color:#1976D2; color:white;' """, script:"\$router.go(-1)"]]
@@ -757,7 +758,7 @@ beans {
         readonly = true
         initOnPageLoad = true
         putFillInitDataMethod = true
-        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
+        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
         addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]]]
         dataframeButtons = [next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantSelfAssessmentDataframe-tab-id");
@@ -770,7 +771,7 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
         tab = true
         saveButton = false
-        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
         initOnPageLoad = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         readonly = true
@@ -807,7 +808,7 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantQuestionAnswerDataframe']
         tab = true
         readonly = true
-        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
         saveButton = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"

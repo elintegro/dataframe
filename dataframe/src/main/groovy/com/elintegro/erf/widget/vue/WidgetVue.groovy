@@ -78,6 +78,11 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     public String getFieldJSONModelNameVue(Map field){
         return "${getFieldJSONNameVue(field)}.value";
     }
+    public String getFieldJSONNameVueWithoutState(Map field){
+        String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
+        String fieldType = field.containsKey("domain") ? PERSISTERS : TRANSITS
+        return "${fieldType}${DOT}${fldDomainAndDot}${field.name}.value";
+    }
     public String getFieldJSONItems(Map field){
         String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
         return "${getFieldJSONNameVue(field)}.items";
