@@ -55,7 +55,7 @@ beans {
                             if(personId){
                                 let userProfileMenu = excon.getFromStore("vueElintegroProfileMenuDataframe");
                                 userProfileMenu.persisters.person.id = personId;
-                                excon.saveToStore("vueElintegroProfileMenuDataframe", "persisters", userProfileMenu);
+                                excon.saveToStore("vueElintegroProfileMenuDataframe", "persisters", userProfileMenu.persisters);
                                 let userProfile = excon.getFromStore("vueElintegroUserProfileDataframe");
                                 userProfile.persisters.person.id = personId;
                                 userProfile.domain_keys.person.id = personId;

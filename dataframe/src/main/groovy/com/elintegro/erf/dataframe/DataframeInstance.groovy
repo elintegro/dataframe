@@ -638,23 +638,26 @@ class DataframeInstance implements DataframeConstants{
 		StringBuilder findFuncName = new StringBuilder();
 		StringBuilder arguments = new StringBuilder();
 
+		int lastIndex = 1
 		domainKeys.each{key, value ->
 			//This is the most common case:
+			lastIndex++
 			String keyField = key.toString().toLowerCase().capitalize()
 			if(domainKeys.size() == 1 && (key == "id" || key == "Id") && !value && !StringUtils.isEmpty(value.toString()) && !value.toString().equalsIgnoreCase("new")){
 				return domainClass.newInstance().get(value)
 			}else{
+				arguments.append(value)
 				if(findFuncName.size() == 0){
 					findFuncName.append("findBy").append(keyField)
-					arguments.append("(").append(value)
 				}else {
 					findFuncName.append("And").append(keyField)
-					arguments.append("(").append(value)
+					if(lastIndex < domainKeys.size()-1) arguments.append(",")
 				}
 			}
 		}
-		findFuncName.append(arguments)
-		return domainClass.newInstance()."${findFuncName.toString()}"
+//		findFuncName.append(arguments)
+//		return domainClass.newInstance()."${findFuncName.toString()}" //Todo see why this is not working
+		return domainClassInfo.clazz."${findFuncName.toString()}"(arguments.toString())
 	}
 
 	public boolean isInsertDomainInstance(DomainClassInfo domainClassInfo) {
