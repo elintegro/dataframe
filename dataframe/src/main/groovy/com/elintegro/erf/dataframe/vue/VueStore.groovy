@@ -199,6 +199,7 @@ class VueStore {
     public static String createStoreActionsScript(){
         return """
     refreshData : ({commit},params) => {
+       params["doBeforeRefresh"](params); 
        excon.callApi(params.url, "POST", params).then((response) =>{
           commit("updateData",response.data.data);
           params["doAfterRefresh"](response.data.data); 
@@ -208,6 +209,7 @@ class VueStore {
       });
     },
     saveData : ({commit}, params) => {
+       params["doBeforeSave"](params); 
        excon.callApi(params.url, "POST", params).then((response) =>{
           params["doAfterSave"](response.data.data); 
           excon.showAlertMessage(response.data);

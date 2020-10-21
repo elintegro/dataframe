@@ -623,7 +623,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                  let params = this.state;    
                  if(!params) return;
                  params["url"] =  '$df.ajaxUrl';
-                 params["doAfterRefresh"] = function(){console.log("Inside doAfterRefresh. Put any doAfterRefresh scripts here")};                               
+                 params["doBeforeRefresh"] = function(){console.log(" Put any doBeforeRefresh scripts here"); ${doBeforeRefresh}};                               
+                 params["doAfterRefresh"] = function(){console.log("Inside doAfterRefresh. Put any doAfterRefresh scripts here"); ${doAfterRefresh}};                               
 				 this.refreshData(params);
              },\n
               """
@@ -702,7 +703,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
               ${dataframeName}_save: function(){
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
-                 params["doAfterSave"] = function(){console.log("Inside doAfterSave. Put any doAfterSave scripts here")};                               
+                 params["doBeforeSave"] = function(){console.log("Put any doBeforeSave Scripts here"); ${doBeforeSave} }
+                 params["doAfterSave"] = function(){console.log("Inside doAfterSave. Put any doAfterSave scripts here"); ${doAfterSave} };                               
 				 this.saveData(params);
                },\n"""
 	}
