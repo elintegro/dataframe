@@ -632,7 +632,8 @@ class DataframeInstance implements DataframeConstants{
 		def currentInstance = null
 
 		String domainAlias = domainClassInfo.getDomainAlias()
-		Map domainKeys = requestParams?.domain_keys?."${domainAlias}"?.value
+		JSONObject domainKeys = requestParams?.domain_keys?."${domainAlias}"
+
 
 		StringBuilder findFuncName = new StringBuilder();
 		StringBuilder arguments = new StringBuilder();
@@ -640,7 +641,7 @@ class DataframeInstance implements DataframeConstants{
 		domainKeys.each{key, value ->
 			//This is the most common case:
 			String keyField = key.toString().toLowerCase().capitalize()
-			if(domainKeys.size() == 1 && key == "id" && !value && !StringUtils.isEmpty(value.toString()) && !value.toString().equalsIgnoreCase("new")){
+			if(domainKeys.size() == 1 && (key == "id" || key == "Id") && !value && !StringUtils.isEmpty(value.toString()) && !value.toString().equalsIgnoreCase("new")){
 				return domainClass.newInstance().get(value)
 			}else{
 				if(findFuncName.size() == 0){

@@ -592,8 +592,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return """ updateState: function(response){
                     this.\$store.commit("updateState", response)
                 },
-                refreshData : function(response){
-                   this.\$store.dispatch("refreshData", response); 
+                refreshData : function(params){
+                   this.\$store.dispatch("refreshData", params); 
                 },
                 saveData : function(params){
                    this.\$store.dispatch("saveData", params); 
@@ -623,8 +623,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                  let params = this.state;    
                  if(!params) return;
                  params["url"] =  '$df.ajaxUrl';
-                 params["method"] = "POST";
-                 params["doAfterRefresh"] = function(){console.log("Inside doAfterRefresh")};                               
+                 params["doAfterRefresh"] = function(){console.log("Inside doAfterRefresh. Put any doAfterRefresh scripts here")};                               
 				 this.refreshData(params);
              },\n
               """
@@ -703,9 +702,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
               ${dataframeName}_save: function(){
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
-                 params["method"] = "GET";
-                 params["doAfterSave"] = function(){console.log("Inside doAfterSave")};                               
-				  this.saveData(params);
+                 params["doAfterSave"] = function(){console.log("Inside doAfterSave. Put any doAfterSave scripts here")};                               
+				 this.saveData(params);
                },\n"""
 	}
 

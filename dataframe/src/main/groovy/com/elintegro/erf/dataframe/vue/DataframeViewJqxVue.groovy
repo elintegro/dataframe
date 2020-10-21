@@ -77,7 +77,7 @@ public class DataframeViewJqxVue implements DataframeView {
                     ResultPageHtmlBuilder.registeredComponents.add(refDataframe.dataframeName)
                     script.append("""${dataframeName}_${dfButton.name}: function(_param){\n 
                          $doBeforeAjax
-                         var routeId = ${routeIdScript?:""}
+                         var routeId = ${routeIdScript?:0}
                          this.\$router.push({
                          name: '$refDfrName',
                          path: '$refDfrName',
