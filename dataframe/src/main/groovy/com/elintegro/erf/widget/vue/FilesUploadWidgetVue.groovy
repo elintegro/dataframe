@@ -1,7 +1,11 @@
 package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.DataframeException
+import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import org.apache.commons.lang.StringUtils
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 
 class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
     @Override
@@ -23,6 +27,52 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                </v-file-input></div>
                """
 
+    }
+    @Override
+    boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
+        if(isReadOnly(field)){
+            return false
+        }
+        JSONArray selectedItems =  convertToJSONArrayIfSingleJSONObject(inputValue)
+        JSONArray availableItems = inputValue.items
+
+        if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
+            def oldfldVal = domainInstance."${fieldName}"
+            if(oldfldVal == inputValue.value) return false
+            domainInstance."${fieldName}" = inputValue.value
+        }else if(domainClassInfo.isToMany(fieldName)){
+            return saveHasManyAssociation(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
+        }else if(domainClassInfo.isToOne(fieldName)){
+            def oldfldVal = domainInstance."${fieldName}".value
+            domainInstance."${fieldName}" = inputValue.value[0] //TODO: check if there is not exception in case of single choice
+        }
+        return true
+    }
+    private JSONArray convertToJSONArrayIfSingleJSONObject(JSONObject value){
+        JSONArray jn = new JSONArray()
+        jn.add(value)
+        return jn
+    }
+    //	saves onetomany and manytomany
+    private boolean saveHasManyAssociation(JSONArray inputValue, def refDomainClass, String fieldName, def domainInstance) {
+        def oldfldVal = domainInstance."${fieldName}"
+//        if (oldfldVal) {
+//            JSONArray oldfldValArr = new JSONArray(domainInstance."${fieldName}")
+//            if (isSelectionEqualsToOld(oldfldVal, inputValue)) {
+//                return false
+//            }
+//        }
+        domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
+        inputValue.each{val ->
+            val.each{
+                if(it.key == "id"){
+                    def refDomainObj  = refDomainClass.get(Long.valueOf(it.value))
+                    String fn = fieldName.capitalize()
+                    domainInstance."addTo${fieldName.capitalize()}"(refDomainObj)
+                }
+            }
+        }
+        return true
     }
     String getVueDataVariable(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
