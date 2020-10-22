@@ -67,7 +67,6 @@ ${constructedPageHtml}
 </script>
 <asset:javascript src="/erf/i18Messages.js"/>
 <asset:javascript src="/erf/erfVueController.js"/>
-<asset:javascript src="/vuejs/vuex.js"/>
 ${constructedPageScript}
 <script>
 

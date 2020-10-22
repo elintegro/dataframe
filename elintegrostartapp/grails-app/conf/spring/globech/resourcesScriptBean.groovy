@@ -56,13 +56,15 @@ beans {
                                 let userProfileMenu = excon.getFromStore("vueElintegroProfileMenuDataframe");
                                 userProfileMenu.persisters.person.id = personId;
                                 userProfileMenu.domain_keys.person.id = personId;
-                                userProfile.namedParameters.session_userid.value = personId;
+                                userProfileMenu.namedParameters.session_userid.value = personId;
                                 excon.saveToStore("vueElintegroProfileMenuDataframe", userProfileMenu);
                                 let userProfile = excon.getFromStore("vueElintegroUserProfileDataframe");
                                 userProfile.persisters.person.id = personId;
                                 userProfile.domain_keys.person.id = personId;
                                 userProfile.namedParameters.id.value = personId;
-                                excon.saveToStore("vueElintegroUserProfileDataframe", userProfile);
+                                excon.callApi('dataframe/ajaxValues', 'POST', userProfile).then((response)=>{
+                                    excon.saveToStore("vueElintegroUserProfileDataframe", response.data.data);
+                                });
                             }
 //                            vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
 //                            Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
@@ -187,6 +189,25 @@ beans {
                             }
                             
                      },"""
+    }
+    vueElintegroLoginDataframe_script(VueJsEntity) { bean ->
+        boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
+        String loginAuthenticateUrl = loginWithSpringSecurity?"login/authenticate" : "login/loginUser"
+
+        methods = """login: function(){
+                                     var elementId = '#vueElintegroLoginDataframe';
+                                     let params = {};
+                                     params["username"] = this.state.persisters.user.username.value;
+                                     params["password"] = this.state.persisters.user.password.value;
+                                     params["remember-me"] = this.state.transits.rememberMe.value;
+                                     axios({
+                                            method:"POST",
+                                            url: '$loginAuthenticateUrl',
+                                            params: params
+                                    }).then((response)=>{
+                                           window.location.reload();
+                                    })
+                    }"""
     }
     vueElintegroRegisterDataframe_script(VueJsEntity) { bean ->
         data = "vueElintegroRegisterDataframe_display:true,\n checkboxSelected: [],\n"

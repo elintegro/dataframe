@@ -59,7 +59,7 @@ beans {
         bean.constructorArgs = ['vueElintegroNavigationButtonDataframe']
         isGlobal = true
         saveButton = false
-        initOnPageLoad = true
+        initOnPageLoad = false
         dataframeButtons = [register       : [name: "register", type: "link", showAsDialog: true, attr:"style='color:#1976D2;'",
                                               refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             login          : [name: "login", type: "link",showAsDialog: true,attr:"style='color:#1976D2;'",
@@ -480,27 +480,14 @@ beans {
         initOnPageLoad = false
         isGlobal = true
 
-        boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
-        String loginAuthenticateUrl = loginWithSpringSecurity?"${contextPath}/login/authenticate" : "${contextPath}/login/loginUser"
-
         addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150]
                        ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an email"]
                        ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px']
         ]
 
-        dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
-                                     doBeforeSave:""" 
-                                     var elementId = '#vueElintegroLoginDataframe';
-                                     params["username"] = this.state.persisters.user.username.value;
-                                     params["password"] = this.state.persisters.user.password.value;
-                                     params["remember-me"] = this.state.transits.rememberMe.value;
-                                      """,
-                                    callBackParams: [successScript: """
-                                                          console.log("Login Callback");
-                                                           this.location.reload();
-                                                          //Dataframe.showHideDataframesBasedOnUserType(data);
-                                                       """,
-                                                     failureScript:""" if(!response.msg){ this.location.reload();}"""],"flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+        dataframeButtons = [ login:[name:"login", type: "button", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
+                script:"this.login();",
+                                                 "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                              forgetPassword:[name: "forgetPassword", type: "button", attr:"""style="background-color:#1976D2; color:white; margin-left:2px;" """, script:""" console.log("Forget Password Clicked");""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
                                              layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],
                              logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
@@ -595,7 +582,7 @@ beans {
         ]
 //        this.location.reload();
         dataframeButtons = [Logout     : [name: "logout", type: "button",attr: """style='background-color:#1976D2; color:white;' """, url: "${contextPath}/logoff", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], script: "", callBackParams: [failureScript: """vueElintegroProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]],
-                            editProfile: [name: 'editProfile', type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: false, "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "this.state.persisters.person.id;", refDataframe: ref('vueElintegroUserProfileDataframe')]]
+                            editProfile: [name: 'editProfile', type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: false, "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "this.state.persisters.person.id.value;", refDataframe: ref('vueElintegroUserProfileDataframe')]]
         currentFrameLayout = ref("vueElintegroProfileMenuDataframeLayout")
     }
     vueElintegroUserProfileDataframe(DataframeVue){ bean ->
@@ -604,7 +591,7 @@ beans {
         bean.constructorArgs = ['vueElintegroUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone from Person as person where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, lang.ename from Person as person left join person.languages as lang where person.id=:id"
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -614,7 +601,6 @@ beans {
         childDataframes=["vueElintegroResetPasswordDataframe"]
         doAfterSave = """setTimeout(function(){ vueElintegroUserProfileDataframe.\$router.push('/');this.location.reload();}, 3000);"""
         route = true
-        initOnPageLoad = true
         addFieldDef =[
                 "person.id":[
                         widget: "NumberInputWidgetVue",
@@ -644,7 +630,7 @@ beans {
                          ,"required": "required"
                          ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
                 ],
-                "languages":[
+                "lang.ename":[
                         widget: "ComboboxVue"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
                         , hql: """select language.id as id, language.ename as ename from Language as language"""

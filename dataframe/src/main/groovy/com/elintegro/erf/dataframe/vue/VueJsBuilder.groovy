@@ -26,7 +26,9 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
     private StringBuffer dataScriptStringbf = new StringBuffer()
     private StringBuffer watchScriptSbf = new StringBuffer()
     private StringBuffer componentScriptSbf = new StringBuffer()
+    private StringBuffer beforeCreatedScriptSbf = new StringBuffer()
     private StringBuffer createdScriptSbf = new StringBuffer()
+    private StringBuffer mountedScriptSbf = new StringBuffer()
     private StringBuffer methodScriptSbf = new StringBuffer()
     private StringBuffer propsScriptSbf = new StringBuffer()
     private StringBuffer propsAttrString = new StringBuffer()
@@ -49,8 +51,18 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         return this
     }
 
+    public VueJsBuilder addToBeforeCreatedScript(script){
+        beforeCreatedScriptSbf.append(script)
+        this
+    }
+
     public VueJsBuilder addToCreatedScript(script){
         createdScriptSbf.append(script)
+        this
+    }
+
+    public VueJsBuilder addToMountedScript(script){
+        mountedScriptSbf.append(script)
         this
     }
 
@@ -112,6 +124,27 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         sb.append("template:`")
         sb.append(templateScriptSbf.toString())
         sb.append("`,\n")
+        return sb.toString()
+    }
+
+    public String buildBeforeCreatedScript(){
+        if(beforeCreatedScriptSbf.length() == 0){
+            return ""
+        }
+        StringBuilder sb = new StringBuilder()
+        sb.append("beforeCreate () {\n")
+        sb.append(beforeCreatedScriptSbf.toString())
+        sb.append("},\n")
+        return sb.toString()
+    }
+    public String buildMountedScript(){
+        if(mountedScriptSbf.length() == 0){
+            return ""
+        }
+        StringBuilder sb = new StringBuilder()
+        sb.append("mounted () {\n")
+        sb.append(mountedScriptSbf.toString())
+        sb.append("},\n")
         return sb.toString()
     }
 
@@ -241,6 +274,7 @@ class VueJsBuilder implements ScriptBuilder<DataframeVue>{
         vueCompBuilder.append(buildPropsScript())
         vueCompBuilder.append(buildComponentScript())
         vueCompBuilder.append(buildCreatedScript())
+        vueCompBuilder.append(buildMountedScript())
         vueCompBuilder.append(buildComputedScript())
         vueCompBuilder.append(buildWatchScript())
         vueCompBuilder.append(buildMethodScript())

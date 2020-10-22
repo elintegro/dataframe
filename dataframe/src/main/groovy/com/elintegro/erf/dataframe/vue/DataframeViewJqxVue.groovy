@@ -179,6 +179,20 @@ public class DataframeViewJqxVue implements DataframeView {
 
     public String getClickedButtonScript(DFButton dfButton){
         String doBeforeSave = dfButton.doBeforeSave?:""
+        return """
+                  const self = this;
+                  let params = this.state;                                    
+                 params["url"] =  '$dfButton.url';
+                 params["doBeforeSave"] = function(params){console.log("Put any doBeforeSave Scripts here"); ${doBeforeSave} }
+                 params["doAfterSave"] = function(response){console.log("Inside doAfterSave. Put any doAfterSave scripts here"); 
+                 ${dfButton.doAfterSave} 
+                 excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);}
+				 excon.saveData(params);
+             \n
+			"""
+    }
+    public String getClickedButtonScriptbackup(DFButton dfButton){
+        String doBeforeSave = dfButton.doBeforeSave?:""
         String callBackScriptS = ""
         String callBackSuccessScriptS = ""
         String callBackFailureScript = ""

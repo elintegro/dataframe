@@ -1173,7 +1173,8 @@ class DataframeInstance implements DataframeConstants{
 		//Search in domain Keys:
 		Map domainKeys = requestParams.domain_keys?."${refDomainAlias}"
 		if(domainKeys?.containsKey(refFieldName)){
-			return typeCastNamedParameterValue(refDomainAlias, refFieldName, domainKeys.get(refFieldName).value)
+//			return typeCastNamedParameterValue(refDomainAlias, refFieldName, domainKeys.get(refFieldName).value)
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, domainKeys.get(refFieldName))
 		}
 
 		//Serch in old style requestparameters for back compitability:
