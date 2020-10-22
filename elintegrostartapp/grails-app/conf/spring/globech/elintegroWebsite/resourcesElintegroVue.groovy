@@ -275,11 +275,11 @@ beans {
 
         addFieldDef = [
 
-                   "Person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
+                "Person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
                 "application.availablePositions"  :[
                         "widget"             :"RadioButtonWidgetVue"
                         ,internationalize    :true
-                        ,initBeforePageLoad  :true
+                        ,initBeforePageLoad  : true
                         ,multiple            :true
                         ,"hql"               : "select position.id as id, position.name as name from Position as position"
                         ,"displayMember": "name"
