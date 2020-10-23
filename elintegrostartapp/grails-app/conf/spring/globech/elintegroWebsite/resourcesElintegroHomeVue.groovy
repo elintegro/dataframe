@@ -32,6 +32,11 @@ beans{
                             ,elementId: "build"
                             ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
+                "apps":["widget":"TextDisplayWidgetVue"
+                         ,"name":"apps"
+                         ,elementId: "apps"
+                         ,flexGridValues:['xs12', 'sm12', 'md1', 'lg1', 'xl1']
+                ],
                 'buildData':[ "widget":"TextDisplayWidgetVue"
                             ,"name":"buildData"
                             ,attr: """v-show = false"""

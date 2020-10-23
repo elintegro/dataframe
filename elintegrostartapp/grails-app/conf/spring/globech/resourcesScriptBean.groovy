@@ -91,7 +91,6 @@ beans {
                             var text = document.getElementById("buildData").innerHTML;
                             var words = text.split(',');
                             var colors = ['royalblue','mediumseagreen','aqua','gold','crimson']
-                            var visible = true;
                             var con = document.getElementById('console');
                             var letterCount = 1;
                             var x = 1;
@@ -124,16 +123,6 @@ beans {
                                       letterCount += x;
                                       }
                             }, 120)
-                            window.setInterval(function() {
-                                if (visible === true) {
-                                  con.className = 'console-underscore hidden'
-                                  visible = false;
-                                } else {
-                                  con.className = 'console-underscore'
-                                  visible = true;
-                                }
-                            }, 400)
-
                     },\n           
 
                     """
