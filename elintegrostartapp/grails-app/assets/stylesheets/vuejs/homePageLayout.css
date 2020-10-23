@@ -16,7 +16,19 @@
 .mainContainer .our_home .heading-2{
     font-size: 43px;
     color:#3898ed;
+    animation-name: colorChange;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
 }
+ @keyframes colorChange {
+     0%   {color: royalblue}
+     25%  {color: mediumseagreen}
+     50%  {color: aqua}
+     75%  {color: gold}
+     100% {color: crimson}
+ }
  .mainContainer .our_home #console{
      left:10px;
      font-size: 43px;
@@ -27,6 +39,10 @@
      color: dodgerblue;
      padding-left: 12px;
      font-weight: bold;
+     animation-name: colorChange;
+     animation-duration: 10s;
+     animation-iteration-count: infinite;
+     animation-timing-function: linear;
  }
 .mainContainer .our_home .paragraph{
     color: black;
