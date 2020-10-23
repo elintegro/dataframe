@@ -63,13 +63,18 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
 //            }
 //        }
         domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
-        inputValue.each{val ->
-            val.each{
-                if(it.key == "id"){
-                    def refDomainObj  = refDomainClass.get(Long.valueOf(it.value))
-                    String fn = fieldName.capitalize()
-                    domainInstance."addTo${fieldName.capitalize()}"(refDomainObj)
-                }
+        //Here i have tried to save fileName,fileType,fileStorageSize in Files table ,if we need to save other attributes(fields) in future, change this code accordingly.
+        //Todo : Need to make this code more generic if possible so that we don't have to manually add hardcoded fields (like fileName,fileType.. )
+        inputValue.value.each{val ->
+            val.each {
+                //fileName, fileType, fileStorageSize saving into Files table
+                def newInstance = refDomainClass.newInstance()
+                newInstance.fileName = it.fileName
+                newInstance.fileStorageSize = it.fileStorageSize
+                newInstance.fileType = it.fileType
+                newInstance.save()
+                //newly created file instance saving into cross table..
+                domainInstance."addTo${fieldName.capitalize()}"(newInstance)
             }
         }
         return true
@@ -90,8 +95,16 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                    ${fldName}_uploadFile: function(event){
                               this.${fldName}_files =  event;
                               var fileToUpload =  this.${fldName}_files;
+                              let fileArray = [];
+                              for(let i = 0; i < fileToUpload.length; i++){
+                                  let fileData = {};
+                                  fileData["fileName"] = fileToUpload[i].name; 
+                                  fileData["fileType"] = fileToUpload[i].type;
+                                  fileData["fileStorageSize"] = fileToUpload[i].size;
+                                  fileArray.push(fileData);
+                              }
                               let stateVariable = excon.getFromStore("$dataframe.dataframeName");
-                              stateVariable.${getFieldJSONNameVueWithoutState(field)} = fileToUpload[0].name;
+                              stateVariable.${getFieldJSONNameVueWithoutState(field)} = fileArray;
                               excon.saveToStore("$dataframe.dataframeName", stateVariable)
                               },\n
                              ${fldName}_ajaxFileSave: function(data, allParams){
