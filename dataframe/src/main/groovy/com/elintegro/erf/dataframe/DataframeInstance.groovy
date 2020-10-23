@@ -135,20 +135,47 @@ class DataframeInstance implements DataframeConstants{
 		jData = new JSONObject(df.domainFieldMap)
 		df.writableDomains.each { domainName, domain ->
 			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
+			PersistentEntity queryDomain = domainClassInfo.getValue();
 			def domainInstance = domainClassInfo.clazz.findById(namedParmeters.get("id")) //todo hardcoded just for now
 			df.fields.getList().each{ fieldName ->
 				Map fieldProps = df.fields.get(fieldName)
 				String myDomainAlias = null
-				def fldValue = domainInstance."${fieldProps.name}"
-				myDomainAlias = fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
-				Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
-				String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
-				widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, [:])
+				if(isFieldExistInDb(fieldProps)){ //todo first make it work for persistents
+					def fldValue = domainInstance."${fieldProps.name}"
+					myDomainAlias = fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
+					Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
+					String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
+					List items = getAssociationData(domainClassInfo, fieldProps.name, fieldProps)
+					widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, [items:items])
+				}
 			}
 		}
-        Map jsonRet = [:]
+		Map jsonRet = [:]
+		addKeyDataForNamedParameters([:]) // adding key- fields for vue js
 		jsonRet.put("data", jData)
 		return jsonRet
+	}
+
+	private List getAssociationData(DomainClassInfo domainClassInfo, String fieldName, Map field){
+		ArrayList resList = []
+		if(domainClassInfo.isAssociation(fieldName) || domainClassInfo.isManyToMany(fieldName)){
+			String hql = field.hql
+			if(!hql) throw new MissingFieldException("this widget requires a hql statement")
+			Query query = sessionHibernate.createQuery(hql);
+			Transaction tx = sessionHibernate.beginTransaction()
+			def results = query.list()
+			String valueMember = field.valueMember?:"id"
+			String displayMember = field.displayMember?:"name"
+			if(results.size()>1){
+				results.each{
+					Map res = [:]
+					res[valueMember] = it[0]
+					res[displayMember] = it[1]
+					resList.add(res)
+				}
+			}
+		}
+		return resList
 	}
 
 	private void populateInstance(){
@@ -826,7 +853,7 @@ class DataframeInstance implements DataframeConstants{
 
 			Widget widget = df.getFieldWidget(myDomainAlias, fieldName)
 			Map field = df.getFieldByDomainAliasAndFieldName(myDomainAlias, fieldName)
-            saveHistoryDomain(historyDomainInstance, domainInstance, domainClassInfo, fieldName, hibernetPersistentEntity, inputValue)
+			saveHistoryDomain(historyDomainInstance, domainInstance, domainClassInfo, fieldName, hibernetPersistentEntity, inputValue)
 			//TODO: refactor it, please!!!
 
 			isValidate = fieldValidate(field, inputValue)

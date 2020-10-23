@@ -70,7 +70,9 @@ class ComboboxVue extends WidgetVue {
     @Override
     boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
         jData?.persisters?."${domainAlias}"."${fieldName}".value = value
-        //jData?.persisters?."${domainAlias}"."${fieldName}".items = value
+        if(additionalDataRequestParamMap.containsKey("items")){
+            jData?.persisters?."${domainAlias}"."${fieldName}".items = additionalDataRequestParamMap.items
+        }
     }
 
 
