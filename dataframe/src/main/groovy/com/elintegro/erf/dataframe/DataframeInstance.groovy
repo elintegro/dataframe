@@ -122,6 +122,35 @@ class DataframeInstance implements DataframeConstants{
 		return additionalData
 	}
 
+	private def retrieveAndGetJson(){
+
+		if(!df.hql){
+			return;
+		}
+
+		Query query = createSQLQuery()
+
+		setNamedParametersFromRequestOrSession(query)
+
+		jData = new JSONObject(df.domainFieldMap)
+		df.writableDomains.each { domainName, domain ->
+			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
+			def domainInstance = domainClassInfo.clazz.findById(namedParmeters.get("id")) //todo hardcoded just for now
+			df.fields.getList().each{ fieldName ->
+				Map fieldProps = df.fields.get(fieldName)
+				String myDomainAlias = null
+				def fldValue = domainInstance."${fieldProps.name}"
+				myDomainAlias = fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
+				Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
+				String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
+				widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, [:])
+			}
+		}
+        Map jsonRet = [:]
+		jsonRet.put("data", jData)
+		return jsonRet
+	}
+
 	private void populateInstance(){
 
 		if(!df.hql){
@@ -297,7 +326,7 @@ class DataframeInstance implements DataframeConstants{
 		return retrieveAndGetJson()
 	}
 
-	public def retrieveAndGetJson(){
+	public def retrieveAndGetJsonbackup(){
 		if (!isDefault){
 			//retrieving from DB!
 			populateInstance()
