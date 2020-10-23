@@ -90,24 +90,19 @@ beans {
                     changeWords(){
                             var text = document.getElementById("buildData").innerHTML;
                             var words = text.split(',');
-                            var colors = ['royalblue','mediumseagreen','aqua','gold','crimson']
                             var con = document.getElementById('console');
                             var letterCount = 1;
                             var x = 1;
                             var waiting = false;
                             var target = document.getElementById("build");
-                            target.setAttribute('style', 'color:' + colors[0])
                             window.setInterval(function() {
                                 if (letterCount === 2 && waiting === false) {
                                   waiting = true;
                                   target.innerHTML = words[0].substring(0, letterCount)
                                   window.setTimeout(function() {
-                                        var usedColor = colors.shift();
-                                        colors.push(usedColor);
                                         var usedWord = words.shift();
                                         words.push(usedWord);
                                         x = 1;
-                                        target.setAttribute('style', 'color:' + colors[0])
                                         letterCount += x;
                                         waiting = false;
                                   }, 1000)
