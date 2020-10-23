@@ -45,7 +45,7 @@ class ComboboxVue extends WidgetVue {
         if(isReadOnly(field)){
             return false
         }
-        JSONArray selectedItems =  convertToJSONArrayIfSingleJSONObject(inputValue.value)
+        JSONArray selectedItems =  (inputValue.value instanceof JSONArray)?inputValue.value:convertToJSONArrayIfSingleJSONObject(inputValue.value)
         JSONArray availableItems = inputValue.items
 
         if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity

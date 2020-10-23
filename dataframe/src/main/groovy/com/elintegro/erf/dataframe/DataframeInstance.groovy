@@ -17,6 +17,7 @@ import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.Widget
 import grails.gorm.transactions.Transactional
+import grails.test.mixin.gorm.Domain
 import grails.util.Holders
 import groovy.util.logging.Slf4j
 import org.apache.commons.lang.ClassUtils
@@ -417,7 +418,8 @@ class DataframeInstance implements DataframeConstants{
 				String refDomainAlias =  namedParam[0];
 				String refFieldName =  namedParam[1];
 				String keyNamedParam = DataframeVue.buildFullFieldNameKeyParamWithDot(df, refDomainAlias, refFieldName, key);
-				jsonMapDf.put(keyNamedParam, value)
+//				jsonMapDf.put(keyNamedParam, value)
+				jsonMapDf.put("$refDomainAlias",["$refFieldName": value, "$key":value]) //todo check if this works for all cases
 
 				jData?."${DOMAIN_KEYS}".putAll(jsonMapDf)
 			}
@@ -786,7 +788,7 @@ class DataframeInstance implements DataframeConstants{
 		String myDomainAlias = domainClassInfo.getDomainAlias()
 
 		if( StringUtils.isEmpty(myDomainAlias)){
-			throw new DataframeException(" Trying to save Instance of ${myDomainName} for dataframe ${df.dtataframename}, that does not suppose to have this domain for saving!");
+			throw new DataframeException(" Trying to save Instance of ${myDomainName} for dataframe ${df.dataframeName}, that does not suppose to have this domain for saving!");
 		}
 
 		//*************   MAIN LOOP on PARAMETERS!!!! **************
@@ -795,35 +797,8 @@ class DataframeInstance implements DataframeConstants{
 
 			Widget widget = df.getFieldWidget(myDomainAlias, fieldName)
 			Map field = df.getFieldByDomainAliasAndFieldName(myDomainAlias, fieldName)
-//            Checking if historyDomainInstance is null and setting the values of parentId and last updated timestamp of parent table
+            saveHistoryDomain(historyDomainInstance, domainInstance, domainClassInfo, fieldName, hibernetPersistentEntity, inputValue)
 			//TODO: refactor it, please!!!
-			if(historyDomainInstance){
-				if(fieldName == "id"){
-					historyDomainInstance. parentId = domainInstance."${fieldName}"
-					if(hasPersistentProperty("lastUpdated", hibernetPersistentEntity)){
-						historyDomainInstance.lastUpdated = domainInstance.lastUpdated
-					}
-				}
-			}
-
-			//boolean isParameterRelatedToDomain = this.isParameterRelatedToDomain(domainClass, myDomainAlias, paramName)
-			//if(isParameterRelatedToDomain){
-			PersistentProperty prop = domainClassInfo.getPropertyByName(fieldName)
-			def oldfldVal = domainInstance."${fieldName}";
-			if(historyDomainInstance){
-				if(!(df.metaFieldService.isAssociation(prop))) {
-					historyDomainInstance."${fieldName}" = oldfldVal //Saving the old data to history table
-				}else{
-					if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
-						def refDomainClass = domainClassInfo.getRefDomainClass(fieldName)
-						def savedInstance = saveHasManyAssociation(inputValue,refDomainClass,fieldName,historyDomainInstance)
-						historyDomainInstance = savedInstance
-					}
-				}
-				//                Saving the historyDomainInstance
-				historyDomainInstance.save(failOnError: true)
-			}
-			def fldVal = null
 
 			isValidate = fieldValidate(field, inputValue)
 			if (!isValidate){
@@ -839,6 +814,35 @@ class DataframeInstance implements DataframeConstants{
 		return isChanged
 	}//End of method applyNewValuesToDomainInstance
 
+	private boolean saveHistoryDomain(def historyDomainInstance, def domainInstance, DomainClassInfo domainClassInfo, String fieldName, HibernatePersistentEntity hibernetPersistentEntity, def inputValue){
+//            Checking if historyDomainInstance is null and setting the values of parentId and last updated timestamp of parent table
+		if(historyDomainInstance){
+			if(fieldName == "id"){
+				historyDomainInstance. parentId = domainInstance."${fieldName}"
+				if(hasPersistentProperty("lastUpdated", hibernetPersistentEntity)){
+					historyDomainInstance.lastUpdated = domainInstance.lastUpdated
+				}
+			}
+		}
+
+		//boolean isParameterRelatedToDomain = this.isParameterRelatedToDomain(domainClass, myDomainAlias, paramName)
+		//if(isParameterRelatedToDomain){
+		PersistentProperty prop = domainClassInfo.getPropertyByName(fieldName)
+		def oldfldVal = domainInstance."${fieldName}";
+		if(historyDomainInstance){
+			if(!(df.metaFieldService.isAssociation(prop))) {
+				historyDomainInstance."${fieldName}" = oldfldVal //Saving the old data to history table
+			}else{
+				if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
+					def refDomainClass = domainClassInfo.getRefDomainClass(fieldName)
+					def savedInstance = saveHasManyAssociation(inputValue,refDomainClass,fieldName,historyDomainInstance)
+					historyDomainInstance = savedInstance
+				}
+			}
+			//                Saving the historyDomainInstance
+			historyDomainInstance.save(failOnError: true)
+		}
+	}
 	private static Boolean hasPersistentProperty(String propertyName, HibernatePersistentEntity domainClass){
 		/**commented code put here because may be it will required */
 //		for (String propertyNames:domainClass.persistentPropertyNames){

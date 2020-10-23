@@ -46,8 +46,6 @@ beans {
                ,\nsetInitPageValues:function(){
                                                
                        axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
-                            excon.saveToStore("vueInitDataframe", "key", '');
-                            excon.saveToStore("vueElintegroProfileMenuDataframe", "key", '');
                             const res = responseData.data;
                             excon.saveToStore("vueInitDataframe", "loggedIn", res.loggedIn);
                             excon.saveToStore("loggedIn", res.loggedIn);
@@ -63,14 +61,11 @@ beans {
                                 userProfile.domain_keys.person.id = personId;
                                 userProfile.namedParameters.id.value = personId;
                                 excon.callApi('dataframe/ajaxValues', 'POST', userProfile).then((response)=>{
-                                    excon.saveToStore("vueElintegroUserProfileDataframe", response.data.data);
+                                    const profileData = response.data.data;
+                                    excon.saveToStore("vueElintegroUserProfileDataframe", profileData);
                                 });
                             }
-//                            vueInitDataframeVar.\$store.state.vueInitDataframe = responseData.data;
-//                            Vue.set(vueInitDataframeVar.\$store.state.vueInitDataframe, "key", '');
-//                            Vue.set(vueInitDataframeVar.\$store.state.vueElintegroProfileMenuDataframe, "key", '');
                               var loggedIn = responseData.data.loggedIn
-//                            vueInitDataframeVar.\$store.state.loggedIn = loggedIn;
                               var urlLocation = window.location.href;
                               if(loggedIn == false){
 //                               vueInitDataframeVar.\$router.push("/");this.location.reload();

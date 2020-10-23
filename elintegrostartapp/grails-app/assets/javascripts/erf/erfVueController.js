@@ -33,18 +33,13 @@ var excon = new Vue({
             if(store.state.hasOwnProperty(containerVariable)){
                 const obj = eval("store.state."+ containerVariable +"");
                 if(obj.hasOwnProperty(key)){
-                    // store.commit(key,value);
                     Vue.set(obj, key, value);
-                    /*var obj1 = eval(""+obj+"."+key)
-                    obj1 = value;*/
                 } else {
-                    // const Obj1 = eval(store.state +"."+ containerVariable);
-                    Vue.set(obj,key, value);
+                    value?Vue.set(obj,key, value):Vue.set(store.state, containerVariable, key);
                 }
             } else {
                 Vue.set(store.state, containerVariable, key);
             }
-
         },
         goToTab: function(containerDataframe, targetDataframe) {
             //key_<dfname>_<domain>_id_id
