@@ -282,7 +282,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		keyFieldNames.each {
 			vueStateVariable.append("${convertToDataVariableFromat(it)}"+":\"\",\n")
 			vueSaveVariables.append("allParams[\"$it\""+"] = this.${convertToDataVariableFromat(it)};\n")
-			vueFileSaveVariables.append("allParams[\"$it\""+"] = response.nodeId[0];\n")
+			vueFileSaveVariables.append("params[\"$it\""+"] = response.namedParameters.id.value;\n")
 			vueDataFillScript.append("this.${convertToDataVariableFromat(it)} = response['${convertToReturnedDataVariableFromat(it)}']?response['${convertToReturnedDataVariableFromat(it)}']:\"\"\n")
 		}
 
@@ -694,13 +694,25 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				}
 			}
 		}
+		doAfterSaveStringBuilder.append("""
+                    var ajaxFileSave = ${dataframeName}Var.params.ajaxFileSave;
+                    if(ajaxFileSave){
+                       for(let i in ajaxFileSave) {
+                         const value = ajaxFileSave[i];
+                         $vueFileSaveVariables
+  						 self[value.fieldName+'_ajaxFileSave'](response, params); 	
+					   }
+                    } 
+				""")
 		return """
               ${dataframeName}_save: function(){
+                  let self = this;
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
                  params["doBeforeSave"] = function(params){console.log("Put any doBeforeSave Scripts here"); ${doBeforeSave} }
                  params["doAfterSave"] = function(response){console.log("Inside doAfterSave. Put any doAfterSave scripts here"); 
                  ${doAfterSave} 
+                 ${doAfterSaveStringBuilder}
                  excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);}
 				 excon.saveData(params);
                },\n"""
