@@ -1,0 +1,42 @@
+
+.translatorAssistantContainer{
+    width: 100%;
+    padding: 0px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.translatorAssistantContainer .howYouDoSection{
+    background-color: #f5fbff;
+}
+.translatorAssistantContainer .howYouDoSection #howYouDo{
+    font-size: 33px;
+}
+.translatorAssistantContainer .howYouDoSection .paragraph{
+    color: black;
+    font-size: 20px;
+    font-family:Roboto;
+}
+.translatorAssistantContainer .newsLetter{
+    background-color: #2ab6f6;
+}
+.translatorAssistantContainer .newsLetter #subscribe{
+    font-size: 38px;
+}
+.translatorAssistantContainer .Quiz_Placeholder{
+    background-color:#000000;
+}
+.translatorAssistantContainer .Quiz_Placeholder .columnLeft{
+    padding-top: 6%;
+    padding-left:8%;
+
+}
+.translatorAssistantContainer .Quiz_Placeholder .columnLeft .heading-1{
+    color:#2ab6f6;
+    font-size:38px;
+}
+.translatorAssistantContainer .Quiz_Placeholder .pa-md-0{
+    padding:6%
+}
+.translatorAssistantContainer .Quiz_Placeholder .v-card{
+    color:#f1f1f1
+}

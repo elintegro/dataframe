@@ -14,7 +14,12 @@ beans{
         saveButton = false
         initOnPageLoad = true
         route = true
-        childDataframes = ["vueTranslatorAssistantAfterLoggedInDataframe","vueTranslatorAssistantBeforeLoggedInDataframe"]
+        childDataframes = ["vueTranslatorAssistantAfterLoggedInDataframe",
+                           "vueTranslatorAssistantBeforeLoggedInDataframe"
+                           ,"vueHowYouDoDataframe"
+                           ,"vueNewsLetterDataframe"
+                           ,"vueQuizPlaceholderContainerDataframe"
+                           ,"vueFooterContainerDataframe"]
         currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
     }
     vueTranslatorAssistantBeforeLoggedInDataframe(DataframeVue){bean->
@@ -61,7 +66,52 @@ beans{
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
         currentFrameLayout = ref("vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout")
     }
+    vueHowYouDoDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueHowYouDoDataframe']
+        saveButton = false
+        addFieldDef = [
+                "howYouDo":["widget":"TextDisplayWidgetVue"
+                             ,"name":"howYouDo"
+                             ,elementId: "howYouDo"
+                             ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ],
+                "howYouDoParagraphOne":[
+                        "widget":"TextDisplayWidgetVue"
+                        ,"name":"howYouDoParagraphOne"
+                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                "howYouDoParagraphTwo":[
+                        "widget":"TextDisplayWidgetVue"
+                        ,"name":"howYouDoParagraphTwo"
+                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
+                "howYouDoParagraphThree":[
+                        "widget":"TextDisplayWidgetVue"
+                        ,"name":"howYouDoParagraphThree"
+                        ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                ],
 
+        ]
+        currentFrameLayout = ref("vueHowYouDoDataframeLayout")
+    }
+    vueNewsLetterDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueNewsLetterDataframe']
+        saveButton = false
+        initOnPageLoad = true
+        addFieldDef =[
+                "subscribe":["widget":"TextDisplayWidgetVue"
+                        ,"name":"subscribe"
+                        ,elementId: "subscribe"
+                        ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ]
+        ]
+        dataframeButtons=[
+                subscribe:[name: "subscribe",type: "button",attr:"""style='background-color:#1976D2; color:white;' """,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
+        ]
+        currentFrameLayout = ref("vueNewsLetterDataframeLayout")
+    }
     vueCreateProjectForTranslationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueCreateProjectForTranslationDataframe']
