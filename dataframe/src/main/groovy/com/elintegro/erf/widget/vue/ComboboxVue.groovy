@@ -219,6 +219,13 @@ class ComboboxVue extends WidgetVue {
 
     }
 
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
+        super.setTransientValueToResponse(jData, value, domainAlias, fieldName, additionalDataRequestParamMap)
+        if(additionalDataRequestParamMap.containsKey("items")){
+            jData?.transits?."${fieldName}".items = additionalDataRequestParamMap.items
+        }
+    }
+
     private Map generateInitialData(DataframeVue dataframe, Map field){
 
         if(!field.initBeforePageLoad){
@@ -349,9 +356,8 @@ class ComboboxVue extends WidgetVue {
                 """
     }
 
-    public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData){
+    public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){
         Dataframe df = dfInst.df;
-        def session = dfInst.sessionHibernate
         Map fieldProps = df.fields.get(fieldnameToReload)
         String enumFileName = fieldProps.enumFileName
         if(enumFileName){
@@ -361,46 +367,121 @@ class ComboboxVue extends WidgetVue {
         String wdgHql = fieldProps?.hql
 
         Map result=[:]
-        if(wdgHql && !fieldProps?.DataframeConstants.FIELD_PROP_INIT_BEFORE_PAGE_LOAD /*TODO: check if this condition correct: if this is true, no reload will happen, so where we are reloading?*/) {
-            if (!fieldProps?.containsKey(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL)){
-                fieldProps?.put(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL,  new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory))
-            }
-            ParsedHql parsedHql = fieldProps?.get(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL)
-            DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);
-            List resultList = dbRes.getResultList()
-            List res = new ArrayList(resultList.size())
-            String valueMember = fieldProps.valueMember?:"id"
-            String displayMember = fieldProps.displayMember?:"name"
-            if(fieldProps.internationalize){
-                resultList.each {
-                    Map value1 = ["$valueMember":it.getAt("id"), "$displayMember":getMessageSource().getMessage(it.getAt("$displayMember"), null, it.getAt("$displayMember"), LocaleContextHolder.getLocale())]
-                    res.push(value1)
-                }
-            }else {
-                res = resultList
-            }
-            fieldProps["dictionary"] = res
-            result = buildData(dfInst, inputData, fieldProps, fieldnameToReload)
+//        if(wdgHql && !fieldProps?.DataframeConstants.FIELD_PROP_INIT_BEFORE_PAGE_LOAD /*TODO: check if this condition correct: if this is true, no reload will happen, so where we are reloading?*/) {
+        if (!fieldProps?.containsKey(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL)){
+            fieldProps?.put(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL,  new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory))
         }
+        ParsedHql parsedHql = fieldProps?.get(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL)
+        DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);
+        List resultList = dbRes.getResultList()
+        List res = new ArrayList(resultList.size())
+        String valueMember = fieldProps.valueMember?:"id"
+        String displayMember = fieldProps.displayMember?:"name"
+        if(fieldProps.internationalize){
+            resultList.each {
+                Map value1 = ["$valueMember":it.getAt("id"), "$displayMember":getMessageSource().getMessage(it.getAt("$displayMember"), null, it.getAt("$displayMember"), LocaleContextHolder.getLocale())]
+                res.push(value1)
+            }
+        }else {
+            res = resultList
+        }
+        fieldProps["dictionary"] = res
+        result = getSelectedData(dfInst, inputData, fieldProps, fieldnameToReload)
+//    }
         //TODO: Populate right field of jDate (either persisters or transits
         //with results
         //Check that results have the right structure
         return result
     }
 
+    private def getSelectedData(DataframeInstance dfInst, Map inputData, Map fieldProps, String fieldnameToReload){
+        def dictionary = fieldProps.dictionary
+        def selectedValue = null
+        DataframeVue df = dfInst.df
+        String simpleFieldName = ""
+        List keys = null
+        String dataVariable = df.getDataVariableForVue(fieldProps)
+        String domainAlias= Dataframe.getDataFrameDomainAlias(dataVariable.replace("_", "."))
+        def domainInstance = null
+        boolean isParameterRelatedToDomain = false
+        if (domainAlias && df.writableDomains) {
+            Map domain = df.writableDomains.get(domainAlias)
+            DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
+            def queryDomain = domainClassInfo.getValue()
+            try {
+                domainInstance = dfInst.retrieveDomainInstanceForUpdate(domainClassInfo);
+                simpleFieldName = Dataframe.extractSimpleFieldName(df.dataframeName, fieldnameToReload, domainAlias)
+                def refFieldValues = getFieldValue(domainInstance, simpleFieldName)
+                if (refFieldValues){
+                    def prop = queryDomain.getPropertyByName(simpleFieldName)
+                    if (df.metaFieldService.isAssociation(prop)){
+                        String valueMember = fieldProps.valueMember
+                        String displayMember = fieldProps.displayMember
+                        def selectedValList = []
+                        if (fieldProps?.multiple){
+                            refFieldValues.each{obj ->
+                                def selMap= [:]
+                                selMap.put(valueMember, obj."$valueMember")
+                                selMap.put(displayMember, obj."$displayMember")
+                                selectedValList.add(selMap)
+                            }
+                        }
+//                        def selMap= [:]
+//                        if (valueMember){
+//                            selMap.put(valueMember, refFieldValues."$valueMember")
+//                        }
+//                        if (displayMember){
+//                            String value1 = refFieldValues."$displayMember"
+//                            if(fieldProps.internationalize){
+//                                value1 = getMessageSource().getMessage(refFieldValues."$displayMember", null, refFieldValues."$displayMember", LocaleContextHolder.getLocale())
+//                            }
+//                            selMap.put(displayMember, value1)
+//                        }
+                        selectedValue = selectedValList
+                    }else if (df.metaFieldService.isEnumType(prop)){
+                        def enumClass = prop.type
+                        dictionary = enumClass.getDescs()
+                        keys = enumClass.getTypes()
+                        if (refFieldValues){
+                            if (fieldProps.internationalize){
+                                selectedValue = enumClass."$refFieldValues".getType()
+                                Map enumMap = getEnumData(fieldProps, enumClass, selectedValue)
+                                dictionary = enumMap.result
+                                selectedValue = enumMap.selectedData
+                            }else {
+                                selectedValue = enumClass."$refFieldValues".getDesc()
+                            }
+                        }
+                    }
+                }
+            } catch(Exception){
+                throw  new DataframeException("Writable Domain does not contain domain for alias"+ domainAlias)
+            }
+        }
+//        setTransientValueToResponse(df, fieldProps, selectedValue, [keys:keys, items:dictionary])
+        return [keys:keys, items:dictionary, "value":selectedValue]
+    }
+
+    private static def getFieldValue(def domainInstance, fieldName){
+        def refFieldValues = domainInstance?."$fieldName"
+        return refFieldValues
+    }
 
     private def buildData(DataframeInstance dfInst, Map inputData, Map fieldProps, String fieldnameToReload){
         def dictionary = fieldProps.dictionary
         def selectedValue = null
-        Dataframe df = dfInst.df
+        DataframeVue df = dfInst.df
         String simpleFieldName = ""
         List keys = null
-        String domainAlias= Dataframe.getDataFrameDomainAlias(fieldnameToReload)
+        String dataVariable = df.getDataVariableForVue(fieldProps)
+        String fieldnameload = dataVariable.replace("_", ".")
+        String domainAlias= Dataframe.getDataFrameDomainAlias(dataVariable.replace("_", "."))
         def domainInstance = null
         boolean isParameterRelatedToDomain = false
         def queryDomain = null
         if (domainAlias && df.writableDomains) {
             Map domain = df.writableDomains.get(domainAlias)
+            DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
             try {
                 queryDomain = dfInst.getPersistentEntityFromDomainMap(domain)
                 Map keysNamesAndValue = [:];
@@ -412,7 +493,7 @@ class ComboboxVue extends WidgetVue {
                 simpleFieldName = Dataframe.extractSimpleFieldName(df.dataframeName, fieldnameToReload, domainAlias)
                 isParameterRelatedToDomain = dfInst.isParameterRelatedToDomain(queryDomain, domainAlias, simpleFieldName)
             } catch(Exception){
-                throw  new DataframeException("Writable Domain doesnot contain domain for alias"+ domainAlias)
+                throw  new DataframeException("Writable Domain does not contain domain for alias"+ domainAlias)
             }
         }
         if (simpleFieldName && isParameterRelatedToDomain){

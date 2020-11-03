@@ -15,6 +15,7 @@ package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.DFButton
 import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.ScriptBuilder
 import com.elintegro.erf.dataframe.db.fields.MetaField
@@ -62,6 +63,11 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     @Override
     boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
         jData?.persisters?."${domainAlias}"."${fieldName}".value = value
+    }
+
+    @Override
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
+        jData?.transits?."${fieldName}".value = value
     }
 
     String getVuePropVariable(DataframeVue dataframe, Map field) {

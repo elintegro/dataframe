@@ -192,6 +192,7 @@ class VueStore {
           const dataframe = response?response.dataframe:"";
           if(dataframe){
            state[dataframe]["persisters"] = response.persisters;   
+           state[dataframe]["transits"] = response.transits;   
           }
         },
                """

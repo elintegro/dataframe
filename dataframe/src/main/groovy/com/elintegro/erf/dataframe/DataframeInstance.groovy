@@ -21,6 +21,7 @@ import grails.test.mixin.gorm.Domain
 import grails.util.Holders
 import groovy.util.logging.Slf4j
 import org.apache.commons.lang.ClassUtils
+import org.apache.commons.lang.SerializationUtils
 import org.apache.commons.lang.StringUtils
 import org.grails.datastore.mapping.model.PersistentEntity
 import org.grails.datastore.mapping.model.PersistentProperty
@@ -267,7 +268,7 @@ class DataframeInstance implements DataframeConstants{
 	 * and return the map which can be converted to json on controller.
 	 */
 	public def readAndGetJson(){
-		return retrieveAndGetJson()
+		return retrieveAndGetJsonbackup()
 	}
 
 	/**   CRUD - RETRIEVE
@@ -359,7 +360,7 @@ class DataframeInstance implements DataframeConstants{
 			populateInstance()
 		}
 
-		jData = new JSONObject(df.domainFieldMap)
+		jData = new JSONObject((Map) SerializationUtils.clone(df.domainFieldMap))
 
 		Map jsonRet = [:];
 		Map jsonMapDf = [:];
@@ -375,10 +376,12 @@ class DataframeInstance implements DataframeConstants{
 			df.fields.getList().each{ fieldName ->
 				Map fieldProps = df.fields.get(fieldName)
 				String myDomainAlias = null
-				convertPersisters(fieldProps, fieldName)
 				//Try to load Additional Data:
-				convertAdditionalData(fieldName, fieldProps)
-
+				if (isFieldExistInDb(fieldProps)){
+					convertPersisters(fieldProps, fieldName)
+				}else {
+					convertAdditionalData(fieldProps, fieldName, additionalDataRequestParamMap)
+				}
 			}
 		}
 		addKeyDataForNamedParameters(jsonMapDf) // adding key- fields for vue js
@@ -431,39 +434,32 @@ class DataframeInstance implements DataframeConstants{
 		return jsonRet
 	}
 
-	private void convertAdditionalData(String fieldName, Map fieldProps) {
-		Map jsonAdditionalData, additionalDataRequestParamMap
-		Map jsonAdditionalDataField = getAdditionalData(fieldName, additionalDataRequestParamMap);
-		if (jsonAdditionalDataField) {
-			//TODO: next line we will remove!
-			jsonAdditionalData.put(fieldName.replace(Dataframe.DOT, DataframeVue.UNDERSCORE), jsonAdditionalDataField);
-
-			//Populate Items with the additional data this widget requires data from
-			setFieldItems(jData, fieldProps, jsonAdditionalData)
+	private void convertAdditionalData(Map fieldProps, String fieldName, Map additionalDataRequestParamMap) {
+		def widgetObj = df.getWidget(fieldName)
+		Map additionalData = widgetObj?.loadAdditionalData(this, fieldName, additionalDataRequestParamMap, sessionHibernate)
+		if (additionalData) {
+			widgetObj.setTransientValueToResponse(jData, additionalData.get(df.VALUE_ENTRY), getFieldDomainAlias(fieldProps), fieldProps.get(DataframeConstants.FIELD_PROP_NAME), additionalData)
 		}
 	}
 
 	private void convertPersisters(Map fieldProps, String fieldName) {
 		Map additionalDataRequestParamMap
 		String myDomainAlias
-		if (isFieldExistInDb(fieldProps)) {
-			if (!isDefault) {
-				def fldValue = getFieldValue(fieldProps)
-//						jsonMapDf.put(fieldName, fldValue)
-				//jsonMapDf.put(fieldName.replace(Dataframe.DOT,DataframeVue.UNDERSCORE), fldValue) //Chnaged Dot to Underscore for vue
-
-				myDomainAlias = fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
-				Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
-				String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
-				widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, additionalDataRequestParamMap)
-
-			}
-			//def fldDefaultValue = fieldProps.defaultValue
-//					jsonDefaults.put(fieldName, fldDefaultValue)
-
-			//jsonDefaults.put(fieldName.replace(Dataframe.DOT,DataframeVue.UNDERSCORE), fldDefaultValue) //Chnaged Dot to Underscore for vue
-			//Additional data:
+		if (!isDefault) {
+			def fldValue = getFieldValue(fieldProps)
+			myDomainAlias = getFieldDomainAlias(fieldProps)
+			Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
+			String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
+			widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, additionalDataRequestParamMap)
 		}
+	}
+
+	private String getFieldDomainAlias(Map fieldProps){
+		return fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
+	}
+
+	private Widget getFieldWidget(Map fieldProps){
+		return fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
 	}
 
 	private void addKeyDataForNamedParameters(jsonMapDf){
