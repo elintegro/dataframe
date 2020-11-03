@@ -14,13 +14,33 @@ beans{
         saveButton = false
         initOnPageLoad = true
         route = true
-        childDataframes = ["vueTranslatorAssistantAfterLoggedInDataframe",
-                           "vueTranslatorAssistantBeforeLoggedInDataframe"
+        childDataframes = ["vueMeetTranslatorAssistantIntroDataframe"
+                           ,"vueTranslatorAssistantAfterLoggedInDataframe"
+                           ,"vueTranslatorAssistantBeforeLoggedInDataframe"
                            ,"vueHowYouDoDataframe"
                            ,"vueNewsLetterDataframe"
                            ,"vueQuizPlaceholderContainerDataframe"
                            ,"vueFooterContainerDataframe"]
         currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
+    }
+    vueMeetTranslatorAssistantIntroDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueMeetTranslatorAssistantIntroDataframe']
+        saveButton = false
+        addFieldDef =[
+                "meetTranslatorTitle":["widget":"TextDisplayWidgetVue"
+                            ,"name":"meetTranslatorTitle"
+                            ,elementId: "meetTranslatorTitle"
+                            ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ],
+                "meetTranslatorSubTitle":["widget":"TextDisplayWidgetVue"
+                                       ,"name":"meetTranslatorSubTitle"
+                                       ,elementId: "meetTranslatorSubTitle"
+                                       ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ],
+
+        ]
+        currentFrameLayout = ref("vueMeetTranslatorAssistantIntroDataframeLayout")
     }
     vueTranslatorAssistantBeforeLoggedInDataframe(DataframeVue){bean->
         bean.parent = dataFrameSuper
@@ -91,7 +111,10 @@ beans{
                         ,"name":"howYouDoParagraphThree"
                         ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
                 ],
-
+                "translateApp":["widget":"ButtonWidgetVue"
+                            ,"name":"translateApp"
+                            ,flexGridValues:['xs0', 'sm0', 'md6', 'lg6', 'xl6']
+                ]
         ]
         currentFrameLayout = ref("vueHowYouDoDataframeLayout")
     }
@@ -105,11 +128,13 @@ beans{
                         ,"name":"subscribe"
                         ,elementId: "subscribe"
                         ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ],
+                "subscribeButton":["widget":"ButtonWidgetVue"
+                                ,"name":"subscribeButton"
+                                ,flexGridValues:['xs0', 'sm0', 'md6', 'lg6', 'xl6']
                 ]
         ]
-        dataframeButtons=[
-                subscribe:[name: "subscribe",type: "button",attr:"""style='background-color:#1976D2; color:white;' """,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']]
-        ]
+
         currentFrameLayout = ref("vueNewsLetterDataframeLayout")
     }
     vueCreateProjectForTranslationDataframe(DataframeVue){bean ->

@@ -5,22 +5,61 @@
     margin-right: auto;
     margin-left: auto;
 }
+.translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout{
+    padding: 0px
+}
+.translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout .row{
+    text-align: center;
+    padding: 20%;
+}
+.translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorTitle{
+    color: white;
+    font-size: xx-large;
+}
+.translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorSubTitle{
+    color: white;
+    font-size: x-large;
+}
+.translatorAssistantContainer .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout{
+    background-color: red;
+}
 .translatorAssistantContainer .howYouDoSection{
     background-color: #f5fbff;
+    padding-bottom: 100px;
+    padding-top: 110px;
 }
 .translatorAssistantContainer .howYouDoSection #howYouDo{
     font-size: 33px;
+    color: black;
 }
 .translatorAssistantContainer .howYouDoSection .paragraph{
     color: black;
-    font-size: 20px;
+    font-size:14px;
     font-family:Roboto;
+}
+
+.translatorAssistantContainer .howYouDoSection #vueHowYouDoDataframe_translateApp{
+    background-color: black;
+    color:white;
+    text-transform: unset;
+    font-family:Roboto;
+    padding: 20px;
 }
 .translatorAssistantContainer .newsLetter{
     background-color: #2ab6f6;
 }
 .translatorAssistantContainer .newsLetter #subscribe{
     font-size: 38px;
+}
+.translatorAssistantContainer .newsLetter .subscribeButton{
+    text-align: center;
+}
+.translatorAssistantContainer .newsLetter #vueNewsLetterDataframe_subscribeButton{
+    background-color: black;
+    color:white;
+    text-transform: unset;
+    font-family:Roboto;
+    padding: 20px;
 }
 .translatorAssistantContainer .Quiz_Placeholder{
     background-color:#000000;
