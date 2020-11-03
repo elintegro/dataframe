@@ -308,7 +308,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		vueJsBuilder.getVueStore().addToState(vueStateVariable.toString())
 		if(initOnPageLoad){
 			putFillInitDataMethod = true
-			vueJsBuilder.addToCreatedScript("this.${dataframeName}_fillInitData();\n")
+			vueJsBuilder.addToMountedScript("this.${dataframeName}_fillInitData();\n")
 		}
 		if(putFillInitDataMethod){
 			vueJsBuilder.addToWatchScript(""" ${dataframeName}_prop: {
@@ -531,6 +531,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 		addVueComponents(vueJsBuilder)
 
+		if(vueJsEntity.beforeCreated){
+			vueJsBuilder.addToBeforeCreatedScript(vueJsEntity.beforeCreated)
+		}
+
 		vueJsBuilder.addToCreatedScript("${dataframeName}Var = this;\n")
 				.addToComputedScript("""
                                       checkResetFormProp: function(){
@@ -542,6 +546,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		if(vueJsEntity.created){
 			vueJsBuilder.addToCreatedScript(vueJsEntity.created)
+		}
+		if(vueJsEntity.mounted){
+			vueJsBuilder.addToMountedScript(vueJsEntity.mounted)
 		}
 		vueJsBuilder.addToComputedScript(getStateAccessor())
 		if(vueJsEntity.computed){
@@ -590,9 +597,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 	private String getStateSetter(){
 		return """ 
-                 updateState: function(response){
-                    this.\$store.commit("updateState", response)
-                },
                """
 	}
 	public String getJsonDataFillScript(df){
@@ -609,12 +613,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				allParamsSb.append("allParams['$entry.key'] = '$entry.value';\n")
 			}
 		}
-		String updateStoreScriptcaller = ""
-		if(createStore){
-//			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n excon.updateStoreState(resData, stateVar,${dataframeName}Var);"""
-		}
 		return """
              ${dataframeName}_fillInitData: function(){
+                 const self = this;
                  let params = this.state;    
                  if(!params) return;
                  params["url"] =  '$df.ajaxUrl';
@@ -706,7 +707,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				""")
 		return """
               ${dataframeName}_save: function(){
-                  let self = this;
+                  const self = this;
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
                  params["doBeforeSave"] = function(params){console.log("Put any doBeforeSave Scripts here"); ${doBeforeSave} }
