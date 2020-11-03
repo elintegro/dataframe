@@ -282,7 +282,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		keyFieldNames.each {
 			vueStateVariable.append("${convertToDataVariableFromat(it)}"+":\"\",\n")
 			vueSaveVariables.append("allParams[\"$it\""+"] = this.${convertToDataVariableFromat(it)};\n")
-			vueFileSaveVariables.append("allParams[\"$it\""+"] = response.nodeId[0];\n")
+			vueFileSaveVariables.append("params[\"$it\""+"] = response.namedParameters.id.value;\n")
 			vueDataFillScript.append("this.${convertToDataVariableFromat(it)} = response['${convertToReturnedDataVariableFromat(it)}']?response['${convertToReturnedDataVariableFromat(it)}']:\"\"\n")
 		}
 
@@ -308,7 +308,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		vueJsBuilder.getVueStore().addToState(vueStateVariable.toString())
 		if(initOnPageLoad){
 			putFillInitDataMethod = true
-			vueJsBuilder.addToMountedScript("this.${dataframeName}_fillInitData();\n")
+			vueJsBuilder.addToCreatedScript("this.${dataframeName}_fillInitData();\n")
 		}
 		if(putFillInitDataMethod){
 			vueJsBuilder.addToWatchScript(""" ${dataframeName}_prop: {
@@ -531,10 +531,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 		addVueComponents(vueJsBuilder)
 
-		if(vueJsEntity.beforeCreated){
-			vueJsBuilder.addToBeforeCreatedScript(vueJsEntity.beforeCreated)
-		}
-
 		vueJsBuilder.addToCreatedScript("${dataframeName}Var = this;\n")
 				.addToComputedScript("""
                                       checkResetFormProp: function(){
@@ -546,9 +542,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 		if(vueJsEntity.created){
 			vueJsBuilder.addToCreatedScript(vueJsEntity.created)
-		}
-		if(vueJsEntity.mounted){
-			vueJsBuilder.addToMountedScript(vueJsEntity.mounted)
 		}
 		vueJsBuilder.addToComputedScript(getStateAccessor())
 		if(vueJsEntity.computed){
@@ -597,6 +590,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 	private String getStateSetter(){
 		return """ 
+                 updateState: function(response){
+                    this.\$store.commit("updateState", response)
+                },
                """
 	}
 	public String getJsonDataFillScript(df){
@@ -613,9 +609,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				allParamsSb.append("allParams['$entry.key'] = '$entry.value';\n")
 			}
 		}
+		String updateStoreScriptcaller = ""
+		if(createStore){
+//			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n excon.updateStoreState(resData, stateVar,${dataframeName}Var);"""
+		}
 		return """
              ${dataframeName}_fillInitData: function(){
-                 const self = this;
                  let params = this.state;    
                  if(!params) return;
                  params["url"] =  '$df.ajaxUrl';
@@ -695,14 +694,25 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				}
 			}
 		}
+		doAfterSaveStringBuilder.append("""
+                    var ajaxFileSave = ${dataframeName}Var.params.ajaxFileSave;
+                    if(ajaxFileSave){
+                       for(let i in ajaxFileSave) {
+                         const value = ajaxFileSave[i];
+                         $vueFileSaveVariables
+  						 self[value.fieldName+'_ajaxFileSave'](response, params); 	
+					   }
+                    } 
+				""")
 		return """
               ${dataframeName}_save: function(){
-                  const self = this;
+                  let self = this;
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
                  params["doBeforeSave"] = function(params){console.log("Put any doBeforeSave Scripts here"); ${doBeforeSave} }
                  params["doAfterSave"] = function(response){console.log("Inside doAfterSave. Put any doAfterSave scripts here"); 
                  ${doAfterSave} 
+                 ${doAfterSaveStringBuilder}
                  excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);}
 				 excon.saveData(params);
                },\n"""

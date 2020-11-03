@@ -301,7 +301,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, files.fileName from Application application inner join application.files files where application.id=:id"
+        hql = "select application.id, application.files from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
@@ -329,10 +329,10 @@ beans {
 //                                      ,editButton: true
 //                                      ,deleteButton:true  ],
 
-                "files.fileName":["name":"fileName"
+                "application.files":["name":"files"
                                       ,"widget":"FilesUploadWidgetVue"
                                       , ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-                                      ,multiple:false
+                                      ,multiple:true
                                       ,"accept":"image/*,.pdf,.docx,.doc"
 
                                      ]
