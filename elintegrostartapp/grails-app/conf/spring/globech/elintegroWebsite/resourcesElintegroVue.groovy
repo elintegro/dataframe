@@ -301,7 +301,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, application.files from Application application where application.id=:id"
+        hql = "select application.id, application.images,  application.files from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
@@ -322,12 +322,12 @@ beans {
                          excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeSelfAssesmentDataframe");
                       """
         addFieldDef = [
-//                "application.avatar":["name":"avatar"
-//                                      ,"widget":"PictureUploadWidgetVue"
-//                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
-//                                      ,multiple:false
-//                                      ,editButton: true
-//                                      ,deleteButton:true  ],
+                "application.images":["name":"images"
+                                      ,"widget":"PictureUploadWidgetVue"
+                                      ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                                      ,multiple:true
+                                      ,editButton: true
+                                      ,deleteButton:true  ],
 
                 "application.files":["name":"files"
                                       ,"widget":"FilesUploadWidgetVue"
