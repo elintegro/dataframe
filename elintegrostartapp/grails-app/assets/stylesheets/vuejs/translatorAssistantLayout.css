@@ -38,6 +38,8 @@
 }
 .translatorAssistantContainer .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout{
     background-color: white;
+    padding-top: 5%;
+    padding-bottom: 5%;
 }
 .translatorAssistantContainer .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout .translationAssistantBorder{
     border: 1px solid black;

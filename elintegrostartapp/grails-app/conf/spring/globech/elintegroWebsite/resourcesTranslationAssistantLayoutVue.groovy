@@ -45,7 +45,7 @@ beans{
                                   <v-flex xs12 sm12 md12 lg12 x12>
                                         <v-row>
                                             <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                            <v-col class="translationAssistantBorder" cols="12" xs="11" sm="11" md="11" xl="11" lg="11">
+                                            <v-col class="translationAssistantBorder" cols="12" xs="10" sm="10" md="10" xl="10" lg="10">
                                                 <v-row>
                                                     <h2>[translatorAssistant]</h2>
                                                 </v-row>
@@ -62,6 +62,7 @@ beans{
                                                     </v-flex>    
                                                 </v-row>    
                                             </v-col>
+                                            <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
                                         </v-row>    
                                   </v-flex>
                                 </v-container>"""
