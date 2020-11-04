@@ -43,8 +43,27 @@ beans{
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-container class="translatorAssistantBeoforeAndAfterLoggedInDataframeLayout" fluid>
                                   <v-flex xs12 sm12 md12 lg12 x12>
-                                        [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
-                                   </v-flex>
+                                        <v-row>
+                                            <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+                                            <v-col class="translationAssistantBorder" cols="12" xs="11" sm="11" md="11" xl="11" lg="11">
+                                                <v-row>
+                                                    <h2>[translatorAssistant]</h2>
+                                                </v-row>
+                                                <v-row class="divider"></v-row>
+                                                <v-row class="tranlatorIcon">
+                                                    <v-flex xs6 sm4 md2 lg2 xl2>
+                                                        <v-img src="assets/home/translatorIcon.png"></v-img>
+                                                    </v-flex>    
+                                                </v-row>
+                                                <v-row>
+                                                    [DATAFRAME_SCRIPT]
+                                                    <v-flex xs12 sm11 md5 lg6 x4>
+                                                        [BUTTON_SCRIPT]
+                                                    </v-flex>    
+                                                </v-row>    
+                                            </v-col>
+                                        </v-row>    
+                                  </v-flex>
                                 </v-container>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
 
