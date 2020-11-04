@@ -123,7 +123,7 @@ class DataframeInstance implements DataframeConstants{
 		return additionalData
 	}
 
-	private def retrieveAndGetJson(){
+	private def retrieveAndGetJsonNew(){
 
 		if(!df.hql){
 			return;
@@ -268,7 +268,7 @@ class DataframeInstance implements DataframeConstants{
 	 * and return the map which can be converted to json on controller.
 	 */
 	public def readAndGetJson(){
-		return retrieveAndGetJsonbackup()
+		return retrieveAndGetJson()
 	}
 
 	/**   CRUD - RETRIEVE
@@ -354,7 +354,7 @@ class DataframeInstance implements DataframeConstants{
 		return retrieveAndGetJson()
 	}
 
-	public def retrieveAndGetJsonbackup(){
+	public def retrieveAndGetJson(){
 		if (!isDefault){
 			//retrieving from DB!
 			populateInstance()
