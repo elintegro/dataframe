@@ -27,8 +27,6 @@ class FileUploadController {
     def index() {}
 
     def ajaxFileSave(){
-        println(params)
-        println(params['fileName'])
         def fldId = params.fldId
         ArrayList inputFile = []
         def imagePath =[:]
