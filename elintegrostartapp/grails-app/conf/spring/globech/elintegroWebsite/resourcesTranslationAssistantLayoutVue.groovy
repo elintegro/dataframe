@@ -45,22 +45,28 @@ beans{
                                   <v-flex xs12 sm12 md12 lg12 x12>
                                         <v-row>
                                             <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                            <v-col class="translationAssistantBorder" cols="12" xs="10" sm="10" md="10" xl="10" lg="10">
-                                                <v-row>
-                                                    <h2>[translatorAssistant]</h2>
-                                                </v-row>
-                                                <v-row class="divider"></v-row>
-                                                <v-row class="tranlatorIcon">
-                                                    <v-flex xs6 sm4 md2 lg2 xl2>
-                                                        <v-img src="assets/home/translatorIcon.png"></v-img>
-                                                    </v-flex>    
-                                                </v-row>
-                                                <v-row>
-                                                    [DATAFRAME_SCRIPT]
-                                                    <v-flex xs12 sm11 md5 lg6 x4>
-                                                        [BUTTON_SCRIPT]
-                                                    </v-flex>    
-                                                </v-row>    
+                                            <v-col  cols="12" xs="10" sm="10" md="10" xl="10" lg="10">
+                                                <table class="translationAssistantBorder">
+                                                    <tr>
+                                                        <v-row>
+                                                            <h2>[translatorAssistant]</h2>
+                                                        </v-row>
+                                                    </tr>
+                                                    <tr>
+                                                        <v-row class="divider"></v-row>
+                                                        <v-row class="tranlatorIcon">
+                                                            <v-flex xs8 sm6 md6 lg6 xl6>
+                                                                <v-img src="assets/home/translatorIcon.png"></v-img>
+                                                            </v-flex>    
+                                                        </v-row>
+                                                        <v-row>
+                                                            [DATAFRAME_SCRIPT]
+                                                            <v-flex xs12 sm12 md12 lg12 x12>
+                                                                [BUTTON_SCRIPT]
+                                                            </v-flex>    
+                                                        </v-row>
+                                                    </tr>
+                                                </table>    
                                             </v-col>
                                             <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
                                         </v-row>    

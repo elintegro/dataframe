@@ -58,11 +58,11 @@ beans{
                         , hql: """select proj.id as projectId, proj.name as Name from Project proj where proj.id not in  (select pro.id from Project pro inner join pro.users u)"""
                         ,"displayMember":"Name"
                         , search:true
-                        ,flexGridValues: [ 'xs12' ,'sm8', 'md4', 'lg4', 'xl4']
+                        ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ]
         ]
         dataframeButtons =[
-                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ],
+                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
                 createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
@@ -84,11 +84,11 @@ beans{
                         , hql: """select project.id as projectId , project.name as Name , users.id as Id from Project project inner join project.users users where users.id = :session_userid"""
                         ,"displayMember":"Name"
                         , search:true
-                        ,flexGridValues: [ 'xs12' ,'sm8', 'md4', 'lg4', 'xl4']
+                        ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ]
         ]
         dataframeButtons =[
-                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ],
+                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
                 createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
