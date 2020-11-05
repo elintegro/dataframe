@@ -62,8 +62,8 @@ beans{
                 ]
         ]
         dataframeButtons =[
-                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
-                createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
+                translation:[name:"translate",type: "link",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
+                createProject:[name: "createProject",type: "button",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
         currentFrameLayout = ref("vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout")
@@ -88,8 +88,8 @@ beans{
                 ]
         ]
         dataframeButtons =[
-                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
-                createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
+                translation:[name:"translate",type: "link",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' :disabled='disableWhenItemNotExist' """,route: true,routeIdScript: 0,refDataframe: ref("vueTranslatorDataframe"),flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
+                createProject:[name: "createProject",type: "button",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
         currentFrameLayout = ref("vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout")
