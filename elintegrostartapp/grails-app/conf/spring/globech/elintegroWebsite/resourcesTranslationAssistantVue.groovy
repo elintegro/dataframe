@@ -121,7 +121,7 @@ beans{
                 ],
                 "translateApp":["widget":"ButtonWidgetVue"
                             ,"name":"translateApp"
-                            ,flexGridValues:['xs0', 'sm0', 'md6', 'lg6', 'xl6']
+                            ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ]
         ]
         currentFrameLayout = ref("vueHowYouDoDataframeLayout")

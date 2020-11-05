@@ -25,17 +25,7 @@
     font-weight: normal;
     font-family: 'Roboto';
 }
-@media screen and (max-width: 750px) {
-    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout .row{
-        padding: 7%;
-    }
-    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorTitle{
-        font-size: 40px;
-    }
-    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorSubTitle{
-        font-size: 15px;
-    }
-}
+
 .translatorAssistantContainer .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout{
     background-color: white;
     padding-top: 5%;
@@ -74,13 +64,48 @@
     font-size:14px;
     font-family:Roboto;
 }
+.translatorAssistantContainer .howYouDoSection .imageRow{
+    max-width: 70%;
+    position: relative;
 
+}
+.translatorAssistantContainer .howYouDoSection .imageRow .image1{
+    max-width: 65%;
+    left: 65%;
+    z-index: 2;
+}
+.translatorAssistantContainer .howYouDoSection .imageRow .image2{
+    position: absolute;
+    top: 76%;
+    z-index: 1;
+}
 .translatorAssistantContainer .howYouDoSection #vueHowYouDoDataframe_translateApp{
     background-color: black;
     color:white;
     text-transform: unset;
     font-family:Roboto;
     padding: 20px;
+}
+@media screen and (max-width: 750px) {
+    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout .row{
+        padding: 7%;
+    }
+    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorTitle{
+        font-size: 40px;
+    }
+    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorSubTitle{
+        font-size: 15px;
+    }
+}
+@media screen and (max-width: 1220px) and (min-width: 960px) {
+    .translatorAssistantContainer .howYouDoSection .imageRow{
+        padding-top: 25%;
+    }
+}
+@media screen and (max-width: 960px) and (min-width: 400px){
+    .translatorAssistantContainer .howYouDoSection {
+        height: 1000px;
+    }
 }
 .translatorAssistantContainer .newsLetter{
     background-color: #2ab6f6;

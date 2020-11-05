@@ -143,8 +143,10 @@ beans{
                                             </v-col>    
                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
                                             <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
-                                                <v-img alt ="howYouDo" class="image1" src="assets/home/laptoPhoto2.png"></v-img>
-                                                <v-img alt ="howYouDo"  class= "image2" src="assets/home/laptoPhoto1.png"></v-img>
+                                                <v-row class="imageRow">
+                                                    <v-img alt ="howYouDo" class="image1" src="assets/home/laptoPhoto2.png"></v-img>
+                                                    <v-img alt ="howYouDo"  class= "image2" src="assets/home/laptoPhoto1.png"></v-img>
+                                                </v-row>
                                              </v-col>
                                              <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>
                                         </v-row>    
