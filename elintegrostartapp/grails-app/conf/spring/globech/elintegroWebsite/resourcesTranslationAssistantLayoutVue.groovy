@@ -92,7 +92,7 @@ beans{
                                             </v-tooltip>
                                         </v-toolbar>
                                         <v-row class="px-5">
-                                            [DATAFRAME_SCRIPT]
+                                            [DATAFRAME_SCRIPT] 
                                         </v-row>    
                                    </v-card>
                                </v-flex>"""
@@ -100,13 +100,19 @@ beans{
     }
     vueElintegroTranslatorDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="blue darken-2" height="100px" style="margin-bottom:30px;">
-                                 <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
-                                  </v-toolbar>
-                                  <v-row>
-                                  <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4">[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-col>
-                                  <v-col cols="12" xs="12" sm="12" md="8" xl="8" lg="8"><vueGridOfTranslatedTextDataframe v-if="isHidden"/></v-col></v-row>
-                                  </v-card></v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                                    <v-container class="translatorAssistantContainer" fluid>
+                                        <vueMeetTranslatorAssistantIntroDataframe/>
+                                        
+                                        <vueHowYouDoDataframe/>
+                                       <vueNewsLetterDataframe/>
+                                       <vueQuizPlaceholderContainerDataframe/> 
+                                    </v-container>
+                                    <v-container class="footerContainer" fluid>
+                                        <vueFooterContainerDataframe/>
+                                    </v-container>   
+                                    </v-container>
+                                 </v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
     }
     vueAddNewRecordForCurrentProjectDataframeLayout(ColumnLayoutVue){ bean->

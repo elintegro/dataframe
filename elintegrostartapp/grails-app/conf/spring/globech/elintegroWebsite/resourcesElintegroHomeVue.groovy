@@ -16,8 +16,8 @@ beans{
         currentRoute = 'home'
         childDataframes=['vueFirstContainerDataframe','vueOurWorkContainerDataframe','vueOurProcessContainerDataframe',
                          "vueCollaborationContainerDataframe",'vueOurFrameworkContainerDataframe',
-                         'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe',
-                         'vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
+                         'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe'
+                         ]
         currentFrameLayout = ref("vueElintegroHomeDataframeLayout")
 
     }
@@ -201,13 +201,13 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuizPlaceholderContainerDataframe']
         saveButton = false
+        isGlobal = true
         addFieldDef = [
                 letsTalk:["widget":"TextDisplayWidgetVue"
                              ,"name":"letsTalk"
                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
         ]
-        childDataframes = ['vueElintegroSignUpQuizDataframe']
         currentFrameLayout = ref("vueQuizPlaceholderContainerDataframeLayout")
     }
     vueElintegroSignUpQuizDataframe(DataframeVue){ bean->
@@ -215,6 +215,7 @@ beans{
         bean.constructorArgs = ['vueElintegroSignUpQuizDataframe']
         saveButton = false
         initOnPageLoad = false
+        isGlobal = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = """select  lead.leadDescription, lead.leadStage, lead.leadBudget,lead.nameOfProject, lead.descriptionOfProject,lead.deadline, person.firstName, person.lastName, person.email , person.phone from Lead lead inner join lead.applicant person  where lead.id=:id"""
         addFieldDef = [
@@ -270,6 +271,7 @@ beans{
         currentRoute = "change-password"
         saveButton = false
         initOnPageLoad = false
+        isGlobal = true
         route = true
         addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue"],
                        "newPassword":[name:"newPassword"
@@ -289,6 +291,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFooterContainerDataframe']
         saveButton = false
+        isGlobal = true
         addFieldDef = [
                 footerPrivacy:["widget":"ButtonWidgetVue"
                                ,"name":"footerPrivacy"
@@ -305,7 +308,6 @@ beans{
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
-        childDataframes = ["vueFooterPrivacyDataframe","vueTermAndConditionDataframe"]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
     }
     vueFooterPrivacyDataframe(DataframeVue){ bean->
@@ -313,6 +315,7 @@ beans{
         bean.constructorArgs = ['vueFooterPrivacyDataframe']
         saveButton = false
         initOnPageLoad = false
+        isGlobal = true
         addFieldDef = [
                 privacyPolicyHeading:["widget":"TextDisplayWidgetVue"
                                       ,"name":"privacyPolicyHeading"
@@ -329,6 +332,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTermAndConditionDataframe']
         saveButton = false
+        isGlobal = true
         initOnPageLoad = false
         addFieldDef = [
                 termAndConditionHeading:["widget":"TextDisplayWidgetVue"

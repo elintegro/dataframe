@@ -14,19 +14,17 @@ beans{
         saveButton = false
         initOnPageLoad = true
         route = true
-        childDataframes = ["vueMeetTranslatorAssistantIntroDataframe"
-                           ,"vueTranslatorAssistantAfterLoggedInDataframe"
+        childDataframes = [
+                           "vueTranslatorAssistantAfterLoggedInDataframe"
                            ,"vueTranslatorAssistantBeforeLoggedInDataframe"
-                           ,"vueHowYouDoDataframe"
-                           ,"vueNewsLetterDataframe"
-                           ,"vueQuizPlaceholderContainerDataframe"
-                           ,"vueFooterContainerDataframe"]
+                           ]
         currentFrameLayout = ref("vueElintegroTranslatorAssistantDataframeLayout")
     }
     vueMeetTranslatorAssistantIntroDataframe(DataframeVue){bean->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueMeetTranslatorAssistantIntroDataframe']
         saveButton = false
+        isGlobal = true
         addFieldDef =[
                 "meetTranslatorTitle":["widget":"TextDisplayWidgetVue"
                             ,"name":"meetTranslatorTitle"
@@ -98,6 +96,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueHowYouDoDataframe']
         saveButton = false
+        isGlobal = true
         addFieldDef = [
                 "howYouDo":["widget":"TextDisplayWidgetVue"
                              ,"name":"howYouDo"
@@ -131,6 +130,7 @@ beans{
         bean.constructorArgs = ['vueNewsLetterDataframe']
         saveButton = false
         initOnPageLoad = true
+        isGlobal = true
         addFieldDef =[
                 "subscribe":["widget":"TextDisplayWidgetVue"
                         ,"name":"subscribe"
