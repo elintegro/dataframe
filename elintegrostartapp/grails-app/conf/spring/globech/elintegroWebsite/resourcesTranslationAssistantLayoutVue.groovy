@@ -103,7 +103,11 @@ beans{
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                                     <v-container class="translatorAssistantContainer" fluid>
                                         <vueMeetTranslatorAssistantIntroDataframe/>
-                                        
+                                        <v-card>
+                                                                              <v-row>
+                                  <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4">[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-col>
+                                  <v-col cols="12" xs="12" sm="12" md="8" xl="8" lg="8"><vueGridOfTranslatedTextDataframe v-if="isHidden"/></v-col></v-row>
+                                        </v-card>
                                         <vueHowYouDoDataframe/>
                                        <vueNewsLetterDataframe/>
                                        <vueQuizPlaceholderContainerDataframe/> 
