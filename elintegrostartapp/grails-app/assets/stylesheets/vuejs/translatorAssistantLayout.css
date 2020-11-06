@@ -8,20 +8,12 @@
 .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout{
     padding: 0px
 }
-.translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout .row{
-    text-align: center;
-    padding: 20%;
-}
 
 .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorTitle{
-    color: white;
-    font-size: 37px;
     font-weight: bold;
     font-family: 'Roboto';
 }
 .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorSubTitle{
-    color: white;
-    font-size: 20px;
     font-weight: normal;
     font-family: 'Roboto';
 }
@@ -38,7 +30,6 @@
 }
 .translatorAssistantContainer  .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout #translatorAssistant{
     font-family: Roboto;
-    font-size: 22px;
     color: black;
 }
 .translatorAssistantContainer .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout .tranlatorIcon{
@@ -56,7 +47,6 @@
     padding-top: 110px;
 }
 .translatorAssistantContainer .howYouDoSection #howYouDo{
-    font-size: 33px;
     color: black;
 }
 .translatorAssistantContainer .howYouDoSection .paragraph{
@@ -86,17 +76,6 @@
     font-family:Roboto;
     padding: 20px;
 }
-@media screen and (max-width: 750px) {
-    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout .row{
-        padding: 7%;
-    }
-    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorTitle{
-        font-size: 40px;
-    }
-    .translatorAssistantContainer .vueMeetTranslatorAssistantIntroDataframeLayout #meetTranslatorSubTitle{
-        font-size: 15px;
-    }
-}
 @media screen and (max-width: 1220px) and (min-width: 960px) {
     .translatorAssistantContainer .howYouDoSection .imageRow{
         padding-top: 25%;
@@ -109,9 +88,6 @@
 }
 .translatorAssistantContainer .newsLetter{
     background-color: #2ab6f6;
-}
-.translatorAssistantContainer .newsLetter #subscribe{
-    font-size: 38px;
 }
 .translatorAssistantContainer .newsLetter .subscribeButton{
     text-align: center;
@@ -140,4 +116,8 @@
 }
 .translatorAssistantContainer .Quiz_Placeholder .v-card{
     color:#f1f1f1
+}
+#vueCreateProjectForTranslationDataframe_save{
+    background-color: #2ab6f6;
+    color: white;
 }

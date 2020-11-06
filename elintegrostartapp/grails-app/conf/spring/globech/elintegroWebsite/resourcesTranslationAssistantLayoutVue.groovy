@@ -29,12 +29,15 @@ beans{
         layoutPlaceHolder = """
                                <v-container class="vueMeetTranslatorAssistantIntroDataframeLayout" fluid>
                                     <v-flex xs12 sm12 md12 lg12 x12>
-                                        <v-img src="assets/home/rectangle.png">
-                                            <v-row>
-                                                [meetTranslatorTitle][meetTranslatorSubTitle]
-                                            </v-row>    
-                                        </v-img>
-                                    </v-flex>
+                                        <v-parallax src="assets/home/rectangle.png">
+                                            <v-row  align="center" justify="center">
+                                                <v-col class="text-center" cols="12">
+                                                    <h1>[meetTranslatorTitle]</h1>
+                                                    <h4>[meetTranslatorSubTitle]</h4>
+                                                </v-col>
+                                            </v-row>
+                                        </v-parallax>
+                                    </v-flex>     
                                </v-container>
                             """
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
@@ -49,7 +52,7 @@ beans{
                                                 <table class="translationAssistantBorder">
                                                     <tr>
                                                         <v-row>
-                                                            <h2>[translatorAssistant]</h2>
+                                                            <h1>[translatorAssistant]</h1>
                                                         </v-row>
                                                     </tr>
                                                     <tr>
@@ -77,9 +80,22 @@ beans{
     }
     vueCreateProjectForTranslationDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl2><v-card round class='rounded-card' ><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
-                                <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl2>
+                                   <v-card round class='rounded-card' >
+                                        <v-toolbar dark color="#2ab6f6">
+                                            <v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
+                                            <v-spacer></v-spacer>
+                                            <v-tooltip bottom>
+                                                <v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe">
+                                                    <v-icon medium >close</v-icon>
+                                                </v-btn><span>Close</span>
+                                            </v-tooltip>
+                                        </v-toolbar>
+                                        <v-row class="px-5">
+                                            [DATAFRAME_SCRIPT]
+                                        </v-row>    
+                                   </v-card>
+                               </v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl2']
     }
     vueElintegroTranslatorDataframeLayout(ColumnLayoutVue){bean->
@@ -125,7 +141,7 @@ beans{
                                         <v-row>
                                             <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
                                             <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
-                                                 <v-row><h2 class="heading-2">[howYouDo]</h2></v-row><br>
+                                                 <v-row><h1 class="heading-2">[howYouDo]</h1></v-row><br>
                                                 <v-row>
                                                     <p class="paragraph">
                                                         [howYouDoParagraphOne]
@@ -163,7 +179,7 @@ beans{
                                         <v-row>
                                             <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
                                             <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
-                                                <v-row><h2 class="heading-1">[subscribe]</h2></v-row>
+                                                <v-row><h1 class="heading-1">[subscribe]</h1></v-row>
                                             </v-col>
                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>
                                             <v-col cols="12" xs="12" sm="12" md="5" xl="5" lg="5" align-self = 'center'>    

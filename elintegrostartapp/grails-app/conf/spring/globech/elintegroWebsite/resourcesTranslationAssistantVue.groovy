@@ -162,15 +162,19 @@ beans{
                         ,"valueMember":"id"
                         , search:true
                         ,multiple: false
+                        ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ],
                 "project.sourceFile":[
                         widget: "FilesUploadWidgetVue"
                         ,ajaxFileSaveUrl: "translatorAssistant/fileUpload"
                         ,doAfterSave:"""excon.showMessage(response,'vueCreateProjectForTranslationDataframe');"""
+                        ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
+                ],
+                "save":["widget":"ButtonWidgetVue"
+                        ,"name":"save"
+                        ,script: """let timeOut = 6000;this.saveProject(timeOut);"""
+                        ,flexGridValues:['xs0', 'sm0', 'md6', 'lg6', 'xl6']
                 ]
-        ]
-        dataframeButtons=[
-                save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """let timeOut = 6000;this.saveProject(timeOut);"""]
         ]
         currentFrameLayout = ref("vueCreateProjectForTranslationDataframeLayout")
     }
