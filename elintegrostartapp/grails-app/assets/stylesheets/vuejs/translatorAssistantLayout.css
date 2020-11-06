@@ -121,3 +121,8 @@
     background-color: #2ab6f6;
     color: white;
 }
+.translatorAssistantContainer .borderInTranslation{
+    border: 1px solid dodgerblue;
+    border-radius: 3px;
+    padding-top: 3%;
+}
