@@ -40,6 +40,7 @@ import org.springframework.context.i18n.LocaleContextHolder
  */
 abstract class WidgetVue extends Widget<DataframeVue>{
     /** Dependency injection for the springSecurityService. */
+    public static final String items = "items"
 
     //This assigns a new value and returns true if new value was different then the old one
     @Override
@@ -91,7 +92,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     }
     public String getFieldJSONItems(Map field){
         String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
-        return "${getFieldJSONNameVue(field)}.items";
+        return "${getFieldJSONNameVue(field)}${DOT}${items}";
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
@@ -463,6 +464,27 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         String mandatory = isMandatory(field)?" *":""
         String label = field.label + mandatory
         return label
+    }
+
+    protected static Map getDomainFieldJsonMap(DataframeVue dataframe, Map field){
+        Map domainFieldMap = dataframe.domainFieldMap
+        Map fieldJSON = [:]
+        if(dataframe.isDatabaseField(field)){
+            Map persisters = domainFieldMap.get(Dataframe.PERSISTERS)
+            Map domainJSON = persisters.get(field.get(Dataframe.FIELD_PROP_DOMAIN_ALIAS))
+            fieldJSON = domainJSON.get(field.get(Dataframe.FIELD_PROP_NAME))
+        }else{
+            Map transits = domainFieldMap.get(Dataframe.TRANSITS)
+            fieldJSON = transits.get(field.get(Dataframe.FIELD_PROP_NAME))
+        }
+        return fieldJSON
+    }
+
+    protected static boolean isInitBeforePageLoad(Map field){
+        if (field?.initBeforePageLoad){
+            return true
+        }
+        return false
     }
 
 }

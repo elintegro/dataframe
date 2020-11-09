@@ -177,10 +177,6 @@ class ComboboxVue extends WidgetVue {
     }
 
     Map getStateDataVariablesMap(DataframeVue dataframe, Map field){
-
-        //TODO: no need
-        //String dataVariable = dataframe.getDataVariableForVue(field)
-
         Map result = generateInitialData(dataframe, field)
 
         String valueMember = field.valueMember?:"id"
@@ -197,26 +193,9 @@ class ComboboxVue extends WidgetVue {
         }
 
         Map domainFieldMap = dataframe.domainFieldMap
-        Map fldJSON = null
-        if(dataframe.isDatabaseField(field)){ //Put it to PERSISTERS section
-            Map persisters = domainFieldMap.get(Dataframe.PERSISTERS)
-            Map domainJSON = persisters.get(field.get(Dataframe.FIELD_PROP_DOMAIN_ALIAS))
-            fldJSON = domainJSON.get(field.get(Dataframe.FIELD_PROP_NAME))
-        }else{//Put it to TRANSITS section
-            Map transits = domainFieldMap.get(Dataframe.TRANSITS)
-            fldJSON = transits.get(field.get(Dataframe.FIELD_PROP_NAME))
-        }
-        fldJSON?.put("items", res)
-
+        Map fldJSON = getDomainFieldJsonMap(dataframe, field)
+        fldJSON?.put(items, res)
         return domainFieldMap
-/*
-
-        return [$dataVariable:${selMap?selMap as JSON:"\"\""},\n
-                  ${dataVariable}_items:${res as JSON} ,\n
-                  ${dataVariable}_keys:${keys as JSON},\n
-                """
-*/
-
     }
 
     boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
@@ -228,7 +207,7 @@ class ComboboxVue extends WidgetVue {
 
     private Map generateInitialData(DataframeVue dataframe, Map field){
 
-        if(!field.initBeforePageLoad){
+        if(!isInitBeforePageLoad(field)){
             return [keys: [], result:[], selectedData: [:]]
         }
         String displayMember = field.displayMember?:"name"

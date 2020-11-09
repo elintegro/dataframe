@@ -23,6 +23,7 @@ import grails.converters.JSON
 import grails.util.Holders
 import org.apache.commons.lang.WordUtils
 import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.i18n.LocaleContextHolder
@@ -35,6 +36,8 @@ class GridWidgetVue extends WidgetVue {
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
     String embDDfr = "";
+    private static final String headers = "headers"
+    private static final String defaultData = "defaultData"
 
 
     //This assigns a new value and returns true if new value was different then the old one
@@ -59,6 +62,26 @@ class GridWidgetVue extends WidgetVue {
         return true
     }
 
+    @Override
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
+        if(additionalDataRequestParamMap.containsKey(items)){
+            jData?.persisters?."${domainAlias}"."${fieldName}"."${items}" = additionalDataRequestParamMap."${items}"
+        }
+        if(additionalDataRequestParamMap.containsKey(headers)){
+            jData?.persisters?."${domainAlias}"."${fieldName}"."${headers}" = additionalDataRequestParamMap."${headers}"
+        }
+    }
+
+    @Override
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
+        if(additionalDataRequestParamMap.containsKey(items)){
+            jData?.transits?."${fieldName}"."${items}" = additionalDataRequestParamMap."${items}"
+        }
+        if(additionalDataRequestParamMap.containsKey(headers)){
+            jData?.transits?."${fieldName}"."${headers}" = additionalDataRequestParamMap."${headers}"
+        }
+    }
+
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
@@ -75,7 +98,10 @@ class GridWidgetVue extends WidgetVue {
         }
         String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
         String labelStyle = field.labelStyle?:""
-        String modelString = getModelString(dataframe, field)
+//        String modelString = getModelString(dataframe, field)
+        String modelString = getFieldJSONModelNameVue(field)
+        String itemsStr = getFieldJSONItems(field)
+        String headerString = "${getFieldJSONNameVue(field)}${DOT}${headers}"
         String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
         String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
         return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
@@ -94,8 +120,8 @@ class GridWidgetVue extends WidgetVue {
             </v-col></v-row>
         """:""}
        <v-data-table
-            :headers="${modelString}_headers"
-            :items="${modelString}_items"
+            :headers="${headerString}"
+            :items="${itemsStr}"
             :items-per-page="-1"
             ${showGridSearch?":search='${fldName}_search'":""}
             ${dataTableAttribbutes.toString()}
@@ -226,6 +252,23 @@ $fieldParams
 """
 
     }
+
+    Map getStateDataVariablesMap(DataframeVue dataframe, Map field){
+        List gridItems = []
+        List gridHeaders = []
+        if (isInitBeforePageLoad(field)){
+            Map result = getGridData(dataframe, field, [:])
+            if (result){
+                gridItems = result."${items}"
+                gridHeaders = result."${headers}"
+            }
+        }
+        Map fldJSON = getDomainFieldJsonMap(dataframe, field)
+        fldJSON?.put(items, gridItems)
+        fldJSON?.put(headers, gridHeaders)
+        return dataframe.domainFieldMap
+    }
+
     String getStateDataVariable(DataframeVue dataframe, Map field){
 
         String dataVariable = dataframe.getDataVariableForVue(field)
@@ -255,7 +298,7 @@ $fieldParams
         String fldName = dataframe.getDataVariableForVue(field);
         String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
         dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){
-                                                                    if(this.state.transits.${field.domainAlias}.items){
+                                                                    if(this.${getFieldJSONItems(field)}){
                                                                         return true;
                                                                     }
                                                                   },\n""")
@@ -274,43 +317,44 @@ $fieldParams
     }
 
     public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldnameToReload, Map inputData, def dbSession){
-        Map result=[:];
-        Dataframe dataframe = dataframeInst.df;
+        DataframeVue dataframe = dataframeInst.df;
         Map fieldProps = dataframe.fields.get(fieldnameToReload);
-
         //Add fields from the Dataframe as possible input parameters for the additional HQL:
         inputData.putAll(dataframeInst.getFieldValuesAsKeyValueMap());
+        Map sessionParams = dataframeInst.sessionParams
+        if (sessionParams){
+            inputData << sessionParams
+        }
+        Map result= getGridData(dataframe, fieldProps, inputData)
+        return result
+    }
 
+    private def getGridData(DataframeVue dataframe, Map fieldProps, Map inputData){
+        Map result=[:];
         String wdgHql = fieldProps?.hql;
         if(wdgHql){
-            Map sessionParams = dataframeInst.sessionParams
-            if (sessionParams){
-                inputData << sessionParams
-            }
             List<MetaField> fieldMetaData =  fieldProps.get("gridMetaData");
-
             ParsedHql parsedHql =  fieldProps.get("parsedHql");
             if(parsedHql == null){
                 log.warn("We have to recreate the Parsed Hql since it is null")
                 parsedHql = new ParsedHql(fieldProps.hql, dataframe.grailsApplication, dataframe.sessionFactory)
             }
             List dataHeader =  fieldProps.get("dataHeader");
-            getNamedParameterValue(dataframeInst,inputData, parsedHql, fieldProps)
+//            getNamedParameterValue(dataframeInst,inputData, parsedHql, fieldProps)
+            def dbSession = dataframe.sessionFactory.openSession()
             DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
             List resultList = dbRes.getResultList();
-            result.put("dictionary", resultList);
-            result.put("headers", dataHeader);
-            result.put("defaultData", getDefaultData(fieldMetaData));
-
+            result.put(items, resultList);
+            result.put(headers, dataHeader);
+            result.put(defaultData, getDefaultData(fieldMetaData));
             if(!(fieldProps.containsKey("metaData") && fieldProps.get("metaData"))){
                 fieldProps.put("metaData", getDataFields(wdgHql, dataframe, fieldMetaData));
             }
-
             result.put("metaData", fieldProps.get("metaData"));
-
         }
         return result
     }
+
 
     public void getNamedParameterValue(dfInstance,inputData, parsedHql, fieldProps){
         Dataframe dataframe = dfInstance.df
