@@ -11,6 +11,7 @@ beans {
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="white" slider-color="yellow"  background-color="blue darken-2" v-model="vueNewEmployeeApplicantDataframe_tab_model">
                                     <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueNewEmployeeBasicInformationDataframe-tab-id">Basic Information</v-tab>
+                                    <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueAddressDataframe-tab-id">Address Information</v-tab>
                                     <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueNewEmployeeUploadResumeDataframe-tab-id">Upload Resume</v-tab>
                                      <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueNewEmployeeSelfAssesmentDataframe-tab-id">Self Assesment</v-tab>
                                    <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueNewEmployeeAddtionalQuestionsDataframe-tab-id">Additional Questions</v-tab>
@@ -20,6 +21,7 @@ beans {
                                     <v-tab-item value="vueNewEmployeeBasicInformationDataframe-tab-id">
                                      <vueNewEmployeeBasicInformationDataframe/>
                                      </v-tab-item>
+                                     <v-tab-item value="vueAddressDataframe-tab-id"><vueAddressDataframe/></v-tab-item>
                                      <v-tab-item value="vueNewEmployeeUploadResumeDataframe-tab-id"><vueNewEmployeeUploadResumeDataframe/></v-tab-item>
                                      <v-tab-item value="vueNewEmployeeSelfAssesmentDataframe-tab-id"><vueNewEmployeeSelfAssesmentDataframe/></v-tab-item>
                                      <v-tab-item value="vueNewEmployeeAddtionalQuestionsDataframe-tab-id"><vueNewEmployeeAddtionalQuestionsDataframe/></v-tab-item>
