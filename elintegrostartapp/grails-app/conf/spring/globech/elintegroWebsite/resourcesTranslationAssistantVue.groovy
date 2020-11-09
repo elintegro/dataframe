@@ -55,6 +55,7 @@ beans{
                         widget: "ComboboxVue"
                         , hql: """select proj.id as projectId, proj.name as Name from Project proj where proj.id not in  (select pro.id from Project pro inner join pro.users u)"""
                         ,"displayMember":"Name"
+                        ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' """
                         , search:true
                         ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ]
@@ -81,6 +82,7 @@ beans{
                         widget: "ComboboxVue"
                         , hql: """select project.id as projectId , project.name as Name , users.id as Id from Project project inner join project.users users where users.id = :session_userid"""
                         ,"displayMember":"Name"
+                        ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' """
                         , search:true
                         ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ]
@@ -154,6 +156,10 @@ beans{
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = "select project.id , project.name, project.sourceLanguage, project.sourceFile from Project as project"
         addFieldDef=[
+                "project.name":[
+                        widget: "InputWidgetVue"
+                        ,attr: """ outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """
+                ],
                 "project.sourceLanguage":[
                         widget: "ComboboxVue"
                         ,initBeforePageLoad  :true
@@ -161,12 +167,14 @@ beans{
                         ,"displayMember":"ename"
                         ,"valueMember":"id"
                         , search:true
+                        ,attr: """ outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,multiple: false
                         ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ],
                 "project.sourceFile":[
                         widget: "FilesUploadWidgetVue"
                         ,ajaxFileSaveUrl: "translatorAssistant/fileUpload"
+                        ,attr: """ outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,doAfterSave:"""excon.showMessage(response,'vueCreateProjectForTranslationDataframe');"""
                         ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ],
@@ -203,6 +211,7 @@ beans{
                         ,internationalize: true
                         , search:true
                         ,multiple: true
+                        ,attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,valueMember:"id"
                         ,"flexGridValues":['xs12', 'sm12', 'md8', 'lg9', 'xl9'],
                 ],
@@ -290,7 +299,7 @@ beans{
         doBeforeRefresh = """ allParams['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId');
                               this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text = this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text;
                           """
-        addFieldDef = ["text.text":[ widget: "TextAreaWidgetVue"]]
+        addFieldDef = ["text.text":[ widget: "TextAreaWidgetVue",attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """]]
         dataframeButtons=[
                 save: [name: "save",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6'],script:"this.updateEditedTextInGrid();"]
         ]

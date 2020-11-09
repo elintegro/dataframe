@@ -103,17 +103,17 @@ beans{
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                                     <v-container class="translatorAssistantContainer" fluid>
                                         <vueMeetTranslatorAssistantIntroDataframe/>
-                                        <v-container>
+                                        <v-container class="translatorPageContainer" fluid>
                                             <v-row>
-                                                  <v-col  cols="12" xs="12" sm="12" md="4" xl="4" lg="4">
-                                                       <v-card class="borderInTranslation"> 
+                                                <v-col  cols="12" xs="12" sm="12" md="4" xl="4" lg="4">
+                                                    <v-card class="borderInTranslation"> 
                                                             [DATAFRAME_SCRIPT]
-                                                            <v-row>
-                                                                [BUTTON_SCRIPT]
-                                                            </v-row>
-                                                       </v-card>
-                                                  </v-col>
-                                                  <v-col cols="12" xs="12" sm="12" md="8" xl="8" lg="8"><vueGridOfTranslatedTextDataframe v-if="isHidden"/></v-col>
+                                                        <v-row>
+                                                            [BUTTON_SCRIPT]
+                                                        </v-row>
+                                                    </v-card>
+                                                </v-col>
+                                                <v-col cols="12" xs="12" sm="12" md="8" xl="8" lg="8"><vueGridOfTranslatedTextDataframe v-if="isHidden"/></v-col>
                                             </v-row>
                                         </v-container>
                                         <vueHowYouDoDataframe/>

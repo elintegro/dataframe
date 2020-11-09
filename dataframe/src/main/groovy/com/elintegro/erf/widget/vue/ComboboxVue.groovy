@@ -358,6 +358,7 @@ class ComboboxVue extends WidgetVue {
           ${toolTip(field)}
            $onSelect
           $typeString
+          ${getAttr(field)}
         ></v-combobox>
         """
     }
