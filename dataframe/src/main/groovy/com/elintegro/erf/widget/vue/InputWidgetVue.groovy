@@ -35,8 +35,6 @@ class InputWidgetVue extends WidgetVue {
             ${isReadOnly?"readonly":''}
             ${toolTip(field)}
             style="width:${getWidth(field)}; height:${getHeight(field, "40px")};"
-            background-color="white"
-            autocomplete = $autoComplete
             $clearable
             ${getAttr(field)}
           ></v-text-field>"""

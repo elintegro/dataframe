@@ -20,7 +20,8 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                   @change = "${fldName}_uploadFile"
                   ${toolTip(field)}
                   ${getAttr(field)}
-                  prepend-icon="mdi-file-upload"
+                  prepend-icon=""
+                   prepend-inner-icon="mdi-file-upload"
                 >
                </v-file-input>
                """
