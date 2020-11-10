@@ -158,7 +158,7 @@ beans{
         addFieldDef=[
                 "project.name":[
                         widget: "InputWidgetVue"
-                        ,attr: """ outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """
+                        ,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                 ],
                 "project.sourceLanguage":[
                         widget: "ComboboxVue"
@@ -167,16 +167,14 @@ beans{
                         ,"displayMember":"ename"
                         ,"valueMember":"id"
                         , search:true
-                        ,attr: """ outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """
+                        ,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,multiple: false
-                        ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ],
                 "project.sourceFile":[
                         widget: "FilesUploadWidgetVue"
                         ,ajaxFileSaveUrl: "translatorAssistant/fileUpload"
-                        ,attr: """ outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """
+                        ,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,doAfterSave:"""excon.showMessage(response,'vueCreateProjectForTranslationDataframe');"""
-                        ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ],
                 "save":["widget":"ButtonWidgetVue"
                         ,"name":"save"
@@ -252,8 +250,8 @@ beans{
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = """select project.id ,project.sourceLanguage from Project project where project.id = :projectId """
         addFieldDef = [
-                "project.key":[name: 'key', widget:"InputWidgetVue",attr: """ autofocus outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' ""","validationRules":[[condition:"v => !!v",message:"key.required.message"],[condition:"v =>  (v && new RegExp(/^\\S+\$/).test(v))",message:"key.donot.have.space"]]],
-                "project.sourceText":[ widget:"InputWidgetVue","validationRules":[[condition:"v => !!v",message:"text.required.message"]],attr: """ outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "project.key":[widget:"InputWidgetVue" ,attr: """ autofocus outlined background-color='#EBF9FF !important' color='#2AB6F6' ""","validationRules":[[condition:"v => !!v",message:"key.required.message"],[condition:"v =>  (v && new RegExp(/^\\S+\$/).test(v))",message:"key.donot.have.space"]]],
+                "project.sourceText":[ widget:"InputWidgetVue","validationRules":[[condition:"v => !!v",message:"text.required.message"]],attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                 "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true,insertAfter:'project.text'],
                 "textToTranslate":[
                           name: 'textToTranslate'
@@ -285,7 +283,7 @@ beans{
 
         ]
         dataframeButtons=[
-                save: [name: "save",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6'],script:"this.saveNewlyAddedRecord();"]
+                save: [name: "save",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script:"this.saveNewlyAddedRecord();"]
         ]
         childDataframes = ['vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe']
         currentFrameLayout = ref("vueAddNewRecordForCurrentProjectDataframeLayout")
@@ -301,7 +299,7 @@ beans{
                           """
         addFieldDef = ["text.text":[ widget: "TextAreaWidgetVue",attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """]]
         dataframeButtons=[
-                save: [name: "save",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6'],script:"this.updateEditedTextInGrid();"]
+                save: [name: "save",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script:"this.updateEditedTextInGrid();"]
         ]
         currentFrameLayout = ref("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframeLayout")
     }
@@ -353,7 +351,6 @@ beans{
         currentFrameLayout= ref("vueGridOfTranslatedTextDataframeLayout")
 
     }
-
     vueEditTranslatedRecordsOfGridDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueEditTranslatedRecordsOfGridDataframe']
@@ -373,10 +370,10 @@ beans{
         hql = """select text.id as Id, text._key as Key, text.text as Text from Text text where text.id =:id"""
         addFieldDef = [
                 "text._key":[widget:"InputWidgetVue"
-                             ,attr: """outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """,
+                             ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
                              readOnly: true,],
-                "text.text":[widget:"InputWidgetVue"
-                             ,attr: """outlined rounded background-color='#EBF9FF !important' color='#2AB6F6' """,
+                "text.text":[widget:"TextAreaWidgetVue"
+                             ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
                              ]
         ]
         dataframeButtons = [googleTranslate: [name: "googleTranslate",type: "button",attr: """style='background-color:#2ab6f6; color:white;'""",script: """ this.googleTranslateForEachRecord();""",flexGridValues:['xs12', 'sm12', 'md4', 'lg4', 'xl4']],

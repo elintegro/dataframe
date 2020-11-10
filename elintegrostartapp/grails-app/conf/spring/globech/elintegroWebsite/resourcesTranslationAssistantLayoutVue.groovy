@@ -91,8 +91,8 @@ beans{
                                                 </v-btn><span>Close</span>
                                             </v-tooltip>
                                         </v-toolbar>
-                                        <v-row class="px-5">
-                                            [DATAFRAME_SCRIPT] 
+                                        <v-row class="pa-8">
+                                            [project.name] [project.sourceLanguage] [project.sourceFile][save]
                                         </v-row>    
                                    </v-card>
                                </v-flex>"""
@@ -107,9 +107,11 @@ beans{
                                             <v-row>
                                                 <v-col  cols="12" xs="12" sm="12" md="4" xl="4" lg="4">
                                                     <v-card class="borderInTranslation"> 
-                                                            [DATAFRAME_SCRIPT]
-                                                        <v-row>
-                                                            [BUTTON_SCRIPT]
+                                                         <v-row class="px-8">
+                                                                [DATAFRAME_SCRIPT]
+                                                            <v-row>
+                                                                [BUTTON_SCRIPT]
+                                                            </v-row>
                                                         </v-row>
                                                     </v-card>
                                                 </v-col>
@@ -129,16 +131,39 @@ beans{
     }
     vueAddNewRecordForCurrentProjectDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' >
-                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeVueAddNewRecordForCurrentProjectDataframe()"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-flex>[DATAFRAME_SCRIPT]<v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                                    <v-card round class='rounded-card' >
+                                        <v-flex class="text-right">
+                                            <v-tooltip bottom>
+                                                <v-btn icon target="_blank" slot="activator" @click.prevent="closeVueAddNewRecordForCurrentProjectDataframe()">
+                                                    <v-icon medium >close</v-icon>
+                                                </v-btn>
+                                                <span>Close</span>
+                                            </v-tooltip>
+                                        </v-flex>
+                                        <v-row class="px-8">
+                                           [project.sourceLanguage][project.key][project.sourceText][textToTranslate]
+                                        </v-row>
+                                        <v-row class="pa-8" style="text-align: center;">[save]</v-row>
+                                    </v-card>
+                                 </v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
     vueEditTextOfNewlyAddedRecordForCurrentProjectDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' >
-                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe()"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-flex>[DATAFRAME_SCRIPT]<v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-flex> """
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                                    <v-card round class='rounded-card'>
+                                        <v-flex class="text-right">
+                                            <v-tooltip bottom>
+                                                <v-btn icon target="_blank" slot="activator" @click.prevent="closeVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe()">
+                                                    <v-icon medium >close</v-icon>
+                                                </v-btn><span>Close</span>
+                                            </v-tooltip>
+                                        </v-flex>
+                                        <v-row class="px-1">[DATAFRAME_SCRIPT]</v-row>
+                                        <v-row class="pa-1" style="text-align: center;">[save]</v-row>
+                                    </v-card>
+                              </v-flex> """
     }
     vueGridOfTranslatedTextDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
@@ -213,9 +238,17 @@ beans{
     }
     vueEditTranslatedRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' >
-                                <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeVueEditTranslatedRecordsOfGridDataframe();"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                                  <v-card round class='rounded-card'>
+                                       <v-flex class="text-right">
+                                            <v-tooltip bottom>
+                                                   <v-btn icon target="_blank" slot="activator" @click.prevent="closeVueEditTranslatedRecordsOfGridDataframe();"><v-icon medium >close</v-icon>
+                                                   </v-btn><span>Close</span>
+                                            </v-tooltip>
+                                       </v-flex>
+                                       <v-row class="px-8">[DATAFRAME_SCRIPT]</v-row>[BUTTON_SCRIPT]
+                                  </v-card>
+                               </v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
     vueDeleteTranslatedRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean->
