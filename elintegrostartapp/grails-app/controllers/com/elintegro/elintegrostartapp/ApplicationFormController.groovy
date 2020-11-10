@@ -107,8 +107,8 @@ class ApplicationFormController {
     }
 
     def saveAddress(){
-        def _params = params
-        def personId = params["personId"]
+        def _params = request.getJSON()
+        def personId = _params.personId
         DataframeController dc = new DataframeController()
         Dataframe dataframe = dc.getDataframe(_params)
         def dfInstance = new DataframeInstance(dataframe, _params)

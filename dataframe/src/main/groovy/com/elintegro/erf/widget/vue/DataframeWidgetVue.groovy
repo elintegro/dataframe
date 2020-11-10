@@ -36,12 +36,12 @@ class DataframeWidgetVue extends WidgetVue{
         dataframe.childrenDataframes.add(refDataframeName)
         LayoutVue reflayoutObj = refDataframe.currentFrameLayout
         resultPageHtml.append(reflayoutObj.layoutPlaceHolder?:"")
-        Map propPass = fields.propPass
+        Map props = fields.props
         Map propReturn = fields.propReturn
         StringBuilder propString = new StringBuilder()
-        if(propPass && propPass.containsKey("key")){
-            String key = propPass.key
-            String value = propPass.value
+        if(props && props.containsKey("key")){
+            String key = props.key
+            String value = props.value
             if(key.trim().indexOf(":") == 0)
                 dataframe.getVueJsBuilder().addToDataScript("$value:'',\n")
             propString.append("""$key = '$value' """)

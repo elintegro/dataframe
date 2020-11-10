@@ -270,7 +270,7 @@ beans {
 
         doAfterSave = """
                                  
-                        excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeUploadResumeDataframe");
+                        excon.goToTab("vueNewEmployeeApplicantDataframe", "vueAddressDataframe");
                       """
 
         doBeforeSave = """
@@ -306,7 +306,8 @@ beans {
         dataframeLabelCode = "Address.Information"
 //		hql = "select address.id, address.addressLine, address.street from Address as address where address.id=:id"
         hql = "select address.addressLine, address.addressLine2, address.id,  address.addressText, address.apartment, address.street, address.cityString, address.countryString, address.postalZip from Address as address where address.id=:id"
-//        doBeforeSave = "params['personId'] = excon.getFromStore('vueContactDataframe','key');"
+        doBeforeSave = """var domainKeys = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys');
+                          params['personId'] = domainKeys.Person.id """
         doAfterSave = "excon.goToTab('vueNewEmployeeApplicantDataframe','vueNewEmployeeUploadResumeDataframe');"
 
         childDataframes =["vueMapWidgetDataframe"]
@@ -314,7 +315,7 @@ beans {
         flexGridValuesForSaveButton = ['xs4', 'sm4', 'md4', 'lg4', 'xl4']
         deleteButton = false
         insertButton=false
-        saveButton = false
+        saveButton = true
         wrapInForm=false
         initOnPageLoad = false
         createStore = true
@@ -336,6 +337,7 @@ beans {
                 ],
                 "validateWithGoogle":[
                         "widget"     : "ButtonWidgetVue",
+                        insertAfter: "address.addressLine",
                         script       : """ this.updatedAddressValue = this.state.persisters.address.addressLine.value;""",
                         "flexGridValues":['xs4', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
@@ -343,7 +345,7 @@ beans {
                         "widget"      : "DataframeWidgetVue",
                         dataframe     : ref("vueMapWidgetDataframe"),
                         "attr"        :" @resultData='updateAddressFields'",
-                        propPass      :[key:":addressValue", value:"updatedAddressValue"],
+                        props      :[key:":addressValue", value:"updatedAddressValue"],
                         passValueAsProp : true,
                         "showInMap"   :true,
                         "name"        : "googleMap",
