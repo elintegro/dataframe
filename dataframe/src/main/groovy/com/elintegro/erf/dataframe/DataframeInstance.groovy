@@ -1214,6 +1214,10 @@ class DataframeInstance implements DataframeConstants{
 			return typeCastNamedParameterValue(refDomainAlias, refFieldName, requestParams.get(namedParameter))
 		}
 
+		//search in namedParameter
+		def nField = getNamedParameterField(requestParams, namedParameter)
+		if (nField){return typeCastNamedParameterValue(refDomainAlias, refFieldName, nField)}
+
 		//Search in request parameters:
 //		Map requestNamedParams = requestParams.request_parameters?."${namedParameter}"
 //		if(requestNamedParams?.containsKey(namedParameter)){return requestNamedParams.get(namedParameter)}
@@ -1244,6 +1248,18 @@ class DataframeInstance implements DataframeConstants{
 
 	private def typeCastNamedParameterValue(refDomainAlias, refFieldName, paramValue){
 		return df.getTypeCastValue2(refDomainAlias, refFieldName, paramValue);
+	}
+
+	static def getNamedParameterField(JSONObject requestParams, namedParam){
+		Map namedParameters = getNamedParameters(requestParams)
+		if(namedParameters?.containsKey(namedParam)) {
+			return namedParameters.get(namedParam)?.value
+		}
+		return null
+	}
+
+	static Map getNamedParameters(JSONObject requestParams){
+		return requestParams.namedParameters
 	}
 
 	static def getPersisterField(JSONObject requestParams, String domainAlias, String fieldName){

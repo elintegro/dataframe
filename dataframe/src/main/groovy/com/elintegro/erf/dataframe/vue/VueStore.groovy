@@ -193,6 +193,7 @@ class VueStore {
           if(dataframe){
            state[dataframe]["persisters"] = response.persisters;   
            state[dataframe]["transits"] = response.transits;   
+           state[dataframe]["domain_keys"] = response.domain_keys;   
           }
         },
                """

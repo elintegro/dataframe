@@ -65,6 +65,15 @@ var excon = new Vue({
             }
 
         },
+        saveToStateTest: function(containerVariable, key, value=''){
+            if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
+                return
+            }
+            const obj = eval("store.state."+ containerVariable +"");
+            if (obj){
+                Vue.set(obj, key, value);
+            }
+        },
         saveToState: function(containerVariable, value=''){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
                 return
@@ -430,6 +439,17 @@ var excon = new Vue({
         reset: function(dataframeName){
 
             let oldData = store.getters.getState(dataframeName);
+        },
+        setSelectedGridDataToRequestParams: function (selectedDataRecord, dataframeName){
+            let namedParams = this.getFromStore(dataframeName, "namedParameters")
+            if (!namedParams)
+                return
+            for(const [key, namedValue] of Object.entries(namedParams)) {
+                let namedParamVal = selectedDataRecord[key]
+                if (namedParamVal){
+                    namedValue.value = namedParamVal;
+                }
+            }
         }
     }
 });

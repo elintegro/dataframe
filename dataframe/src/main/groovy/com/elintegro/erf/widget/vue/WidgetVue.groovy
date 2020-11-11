@@ -41,6 +41,7 @@ import org.springframework.context.i18n.LocaleContextHolder
 abstract class WidgetVue extends Widget<DataframeVue>{
     /** Dependency injection for the springSecurityService. */
     public static final String items = "items"
+    public static final String excon = "excon"
 
     //This assigns a new value and returns true if new value was different then the old one
     @Override
