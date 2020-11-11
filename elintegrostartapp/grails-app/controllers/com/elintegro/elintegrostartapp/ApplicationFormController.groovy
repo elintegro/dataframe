@@ -27,6 +27,7 @@ import com.elintegro.elintegrostartapp.hr.Employee
 import com.elintegro.elintegrostartapp.property.Property
 import com.elintegro.elintegrostartapp.ref.ApplicationStatus
 import com.elintegro.elintegrostartapp.ref.FacilityType
+import com.elintegro.model.DataframeResponse
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import jdk.nashorn.api.scripting.JSObject
@@ -113,41 +114,48 @@ class ApplicationFormController {
         Dataframe dataframe = dc.getDataframe(_params)
         def dfInstance = new DataframeInstance(dataframe, _params)
         def result = dfInstance.save();
+        Map savedResultMap = dfInstance.getSavedDomainsMap();
+        DataframeResponse response = new DataframeResponse()
         Map responseData
+        String msg
         if(result){
-            def addressId = result[0]
+            def addressId = savedResultMap.address[1]
             if(personId){
                 Person person = Person.get(Long.valueOf(personId))
                 if(person){
                     person.mainAddress = addressId
                     try{
+                        person.addToAddresses(addressId)
                         person.save(flush: true)
-                        def generatedKeys = []
-                        result.each{ record->
-                            def _id = record.id
-                            generatedKeys.add record.id
-                        }
-                        _params.remove("controller")
-                        _params.remove("action")
-
-                        responseData = [success: true, msg:"Form successfully saved", generatedKeys:generatedKeys, nodeId: generatedKeys]
+                        def resultData = [personId:personId,addressId:addressId.id]
+                        response.success = true
+                        msg:"Form successfully saved"
+                        response.message = msg
+                        _params["domain_keys"].addressId = addressId.id
+                        response.data = _params
                     }catch(Throwable ee){
                         log.error("Error saving " + person.toString() + "for params: " + params)
-                        responseData = [success: false, msg: "Couldn't save the form. Please retry"]
+                        response.success = false
+                        msg = "Couldn't save the form. Please retry"
+                        response.message = msg
                         rollbackTransaction([person, addressId])
                     }
                 }
             } else {
                 log.debug("Person Id not available for save.")
                 rollbackTransaction([addressId])
-                responseData = [success: false, msg:"There was an error saving Form. Please try again."]
+                response.success = false
+                msg = "There was an error saving Form. Please try again."
+                response.message = msg
             }
 
         }else {
-            responseData = [success: false, msg:"There was an error saving Form. Please try again."]
+            response.success = false
+            msg = "There was an error saving Form. Please try again."
+            response.message = msg
         }
 
-        render responseData as JSON
+        return response
     }
 
     public def saveMedications(){
