@@ -155,7 +155,7 @@ class ApplicationFormController {
             response.message = msg
         }
 
-        return response
+        render response as JSON
     }
 
     public def saveMedications(){
