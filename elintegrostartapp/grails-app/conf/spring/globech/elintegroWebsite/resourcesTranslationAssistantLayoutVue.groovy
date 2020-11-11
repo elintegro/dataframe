@@ -246,7 +246,7 @@ beans{
                                                    </v-btn><span>Close</span>
                                             </v-tooltip>
                                        </v-flex>
-                                       <v-row class="px-8">[DATAFRAME_SCRIPT]</v-row>[BUTTON_SCRIPT]
+                                       <v-row class="px-8">[Key][Text]</v-row>[BUTTON_SCRIPT]
                                   </v-card>
                                </v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']

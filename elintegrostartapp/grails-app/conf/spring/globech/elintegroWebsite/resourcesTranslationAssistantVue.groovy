@@ -322,12 +322,13 @@ beans{
                                      , internationalize: true
                                      ,attr: """style="overflow-y:auto; max-height:500px;" """
                                      , sortable        : true
-                                     ,onClick :[showAsDialog: true, refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
+                                     ,onClick :[showAsDialog: true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,editButton: true
                                      ,onButtonClick   : [
                                                         ['actionName': 'Edit Text', 'buttons': [
                                                         [name        : "edit"
-                                                        ,MaxWidth: 500
+                                                         ,editButton: true
+                                                        ,MaxWidth: 700
                                                         ,showAsDialog: true
                                                         ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
                                                         ,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe")

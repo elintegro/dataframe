@@ -309,13 +309,12 @@ class ListWidgetVue extends WidgetVue {
         """
            <v-list ${isDisabled(dataframe, field) ? "disabled" : ""} flat ${getAttr(field)}>
                   <v-subheader>$label</v-subheader>
-                   <v-divider></v-divider>
                   <v-list-item-group color="#1976D2">
                        <v-list-item  v-for="(item, i) in ${modelString}_items" :key="i">
                           <v-list-item-content>
                                <v-list-item-title v-model = "$modelString" v-text="item.${displayMember}" @click="${onClick}">
                                </v-list-item-title>
-                               <v-divider></v-divider>
+                               <v-divider style="border-color:rgb(42, 182, 246);"></v-divider>
                           </v-list-item-content>
                        </v-list-item>
                   </v-list-item-group>
