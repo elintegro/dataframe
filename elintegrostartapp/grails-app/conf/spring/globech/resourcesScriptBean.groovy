@@ -110,39 +110,39 @@ beans {
         methods = """updateAddressFields(result){
                     console.log("updateAddressFields.");
                         var results = result[0].address_components;
-                        jQuery(results).each(function(index){
-                                         let typeString = jQuery(this)[0].types[0];
-                                         let nameString = jQuery(this)[0].long_name;
+                        for(var i = 0; i < results.length; i++){
+                                         let typeString = results[i].types[0];
+                                         let nameString = results[i].long_name;
                                          if(typeString =="subpremise"){
                                          console.log("Apartment:"+typeString+"::::::"+nameString);
-                                         vueAddressDataframeVar.vueAddressDataframe_address_apartment = nameString;
+                                         vueAddressDataframeVar.state.persisters.address.apartment.value = nameString;
                                          }
                                          if(typeString =="street_address"){
                                          console.log("Street:"+typeString+"::::::"+nameString);
-                                         vueAddressDataframeVar.vueAddressDataframe_address_area = nameString;
+                                         vueAddressDataframeVar.state.persisters.address.addressText.value = nameString;
                                          }
                                          if(typeString =="route"){
                                          console.log("Street:"+typeString+"::::::"+nameString);
-                                          vueAddressDataframeVar.vueAddressDataframe_address_street = nameString;
+                                          vueAddressDataframeVar.state.persisters.address.street.value = nameString;
                                          }
                                          if(typeString =="locality"){
                                          console.log("City:"+typeString+"::::::"+nameString);
-                                         vueAddressDataframeVar.vueAddressDataframe_address_cityString = nameString;
+                                         vueAddressDataframeVar.state.persisters.address.cityString.value = nameString;
                                          }
                                          if(typeString =="country"){
                                            console.log("Country:"+typeString+"::::::"+ nameString);
-                                          vueAddressDataframeVar.vueAddressDataframe_address_countryString = nameString;
+                                          vueAddressDataframeVar.state.persisters.address.countryString.value = nameString;
                                          }
                                          if(typeString =="postal_code"){
-                                          vueAddressDataframeVar.vueAddressDataframe_address_postalZip = nameString;
+                                          vueAddressDataframeVar.state.persisters.address.postalZip.value = nameString;
                                          }
                                          if(typeString =="street_number"){
                                          console.log("street_number:"+typeString+"::::::"+nameString);
                                           jQuery("#addressDataframe-address-streetNbr").val(nameString);
                                          }
-                                     });
-                                     vueAddressDataframeVar.vueAddressDataframe_address_addressText = result[0].formatted_address;
-                                     vueAddressDataframeVar.vueAddressDataframe_address_addressLine = result[0].formatted_address;
+                                     };
+                                     vueAddressDataframeVar.state.persisters.address.addressText.value = result[0].formatted_address;
+                                     vueAddressDataframeVar.state.persisters.address.addressLine.value = result[0].formatted_address;
                     },"""
     }
 
