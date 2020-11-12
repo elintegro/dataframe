@@ -15,6 +15,7 @@ package com.elintegro.register
 
 import com.elintegro.auth.User
 import com.elintegro.gc.AuthenticationService
+import com.elintegro.otpVerification.Otp
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 //import grails.plugin.springsecurity.rest.oauth.OauthUser
@@ -23,6 +24,8 @@ import org.springframework.security.authentication.CredentialsExpiredException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.LockedException
 import org.springframework.security.web.WebAttributes
+
+import java.text.DecimalFormat
 
 class LoginController extends grails.plugin.springsecurity.LoginController {
 
@@ -186,5 +189,27 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
         }
 
         return userInfo
+    }
+    def loginWithOTP(){
+        def params = request.getJSON();
+        def result
+        User user1 = User.findByUsername(params.vueElintegroLoginDataframe_user_username)
+        if(user1){
+            String verificationCode = new DecimalFormat("000000").format(new Random().nextInt(999999));
+            Otp otp = new Otp()
+            otp.verificationCode = verificationCode
+            otp.createTime = new Date()
+            otp.expireTime = new Date().plus(1)
+            otp.user = user1
+            otp.save()
+            result = [success: true,msg: "we sent a verification code in your email. Please check and follow instructions.",alert_type: "success"]
+
+        }
+        else{
+            result = [success:false , msg: "We don't have user with this email. Would you like to register ?",alert_type:"error"]
+        }
+        println(params)
+
+        render result as JSON
     }
 }

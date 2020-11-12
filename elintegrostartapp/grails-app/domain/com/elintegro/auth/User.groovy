@@ -37,6 +37,7 @@ class User extends ControlField implements Serializable {
     String 	lastName
     boolean guestUser = false
     boolean admin = false
+    String verificationCode
 
     Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
@@ -45,6 +46,7 @@ class User extends ControlField implements Serializable {
     static constraints = {
         password nullable: false, blank: false, password: true
         username blank: false, unique: true
+        verificationCode nullable: true ,password: true
     }
 
     static mapping = {

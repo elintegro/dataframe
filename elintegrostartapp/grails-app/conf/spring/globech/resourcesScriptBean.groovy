@@ -244,6 +244,32 @@ beans {
                     console.log("login dataframe close button.");
                     },"""
     }
+    vueElintegroLoginDataframe_script(VueJsEntity){ bean ->
+        data = """showLoginWithOTPbutton : false ,"""
+        watch = """showHideLoginWithOTPbutton:{handler: function(val, oldVal){ this.showLoginWithOTPbutton = val;}},\n"""
+        computed = """showHideLoginWithOTPbutton(){ if(this.state.vueElintegroLoginDataframe_user_username){ return true;} else{return false;}},\n"""
+        methods = """loginWithOTP(){
+                              var allParams = this.state;
+                              allParams['dataframe'] = 'vueElintegroLoginDataframe';
+                              var self = this;
+                              axios({
+                                    method:'post',
+                                    url:'login/loginWithOTP',
+                                    data:allParams
+                              }).then(function(responseData){
+                                console.log(responseData);
+                                var response = responseData.data;
+                                excon.showMessage(responseData,'vueElintegroLoginDataframe');
+                                if(response.success == true){
+                                 excon.redirectPage(self,'login-with-otp');
+                                }
+                                else{
+                                  excon.setVisibility('vueElintegroRegisterDataframe',true);
+                                }
+                              })
+                 },\n"""
+
+    }
     vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
         methods = """
                    forgotPassword(){

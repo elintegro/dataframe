@@ -538,6 +538,7 @@ beans {
                                                                                              var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                               """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                             loginWithOtp:[name:"loginWithOTP",type: "button", attr: """color='blue darken-2' width='100%' style="color:white;" v-show='showLoginWithOTPbutton' """, "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script: """this.loginWithOTP();"""],
                                      login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs6 sm6 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark rounded style="width: 10px; margin-left:65px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
                                      allParams["username"] = this.state.vueElintegroLoginDataframe_user_username;
                                      allParams["password"] = this.state.vueElintegroLoginDataframe_user_password;
@@ -560,6 +561,18 @@ beans {
 
 
         currentFrameLayout = ref("vueElintegroLoginDataframeLayout")
+    }
+    vueElintegroLoginWithOTPDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroLoginWithOTPDataframe']
+        currentRoute = 'login-with-otp'
+        initOnPageLoad = false
+        route = true
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        saveButton = false
+        addFieldDef = ["verificationCode":[widget:"InputWidgetVue",placeholder: "Enter the verification code",]]
+        currentFrameLayout = ref("vueElintegroLoginWithOTPDataframeLayout")
+
     }
     vueElintegroForgetPasswordDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
