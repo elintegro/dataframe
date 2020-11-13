@@ -110,11 +110,11 @@ beans {
         bean.constructorArgs = ['vueElintegroLogoDataframe']
         isGlobal = true
         saveButton = false
-        initOnPageLoad = false
+        initOnPageLoad = true
         addFieldDef = [
                 "logo": [
                         "widget"      : "PictureDisplayWidgetVue",
-                        "url"         : "${contextPath}/assets/elintegro_logo.png",
+                        "url"         : "assets/elintegro_logo.png",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "attr"        : " contain ",
                         "height"      : "auto",
@@ -132,12 +132,12 @@ beans {
         bean.constructorArgs = ['vueElintegroBannerDataframe']
         isGlobal = true
         saveButton = false
-        initOnPageLoad = false
+        initOnPageLoad = true
         route = true
         addFieldDef = [
                 "banner": [
                         "widget"      : "PictureDisplayWidgetVue",
-                        "url"         : "${contextPath}/assets/elintegro_banner.jpg",
+                        "url"         : "assets/elintegro_banner.jpg",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
 
 
@@ -591,7 +591,7 @@ beans {
         bean.constructorArgs = ['vueElintegroUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages from Person as person where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, language.ename from Person as person inner join person.languages language where person.id=:id"
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -630,8 +630,8 @@ beans {
                          ,"required": "required"
                          ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
                 ],
-                "person.languages":[
-                        widget: "ComboboxVue"
+                "language.ename":[
+                        widget: "ListWidgetVue"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
                         ,"displayMember":"ename"
@@ -640,6 +640,15 @@ beans {
                         ,multiple: true
                 ],
 
+                "languageList":[
+                        widget: "ListWidgetVue"
+                        , hql: """select language.id as id, language.ename as ename from Language language"""
+                        ,"displayMember":"language"
+                        ,internationalize: true
+                        ,valueMember:"id"
+                        ,OnClick:"translatedText(item)"
+
+                ],
                 "person.mainPicture":[
                         "widget" : "PictureDisplayWidgetVue",
                         "aspectRatio":"2.5",
@@ -650,9 +659,8 @@ beans {
 
                 "uploadPicture":[
                         "widget" : "PictureUploadWidgetVue"
-                        ,name:"propertyImages"
                         , valueMember: "mainPicture"
-                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                        ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                         ,insertAfter: "person.mainPicture"
                         ,multiple:false
                         ,editButton: true

@@ -9,6 +9,7 @@ import com.elintegro.erf.widget.vue.FKWidgetVue
 import com.elintegro.erf.widget.vue.GalleryDisplayWidgetVue
 import com.elintegro.erf.widget.vue.GridWidgetVue
 import com.elintegro.erf.widget.vue.InputWidgetVue
+import com.elintegro.erf.widget.vue.ListWidgetVue
 import com.elintegro.erf.widget.vue.MapWidgetVue
 import com.elintegro.erf.widget.vue.MultiSelectComboboxVue
 import com.elintegro.erf.widget.vue.NumberInputWidgetVue
@@ -49,4 +50,5 @@ beans {
 	TextDisplayWidgetVue(TextDisplayWidgetVue){}
 	FileUploadWidgetVue(FileUploadWidgetVue){}
 	FilesUploadWidgetVue(FilesUploadWidgetVue){}
+	ListWidgetVue(ListWidgetVue){}
 }

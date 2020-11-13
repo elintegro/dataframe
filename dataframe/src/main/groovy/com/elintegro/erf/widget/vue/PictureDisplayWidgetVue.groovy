@@ -13,7 +13,9 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
+import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
+import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.util.Holders
 import org.grails.web.json.JSONObject
@@ -56,28 +58,19 @@ class PictureDisplayWidgetVue extends WidgetVue{
 
     }
 
-    @Override
-    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
-        String defImgUrl = getDefaultImageName()
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalData, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        String defImgUrl = fieldProps.url?:getDefaultImageName()
         String url = value?:defImgUrl
         String alt = value?:defImgUrl
         jData?.persisters?."${domainAlias}"."${fieldName}".value = url
     }
 
-    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-
-/*
-        return """this.$dataVariable = response['$key']?"$imgUrl"+response['$key']:"$defImgUrl";\n
-                  this.${dataVariable}_alt = response['$key']?response['$key']:"$defImgUrl";"""
-*/
-        return ""
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalData, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        String defImgUrl = fieldProps.url?:getDefaultImageName()
+        String url = value?:defImgUrl
+        String alt = value?:defImgUrl
+        jData?.transits?."${fieldName}".value = url
     }
-
-    String getVueSaveVariables(DataframeVue dataframe, Map field){
-        return """"""
-    }
-
-
 
     private String getDefaultImageName(){
 //        def imgUrl = field.url?field.url: Holders.config.aws.s3.defaultS3Url

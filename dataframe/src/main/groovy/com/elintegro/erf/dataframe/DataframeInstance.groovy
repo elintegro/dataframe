@@ -105,24 +105,6 @@ class DataframeInstance implements DataframeConstants{
 		return df.parsedHql.indexOfFileds.containsKey(mapFieldValue.name)
 	}
 
-	/**
-	 *
-	 */
-	public Map getAdditionalData(String fieldName, Map parameterMap){
-		Map additionalData = [:]
-
-		def widgetObj = df.getWidget(fieldName)
-
-/*  //TODO: remove it
-        def widgetObjDbg = df.fields.get(fieldName)?.get("widgetObject")
-		if(fieldName.contains("paymentMethods")){
-			println "checking paymentMethods"
-		}
-*/
-		additionalData = widgetObj?.loadAdditionalData(this, fieldName, parameterMap, sessionHibernate)
-		return additionalData
-	}
-
 	private def retrieveAndGetJsonNew(){
 
 		if(!df.hql){
@@ -376,12 +358,8 @@ class DataframeInstance implements DataframeConstants{
 			df.fields.getList().each{ fieldName ->
 				Map fieldProps = df.fields.get(fieldName)
 				String myDomainAlias = null
-				//Try to load Additional Data:
-				if (isFieldExistInDb(fieldProps)){
-					convertPersisters(fieldProps, fieldName)
-				}else {
-					convertAdditionalData(fieldProps, fieldName, additionalDataRequestParamMap)
-				}
+				//load data for widgets
+				loadDataForWidgets(fieldProps, additionalDataRequestParamMap)
 			}
 		}
 		addKeyDataForNamedParameters(jsonMapDf) // adding key- fields for vue js
@@ -434,32 +412,36 @@ class DataframeInstance implements DataframeConstants{
 		return jsonRet
 	}
 
-	private void convertAdditionalData(Map fieldProps, String fieldName, Map additionalDataRequestParamMap) {
-		def widgetObj = df.getWidget(fieldName)
-		Map additionalData = widgetObj?.loadAdditionalData(this, fieldName, additionalDataRequestParamMap, sessionHibernate)
-		if (additionalData) {
-			widgetObj.setTransientValueToResponse(jData, additionalData.get(df.VALUE_ENTRY), getFieldDomainAlias(fieldProps), fieldProps.get(DataframeConstants.FIELD_PROP_NAME), additionalData)
+	private void loadDataForWidgets(Map fieldProps, Map additionalDataRequestParamMap){
+
+		String fieldName = fieldProps.get(FIELD_PROP_NAME)
+		Widget widget = (Widget) fieldProps.get(FIELD_PROP_WIDGET_OBJECT)
+		if (isFieldExistInDb(fieldProps)){
+			loadPersistentData(widget, fieldProps, fieldName, additionalDataRequestParamMap, this, sessionHibernate)
+		}else {
+			loadTransientData(widget, fieldProps, fieldName, additionalDataRequestParamMap, this, sessionHibernate)
 		}
 	}
 
-	private void convertPersisters(Map fieldProps, String fieldName) {
-		Map additionalDataRequestParamMap
+	private void loadTransientData(Widget widget, Map fieldProps, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate) {
+			widget.setTransientValueToResponse(jData, additionalDataMap.get(df.VALUE_ENTRY), getFieldDomainAlias(fieldProps), fieldProps.get(DataframeConstants.FIELD_PROP_NAME), additionalDataMap, dfInstance, sessionHibernate, fieldProps)
+	}
+
+	private void loadPersistentData(Widget widget, Map fieldProps, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate) {
 		String myDomainAlias
 		if (!isDefault) {
 			def fldValue = getFieldValue(fieldProps)
 			myDomainAlias = getFieldDomainAlias(fieldProps)
-			Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
-			String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
-			widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, additionalDataRequestParamMap)
+			widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, fieldName, additionalDataMap, dfInstance, sessionHibernate, fieldProps)
 		}
 	}
 
 	private String getFieldDomainAlias(Map fieldProps){
-		return fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
+		return fieldProps.get(FIELD_PROP_DOMAIN_ALIAS)
 	}
 
 	private Widget getFieldWidget(Map fieldProps){
-		return fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
+		return fieldProps.get(FIELD_PROP_WIDGET_OBJECT)
 	}
 
 	private void addKeyDataForNamedParameters(jsonMapDf){
