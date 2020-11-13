@@ -29,7 +29,13 @@ class CollectionWidgetVue extends WidgetVue {
         if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
             def oldfldVal = domainInstance."${fieldName}"
             if(oldfldVal == inputValue.value) return false
-            domainInstance."${fieldName}" = inputValue.value
+/*
+            if(inputValue.value instanceof List){
+               addAssociationToDomainInstance(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
+            }else {
+*/
+                domainInstance."${fieldName}" = inputValue.value
+//            }
         }else if(domainClassInfo.isToMany(fieldName)){
             return saveHasManyAssociation(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
         }else if(domainClassInfo.isToOne(fieldName)){
@@ -48,20 +54,45 @@ class CollectionWidgetVue extends WidgetVue {
     boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
         Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
         if(additionalData && additionalData.containsKey("items")){
-            jData?.persisters?."${domainAlias}"."${fieldName}".value = additionalData.value
-            jData?.persisters?."${domainAlias}"."${fieldName}".items = additionalData.items
+            List items = additionalData.items
+            List valueList = new ArrayList()
+            if(items && value){
+                for(int j=0; j<items.size(); j++){
+                    Map item = (Map) items[j]
+                    for(int k=0; k<value.size(); k++){
+                        if(item."$fieldName" == value[k]){
+                            valueList.add(item)
+                            continue;
+                        }
+                    }
+                }
+            }
+            jData?.persisters?."${domainAlias}"."${fieldName}".value = valueList
+            jData?.persisters?."${domainAlias}"."${fieldName}".items = items
         }
     }
 
     boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
 //        super.setTransientValueToResponse(jData, value, domainAlias, fieldName)
         Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
-        if(additionalData.containsKey("items")){
-            jData?.transits?."${fieldName}".value = additionalData.value
-            jData?.transits?."${fieldName}".items = additionalData.items
+        if(additionalData && additionalData.containsKey("items")){
+            List items = additionalData.items
+            List valueList = new ArrayList()
+            if(items && value){
+                for(int j=0; j<items.size(); j++){
+                    Map item = (Map) items[j]
+                    for(int k=0; k<value.size(); k++){
+                        if(item."$fieldName" == value[k]){
+                            valueList.add(item)
+                            continue;
+                        }
+                    }
+                }
+            }
+            jData?.transits?."${fieldName}".value = valueList
+            jData?.transits?."${fieldName}".items = items
         }
     }
-
 
     boolean isSelectionEqualsToOld(JSONArray jarr1, JSONArray jarr2){
         boolean isEqual = true;
@@ -104,17 +135,21 @@ class CollectionWidgetVue extends WidgetVue {
                 return false
             }
         }
+        addAssociationToDomainInstance(inputValue, refDomainClass, fieldName, domainInstance)
+        return true
+    }
+
+    private boolean addAssociationToDomainInstance(JSONArray inputValue, def refDomainClass, String fieldName, def domainInstance){
         domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
         inputValue.each{val ->
             val.each{
-                if(it.key == "id"){
+                if(it.key == "id"){// todo change this to value member?
                     def refDomainObj  = refDomainClass.get(Long.valueOf(it.value))
                     String fn = fieldName.capitalize()
                     domainInstance."addTo${fieldName.capitalize()}"(refDomainObj)
                 }
             }
         }
-        return true
     }
 
     private Map generateInitialData(DataframeVue dataframe, Map field){
@@ -263,8 +298,8 @@ class CollectionWidgetVue extends WidgetVue {
             }
             fieldProps["dictionary"] = res
         }
-        Map result = buildData(dfInst, fieldProps, fieldnameToReload)
-        return result
+//        Map result = buildData(dfInst, fieldProps, fieldnameToReload)
+        return [items:fieldProps.dictionary]
     }
 
     private def buildData(DataframeInstance dfInst, Map fieldProps, String fieldnameToReload){

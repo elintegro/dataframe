@@ -177,8 +177,9 @@ class DataframeInstance implements DataframeConstants{
 			this.results = query.list()
 			tx.commit();
 			if(results && results .size() > 0){
-				this.record = results[0] //TODO: its hard coded assumption we have only one record per Dataframe!
-				calculateFieldValuesAsKeyValueMap();
+//				this.record = results[0] //TODO: its hard coded assumption we have only one record per Dataframe!
+				calculateFieldValuesAsKeyValueMap();// todo merge with below method
+				this.record = results.size()==1? results[0]:calculateFieldValuesAsKeyValueMapNew(results)
 				log.debug("");
 			}else{
 				isDefault = true
@@ -1094,8 +1095,48 @@ class DataframeInstance implements DataframeConstants{
 				resultMap.put(fldName, val);
 			}
 		}
+		return resultMap
 	}
 
+	private List calculateFieldValuesAsKeyValueMapNew(List result){
+        List resultList
+		if(result){
+			List lst = df.fields.getDbList()
+			int recSize = result.size()
+			List record = result[0]
+			for(int i = 1; i < recSize; i++){
+				List currentRecord = result[i]
+//				Map resultM = [:]
+				for(int j = 0; j < currentRecord.size(); j++) {
+//					def fldName = lst.get(j)
+//					def val = result.getAt(j);
+//					if(resultM.containsKey(fldName)){
+//						def oldVal = resultM.get(fldName)
+//						List newList = [oldVal]
+//						oldVal instanceof List?newList.addAll(oldVal):newList.add(oldVal)
+//						resultM.put(fldName, newList)
+//					} else{
+//						resultM.put(fldName, val);
+//					}
+					if(record[j] instanceof List){
+						if(!record[j].contains(currentRecord[j])){
+							record[j].add(currentRecord[j])
+						}
+					} else {
+						if(currentRecord[j] != record[j]){
+							def oldVal = record[j]
+							List newList = [oldVal]
+							newList.add(currentRecord[j])
+							record[j] = newList
+						}
+					}
+				}
+//				resultList.add(resultM)
+				resultList = record
+			}
+		}
+		return resultList
+	}
 	public boolean fieldValidate(String fieldName, String fldVal){
 		boolean validateFlag = true
 		df?.fields?.getList()?.each {it ->

@@ -592,6 +592,7 @@ beans {
 
         dataframeLabelCode = "User.Profile"
         hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, language.ename from Person as person inner join person.languages language where person.id=:id"
+//        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, language from Person as person inner join person.languages language where person.id=:id"
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -640,15 +641,6 @@ beans {
                         ,multiple: true
                 ],
 
-                "languageList":[
-                        widget: "ListWidgetVue"
-                        , hql: """select language.id as id, language.ename as ename from Language language"""
-                        ,"displayMember":"language"
-                        ,internationalize: true
-                        ,valueMember:"id"
-                        ,OnClick:"translatedText(item)"
-
-                ],
                 "person.mainPicture":[
                         "widget" : "PictureDisplayWidgetVue",
                         "aspectRatio":"2.5",
