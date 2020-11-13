@@ -13,6 +13,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
+import com.elintegro.annotation.OverridableByEditor
 import com.elintegro.erf.dataframe.DFButton
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeInstance
@@ -198,6 +199,11 @@ abstract class WidgetVue extends Widget<DataframeVue>{
 
     String getValueScript(DataframeVue dataframe, Map field, String divId, String fldId, String key){
         return """""";
+    }
+
+    @Override
+    public Object getInitValues(DataframeVue df, Map field){
+        return null
     }
 
 /*    protected DataframeVue getDataframe(dataframeName){

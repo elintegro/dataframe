@@ -39,6 +39,7 @@ abstract class Widget<T> implements DataframeConstants{
 	abstract boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue)
 	abstract boolean setPersistedValueToResponse(JSONObject inputValue, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps)
 	abstract boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps)
+	abstract  Object  getInitValues(T dataframe, Map field)
 	public static final int ONE_SIMBOL_WITH = 6;
 
 	public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldName, Map inputData, def dbSession){

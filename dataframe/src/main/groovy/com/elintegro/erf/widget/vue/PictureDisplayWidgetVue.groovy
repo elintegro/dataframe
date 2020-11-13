@@ -80,4 +80,8 @@ class PictureDisplayWidgetVue extends WidgetVue{
         }*/
         return Holders.config.images.defaultImagePath
     }
+
+    public Object getInitValues(DataframeVue df, Map fieldProps){
+        return fieldProps.url?:getDefaultImageName()
+    }
 }

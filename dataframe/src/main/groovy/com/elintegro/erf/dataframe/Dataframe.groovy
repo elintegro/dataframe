@@ -607,8 +607,11 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		}
 		Map domainFieldMapTans = this.domainFieldMap.get(TRANSITS);
 
+		//Init values if default values are required when creating layouts
+		Widget widgetObj = getWidget(fieldProp)
+		Object initValue = widgetObj.getInitValues(this, fieldProp)
 		//Add placeholder to additional data, if exists:
-		domainFieldMapTans.put(fieldName, ["${VALUE_ENTRY}": null])
+		domainFieldMapTans.put(fieldName, ["${VALUE_ENTRY}": initValue])
 	}
 
 	protected void addField(String fieldName, Map<String, Object> fieldProp){
