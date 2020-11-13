@@ -70,7 +70,6 @@ beans{
                                                         <v-row>
                                                                 <p class="paragraph">
                                                                     [WeDeliverTextParagraphOne]
-
                                                                 </p>
                                                         </v-row>
                                              </v-col>

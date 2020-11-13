@@ -63,6 +63,7 @@
     <asset:stylesheet href="/vuejs/vuetify-v2.0.5.css"/>
     <asset:stylesheet href="/vuejs/gc-vue.css"/>
     <asset:stylesheet href="/vuejs/homePageLayout.css"/>
+    <asset:stylesheet href="/vuejs/translatorAssistantLayout.css"/>
 
 </head>
 <body>
