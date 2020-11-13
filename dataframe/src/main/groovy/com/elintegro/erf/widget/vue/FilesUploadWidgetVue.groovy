@@ -10,18 +10,20 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
         String label = field.label
         boolean multiple = field?.multiple
 //        boolean deleteButton = field?.deleteButton
-        String attr = field?.attr
         String modelString = getModelString(dataframe, field)
 
         return """
-              <div $attr>
+            
                <v-file-input
                   label = "$label"
                   multiple
                   @change = "${fldName}_uploadFile"
                   ${toolTip(field)}
+                  ${getAttr(field)}
+                  prepend-icon=""
+                   prepend-inner-icon="mdi-file-upload"
                 >
-               </v-file-input></div>
+               </v-file-input>
                """
 
     }
