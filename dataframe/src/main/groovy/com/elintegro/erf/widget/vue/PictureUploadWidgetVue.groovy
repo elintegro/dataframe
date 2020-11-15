@@ -15,7 +15,11 @@ package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
+import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import org.apache.commons.lang.StringUtils
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 
 /**
  * Created by kchapagain on Dec, 2018.
@@ -41,6 +45,56 @@ class PictureUploadWidgetVue extends WidgetVue{
                </v-eutil-image-upload></div>
                """
     }
+    @Override
+    boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
+        if(isReadOnly(field)){
+            return false
+        }
+        JSONArray selectedItems =  convertToJSONArrayIfSingleJSONObject(inputValue)
+        JSONArray availableItems = inputValue.items
+
+        if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
+            def oldfldVal = domainInstance."${fieldName}"
+            if(oldfldVal == inputValue.value) return false
+            domainInstance."${fieldName}" = inputValue.value
+        }else if(domainClassInfo.isToMany(fieldName)){
+            return saveHasManyAssociation(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
+        }else if(domainClassInfo.isToOne(fieldName)){
+            def oldfldVal = domainInstance."${fieldName}".value
+            domainInstance."${fieldName}" = inputValue.value[0] //TODO: check if there is not exception in case of single choice
+        }
+        return true
+    }
+    private JSONArray convertToJSONArrayIfSingleJSONObject(JSONObject value){
+        JSONArray jn = new JSONArray()
+        jn.add(value)
+        return jn
+    }
+    //	saves onetomany and manytomany
+    private boolean saveHasManyAssociation(JSONArray inputValue, def refDomainClass, String fieldName, def domainInstance) {
+        def oldfldVal = domainInstance."${fieldName}"
+//        if (oldfldVal) {
+//            JSONArray oldfldValArr = new JSONArray(domainInstance."${fieldName}")
+//            if (isSelectionEqualsToOld(oldfldVal, inputValue)) {
+//                return false
+//            }
+//        }
+        domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
+        //Here i have tried to save imageName,imageType,imageSize in Images table ,if we need to save other attributes(fields) in future, need to change this code accordingly.
+        //Todo : Need to make this code more generic if possible so that we don't have to manually add hardcoded fields (like imageName,imageType.. )
+        inputValue.value.each{val ->
+            val.each {
+                def newInstance = refDomainClass.newInstance()
+                newInstance.name = it.imageName
+                newInstance.imageType = it.imageType
+                newInstance.imageSize = it.imageSize
+                newInstance.save()
+                //newly created image instance saving into cross table..
+                domainInstance."addTo${fieldName.capitalize()}"(newInstance)
+            }
+        }
+        return true
+    }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String fldName = dataframe.getDataVariableForVue(field)
@@ -65,8 +119,20 @@ class PictureUploadWidgetVue extends WidgetVue{
                 .addToMethodScript("""
            ${fldName}_uploadImages: function(event){
                         var detailData = event.detail;
-                        var fileList = detailData[3];
-                        this.${fldName}_files = fileList; 
+                        var imageList = detailData[3];
+                        this.${fldName}_files = imageList;
+                        let imageArray = [];
+                        for(let i = 0; i < imageList.length; i++){
+                            let imageData = {};
+                            imageData["imageName"] = imageList[i].name; 
+                            imageData["imageSize"] = imageList[i].size;
+                            imageData["imageType"] = imageList[i].type;
+                            imageArray.push(imageData);
+                        }
+                        let stateVariable = excon.getFromStore("$dataframe.dataframeName");
+                        stateVariable.${getFieldJSONNameVueWithoutState(field)} = imageArray;
+                        excon.saveToStore("$dataframe.dataframeName", stateVariable)
+                        
                     },\n
            ${deleteButton?"""${fldName}_beforeRemove: function(event){
                             var detailData = event.detail;

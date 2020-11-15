@@ -48,7 +48,7 @@ class Application extends ControlField{
     String lastComment
 
 
-    static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills,images: Images,files: Files]
+    static 	hasMany = [contacts: Person, availablePositions: Position, skills: Skills, images: Images, files: Files]
 
     static constraints = {
         applicant (nullable: true)

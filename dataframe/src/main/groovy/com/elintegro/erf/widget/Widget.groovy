@@ -18,6 +18,7 @@ import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.vue.DataframeConstants
+import com.elintegro.erf.dataframe.vue.DataframeVue
 import org.grails.datastore.mapping.model.PersistentEntity
 import org.grails.web.json.JSONObject
 
@@ -37,6 +38,7 @@ abstract class Widget<T> implements DataframeConstants{
 	abstract String getValueSetter(T dataframe, Map field, String divId, String fldId, String key)
 	abstract boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue)
 	abstract boolean setPersistedValueToResponse(JSONObject inputValue, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap)
+	abstract boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap)
 	public static final int ONE_SIMBOL_WITH = 6;
 
 	public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldName, Map inputData, def dbSession){
