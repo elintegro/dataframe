@@ -239,18 +239,39 @@ beans {
                     },"""
     }
 
-    vueLoginDataframe_script(VueJsEntity) { bean ->
-        methods = """dialogBoxClose(){
-                    console.log("login dataframe close button.");
-                    },"""
+    vueLoginDataframe_script(VueJsEntity){bean->
+        data = "vueLoginDataframe_tab_model : this.tabValue,\nvueLoginDataframe_display: true, \n"
+        computed = """tabValue(){return this.\$store.state.vueLoginDataframe.vueLoginDataframe_tab_model}"""
+        watch = """ tabValue:{handler: function(val, oldVal) {this.vueLoginDataframe_tab_model = val;}},"""
     }
-    vueElintegroLoginDataframe_script(VueJsEntity){ bean ->
-        data = """showLoginWithOTPbutton : false ,"""
-        watch = """showHideLoginWithOTPbutton:{handler: function(val, oldVal){ this.showLoginWithOTPbutton = val;}},\n"""
-        computed = """showHideLoginWithOTPbutton(){ if(this.state.vueElintegroLoginDataframe_user_username){ return true;} else{return false;}},\n"""
-        methods = """loginWithOTP(){
+    vueElintegroLoginWithOTPDataframe_script(VueJsEntity){bean ->
+        data = """showSendCodeButton : false ,showThisFieldAfterCodeSent : false,"""
+        watch = """showHideSendCodeButton:{handler: function(val, oldVal){ this.showSendCodeButton = val;}},\n"""
+        computed = """showHideSendCodeButton(){ if(this.state.vueElintegroLoginWithOTPDataframe_emailOrPhone){ return true;} else{return false;}},\n"""
+        methods = """sendVerificationCode(){
                               var allParams = this.state;
-                              allParams['dataframe'] = 'vueElintegroLoginDataframe';
+                              allParams['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              axios({
+                                    method:'post',
+                                    url:'login/sendVerificationCodeForLoginWithOTP',
+                                    data:allParams
+                              }).then(function(responseData){
+                                console.log(responseData);
+                                var response = responseData.data;
+                                excon.showMessage(responseData,'vueElintegroLoginWithOTPDataframe');
+                                if(response.success == true){
+                                 self.showThisFieldAfterCodeSent = true;
+                                 self.showSendCodeButton = false;
+                                }
+                                else{
+                                  excon.setVisibility('vueElintegroRegisterDataframe',true);
+                                }
+                              })
+                 },\n
+                 loginWithVerificationCode(){
+                              var allParams = this.state;
+                              allParams['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
                               var self = this;
                               axios({
                                     method:'post',
@@ -259,16 +280,19 @@ beans {
                               }).then(function(responseData){
                                 console.log(responseData);
                                 var response = responseData.data;
-                                excon.showMessage(responseData,'vueElintegroLoginDataframe');
+                                excon.showMessage(responseData,'vueElintegroLoginWithOTPDataframe');
                                 if(response.success == true){
-                                 excon.redirectPage(self,'login-with-otp');
+                                 self.showThisFieldAfterCodeSent = true;
+                                 self.showSendCodeButton = false;
                                 }
                                 else{
                                   excon.setVisibility('vueElintegroRegisterDataframe',true);
                                 }
                               })
-                 },\n"""
-
+                 
+                 
+                 },\n
+                 """
     }
     vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
         methods = """

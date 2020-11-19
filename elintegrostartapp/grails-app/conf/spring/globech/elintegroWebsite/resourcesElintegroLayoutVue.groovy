@@ -218,11 +218,25 @@ beans {
                                 </v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
+    vueLoginDataframeLayout(ColumnLayoutVue){bean ->
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
+                                <v-tabs color="white" slider-color="yellow"  background-color="blue darken-2" v-model="vueLoginDataframe_tab_model">
+                                    <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroLoginDataframe-tab-id">Login</v-tab>
+                                    <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroLoginWithOTPDataframe-tab-id">Login with OTP</v-tab>
+                                      <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
+                                      </v-btn><span>Close</span></v-tooltip></v-flex>  
+                                </v-tabs>
+                                 
+                                <v-tabs-items v-model="vueLoginDataframe_tab_model">
+                                     <v-tab-item value="vueElintegroLoginDataframe-tab-id"><vueElintegroLoginDataframe/></v-tab-item>
+                                     <v-tab-item value="vueElintegroLoginWithOTPDataframe-tab-id"><vueElintegroLoginWithOTPDataframe/></v-tab-item>
+                                     </v-tabs-items></v-card></v-flex>
+                                </v-flex>
+                            """
+    }
     vueElintegroLoginDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class="rounded-card" style="width:320px; border-radius:10px;"><v-toolbar dark color="blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
-                                <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click="closeDataframe"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT]<v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class="rounded-card" style="width:320px; border-radius:10px;">[DATAFRAME_SCRIPT]<v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
     }
     vueElintegroForgetPasswordDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -233,9 +247,7 @@ beans {
     }
     vueElintegroLoginWithOTPDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex><v-row><v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col>
-                              <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" style="padding-top:5%;"> <v-card>[DATAFRAME_SCRIPT]<v-card-actions class="justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-col>
-                               <v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col></v-row></v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class="rounded-card" style="width:320px; border-radius:10px;">[DATAFRAME_SCRIPT]<v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
 

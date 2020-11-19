@@ -18,6 +18,8 @@ import com.elintegro.gc.AuthenticationService
 import com.elintegro.otpVerification.Otp
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
+import grails.util.Holders
+
 //import grails.plugin.springsecurity.rest.oauth.OauthUser
 import org.springframework.security.authentication.AccountExpiredException
 import org.springframework.security.authentication.CredentialsExpiredException
@@ -29,7 +31,7 @@ import java.text.DecimalFormat
 
 class LoginController extends grails.plugin.springsecurity.LoginController {
 
-//    def springSecurityService
+    def emailService
 //    def messageSource
     def authenticationService
     def user = null
@@ -190,26 +192,57 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
 
         return userInfo
     }
-    def loginWithOTP(){
+    def sendVerificationCodeForLoginWithOTP(){
         def params = request.getJSON();
         def result
-        User user1 = User.findByUsername(params.vueElintegroLoginDataframe_user_username)
+        User user1 = User.findByUsername(params.vueElintegroLoginWithOTPDataframe_emailOrPhone)
         if(user1){
             String verificationCode = new DecimalFormat("000000").format(new Random().nextInt(999999));
             Otp otp = new Otp()
-            otp.verificationCode = verificationCode
+            def encodedVerificationCode = springSecurityService.encodePassword(verificationCode)
+            otp.verificationCode = encodedVerificationCode
             otp.createTime = new Date()
             otp.expireTime = new Date().plus(1)
             otp.user = user1
             otp.save()
+            def conf = Holders.grailsApplication.config
+            String emailBody = conf.loginController.emailForLoginWithOTP
+            Map emailParams = [verificationCode:verificationCode]
+            try {
+                emailService.sendMail(user1.email,emailParams,emailBody)
+            } catch(Exception e){
+                log.error("Email sending failed"+e)
+                println("email sending failed"+e)
+            }
             result = [success: true,msg: "we sent a verification code in your email. Please check and follow instructions.",alert_type: "success"]
 
         }
         else{
             result = [success:false , msg: "We don't have user with this email. Would you like to register ?",alert_type:"error"]
         }
-        println(params)
+        render result as JSON
+    }
+    def loginWithOTP(){
+        def param = request.getJSON()
+        println(param)
+        User user1 = User.findByUsername(param.vueElintegroLoginWithOTPDataframe_emailOrPhone)
+        Otp otp = Otp.findByUserAndVerificationCode(user1,param.vueElintegroLoginWithOTPDataframe_verificationCode)
+        def result
+        if(otp){
+            try {
+                springSecurityService.reauthenticate(user1.username,otp.verificationCode)
+                println("Authentication successful")
+                result = [success: true,msg: "Login successful",alert_type: "success"]
+            }catch(Exception e){
+                log.error("Couldn't authenticate this user.")
+                println("Couldn't authenticate")
+                result = [success: false,msg: "Couldn't authenticate this user.",alert_type: "error"]
+            }
+        }
+        else{
+            result = [success: false,msg:"This code has been expired already",alert_type: "error"]
 
+        }
         render result as JSON
     }
 }

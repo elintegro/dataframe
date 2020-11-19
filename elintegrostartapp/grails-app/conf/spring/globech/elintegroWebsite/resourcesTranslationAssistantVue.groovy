@@ -144,7 +144,7 @@ beans{
                 ],
         ]
         dataframeButtons=[
-                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#1976D2; color:white;' v-show = 'showDownloadAllTranslatedFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;' v-show = 'showDownloadAllTranslatedFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                 addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#1976D2; color:white;' """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm12', 'md6', 'lg6', 'xl6'],]
         ]
         childDataframes = ['vueAddNewRecordForCurrentProjectDataframe','vueGridOfTranslatedTextDataframe']

@@ -26,6 +26,7 @@ class InputWidgetVue extends WidgetVue {
         boolean isReadOnly = dataframe.isReadOnly(field)
         String autoComplete = field.autoComplete?:'off'
         String clearable = field.clearable?"clearable":""
+        String placeholder = field.placeholder?:""
         String modelString = getModelString(dataframe, field)
         String html = """<v-text-field
             label="${getLabel(field)}"
@@ -37,6 +38,7 @@ class InputWidgetVue extends WidgetVue {
             style="width:${getWidth(field)}; height:${getHeight(field, "40px")};"
             background-color="white"
             autocomplete = $autoComplete
+            placeholder = "$placeholder"
             $clearable
             ${getAttr(field)}
           ></v-text-field>"""

@@ -64,7 +64,7 @@ beans {
         dataframeButtons = [register       : [name: "register", type: "link", showAsDialog: true, attr:"style='color:#1976D2;'",
                                               refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             login          : [name: "login", type: "link",showAsDialog: true,attr:"style='color:#1976D2;'",
-                                              refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                                              refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             contactUs      : [name: "contactUs", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             careers        : [name: "careers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                            ]
@@ -505,13 +505,21 @@ beans {
 
         currentFrameLayout = ref("contactUsPageDataframeLayout")
     }
+    vueLoginDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueLoginDataframe']
+        initOnPageLoad = false
+        saveButton = false
+        isGlobal = true
+        currentFrameLayout = ref("vueLoginDataframeLayout")
+    }
     vueElintegroLoginDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroLoginDataframe']
-        dataframeLabelCode = "User.Login"
         hql = "select user.username, user.password from User as user where user.id=:id"
         wrapInForm = true
         saveButton = false
+        tab = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         initOnPageLoad = false
         isGlobal = true
@@ -538,7 +546,6 @@ beans {
                                                                                              var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                               """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
-                             loginWithOtp:[name:"loginWithOTP",type: "button", attr: """color='blue darken-2' width='100%' style="color:white;" v-show='showLoginWithOTPbutton' """, "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script: """this.loginWithOTP();"""],
                                      login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs6 sm6 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark rounded style="width: 10px; margin-left:65px;" """, doBeforeSave:""" var elementId = '#vueElintegroLoginDataframe';
                                      allParams["username"] = this.state.vueElintegroLoginDataframe_user_username;
                                      allParams["password"] = this.state.vueElintegroLoginDataframe_user_password;
@@ -567,10 +574,23 @@ beans {
         bean.constructorArgs = ['vueElintegroLoginWithOTPDataframe']
         currentRoute = 'login-with-otp'
         initOnPageLoad = false
-        route = true
+        tab = true
+        isGlobal = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         saveButton = false
-        addFieldDef = ["verificationCode":[widget:"InputWidgetVue",placeholder: "Enter the verification code",]]
+        addFieldDef = [
+                "emailOrPhone":[name:"emailOrPhone",widget: "InputWidgetVue",placeholder: "Enter your email or phone"],
+                "sendCode":[widget: "ButtonWidgetVue"
+                           ,insertAfter: "emailOrPhone"
+                           ,attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;' v-show = 'showSendCodeButton' """
+                           ,script: """this.sendVerificationCode();"""],
+                "verificationCode":[widget:"InputWidgetVue",placeholder: "Enter the verification code",attr: """v-show = 'showThisFieldAfterCodeSent'"""],
+                "codeNotReceived":[widget: "TextDisplayWidgetVue",displayWithLabel:false,attr: """v-show='showThisFieldAfterCodeSent'""", "flexGridValues": ['xs8', 'sm8', 'md8', 'lg8', 'xl8']],
+                "resendCode":[widget: "ButtonWidgetVue"
+                             ,insertAfter: "codeNotReceived"
+                             ,attr: """style='background-color:white;color:#1976D2; text-transform:capitalize;margin-left:-20px;margin-top:-5px;' text v-show='showThisFieldAfterCodeSent' """
+                             ,"flexGridValues": ['xs4', 'sm4', 'md4', 'lg4', 'xl4']]]
+        dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.loginWithVerificationCode();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroLoginWithOTPDataframeLayout")
 
     }
