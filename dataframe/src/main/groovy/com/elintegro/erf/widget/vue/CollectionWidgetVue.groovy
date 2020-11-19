@@ -29,13 +29,7 @@ class CollectionWidgetVue extends WidgetVue {
         if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
             def oldfldVal = domainInstance."${fieldName}"
             if(oldfldVal == inputValue.value) return false
-/*
-            if(inputValue.value instanceof List){
-               addAssociationToDomainInstance(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
-            }else {
-*/
-                domainInstance."${fieldName}" = inputValue.value
-//            }
+            domainInstance."${fieldName}" = inputValue.value
         }else if(domainClassInfo.isToMany(fieldName)){
             return saveHasManyAssociation(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
         }else if(domainClassInfo.isToOne(fieldName)){
@@ -54,13 +48,14 @@ class CollectionWidgetVue extends WidgetVue {
     boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
         Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
         if(additionalData && additionalData.containsKey("items")){
-            List items = additionalData.items
+            List items = (List)additionalData.items
             List valueList = new ArrayList()
+            String displayMember = fieldProps.displayMember?:fieldName
             if(items && value){
                 for(int j=0; j<items.size(); j++){
                     Map item = (Map) items[j]
                     for(int k=0; k<value.size(); k++){
-                        if(item."$fieldName" == value[k]){
+                        if(item."$displayMember" == value[k]){//check if same item and add to list
                             valueList.add(item)
                             continue;
                         }

@@ -591,8 +591,8 @@ beans {
         bean.constructorArgs = ['vueElintegroUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, language.ename from Person as person inner join person.languages language where person.id=:id"
-//        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, language from Person as person inner join person.languages language where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, language.ename, address.addressText from Person as person inner join person.languages language inner join person.addresses address where person.id=:id"
+//        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages from Person as person where person.id=:id"
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -632,7 +632,7 @@ beans {
                          ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
                 ],
                 "language.ename":[
-                        widget: "ListWidgetVue"
+                        widget: "ComboboxVue"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
                         ,"displayMember":"ename"
@@ -641,6 +641,15 @@ beans {
                         ,multiple: true
                 ],
 
+                "address.addressText":[
+                        widget: "ListWidgetVue"
+                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
+                        , hql: """select address.id as id, address.addressText as addres from Address as address"""
+                        ,"displayMember":"addres"
+                        ,"valueMember":"id"
+                        , search:true
+                        ,multiple: true
+                ],
                 "person.mainPicture":[
                         "widget" : "PictureDisplayWidgetVue",
                         "aspectRatio":"2.5",

@@ -180,7 +180,7 @@ class DataframeInstance implements DataframeConstants{
 //				this.record = results[0] //TODO: its hard coded assumption we have only one record per Dataframe!
 				calculateFieldValuesAsKeyValueMap();// todo merge with below method
 				this.record = results.size()==1? results[0]:calculateFieldValuesAsKeyValueMapNew(results)
-				log.debug("");
+				log.debug(this.record.toString())
 			}else{
 				isDefault = true
 				//throw new DataframeException(df, "No record found for the Dataframe");
@@ -1098,45 +1098,40 @@ class DataframeInstance implements DataframeConstants{
 		return resultMap
 	}
 
-	private List calculateFieldValuesAsKeyValueMapNew(List result){
-        List resultList
-		if(result){
+	/**
+	 *
+	 * @param result = [[1, "hello", 987654321", "hebrew"],[1, "hello", 987654321", "french"]]
+	 * @return [1, "hello", 987654321", ["hebrew", "french"]]
+	 */
+	private List calculateFieldValuesAsKeyValueMapNew(List record){
+        List recordToCompareWith
+		if(record){
 			List lst = df.fields.getDbList()
-			int recSize = result.size()
-			List record = result[0]
-			for(int i = 1; i < recSize; i++){
-				List currentRecord = result[i]
-//				Map resultM = [:]
-				for(int j = 0; j < currentRecord.size(); j++) {
-//					def fldName = lst.get(j)
-//					def val = result.getAt(j);
-//					if(resultM.containsKey(fldName)){
-//						def oldVal = resultM.get(fldName)
-//						List newList = [oldVal]
-//						oldVal instanceof List?newList.addAll(oldVal):newList.add(oldVal)
-//						resultM.put(fldName, newList)
-//					} else{
-//						resultM.put(fldName, val);
-//					}
-					if(record[j] instanceof List){
-						if(!record[j].contains(currentRecord[j])){
-							record[j].add(currentRecord[j])
-						}
-					} else {
-						if(currentRecord[j] != record[j]){
-							def oldVal = record[j]
-							List newList = [oldVal]
-							newList.add(currentRecord[j])
-							record[j] = newList
-						}
-					}
-				}
-//				resultList.add(resultM)
-				resultList = record
+			int recSize = record.size()
+			recordToCompareWith = (List)record[0] //First record taken for comparison
+			for(int i = 1; i < recSize; i++) {
+				combineRecords((List)record[i], recordToCompareWith)
 			}
 		}
-		return resultList
+		return recordToCompareWith
 	}
+	private void combineRecords(List currentRecord, List recordToCompareWith){
+		for(int j = 0; j < currentRecord.size(); j++) {
+			if(recordToCompareWith[j] instanceof List){//First time its just record[0] not List, subsequent times it is List
+				if(!recordToCompareWith[j].contains(currentRecord[j])){
+					recordToCompareWith[j].add(currentRecord[j])
+				}
+			} else { //changes recordToCompareWith[j] to List
+				if(currentRecord[j] != recordToCompareWith[j]){
+					def oldVal = recordToCompareWith[j]
+					List newList = [oldVal]
+					newList.add(currentRecord[j])
+					recordToCompareWith[j] = newList
+				}
+			}
+		}
+	}
+
 	public boolean fieldValidate(String fieldName, String fldVal){
 		boolean validateFlag = true
 		df?.fields?.getList()?.each {it ->
