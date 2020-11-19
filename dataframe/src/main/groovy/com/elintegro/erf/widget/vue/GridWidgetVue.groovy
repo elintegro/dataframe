@@ -62,23 +62,23 @@ class GridWidgetVue extends WidgetVue {
         return true
     }
 
-    @Override
-    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
-        if(additionalDataRequestParamMap.containsKey(items)){
-            jData?.persisters?."${domainAlias}"."${fieldName}"."${items}" = additionalDataRequestParamMap."${items}"
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
+        if(additionalData.containsKey(items)){
+            jData?.persisters?."${domainAlias}"."${fieldName}"."${items}" = additionalData."${items}"
         }
-        if(additionalDataRequestParamMap.containsKey(headers)){
-            jData?.persisters?."${domainAlias}"."${fieldName}"."${headers}" = additionalDataRequestParamMap."${headers}"
+        if(additionalData.containsKey(headers)){
+            jData?.persisters?."${domainAlias}"."${fieldName}"."${headers}" = additionalData."${headers}"
         }
     }
 
-    @Override
-    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
-        if(additionalDataRequestParamMap.containsKey(items)){
-            jData?.transits?."${fieldName}"."${items}" = additionalDataRequestParamMap."${items}"
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataMap, sessionHibernate)
+        if(additionalData.containsKey(items)){
+            jData?.transits?."${fieldName}"."${items}" = additionalData."${items}"
         }
-        if(additionalDataRequestParamMap.containsKey(headers)){
-            jData?.transits?."${fieldName}"."${headers}" = additionalDataRequestParamMap."${headers}"
+        if(additionalData.containsKey(headers)){
+            jData?.transits?."${fieldName}"."${headers}" = additionalData."${headers}"
         }
     }
 
@@ -191,6 +191,8 @@ $fieldParams
             requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
         field.put("dataHeader", dataHeader);
+        VueStore store = dataframe.getVueJsBuilder().getVueStore()
+        store.addToState("${field.name}_selectedrow : '',\n")
         def parentDataframeName = dataframe.dataframeName
         String onClickMethod    = " "
         String refDataframeName = ""
@@ -207,13 +209,13 @@ $fieldParams
                 DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
                 refDataframeName = refDataframe.dataframeName
                 onClickMethod    = "${fldName}_showDetail$refDataframeName(props.item)"
-                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName)
+                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName, field.name)
             }
         }
 
         if (onButtonClick){
 //            showRefreshMethod = true
-            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader)
+            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader, field.name)
 
         }
         field.put("gridDataframeList", gridDataframeList);
@@ -280,7 +282,6 @@ $fieldParams
         return """
            ${dataVariable}_headers: [],
            ${dataVariable}_items: [],
-           ${dataVariable}_selectedrow:{},
 """
     }
 
@@ -316,9 +317,9 @@ $fieldParams
         return embDDfr
     }
 
-    public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldnameToReload, Map inputData, def dbSession){
+    public Map loadAdditionalData(DataframeInstance dataframeInst, Map fieldProps, String fieldnameToReload, Map inputData, def dbSession){
         DataframeVue dataframe = dataframeInst.df;
-        Map fieldProps = dataframe.fields.get(fieldnameToReload);
+//        Map fieldProps = dataframe.fields.get(fieldnameToReload);
         //Add fields from the Dataframe as possible input parameters for the additional HQL:
         inputData.putAll(dataframeInst.getFieldValuesAsKeyValueMap());
         Map sessionParams = dataframeInst.sessionParams
@@ -409,7 +410,7 @@ $fieldParams
     }
 
     private void getOnButtonClickScript(onButtonClick, DataframeVue dataframe,  StringBuilder onclickDfrBuilder
-                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader){
+                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader, String nameOfField){
         String buttonHoverMessage = ""
         onButtonClick.each{Map onButtonClickMaps ->
             String actionName = getMessageSource().getMessage(onButtonClickMaps?.actionName?:"", null, onButtonClickMaps?.actionName?:"", LocaleContextHolder.getLocale())
@@ -437,16 +438,16 @@ $fieldParams
                 }else if(editButton){
                     btnName = "editButton"
                     vIcon.name = "edit"
-                    methodScript = getEditJavascript(buttonMaps, dataframe, fldName)
+                    methodScript = getEditJavascript(buttonMaps, dataframe, fldName, nameOfField)
                 } else if(showDetail){
                     btnName = "detailsButton"
-                    methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName)
+                    methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName, nameOfField)
                 } else {
                     methodScript = buttonMaps.script
                     btnName = buttonMaps.name
                     if(!btnName) throw new DataMissingException("name is required for each action buttons")
                     if(buttonMaps?.refDataframe && !buttonMaps.script){
-                        methodScript= getEditJavascript(buttonMaps, dataframe, fldName)
+                        methodScript= getEditJavascript(buttonMaps, dataframe, fldName, nameOfField)
                     }
                     if(!methodScript){
                         methodScript = ""
@@ -482,13 +483,13 @@ $fieldParams
     }
 
     private void getOnClickScript(def onClick, DataframeVue dataframe, String refDataframeName, StringBuilder onclickDfrBuilder, def gridDataframeList
-                                  , String fldName){
+                                  , String fldName, String fieldOfName){
 
         String stateName = fldName + "_onClick"
 
         onclickDfrBuilder.append(getRefDataframeHtml(onClick, dataframe, fldName, gridDataframeList))
         dataframe.getVueJsBuilder().addToMethodScript(""" ${fldName}_showDetail$refDataframeName: function(dataRecord){
-                                             ${getShowDetailJavascript(onClick, dataframe, fldName)}
+                                             ${getShowDetailJavascript(onClick, dataframe, fldName, fieldOfName)}
                                              },\n""")
 
     }
@@ -563,11 +564,11 @@ $fieldParams
         return resultPageHtml.toString()
     }
 
-    private String getEditJavascript(Map onClickMap, DataframeVue dataframe, String fldName){
-        return getShowDetailJavascript(onClickMap, dataframe, fldName)
+    private String getEditJavascript(Map onClickMap, DataframeVue dataframe, String fldName, String nameOfField){
+        return getShowDetailJavascript(onClickMap, dataframe, fldName, nameOfField)
     }
 
-    private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName){
+    private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName, String nameOfField){
         String parentDataframeName = dataframe.dataframeName
         String updateStoreCallScript = ""
         if(!onClickMap.refDataframe){
@@ -592,7 +593,7 @@ $fieldParams
                               ${excon}.setSelectedGridDataToRequestParams(dataRecord, "${refDataframeName}")
                               Vue.set(this.${refDataframeName}_data, 'key', key);
                               Vue.set(this.${refDataframeName}_data, 'refreshInitialData', ${refreshInitialData?'Math.random()':false});
-                              ${excon}.saveToStore('${parentDataframeName}', '${fldName}_selectedrow', dataRecord);
+                              ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
                               ${excon}.setVisibility("${refDataframeName}", true);
                     \n 
                     """

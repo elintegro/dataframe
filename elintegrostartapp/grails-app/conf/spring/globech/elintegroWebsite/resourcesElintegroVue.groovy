@@ -169,7 +169,7 @@ beans {
                         widget            : "GridWidgetVue"
                         , name            : "clientProject"
 
-                        ,hql             : """select clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
+                        ,hql             : """select clientProject.id as Id, clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
                                                 clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
 
 
@@ -185,12 +185,45 @@ beans {
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
                         ,url:'/'
+                        ,onButtonClick : [
+                        ['actionName': 'Edit client Project', 'buttons': [
+                                [name : "edit"
+                                 ,MaxWidth: 500
+                                 ,showAsDialog: true
+                                 ,tooltip : [message: "tooltip.grid.edit", internationalization: true]
+                                 ,refDataframe: ref("clientProjectEditDataframe")
+                                 ,vuetifyIcon : [name: "edit"]
+                                 ,refreshInitialData:true
+                                ]]]]
 
                 ]
         ]
         currentFrameLayout = ref("clientProjectPageDataframeLayout")
 
     }
+
+    clientProjectEditDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['clientProjectEditDataframe']
+        hql = """select clientProject.id, clientProject.clientName, clientProject.projectName, clientProject.logo, clientProject.description, clientProject.linkToWebsite from ClientProject clientProject where clientProject.id=:id"""
+
+        initOnPageLoad = true
+        putFillInitDataMethod = true
+        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        saveButton = true
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+
+        doAfterSave = """
+excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 'U', "transits");
+"""
+
+        doBeforeSave = """
+"""
+        doBeforeRefresh=""""""
+        currentFrameLayout = ref("defaultDataframeLayout")
+
+    }
+
     vueTechnologiesDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTechnologiesDataframe']

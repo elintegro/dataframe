@@ -13,7 +13,7 @@ import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import org.springframework.context.i18n.LocaleContextHolder
 
-class CollectionWidgetVue extends WidgetVue {
+abstract class CollectionWidgetVue extends WidgetVue {
     //This assigns a new value and returns true if new value was different then the old one
     public String getHtml(DataframeVue dataframe, Map field){
         return ""
