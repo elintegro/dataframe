@@ -73,29 +73,30 @@ beans {
 
         currentFrameLayout = ref("elintegroNavigationButtonLayout")
     }
-//    vueElintegroLanguageSelectorDataframe(DataframeVue){bean ->
-//        bean.parent = dataFrameSuper
-//        bean.constructorArgs = ['vueElintegroLanguageSelectorDataframe']
-//        initOnPageLoad = true
-//        def languageCodeFromConfigFile = Holders.grailsApplication.config.application.languages
-//        def languageCode = languageCodeFromConfigFile.replace('"""','')
-//        isGlobal = true
-//        saveButton = false
-//        doAfterRefresh = """self.changeSelectedLanguageValue(response);"""
-//        addFieldDef = [
-//                "languages":[
-//                        widget: "LanguageSelectorWidgetVue"
-//                        ,"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-//                        , hql: """select language.id as id,language.code as code, language.ename as ename from Language as language where language.code in (${languageCode})"""
-//                        ,"displayMember":"ename"
-//                        ,"valueMember":"ename"
-//                        , search:true
-//                        ,attr: """style='max-width:min-content;margin-top=-2%;'"""
-//                        ,onSelect:[methodScript:"this.selectedLanguage(_params);"]
-//                ],]
-//        currentFrameLayout = ref("vueElintegroLanguageSelectorDataframeLayout")
-//
-//    }
+    vueElintegroLanguageSelectorDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroLanguageSelectorDataframe']
+        initOnPageLoad = true
+        def languageCodeFromConfigFile = Holders.grailsApplication.config.application.languages
+        def languageCode = languageCodeFromConfigFile.replace('"""','')
+        isGlobal = true
+        saveButton = false
+        initOnPageLoad = true
+        doAfterRefresh = """self.changeSelectedLanguageValue(response);"""
+        addFieldDef = [
+                "languages":[
+                        widget: "LanguageSelectorWidgetVue"
+                        ,"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                        , hql: """select language.id as id,language.code as code, language.ename as ename from Language as language where language.code in (${languageCode})"""
+                        ,"displayMember":"ename"
+                        ,"valueMember":"ename"
+                        , search:true
+                        ,attr: """style='max-width:min-content;margin-top=-2%;'"""
+                        ,onSelect:[methodScript:"this.selectedLanguage(_params);"]
+                ],]
+        currentFrameLayout = ref("vueElintegroLanguageSelectorDataframeLayout")
+
+    }
     vueElintegroNavigationButtonAfterLoggedInDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroNavigationButtonAfterLoggedInDataframe']

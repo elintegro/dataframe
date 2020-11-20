@@ -56,7 +56,7 @@ beans {
                                       <v-list-item style="margin-left:5%;position:fixed;height:auto;"><vueElintegroAppsDataframe/> </v-list-item>
                                       <v-list-item style="margin-top: 40%;" ><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                          <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
-                                      <v-list-item style="margin-top:-12%;margin-left:-10%" ></v-list-item>
+                                      <v-list-item style="margin-top:-12%;margin-left:-10%" ><vueElintegroLanguageSelectorDataframe/></v-list-item>
                                      </v-list>
                                      </v-navigation-drawer>
        </div>"""
@@ -87,7 +87,7 @@ beans {
                                   <div style="padding: 40px 0px 0px 0px;"><vueElintegroAppsDataframe/></div>
                                   <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                   <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/> 
-                                  <div></div>
+                                  <div><vueElintegroLanguageSelectorDataframe/></div>
                                 </v-row> 
                                 </v-toolbar-items>
         </v-flex> """

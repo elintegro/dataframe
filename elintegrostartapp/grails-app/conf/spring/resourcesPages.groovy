@@ -9,10 +9,9 @@ beans {
 
 				"vueInitDataframe","vueElintegroProgressBarDataframe","vueFirstContainerDataframe",
 				"vueOurWorkContainerDataframe","vueOurProcessContainerDataframe","vueCollaborationContainerDataframe",
-				"vueOurFrameworkContainerDataframe","vueQuotesContainerDataframe","vueOurTechnologiesContainerDataframe","vueElintegroSignUpQuizDataframe","vueElintegroChangePasswordAfterSignUpDataframe","vueQuizPlaceholderContainerDataframe","vueFooterPrivacyDataframe","vueTermAndConditionDataframe","vueFooterContainerDataframe","vueElintegroHomeDataframe","vueElintegroNavigationDrawerDataframe",
-
-
-
+				"vueOurFrameworkContainerDataframe","vueQuotesContainerDataframe","vueOurTechnologiesContainerDataframe","vueElintegroSignUpQuizDataframe",
+				"vueElintegroChangePasswordAfterSignUpDataframe","vueQuizPlaceholderContainerDataframe","vueFooterPrivacyDataframe","vueTermAndConditionDataframe","vueFooterContainerDataframe",
+				"vueElintegroHomeDataframe","vueElintegroLanguageSelectorDataframe","vueElintegroNavigationDrawerDataframe",
 				"vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe","vueNewEmployeeApplicantAddSkillDataframe"
 				,"vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe","vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 				"vueElintegroResetPasswordDataframe","vueElintegroUserProfileDataframe","vueElintegroProfileMenuDataframe","vueCareersPageButtonDataframe",

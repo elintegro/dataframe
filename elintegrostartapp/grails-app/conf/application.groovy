@@ -28,7 +28,34 @@ grails.mime.types = [
 		multipartForm: 'multipart/form-data',
 		rss:           'application/rss+xml',
 		text:          'text/plain',
-		xml:           ['text/xml', 'application/xml']
+		xml:           ['text/xml', 'application/xml'],
+		doc:           ['application/msword'],
+		dot:           ['application/msword'],
+		docx:          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+		dotx:          ['application/vnd.openxmlformats-officedocument.wordprocessingml.template'],
+		docm:           'application/vnd.ms-word.document.macroEnabled.12',
+		dotm:          'application/vnd.ms-word.template.macroEnabled.12',
+        xls:           'application/vnd.ms-excel',
+		xlt:           'application/vnd.ms-excel',
+		xla:           'application/vnd.ms-excel',
+		xlsx:          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+		xltx:          'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+		xlsm:          'application/vnd.ms-excel.sheet.macroEnabled.12',
+		xltm:          'application/vnd.ms-excel.template.macroEnabled.12',
+		xlam:          'application/vnd.ms-excel.addin.macroEnabled.12',
+		xlsb:          'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+        ppt:           'application/vnd.ms-powerpoint',
+		pot:           'application/vnd.ms-powerpoint',
+		pps:           'application/vnd.ms-powerpoint',
+		ppa:           'application/vnd.ms-powerpoint',
+		pptx:          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+		potx:          'application/vnd.openxmlformats-officedocument.presentationml.template',
+		ppsx:          'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+		ppam:          'application/vnd.ms-powerpoint.addin.macroEnabled.12',
+		pptm:          'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+		potm:          'application/vnd.ms-powerpoint.template.macroEnabled.12',
+		ppsm:          'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
+        mdb:           'application/vnd.ms-access',
 ]
 
 // URL Mapping Cache Max Size, defaults to 5000
@@ -109,10 +136,19 @@ images {
 		s3 = false
 	}
 //	storageLocation = "/opt/tomcat-8/webapps"
-	storageLocation = "/opt/tomcat-8/webapps"
+	storageLocation = "/usr/local/opt/apache-tomcat-9.0.33/webapps"
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
-	defaultImagePath = "assets/$defaultImageName"
+	defaultImagePath = "/assets/$defaultImageName"
+	defaultImageForPdf = "defaultPdfIcon.PNG"
+	defaultImagePathForPdf = "assets/$defaultImageForPdf"
+	defaultImageForExcel = 'defaultExcelFileIcon.PNG'
+	defaultImagePathForExcel = "assets/$defaultImageForExcel"
+	defaultImageForDocFile = 'defaultDocFileIcon.PNG'
+	defaultImagePathForDocFile = "assets/$defaultImageForDocFile"
+	defaultImageForCsvFile = 'defaultCsvIcon.PNG'
+	defaultImagePathForCsvFile = "assets/$defaultImageForCsvFile"
+
 
 
 }
@@ -328,17 +364,18 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 	}
 
 	qa {
-		baseUrl = "http://208.75.75.98"
-		rootPath = "elintegrostartapp"
-		grails.serverURL = "http://208.75.75.98"
+		server.contextPath = "/"
+		rootPath = ""
+		grails.serverURL = "https://qa.elintegro.com"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro@QA'
 		dataSource {
-			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
-//			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
+			logSql = true
+//			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
 //			url = " jdbc:mysql://0.tcp.ngrok.io:15905/gcerf"
-			url = "jdbc:mysql://localhost:3306/elintegrostartapp_db"
+			url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_qa?useUnicode=true&characterEncoding=UTF-8"
 			username = "developer"
-			password = "java11"
+			password = "java1177"
 			logSql = true
 //            pooled = true
 //            jmxExport = true
@@ -368,13 +405,13 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 	production {
 		server.contextPath = "/"
 		rootPath = ""
-		grails.serverURL = "qa.elintegro.com"
+		grails.serverURL = "https://www.elintegro.com"
 		grails.plugin.springsecurity.ui.register.emailFrom='elintegro.himalaya'
 		dataSource {
 			logSql = true
 //			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
 			dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
-			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev"
+			url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_prod?useUnicode=true&characterEncoding=UTF-8"
 			username = "developer"
 			password = "java1177"
 
@@ -401,6 +438,43 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 			}
 		}
 	}
+docker {
+	server.contextPath = "/"
+	rootPath = ""
+	grails.serverURL = "https://web.elintegro.com"
+	grails.plugin.springsecurity.ui.register.emailFrom='elintegro@QA'
+	dataSource {
+		logSql = true
+//		dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+		dbCreate = 'update' //"update" // one of 'create', 'create-drop','update'
+		url = "jdbc:mysql://95.217.159.62:3316/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
+		username = "developer"
+		password = "java1177"
+		logSql = true
+//            pooled = true
+//            jmxExport = true
+//            driverClassName = "com.mysql.jdbc.Driver"
+		properties {
+			jmxEnabled = true
+			initialSize = 5
+			maxActive = 50
+			minIdle = 5
+			maxIdle = 25
+			maxWait = 10000
+			maxAge = 10 * 60000
+			timeBetweenEvictionRunsMillis = 5000
+			minEvictableIdleTimeMillis = 60000
+			validationQuery = "SELECT 1"
+			validationQueryTimeout = 3
+			validationInterval = 15000
+			testOnBorrow = true
+			testWhileIdle = true
+			testOnReturn = false
+			jdbcInterceptors = "ConnectionState"
+			defaultTransactionIsolation = java.sql.Connection.TRANSACTION_READ_COMMITTED
+		}
+	}
+}
 }
 //grails.server.port.https = 9090
 loginWithSpringSecurity = true
@@ -414,20 +488,24 @@ grails{
 			oauth2{
 				providers{
 					google {
-						api_key = '482906574403-seedi2p2ae3s9obm2ohb8bevq693jl3n.apps.googleusercontent.com'
-						api_secret= 'MEqtVZxols8l8o0e6waQ5E48'
+						api_key = '252139291193-dv3ekugm57up532d0e0g1lg1jp4fpir4.apps.googleusercontent.com'
+						api_secret= '9Iqwxj02b3F4c86FCle8z8w0'
 						successUri= "/springSecurityOAuth2/onSuccess?provider=google"
 						failureUri= "/oauth2/google/error"
 						callback= "/oauth2/google/callback"
 					}
 					facebook {
-						api_key = '307223053378607'
-						api_secret= '76e7d4e29923c37fa4c39f1c3d239bee'
+						api_key = '3331166770333939'
+						api_secret= '6b4892fbb53f6cce09c2ad83d1d5f44c'
 						successUri= "/springSecurityOAuth2/onSuccess?provider=facebook"
 						failureUri= "/oauth2/facebook/error"
 						callback= "/oauth2/facebook/callback"
 					}
 				}
+				registration {
+					askToLinkOrCreateAccountUri = "/loginWithGoogle/linkYourElintegroAccountWithGoogle"
+				}
+
 			}
 			successHandler {
 				defaultTargetUrl = "${grails.serverURL}/login/success"
@@ -500,7 +578,7 @@ grails.plugin.springsecurity.ui.forgotPassword.emailBody = '''\
 Hi $user.firstName,<br/>
 <br/>
 Please, click
-click&nbsp;<a href="$url">here</a> to reset your password.
+&nbsp;<a href="$url">here</a> to reset your password.
 <br/><br/>
 '''
 emailService.emailWithPassword = '''\
@@ -513,6 +591,18 @@ click&nbsp;<a href="$url">here</a> to finish your registration.
 contactUsEmailService.emailWithInformation = '''Hello $name,<br/>
 This is the test for email sending service.
 Thank you for choosing us. Your registration is almost complete.
+'''
+
+registerService.emailInfoAfterSignUp = '''Hi ${name}, <br/>
+We created a temporary password for you so you can start defining your app and making it reality! <br/>
+
+Username:\t ${currentUser} <br/>
+Password:\t ${password} <br/>
+Click <a href="$url">here</a> to auto-login. <br/>
+Click <a href="$urlToChangePassword">here</a> to change your password.
+'''
+registerService.emailSubjectAfterSignUp = ''' ${name}, 
+welcome. Next steps to build your app.
 '''
 elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com,sumanneupane19982055@gmail.com, shai@gmail.com,rabindra@gmail.com"
 
@@ -603,5 +693,7 @@ environments {
 grails.plugin.springsecurity.oauth2.domainClass = 'com.elintegro.auth.OAuthID'
 
 dataframe.right_to_left_language = false
+quizzableUrl = "https://quizzable.elintegro.com/"
 
+application.languages = """'fr','en','es'"""
 
