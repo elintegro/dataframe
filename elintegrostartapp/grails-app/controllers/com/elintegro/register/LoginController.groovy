@@ -210,11 +210,12 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
             Map emailParams = [verificationCode:verificationCode]
             try {
                 emailService.sendMail(user1.email,emailParams,emailBody)
+                result = [success: true,msg: "we sent a verification code in your email. Please check and follow instructions.",alert_type: "success"]
             } catch(Exception e){
                 log.error("Email sending failed"+e)
+                result = [success:false , msg: "Couldn't send mail",alert_type:"error"]
                 println("email sending failed"+e)
             }
-            result = [success: true,msg: "we sent a verification code in your email. Please check and follow instructions.",alert_type: "success"]
 
         }
         else{
@@ -226,7 +227,7 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
         def param = request.getJSON()
         println(param)
         User user1 = User.findByUsername(param.vueElintegroLoginWithOTPDataframe_emailOrPhone)
-        Otp otp = Otp.findByUserAndVerificationCode(user1,param.vueElintegroLoginWithOTPDataframe_verificationCode)
+        Otp otp = Otp.findByUser(user1)
         def result
         if(otp){
             try {

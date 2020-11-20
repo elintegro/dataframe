@@ -590,7 +590,7 @@ beans {
                              ,insertAfter: "codeNotReceived"
                              ,attr: """style='background-color:white;color:#1976D2; text-transform:capitalize;margin-left:-20px;margin-top:-5px;' text v-show='showThisFieldAfterCodeSent' """
                              ,"flexGridValues": ['xs4', 'sm4', 'md4', 'lg4', 'xl4']]]
-        dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.loginWithVerificationCode();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
+        dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' v-show='showThisFieldAfterCodeSent' """,script: """this.loginWithVerificationCode();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroLoginWithOTPDataframeLayout")
 
     }
