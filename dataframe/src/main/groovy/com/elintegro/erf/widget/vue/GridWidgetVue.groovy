@@ -23,6 +23,7 @@ import grails.converters.JSON
 import grails.util.Holders
 import org.apache.commons.lang.WordUtils
 import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.i18n.LocaleContextHolder
@@ -35,6 +36,8 @@ class GridWidgetVue extends WidgetVue {
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
     String embDDfr = "";
+    private static final String headers = "headers"
+    private static final String defaultData = "defaultData"
 
 
     //This assigns a new value and returns true if new value was different then the old one
@@ -59,6 +62,26 @@ class GridWidgetVue extends WidgetVue {
         return true
     }
 
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
+        if(additionalData.containsKey(items)){
+            jData?.persisters?."${domainAlias}"."${fieldName}"."${items}" = additionalData."${items}"
+        }
+        if(additionalData.containsKey(headers)){
+            jData?.persisters?."${domainAlias}"."${fieldName}"."${headers}" = additionalData."${headers}"
+        }
+    }
+
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataMap, sessionHibernate)
+        if(additionalData.containsKey(items)){
+            jData?.transits?."${fieldName}"."${items}" = additionalData."${items}"
+        }
+        if(additionalData.containsKey(headers)){
+            jData?.transits?."${fieldName}"."${headers}" = additionalData."${headers}"
+        }
+    }
+
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
@@ -75,7 +98,10 @@ class GridWidgetVue extends WidgetVue {
         }
         String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
         String labelStyle = field.labelStyle?:""
-        String modelString = getModelString(dataframe, field)
+//        String modelString = getModelString(dataframe, field)
+        String modelString = getFieldJSONModelNameVue(field)
+        String itemsStr = getFieldJSONItems(field)
+        String headerString = "${getFieldJSONNameVue(field)}${DOT}${headers}"
         String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
         String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
         return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
@@ -94,8 +120,8 @@ class GridWidgetVue extends WidgetVue {
             </v-col></v-row>
         """:""}
        <v-data-table
-            :headers="${modelString}_headers"
-            :items="${modelString}_items"
+            :headers="${headerString}"
+            :items="${itemsStr}"
             :items-per-page="-1"
             ${showGridSearch?":search='${fldName}_search'":""}
             ${dataTableAttribbutes.toString()}
@@ -165,6 +191,8 @@ $fieldParams
             requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
         field.put("dataHeader", dataHeader);
+        VueStore store = dataframe.getVueJsBuilder().getVueStore()
+        store.addToState("${field.name}_selectedrow : '',\n")
         def parentDataframeName = dataframe.dataframeName
         String onClickMethod    = " "
         String refDataframeName = ""
@@ -181,13 +209,13 @@ $fieldParams
                 DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
                 refDataframeName = refDataframe.dataframeName
                 onClickMethod    = "${fldName}_showDetail$refDataframeName(props.item)"
-                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName)
+                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName, field.name)
             }
         }
 
         if (onButtonClick){
 //            showRefreshMethod = true
-            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader)
+            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader, field.name)
 
         }
         field.put("gridDataframeList", gridDataframeList);
@@ -226,6 +254,23 @@ $fieldParams
 """
 
     }
+
+    Map getStateDataVariablesMap(DataframeVue dataframe, Map field){
+        List gridItems = []
+        List gridHeaders = []
+        if (isInitBeforePageLoad(field)){
+            Map result = getGridData(dataframe, field, [:])
+            if (result){
+                gridItems = result."${items}"
+                gridHeaders = result."${headers}"
+            }
+        }
+        Map fldJSON = getDomainFieldJsonMap(dataframe, field)
+        fldJSON?.put(items, gridItems)
+        fldJSON?.put(headers, gridHeaders)
+        return dataframe.domainFieldMap
+    }
+
     String getStateDataVariable(DataframeVue dataframe, Map field){
 
         String dataVariable = dataframe.getDataVariableForVue(field)
@@ -237,7 +282,6 @@ $fieldParams
         return """
            ${dataVariable}_headers: [],
            ${dataVariable}_items: [],
-           ${dataVariable}_selectedrow:{},
 """
     }
 
@@ -255,7 +299,7 @@ $fieldParams
         String fldName = dataframe.getDataVariableForVue(field);
         String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
         dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){
-                                                                    if(this.state.transits.${field.domainAlias}.items){
+                                                                    if(this.${getFieldJSONItems(field)}){
                                                                         return true;
                                                                     }
                                                                   },\n""")
@@ -273,44 +317,45 @@ $fieldParams
         return embDDfr
     }
 
-    public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldnameToReload, Map inputData, def dbSession){
-        Map result=[:];
-        Dataframe dataframe = dataframeInst.df;
-        Map fieldProps = dataframe.fields.get(fieldnameToReload);
-
+    public Map loadAdditionalData(DataframeInstance dataframeInst, Map fieldProps, String fieldnameToReload, Map inputData, def dbSession){
+        DataframeVue dataframe = dataframeInst.df;
+//        Map fieldProps = dataframe.fields.get(fieldnameToReload);
         //Add fields from the Dataframe as possible input parameters for the additional HQL:
         inputData.putAll(dataframeInst.getFieldValuesAsKeyValueMap());
+        Map sessionParams = dataframeInst.sessionParams
+        if (sessionParams){
+            inputData << sessionParams
+        }
+        Map result= getGridData(dataframe, fieldProps, inputData)
+        return result
+    }
 
+    private def getGridData(DataframeVue dataframe, Map fieldProps, Map inputData){
+        Map result=[:];
         String wdgHql = fieldProps?.hql;
         if(wdgHql){
-            Map sessionParams = dataframeInst.sessionParams
-            if (sessionParams){
-                inputData << sessionParams
-            }
             List<MetaField> fieldMetaData =  fieldProps.get("gridMetaData");
-
             ParsedHql parsedHql =  fieldProps.get("parsedHql");
             if(parsedHql == null){
                 log.warn("We have to recreate the Parsed Hql since it is null")
                 parsedHql = new ParsedHql(fieldProps.hql, dataframe.grailsApplication, dataframe.sessionFactory)
             }
             List dataHeader =  fieldProps.get("dataHeader");
-            getNamedParameterValue(dataframeInst,inputData, parsedHql, fieldProps)
+//            getNamedParameterValue(dataframeInst,inputData, parsedHql, fieldProps)
+            def dbSession = dataframe.sessionFactory.openSession()
             DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
             List resultList = dbRes.getResultList();
-            result.put("dictionary", resultList);
-            result.put("headers", dataHeader);
-            result.put("defaultData", getDefaultData(fieldMetaData));
-
+            result.put(items, resultList);
+            result.put(headers, dataHeader);
+            result.put(defaultData, getDefaultData(fieldMetaData));
             if(!(fieldProps.containsKey("metaData") && fieldProps.get("metaData"))){
                 fieldProps.put("metaData", getDataFields(wdgHql, dataframe, fieldMetaData));
             }
-
             result.put("metaData", fieldProps.get("metaData"));
-
         }
         return result
     }
+
 
     public void getNamedParameterValue(dfInstance,inputData, parsedHql, fieldProps){
         Dataframe dataframe = dfInstance.df
@@ -365,7 +410,7 @@ $fieldParams
     }
 
     private void getOnButtonClickScript(onButtonClick, DataframeVue dataframe,  StringBuilder onclickDfrBuilder
-                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader){
+                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader, String nameOfField){
         String buttonHoverMessage = ""
         onButtonClick.each{Map onButtonClickMaps ->
             String actionName = getMessageSource().getMessage(onButtonClickMaps?.actionName?:"", null, onButtonClickMaps?.actionName?:"", LocaleContextHolder.getLocale())
@@ -393,16 +438,16 @@ $fieldParams
                 }else if(editButton){
                     btnName = "editButton"
                     vIcon.name = "edit"
-                    methodScript = getEditJavascript(buttonMaps, dataframe, fldName)
+                    methodScript = getEditJavascript(buttonMaps, dataframe, fldName, nameOfField)
                 } else if(showDetail){
                     btnName = "detailsButton"
-                    methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName)
+                    methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName, nameOfField)
                 } else {
                     methodScript = buttonMaps.script
                     btnName = buttonMaps.name
                     if(!btnName) throw new DataMissingException("name is required for each action buttons")
                     if(buttonMaps?.refDataframe && !buttonMaps.script){
-                        methodScript= getEditJavascript(buttonMaps, dataframe, fldName)
+                        methodScript= getEditJavascript(buttonMaps, dataframe, fldName, nameOfField)
                     }
                     if(!methodScript){
                         methodScript = ""
@@ -438,13 +483,13 @@ $fieldParams
     }
 
     private void getOnClickScript(def onClick, DataframeVue dataframe, String refDataframeName, StringBuilder onclickDfrBuilder, def gridDataframeList
-                                  , String fldName){
+                                  , String fldName, String fieldOfName){
 
         String stateName = fldName + "_onClick"
 
         onclickDfrBuilder.append(getRefDataframeHtml(onClick, dataframe, fldName, gridDataframeList))
         dataframe.getVueJsBuilder().addToMethodScript(""" ${fldName}_showDetail$refDataframeName: function(dataRecord){
-                                             ${getShowDetailJavascript(onClick, dataframe, fldName)}
+                                             ${getShowDetailJavascript(onClick, dataframe, fldName, fieldOfName)}
                                              },\n""")
 
     }
@@ -519,11 +564,11 @@ $fieldParams
         return resultPageHtml.toString()
     }
 
-    private String getEditJavascript(Map onClickMap, DataframeVue dataframe, String fldName){
-        return getShowDetailJavascript(onClickMap, dataframe, fldName)
+    private String getEditJavascript(Map onClickMap, DataframeVue dataframe, String fldName, String nameOfField){
+        return getShowDetailJavascript(onClickMap, dataframe, fldName, nameOfField)
     }
 
-    private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName){
+    private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName, String nameOfField){
         String parentDataframeName = dataframe.dataframeName
         String updateStoreCallScript = ""
         if(!onClickMap.refDataframe){
@@ -545,10 +590,11 @@ $fieldParams
                               this.${refDataframeName}_comp = "";
                               this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
+                              ${excon}.setSelectedGridDataToRequestParams(dataRecord, "${refDataframeName}")
                               Vue.set(this.${refDataframeName}_data, 'key', key);
                               Vue.set(this.${refDataframeName}_data, 'refreshInitialData', ${refreshInitialData?'Math.random()':false});
-                              excon.saveToStore('${parentDataframeName}', '${fldName}_selectedrow', dataRecord);
-                              excon.setVisibility("${refDataframeName}", true);
+                              ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
+                              ${excon}.setVisibility("${refDataframeName}", true);
                     \n 
                     """
     }

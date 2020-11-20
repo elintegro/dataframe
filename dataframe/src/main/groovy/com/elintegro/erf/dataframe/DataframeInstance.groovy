@@ -105,24 +105,6 @@ class DataframeInstance implements DataframeConstants{
 		return df.parsedHql.indexOfFileds.containsKey(mapFieldValue.name)
 	}
 
-	/**
-	 *
-	 */
-	public Map getAdditionalData(String fieldName, Map parameterMap){
-		Map additionalData = [:]
-
-		def widgetObj = df.getWidget(fieldName)
-
-/*  //TODO: remove it
-        def widgetObjDbg = df.fields.get(fieldName)?.get("widgetObject")
-		if(fieldName.contains("paymentMethods")){
-			println "checking paymentMethods"
-		}
-*/
-		additionalData = widgetObj?.loadAdditionalData(this, fieldName, parameterMap, sessionHibernate)
-		return additionalData
-	}
-
 	private def retrieveAndGetJsonNew(){
 
 		if(!df.hql){
@@ -195,9 +177,10 @@ class DataframeInstance implements DataframeConstants{
 			this.results = query.list()
 			tx.commit();
 			if(results && results .size() > 0){
-				this.record = results[0] //TODO: its hard coded assumption we have only one record per Dataframe!
-				calculateFieldValuesAsKeyValueMap();
-				log.debug("");
+//				this.record = results[0] //TODO: its hard coded assumption we have only one record per Dataframe!
+				calculateFieldValuesAsKeyValueMap();// todo merge with below method
+				this.record = results.size()==1? results[0]:calculateFieldValuesAsKeyValueMapNew(results)
+				log.debug(this.record.toString())
 			}else{
 				isDefault = true
 				//throw new DataframeException(df, "No record found for the Dataframe");
@@ -376,12 +359,8 @@ class DataframeInstance implements DataframeConstants{
 			df.fields.getList().each{ fieldName ->
 				Map fieldProps = df.fields.get(fieldName)
 				String myDomainAlias = null
-				//Try to load Additional Data:
-				if (isFieldExistInDb(fieldProps)){
-					convertPersisters(fieldProps, fieldName)
-				}else {
-					convertAdditionalData(fieldProps, fieldName, additionalDataRequestParamMap)
-				}
+				//load data for widgets
+				loadDataForWidgets(fieldProps, additionalDataRequestParamMap)
 			}
 		}
 		addKeyDataForNamedParameters(jsonMapDf) // adding key- fields for vue js
@@ -434,32 +413,36 @@ class DataframeInstance implements DataframeConstants{
 		return jsonRet
 	}
 
-	private void convertAdditionalData(Map fieldProps, String fieldName, Map additionalDataRequestParamMap) {
-		def widgetObj = df.getWidget(fieldName)
-		Map additionalData = widgetObj?.loadAdditionalData(this, fieldName, additionalDataRequestParamMap, sessionHibernate)
-		if (additionalData) {
-			widgetObj.setTransientValueToResponse(jData, additionalData.get(df.VALUE_ENTRY), getFieldDomainAlias(fieldProps), fieldProps.get(DataframeConstants.FIELD_PROP_NAME), additionalData)
+	private void loadDataForWidgets(Map fieldProps, Map additionalDataRequestParamMap){
+
+		String fieldName = fieldProps.get(FIELD_PROP_NAME)
+		Widget widget = (Widget) fieldProps.get(FIELD_PROP_WIDGET_OBJECT)
+		if (isFieldExistInDb(fieldProps)){
+			loadPersistentData(widget, fieldProps, fieldName, additionalDataRequestParamMap, this, sessionHibernate)
+		}else {
+			loadTransientData(widget, fieldProps, fieldName, additionalDataRequestParamMap, this, sessionHibernate)
 		}
 	}
 
-	private void convertPersisters(Map fieldProps, String fieldName) {
-		Map additionalDataRequestParamMap
+	private void loadTransientData(Widget widget, Map fieldProps, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate) {
+			widget.setTransientValueToResponse(jData, additionalDataMap.get(df.VALUE_ENTRY), getFieldDomainAlias(fieldProps), fieldProps.get(DataframeConstants.FIELD_PROP_NAME), additionalDataMap, dfInstance, sessionHibernate, fieldProps)
+	}
+
+	private void loadPersistentData(Widget widget, Map fieldProps, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate) {
 		String myDomainAlias
 		if (!isDefault) {
 			def fldValue = getFieldValue(fieldProps)
 			myDomainAlias = getFieldDomainAlias(fieldProps)
-			Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
-			String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
-			widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, additionalDataRequestParamMap)
+			widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, fieldName, additionalDataMap, dfInstance, sessionHibernate, fieldProps)
 		}
 	}
 
 	private String getFieldDomainAlias(Map fieldProps){
-		return fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
+		return fieldProps.get(FIELD_PROP_DOMAIN_ALIAS)
 	}
 
 	private Widget getFieldWidget(Map fieldProps){
-		return fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
+		return fieldProps.get(FIELD_PROP_WIDGET_OBJECT)
 	}
 
 	private void addKeyDataForNamedParameters(jsonMapDf){
@@ -1112,6 +1095,41 @@ class DataframeInstance implements DataframeConstants{
 				resultMap.put(fldName, val);
 			}
 		}
+		return resultMap
+	}
+
+	/**
+	 *
+	 * @param result = [[1, "hello", 987654321", "hebrew"],[1, "hello", 987654321", "french"]]
+	 * @return [1, "hello", 987654321", ["hebrew", "french"]]
+	 */
+	private List calculateFieldValuesAsKeyValueMapNew(List record){
+        List recordToCompareWith
+		if(record){
+			List lst = df.fields.getDbList()
+			int recSize = record.size()
+			recordToCompareWith = (List)record[0] //First record taken for comparison
+			for(int i = 1; i < recSize; i++) {
+				combineRecords((List)record[i], recordToCompareWith)
+			}
+		}
+		return recordToCompareWith
+	}
+	private void combineRecords(List currentRecord, List recordToCompareWith){
+		for(int j = 0; j < currentRecord.size(); j++) {
+			if(recordToCompareWith[j] instanceof List){//First time its just record[0] not List, subsequent times it is List
+				if(!recordToCompareWith[j].contains(currentRecord[j])){
+					recordToCompareWith[j].add(currentRecord[j])
+				}
+			} else { //changes recordToCompareWith[j] to List
+				if(currentRecord[j] != recordToCompareWith[j]){
+					def oldVal = recordToCompareWith[j]
+					List newList = [oldVal]
+					newList.add(currentRecord[j])
+					recordToCompareWith[j] = newList
+				}
+			}
+		}
 	}
 
 	public boolean fieldValidate(String fieldName, String fldVal){
@@ -1214,6 +1232,10 @@ class DataframeInstance implements DataframeConstants{
 			return typeCastNamedParameterValue(refDomainAlias, refFieldName, requestParams.get(namedParameter))
 		}
 
+		//search in namedParameter
+		def nField = getNamedParameterField(requestParams, namedParameter)
+		if (nField){return typeCastNamedParameterValue(refDomainAlias, refFieldName, nField)}
+
 		//Search in request parameters:
 //		Map requestNamedParams = requestParams.request_parameters?."${namedParameter}"
 //		if(requestNamedParams?.containsKey(namedParameter)){return requestNamedParams.get(namedParameter)}
@@ -1244,6 +1266,18 @@ class DataframeInstance implements DataframeConstants{
 
 	private def typeCastNamedParameterValue(refDomainAlias, refFieldName, paramValue){
 		return df.getTypeCastValue2(refDomainAlias, refFieldName, paramValue);
+	}
+
+	static def getNamedParameterField(JSONObject requestParams, namedParam){
+		Map namedParameters = getNamedParameters(requestParams)
+		if(namedParameters?.containsKey(namedParam)) {
+			return namedParameters.get(namedParam)?.value
+		}
+		return null
+	}
+
+	static Map getNamedParameters(JSONObject requestParams){
+		return requestParams.namedParameters
 	}
 
 	static def getPersisterField(JSONObject requestParams, String domainAlias, String fieldName){

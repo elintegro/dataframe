@@ -65,6 +65,15 @@ var excon = new Vue({
             }
 
         },
+        saveToStateTest: function(containerVariable, key, value=''){
+            if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
+                return
+            }
+            const obj = eval("store.state."+ containerVariable +"");
+            if (obj){
+                Vue.set(obj, key, value);
+            }
+        },
         saveToState: function(containerVariable, value=''){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
                 return
@@ -363,14 +372,15 @@ var excon = new Vue({
                 store.commit("updateState", stateData);
             }
         },
-        refreshDataForGrid: function(response, dataframeName, fldName, operation = "U"){
+        refreshDataForGrid: function(response, dataframeName, fldName, operation = "U", type="persisters"){
 
-            const newData = response.newData;
+            const newData = response['persisters'][fldName];//hard guess that it will always be persisters
             if(!dataframeName && !fldName && !newData) return;
             let state = store.getters.getState(dataframeName);
-            const items = state[fldName +'_items'];
+            const items = state[type][fldName]['items'];
             const selectedRow = state[fldName +'_selectedrow'];
             const editedIndex = items.indexOf(selectedRow);
+/*
             let row = {};
             for(let key in newData){
                 let dataMap = newData[key];
@@ -385,15 +395,15 @@ var excon = new Vue({
 
                 }
             }
+*/
             state['stateName'] = dataframeName;
             if (operation==="I") {
-                state[fldName +'_items'].push(row);
+                state[type][fldName]['items'].push(newData);
                 store.commit('updateState', state)
             } else {
-                Object.assign(state[fldName +'_items'][editedIndex], row);
+                Object.assign(state[type][fldName]['items'][editedIndex], newData);
                 store.commit('updateState', state)
             }
-//                          this.gridDataframes[refreshParams.dataframe] = false;
         },
 
 
@@ -430,6 +440,17 @@ var excon = new Vue({
         reset: function(dataframeName){
 
             let oldData = store.getters.getState(dataframeName);
+        },
+        setSelectedGridDataToRequestParams: function (selectedDataRecord, dataframeName){
+            let namedParams = this.getFromStore(dataframeName, "namedParameters")
+            if (!namedParams)
+                return
+            for(const [key, namedValue] of Object.entries(namedParams)) {
+                let namedParamVal = selectedDataRecord['Id'] || selectedDataRecord[key]
+                if (namedParamVal){
+                    namedValue.value = namedParamVal;
+                }
+            }
         }
     }
 });

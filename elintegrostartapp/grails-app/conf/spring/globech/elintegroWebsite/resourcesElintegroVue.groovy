@@ -110,11 +110,11 @@ beans {
         bean.constructorArgs = ['vueElintegroLogoDataframe']
         isGlobal = true
         saveButton = false
-        initOnPageLoad = false
+        initOnPageLoad = true
         addFieldDef = [
                 "logo": [
                         "widget"      : "PictureDisplayWidgetVue",
-                        "url"         : "${contextPath}/assets/elintegro_logo.png",
+                        "url"         : "assets/elintegro_logo.png",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "attr"        : " contain ",
                         "height"      : "auto",
@@ -132,12 +132,12 @@ beans {
         bean.constructorArgs = ['vueElintegroBannerDataframe']
         isGlobal = true
         saveButton = false
-        initOnPageLoad = false
+        initOnPageLoad = true
         route = true
         addFieldDef = [
                 "banner": [
                         "widget"      : "PictureDisplayWidgetVue",
-                        "url"         : "${contextPath}/assets/elintegro_banner.jpg",
+                        "url"         : "assets/elintegro_banner.jpg",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
 
 
@@ -169,7 +169,7 @@ beans {
                         widget            : "GridWidgetVue"
                         , name            : "clientProject"
 
-                        ,hql             : """select clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
+                        ,hql             : """select clientProject.id as Id, clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
                                                 clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
 
 
@@ -185,12 +185,45 @@ beans {
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
                         ,url:'/'
+                        ,onButtonClick : [
+                        ['actionName': 'Edit client Project', 'buttons': [
+                                [name : "edit"
+                                 ,MaxWidth: 500
+                                 ,showAsDialog: true
+                                 ,tooltip : [message: "tooltip.grid.edit", internationalization: true]
+                                 ,refDataframe: ref("clientProjectEditDataframe")
+                                 ,vuetifyIcon : [name: "edit"]
+                                 ,refreshInitialData:true
+                                ]]]]
 
                 ]
         ]
         currentFrameLayout = ref("clientProjectPageDataframeLayout")
 
     }
+
+    clientProjectEditDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['clientProjectEditDataframe']
+        hql = """select clientProject.id, clientProject.clientName, clientProject.projectName, clientProject.logo, clientProject.description, clientProject.linkToWebsite from ClientProject clientProject where clientProject.id=:id"""
+
+        initOnPageLoad = true
+        putFillInitDataMethod = true
+        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        saveButton = true
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+
+        doAfterSave = """
+excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 'U', "transits");
+"""
+
+        doBeforeSave = """
+"""
+        doBeforeRefresh=""""""
+        currentFrameLayout = ref("defaultDataframeLayout")
+
+    }
+
     vueTechnologiesDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTechnologiesDataframe']
@@ -671,7 +704,8 @@ beans {
         bean.constructorArgs = ['vueElintegroUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages from Person as person where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, language.ename, address.addressText from Person as person inner join person.languages language inner join person.addresses address where person.id=:id"
+//        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages from Person as person where person.id=:id"
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -710,7 +744,7 @@ beans {
                          ,"required": "required"
                          ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
                 ],
-                "person.languages":[
+                "language.ename":[
                         widget: "ComboboxVue"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
@@ -720,6 +754,15 @@ beans {
                         ,multiple: true
                 ],
 
+                "address.addressText":[
+                        widget: "ListWidgetVue"
+                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
+                        , hql: """select address.id as id, address.addressText as addres from Address as address"""
+                        ,"displayMember":"addres"
+                        ,"valueMember":"id"
+                        , search:true
+                        ,multiple: true
+                ],
                 "person.mainPicture":[
                         "widget" : "PictureDisplayWidgetVue",
                         "aspectRatio":"2.5",
@@ -730,9 +773,8 @@ beans {
 
                 "uploadPicture":[
                         "widget" : "PictureUploadWidgetVue"
-                        ,name:"propertyImages"
                         , valueMember: "mainPicture"
-                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                        ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                         ,insertAfter: "person.mainPicture"
                         ,multiple:false
                         ,editButton: true

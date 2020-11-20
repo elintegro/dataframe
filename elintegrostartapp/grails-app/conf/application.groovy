@@ -112,7 +112,7 @@ images {
 	storageLocation = "/opt/tomcat-8/webapps"
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
-	defaultImagePath = "/assets/$defaultImageName"
+	defaultImagePath = "assets/$defaultImageName"
 
 
 }

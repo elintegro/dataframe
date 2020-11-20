@@ -13,6 +13,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
+import com.elintegro.annotation.OverridableByEditor
 import com.elintegro.erf.dataframe.DFButton
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeInstance
@@ -40,6 +41,8 @@ import org.springframework.context.i18n.LocaleContextHolder
  */
 abstract class WidgetVue extends Widget<DataframeVue>{
     /** Dependency injection for the springSecurityService. */
+    public static final String items = "items"
+    public static final String excon = "excon"
 
     //This assigns a new value and returns true if new value was different then the old one
     @Override
@@ -61,12 +64,12 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     }
 
     @Override
-    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
         jData?.persisters?."${domainAlias}"."${fieldName}".value = value
     }
 
     @Override
-    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap){
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
         jData?.transits?."${fieldName}".value = value
     }
 
@@ -91,7 +94,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     }
     public String getFieldJSONItems(Map field){
         String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
-        return "${getFieldJSONNameVue(field)}.items";
+        return "${getFieldJSONNameVue(field)}${DOT}${items}";
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
@@ -198,6 +201,11 @@ abstract class WidgetVue extends Widget<DataframeVue>{
 
     String getValueScript(DataframeVue dataframe, Map field, String divId, String fldId, String key){
         return """""";
+    }
+
+    @Override
+    public Object getInitValues(DataframeVue df, Map field){
+        return null
     }
 
 /*    protected DataframeVue getDataframe(dataframeName){
@@ -463,6 +471,27 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         String mandatory = isMandatory(field)?" *":""
         String label = field.label + mandatory
         return label
+    }
+
+    protected static Map getDomainFieldJsonMap(DataframeVue dataframe, Map field){
+        Map domainFieldMap = dataframe.domainFieldMap
+        Map fieldJSON = [:]
+        if(dataframe.isDatabaseField(field)){
+            Map persisters = domainFieldMap.get(Dataframe.PERSISTERS)
+            Map domainJSON = persisters.get(field.get(Dataframe.FIELD_PROP_DOMAIN_ALIAS))
+            fieldJSON = domainJSON.get(field.get(Dataframe.FIELD_PROP_NAME))
+        }else{
+            Map transits = domainFieldMap.get(Dataframe.TRANSITS)
+            fieldJSON = transits.get(field.get(Dataframe.FIELD_PROP_NAME))
+        }
+        return fieldJSON
+    }
+
+    protected static boolean isInitBeforePageLoad(Map field){
+        if (field?.initBeforePageLoad){
+            return true
+        }
+        return false
     }
 
 }
