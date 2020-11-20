@@ -709,7 +709,7 @@ beans {
                            var replacedCurrentUrl = splittedCurrentUrl[0].replace('$defaultUrl/','');
                            if(replacedCurrentUrl != null || replacedCurrentUrl != undefined || replacedCurrentUrl != ""){
                                  var langCode = replacedCurrentUrl.replace("?lang=",'');
-                                 var langItems = this.state.vueElintegroLanguageSelectorDataframe_languages_items;
+                                 var langItems = this.state.transits.languages.items;
                                  for(i=0;i<langItems.length;i++){
                                      if(langCode == langItems[i].code){
                                         this.defaultLanguage = langItems[i].ename;

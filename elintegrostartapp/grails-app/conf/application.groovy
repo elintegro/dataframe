@@ -606,6 +606,7 @@ welcome. Next steps to build your app.
 '''
 elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com,sumanneupane19982055@gmail.com, shai@gmail.com,rabindra@gmail.com"
 
+application.languages = """'fr','en','es'"""
 
 //elintegro.contuctus.email.interval = 20000     //send email once in 20 seconds
 //elintegro.contuctus.email.interval = 5*60*1000 //send email once in 5 minutes.

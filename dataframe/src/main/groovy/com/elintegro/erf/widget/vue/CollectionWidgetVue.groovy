@@ -49,20 +49,7 @@ abstract class CollectionWidgetVue extends WidgetVue {
         Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
         if(additionalData && additionalData.containsKey("items")){
             List items = (List)additionalData.items
-            List valueList = new ArrayList()
-            String displayMember = fieldProps.displayMember?:fieldName
-            if(items && value){
-                for(int j=0; j<items.size(); j++){
-                    Map item = (Map) items[j]
-                    for(int k=0; k<value.size(); k++){
-                        if(item."$displayMember" == value[k]){//check if same item and add to list
-                            valueList.add(item)
-                            continue;
-                        }
-                    }
-                }
-            }
-            jData?.persisters?."${domainAlias}"."${fieldName}".value = valueList
+            jData?.persisters?."${domainAlias}"."${fieldName}".value = getValueList(fieldProps, items, value, fieldName)
             jData?.persisters?."${domainAlias}"."${fieldName}".items = items
         }
     }
@@ -71,22 +58,27 @@ abstract class CollectionWidgetVue extends WidgetVue {
 //        super.setTransientValueToResponse(jData, value, domainAlias, fieldName)
         Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
         if(additionalData && additionalData.containsKey("items")){
-            List items = additionalData.items
-            List valueList = new ArrayList()
-            if(items && value){
-                for(int j=0; j<items.size(); j++){
-                    Map item = (Map) items[j]
-                    for(int k=0; k<value.size(); k++){
-                        if(item."$fieldName" == value[k]){
-                            valueList.add(item)
-                            continue;
-                        }
+            List items = (List)additionalData.items
+            jData?.transits?."${fieldName}".value = getValueList(fieldProps, items, value, fieldName)
+            jData?.transits?."${fieldName}".items = items
+        }
+    }
+
+    private List getValueList(Map fieldProps, List items, Object value, String fieldName){
+        List valueList = new ArrayList()
+        String displayMember = fieldProps.displayMember?:fieldName
+        if(items && value){
+            for(int j=0; j<items.size(); j++){
+                Map item = (Map) items[j]
+                for(int k=0; k<value.size(); k++){
+                    if(item."$displayMember" == value[k]){//check if same item and add to list
+                        valueList.add(item)
+                        continue;
                     }
                 }
             }
-            jData?.transits?."${fieldName}".value = valueList
-            jData?.transits?."${fieldName}".items = items
         }
+        return valueList
     }
 
     boolean isSelectionEqualsToOld(JSONArray jarr1, JSONArray jarr2){

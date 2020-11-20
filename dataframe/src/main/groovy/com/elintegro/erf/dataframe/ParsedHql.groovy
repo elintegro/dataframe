@@ -213,7 +213,7 @@ class ParsedHql {
 			}
 
 			if (!extractParts(hql)){
-				throw DataframeException("There is a parsing error of hql: ${hql}")
+				throw new DataframeException("There is a parsing error of hql: ${hql}")
 			}
 
 			//TODO: END of the depricated fragment
