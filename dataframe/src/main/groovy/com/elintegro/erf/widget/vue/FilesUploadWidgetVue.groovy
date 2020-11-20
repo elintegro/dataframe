@@ -107,7 +107,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                               stateVariable.${getFieldJSONNameVueWithoutState(field)} = fileArray;
                               excon.saveToStore("$dataframe.dataframeName", stateVariable)
                               },\n
-                             ${fldName}_ajaxFileSave: function(data, allParams){
+                             ${fldName}_ajaxFileSave: function(data, params){
                               var fileList = this.${fldName}_files;
                               if(fileList.length > 0){                                                                        
                               var fileData = new FormData();
@@ -123,7 +123,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                             fileData.append('fileSize',fileList.length);
                             fileData.append('fldId','$fldName');
                             if(data.params != null){
-                            fileData.append('allParams',data.params.id);}
+                            fileData.append('params',data.params.id);}
                             }
                             let self = this;
                               axios({ method:'post',

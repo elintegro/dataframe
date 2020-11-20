@@ -630,31 +630,31 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         isGlobal = true
 
         addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150]
-                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an email"]
-                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px']
+                       ,"user.username":["widget" : "EmailWidgetVue",attr: "autofocus", "name": "user.username", autoComplete:"on", "width":150,placeholder:"Enter your email", "errMessage":"Username should be an email"]
+                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px',flexGridValues: ['xs11', 'sm11', 'md11', 'lg11', 'xl11'],]
         ]
 
-        dataframeButtons = [ login:[name:"login", type: "button", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
-                script:"this.login();",
-                                                 "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                             forgetPassword:[name: "forgetPassword", type: "button", attr:"""style="background-color:#1976D2; color:white; margin-left:2px;" """, script:""" console.log("Forget Password Clicked");""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
-                                             layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],
-                             logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
-//                                                                                             var url = "/elintegrostartapp/oauth/authenticate/google";
+        dataframeButtons = [logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:10px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'120px', height: '35px'], script:"""
+//                                                                                             var url = "elintegrostartapp/oauth/authenticate/google";
                                                                                              var url = "springSecurityOAuth2/authenticate?provider=google";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                              /*if(childWindow){
                                                                                                 window.opener.location.reload();
                                                                                                 close();
                                                                                              }*/
-                                                                                              """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                             logInWithFacebook:[name: "logInWithFacebook", type: "image", attr: "style=\"margin-top:3px;\"", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl", width: '135px', height: '43px'],script:"""
+                                                                                              """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                             logInWithFacebook:[name: "logInWithFacebook", type: "image", attr: """style='margin-top:3px;margin-left: -10px;'""", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl", width: '120px', height: '35px'],script:"""
                                                                                              var provider = 'facebook';
                                                                                              var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
-                                                                                              """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']]
+                                                                                              """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                            login:[name:"login", type: "button", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
+                                   script:"this.login();",
+                                   "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                            forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
+                                                                layout: "<v-flex xs6 sm6 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],]
 
-        ]
+
 
         currentFrameLayout = ref("vueElintegroLoginDataframeLayout")
     }
@@ -944,7 +944,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         readonly = true
         initOnPageLoad = true
         putFillInitDataMethod = true
-        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
+        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
         addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]],
                        "person.selectedPosition":[widget: "ListWidgetVue"
@@ -965,7 +965,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
         tab = true
         saveButton = false
-        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
         initOnPageLoad = true
         putFillInitDataMethod = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -993,7 +993,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         saveButton = false
         initOnPageLoad = true
         putFillInitDataMethod = true
-        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantCVDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantCVDataframe_prop.key"""
         doAfterRefresh = """self.afterRefreshing(response);"""
         hql = "select application.id as Id, files.fileName, images.name from Application application inner join application.files as files inner join application.images as images where application.id=:id"
         addFieldDef = [
@@ -1027,7 +1027,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         readonly = true
         initOnPageLoad = true
         putFillInitDataMethod = true
-        doBeforeRefresh = """allParams['id'] = this.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
         saveButton = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
@@ -1044,7 +1044,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         tab = true
         initOnPageLoad = true
         putFillInitDataMethod = true
-        doBeforeRefresh = """allParams['id'] = this.vueElintegroCommentPageForApplicantDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = this.vueElintegroCommentPageForApplicantDataframe_prop.key"""
         saveButton = false
         hql="select application.id,application.comments,application.lastComment from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']

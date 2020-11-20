@@ -39,7 +39,7 @@ beans {
         saveButton = true
         wrapInForm=true
 
-        doBeforeSave = """allParams["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nallParams["personId"] = excon.getFromStore("vueEmployeeContactDataframe", 'key');"""
+        doBeforeSave = """params["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nparams["personId"] = excon.getFromStore("vueEmployeeContactDataframe", 'key');"""
         doAfterSave = """var params = response.params;\n
 
                          vueEmployeeAddDataframeVar.\$router.push('/');this.location.reload();"""
@@ -133,7 +133,7 @@ beans {
 
 
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueEmployeeContactDataframe','key');"
+        doBeforeSave = "params['personId'] = excon.getFromStore('vueEmployeeContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueEmployeeAddDataframe','vueEmployeeAddDataframe_tab_model', 'vueEmployeeAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -194,7 +194,7 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-        doBeforeRefresh = """allParams['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
+        doBeforeRefresh = """params['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
 //        childDataframes = ["vueContactManagementDataframe"]
 
@@ -370,7 +370,7 @@ beans {
         saveButton = true
         wrapInForm=true
 
-        doBeforeSave = """allParams["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nallParams["personId"] = excon.getFromStore("vueProviderContactDataframe", 'key');"""
+        doBeforeSave = """params["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nparams["personId"] = excon.getFromStore("vueProviderContactDataframe", 'key');"""
         doAfterSave = """var params = response.params;\n
 
                          vueProviderAddDataframeVar.\$router.push('/');this.location.reload();"""
@@ -458,7 +458,7 @@ beans {
 
 
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueProviderContactDataframe','key');"
+        doBeforeSave = "params['personId'] = excon.getFromStore('vueProviderContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueProviderAddDataframe','vueProviderAddDataframe_tab_model', 'vueProviderAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -519,7 +519,7 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-        doBeforeRefresh = """allParams['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
+        doBeforeRefresh = """params['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
 //        childDataframes = ["vueContactManagementDataframe"]
 
@@ -678,7 +678,7 @@ beans {
         saveButton = true
         wrapInForm=true
 
-        doBeforeSave = """allParams["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nallParams["personId"] = excon.getFromStore("vueVendorContactDataframe", 'key');"""
+        doBeforeSave = """params["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nparams["personId"] = excon.getFromStore("vueVendorContactDataframe", 'key');"""
         doAfterSave = """var params = response.params;\n
 
                          vueVendorAddDataframeVar.\$router.push('/');this.location.reload();"""
@@ -759,7 +759,7 @@ beans {
 
 
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueVendorContactDataframe','key');"
+        doBeforeSave = "params['personId'] = excon.getFromStore('vueVendorContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueVendorAddDataframe','vueVendorAddDataframe_tab_model', 'vueVendorAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -820,7 +820,7 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-        doBeforeRefresh = """allParams['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
+        doBeforeRefresh = """params['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
 //        childDataframes = ["vueContactManagementDataframe"]
 
@@ -1017,11 +1017,11 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-//        doBeforeRefresh = """allParams['contactType'] = this.\$route.params.routeId"""
+//        doBeforeRefresh = """params['contactType'] = this.\$route.params.routeId"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
 //        childDataframes = ["vueContactManagementDataframe"]
 
-        doBeforeRefresh = """allParams['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
+        doBeforeRefresh = """params['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
         addFieldDef =[
                 "client": [
                         widget            : "GridWidgetVue"

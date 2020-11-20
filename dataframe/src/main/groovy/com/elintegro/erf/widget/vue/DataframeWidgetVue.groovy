@@ -78,11 +78,11 @@ class DataframeWidgetVue extends WidgetVue{
             String keyField = entry.key;
             String keyFieldName = Dataframe.buildFullFieldNameKeyParam(refDataframe, entry.key);
             String parentFieldName = Dataframe.buildFullFieldNameParentParam(refDataframe, keyField);
-            buildParentAndRefParams.append("allParams[\"$parentFieldName\"] = \"$thisFieldName\";\n")
-            buildParentAndRefParams.append("allParams[\"ref-$thisFieldName\"] = \"$keyFieldName\";\n")
+            buildParentAndRefParams.append("params[\"$parentFieldName\"] = \"$thisFieldName\";\n")
+            buildParentAndRefParams.append("params[\"ref-$thisFieldName\"] = \"$keyFieldName\";\n")
             if(field.hideFK) {
                 String dataVariable = dataframe.getDataVariableForVue(field)
-                buildParentAndRefParams.append("allParams['$thisFieldName'] = this.$dataVariable;\n")
+                buildParentAndRefParams.append("params['$thisFieldName'] = this.$dataVariable;\n")
             }
         }
         if(refDataframe.saveButton){

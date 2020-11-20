@@ -113,7 +113,7 @@ beans {
 //        isGlobal = true
 //        createStore = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        doBeforeSave = "allParams['vueMedicalRecordDataframe-record-person'] = excon.getFromStore('vueContactDataframe', 'key'); \nallParams['applicationId'] = excon.getFromStore('vueApplicationFormDataframe', 'key');"
+        doBeforeSave = "params['vueMedicalRecordDataframe-record-person'] = excon.getFromStore('vueContactDataframe', 'key'); \nparams['applicationId'] = excon.getFromStore('vueApplicationFormDataframe', 'key');"
         doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicationsGridDataframe-tab-id');\n"
 
 
@@ -148,7 +148,7 @@ beans {
         ajaxSaveUrl = "applicationForm/saveMedications"
         doAfterSave = """excon.saveToStore('dataframeShowHideMaps', 'vuePrescribedMedicationsDataframe_display', false);\nexcon.saveToStore('vueMedicationsGridDataframe', 'key', response.nodeId[0]);\n
                           excon.saveToStore("dataframeBuffer","savedResponseData", responseData);"""
-        doBeforeSave = "allParams['medicalRecordId'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"
+        doBeforeSave = "params['medicalRecordId'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"
 
         addFieldDef = [
                 "prescribedMed.medication"     : [
@@ -206,7 +206,7 @@ beans {
         saveButton = false
         initOnPageLoad = false
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        doBeforeRefresh = """allParams['id'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"""
+        doBeforeRefresh = """params['id'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"""
         doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
         childDataframes = ["vuePrescribedMedicationsDataframe"]
         /*,onClick:[showAsDialog: false, refDataframe: ref("vuePrescribedMedicationsDataframe")]
@@ -319,7 +319,7 @@ beans {
 
 
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueContactDataframe','key');"
+        doBeforeSave = "params['personId'] = excon.getFromStore('vueContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicalRecordDataframe-tab-id');"
 
         childDataframes =["vueMapWidgetDataframe"]

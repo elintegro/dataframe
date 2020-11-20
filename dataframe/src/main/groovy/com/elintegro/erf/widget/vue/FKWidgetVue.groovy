@@ -50,9 +50,9 @@ class FKWidgetVue extends WidgetVue{
             String keyFieldName = Dataframe.buildFullFieldNameKeyParam(refDataframe, entry.key);
             String parentFieldName = Dataframe.buildFullFieldNameParentParam(refDataframe, keyField);
             String dataVariable = dataframe.getDataVariableForVue(field)
-            buildParentAndRefParams.append("allParams[\"$parentFieldName\"] = \"$thisFieldName\";\n")
-            buildParentAndRefParams.append("allParams[\"ref_$dataVariable\"] = \"$keyFieldName\";\n")
-            buildParentAndRefParams.append("allParams['$dataVariable'] = this.state.$dataVariable;\n")
+            buildParentAndRefParams.append("params[\"$parentFieldName\"] = \"$thisFieldName\";\n")
+            buildParentAndRefParams.append("params[\"ref_$dataVariable\"] = \"$keyFieldName\";\n")
+            buildParentAndRefParams.append("params['$dataVariable'] = this.state.$dataVariable;\n")
         }
         if(refDataframe.saveButton){
             return ""

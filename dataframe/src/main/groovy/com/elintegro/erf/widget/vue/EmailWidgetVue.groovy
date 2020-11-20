@@ -43,7 +43,7 @@ class EmailWidgetVue extends WidgetVue{
     String getVueSaveVariables(DataframeVue dataframe, Map field){
         String thisFieldName = dataframe.getFieldId(field)
         String dataVariable = dataframe.getDataVariableForVue(field)
-        return """allParams['$dataVariable'] = this.state.$dataVariable;\n allParams['email'] = this.state.$dataVariable;\n"""
+        return """params['$dataVariable'] = this.state.$dataVariable;\n params['email'] = this.state.$dataVariable;\n"""
     }
     @Override
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) {

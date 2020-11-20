@@ -195,7 +195,7 @@ beans{
         doBeforeRefresh = """
                          var projectDetails = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject')
                          var selectedProjectId = projectDetails.projectId
-                         allParams['projectId']= selectedProjectId
+                         params['projectId']= selectedProjectId
                          excon.saveToStore('vueTranslatorDataframe','projectId',selectedProjectId)"""
         hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
         addFieldDef =[
@@ -246,7 +246,7 @@ beans{
         initOnPageLoad = true
         putFillInitDataMethod = true
         saveButton = false
-        doBeforeRefresh = """ allParams['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId')"""
+        doBeforeRefresh = """ params['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId')"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = """select project.id ,project.sourceLanguage from Project project where project.id = :projectId """
         addFieldDef = [
@@ -294,7 +294,7 @@ beans{
         initOnPageLoad = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         saveButton = false
-        doBeforeRefresh = """ allParams['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId');
+        doBeforeRefresh = """ params['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId');
                               this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text = this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text;
                           """
         addFieldDef = ["text.text":[ widget: "TextAreaWidgetVue",attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """]]
@@ -309,9 +309,9 @@ beans{
         saveButton = false
         initOnPageLoad = true
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doBeforeRefresh = """allParams['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
-                           allParams['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
-                           allParams['sourceLanguage'] =excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage'); """
+        doBeforeRefresh = """params['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
+                           params['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
+                           params['sourceLanguage'] =excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage'); """
         doAfterRefresh = """self.buttonShowHide(response);"""
         addFieldDef = ["translatedText":[
                                      widget: "GridWidgetVue"
@@ -338,7 +338,7 @@ beans{
                                                          ,maxWidth:500
                                                          ,valueMember: 'Id'
                                                          ,ajaxDeleteUrl:"translatorAssistant/deleteRecord"
-                                                         ,doBeforeDelete:"""allParams['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');"""
+                                                         ,doBeforeDelete:"""params['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');"""
                                                          ,doAfterDelete:"""self.vueGridOfTranslatedTextDataframe_fillInitData();"""
                                                          ,tooltip: [message:"tooltip.grid.delete",internationalization: true]
                                                          ,refDataframe: ref("vueDeleteTranslatedRecordsOfGridDataframe")
@@ -361,9 +361,9 @@ beans{
         saveButtonAttr = """style='background-color:#2ab6f6; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doBeforeRefresh =  """allParams['id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
+        doBeforeRefresh =  """params['id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
         doAfterRefresh = """excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.vueEditTranslatedRecordsOfGridDataframe_text_text);"""
-        doBeforeSave = """allParams['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
+        doBeforeSave = """params['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
         doAfterSave = """ excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
                           excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.params.vueEditTranslatedRecordsOfGridDataframe_text_text);
                           excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'vueGridOfTranslatedTextDataframe_translatedText', 'U');

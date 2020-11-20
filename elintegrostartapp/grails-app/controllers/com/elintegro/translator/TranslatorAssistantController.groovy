@@ -44,7 +44,7 @@ class TranslatorAssistantController {
     }
 
     def fileUpload() {
-        def projectId = params.allParams
+        def projectId = params.params
         Project project = Project.findById(projectId)
         String projectName = project.name
         String sourceLanguage = project.sourceLanguage

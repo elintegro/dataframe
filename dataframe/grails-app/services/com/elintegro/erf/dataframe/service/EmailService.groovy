@@ -41,6 +41,22 @@ class EmailService {
                     html emailBody.toString()
                 }
     }
+    def sendingMailWithSubject(email,emailParams, emailBody , emailSubject){
+        def conf = Holders.grailsApplication.config
+        if (emailBody.contains('$')) {
+            emailBody = evaluate(emailBody, emailParams)
+        }
+        if (emailSubject.contains('$')) {
+            emailSubject = evaluate(emailSubject, emailParams)
+        }
+        mailService.sendMail {
+            async true
+            to email
+            from conf.grails.mail.username
+            subject emailSubject
+            html emailBody.toString()
+        }
+    }
 
     protected String evaluate(s, emailParams) {
         new SimpleTemplateEngine().createTemplate(s).make(emailParams)

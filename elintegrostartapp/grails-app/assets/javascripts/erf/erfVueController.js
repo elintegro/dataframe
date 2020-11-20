@@ -221,6 +221,14 @@ var excon = new Vue({
                 }
             }
         },
+        showMessage: function(responseData,dataframeName){
+            let response = responseData.data;
+            let stateDataOfThisDataframe = store.getters.getState(dataframeName);
+            let alertProps = stateDataOfThisDataframe.alertProp;
+            Vue.set(alertProps,'snackbar',true);
+            Vue.set(alertProps,'alert_type',response.alert_type);
+            Vue.set(alertProps,'alert_message',response.msg);
+        },
 
         closeDataframe: function(dataframeName){
             var dfNameDisplay = dataframeName +"_display";
@@ -254,7 +262,7 @@ var excon = new Vue({
         },
 
         formatData:function(param){
-            var allParams = [];
+            var params = [];
 
             var survey = param.survey;
             if(!survey){
@@ -275,19 +283,19 @@ var excon = new Vue({
                     response = this.createResponseFromList(response);
                 }
                 let question ="";
-                allParams.push(this.addToResponse(questionId, question, answerType, response));
+                params.push(this.addToResponse(questionId, question, answerType, response));
             }
 
-            return allParams;
+            return params;
         },
 
         addToResponse: function (questionId, question, answerType, response) {
-            var allParams = new Object();
-            allParams.questionId = questionId;
-            allParams.question = question;
-            allParams.answerType = answerType;
-            allParams.response = response;
-            return allParams;
+            var params = new Object();
+            params.questionId = questionId;
+            params.question = question;
+            params.answerType = answerType;
+            params.response = response;
+            return params;
         },
 
         createResponseFromList: function (response) {
@@ -451,6 +459,29 @@ var excon = new Vue({
                     namedValue.value = namedParamVal;
                 }
             }
+        },
+        enableDisableButton:function (dataframeName , valueToObserve){
+            let state = store.getters.getState(dataframeName);
+            let dataToChange;
+            if(valueToObserve == null && valueToObserve == undefined){
+                dataToChange = true
+            }
+            else if (valueToObserve && valueToObserve.length == 0){
+                dataToChange = true
+            }
+            else {
+                dataToChange = false
+            }
+            return dataToChange
+        },
+        redirectPage:function (dataFrame,pageToRedirect,routeId){
+            if(routeId == null){
+            dataFrame.$router.push('/'+pageToRedirect+'/0');
+        }
+            else {
+                dataFrame.$router.push('/'+pageToRedirect+'/'+routeId);
+            }
         }
     }
+
 });

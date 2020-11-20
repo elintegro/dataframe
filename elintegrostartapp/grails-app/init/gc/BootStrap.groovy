@@ -35,6 +35,9 @@ class BootStrap {
         DataInit.initElintegroClientProject()
         DataInit.initElintegroWebsiteSkills()
         DataInit.initElintegroWebsitePosition()
+        DataInit.initElintegroWebsiteQuestionTable()
+        DataInit.initElintegroWebsiteAnswerTable()
+        DataInit.initElintegroWebsiteTestimonials()
 
         //DataInit.initNotification()
         DataInit.initFrequencyUnit()

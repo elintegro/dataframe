@@ -245,20 +245,20 @@ beans {
     vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
         methods = """
                    forgotPassword(){
-                                  var allParams = this.state;
-                                  if(this.state.vueElintegroForgetPasswordDataframe_user_email == "" || this.state.vueElintegroForgetPasswordDataframe_user_email == null || this.state.vueElintegroForgetPasswordDataframe_user_email == undefined){
+                                  var params = this.state;
+                                  if(this.state.persisters.user.email.value == "" || this.state.persisters.user.email.value  == null || this.state.persisters.user.email.value  == undefined){
                                        var response = {};
                                        response['alert_type'] = 'error'
                                        response['msg'] = 'You must enter your email.';
                                        var responseData = {data:response};
                                        excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
                                   }else{
-                                        allParams['email'] = this.state.vueElintegroForgetPasswordDataframe_user_email;
+                                        params['email'] = this.state.persisters.user.email.value ;
                                         var self = this;
                                         axios({
                                            method:'post',
                                            url:'register/forgotPassword',
-                                           data: allParams
+                                           data: params
                                         }).then(function(responseData){
                                                 var response = responseData.data;
                                                 excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
@@ -275,16 +275,16 @@ beans {
     vueElintegroChangeForgotPasswordDataframe_script(VueJsEntity){bean ->
         methods = """
                    changeForgotPassword(){
-                                    var allParams = this.state;
-                                    allParams['dataframe'] = 'vueElintegroChangeForgotPasswordDataframe';
+                                    var params = this.state;
+                                    params['dataframe'] = 'vueElintegroChangeForgotPasswordDataframe';
                                     var self = this;
                                     var currentLocation = window.location.href;
                                     var location = currentLocation.split("/change-forget-password/0?")
-                                    allParams['token'] = location[1]
+                                    params['token'] = location[1]
                                                     axios({ 
                                           method: 'post',
                                           url:'register/changeForgotPassword',
-                                          data:allParams
+                                          data:params
                                     }).then(function(responseData){
                                            var response = responseData.data;
                                            excon.showMessage(responseData,'vueElintegroChangeForgotPasswordDataframe');
@@ -311,12 +311,12 @@ beans {
                                this.vueAfterLoggedinDataframe_person_firstName = details.name;
                                 this.vueAfterLoggedinDataframe_person_mainPicture = details.imageUrl;
                             }else{
-                var allParams = {};
-                allParams["id"] = eval(this.namedParamKey);
-                allParams['dataframe'] = 'vueAfterLoggedinDataframe';
+                var params = {};
+                params["id"] = eval(this.namedParamKey);
+                params['dataframe'] = 'vueAfterLoggedinDataframe';
                 
                 axios.get('dataframe/ajaxValues', {
-                    params: allParams
+                    params: params
                 }).then(function(responseData) {
                     if(responseData == undefined ||  responseData.data == undefined || responseData.data.data == undefined){
                         console.log("Error login for the user");
@@ -648,13 +648,13 @@ beans {
     }
     vueElintegroSignUpQuizDataframe_script(VueJsEntity){bean ->
         methods = """saveSignUpForm(){
-                                    var allParams = this.state;
-                                    allParams['dataframe'] = 'vueElintegroSignUpQuizDataframe';
+                                    var params = this.state;
+                                    params['dataframe'] = 'vueElintegroSignUpQuizDataframe';
                                     var self = this;
                                     axios({ 
                                           method: 'post',
                                           url:'register/createLeadUser',
-                                          data:allParams
+                                          data:params
                                     }).then(function(responseData){
                                            console.log(responseData);
                                            excon.showMessage(responseData,'vueElintegroSignUpQuizDataframe');
@@ -669,16 +669,16 @@ beans {
     }
     vueElintegroChangePasswordAfterSignUpDataframe_script(VueJsEntity){bean ->
         methods = """saveSignUpForm(){
-                                    var allParams = this.state;
-                                    allParams['dataframe'] = 'vueElintegroChangePasswordAfterSignUpDataframe';
+                                    var params = this.state;
+                                    params['dataframe'] = 'vueElintegroChangePasswordAfterSignUpDataframe';
                                     var self = this;
                                     var currentLocation = window.location.href;
                                     var location = currentLocation.split("/change-password/0?")
-                                    allParams['token'] = location[1]
+                                    params['token'] = location[1]
                                     axios({ 
                                           method: 'post',
                                           url:'register/changePassword',
-                                          data:allParams
+                                          data:params
                                     }).then(function(responseData){
                                            var response = responseData.data;
                                            excon.showMessage(responseData,'vueElintegroChangePasswordAfterSignUpDataframe');
@@ -728,12 +728,12 @@ beans {
         methods = """
                      quizzableApp(){
                              if(this.\$store.state.vueInitDataframe.loggedIn){
-                                  var allParams = this.state;
-                                  allParams['dataframe'] = 'vueElintegroSubMenuDataframe';
+                                  var params = this.state;
+                                  params['dataframe'] = 'vueElintegroSubMenuDataframe';
                                   axios ({
                                        method: 'post',
                                        url: 'quizzableLogin/quizzableLoginFromElintegro',
-                                       data: allParams
+                                       data: params
                                   }).then(function(response){
                                            var token = response.data.accessToken
                                            var serverUrl = response.data.serverUrl
@@ -749,12 +749,12 @@ beans {
                              var self = this;
                              if(this.\$store.state.vueInitDataframe.loggedIn){
                              
-                                  var allParams = this.state;
-                                  allParams['dataframe'] = 'vueElintegroSubMenuDataframe';
+                                  var params = this.state;
+                                  params['dataframe'] = 'vueElintegroSubMenuDataframe';
                                   axios ({
                                        method: 'post',
                                        url: 'ELcommerceLogin/elCommerceLoginFromElintegro',
-                                       data: allParams
+                                       data: params
                                   }).then(function(response){
                                            var token = response.data.accessToken
                                            var serverUrl = response.data.serverUrl
@@ -790,7 +790,7 @@ beans {
                        axios({
                        method:'post',
                        url:'EmployeeApplication/createApplicant',
-                       data: allParams
+                       data: params
                          }).then(function(responseData){
                           var response = responseData;
                           //Use excon object to store/retrieve data fro the store.state.<dataframe>....
@@ -809,16 +809,16 @@ beans {
                  fillApplicationSkillTable(){  
                  var details = this.state.vueNewEmployeeSelfAssesmentDataframe
                  console.log(details);
-                 var allParams = {};
+                 var params = {};
                        var self = this;
-                       allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                       params['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
                        
-                       allParams['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
-                       console.log(allParams)
+                       params['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
+                       console.log(params)
                        axios({
                        method:'post',
                        url:'EmployeeApplication/initiateSkillSet',
-                       data: allParams
+                       data: params
                          }).then(function(responseData){
                          self.vueNewEmployeeSelfAssesmentDataframe_fillInitData();
                          
@@ -835,17 +835,17 @@ beans {
                                     var details = this.state.vueNewEmployeeApplicantAddSkillDataframe;                           
                                     var details = this.state.vueNewEmployeeApplicantAddSkillDataframe
                                     console.log(details);
-                                    var allParams = this.state;
+                                    var params = this.state;
                                     var self = this;
-                                    allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','state.persisters.application.id.value')
-                                    allParams['vueNewEmployeeApplicantAddSkillDataframe_application_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
-                                    allParams['dataframe'] = 'vueNewEmployeeApplicantAddSkillDataframe';
-                                    console.log(allParams)
+                                    params['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','state.persisters.application.id.value')
+                                    params['vueNewEmployeeApplicantAddSkillDataframe_application_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                                    params['dataframe'] = 'vueNewEmployeeApplicantAddSkillDataframe';
+                                    console.log(params)
                                              
                                     axios({
                                            method:'post',
                                            url:'EmployeeApplication/addNewSkillSet',
-                                            data: allParams
+                                            data: params
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
                                                                    excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
@@ -934,13 +934,13 @@ beans {
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
                                         
-                                    var allParams = this.state;
+                                    var params = this.state;
                                     var self = this;
-                                    allParams['dataframe'] = 'vueElintegroCommentPageForApplicantDataframe';
+                                    params['dataframe'] = 'vueElintegroCommentPageForApplicantDataframe';
                                     axios({
                                            method:'post',
                                            url:'EmployeeApplication/addComment',
-                                           data: allParams
+                                           data: params
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
                                                                    self.vueElintegroCommentPageForApplicantDataframe_fillInitData()
@@ -959,18 +959,18 @@ beans {
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(timeOut){
-                    var allParams = this.state;
+                    var params = this.state;
                     var self = this;
-                    allParams['dataframe'] = 'vueCreateProjectForTranslationDataframe';
+                    params['dataframe'] = 'vueCreateProjectForTranslationDataframe';
                                     axios({
                                            method:'post',
                                            url:'translatorAssistant/saveProjectData',
-                                           data: allParams
+                                           data: params
                                     }).then(function(responseData){
                                                      var response = responseData.data;
                                                      if(response.success == true){
                                                                    var currentlySaveProject = {Name:response.params.name,projectId:response.params.id}
-                                                                   self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,allParams);
+                                                                   self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,params);
                                                                    excon.saveToStore('vueTranslatorAssistantBeforeLoggedInDataframe','vueTranslatorAssistantBeforeLoggedInDataframe_project_list',currentlySaveProject);
                                                                    excon.saveToStore('vueTranslatorAssistantAfterLoggedInDataframe','vueTranslatorAssistantAfterLoggedInDataframe_project_list',currentlySaveProject);
                                                                    setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, timeOut);
@@ -991,14 +991,14 @@ beans {
                       enableDisableAddButton(){return this.state.vueTranslatorDataframe_project_languages;},\n
                    """
         methods = """addLanguage(){
-                                    var allParams = this.state;
+                                    var params = this.state;
                                     var self = this;
-                                    allParams['dataframe'] = 'vueTranslatorDataframe';
-                                    allParams['projectId'] =Number(this.state.keys.projectId);
+                                    params['dataframe'] = 'vueTranslatorDataframe';
+                                    params['projectId'] =Number(this.state.keys.projectId);
                                     axios({
                                            method:'post',
                                            url:'translatorAssistant/addLanguage',
-                                           data: allParams
+                                           data: params
                                     }).then(function(responseData){
                                                                    self.vueTranslatorDataframe_fillInitData()
                                                                    var response = responseData.data;
@@ -1017,13 +1017,13 @@ beans {
 
                              },\n
                              downloadAllTranslatedFiles(){
-                                       var allParams = this.state;
+                                       var params = this.state;
                                        var self = this;
                                        if(this.\$store.state.vueInitDataframe.loggedIn){                    
                                                          axios({
                                                                 method:'post',
                                                                 url:'translatorAssistant/compressAllFilesInZip',
-                                                                data: allParams
+                                                                data: params
                                                          }).then(function(responseData){
                                                                 var response = responseData.data;
                                                                 if(response.success == true){
@@ -1038,11 +1038,11 @@ beans {
                                                         });
                                        }
                                        else{ 
-                                            allParams['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                            params['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
                                             axios({ 
                                                  method:'post',
                                                  url:'translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
-                                                 data:allParams
+                                                 data:params
                                             }).then(function(responseData){
                                                  excon.redirectPage(self,"login-page");
                                             })
@@ -1058,26 +1058,26 @@ beans {
         methods = """
                     translateText(params){
                                         excon.saveToStore('vueAddNewRecordForCurrentProjectDataframe','vueAddNewRecordForCurrentProjectDataframe_textToTranslate_selectedrow',params)
-                                        var allParams = this.state;
-                                        allParams['targetLanguage'] = params.targetLanguage;
-                                        allParams['dataframe'] = 'vueAddNewRecordForCurrentProjectDataframe';
+                                        var params = this.state;
+                                        params['targetLanguage'] = params.targetLanguage;
+                                        params['dataframe'] = 'vueAddNewRecordForCurrentProjectDataframe';
                                         axios({
                                                method:'post',
                                                url:'translatorAssistant/translateNewlyAddedRecord',
-                                               data: allParams
+                                               data: params
                                         }).then(function(responseData){
                                                  var response = responseData.data;
                                                  excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
                                         })
                     },\n
                     saveNewlyAddedRecord(){
-                                       var allParams = this.state;
+                                       var params = this.state;
                                        var self = this;
                                        if(this.state.vueAddNewRecordForCurrentProjectDataframe_key != "" && this.state.vueAddNewRecordForCurrentProjectDataframe_text != ""){
                                            axios({
                                                method:'post',
                                                url:'translatorAssistant/saveNewlyAddedRecord',
-                                               data: allParams
+                                               data: params
                                            }).then(function(responseData){
                                                var response = responseData.data;
                                                excon.setVisibility('vueAddNewRecordForCurrentProjectDataframe',false);
@@ -1089,7 +1089,7 @@ beans {
                     
                     },\n
                     closeVueAddNewRecordForCurrentProjectDataframe(){
-                                    var allParams = this.state;
+                                    var params = this.state;
                                     if(this.state.vueAddNewRecordForCurrentProjectDataframe_key != "" && this.state.vueAddNewRecordForCurrentProjectDataframe_text != ""){
                                        var confirmMessage = confirm("Are you sure want to abandon the changes?");
                                        if(confirmMessage){
@@ -1150,13 +1150,13 @@ beans {
                                     retrieveTranslatedText(){
                                          this.progressBarEnable = true;
                                          this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
-                                         var allParams = this.state;
+                                         var params = this.state;
                                          var self = this;
                                          var myVar = setInterval(function(){
                                                axios({
                                                       method:'post',
                                                       url:'translatorAssistant/intermediateRequest',
-                                                      data: allParams
+                                                      data: params
                                                }).then(function(responseData){
                                                       var response = Math.round(responseData.data);
                                                       excon.saveToStore('vueElintegroProgressBarDataframe','progressValue',response)
@@ -1167,7 +1167,7 @@ beans {
                                          axios({
                                               method:'post',
                                               url:'translatorAssistant/translateWithGoogle',
-                                              data: allParams
+                                              data: params
                                          }).then(function(responseData){
                                               self.vueGridOfTranslatedTextDataframe_fillInitData();
                                               self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
@@ -1176,21 +1176,21 @@ beans {
                                          });
                                     },\n
                                     downloadTargetFile(){
-                                            var allParams = this.state;
+                                            var params = this.state;
                                             var self = this;
                                             if(this.\$store.state.vueInitDataframe.loggedIn){
-                                                    var fileURL = 'translatorAssistant/downloadTargetFile/'+allParams.projectId+allParams.targetLanguage
+                                                    var fileURL = 'translatorAssistant/downloadTargetFile/'+params.projectId+params.targetLanguage
                                                     var fileLink = document.createElement('a');
                                                     fileLink.href = fileURL;
                                                     document.body.appendChild(fileLink);
                                                     fileLink.click();
                                             }
                                             else{
-                                                      allParams['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                                      params['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
                                                       axios({ 
                                                              method:'post',
                                                              url:'translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
-                                                             data:allParams
+                                                             data:params
                                                       }).then(function(responseData){
                                                               excon.redirectPage(self,"login-page");
                                                       })
@@ -1205,17 +1205,17 @@ beans {
         computed = "refreshVueEditTranslatedRecordsOfGridDataframe(){return this.vueEditTranslatedRecordsOfGridDataframe_prop.key},"
         methods ="""
                     googleTranslateForEachRecord(){
-                    var allParams = this.state;
+                    var params = this.state;
                     var self = this;
-                    allParams['sourceLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage');
-                    allParams['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
-                    allParams['projectId'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
-                    allParams['dataframe'] = 'vueEditTranslatedRecordsOfGridDataframe';
+                    params['sourceLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage');
+                    params['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
+                    params['projectId'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
+                    params['dataframe'] = 'vueEditTranslatedRecordsOfGridDataframe';
 
                      axios({
                                            method:'post',
                                            url:'translatorAssistant/translateEachRecordWithGoogle',
-                                           data: allParams
+                                           data: params
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
                                                                    excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text', response.translatedText); 

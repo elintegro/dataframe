@@ -479,6 +479,8 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		addFieldDef?.each{key, value->
 			addField(key, value)
 		}
+		//Todo: We need to refactor it soon...
+//		addField("alertMesssage", [widget: "SnackbarWidgetVue",flexGridValues: ['xs0', 'sm0', 'md0', 'lg0', 'xl0'],])
 	}
 
 	List getHqlResult(def queryHql){
@@ -725,13 +727,13 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
            Dataframe.${dataframeName}_save = function(){
                  //EU!!!-save
-                             var allParams = {'dataframe':'$dataframeName'};
+                             var params = {'dataframe':'$dataframeName'};
                  if($wrapInDiv){
                    $saveScriptJs
                  }else{   
                   //Add form parameters if current dataframe under the form
                   jQuery.each(jQuery('#$dataframeName-form').serializeArray(), function(i, field) {
-                                             allParams[field.name] = field.value;
+                                             params[field.name] = field.value;
                                  });
                  }    
                          
@@ -745,7 +747,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
                  if(Dataframe.validForSave){
                      jQuery.ajax({
                    url: '$ajaxSaveUrl',
-                   data: allParams,
+                   data: params,
                    type: 'POST',
                    error: function(data) {
                     alert("Error saving!");
@@ -800,7 +802,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 			}
 			String getValuePart = widgetObj?.getValueScript(this, field, getDivId(key), getFieldId(field), key);
 			if(!StringUtils.isEmpty(getValuePart)){
-				additionalParameters.append("\n allParams['"+getFieldId(field)+"'] = "+ getValuePart +";")
+				additionalParameters.append("\n params['"+getFieldId(field)+"'] = "+ getValuePart +";")
 			}
 		}
 
@@ -856,7 +858,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 			jQuery(document).ready(function(){
                   Dataframe.${dataframeName}_delete = function(){
                   
-                        var allParams = {'dataframe':'$dataframeName'};
+                        var params = {'dataframe':'$dataframeName'};
                         var idField = jQuery('#$dataframeName-id').val();
                         var formParams = jQuery('#$dataframeName-form');
                         var serializedParams = formParams.serialize();
@@ -951,13 +953,13 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 			*/
 			${refreshFuncName} = function(params){
 					
-                var allParams = {'dataframe':'$dataframeName'};  // TODO automatically add the id's for this dataframe
+                var params = {'dataframe':'$dataframeName'};  // TODO automatically add the id's for this dataframe
                 jQuery.each(params, function(key,value){
-										allParams[key]=value;
+										params[key]=value;
 									});
 				jQuery.ajax({
 				url: '$ajaxUrl',
-				data: allParams,
+				data: params,
 				type: 'POST',
 				success: function(returnedData) { 
 					try{
@@ -1033,18 +1035,18 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
                   var parentNode = Dataframe.${dataframeName}.dataFrameParamsToRefresh.parentNode; //1
                   var parentNodeId = Dataframe.${dataframeName}.dataFrameParamsToRefresh.parentNodeId; //1
                   var parentDataframe = Dataframe.${dataframeName}.dataFrameParamsToRefresh.parentDataframe
-                  var allParams = {'dataframe':'$dataframeName','level':parentLevel,'parentNodeLevel':parentNodeLevel,'parentFieldName':parentFieldName,'parentNode':parentNode,'parentNodeId':parentNodeId,'parentDataframe':parentDataframe};
+                  var params = {'dataframe':'$dataframeName','level':parentLevel,'parentNodeLevel':parentNodeLevel,'parentFieldName':parentFieldName,'parentNode':parentNode,'parentNodeId':parentNodeId,'parentDataframe':parentDataframe};
 
                  jQuery.each(jQuery('#$dataframeName-form').serializeArray(), function(i, field) {
-                      allParams[field.name] = field.value;
+                      params[field.name] = field.value;
                  });
                   jQuery.ajax({
 						url: '$ajaxCreateUrl',
-						data: allParams,
+						data: params,
 						type: 'POST',
 						success:  function(returnedData){
 						      Dataframe.returnedRefreshData(returnedData);
-						      Dataframe.initHiddenValuesForInsert(Dataframe.${dataframeName}.dataFrameParamsToRefresh, '${dataframeName}', allParams);
+						      Dataframe.initHiddenValuesForInsert(Dataframe.${dataframeName}.dataFrameParamsToRefresh, '${dataframeName}', params);
 						}
 					});
 
@@ -1071,7 +1073,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	public String buildDivParams(){
 		return """jQuery('#$dataframeName-div').find(':input, input:text, input:password, input:file, select, textarea').not("input[type=button]").each(function(){ 
                        var attributeName = jQuery(this).attr("name");
-                       allParams[attributeName]=jQuery(this).val(); 
+                       params[attributeName]=jQuery(this).val(); 
             });"""
 	}
 
@@ -1291,7 +1293,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 				seq++
 
 				//				resultPageJs.append("jQuery('#$fldId-preview').html('');")
-//				saveScriptJs.append( "  allParams['${getFieldId(field)}'] =" + widget.generateValueGetterScript(this, field, divId, fldId, key))
+//				saveScriptJs.append( "  params['${getFieldId(field)}'] =" + widget.generateValueGetterScript(this, field, divId, fldId, key))
 
 				headerScript.append(widget.getElementAttributeSetter(divId, field, fldId))
 				// TODO:

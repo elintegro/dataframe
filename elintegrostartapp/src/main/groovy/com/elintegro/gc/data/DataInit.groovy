@@ -17,7 +17,10 @@ import com.elintegro.auth.Role
 import com.elintegro.auth.User
 import com.elintegro.auth.UserRole
 import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.Testimonials
+import com.elintegro.elintegrostartapp.hr.AnswerTable
 import com.elintegro.elintegrostartapp.hr.Position
+import com.elintegro.elintegrostartapp.hr.QuestionTable
 import com.elintegro.elintegrostartapp.hr.Skills
 import com.elintegro.ref.Address
 import com.elintegro.ref.Language
@@ -65,6 +68,7 @@ class DataInit {
 			new Role(authority: "ROLE_CARE_GIVER", isEmployee: true).save(failOnError: true)
             new Role(authority: "ROLE_MANAGER", isEmployee: true).save(failOnError: true)
 			new Role(authority: "ROLE_DIRECTOR", isEmployee: true).save(failOnError: true)
+			new Role(authority: "ROLE_LEAD").save(failOnError: true)
 		}
 
 		User adminUser = User.findByUsername("eugenelip@gmail.com")
@@ -99,11 +103,12 @@ class DataInit {
 	static List<Language> initLanguage() {
 		if (!Language.count()) {
 			new Language(code: "en", ename: "English", name: "English", description: "English is used in many countries. Also it is a language of international communication.", inuse: true).save(failOnError: true)
-			new Language(code: "ru", ename: "Russian", name: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439", description: "Russian.", inuse: true).save(failOnError: true)
+			new Language(code: "ru", ename: "Russian", name: "русский", description: "Russian.", inuse: true).save(failOnError: true)
 			new Language(code: "fr", ename: "French", name: "Français", description: "French.", inuse: true).save(failOnError: true)
 			new Language(code: "he", ename: "Hebrew", name: "עברית", description: "Hebrew.", inuse: true).save(failOnError: true)
-			new Language(code: "ar", ename: "Arabic", name: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629", description: "Arabic.", inuse: false).save(failOnError: true)
-			new Language(code: "sp", ename: "Spanish", name: "español", description: "Spanish.", inuse: false).save(failOnError: true)
+			new Language(code: "ar", ename: "Arabic", name: "عربى", description: "Arabic.", inuse: false).save(failOnError: true)
+			new Language(code: "es", ename: "Spanish", name: "español", description: "Spanish.", inuse: false).save(failOnError: true)
+			new Language(code: "ne", ename: "Nepali", name: "नेपाली", description: "Nepali.", inuse: false).save(failOnError: true)
 		}
 
 		List languages = Language.findAllByInuse(true);
@@ -122,6 +127,13 @@ class DataInit {
 			new ClientProject(clientName: "Coach Clone", projectName: "Coach Clone application", logo: "assets/clientsProjectImages/coachClone.PNG", description: "All In One Lifestyle Coaching Tool for Fitness Pros", linkToWebsite: "https://www.coachclone.com/").save()
 			ClientProject clientProject2 = new ClientProject(clientName: "Morgan Stanley", projectName: "", logo: "assets/clientsProjectImages/morganStanley.PNG", description: "Nothing here ", linkToWebsite: "https://www.morganstanley.com/").save()
 			ClientProject clientProject3 = new ClientProject(clientName: "Yellow Pages", projectName: "", logo: "assets/clientsProjectImages/yellowPages.PNG", description: "Nothing here", linkToWebsite: "https://www.yellopages.com/").save()
+		}
+	}
+	static  def initElintegroWebsiteTestimonials() {
+		if (!Testimonials.count()) {
+			new Testimonials(quote: "From concept to development, it was a pleasure to work with Elintegro. They delivered my product on time and on budget. I’d definitely hire them again.", name: "Drasko Raicevic", title: " Quickbody Fitness", customerImage: "assets/home/avatar.png").save()
+			new Testimonials(quote: "The Dating app Elintegro developed for me was perfect. It was exactly what I needed, and more.", name: "Lev", title: " Matchmaker", customerImage: "assets/home/avatar.png").save(flush: true)
+
 		}
 	}
 	static def initElintegroWebsiteSkills(){
@@ -163,6 +175,37 @@ class DataInit {
 			new Position(_code: "qa", name: "Quality Assurance", description: "Quality Assurance specialist").save()
 			new Position(_code: "pm", name: "Project Manager", description: "Project Manager").save()
 			new Position(_code: "pm", name: "Devop", description: "Developer Operator").save()
+		}
+	}
+	static  def initElintegroWebsiteQuestionTable() {
+		if (!QuestionTable.count()) {
+			new QuestionTable(questionKey: "Which describes you best ?", questionName: "leadDescription").save()
+			new QuestionTable(questionKey: "What stage is your app in ?", questionName: "leadStage").save()
+			new QuestionTable(questionKey: "What is your budget ?", questionName: "leadBudget").save()
+		}
+	}
+	static def initElintegroWebsiteAnswerTable() {
+		if (!AnswerTable.count()) {
+			QuestionTable question = QuestionTable.findByQuestionName("leadDescription")
+			new AnswerTable(question: question, answerKey: "I want to build an app for my business.").save()
+			new AnswerTable(question: question, answerKey: "I work at a company who is looking to build an app.").save()
+			new AnswerTable(question: question, answerKey: "We are a software company looking to outsource some technology.").save()
+
+			QuestionTable question1 = QuestionTable.findByQuestionName("leadStage")
+			new AnswerTable(question: question1, answerKey: "I have the spec all agile and ready !").save()
+			new AnswerTable(question: question1, answerKey: "I don't have a detailed spec but I do have some documentation with requirements and I want help with a spec.").save()
+			new AnswerTable(question: question1, answerKey: "What's a spec?").save()
+			new AnswerTable(question: question1, answerKey: "I want to brainstorm ideas?").save()
+
+			QuestionTable question2 = QuestionTable.findByQuestionName("leadBudget")
+			new AnswerTable(question: question2, answerKey: "\$250K and up").save()
+			new AnswerTable(question: question2, answerKey: "\$100K - \$250K").save()
+			new AnswerTable(question: question2, answerKey: "\$50K - \$100K").save()
+			new AnswerTable(question: question2, answerKey: "\$25K - \$50K").save()
+			new AnswerTable(question: question2, answerKey: "\$10K - \$25K").save()
+			new AnswerTable(question: question2, answerKey: "Under \$10K").save()
+
+
 		}
 	}
 

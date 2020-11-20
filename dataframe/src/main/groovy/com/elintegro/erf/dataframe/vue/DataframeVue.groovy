@@ -286,7 +286,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		StringBuilder vueFileSaveVariables = new StringBuilder()
 		keyFieldNames.each {
 			vueStateVariable.append("${convertToDataVariableFromat(it)}"+":\"\",\n")
-			vueSaveVariables.append("allParams[\"$it\""+"] = this.${convertToDataVariableFromat(it)};\n")
+			vueSaveVariables.append("params[\"$it\""+"] = this.${convertToDataVariableFromat(it)};\n")
 			vueFileSaveVariables.append("params[\"$it\""+"] = response.namedParameters.id.value;\n")
 			vueDataFillScript.append("this.${convertToDataVariableFromat(it)} = response['${convertToReturnedDataVariableFromat(it)}']?response['${convertToReturnedDataVariableFromat(it)}']:\"\"\n")
 		}
@@ -608,16 +608,16 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	}
 	public String getJsonDataFillScript(df){
 		String dataframeName = df.dataframeName
-		StringBuilder allParamsSb = new StringBuilder()
+		StringBuilder paramsSb = new StringBuilder()
 		String namedParamKey = mainNamedParamKey?:"id"
 		if(route){
-			allParamsSb.append("allParams['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
+			paramsSb.append("params['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
 		}else{
-			allParamsSb.append("""allParams["$namedParamKey"] = eval(this.namedParamKey);\n""")
+			paramsSb.append("""params["$namedParamKey"] = eval(this.namedParamKey);\n""")
 		}
 		if(!ajaxUrlParams.isEmpty()){
 			for(Map.Entry entry: ajaxUrlParams){
-				allParamsSb.append("allParams['$entry.key'] = '$entry.value';\n")
+				paramsSb.append("params['$entry.key'] = '$entry.value';\n")
 			}
 		}
 		return """
@@ -635,16 +635,16 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 	public String getJsonDataFillScriptbackup(df){
 		String dataframeName = df.dataframeName
-		StringBuilder allParamsSb = new StringBuilder()
+		StringBuilder paramsSb = new StringBuilder()
 		String namedParamKey = mainNamedParamKey?:"id"
 		if(route){
-			allParamsSb.append("allParams['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
+			paramsSb.append("params['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
 		}else{
-			allParamsSb.append("""allParams["$namedParamKey"] = eval(this.namedParamKey);\n""")
+			paramsSb.append("""params["$namedParamKey"] = eval(this.namedParamKey);\n""")
 		}
 		if(!ajaxUrlParams.isEmpty()){
 			for(Map.Entry entry: ajaxUrlParams){
-				allParamsSb.append("allParams['$entry.key'] = '$entry.value';\n")
+				paramsSb.append("params['$entry.key'] = '$entry.value';\n")
 			}
 		}
 		String updateStoreScriptcaller = ""
@@ -654,23 +654,23 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return """
              ${dataframeName}_fillInitData: function(){
                 excon.saveToStore('$dataframeName','doRefresh',false);
-                let allParams = this.state;\n
+                let params = this.state;\n
                 const propData = this.${dataframeName}_prop;
                  if(propData){
-                    allParams = propData; 
+                    params = propData; 
                     if(this.namedParamKey == '' || this.namedParamKey == undefined){
                         this.namedParamKey = "this.${dataframeName}_prop.key?this.${dataframeName}_prop.key:this.\$store.state.${dataframeName}.key"; 
                     }
                  }
-                ${allParamsSb.toString()}
-                allParams['dataframe'] = '$dataframeName';
+                ${paramsSb.toString()}
+                params['dataframe'] = '$dataframeName';
                 $doBeforeRefresh
                 this.overlay_dataframe = true;
                 let self = this;
 				axios({
                           method:'post',
                           url:'$df.ajaxUrl',
-                          data: allParams
+                          data: params
                       }).then(function (responseData) {
                         let resData = responseData.data;
                         let response = resData?resData.data:'';
@@ -698,7 +698,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				if(it.trim() != ""){
 					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it}_ref") && this.\$refs.${it}_ref){for(var a in this.\$refs.${it}_ref.\$data){\n
                                               var dashA = a.split('_').join('-');
-                                              allParams[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
+                                              params[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
 				}
 			}
 		}
@@ -734,7 +734,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				if(it.trim() != ""){
 					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it}_ref") && this.\$refs.${it}_ref){for(var a in this.\$refs.${it}_ref.\$data){\n
                                               var dashA = a.split('_').join('-');
-                                              allParams[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
+                                              params[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
 				}
 			}
 		}
@@ -749,7 +749,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                        for(let i in ajaxFileSave) {
                          const value = ajaxFileSave[i];
                          $vueFileSaveVariables
-  						 self[value.fieldName+'_ajaxFileSave'](responseData, allParams);
+  						 self[value.fieldName+'_ajaxFileSave'](responseData, params);
 					   }
                     }
                   $addKeyToVueStore
@@ -757,19 +757,19 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				*/
 		return """
               ${dataframeName}_save: function(){
-                  let allParams = this.state;                                    
+                  let params = this.state;                                    
                   $vueSaveVariables
                   ${embdSaveParms?.toString()}
                   ${doBeforeSave}
-                  allParams['dataframe'] = '$dataframeName';
-                  console.log(allParams)
+                  params['dataframe'] = '$dataframeName';
+                  console.log(params)
                   if (this.\$refs.${dataframeName}_form.validate()) {
                       this.${dataframeName}_save_loading = true;
                       const self = this;
                       axios({
                           method:'post',
                           url:'$df.ajaxSaveUrl',
-                          data: allParams
+                          data: params
                       }).then(function (responseData) {
                         self.${dataframeName}_save_loading = false;
                         var response = responseData.data;                        
@@ -840,7 +840,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return """
                 ${dataframeName}_delete: function(){
                       
-                      var allParams = {'dataframe':'$dataframeName'};
+                      var params = {'dataframe':'$dataframeName'};
                           ${vueSaveVariables}
                        ${doBeforeDelete}
                        if(!confirm("${messageSource.getMessage("delete.confirm.message", null, "delete.confirm.message", LocaleContextHolder.getLocale())}"))return
@@ -848,7 +848,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                        axios({
                            method:'post',
                            url:'$ajaxDeleteUrl',
-                           params: allParams
+                           params: params
                        }).then(function (responseData) {
                 
                        ${doAfterDelete}
