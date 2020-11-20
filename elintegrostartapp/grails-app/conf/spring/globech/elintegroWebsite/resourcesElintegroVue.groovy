@@ -305,22 +305,25 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         addFieldDef = [
 
-//                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue"],
-//                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],],
-//                "person.email":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'email.required.message']]],
-//                "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]],
-                   "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
-//                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']]],
+                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "person.email":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'email.required.message']],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "person.phone":[
+                        "name":"phone",
+                        "type":"link",
+                        "widget":"PhoneNumberWidgetVue",
+                        "validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                 "person.availablePosition"  :[
-                        "widget"             :"ComboboxVue"
-//                        ,"name"              :"person.availablePosition"
+                        widget             :"ComboboxVue"
                         ,internationalize    :true
                         ,initBeforePageLoad  :true
                         ,multiple            :true
-                        ,"hql"               : "select position.id as id, position.name as name from Position as position"
+                        ,hql                 : """select position.id as id, position.name as name from Position as position"""
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                         , search:true
+                        ,attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """
 
                 ],
 
@@ -364,6 +367,7 @@ beans {
                                       ,"widget":"FilesUploadWidgetVue"
                                       ,valueMember: "resume"
                                       ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
+                                      ,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                       ,multiple:true
                                       ,"accept":".pdf,.docx,.doc,.csv"
 
@@ -463,6 +467,12 @@ beans {
         tab = true
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         doAfterSave = """self.\$router.push("/thank-you-message/0");"""
+        addFieldDef = [
+                "application.question1":[widget:"TextAreaWidgetVue"
+                                         ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,],
+                "application.question2":[widget:"TextAreaWidgetVue"
+                                         ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,]
+        ]
         dataframeButtons = [
                 previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
