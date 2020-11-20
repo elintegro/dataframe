@@ -95,6 +95,8 @@ class LanguageSelectorWidgetVue extends CollectionWidgetVue {
                             $field.onSelect.methodScript
              },\n """)
         }
+        String defaultLanguage = field.defaultLanguage?:"English"
+        dataframe.getVueJsBuilder().addToDataScript("""defaultLanguage:'$defaultLanguage',""")
         boolean isReadOnly = dataframe.isReadOnly(field)
         String typeString = ""
         if(!isSearchable(field)){
@@ -113,7 +115,7 @@ class LanguageSelectorWidgetVue extends CollectionWidgetVue {
                   <v-col cols="6">
                       <v-select
                           class = "underLine"
-                          v-model = "$modelString" 
+                          v-model = "defaultLanguage" 
                           :items="$itemsStr"
                           ${validate(field)?":rules = '${fldName}_rule'":""}
                           label="$label"

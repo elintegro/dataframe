@@ -91,6 +91,7 @@ beans {
                         ,"displayMember":"ename"
                         ,"valueMember":"id"
                         , search:true
+                        ,defaultLanguage :"English"
                         ,attr: """style='max-width:min-content;margin-top=-2%;'"""
                         ,onSelect:[methodScript:"this.selectedLanguage(_params);"]
                 ],]
