@@ -25,7 +25,7 @@ beans {
 
         hql = "select employee.id, employee.positionStart, employee.role, employee.description, employee.person from Employee employee where employee.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveEmployee"
+        ajaxSaveUrl = "userManagementForm/saveEmployee"
 
         dataframeLabelCode = "Employee.Registration"
         //These are values, that overrides the default ones
@@ -86,7 +86,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
+        ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
                          excon.saveToStore("vueEmployeeContactDataframe","key", response.nodeId[0]);
@@ -137,7 +137,7 @@ beans {
         doAfterSave = "excon.saveToStore('vueEmployeeAddDataframe','vueEmployeeAddDataframe_tab_model', 'vueEmployeeAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
+        ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
         wrapInForm=false
@@ -356,7 +356,7 @@ beans {
 
         hql = "select provider.id, provider.person, provider.providerType from Provider provider where provider.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveProvider"
+        ajaxSaveUrl = "userManagementForm/saveProvider"
 
         dataframeLabelCode = "Provider.Registration"
         //These are values, that overrides the default ones
@@ -411,7 +411,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
+        ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
                          excon.saveToStore("vueProviderContactDataframe","key", response.nodeId[0]);
@@ -462,7 +462,7 @@ beans {
         doAfterSave = "excon.saveToStore('vueProviderAddDataframe','vueProviderAddDataframe_tab_model', 'vueProviderAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
+        ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
         wrapInForm=false
@@ -664,7 +664,7 @@ beans {
 
         hql = "select vendor.id, vendor.person, vendor.description from Vendor vendor where vendor.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveVendor"
+        ajaxSaveUrl = "userManagementForm/saveVendor"
 
         dataframeLabelCode = "Vendor.Registration"
         //These are values, that overrides the default ones
@@ -712,7 +712,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
+        ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
                          excon.saveToStore("vueVendorContactDataframe","key", response.nodeId[0]);
@@ -763,7 +763,7 @@ beans {
         doAfterSave = "excon.saveToStore('vueVendorAddDataframe','vueVendorAddDataframe_tab_model', 'vueVendorAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
+        ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
         wrapInForm=false

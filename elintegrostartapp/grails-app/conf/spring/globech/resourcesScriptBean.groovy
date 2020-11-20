@@ -45,7 +45,7 @@ beans {
                      }
                ,\nsetInitPageValues:function(){
                                                
-                       axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
+                       axios.get('login/getUserInfo').then(function (responseData) {
                             const res = responseData.data;
                             excon.saveToStore("vueInitDataframe", "loggedIn", res.loggedIn);
                             excon.saveToStore("loggedIn", res.loggedIn);
@@ -168,7 +168,7 @@ beans {
                 allParams["id"] = eval(this.namedParamKey);
                 allParams['dataframe'] = 'vueAfterLoggedinDataframe';
                 
-                axios.get('${contextPath}/dataframe/ajaxValues', {
+                axios.get('dataframe/ajaxValues', {
                     params: allParams
                 }).then(function(responseData) {
                     if(responseData == undefined ||  responseData.data == undefined || responseData.data.data == undefined){
@@ -508,7 +508,7 @@ beans {
                        //Even call a backend!
                        axios({
                        method:'post',
-                       url:'${contextPath}/EmployeeApplication/createApplicant',
+                       url:'EmployeeApplication/createApplicant',
                        data: allParams
                          }).then(function(responseData){
                           var response = responseData;
@@ -536,7 +536,7 @@ beans {
                        console.log(allParams)
                        axios({
                        method:'post',
-                       url:'${contextPath}/EmployeeApplication/initiateSkillSet',
+                       url:'EmployeeApplication/initiateSkillSet',
                        data: allParams
                          }).then(function(responseData){
                          self.vueNewEmployeeSelfAssesmentDataframe_fillInitData();
@@ -563,7 +563,7 @@ beans {
                                              
                                     axios({
                                            method:'post',
-                                           url:'${contextPath}/EmployeeApplication/addNewSkillSet',
+                                           url:'EmployeeApplication/addNewSkillSet',
                                             data: allParams
                                     }).then(function(responseData){
                                                                    var response = responseData.data;

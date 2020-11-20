@@ -30,7 +30,7 @@ beans {
 //        app.referredByPerson, app.referredByOrganisation, app.signedBy,   app.applicationDate,
         initOnPageLoad = false
 
-        ajaxSaveUrl = "${contextPath}/applicationForm/save"
+        ajaxSaveUrl = "applicationForm/save"
         //These are values, that overrides the default ones
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         deleteButton = false
@@ -104,7 +104,7 @@ beans {
         dataframeLabelCode = "Medical.Record"
         hql = "select record.medicareNo, record.physician, record.otherRequirements, record.person from MedicalRecord as record where record.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/applicationForm/saveMedicalRecord"
+        ajaxSaveUrl = "applicationForm/saveMedicalRecord"
         initOnPageLoad = false
         //These are values, that overrides the default ones
         deleteButton = false
@@ -145,7 +145,7 @@ beans {
 
         dataframeLabelCode = "Add.Medications"
         initOnPageLoad = false
-        ajaxSaveUrl = "${contextPath}/applicationForm/saveMedications"
+        ajaxSaveUrl = "applicationForm/saveMedications"
         doAfterSave = """excon.saveToStore('dataframeShowHideMaps', 'vuePrescribedMedicationsDataframe_display', false);\nexcon.saveToStore('vueMedicationsGridDataframe', 'key', response.nodeId[0]);\n
                           excon.saveToStore("dataframeBuffer","savedResponseData", responseData);"""
         doBeforeSave = "allParams['medicalRecordId'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"
@@ -323,7 +323,7 @@ beans {
         doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicalRecordDataframe-tab-id');"
 
         childDataframes =["vueMapWidgetDataframe"]
-        ajaxSaveUrl = "${contextPath}/applicationForm/saveAddress"
+        ajaxSaveUrl = "applicationForm/saveAddress"
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         deleteButton = false

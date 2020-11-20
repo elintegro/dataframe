@@ -140,13 +140,13 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 
 	String contextPath = Holders.grailsApplication.config.rootPath
 	// This is a default to use DataframeController to perform CRUD operations, could be overwritten in Dataframe bean definition to any other controller operation
-	def ajaxUrl = "${contextPath}/dataframe/ajaxValues";
-	def ajaxSaveUrl = "${contextPath}/dataframe/ajaxSave";
+	def ajaxUrl = "dataframe/ajaxValues";
+	def ajaxSaveUrl = "dataframe/ajaxSave";
 	//def ajaxDeleteUrl = "/ayalon/dataframe/ajaxDelete"
-	def ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire";
-	def ajaxInsertUrl = "${contextPath}/dataframe/ajaxInsert";
-	def ajaxDefaultUrl = "${contextPath}/dataframe/ajaxDefaultData";
-	def ajaxCreateUrl ="${contextPath}/dataframe/ajaxCreateNew"
+	def ajaxDeleteUrl = "dataframe/ajaxDeleteExpire";
+	def ajaxInsertUrl = "dataframe/ajaxInsert";
+	def ajaxDefaultUrl = "dataframe/ajaxDefaultData";
+	def ajaxCreateUrl ="dataframe/ajaxCreateNew"
 
 	public static Dataframe getDataframeByName(String dataframeName){
 		return (Dataframe) Holders.grailsApplication.mainContext.getBean(dataframeName)

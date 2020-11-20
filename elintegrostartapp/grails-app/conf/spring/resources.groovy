@@ -60,14 +60,14 @@ beans = {
     loadResource "globech/elintegroWebsite/resourcesElintegroHomeLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesElintegroLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesNavigationButtonLayoutVue.groovy"
-    loadResource "globech/elintegroWebsite/resourcesMidSectionLayoutVue.groovy"
-    loadResource "globech/elintegroWebsite/resourcesSubContainerLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesCareersPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesNewEmployeeApplicantPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesClientProjectPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesContactUsPageLayoutVue.groovy"
     loadResource "globech/elintegroWebsite/resourcesGettingStartedPageLayoutVue.groovy"
-    loadResource "globech/elintegroWebsite/resourcesRefactorTest.groovy"
+    loadResource"globech/elintegroWebsite/resourcesTranslationAssistantVue.groovy"
+    loadResource"globech/elintegroWebsite/resourcesTranslationAssistantLayoutVue.groovy"
+
     if (Environment.current == Environment.DEVELOPMENT){
 //        loadResource "resourcesEditor.groovy"
 //        editorBeanLoading(EditorBeanLoading){ bean -> }

@@ -4,6 +4,7 @@ import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.layout.ColumnLayoutVue
 import com.elintegro.erf.layout.RowLayoutVue
 import grails.util.Holders
+import org.h2.table.Column
 
 beans {
     def contextPath = Holders.grailsApplication.config.rootPath
@@ -28,9 +29,9 @@ beans {
     }
     vueElintegroNavigationLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex><v-app-bar flat color="white"  tabs style="z-index:99;">
+        layoutPlaceHolder = """<v-flex><v-app-bar class="appBar" fixed  dense  outline elevate-on-scroll scroll-target="#scrolling-techniques-7" flat color="white"  tabs >
                                    <vueElintegroNavigationDrawerDataframe/>
-                                   <v-toolbar-title style="position:relative;" ><vueElintegroLogoDataframe/></v-toolbar-title>
+                                   <v-toolbar-title style="position:relative;padding-top:50px;" ><vueElintegroLogoDataframe/></v-toolbar-title>
                                  
                                    <v-spacer></v-spacer>
                                  
@@ -45,18 +46,24 @@ beans {
     vueElintegroNavigationDrawerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>
-                        <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
-                           <v-navigation-drawer v-model="drawer"
-        app
-        temporary
-        width = "min-content">
-       <vueElintegroAppBarDataframe/>       
-       </v-navigation-drawer>
+                                     <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
+                                     <v-navigation-drawer v-model="drawer"
+                                         app
+                                         temporary
+                                         width = "min-content">
+                                     <v-list style="margin-right:30px;">    
+                                      <v-list-item><vueElintegroNavigationFirstTwoButtonDataframe/></v-list-item>
+                                      <v-list-item style="margin-left:5%;position:fixed;height:auto;"><vueElintegroAppsDataframe/> </v-list-item>
+                                      <v-list-item style="margin-top: 40%;" ><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                         <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
+                                      <v-list-item style="margin-top:-12%;margin-left:-10%" ></v-list-item>
+                                     </v-list>
+                                     </v-navigation-drawer>
        </div>"""
     }
     vueElintegroMidSectionLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex style="margin-top:30px;"><v-content>
+        layoutPlaceHolder = """<v-flex style="margin-top:70px;"><v-content>
                              <router-view :key="\$route.fullPath"></router-view>
                              </v-content>
                                 </v-flex>
@@ -67,15 +74,93 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """ """
     }
+    vueElintegroLogoDataframeLayout(RowLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT]</v-flex>"""
+    }
     vueElintegroAppBarDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex>
                                 <v-toolbar-items >
-                                 <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
-                                 <vueElintegroNavigationButtonDataframe v-else/>    
-                                </v-toolbar-items></v-flex>
-                               """
+                                <v-row style="align-items:baseline;padding-top:6%">
+                                  <vueElintegroNavigationFirstTwoButtonDataframe/>
+                                  <div style="padding: 40px 0px 0px 0px;"><vueElintegroAppsDataframe/></div>
+                                  <vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                  <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/> 
+                                  <div></div>
+                                </v-row> 
+                                </v-toolbar-items>
+        </v-flex> """
 
+    }
+    vueElintegroLanguageSelectorDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs 0 sm0 md0 lg0 xl0>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+    }
+    vueElintegroProgressBarLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                                        <v-container >
+                                                <v-row class="fill-height" align-content="center" justify="center">
+                                                  <v-col class="subtitle-1 text-center" cols="12">
+                                                    Loading...
+                                                  </v-col>
+                                                  <v-col cols="12">
+                                                       <v-progress-linear
+                                                              color="#1976D2"
+                                                              v-model = this.progressBarValue
+                                                              height="25">
+                                                              <strong>{{ Math.ceil(this.progressBarValue) }}%</strong>
+                                                       </v-progress-linear>
+                                                  </v-col>
+                                                </v-row>
+                                        </v-container>
+                              </v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+
+    }
+    vueElintegroAppsDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """ <div >
+                                     <v-menu offset-y tile z-index = 101 close-on-content-click>
+                                         <template v-slot:activator="{ on, attrs }">
+                                             <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">About Us</v-btn>
+                                         </template>
+                                         <v-list width="min-content" style=" margin-right: -30px;margin-left: -30px;">
+                                             <v-list-item  @click="">
+                                             <v-list-item-title><vueElintegroAboutUsMenuDataframe/></v-list-item-title>
+                                             </v-list-item>
+                                         </v-list>
+                                     </v-menu>
+                                     <v-menu offset-y tile z-index = 101 close-on-content-click>
+                                         <template v-slot:activator="{ on, attrs }">
+                                             <v-btn class="ma-md-0"color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;margin-top:10px;">Apps</v-btn>
+                                         </template>
+                                         <v-list width="min-content" style=" margin-right: -30px;margin-left: -30px;">
+                                             <v-list-item  @click="">
+                                             <v-list-item-title><vueElintegroSubMenuDataframe/></v-list-item-title>
+                                             </v-list-item>
+                                         </v-list>
+                                     </v-menu>
+                                </div>
+                             """
+
+    }
+    vueElintegroSubMenuDataframeLayout(ColumnLayoutVue) { bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
+                                  [DATAFRAME_SCRIPT]
+                                  <div style="margin-top:-40px; height:92px;">[BUTTON_SCRIPT]</div>
+                                  </v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+    }
+    vueElintegroAboutUsMenuDataframeLayout(ColumnLayoutVue) { bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
+                                  [DATAFRAME_SCRIPT]
+                                  <div style="margin-top:-40px; height:320px;">[BUTTON_SCRIPT]</div>
+                                  </v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
     vueTechnologiesDataframeDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -143,8 +228,16 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class="rounded-card" style="width:320px; border-radius:10px;"><v-toolbar dark color="blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
                                 <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click="closeDataframe"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT]<v-layout align-content-space-around row wrap align-center>[BUTTON_SCRIPT]</v-layout></v-card></v-flex>"""
+                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT]<v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
     }
+    vueElintegroForgetPasswordDataframeLayout(ColumnLayoutVue){ bean->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex><v-row><v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col>
+                              <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" style="padding-top:5%;"> <v-card>[DATAFRAME_SCRIPT]<v-card-actions class="justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-col>
+                               <v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col></v-row></v-flex>"""
+        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+    }
+
     vueElintegroRegisterDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' ><v-toolbar dark color="blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
@@ -192,14 +285,16 @@ beans {
                                       <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroApplicantSelfAssessmentDataframe-tab-id">Self Assessment</v-tab>
                                       <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroApplicantCVDataframe-tab-id">CV</v-tab>
                                       <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroApplicantQuestionAnswerDataframe-tab-id">Questions/Answers</v-tab>
+                                      <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueElintegroCommentPageForApplicantDataframe-tab-id">Comment</v-tab>
                                       <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
                                       </v-btn><span>Close</span></v-tooltip></v-flex>    
                                   </v-tabs>
                                   <v-tabs-items v-model="vueElintegroApplicantDetailsDataframe_tab_model" >
                                       <v-tab-item value="vueElintegroApplicantGeneralInformationDataframe-tab-id" ><vueElintegroApplicantGeneralInformationDataframe :vueElintegroApplicantGeneralInformationDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantSelfAssessmentDataframe-tab-id"><vueElintegroApplicantSelfAssessmentDataframe :vueElintegroApplicantSelfAssessmentDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
-                                      <v-tab-item value="vueElintegroApplicantCVDataframe-tab-id"><vueElintegroApplicantCVDataframe/></v-tab-item>
+                                      <v-tab-item value="vueElintegroApplicantCVDataframe-tab-id"><vueElintegroApplicantCVDataframe :vueElintegroApplicantCVDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                       <v-tab-item value="vueElintegroApplicantQuestionAnswerDataframe-tab-id"><vueElintegroApplicantQuestionAnswerDataframe :vueElintegroApplicantQuestionAnswerDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
+                                      <v-tab-item value="vueElintegroCommentPageForApplicantDataframe-tab-id"><vueElintegroCommentPageForApplicantDataframe :vueElintegroCommentPageForApplicantDataframe_prop='this.vueElintegroApplicantDetailsDataframe_prop'/></v-tab-item>
                                  </v-tabs-items></v-card>
                                 </v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -207,12 +302,31 @@ beans {
     }
     vueElintegroApplicantGeneralInformationDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]<v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
+        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]
+                          <v-flex style="margin-top:-50px; margin-left: 1%;"><v-row>
+                          <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><span style='color:#757575;'>Selected Positions</span>:&nbsp; {{vueElintegroApplicantGeneralInformationDataframe_person_selectedposition}}</v-col>
+                          </v-row>
+                          </v-flex>
+                          <v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
     }
     vueElintegroApplicantQuestionAnswerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
     }
+    vueElintegroCommentPageForApplicantDataframeLayout(ColumnLayoutVue){bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+
+
+    }
+
+
+
+
+
+
+
+
 
 
 

@@ -11,13 +11,13 @@ beans{
         bean.constructorArgs = ['vueElintegroHomeDataframe']
         isGlobal = true
         saveButton = false
-        initOnPageLoad = true
+        initOnPageLoad = false
         route = true
-//        currentRoute = 'home'
+        currentRoute = 'home'
         childDataframes=['vueFirstContainerDataframe','vueOurWorkContainerDataframe','vueOurProcessContainerDataframe',
                          "vueCollaborationContainerDataframe",'vueOurFrameworkContainerDataframe',
-                         'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe',
-                         'vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
+                         'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe'
+                         ]
         currentFrameLayout = ref("vueElintegroHomeDataframeLayout")
 
     }
@@ -31,6 +31,11 @@ beans{
                             ,"name":"build"
                             ,elementId: "build"
                             ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ],
+                "apps":["widget":"TextDisplayWidgetVue"
+                         ,"name":"apps"
+                         ,elementId: "apps"
+                         ,flexGridValues:['xs12', 'sm12', 'md1', 'lg1', 'xl1']
                 ],
                 'buildData':[ "widget":"TextDisplayWidgetVue"
                             ,"name":"buildData"
@@ -196,13 +201,13 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuizPlaceholderContainerDataframe']
         saveButton = false
+        isGlobal = true
         addFieldDef = [
                 letsTalk:["widget":"TextDisplayWidgetVue"
                              ,"name":"letsTalk"
                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
         ]
-        childDataframes = ['vueElintegroSignUpQuizDataframe']
         currentFrameLayout = ref("vueQuizPlaceholderContainerDataframeLayout")
     }
     vueElintegroSignUpQuizDataframe(DataframeVue){ bean->
@@ -210,17 +215,19 @@ beans{
         bean.constructorArgs = ['vueElintegroSignUpQuizDataframe']
         saveButton = false
         initOnPageLoad = false
+        isGlobal = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        hql = """select  application.leadDescription, application.leadStage, application.leadBudget, person.firstName, person.lastName, person.email , person.phone from Application application inner join application.applicant person  where application.id=:id"""
-        addFieldDef = ["application.leadDescription":[
-                widget:"ComboboxVue"
-                ,internationalize    :true
-                ,initBeforePageLoad  :true
-                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
-                ,"displayMember": "Answer"
-                ,"valueMember"  : "id"
-                ,search:true],
-                       "application.leadStage":[
+        hql = """select  lead.leadDescription, lead.leadStage, lead.leadBudget,lead.nameOfProject, lead.descriptionOfProject,lead.deadline, person.firstName, person.lastName, person.email , person.phone from Lead lead inner join lead.applicant person  where lead.id=:id"""
+        addFieldDef = [
+                        "lead.leadDescription":[
+                                widget:"ComboboxVue"
+                                ,internationalize    :true
+                                ,initBeforePageLoad  :true
+                                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
+                                ,"displayMember": "Answer"
+                                ,"valueMember"  : "id"
+                                ,search:true],
+                       "lead.leadStage":[
                                widget:"ComboboxVue"
                                ,internationalize    :true
                                ,initBeforePageLoad  :true
@@ -228,7 +235,7 @@ beans{
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
                                ,search:true],
-                       "application.leadBudget":[
+                       "lead.leadBudget":[
                                widget:"ComboboxVue"
                                ,initBeforePageLoad  :true
                                ,internationalize    :true
@@ -236,11 +243,24 @@ beans{
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
                                ,search:true],
-                       "person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
+                       "lead.nameOfProject":[
+                               widget:"InputWidgetVue"
+                               ,name: "nameOfProject"
+                               ],
+                       "lead.descriptionOfProject":[
+                               widget:"TextAreaWidgetVue"
+                               ,name: "descriptionOfProject"
+                       ],
+                       "lead.deadline":[
+                               widget:"DateWidgetVue"
+                               ,name: "deadline"
+                       ],
+
+                       "person.phone":["name":"phone","widget":"PhoneNumberWidgetVue",validate: true],
 
         ]
         dataframeButtons = [
-                submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                submit: [name: "submit", type: "link",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }
@@ -248,9 +268,10 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroChangePasswordAfterSignUpDataframe']
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-//        currentRoute = "change-password"
+        currentRoute = "change-password"
         saveButton = false
         initOnPageLoad = false
+        isGlobal = true
         route = true
         addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue"],
                        "newPassword":[name:"newPassword"
@@ -270,6 +291,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFooterContainerDataframe']
         saveButton = false
+        isGlobal = true
         addFieldDef = [
                 footerPrivacy:["widget":"ButtonWidgetVue"
                                ,"name":"footerPrivacy"
@@ -286,7 +308,6 @@ beans{
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
-        childDataframes = ["vueFooterPrivacyDataframe","vueTermAndConditionDataframe"]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
     }
     vueFooterPrivacyDataframe(DataframeVue){ bean->
@@ -294,6 +315,7 @@ beans{
         bean.constructorArgs = ['vueFooterPrivacyDataframe']
         saveButton = false
         initOnPageLoad = false
+        isGlobal = true
         addFieldDef = [
                 privacyPolicyHeading:["widget":"TextDisplayWidgetVue"
                                       ,"name":"privacyPolicyHeading"
@@ -310,6 +332,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTermAndConditionDataframe']
         saveButton = false
+        isGlobal = true
         initOnPageLoad = false
         addFieldDef = [
                 termAndConditionHeading:["widget":"TextDisplayWidgetVue"

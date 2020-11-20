@@ -363,7 +363,7 @@ beans {
         hql = "select app.id, app.createTime, app.applicant, app.medicalRecord from Application as app where app.id=:id"
 //        app.referredByPerson, app.referredByOrganisation, app.signedBy,   app.applicationDate,
 
-        ajaxSaveUrl = "${contextPath}/applicationForm/save"
+        ajaxSaveUrl = "applicationForm/save"
         //These are values, that overrides the default ones
 //        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         deleteButton = false
@@ -701,7 +701,7 @@ beans {
         dataframeLabelCode = "Edit.Medication"
         initOnPageLoad = true
         saveButton = true
-        ajaxSaveUrl = "${contextPath}/applicationForm/saveMedications"
+        ajaxSaveUrl = "applicationForm/saveMedications"
         doAfterSave = """excon.saveToStore('dataframeShowHideMaps', 'vuePrescribedMedicationsEditDataframe_display', false);\nexcon.saveToStore('vueMedicationsGridEditDataframe', 'key', response.nodeId[0]);\n
                           excon.saveToStore("dataframeBuffer","savedResponseData", responseData);"""
         doBeforeSave = "allParams['medicalRecordId'] = excon.getFromStore('vueMedicalRecordEditDataframe', 'key');"
