@@ -151,7 +151,7 @@ $fieldParams
         field.put("parsedHql", parsedHql);
         List dataHeader = []
         boolean showRefreshMethod = false
-            fieldMetaData.each {metaField ->
+        fieldMetaData.each {metaField ->
             def propItemText = metaField.alias?:metaField.name
             def propItemVal  = metaField.name
             String headerText = propItemText.capitalize()
@@ -166,7 +166,7 @@ $fieldParams
             }
             addClassesToHeader(field, headerClass, propItemVal)
             headerClass.append("text-$alignment")
-            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':headerText, 'class':"${headerClass.toString()}", 'width':"${headerWidth}"])
+            dataHeader.add(['text':headerText, 'keys':propItemVal, 'value':propItemText, 'class':"${headerClass.toString()}", 'width':"${headerWidth}"])
             String propTextLowercase = propItemText.toLowerCase()
             if(propTextLowercase.contains("image") || propTextLowercase.contains("picture") || propTextLowercase.contains("avatar") || propTextLowercase.contains("logo")){
                 String defaultImageName = Holders.config.images.defaultImageName
@@ -234,6 +234,7 @@ $fieldParams
         </template>
          """
     }
+
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         def search = field?.showGridSearch
@@ -754,5 +755,10 @@ $fieldParams
                 headerClass.append(addClassesToHeader.get(headerText)+" ")
             }
         }
+    }
+
+    private String getReferencedDataframeDomainAlias(DataframeVue df){
+        String domainAlias = df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0) //make sure this is the right way of getting domain alias
+        return domainAlias
     }
 }

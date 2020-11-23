@@ -198,7 +198,33 @@ beans {
 
                 ]
         ]
+        dataframeButtons = [
+                addClient:[name:"addClient",type:"button",attr: """style='background-color:#1976D2; color:white;' """, showAsDialog:true, refDataframe: ref("clientProjectAddDataframe"),flexGridValues: ['xs4', 'sm4', 'md4', 'lg4', 'xl4']],
+               ]
         currentFrameLayout = ref("clientProjectPageDataframeLayout")
+
+    }
+
+    clientProjectAddDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['clientProjectAddDataframe']
+        hql = """select clientProject.id, clientProject.clientName, clientProject.projectName, clientProject.logo, clientProject.description, clientProject.linkToWebsite from ClientProject clientProject where clientProject.id=:id"""
+
+        initOnPageLoad = false
+        putFillInitDataMethod = false
+        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        saveButton = true
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+
+        doAfterSave = """
+                         excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 'I', "transits");
+                         excon.setVisibility("clientProjectAddDataframe", false);
+                      """
+
+        doBeforeSave = """
+"""
+        doBeforeRefresh=""""""
+        currentFrameLayout = ref("defaultDataframeLayout")
 
     }
 
@@ -214,8 +240,9 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
         doAfterSave = """
-excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 'U', "transits");
-"""
+                         excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 'U', "transits");
+                         excon.setVisibility("clientProjectEditDataframe", false);
+                      """
 
         doBeforeSave = """
 """

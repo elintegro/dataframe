@@ -311,7 +311,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vueJsBuilder.addToMountedScript("this.${dataframeName}_fillInitData();\n")
 		}
 		if(putFillInitDataMethod){
-/*
+
 			vueJsBuilder.addToWatchScript(""" ${dataframeName}_prop: {
                              deep:true,
                              handler: function(val, oldVal){
@@ -322,7 +322,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                                   }
                              }
                      },\n""")
-*/
+
 			vueJsBuilder.addToMethodScript(getJsonDataFillScript(this))
 			vueJsBuilder.addToMethodScript(vueDataFillScript.toString())
 		}
