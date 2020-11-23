@@ -43,7 +43,7 @@ class NumberInputWidgetVue extends WidgetVue {
             max=$max
             step=$step
             ${toolTip(field)}
-            style="width:${getWidth(field)}; height:${getHeight(field, '50px')};"
+            style="width:${getWidth(field)}; height:${getHeight(field)};"
             ${getAttr(field)}
           ></v-text-field>"""
     }

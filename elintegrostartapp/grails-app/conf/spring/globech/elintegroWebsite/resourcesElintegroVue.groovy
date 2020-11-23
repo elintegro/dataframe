@@ -439,7 +439,10 @@ beans {
                       """
         hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        addFieldDef = ["applicationSkill.skill":[readOnly: true],"applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]], script: """setTimeout(function(){ alert("Hello"); }, 5000);"""]]
+        addFieldDef = ["applicationSkill.skill":[widget: "InputWidgetVue",readOnly: true,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                       "applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """, script: """setTimeout(function(){ alert("Hello"); }, 5000);"""],
+                       "applicationSkill.comment":[widget: "InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """]
+                        ]
         currentFrameLayout = ref("vueNewEmployeeApplicantEditSkillDataframeLayout")
     }
     vueNewEmployeeApplicantAddSkillDataframe(DataframeVue){ bean ->
@@ -450,8 +453,9 @@ beans {
         putFillInitDataMethod = true
         hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        addFieldDef = ["applicationSkill.skill":[widget: "InputWidgetVue",attr: "autofocus"],
-                       "applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]]]]
+        addFieldDef = ["applicationSkill.skill":[widget: "InputWidgetVue",attr: """ autofocus outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                       "applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                        "applicationSkill.comment":[widget: "InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """]]
         dataframeButtons = [save: [name:"save", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""this.addNewSkill();""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
         currentFrameLayout = ref("vueNewEmployeeApplicantAddSkillDataframeLayout")
     }
