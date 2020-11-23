@@ -14,23 +14,38 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.register
 
 import com.elintegro.auth.Role
+import com.elintegro.auth.User
 import com.elintegro.auth.UserRole
-import com.elintegro.erf.dataframe.service.DataframeService
+import com.elintegro.crm.Person
+import com.elintegro.elintegrostartapp.client.Application
+import com.elintegro.elintegrostartapp.client.Lead
+import com.elintegro.gc.data.DataInit
 import com.elintegro.gerf.DataframeController
 import com.elintegro.elintegrostartapp.Facility
-import com.elintegro.model.DataframeResponse
+import com.elintegro.elintegrostartapp.FacilityUserRegistration
+import com.sun.org.apache.bcel.internal.generic.RETURN
+import grails.converters.JSON
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.ui.RegisterCommand
 //import grails.plugin.springsecurity.ui.RegistrationCode
+import grails.plugin.springsecurity.ui.SpringSecurityUiService
+import grails.util.Holders
+import org.springframework.context.i18n.LocaleContextHolder
+import org.springframework.transaction.interceptor.TransactionAspectSupport
+import sun.security.tools.keytool.Pair
+
+import java.text.SimpleDateFormat
+
 @Transactional
 class RegisterService{
 
     def messageSource
     def mailService
     def springSecurityService
-    DataframeService dataframeService
+    def emailService
 
-    def registerUser(request, RegisterCommand command, Role role, Facility facility) {
+    def registerUser(RegisterCommand command, Role role, Facility facility) {
         def serviceMessage
         DataframeController dataframeController = new DataframeController()
         com.elintegro.auth.User user = null
@@ -43,24 +58,23 @@ class RegisterService{
                 //resultData = ['msg': errMesg, 'success': false]
             }
         }else {
-            DataframeResponse resultData = dataframeService.saveRaw(request)
-            user  = resultData?.dataframeInstance?.savedDomainsMap?.user[1]
-            //Map domainInstanceMap = resultData?.dfInstance.getSavedDomainsMap();
-            //def savedDomainInstances = domainInstanceMap.values()
+            def resultData = dataframeController.ajaxSaveRaw()
+            Map domainInstanceMap = resultData?.dfInstance.getSavedDomainsMap();
+            def savedDomainInstances = domainInstanceMap.values()
 
-            //if (savedDomainInstances) {
-                //user = getRegisterUserInstance(savedDomainInstances, user)
+            if (savedDomainInstances) {
+                user = getRegisterUserInstance(savedDomainInstances, user)
                 UserRole.create(user, role)
-                //if (facility) {
-                //    facility.addToUsers(user)
-                //}
-            //}
+                if (facility) {
+                    facility.addToUsers(user)
+                }
+            }
         }
 
         return new grails.util.Pair(user, serviceMessage)
     }
 
-/*    private static def getRegisterUserInstance(savedDomainInstances, user){
+    private static def getRegisterUserInstance(savedDomainInstances, user){
         String userDomainClassName = SpringSecurityUtils.securityConfig.userLookup.userDomainClassName
         Class clazz = Holders.grailsApplication.getDomainClass(userDomainClassName).clazz
         for (def instance:savedDomainInstances){
@@ -70,5 +84,72 @@ class RegisterService{
             }
         }
         return user
-    }*/
+    }
+
+    def createLeadUser(def param){
+        def result
+        try{
+            User user1 = new User()
+            user1.email = param.persisters.person.email.value
+            user1.username = param.persisters.person.email.value
+            user1.firstName = param.persisters.person.firstName.value
+            user1.lastName = param.persisters.person.lastName.value
+            def password = new Random().toString().replaceAll("java.util.","")
+            user1.password = password
+            user1.enabled = true
+            user1.accountLocked = false
+            user1.save(flush:true)
+
+            Role role = Role.findByName("ROLE_LEAD")
+            UserRole.create(user1,role,true)
+
+            Person applicant = new Person()
+            applicant.firstName = param.persisters.person.firstName.value
+            applicant.lastName = param.persisters.person.lastName.value
+            applicant.email = param.persisters.person.email.value
+            applicant.phone = param.persisters.person.phone.value
+            applicant.user = user1
+            applicant.save()
+
+            Lead lead = new Lead()
+            lead.applicant = applicant
+            lead.leadDescription = param.persisters.lead.leadDescription.value['Answer']
+            lead.leadStage = param.persisters.lead.leadStage.value['Answer']
+            lead.leadBudget = param.persisters.lead.leadBudget.value['Answer']
+            lead.nameOfProject = param.persisters.lead.nameOfProject.value
+            lead.descriptionOfProject = param.persisters.lead.descriptionOfProject.value
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            Date date = inputFormat.parse(param.persisters.lead.deadline.value)
+            lead.deadline = date
+            lead.save()
+
+            result = [success: true, person_id: applicant.id, application_id: lead.id,userId: user1.id,user:user1,password:password]
+        }
+        catch(Exception e){
+            def msg = " Failed to save Person's data error = " + e
+            result = [success: false]
+            log.error(msg)
+        }
+        return  result
+
+    }
+    def sendingEmailAfterSignUp(String firstName, String password, String email,String url,String token) {
+        def resultData
+        def msg
+        try {
+            def conf = Holders.grailsApplication.config
+            String emailBody = conf.registerService.emailInfoAfterSignUp
+            String emailSubject = conf.registerService.emailSubjectAfterSignUp
+            String urlToChangePassword = conf.grails.serverURL+"/#/change-password/0?$token"
+            Map emailParams = [name: firstName, password: password, currentUser: email,url:url,urlToChangePassword:urlToChangePassword]
+            msg = messageSource.getMessage( 'sign.up.success.mail',null,'Success',LocaleContextHolder.getLocale())
+            emailService.sendingMailWithSubject(email, emailParams, emailBody, emailSubject)
+            resultData = [success: true, msg:msg,alert_type: "success"]
+        }catch(Exception e){
+            msg = "Failed to send email"+e
+            resultData = [success: false, msg:msg,alert_type:"error"]
+            log.error("Error occured while sending mail "+e)
+        }
+        return resultData
+    }
 }

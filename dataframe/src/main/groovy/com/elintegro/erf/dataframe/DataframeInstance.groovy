@@ -767,7 +767,7 @@ class DataframeInstance implements DataframeConstants{
 	}
 
 
-	private getNewValueForParameter(String parameterName, Map allParams) {
+	private getNewValueForParameter(String parameterName, Map params) {
 		if(!df.getParsedHql().namedParameters.containsKey(parameterName)){
 			throw new DataManipulationException("Parameter required: ${parameterName}, but not found in parameter map");
 		}
@@ -776,11 +776,11 @@ class DataframeInstance implements DataframeConstants{
 
 		String parFullName = df.getFieldId(namingParamValue[0], namingParamValue[1])
 
-		if(!allParams.containsKey(parFullName)){
+		if(!params.containsKey(parFullName)){
 			throw new DataManipulationException("Cannot identify the record for update: dataframe = ${df.dataframeName} with parameter ${parFullName}");
 		}
 
-		def paramValue = allParams.get(parFullName)
+		def paramValue = params.get(parFullName)
 		return paramValue
 	}
 

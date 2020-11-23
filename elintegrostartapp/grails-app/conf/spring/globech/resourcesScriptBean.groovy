@@ -24,28 +24,27 @@ beans {
         created = """this.setInitPageValues();
                      this.setupHomePage()
                     """
+
         methods =
                 """  setupHomePage: function(){
-                          var currentUrl = window.location.href; 
+                          var currentUrl = window.location.href;
                           var defaultUrl = '${defaultUrl}/#/';
-                          if(sessionStorage.initialRefresh == null || sessionStorage.initialRefresh == undefined || sessionStorage.initialRefresh == true){
-                              if(currentUrl == defaultUrl){//TODO: Not sure if it is a good idea!
-                                let homePage = "vueElintegroBannerDataframe";
-                                let routeId = 0;
-                                this.\$router.push({
-                                      name: homePage,
-                                    path: homePage,
-                                    params: {
-                                          routeId: routeId
-                                    }
-                                 })
-                              }
-                            sessionStorage.initialRefresh = false;
-                          }//End of if
+                          var a = currentUrl.split('#')
+                          if(currentUrl == defaultUrl || a[1] == '/'){
+                            let homePage = "vueElintegroHomeDataframe";
+                            let routeId = 0;
+                            this.\$router.push({
+                                  name: homePage,
+                                path: '/',
+                                params: {
+                                   routeId: ""
+                                }
+                            })
+                          }
                      }
                ,\nsetInitPageValues:function(){
                                                
-                       axios.get('${contextPath}/login/getUserInfo').then(function (responseData) {
+                       axios.get('login/getUserInfo').then(function (responseData) {
                             const res = responseData.data;
                             excon.saveToStore("vueInitDataframe", "loggedIn", res.loggedIn);
                             excon.saveToStore("loggedIn", res.loggedIn);
@@ -79,9 +78,101 @@ beans {
         """
     }
 
+    vueFirstContainerDataframe_script(VueJsEntity){bean ->
+        methods = """
+                          scrollToQuiz(){
+                            let element = document.getElementById('quiz_placeholder');
+                             element.scrollIntoView({ behavior: 'smooth' });
+                    },\n
+
+                    changeWords(){
+                            var text = document.getElementById("buildData").innerHTML;
+                            var words = text.split(',');
+                            var con = document.getElementById('console');
+                            var letterCount = 1;
+                            var x = 1;
+                            var waiting = false;
+                            var target = document.getElementById("build");
+                            window.setInterval(function() {
+                                if (letterCount === 2 && waiting === false) {
+                                  waiting = true;
+                                  target.innerHTML = words[0].substring(0, letterCount)
+                                  window.setTimeout(function() {
+                                        var usedWord = words.shift();
+                                        words.push(usedWord);
+                                        x = 1;
+                                        letterCount += x;
+                                        waiting = false;
+                                  }, 1000)
+                                }else if (letterCount === words[0].length + 1 && waiting === false) {
+                                      waiting = true;
+                                      window.setTimeout(function() {
+                                        x = -1;
+                                        letterCount += x;
+                                        waiting = false;
+                                      }, 1000)
+                                }else if (waiting === false) {
+                                      target.innerHTML = words[0].substring(0, letterCount)
+                                      letterCount += x;
+                                      }
+                            }, 120)
+                    },\n           
+
+                    """
+    }
+
+    vueElintegroAboutUsMenuDataframe_script(VueJsEntity){ bean ->
+        methods = """scrollTo(param){
+           
+            if(param =='ourClientsProjects'){
+                 excon.redirectPage(this,"client-project");
+            }else{
+                let element = document.getElementById(param);
+                if(element != null){
+                    switch(param){
+                    case 'our_work' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'our_process' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'collaboration' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'our_framework' : 
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    case 'Quotes' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;    
+                    case 'our_Technologies' :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;      
+                    case 'quiz_placeholder'  :
+                        element.scrollIntoView({ behavior: 'smooth' });
+                        break;
+                    default : 
+                        excon.redirectPage(this,'home');                                
+                    }
+                }else{
+                       excon.redirectPage(this,'home');
+                       this.\$nextTick(()=> window.document.getElementById(param).scrollIntoView()); 
+                }   
+            }
+  
+            
+        }
+        """
+    }
+
     vueToolbarDataframe_script(VueJsEntity) { bean ->
         data = "newApplication_display:true,\n"
 
+    }
+    vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
+        data = """progressBarValue:'',"""
+        watch =  """progressBarValueChanged:{handler: function(val, oldVal) {this.progressBarValue = val;}},\n"""
+        computed = """progressBarValueChanged(){var progressBarValue = excon.getFromStore('vueElintegroProgressBarDataframe','progressValue'); return progressBarValue;},\n"""
     }
 
     loginNavigationVue_script(VueJsEntity) { bean ->
@@ -151,6 +242,62 @@ beans {
                     console.log("login dataframe close button.");
                     },"""
     }
+    vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   forgotPassword(){
+                                  var params = this.state;
+                                  if(this.state.persisters.user.email.value == "" || this.state.persisters.user.email.value  == null || this.state.persisters.user.email.value  == undefined){
+                                       var response = {};
+                                       response['alert_type'] = 'error'
+                                       response['msg'] = 'You must enter your email.';
+                                       var responseData = {data:response};
+                                       excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                  }else{
+                                        params['email'] = this.state.persisters.user.email.value ;
+                                        var self = this;
+                                        axios({
+                                           method:'post',
+                                           url:'register/forgotPassword',
+                                           data: params
+                                        }).then(function(responseData){
+                                                var response = responseData.data;
+                                                excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                                if(response.success == true){
+                                                  setTimeout(function(){excon.redirectPage(self,"home");},6000);
+                                                }else{
+                                                     setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe',true);},4000);
+                                                }
+                                        })
+                                  }
+                   },\n
+                  """
+    }
+    vueElintegroChangeForgotPasswordDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   changeForgotPassword(){
+                                    var params = this.state;
+                                    params['dataframe'] = 'vueElintegroChangeForgotPasswordDataframe';
+                                    var self = this;
+                                    var currentLocation = window.location.href;
+                                    var location = currentLocation.split("/change-forget-password/0?")
+                                    params['token'] = location[1]
+                                                    axios({ 
+                                          method: 'post',
+                                          url:'register/changeForgotPassword',
+                                          data:params
+                                    }).then(function(responseData){
+                                           var response = responseData.data;
+                                           excon.showMessage(responseData,'vueElintegroChangeForgotPasswordDataframe');
+                                           if(response.success == true){
+                                             excon.setVisibility('vueElintegroLoginDataframe',true);
+                                           }else{
+                                                alert("Failed to change password.");
+                                           }
+                                           
+                                    })
+                   }
+                  """
+    }
 
     vueAfterLoggedinDataframe_script(VueJsEntity) { bean ->
         data = "avatarSize : 40,\n"
@@ -164,12 +311,12 @@ beans {
                                this.vueAfterLoggedinDataframe_person_firstName = details.name;
                                 this.vueAfterLoggedinDataframe_person_mainPicture = details.imageUrl;
                             }else{
-                var allParams = {};
-                allParams["id"] = eval(this.namedParamKey);
-                allParams['dataframe'] = 'vueAfterLoggedinDataframe';
+                var params = {};
+                params["id"] = eval(this.namedParamKey);
+                params['dataframe'] = 'vueAfterLoggedinDataframe';
                 
-                axios.get('${contextPath}/dataframe/ajaxValues', {
-                    params: allParams
+                axios.get('dataframe/ajaxValues', {
+                    params: params
                 }).then(function(responseData) {
                     if(responseData == undefined ||  responseData.data == undefined || responseData.data.data == undefined){
                         console.log("Error login for the user");
@@ -206,6 +353,20 @@ beans {
     }
     vueElintegroRegisterDataframe_script(VueJsEntity) { bean ->
         data = "vueElintegroRegisterDataframe_display:true,\n checkboxSelected: [],\n"
+        methods = """
+                   showAlertMessageToUser(response){
+                   if(response.success == true){
+                         response['alert_type'] = 'success'
+                         var responseData = {data:response}
+                         excon.showMessage(responseData,'vueElintegroRegisterDataframe');
+                         setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe', false);}, 6000);
+                   }else{
+                         response['alert_type'] = 'error';
+                         var responseData = {data:response}
+                         excon.showMessage(response,'vueElintegroRegisterDataframe');
+                         setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe', false);}, 6000);
+                   }
+        },\n """
     }
 
 //    vueRegisterDataframe_script(VueJsEntity) { bean ->
@@ -485,9 +646,129 @@ beans {
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressLine = result[0].formatted_address;
                     },"""
     }
+    vueElintegroSignUpQuizDataframe_script(VueJsEntity){bean ->
+        methods = """saveSignUpForm(){
+                                    var params = this.state;
+                                    params['dataframe'] = 'vueElintegroSignUpQuizDataframe';
+                                    var self = this;
+                                    axios({ 
+                                          method: 'post',
+                                          url:'register/createLeadUser',
+                                          data:params
+                                    }).then(function(responseData){
+                                           console.log(responseData);
+                                           excon.showMessage(responseData,'vueElintegroSignUpQuizDataframe');
+                                           setTimeout(function(){this.location.reload();}, 6000);
+                                    })
+                                    
+
+
+
+
+                                    },\n"""
+    }
+    vueElintegroChangePasswordAfterSignUpDataframe_script(VueJsEntity){bean ->
+        methods = """saveSignUpForm(){
+                                    var params = this.state;
+                                    params['dataframe'] = 'vueElintegroChangePasswordAfterSignUpDataframe';
+                                    var self = this;
+                                    var currentLocation = window.location.href;
+                                    var location = currentLocation.split("/change-password/0?")
+                                    params['token'] = location[1]
+                                    axios({ 
+                                          method: 'post',
+                                          url:'register/changePassword',
+                                          data:params
+                                    }).then(function(responseData){
+                                           var response = responseData.data;
+                                           excon.showMessage(responseData,'vueElintegroChangePasswordAfterSignUpDataframe');
+                                           if(response.success == true){
+                                              setTimeout(function(){window.open("/","_self");}, 2000);
+                                           }else{
+                                                setTimeout(function(){this.location.reload();},3000);
+                                           }
+                                           
+                                    })
+
+
+                                    },\n"""
+    }
+    vueElintegroLanguageSelectorDataframe_script(VueJsEntity){bean ->
+        methods = """
+                   selectedLanguage(params){
+                             var url = 'languageTranslate/languageTranslator/'+params
+                             var link = document.createElement('a');
+                             link.href = url;
+                             document.body.appendChild(link);
+                             link.click();
+                   },\n
+                   changeSelectedLanguageValue(params){
+                           console.log(params);
+                           var currentUrl = window.location.href;
+                           var splittedCurrentUrl = currentUrl.split("#");
+                           var replacedCurrentUrl = splittedCurrentUrl[0].replace('$defaultUrl/','');
+                           if(replacedCurrentUrl != null || replacedCurrentUrl != undefined || replacedCurrentUrl != ""){
+                                 var langCode = replacedCurrentUrl.replace("?lang=",'');
+                                 var langItems = this.state.transits.languages.items;
+                                 for(i=0;i<langItems.length;i++){
+                                     if(langCode == langItems[i].code){
+                                        this.defaultLanguage = langItems[i].ename;
+                                     }
+                                 }
+                           }
+                   },\n
+                           
+                  """
+    }
 
     vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
         data = """drawer: false, group: null,"""
+    }
+    vueElintegroSubMenuDataframe_script(VueJsEntity){bean->
+        methods = """
+                     quizzableApp(){
+                             if(this.\$store.state.vueInitDataframe.loggedIn){
+                                  var params = this.state;
+                                  params['dataframe'] = 'vueElintegroSubMenuDataframe';
+                                  axios ({
+                                       method: 'post',
+                                       url: 'quizzableLogin/quizzableLoginFromElintegro',
+                                       data: params
+                                  }).then(function(response){
+                                           var token = response.data.accessToken
+                                           var serverUrl = response.data.serverUrl
+                                           window.open(serverUrl+'/login/authenticateWithToken/'+token,'_blank')
+                                  });
+                             }
+                             else{
+                                  
+                                 window.open('https://quizzable.elintegro.com/','_blank');
+                             }
+                     },\n
+                     ecommerceApp(){
+                             var self = this;
+                             if(this.\$store.state.vueInitDataframe.loggedIn){
+                             
+                                  var params = this.state;
+                                  params['dataframe'] = 'vueElintegroSubMenuDataframe';
+                                  axios ({
+                                       method: 'post',
+                                       url: 'ELcommerceLogin/elCommerceLoginFromElintegro',
+                                       data: params
+                                  }).then(function(response){
+                                           var token = response.data.accessToken
+                                           var serverUrl = response.data.serverUrl
+                                           window.open(serverUrl+'elintegro_ELcommerce/authenticateWithToken/'+token,'_blank')
+                                  });
+                             
+                             }
+                             else{
+                                 excon.redirectPage(self,"login-page")
+                             }
+                     }
+        
+
+        """
     }
     vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->
         data = "vueNewEmployeeApplicantDataframe_tab_model : this.tabValue,\nvueNewEmployeeApplicantDataframe_display: true, \n"
@@ -508,8 +789,8 @@ beans {
                        //Even call a backend!
                        axios({
                        method:'post',
-                       url:'${contextPath}/EmployeeApplication/createApplicant',
-                       data: allParams
+                       url:'EmployeeApplication/createApplicant',
+                       data: params
                          }).then(function(responseData){
                           var response = responseData;
                           //Use excon object to store/retrieve data fro the store.state.<dataframe>....
@@ -528,16 +809,16 @@ beans {
                  fillApplicationSkillTable(){  
                  var details = this.state.vueNewEmployeeSelfAssesmentDataframe
                  console.log(details);
-                 var allParams = {};
+                 var params = {};
                        var self = this;
-                       allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                       params['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
                        
-                       allParams['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
-                       console.log(allParams)
+                       params['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
+                       console.log(params)
                        axios({
                        method:'post',
-                       url:'${contextPath}/EmployeeApplication/initiateSkillSet',
-                       data: allParams
+                       url:'EmployeeApplication/initiateSkillSet',
+                       data: params
                          }).then(function(responseData){
                          self.vueNewEmployeeSelfAssesmentDataframe_fillInitData();
                          
@@ -554,17 +835,17 @@ beans {
                                     var details = this.state.vueNewEmployeeApplicantAddSkillDataframe;                           
                                     var details = this.state.vueNewEmployeeApplicantAddSkillDataframe
                                     console.log(details);
-                                    var allParams = this.state;
+                                    var params = this.state;
                                     var self = this;
-                                    allParams['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','state.persisters.application.id.value')
-                                    allParams['vueNewEmployeeApplicantAddSkillDataframe_application_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
-                                    allParams['dataframe'] = 'vueNewEmployeeApplicantAddSkillDataframe';
-                                    console.log(allParams)
+                                    params['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','state.persisters.application.id.value')
+                                    params['vueNewEmployeeApplicantAddSkillDataframe_application_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                                    params['dataframe'] = 'vueNewEmployeeApplicantAddSkillDataframe';
+                                    console.log(params)
                                              
                                     axios({
                                            method:'post',
-                                           url:'${contextPath}/EmployeeApplication/addNewSkillSet',
-                                            data: allParams
+                                           url:'EmployeeApplication/addNewSkillSet',
+                                            data: params
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
                                                                    excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
@@ -574,6 +855,9 @@ beans {
                   }"""
 
     }
+    vueNewEmployeeThankYouMessageAfterSaveDataframe_script(VueJsEntity) { bean ->
+        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_firstName) + " " + excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_lastName)}"""
+    }
 
     vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
         data = "vueElintegroApplicantDetailsDataframe_tab_model : this.tabValue,\nvueElintegroApplicantDetailsDataframe_display: true, \n"
@@ -582,18 +866,376 @@ beans {
     }
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantGeneralInformationDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantGeneralInformationDataframe_fillInitData();}},"""
-        computed = "refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},"
+        computed = """refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},\n
+                   vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
+                                        var positions = [];
+                                        var items = this.state.vueElintegroApplicantGeneralInformationDataframe_person_selectedPosition_items;
+                                        for(i=0;i<items.length;i++){
+                                           positions[i] = items[i].Name;
+                                        }
+                                        var selectedPosition = positions.join(",\t\t");
+                                        return selectedPosition;}"""
     }
     vueElintegroApplicantSelfAssessmentDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
     }
+
     vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
         computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
     }
+    vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueElintegroCommentPageForApplicantDataframe:{handler: function(val, oldVal) {this.vueElintegroCommentPageForApplicantDataframe_fillInitData();}},"""
+        computed = "refreshVueElintegroCommentPageForApplicantDataframe(){return this.vueElintegroCommentPageForApplicantDataframe_prop.key},"
+    }
+
     vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
         watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
         computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
     }
+    vueElintegroApplicantCVDataframe_script(VueJsEntity){ bean ->
+        def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
+        def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
+        def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
+        def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
+        watch = """ refreshVueElintegroApplicantCVDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantCVDataframe_fillInitData();}},\n"""
+        computed = "refreshVueElintegroApplicantCVDataframe(){return this.vueElintegroApplicantCVDataframe_prop.key},\n"
+        methods ="""afterRefreshing(response){
+              
+                                 var params = response;
+                                 var fileName = params.vueElintegroApplicantCVDataframe_files_fileName;
+                                  var extension = fileName.split('.').pop();
+                                  if(extension == 'pdf'){
+                                    var defaultImageUrlForPdf = '${pathForPdf}'
+                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForPdf}')   
+                                  }
+                                  else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
+                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForExcel}')   
+
+                                  }
+                                  else if(extension == 'doc' || extension == 'docx'){
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForDocFile}')   
+                                  }
+                                  else if(extension == 'csv' || extension == 'CSV'){
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForCsvFile}')   
+                                  }
+                                  
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
+                                  
+                                  var applicantId = response.vueElintegroApplicantCVDataframe_application_id;
+                                  var imageSrc = "fileDownload/imagePreview/"+applicantId;
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_images_name',imageSrc);    
+                                 
+                                  },\n
+                              
+        """
+    }
+    vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
+        methods ="""addCommentsForApplicant(){
+                                        
+                                    var params = this.state;
+                                    var self = this;
+                                    params['dataframe'] = 'vueElintegroCommentPageForApplicantDataframe';
+                                    axios({
+                                           method:'post',
+                                           url:'EmployeeApplication/addComment',
+                                           data: params
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                   self.vueElintegroCommentPageForApplicantDataframe_fillInitData()
+                                                                   });
+                  }"""
+    }
+    vueTranslatorAssistantAfterLoggedInDataframe_script(VueJsEntity) {
+        data = """disableWhenItemNotExist:true,"""
+        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantAfterLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
+        computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantAfterLoggedInDataframe_project_list;}"""
+    }
+    vueTranslatorAssistantBeforeLoggedInDataframe_script(VueJsEntity) {
+        data = """disableWhenItemNotExist:true,"""
+        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantBeforeLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
+        computed = """ enableDisableTranstaleButtonComputed(){return this.state.vueTranslatorAssistantBeforeLoggedInDataframe_project_list;}"""
+    }
+    vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
+        methods ="""saveProject(timeOut){
+                    var params = this.state;
+                    var self = this;
+                    params['dataframe'] = 'vueCreateProjectForTranslationDataframe';
+                                    axios({
+                                           method:'post',
+                                           url:'translatorAssistant/saveProjectData',
+                                           data: params
+                                    }).then(function(responseData){
+                                                     var response = responseData.data;
+                                                     if(response.success == true){
+                                                                   var currentlySaveProject = {Name:response.params.name,projectId:response.params.id}
+                                                                   self.vueCreateProjectForTranslationDataframe_project_sourceFile_ajaxFileSave(response,params);
+                                                                   excon.saveToStore('vueTranslatorAssistantBeforeLoggedInDataframe','vueTranslatorAssistantBeforeLoggedInDataframe_project_list',currentlySaveProject);
+                                                                   excon.saveToStore('vueTranslatorAssistantAfterLoggedInDataframe','vueTranslatorAssistantAfterLoggedInDataframe_project_list',currentlySaveProject);
+                                                                   setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, timeOut);
+                                                     }
+                                                     else{
+                                                          excon.showMessage(responseData,'vueCreateProjectForTranslationDataframe');
+                                                     }              
+
+                                    });
+                    }"""
+    }
+    vueTranslatorDataframe_script(VueJsEntity){ bean ->
+        data = """isHidden : false ,showDownloadAllTranslatedFilesButton:false,disableAddButtonWhenItemNotSelect:true,"""
+        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
+                    enableDisableAddButton:{handler: function(val){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
+                    """
+        computed = """showOrHideDownloadAllFilesButton(){if(this.state.vueTranslatorDataframe_project_language_items.length > 1){return true;}return false;},\n
+                      enableDisableAddButton(){return this.state.vueTranslatorDataframe_project_languages;},\n
+                   """
+        methods = """addLanguage(){
+                                    var params = this.state;
+                                    var self = this;
+                                    params['dataframe'] = 'vueTranslatorDataframe';
+                                    params['projectId'] =Number(this.state.keys.projectId);
+                                    axios({
+                                           method:'post',
+                                           url:'translatorAssistant/addLanguage',
+                                           data: params
+                                    }).then(function(responseData){
+                                                                   self.vueTranslatorDataframe_fillInitData()
+                                                                   var response = responseData.data;
+                                                                   });
+                             },\n
+                             translatedText(params){
+                                        var previouslyClickedValue = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage')
+                                        if(previouslyClickedValue == ""){
+                                        this.isHidden = !this.isHidden
+                                        }else{
+                                        this.isHidden = true
+                                        }
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','targetLanguage',params.language)
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
+
+                             },\n
+                             downloadAllTranslatedFiles(){
+                                       var params = this.state;
+                                       var self = this;
+                                       if(this.\$store.state.vueInitDataframe.loggedIn){                    
+                                                         axios({
+                                                                method:'post',
+                                                                url:'translatorAssistant/compressAllFilesInZip',
+                                                                data: params
+                                                         }).then(function(responseData){
+                                                                var response = responseData.data;
+                                                                if(response.success == true){
+                                                                    var fileURL = 'translatorAssistant/downloadZipFile/'+response.projectId
+                                                                    var fileLink = document.createElement('a');
+                                                                    fileLink.href = fileURL;
+                                                                    document.body.appendChild(fileLink);
+                                                                    fileLink.click();
+                                                                }else{
+                                                                     excon.showMessage(responseData,'vueTranslatorDataframe');
+                                                                }      
+                                                        });
+                                       }
+                                       else{ 
+                                            params['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                            axios({ 
+                                                 method:'post',
+                                                 url:'translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
+                                                 data:params
+                                            }).then(function(responseData){
+                                                 excon.redirectPage(self,"login-page");
+                                            })
+                                       }                 
+                                        
+                                        
+                             },\n
+
+
+       """
+    }
+    vueAddNewRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
+        methods = """
+                    translateText(params){
+                                        excon.saveToStore('vueAddNewRecordForCurrentProjectDataframe','vueAddNewRecordForCurrentProjectDataframe_textToTranslate_selectedrow',params)
+                                        var params = this.state;
+                                        params['targetLanguage'] = params.targetLanguage;
+                                        params['dataframe'] = 'vueAddNewRecordForCurrentProjectDataframe';
+                                        axios({
+                                               method:'post',
+                                               url:'translatorAssistant/translateNewlyAddedRecord',
+                                               data: params
+                                        }).then(function(responseData){
+                                                 var response = responseData.data;
+                                                 excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
+                                        })
+                    },\n
+                    saveNewlyAddedRecord(){
+                                       var params = this.state;
+                                       var self = this;
+                                       if(this.state.vueAddNewRecordForCurrentProjectDataframe_key != "" && this.state.vueAddNewRecordForCurrentProjectDataframe_text != ""){
+                                           axios({
+                                               method:'post',
+                                               url:'translatorAssistant/saveNewlyAddedRecord',
+                                               data: params
+                                           }).then(function(responseData){
+                                               var response = responseData.data;
+                                               excon.setVisibility('vueAddNewRecordForCurrentProjectDataframe',false);
+                                           })
+                                      }
+                                      else{
+                                            alert("Key and Source Text shouldn't be empty.");
+                                      }
+                    
+                    },\n
+                    closeVueAddNewRecordForCurrentProjectDataframe(){
+                                    var params = this.state;
+                                    if(this.state.vueAddNewRecordForCurrentProjectDataframe_key != "" && this.state.vueAddNewRecordForCurrentProjectDataframe_text != ""){
+                                       var confirmMessage = confirm("Are you sure want to abandon the changes?");
+                                       if(confirmMessage){
+                                                excon.setVisibility("vueAddNewRecordForCurrentProjectDataframe", false);
+                                       }return false;
+                                    }
+                                    else{
+                                       excon.setVisibility("vueAddNewRecordForCurrentProjectDataframe", false);
+                                    }
+                    },\n
+                   
+        """
+    }
+    vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
+        watch = """ refreshVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe:{handler: function(val, oldVal) {this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_fillInitData();}},"""
+        computed = """refreshVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(){var textToEdit = this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text;
+                            return textToEdit;}"""
+        methods = """
+                   updateEditedTextInGrid(){
+                                      var translatedData = {text:this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text, targetLanguage:this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.targetLanguage};
+                                      var response = {newData:{textToTranslate:translatedData}};
+                                      excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
+                                      excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
+                   },\n
+                   closeVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(){
+                                     if(this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text != this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text){
+                                       var confirmMessage = confirm("Are you sure want to abandon the changes?");
+                                       if(confirmMessage){
+                                                excon.saveToStore("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe","vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text",this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text )
+                                                excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
+                                       }return false;
+                                    }
+                                    else{
+                                       excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
+                                    }
+                                     
+                   },\n
+                  """
+
+    }
+    vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
+        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false,progressBarEnable:false,"""
+        watch = """ refreshVueGridOfTranslatedTextDataframe:{handler: function(val, oldVal) {this.vueGridOfTranslatedTextDataframe_fillInitData();}},"""
+        computed = """refreshVueGridOfTranslatedTextDataframe(){var targetLanguage = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
+                            return targetLanguage;}"""
+        methods = """
+                  buttonShowHide(response){
+                                        var retrivedData = response.additionalData.vueGridOfTranslatedTextDataframe_translatedText.dictionary;
+                                        if(retrivedData.length > 1){
+                                        this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=true;
+                                        this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                        }
+                                        else{
+                                        this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=true;
+                                        this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=false;
+                                        }
+                  },\n
+                                    retrieveTranslatedText(){
+                                         this.progressBarEnable = true;
+                                         this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                         var params = this.state;
+                                         var self = this;
+                                         var myVar = setInterval(function(){
+                                               axios({
+                                                      method:'post',
+                                                      url:'translatorAssistant/intermediateRequest',
+                                                      data: params
+                                               }).then(function(responseData){
+                                                      var response = Math.round(responseData.data);
+                                                      excon.saveToStore('vueElintegroProgressBarDataframe','progressValue',response)
+                                                      if(self.progressBarEnable == false){clearInterval(myVar)}
+                                               });
+                                         } ,1000);
+                                         
+                                         axios({
+                                              method:'post',
+                                              url:'translatorAssistant/translateWithGoogle',
+                                              data: params
+                                         }).then(function(responseData){
+                                              self.vueGridOfTranslatedTextDataframe_fillInitData();
+                                              self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                              var response = responseData.data;
+                                              self.progressBarEnable = false;
+                                         });
+                                    },\n
+                                    downloadTargetFile(){
+                                            var params = this.state;
+                                            var self = this;
+                                            if(this.\$store.state.vueInitDataframe.loggedIn){
+                                                    var fileURL = 'translatorAssistant/downloadTargetFile/'+params.projectId+params.targetLanguage
+                                                    var fileLink = document.createElement('a');
+                                                    fileLink.href = fileURL;
+                                                    document.body.appendChild(fileLink);
+                                                    fileLink.click();
+                                            }
+                                            else{
+                                                      params['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
+                                                      axios({ 
+                                                             method:'post',
+                                                             url:'translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser',
+                                                             data:params
+                                                      }).then(function(responseData){
+                                                              excon.redirectPage(self,"login-page");
+                                                      })
+                                           }
+                                           
+                                    }
+        """
+
+    }
+    vueEditTranslatedRecordsOfGridDataframe_script(VueJsEntity){bean ->
+        watch = """ refreshVueEditTranslatedRecordsOfGridDataframe:{handler: function(val, oldVal) {this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();}},"""
+        computed = "refreshVueEditTranslatedRecordsOfGridDataframe(){return this.vueEditTranslatedRecordsOfGridDataframe_prop.key},"
+        methods ="""
+                    googleTranslateForEachRecord(){
+                    var params = this.state;
+                    var self = this;
+                    params['sourceLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage');
+                    params['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
+                    params['projectId'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
+                    params['dataframe'] = 'vueEditTranslatedRecordsOfGridDataframe';
+
+                     axios({
+                                           method:'post',
+                                           url:'translatorAssistant/translateEachRecordWithGoogle',
+                                           data: params
+                                    }).then(function(responseData){
+                                                                   var response = responseData.data;
+                                                                   excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text', response.translatedText); 
+                                                                   });
+                    },\n
+                    closeVueEditTranslatedRecordsOfGridDataframe(){
+                     var textBeforeEditing = excon.getFromStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing')
+                     var textAfterEditing = this.state.vueEditTranslatedRecordsOfGridDataframe_text_text;
+                     if(textBeforeEditing != textAfterEditing){
+                       var result = confirm("Are you sure want to abandon the changes?");
+                        if(result){
+                                excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text',textBeforeEditing)
+                                excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
+                        }
+                         return false;
+                     }
+                          excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
+                     
+                    }
+                    """
+    }
+
 }

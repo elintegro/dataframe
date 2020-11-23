@@ -286,31 +286,31 @@
         methods: {
 
             vueElintegroNavigationButtonDataframe_home: function() {
-                var allParams = {
+                var params = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
 
             },
 
             vueElintegroNavigationButtonDataframe_clientsProjects: function() {
-                var allParams = {
+                var params = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
 
             },
 
             vueElintegroNavigationButtonDataframe_technologies: function() {
-                var allParams = {
+                var params = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
 
-                allParams['id'] = 1;
+                params['id'] = 1;
 
                 if (this.$refs.vueElintegroNavigationButtonDataframe_form.validate()) {
                     axios({
                         method: 'post',
                         url: '/ElintegroWebsite/renderUrlData',
-                        params: allParams
+                        params: params
                     }).then(function(responseData) {
                         var response = responseData.data
                         if (response.success) {
@@ -344,35 +344,35 @@
             },
 
             vueElintegroNavigationButtonDataframe_gettingStarted: function() {
-                var allParams = {
+                var params = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
 
             },
 
             vueElintegroNavigationButtonDataframe_carrers: function() {
-                var allParams = {
+                var params = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
 
             },
 
             vueElintegroNavigationButtonDataframe_contactUs: function() {
-                var allParams = {
+                var params = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
 
             },
 
             vueElintegroNavigationButtonDataframe_login: function() {
-                var allParams = {
+                var params = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
 
             },
 
             vueElintegroNavigationButtonDataframe_register: function() {
-                var allParams = {
+                var params = {
                     'dataframe': 'vueElintegroNavigationButtonDataframe'
                 };
 

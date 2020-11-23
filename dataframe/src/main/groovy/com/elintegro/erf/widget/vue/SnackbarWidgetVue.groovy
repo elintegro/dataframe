@@ -24,24 +24,26 @@ class SnackbarWidgetVue extends WidgetVue{
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
+
+
         return """
       <v-snackbar
-        v-model="alertProp.snackbar"
+        v-model="state.alertProp.snackbar"
         :bottom="y === 'bottom'"
         :left="x === 'left'"
         :multi-line="mode === 'multi-line'"
         :right="x === 'right'"
         :timeout="timeout"
         :top="y === 'top'"
-        :color="alertProp.alert_type"
+        :color="state.alertProp.alert_type"
         :vertical="mode === 'vertical'"
       >
-        {{ alertProp.alert_message }}
+        {{ state.alertProp.alert_message }}
         <v-spacer></v-spacer>
         <v-btn
           dark
           text
-          @click="alertProp.snackbar = false"
+          @click="state.alertProp.snackbar = false"
         >
           <v-icon medium >close</v-icon>
         </v-btn>
@@ -53,26 +55,16 @@ class SnackbarWidgetVue extends WidgetVue{
         String y = field?.y?:"top"
         String x = field?.x?:"right"
         def timeout = field?.timeout?:6000
-        dataframe.getVueJsBuilder().addToComputedScript("""
-              alertProp(){
-               return this.\$store.state.${dataframe.dataframeName}.alertProp;
-           },\n
-        """)
+
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
         store.addToState("""
-             alertProp:{
+            alertProp:{
                 snackbar: false,
                 alert_type: '',
                 alert_message: ''
             },\n
-        """)
-        store.addToMutation("""
-            alertMessage(state, payload) {  
-                state.${dataframe.dataframeName}.alertProp.snackbar = payload.snackbar;
-                state.${dataframe.dataframeName}.alertProp.alert_type = payload.alert_type;
-                state.${dataframe.dataframeName}.alertProp.alert_message = payload.alert_message;
-            },\n
-        """)
+                """)
+
         return """
             y: '$y',
             x: '$x',

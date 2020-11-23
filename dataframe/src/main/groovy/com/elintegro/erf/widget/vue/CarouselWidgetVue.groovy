@@ -28,7 +28,7 @@ class CarouselWidgetVue extends CollectionWidgetVue{
     }
 
     private String getHtmlStructure(DataframeVue dataframe, Map field, String fldName, String label) {
-        String modelString = getFieldJSONModelNameVue(field)
+        String itemsStr = getFieldJSONItems(field)
         String onClick = field.OnClick?:""
         String height = field.height
         String content = field.content
@@ -41,7 +41,7 @@ class CarouselWidgetVue extends CollectionWidgetVue{
                       ${getAttr(field)}
                    >   
                       <v-carousel-item
-                           v-for="(item,i) in ${modelString}"
+                           v-for="(item,i) in ${itemsStr}"
                            :key="i"
                       >
                         ${content}

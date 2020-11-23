@@ -129,7 +129,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         String thisFieldName = dataframe.getFieldId(field)
         String dataVariable = dataframe.getDataVariableForVue(field)
 //        String dataVariable = dataframe.getDataVariableForVueCapitalized(field)
-//        return """allParams['$thisFieldName'] = this.$dataVariable;\n"""
+//        return """params['$thisFieldName'] = this.$dataVariable;\n"""
         return ""
     }
 

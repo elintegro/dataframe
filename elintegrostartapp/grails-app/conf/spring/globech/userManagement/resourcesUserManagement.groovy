@@ -25,7 +25,7 @@ beans {
 
         hql = "select employee.id, employee.positionStart, employee.role, employee.description, employee.person from Employee employee where employee.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveEmployee"
+        ajaxSaveUrl = "userManagementForm/saveEmployee"
 
         dataframeLabelCode = "Employee.Registration"
         //These are values, that overrides the default ones
@@ -39,7 +39,7 @@ beans {
         saveButton = true
         wrapInForm=true
 
-        doBeforeSave = """allParams["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nallParams["personId"] = excon.getFromStore("vueEmployeeContactDataframe", 'key');"""
+        doBeforeSave = """params["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nparams["personId"] = excon.getFromStore("vueEmployeeContactDataframe", 'key');"""
         doAfterSave = """var params = response.params;\n
 
                          vueEmployeeAddDataframeVar.\$router.push('/');this.location.reload();"""
@@ -86,7 +86,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
+        ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
                          excon.saveToStore("vueEmployeeContactDataframe","key", response.nodeId[0]);
@@ -133,11 +133,11 @@ beans {
 
 
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueEmployeeContactDataframe','key');"
+        doBeforeSave = "params['personId'] = excon.getFromStore('vueEmployeeContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueEmployeeAddDataframe','vueEmployeeAddDataframe_tab_model', 'vueEmployeeAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
+        ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
         wrapInForm=false
@@ -194,7 +194,7 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-        doBeforeRefresh = """allParams['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
+        doBeforeRefresh = """params['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
 //        childDataframes = ["vueContactManagementDataframe"]
 
@@ -356,7 +356,7 @@ beans {
 
         hql = "select provider.id, provider.person, provider.providerType from Provider provider where provider.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveProvider"
+        ajaxSaveUrl = "userManagementForm/saveProvider"
 
         dataframeLabelCode = "Provider.Registration"
         //These are values, that overrides the default ones
@@ -370,7 +370,7 @@ beans {
         saveButton = true
         wrapInForm=true
 
-        doBeforeSave = """allParams["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nallParams["personId"] = excon.getFromStore("vueProviderContactDataframe", 'key');"""
+        doBeforeSave = """params["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nparams["personId"] = excon.getFromStore("vueProviderContactDataframe", 'key');"""
         doAfterSave = """var params = response.params;\n
 
                          vueProviderAddDataframeVar.\$router.push('/');this.location.reload();"""
@@ -411,7 +411,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
+        ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
                          excon.saveToStore("vueProviderContactDataframe","key", response.nodeId[0]);
@@ -458,11 +458,11 @@ beans {
 
 
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueProviderContactDataframe','key');"
+        doBeforeSave = "params['personId'] = excon.getFromStore('vueProviderContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueProviderAddDataframe','vueProviderAddDataframe_tab_model', 'vueProviderAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
+        ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
         wrapInForm=false
@@ -519,7 +519,7 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-        doBeforeRefresh = """allParams['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
+        doBeforeRefresh = """params['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
 //        childDataframes = ["vueContactManagementDataframe"]
 
@@ -664,7 +664,7 @@ beans {
 
         hql = "select vendor.id, vendor.person, vendor.description from Vendor vendor where vendor.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveVendor"
+        ajaxSaveUrl = "userManagementForm/saveVendor"
 
         dataframeLabelCode = "Vendor.Registration"
         //These are values, that overrides the default ones
@@ -678,7 +678,7 @@ beans {
         saveButton = true
         wrapInForm=true
 
-        doBeforeSave = """allParams["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nallParams["personId"] = excon.getFromStore("vueVendorContactDataframe", 'key');"""
+        doBeforeSave = """params["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nparams["personId"] = excon.getFromStore("vueVendorContactDataframe", 'key');"""
         doAfterSave = """var params = response.params;\n
 
                          vueVendorAddDataframeVar.\$router.push('/');this.location.reload();"""
@@ -712,7 +712,7 @@ beans {
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveContact"
+        ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
                          excon.saveToStore("vueVendorContactDataframe","key", response.nodeId[0]);
@@ -759,11 +759,11 @@ beans {
 
 
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueVendorContactDataframe','key');"
+        doBeforeSave = "params['personId'] = excon.getFromStore('vueVendorContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueVendorAddDataframe','vueVendorAddDataframe_tab_model', 'vueVendorAddDataframe-tab-id');"
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        ajaxSaveUrl = "${contextPath}/userManagementForm/saveAddress"
+        ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
         wrapInForm=false
@@ -820,7 +820,7 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-        doBeforeRefresh = """allParams['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
+        doBeforeRefresh = """params['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
 //        childDataframes = ["vueContactManagementDataframe"]
 
@@ -1017,11 +1017,11 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-//        doBeforeRefresh = """allParams['contactType'] = this.\$route.params.routeId"""
+//        doBeforeRefresh = """params['contactType'] = this.\$route.params.routeId"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
 //        childDataframes = ["vueContactManagementDataframe"]
 
-        doBeforeRefresh = """allParams['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
+        doBeforeRefresh = """params['facilityId'] = excon.getFromStore("vueAppNameDataframe", 'facilityId');"""
         addFieldDef =[
                 "client": [
                         widget            : "GridWidgetVue"

@@ -97,7 +97,6 @@ public class DataframeViewJqxVue implements DataframeView {
             }else {
                 script.append("""
                        ${dataframeName}_${dfButton.name}: function(){
-                           var allParams = {'dataframe':'$dataframeName'};
                           $doBeforeAjax
                           $btnAjaxScript
                         },\n
@@ -206,7 +205,7 @@ public class DataframeViewJqxVue implements DataframeView {
             callBackFailureScript = dfButton.callBackParams.failureScript
         }
         return """
-                 allParams['id'] = 1;
+                 params['id'] = 1;
                  ${dataframe.getVueSaveVariables()}
                  $doBeforeSave
  if (this.\$refs.${dataframeName}_form.validate()) {
@@ -214,7 +213,7 @@ public class DataframeViewJqxVue implements DataframeView {
                 axios({
                     method:'post',
                     url:'$dfButton.url',
-                    params: allParams
+                    params: params
                 }).then(function (responseData) {
                         var response = responseData.data
                         if(response.success){

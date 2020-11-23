@@ -34,7 +34,7 @@ class GridWidgetVue extends WidgetVue {
     private static final Logger log = LoggerFactory.getLogger(GridWidgetVue.class);
 
     def contextPath = Holders.grailsApplication.config.rootPath
-    public String ajaxDeleteUrl = "${contextPath}/dataframe/ajaxDeleteExpire"
+    public String ajaxDeleteUrl = "dataframe/ajaxDeleteExpire"
     String embDDfr = "";
     private static final String headers = "headers"
     private static final String defaultData = "defaultData"
@@ -188,7 +188,7 @@ $fieldParams
                 }
                 fieldParams.append(tdString)
             }
-            requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
+            requestFieldParams.append("\nparams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
         field.put("dataHeader", dataHeader);
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
@@ -384,10 +384,10 @@ $fieldParams
         String refDataframeName = refDataframe.dataframeName
         return """ 
                          ${parentDataframeName}Var.${fldName}_selectedrow = dataRecord;
-                   var allParams = {'dataframe':'$refDataframeName'};
+                   var params = {'dataframe':'$refDataframeName'};
                    $fieldParams
                    axios.get('$refDataframe.ajaxUrl', {
-                    params: allParams
+                    params: params
                 }).then(function (responseData) {
                         var response = responseData.data.data;
                         console.log(response);
@@ -607,18 +607,18 @@ $fieldParams
         StringBuilder requestFieldParams = new StringBuilder()
         List<String> keyFieldNames = buttonRefDataframe.getKeyFieldNameForNamedParameter(buttonRefDataframe)
 
-        requestFieldParams.append("allParams['dataframe'] = '$buttonRefDataframe.dataframeName';\n")
-        requestFieldParams.append("allParams['parentDataframe'] = '$parentDataframeName';\n")
-        requestFieldParams.append("allParams['fieldName'] = '$fldName';\n")
-        requestFieldParams.append("allParams['id'] = dataRecord.id?dataRecord.id:dataRecord.Id;")
+        requestFieldParams.append("params['dataframe'] = '$buttonRefDataframe.dataframeName';\n")
+        requestFieldParams.append("params['parentDataframe'] = '$parentDataframeName';\n")
+        requestFieldParams.append("params['fieldName'] = '$fldName';\n")
+        requestFieldParams.append("params['id'] = dataRecord.id?dataRecord.id:dataRecord.Id;")
         keyFieldNames.each {
             if (it.split('_').collect().contains(valueMember)){
                 if(valueMember.equalsIgnoreCase("id")){
 
-                    requestFieldParams.append("\nallParams['").append(it).append("'] = allParams['id'];\n");
+                    requestFieldParams.append("\nparams['").append(it).append("'] = params['id'];\n");
                 }else{
 
-                    requestFieldParams.append("\nallParams['").append(it).append("'] = dataRecord.").append(valueMember).append(";\n");
+                    requestFieldParams.append("\nparams['").append(it).append("'] = dataRecord.").append(valueMember).append(";\n");
                 }
             }
 
@@ -628,7 +628,7 @@ $fieldParams
 //                            confirm('${confirmMessage}');
         return """
                 
-    var allParams = {};
+    var params = {};
     var editedIndex = this.state.${fldName}_items.indexOf(dataRecord);
     ${requestFieldParams.toString()}
     $doBeforeDelete
@@ -638,7 +638,7 @@ $fieldParams
         axios({
             method:'post',
             url:'$url',
-            data: allParams
+            data: params
         }).then(function (responseData) {
             if (responseData.data.success){
                 self.state.${fldName}_items.splice(editedIndex, 1);

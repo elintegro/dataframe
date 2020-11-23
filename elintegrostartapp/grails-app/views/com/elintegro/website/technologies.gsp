@@ -35,15 +35,15 @@
 </head>
 <body>
 <div class="technologiesContainer">
-    <img class="item" src="${contextPath}/assets/java.PNG" alt="java">
-    <img class="item" src="${contextPath}/assets/javascript.PNG" alt="javascript">
-    <img class="item" src="${contextPath}/assets/grailsphoto.PNG" alt="grails">
-    <img class="item" src="${contextPath}/assets/vuejs.PNG" alt="VueJS">
-    <img class="item" src="${contextPath}/assets/kafka.PNG" alt="Kafka">
-    <img class="item" src="${contextPath}/assets/oracle.PNG" alt="Oracle">
-    <img class="item" src="${contextPath}/assets/nodejs.PNG" alt="NodeJS">
-    <img class="item" src="${contextPath}/assets/kubernetes.PNG" alt="Kubernates">
-    <img class="item" src="${contextPath}/assets/mysql.PNG" alt="Mysql">
+    <img class="item" src="assets/java.PNG" alt="java">
+    <img class="item" src="assets/javascript.PNG" alt="javascript">
+    <img class="item" src="assets/grailsphoto.PNG" alt="grails">
+    <img class="item" src="assets/vuejs.PNG" alt="VueJS">
+    <img class="item" src="assets/kafka.PNG" alt="Kafka">
+    <img class="item" src="assets/oracle.PNG" alt="Oracle">
+    <img class="item" src="assets/nodejs.PNG" alt="NodeJS">
+    <img class="item" src="assets/kubernetes.PNG" alt="Kubernates">
+    <img class="item" src="assets/mysql.PNG" alt="Mysql">
 </div>
 
 </body>

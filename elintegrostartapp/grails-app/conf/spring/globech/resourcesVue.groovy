@@ -214,7 +214,7 @@ beans {
                         "widget" : "PictureUploadWidgetVue"
                         ,name:"propertyImages"
                         , valueMember: "mainPicture"
-                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                        ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                         ,insertAfter: "person.mainPicture"
                         ,multiple:false
                         ,editButton: true
@@ -254,10 +254,10 @@ beans {
                 "user.password":[widget: "PasswordWidgetVue", "width":"150", "height":"25"],
                 "password2":[widget: "PasswordWidgetVue", "width":"150", "height":"25"]
         ]
-        dataframeButtons = [ Submit: [name:"submit", type: "button", url: "${contextPath}/register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
+        dataframeButtons = [ Submit: [name:"submit", type: "button", url: "register/resetUserPassword", doBeforeAjax: """var url = Dataframe.getUrl();
                                                                                                                             var t = url.searchParams.get("token"); 
-                                                                                                                            if(t != undefined || t != null){ allParams['t']=t;}
-                                                                                          allParams['resetPasswordDfr-user-email']=jQuery("#userProfileDataframe-person-email").val();
+                                                                                                                            if(t != undefined || t != null){ params['t']=t;}
+                                                                                          params['resetPasswordDfr-user-email']=jQuery("#userProfileDataframe-person-email").val();
                                                                                          """, callBackParams:[successScript:"""if(data.redirect){window.location.href=data.redirectUrl;}
                                                                                                                                jQuery('#resetPassword-Div').jqxWindow('close');"""]],
                              Cancel:[name:"cancel", type:"button", script:"\$router.go(-1)"]]
@@ -311,7 +311,7 @@ beans {
 
         hql = "select user.email, user.password, user.firstName, user.lastName from User as user where user.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/register/register"
+        ajaxSaveUrl = "register/register"
 
         dataframeLabelCode = "User.Registration"
         //These are values, that overrides the default ones
@@ -350,7 +350,7 @@ beans {
         isGlobal = true
 
         boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
-        String loginAuthenticateUrl = loginWithSpringSecurity?"${contextPath}/login/authenticate" : "${contextPath}/login/loginUser"
+        String loginAuthenticateUrl = loginWithSpringSecurity?"login/authenticate" : "login/loginUser"
 
         addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
                        ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
@@ -358,9 +358,9 @@ beans {
         ]
 
         dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#loginDataframe';
-                                                                                                                                allParams["username"] = this.state.persiters.user.username.value;
-                                                                                                                               allParams["password"] = this.state.persiters.user.password.value;
-                                                                                                                               allParams["remember-me"] = this.vueLoginDataframe_rememberMe;
+                                                                                                                                params["username"] = this.state.persiters.user.username.value;
+                                                                                                                               params["password"] = this.state.persiters.user.password.value;
+                                                                                                                               params["remember-me"] = this.vueLoginDataframe_rememberMe;
                                                                                                                                 """,
                                     /* url: "/elintegrostartapp/login/loginUser" name:"login", type: "button",attr: "color='cyan'", script: """layout: " layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>",
 //                                                                                                                               var url = "/elintegrostartapp/api/login";
@@ -368,11 +368,11 @@ beans {
                                                                                                                        var url = "/elintegrostartapp/login/authenticate";
 
                                                                                                                        var elementId = '#loginDataframe';
-                                                                                                                       var allParams ={};
-                                                                                                                       allParams["username"] = this.vueLoginDataframe_user_username;
-                                                                                                                       allParams["password"] = this.vueLoginDataframe_user_password;
-                                                                                                                       allParams["remember_me"] = this.vueLoginDataframe_rememberMe;
-                                                                                                                       axios.post(url, allParams).then(function(responseData) {
+                                                                                                                       var params ={};
+                                                                                                                       params["username"] = this.vueLoginDataframe_user_username;
+                                                                                                                       params["password"] = this.vueLoginDataframe_user_password;
+                                                                                                                       params["remember_me"] = this.vueLoginDataframe_rememberMe;
+                                                                                                                       axios.post(url, params).then(function(responseData) {
                                                                                                                         var response = responseData.data
                                                                                                                         if (response.success) {
                                                                                                                             if (response.msg) {
@@ -411,7 +411,7 @@ beans {
                                              layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],
                              logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
 //                                                                                             var url = "/elintegrostartapp/oauth/authenticate/google";
-                                                                                             var url = "${contextPath}/springSecurityOAuth2/authenticate?provider=google";
+                                                                                             var url = "springSecurityOAuth2/authenticate?provider=google";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                              /*if(childWindow){
                                                                                                 window.opener.location.reload();
@@ -420,7 +420,7 @@ beans {
                                                                                               """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
                              logInWithFacebook:[name: "logInWithFacebook", type: "image", attr: "style=\"margin-top:3px;\"", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl", width: '135px', height: '43px'],script:"""
                                                                                              var provider = 'facebook';
-                                                                                             var url = "${contextPath}/springSecurityOAuth2/authenticate?provider="+provider+"";
+                                                                                             var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                               """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']]
 
@@ -492,7 +492,7 @@ beans {
         ]
 //        this.location.reload();
         dataframeButtons = [profile:[name:'Profile', type: "link", attr: "text small", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], showAsDialog: false, route:true, routeIdScript:"this.vueProfileMenuDataframe_person_id;", refDataframe: ref('vueUserProfileDataframe')],
-                            Logout:[name:"logout", type:"link", url:"${contextPath}/logoff", attr:"text small","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], script:"", callBackParams:[failureScript:"""vueProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
+                            Logout:[name:"logout", type:"link", url:"logoff", attr:"text small","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], script:"", callBackParams:[failureScript:"""vueProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
         currentFrameLayout = ref("vueProfileMenuDataframeLayout")
     }
 
@@ -503,8 +503,8 @@ beans {
         dataframeLabelCode = "Record.Event"
         hql = "select event.id, event.client,event.eventType, event.description,  event.images from Event event where event.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/applicationForm/saveEvent"
-        ajaxUrl = "${contextPath}/dataframe/ajaxCreateNew"
+        ajaxSaveUrl = "applicationForm/saveEvent"
+        ajaxUrl = "dataframe/ajaxCreateNew"
         initOnPageLoad = true
         route = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -533,7 +533,7 @@ beans {
                         "widget" : "PictureUploadWidgetVue"
                         ,name:"images"
                         ,valueMember: "images"
-                        ,ajaxFileSaveUrl: "${contextPath}/fileUpload/ajaxFileSave"
+                        ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                         ,multiple:true
                         ,editButton: true
                         ,attr: " style=\"margin-top:30px;\""
@@ -552,7 +552,7 @@ beans {
         saveButton = false
         route = true
         initOnPageLoad = true
-//        doBeforeRefresh = """allParams['contactType'] = this.\$route.params.routeId"""
+//        doBeforeRefresh = """params['contactType'] = this.\$route.params.routeId"""
 //        doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
         childDataframes = ["vueContactManagementDataframe"]
         /*,onClick:[showAsDialog: false, refDataframe: ref("vuePrescribedMedicationsDataframe")]

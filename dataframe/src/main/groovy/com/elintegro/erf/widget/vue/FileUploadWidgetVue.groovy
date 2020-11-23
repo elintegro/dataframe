@@ -55,13 +55,13 @@ class FileUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
         dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
                 .addToMethodScript("""
            ${fldName}_uploadFile: function(event){
-                        var allParams = {};
+                        var params = {};
                         this.${fldName}_files.push(event);
-                        this.${fldName}_ajaxFileSave(allParams);
+                        this.${fldName}_ajaxFileSave(params);
                      
                     },\n
           
-           ${fldName}_ajaxFileSave: function(allParams){
+           ${fldName}_ajaxFileSave: function(params){
                         var fileList = this.${fldName}_files;
                      
                         if(fileList.length > 0){
@@ -70,7 +70,7 @@ class FileUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                             var fileData = new FormData();
                             /*fileData.append('fileSize',fileList.length);
                             fileData.append('fieldnameToReload','$fieldNameToReload');
-                            jQuery.each(allParams, function (key, value) {
+                            jQuery.each(params, function (key, value) {
                                     fileData.append(key,value);
                             });
                             fileData.append('fldId','$fldName');

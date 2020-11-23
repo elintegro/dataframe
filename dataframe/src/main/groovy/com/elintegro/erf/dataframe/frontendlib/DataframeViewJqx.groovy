@@ -58,7 +58,7 @@ public class DataframeViewJqx implements DataframeView {
 			String buttonUrl = dfButton.url?:""
 			script.append("""
                         Dataframe.${dataframeName}_${dfButton.name} = function(){
-                           var allParams = {'dataframe':'$dataframeName'};
+                           var params = {'dataframe':'$dataframeName'};
                                    ${dfButton.script}
                           if (${!buttonUrl.isEmpty()}){
                             ${ getClickedButtonScript(dfButton) }
@@ -148,7 +148,7 @@ public class DataframeViewJqx implements DataframeView {
 				String buttonUrl = dfButton.url?:""
 				script.append("""
                         Dataframe.${dataframeName}_${dfButton.name} = function(){
-                           var allParams = {'dataframe':'$dataframeName'};
+                           var params = {'dataframe':'$dataframeName'};
                           if (${!buttonUrl.isEmpty()}){
                             ${ getClickedButtonScript(dfButton) }
                           }
@@ -190,18 +190,18 @@ public class DataframeViewJqx implements DataframeView {
 			failureScript = dfButton.callBackParams.failureScript
 		}
 			return """
-//				var allParams = {'dataframe':'$dataframeName'};
+//				var params = {'dataframe':'$dataframeName'};
                 if($dataframe.wrapInDiv){
                          $dataframe.saveScriptJs
                 }else{
 		                 jQuery.each(jQuery('#$dataframeName-form').serializeArray(), function(i, field) {
-                                allParams[field.name] = field.value;
+                                params[field.name] = field.value;
                          });
 	            }
 	            $doBeforeSave
 	            jQuery.ajax({
                         url: '$buttonUrl',
- 						data: allParams,
+ 						data: params,
 						type: 'POST',
 						error: function(data) {
 							alert("Error!");

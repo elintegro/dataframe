@@ -147,13 +147,13 @@ class PictureUploadWidgetVue extends WidgetVue{
                             var detailData = event.detail;
                             this.${fldName}_files = detailData[3];
                     },\n  """ : ""}
-           ${fldName}_ajaxFileSave: function(data, allParams){
+           ${fldName}_ajaxFileSave: function(data, params){
                         var fileList = this.${fldName}_files;
                         if(fileList.length > 0){
                             var picData = new FormData();
                             picData.append('fileSize',fileList.length);
                             picData.append('fieldnameToReload','$fieldNameToReload');
-                            jQuery.each(allParams, function (key, value) {
+                            jQuery.each(params, function (key, value) {
                                     picData.append(key,value);
                             });
                             picData.append('fldId','$fldName');

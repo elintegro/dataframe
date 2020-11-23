@@ -105,8 +105,8 @@ class PaypalSpec extends Specification implements GrailsUnitTest {
         paypalPayRequestParams.intent(Intent.SALE.desc)
         String returnUrl, cancelUrl
 		// TODO: init ${contextPath}
-        returnUrl = "http://localhost:9091/${contextPath}/paypalSuccess"
-        cancelUrl = "http://localhost:9091/${contextPath}/paypalCancel"
+        returnUrl = "http://localhost:9091/paypalSuccess"
+        cancelUrl = "http://localhost:9091/paypalCancel"
         paypalPayRequestParams.redirectUrls(PaypalServiceOperation.createRedirectUrls(cancelUrl, returnUrl))
         List<Transaction> transactionList = []
         transactionList.add(PaypalServiceOperation.createTransaction(amount: amount, description: "description"))

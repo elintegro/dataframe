@@ -51,7 +51,7 @@ class BoxListWidgetVue extends WidgetVue {
             def propItemVal = metaField.alias?:metaField.name
             dataHeader.add(['text':propItemVal.capitalize(), 'value':propItemVal])
             fieldParams.append("\n<td class='text-xs-right'>{{ props.item.$propItemVal }}</td>");
-            requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
+            requestFieldParams.append("\nparams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
         field.put("dataHeader", dataHeader);
         def parentDataframeName = dataframe.dataframeName
@@ -215,10 +215,10 @@ class BoxListWidgetVue extends WidgetVue {
         String refDataframeName = refDataframe.dataframeName
         return """ 
                          ${parentDataframeName}Var.${fldName}_selectedrow = dataRecord;
-                   var allParams = {'dataframe':'$refDataframeName'};
+                   var params = {'dataframe':'$refDataframeName'};
                    $fieldParams
                    axios.get('$refDataframe.ajaxUrl', {
-                    params: allParams
+                    params: params
                 }).then(function (responseData) {
                         var response = responseData.data.data;
                         console.log(response);
@@ -382,18 +382,18 @@ class BoxListWidgetVue extends WidgetVue {
         List<String> keyFieldNames = buttonRefDataframe.getKeyFieldNameForNamedParameter(buttonRefDataframe)
         keyFieldNames.each {
             if (it.split('-').collect().contains(valueMember)){
-                requestFieldParams.append("\nallParams['").append(it).append("'] = dataRecord.").append(valueMember).append(";\n");
+                requestFieldParams.append("\nparams['").append(it).append("'] = dataRecord.").append(valueMember).append(";\n");
             }
 
         }
         methodScriptsBuilder.append("""
                 ${fldName}_delete: function(dataRecord){
-                           var allParams = {'dataframe':'$buttonRefDataframe.dataframeName'};
+                           var params = {'dataframe':'$buttonRefDataframe.dataframeName'};
                            var editedIndex = this.${fldName}_items.indexOf(dataRecord);
                            $requestFieldParams
                             confirm('${deleteButton.message}');
                            axios.get('$deleteButton.ajaxDeleteUrl', {
-                             params: allParams
+                             params: params
                         }).then(function (responseData) {
                          if (responseData.data.success){
                            ${parentDataframeName}Var.${fldName}_items.splice(editedIndex, 1)
