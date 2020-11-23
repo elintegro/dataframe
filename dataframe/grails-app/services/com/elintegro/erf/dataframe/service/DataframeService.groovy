@@ -332,7 +332,7 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 		DataframeResponse response = new DataframeResponse()
 		response.operation = operation //todo: make sure is this required in this node?
 		response.data = requestParams
-		response.data.put(response.operation, operation)
+		response.data.put("operation", operation)
 		String msg
 		if(result) {
 			msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())

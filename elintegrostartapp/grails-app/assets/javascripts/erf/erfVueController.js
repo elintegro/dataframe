@@ -388,6 +388,20 @@ var excon = new Vue({
             const items = state[type][fldName]['items'];
             const selectedRow = state[fldName +'_selectedrow'];
             const editedIndex = items.indexOf(selectedRow);
+            const headers = state[type][fldName]['headers']
+            let row = {};
+            for(const [index, headerValue] of Object.entries(headers)){
+                let key = headerValue.keys;
+                let value = headerValue.value
+                let isInNewData = newData[key]
+                if (isInNewData){
+                    if ((operation==="I") && (key==="id")){
+                        row[value] = response['domain_keys'][fldName]["id"] //in case of insert id is not in persister so getting from domain_keys todo://change it
+                    }else {
+                        row[value] = isInNewData.value
+                    }
+                }
+            }
 /*
             let row = {};
             for(let key in newData){
@@ -406,10 +420,10 @@ var excon = new Vue({
 */
             state['stateName'] = dataframeName;
             if (operation==="I") {
-                state[type][fldName]['items'].push(newData);
+                state[type][fldName]['items'].push(row);
                 store.commit('updateState', state)
             } else {
-                Object.assign(state[type][fldName]['items'][editedIndex], newData);
+                Object.assign(state[type][fldName]['items'][editedIndex], row);
                 store.commit('updateState', state)
             }
         },
