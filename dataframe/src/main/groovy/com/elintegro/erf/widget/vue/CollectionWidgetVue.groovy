@@ -65,9 +65,10 @@ abstract class CollectionWidgetVue extends WidgetVue {
     }
 
     private List getValueList(Map fieldProps, List items, Object value, String fieldName){
-        List valueList = new ArrayList()
+        List valueList = null
         String displayMember = fieldProps.displayMember?:fieldName
         if(items && value){
+            valueList = new ArrayList()
             for(int j=0; j<items.size(); j++){
                 Map item = (Map) items[j]
                 for(int k=0; k<value.size(); k++){
@@ -268,6 +269,10 @@ abstract class CollectionWidgetVue extends WidgetVue {
             //TODO: check if this condition correct: if this is true, no reload will happen, so where we are reloading?
             if (!fieldProps?.containsKey(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL)){
                 fieldProps?.put(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL,  new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory))
+            }
+            Map sessionParams = dfInst.sessionParams
+            if (sessionParams){
+                inputData << sessionParams
             }
             ParsedHql parsedHql = fieldProps?.get(DataframeConstants.FIELD_PROP_REF_FIELD_PARSED_HQL)
             DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);

@@ -16,18 +16,18 @@ class TranslatorAssistantController {
 
     def saveProjectData() {
         def param = request.getJSON()
-        Project projectAlreadyExist = Project.findByNameAndSourceLanguageAndSourceFile(param.vueCreateProjectForTranslationDataframe_project_name, param.vueCreateProjectForTranslationDataframe_project_sourceLanguage.ename, param.vueCreateProjectForTranslationDataframe_project_sourceFile)
+        Project projectAlreadyExist = Project.findByNameAndSourceLanguageAndSourceFile(param.persisters.project.name.value, param.persisters.project.sourceLanguage.value.ename, param.persisters.project.sourceFile.value[0].fileName)
         if (projectAlreadyExist == null) {
-            Project projectNameAlreadyTaken = Project.findByName(param.vueCreateProjectForTranslationDataframe_project_name)
-            if (projectNameAlreadyTaken != null && projectNameAlreadyTaken.name == param.vueCreateProjectForTranslationDataframe_project_name) {
+            Project projectNameAlreadyTaken = Project.findByName(param.persisters.project.name.value)
+            if (projectNameAlreadyTaken != null && projectNameAlreadyTaken.name == param.persisters.project.name.value) {
                 def result = [success: false, alert_type: "error", msg: "Project name is already taken."]
                 render(result as JSON)
             } else {
                 def currentUser = springSecurityService.currentUser
                 Project project = new Project()
-                project.name = param.vueCreateProjectForTranslationDataframe_project_name
-                project.sourceLanguage = param.vueCreateProjectForTranslationDataframe_project_sourceLanguage.ename
-                project.sourceFile = param.vueCreateProjectForTranslationDataframe_project_sourceFile
+                project.name = param.persisters.project.name.value
+                project.sourceLanguage =  param.persisters.project.sourceLanguage.value.ename
+                project.sourceFile =  param.persisters.project.sourceFile.value[0].fileName
                 if (currentUser) {
                     project.addToUsers(currentUser)
                 }

@@ -51,9 +51,9 @@ beans{
                             ,elementId: "translatorAssistant"
                             ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
-                "project.list":[
+                "projectList":[
                         widget: "ComboboxVue"
-                        , hql: """select proj.id as projectId, proj.name as Name from Project proj where proj.id not in  (select pro.id from Project pro inner join pro.users u)"""
+                        , hql: """select project.id as projectId , project.name as Name from Project project where project.users is empty"""
                         ,"displayMember":"Name"
                         ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' """
                         , search:true
@@ -78,7 +78,7 @@ beans{
                                        ,elementId: "translatorAssistant"
                                        ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
-                "project.list":[
+                "projectList":[
                         widget: "ComboboxVue"
                         , hql: """select project.id as projectId , project.name as Name , users.id as Id from Project project inner join project.users users where users.id = :session_userid"""
                         ,"displayMember":"Name"
@@ -194,7 +194,7 @@ beans{
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doBeforeRefresh = """
                          var projectDetails = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject')
-                         var selectedProjectId = projectDetails.projectId
+                         var selectedProjectId = Number(projectDetails.projectId)
                          params['projectId']= selectedProjectId
                          excon.saveToStore('vueTranslatorDataframe','projectId',selectedProjectId)"""
         hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
@@ -202,7 +202,7 @@ beans{
 
                 "project.name":[widget:"TextDisplayWidgetVue",displayWithLabel:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                 "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "project.languages":[
+                "notSelectedLanguages":[
                         widget: "ComboboxVue"
                         , hql: """select language.id as id, language.ename as ename  from Language as language where language.ename not in (select text.language as language from Text as text where project_id =:projectId  group by language)"""
                         ,"displayMember":"ename"
@@ -215,13 +215,13 @@ beans{
                 ],
                 "add":[
                         "widget"     : "ButtonWidgetVue",
-                        "insertAfter":"project.languages",
+                        "insertAfter":"notSelectedLanguages",
                         script       : """ this.addLanguage()""",
                         "attr"       :"style='background-color:#2ab6f6; color:white; margin-top:13px;'",
                         disabled     :"disableAddButtonWhenItemNotSelect",
                         "flexGridValues":['xs12', 'sm12', 'md1', 'lg1', 'xl1'],
                 ],
-                "project.language":[
+                "selectedLanguages":[
                         widget: "ListWidgetVue"
                         , hql: """select text.language as language from Text text inner join text.project project  where project_id = :projectId and text.language != project.sourceLanguage group by language"""
                         ,"displayMember":"language"
