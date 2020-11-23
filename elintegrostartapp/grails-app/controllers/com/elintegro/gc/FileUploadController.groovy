@@ -27,8 +27,6 @@ class FileUploadController {
     def index() {}
 
     def ajaxFileSave(){
-        println(params)
-        println(params['fileName'])
         def fldId = params.fldId
         ArrayList inputFile = []
         def imagePath =[:]
@@ -50,25 +48,6 @@ class FileUploadController {
             }
         }
         render imagePath as JSON
-    }
-    def ajaxFileSaveWithParams(params,String projectName){
-        def fileUploadService = new FileUploadService()
-        def fldId = params.fldId
-        ArrayList inputFile = []
-        def imagePath =[:]
-        Integer fileSize = params["fileSize"] as Integer
-        if(fileSize != 0 && fileSize > 0){
-            for(int i=0; i<fileSize; i++){
-                inputFile.add(params."$fldId-file[$i]")
-            }
-            imagePath = fileUploadService.fileSaveWithFolder(inputFile, request,projectName)
-            if (saveFileRecord(imagePath)){
-                imagePath.put('success',true)
-            }else {
-                imagePath.put('success',false)
-            }
-        }
-        return imagePath
     }
 
     def saveFileRecord(imagePath){

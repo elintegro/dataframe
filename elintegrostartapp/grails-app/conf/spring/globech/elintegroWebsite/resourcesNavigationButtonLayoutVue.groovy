@@ -6,10 +6,10 @@ import com.elintegro.erf.layout.RowLayoutVue
 beans {
     elintegroNavigationButtonLayout(RowLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder ="""<div style="margin-bottom:auto;">[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</div> """
+        layoutPlaceHolder ="""<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex> """
     }
     elintegroNavigationButtonAfterLoggedInLayout(RowLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder ="""<div style="margin-bottom:auto;">[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</div> """
+        layoutPlaceHolder ="""<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex> """
     }
 }

@@ -21,40 +21,17 @@ import org.apache.commons.lang.WordUtils
 class TextDisplayWidgetVue extends WidgetVue{
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
-        if(field.hide && field.hide == true){
-            return ""
-        }
         String dataVariableForVue = getFieldName(dataframe, field)
-        String fldName = getFieldName(dataframe, field)
+        String fldName = field.name
         def fldNameDefault = WordUtils.capitalizeFully(fldName);
         String labelCode = field.labelCode?:fldName
         boolean isDynamic = field.isDynamic?true:false
-        String modelString = getModelString(dataframe, field)
-        String elementId = field.elementId
-        String attr = field.attr
-        String html = """<v-text-field
-            flat
-            solo
-            label="${getLabel(field)}"
-            v-model = "$modelString" 
-            ${isDisabled(dataframe, field)?":disabled = true":""}
-            readonly
-            ${toolTip(field)}
-            style="width:${getWidth(field)}; height:${getHeight(field, "40px")}; margin-top:-12px;$attr"
-            background-color="white"
-            ${getAttr(field)}
-          ></v-text-field>"""
         String displayPlaceholder = ""
         if(!isDynamic){
             displayPlaceholder = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
         } else {
             displayPlaceholder = "{{$dataVariableForVue}}"
         }
-        if(field.displayWithLabel && field.displayWithLabel == true){
-            return """<v-row style="margin:auto;">$displayPlaceholder:$html</v-row>"""
-        }
-        else {
-            return """<span id='$elementId' $attr >$displayPlaceholder</span>"""
-        }
+        return """<span>$displayPlaceholder</span>"""
     }
 }
