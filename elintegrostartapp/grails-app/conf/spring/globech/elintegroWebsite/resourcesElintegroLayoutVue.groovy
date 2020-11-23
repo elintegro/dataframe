@@ -31,7 +31,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex><v-app-bar class="appBar" fixed  dense  outline elevate-on-scroll scroll-target="#scrolling-techniques-7" flat color="white"  tabs >
                                    <vueElintegroNavigationDrawerDataframe/>
-                                   <v-toolbar-title style="position:relative;padding-top:50px;" ><vueElintegroLogoDataframe/></v-toolbar-title>
+                                   <v-toolbar-title style="position:relative;padding-top:20px;" ><vueElintegroLogoDataframe/></v-toolbar-title>
                                  
                                    <v-spacer></v-spacer>
                                  
