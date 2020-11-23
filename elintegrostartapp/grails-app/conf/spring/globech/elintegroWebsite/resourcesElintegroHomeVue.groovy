@@ -146,7 +146,6 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuotesContainerDataframe']
         saveButton = false
-        initOnPageLoad = true
         flexGridValues= ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
                 customerSay:["widget":"TextDisplayWidgetVue"

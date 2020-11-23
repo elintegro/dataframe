@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -15,14 +15,17 @@ package com.elintegro.gerf
 
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.service.DataframeService
+import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.service.JavascriptService
 import com.elintegro.erf.dataframe.service.TreeService
-import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.converters.JSON
+import grails.test.mixin.gorm.Domain
 import grails.util.Holders
-import org.springframework.context.ApplicationContext
+import org.springframework.context.MessageSource
+import org.springframework.context.i18n.LocaleContextHolder
 //import org.codehaus.groovy.grails.commons.ApplicationHolder
+import org.springframework.context.ApplicationContext
+
 /**
  * Created with IntelliJ IDEA.
  * User: Shai- Eugenel
@@ -35,7 +38,6 @@ class DataframeController {
 	ApplicationContext ctx;
 	TreeService treeService;
 	JavascriptService javascriptService;
-	DataframeService dataframeService
 
 	public static String TreeId_DELIMITER = "-";
 
@@ -75,16 +77,68 @@ class DataframeController {
 	 * @return
 	 */
 	def ajaxValues() {
-
-//		Dataframe dataframe = getDataframe(params)
-
-		def jsonMap = dataframeService.ajaxValuesRaw(request, session)
-
-		//def converter = jsonMap as JSON
-
-		render(jsonMap as JSON)
+		def jsonMap = ajaxValuesRaw()
+		def converter = jsonMap as JSON
+		converter.render(response)
 	}
+	/*def ajaxValuesVue(){
+		def jsonMap = ajaxValuesRawVue()
+		def converter = jsonMap as JSON
+		converter.render(response)
+	}*/
 
+	def ajaxValuesRaw() {
+
+		Dataframe dataframe = getDataframe(params)
+
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//Actual data, retrieved from Database:
+		//
+
+		def userId = session.getAttribute("userid")
+		if (userId == null) {
+			session.setAttribute("userid", (long) grailsApplication.config.guestUserId)
+		}
+		userId = session.getAttribute("userid")
+
+		def p = params
+		def s = session
+
+		def dfInstance = new DataframeInstance(dataframe, params)
+
+		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
+
+		def jsonMap = dfInstance.readAndGetJson()
+
+		def inp = dfInstance.getFieldValuesAsKeyValueMap()
+		return jsonMap
+	}
+	/*def ajaxValuesRawVue(){
+
+		Dataframe dataframe = getDataframe(params)
+
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//Actual data, retrieved from Database:
+		//
+
+		def userId = session.getAttribute("userid")
+		if(userId == null){
+			session.setAttribute("userid", (long)grailsApplication.config.guestUserId)
+		}
+		userId = session.getAttribute("userid")
+
+		def p = params
+		def s = session
+
+		def dfInstance = new DataframeInstance(dataframe, params)
+
+		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
+
+		def jsonMap = dfInstance.readAndGetJson()
+
+		def inp = dfInstance.getFieldValuesAsKeyValueMap()
+		return jsonMap
+	}*/
 	/**
 	 * This method uses the parameter in the given hql of Dataframe object and retrieve the corresponding
 	 * values from database. If there is no match for the parameter then a blank list will be return other
@@ -118,9 +172,10 @@ class DataframeController {
 	 */
 	def ajaxCreateNew() {
 		Dataframe dataframe = getDataframe(params)
-
-		def userId = dataframeService.getSessionUserId(session)
-
+		def userId = session.getAttribute("userid")
+		if (userId == null) {
+			session.setAttribute("userid", (long) grailsApplication.config.guestUserId)
+		}
 		def dfInstance = new DataframeInstance(dataframe, params)
 		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
 		def jsonMap = dfInstance.createAndGetJson()
@@ -132,26 +187,99 @@ class DataframeController {
 		render jsonMap as JSON
 	}
 
+
+	public static long getSessionUserId(def session) {
+		String userId = session.getAttribute("userid")
+		if ( userId == null ) {
+			session.setAttribute("userid", (long) Holders.grailsApplication.config.guestUserId)
+		}
+		return Long.valueOf(userId)
+	}
+
+
 	/**
 	 * This method uses the parameter to update/insert the fields mention on hql of the Dataframe
 	 * object.Return a json as per the success or failure of the save.
 	 * @return
 	 */
+//	def ajaxSave(){
+//		ajaxSave(params)
+//
+//	}
 	def ajaxSave(){
-		def resultData = dataframeService.saveRaw(request);
-		//resultData.remove("dfInstance")
+		def resultData = ajaxSaveRaw();
+		resultData.remove("dfInstance")
+		def converter = resultData as JSON
+		converter.render(response)
+	}
+
+	def ajaxSaveRaw(){
+		def _params = request.getJSON()
+		Dataframe dataframe = getDataframe(_params)
+		def dfInstance = new DataframeInstance(dataframe, _params)
+		def operation = 'U'; //Update
+		def result;
+
+		try {
+			result = dfInstance.save(true);
+		}catch(Exception e){
+			log.error("Failed to save data for dataframe ${dfInstance.df.dataframeName} Error : \n " + e)
+		}
+
+		if(dfInstance.isInsertOccured()){
+			operation = "I";
+		}
+
+		def resultData
+		def generatedKeys = [:]
+		def generatedKeysArr = []
+
+		Map savedResultMap = dfInstance.getSavedDomainsMap();
+
+		Map<String, Map> resultAlias = [:]
+		savedResultMap.each { domainAlias, domainInstance ->
+//			savedResultMap.each { domainAlias, domainObj ->
+			//this.writableDomains.put(domainAlias, ["parsedDomain": field.domain, "queryDomain":null, "keys":[], "domainAlias": domainAlias])
+//			def doamin = domainObj[0]
+//			def domainInstance = domainObj[1]
+//			doamin?.keys?.each{ key ->
+//				def keyValue = domainInstance."${key}"
+//				generatedKeys.put("${doamin.parsedDomain}_${key}", keyValue)
+//				generatedKeysArr.add(keyValue)
+//			}
+
+
+			Map record = [:];
+			def properties = getAllProperties(domainInstance)
+			properties.each { fieldName, value ->
+				String alias = dataframe.getFieldAlias(domainAlias, fieldName)
+				if (alias){
+					record.put(alias, value);
+				}
+			}
+			resultAlias.put(String.valueOf(domainAlias), record)
+		}
+
 /*
-		if(result) {
-			String msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
-			responseData = ['success': true, 'msg': msg, operation: operation, data: requestParams, params: requestParams]
-		} else {
-			String msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
-			responseData = ['msg': msg, 'success': false]
+		result?.each{ record->
+			def _id = record.id
+			generatedKeys.add record.id
 		}
 */
-		//TODO: check if this is OK
-		def rsp = resultData as JSON
-		render(rsp)
+		//TODO: why do we need this? May be it is failing render process?
+		_params.remove("controller")
+		_params.remove("action")
+
+		MessageSource messageSource = dataframe.messageSource
+
+		if(result) {
+			String msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
+			resultData = ['success': true, 'msg': msg, generatedKeys: generatedKeys, nodeId: generatedKeysArr, operation: operation, newData: resultAlias, params: _params, dfInstance: dfInstance]
+		} else {
+			String msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
+			resultData = ['msg': msg, 'success': false]
+		}
+		return resultData
 	}
 
 	/**
