@@ -151,14 +151,14 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 					widget = "DateWidgetVue";
 					break;
 				case "VARCHAR":
-					if(fld.length > BIG_TEXT_FIELD_LENGTH){
-						widget = "TextAreaWidgetVue";
-					}
-					else if (fld.name.toLowerCase().indexOf("email") >= 0) {
+					if (fld.name.toLowerCase().indexOf("email") >= 0) {
 						widget = "EmailWidgetVue";
 					}
 					else if(fld.name.toLowerCase().indexOf("phone") >= 0){
 						widget = "PhoneNumberWidgetVue"
+					}
+					else if(fld.length > BIG_TEXT_FIELD_LENGTH){
+						widget = "TextAreaWidgetVue";
 					}
 					else{
 						widget = "InputWidgetVue";

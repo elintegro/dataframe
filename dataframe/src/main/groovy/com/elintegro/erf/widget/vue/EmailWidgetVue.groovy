@@ -28,15 +28,17 @@ class EmailWidgetVue extends WidgetVue{
         boolean isReadOnly = dataframe.isReadOnly(field)
         //String modelString = getModelString(dataframe, field)
         //String modelString = dataframe.getFieldJSONModelNameVue(field)
+        String placeholder = field.placeholder?:"Enter your ${field.name}."
         return """
                <v-text-field
                  label="${getLabel(field)}"
-                 placeholder = "Enter your ${field.name}."
+                 placeholder = "${placeholder}"
                  v-model = "${getFieldJSONModelNameVue(field)}" 
                  ${validate(field)?":rules = '${fldName}_rule'":""}
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}
                  style="width:${getWidth(field)}; height:${getHeight(field, '30px')};"   
+                 ${getAttr(field)}
                 ></v-text-field>
                """
     }
