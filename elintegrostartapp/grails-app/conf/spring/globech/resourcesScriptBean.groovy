@@ -1005,8 +1005,8 @@ beans {
         watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
                     enableDisableAddButton:{handler: function(val){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
                     """
-        computed = """showOrHideDownloadAllFilesButton(){if(this.state.vueTranslatorDataframe_project_language_items.length > 1){return true;}return false;},\n
-                      enableDisableAddButton(){return this.state.vueTranslatorDataframe_project_languages;},\n
+        computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.items.length > 1){return true;}return false;},\n
+                      enableDisableAddButton(){return this.state.transits.notSelectedLanguages.value;},\n
                    """
         methods = """addLanguage(){
                                     var params = this.state;
@@ -1031,7 +1031,7 @@ beans {
                                         }
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','targetLanguage',params.language)
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
-                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.vueTranslatorDataframe_project_sourceLanguage)
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.persisters.project.sourceLanguage.value)
 
                              },\n
                              downloadAllTranslatedFiles(){
