@@ -386,8 +386,6 @@ var excon = new Vue({
             if(!dataframeName && !fldName && !newData) return;
             let state = store.getters.getState(dataframeName);
             const items = state[type][fldName]['items'];
-            const selectedRow = state[fldName +'_selectedrow'];
-            const editedIndex = items.indexOf(selectedRow);
             const headers = state[type][fldName]['headers']
             let row = {};
             for(const [index, headerValue] of Object.entries(headers)){
@@ -396,33 +394,20 @@ var excon = new Vue({
                 let isInNewData = newData[key]
                 if (isInNewData){
                     if ((operation==="I") && (key==="id")){
-                        row[value] = response['domain_keys'][fldName]["id"] //in case of insert id is not in persister so getting from domain_keys todo://change it
+                        row[value] = isInNewData?isInNewData.value:response['domain_keys'][fldName]["id"] //in case of insert id is not in persister so getting from domain_keys todo://change it
                     }else {
                         row[value] = isInNewData.value
                     }
                 }
             }
-/*
-            let row = {};
-            for(let key in newData){
-                let dataMap = newData[key];
-                for(let j in dataMap){
-                    if(selectedRow && Object.keys(selectedRow).length !== 0){
-                        if (j in selectedRow) {
-                            row[j] = dataMap[j];
-                        }
-                    } else {
-                        row[j] = dataMap[j];
-                    }
 
-                }
-            }
-*/
             state['stateName'] = dataframeName;
             if (operation==="I") {
                 state[type][fldName]['items'].push(row);
                 store.commit('updateState', state)
             } else {
+                const selectedRow = state[fldName +'_selectedrow'];
+                const editedIndex = items.indexOf(selectedRow);
                 Object.assign(state[type][fldName]['items'][editedIndex], row);
                 store.commit('updateState', state)
             }

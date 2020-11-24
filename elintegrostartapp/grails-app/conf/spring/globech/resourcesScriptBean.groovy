@@ -845,15 +845,11 @@ beans {
     }
     vueNewEmployeeApplicantAddSkillDataframe_script(VueJsEntity){bean ->
         methods = """addNewSkill(){
-                                    var details = this.state.vueNewEmployeeApplicantAddSkillDataframe;                           
-                                    var details = this.state.vueNewEmployeeApplicantAddSkillDataframe
-                                    console.log(details);
+                                    
                                     var params = this.state;
+                                    params['applicationId']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
                                     var self = this;
-                                    params['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','state.persisters.application.id.value')
-                                    params['vueNewEmployeeApplicantAddSkillDataframe_application_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
-                                    params['dataframe'] = 'vueNewEmployeeApplicantAddSkillDataframe';
-                                    console.log(params)
+                                    
                                              
                                     axios({
                                            method:'post',
@@ -861,8 +857,9 @@ beans {
                                             data: params
                                     }).then(function(responseData){
                                                                    var response = responseData.data;
+                                                                   response
                                                                    excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
-                                                                   excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'I');                                                 
+                                                                   excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'I','transits');                                                 
                                                                    console.log(response)                      
                                                                    });
                   }"""

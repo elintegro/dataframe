@@ -104,6 +104,7 @@ class GridWidgetVue extends WidgetVue {
         String headerString = "${getFieldJSONNameVue(field)}${DOT}${headers}"
         String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
         String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
+        String itemKey = field.itemKey?:"id"
         return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
 
        ${showGridSearch?"""
@@ -123,6 +124,7 @@ class GridWidgetVue extends WidgetVue {
             :headers="${headerString}"
             :items="${itemsStr}"
             :items-per-page="-1"
+            item-key="${itemKey}"
             ${showGridSearch?":search='${fldName}_search'":""}
             ${dataTableAttribbutes.toString()}
             ${getAttr(field)}
