@@ -339,7 +339,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
 
         doAfterSave = """
                                  
-                        excon.goToTab("vueNewEmployeeApplicantDataframe", "vueAddressDataframe");
+                        excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeUploadResumeDataframe");
                       """
 
         doBeforeSave = """
@@ -366,86 +366,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         currentFrameLayout = ref("vueNewEmployeeBasicInformationDataframeLayout")
 
     }
-    vueAddressDataframe(DataframeVue){ bean ->
 
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueAddressDataframe']
-        bean.autowire='byName'
-
-        dataframeLabelCode = "Address.Information"
-//		hql = "select address.id, address.addressLine, address.street from Address as address where address.id=:id"
-        hql = "select address.addressLine, address.addressLine2, address.id,  address.addressText, address.apartment, address.street, address.cityString, address.countryString, address.postalZip from Address as address where address.id=:id"
-        doBeforeSave = """var domainKeys = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys');
-                          params['personId'] = domainKeys.Person.id """
-        doAfterSave = "excon.goToTab('vueNewEmployeeApplicantDataframe','vueNewEmployeeUploadResumeDataframe');"
-
-        childDataframes =["vueMapWidgetDataframe"]
-        ajaxSaveUrl = "applicationForm/saveAddress"
-        flexGridValuesForSaveButton = ['xs4', 'sm4', 'md4', 'lg4', 'xl4']
-        deleteButton = false
-        insertButton=false
-        saveButton = true
-        wrapInForm=false
-        initOnPageLoad = false
-        createStore = true
-        addFieldDef = [
-                "address.addressLine": [
-                        "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-
-                ],
-
-                "address.addressLine2": [
-                        "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-
-                ],
-                "address.postalZip": [
-                        "widget"   : "InputWidgetVue"
-
-                ],
-                "validateWithGoogle":[
-                        "widget"     : "ButtonWidgetVue",
-                        insertAfter: "address.addressLine",
-                        script       : """ this.updatedAddressValue = this.state.persisters.address.addressLine.value;""",
-                        "flexGridValues":['xs4', 'sm4', 'md4', 'lg4', 'xl4'],
-                ],
-                "googleMap": [
-                        "widget"      : "DataframeWidgetVue",
-                        dataframe     : ref("vueMapWidgetDataframe"),
-                        "attr"        :" @resultData='updateAddressFields'",
-                        props      :[key:":addressValue", value:"updatedAddressValue"],
-                        passValueAsProp : true,
-                        "showInMap"   :true,
-                        "name"        : "googleMap",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-                        "height"      :'500px'
-
-                ]
-        ]
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueApplicationFormDataframe, "vueApplicationFormDataframe_tab_model","vueApplicationFormDataframe-tab-id");\n""", flexGridValues: ['xs4', 'sm4', 'md4', 'lg4', 'xl4'], url: ""] ]
-
-        currentFrameLayout = ref("vueAddressDataframeLayout")
-
-    }
-    vueMapWidgetDataframe(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueMapWidgetDataframe']
-        initOnPageLoad = false
-        saveButton = false
-        addFieldDef = [
-                "googleMap": [
-                        "widget"   : "MapWidgetVue",
-                        "showInMap":true,
-                        "name"     : "googleMap",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-                        "height"   :'500px'
-
-                ]
-        ]
-
-        currentFrameLayout = ref("defaultDataframeLayout")
-    }
     vueNewEmployeeUploadResumeDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
@@ -462,10 +383,10 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         doBeforeSave = """
             //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rather then insert a new one.                          
             excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
-              const applicantId = excon.getFromStore("vueNewEmployeeBasicInformationDataframe", "domain_keys.application.id")  
-              params.persisters.application.id.value = applicantId;
-              params.namedParameters.id.value = applicantId;
-              params.domain_keys.application.id = applicantId;    
+              const applicationId = excon.getFromStore("vueNewEmployeeBasicInformationDataframe", "domain_keys.application.id")  
+              params.persisters.application.id.value = applicationId;
+              params.namedParameters.id.value = applicationId;
+              params.domain_keys.application.id = applicationId;    
         """
         doAfterSave = """
                          excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeSelfAssesmentDataframe");
@@ -503,7 +424,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         tab = true
         saveButton = false
         flexGridValuesForSaveButton =['xs6', 'sm6', 'md6', 'lg6', 'xl6']
-        doBeforeRefresh = """params['id']= excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id');
+        doBeforeRefresh = """params['applicationId']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
                              """
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeAddtionalQuestionsDataframe","key", response.nodeId[0]);
@@ -512,10 +433,11 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                 "applicationSkill":[ widget          : "GridWidgetVue"
 
                                     ,name            : "applicationSkill"
-                                    ,hql             : """select application.id as AppId,applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"""
+                                    ,hql             : """select application.id as AppId,applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:applicationId"""
                                     ,internationalize: true
                                     ,onClick :[showAsDialog: true, refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe"),]
                                     ,editButton: true
+                                    ,itemKey: "Id"
                                     ,onButtonClick   : [
                                                 ['actionName': 'Edit Skill', 'buttons': [
                                                         [name        : "edit"
@@ -560,7 +482,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         saveButton = false
         initOnPageLoad = true
         putFillInitDataMethod = true
-        hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"
+        hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:applicationId"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = ["applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]]]]
         dataframeButtons = [save: [name:"save", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""this.addNewSkill();""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
@@ -1067,4 +989,85 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
 
 
     }
+    //    This address dataframe might be used later...
+//    vueAddressDataframe(DataframeVue){ bean ->
+//
+//        bean.parent = dataFrameSuper
+//        bean.constructorArgs = ['vueAddressDataframe']
+//        bean.autowire='byName'
+//
+//        dataframeLabelCode = "Address.Information"
+////		hql = "select address.id, address.addressLine, address.street from Address as address where address.id=:id"
+//        hql = "select address.addressLine, address.addressLine2, address.id,  address.addressText, address.apartment, address.street, address.cityString, address.countryString, address.postalZip from Address as address where address.id=:id"
+//        doBeforeSave = """var domainKeys = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys');
+//                          params['personId'] = domainKeys.Person.id """
+//        doAfterSave = "excon.goToTab('vueNewEmployeeApplicantDataframe','vueNewEmployeeUploadResumeDataframe');"
+//
+//        childDataframes =["vueMapWidgetDataframe"]
+//        ajaxSaveUrl = "applicationForm/saveAddress"
+//        flexGridValuesForSaveButton = ['xs4', 'sm4', 'md4', 'lg4', 'xl4']
+//        deleteButton = false
+//        insertButton=false
+//        saveButton = true
+//        wrapInForm=false
+//        initOnPageLoad = false
+//        createStore = true
+//        addFieldDef = [
+//                "address.addressLine": [
+//                        "widget"   : "InputWidgetVue",
+//                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+//
+//                ],
+//
+//                "address.addressLine2": [
+//                        "widget"   : "InputWidgetVue",
+//                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+//
+//                ],
+//                "address.postalZip": [
+//                        "widget"   : "InputWidgetVue"
+//
+//                ],
+//                "validateWithGoogle":[
+//                        "widget"     : "ButtonWidgetVue",
+//                        insertAfter: "address.addressLine",
+//                        script       : """ this.updatedAddressValue = this.state.persisters.address.addressLine.value;""",
+//                        "flexGridValues":['xs4', 'sm4', 'md4', 'lg4', 'xl4'],
+//                ],
+//                "googleMap": [
+//                        "widget"      : "DataframeWidgetVue",
+//                        dataframe     : ref("vueMapWidgetDataframe"),
+//                        "attr"        :" @resultData='updateAddressFields'",
+//                        props      :[key:":addressValue", value:"updatedAddressValue"],
+//                        passValueAsProp : true,
+//                        "showInMap"   :true,
+//                        "name"        : "googleMap",
+//                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+//                        "height"      :'500px'
+//
+//                ]
+//        ]
+//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueApplicationFormDataframe, "vueApplicationFormDataframe_tab_model","vueApplicationFormDataframe-tab-id");\n""", flexGridValues: ['xs4', 'sm4', 'md4', 'lg4', 'xl4'], url: ""] ]
+//
+//        currentFrameLayout = ref("vueAddressDataframeLayout")
+//
+//    }
+//    vueMapWidgetDataframe(DataframeVue){bean ->
+//        bean.parent = dataFrameSuper
+//        bean.constructorArgs = ['vueMapWidgetDataframe']
+//        initOnPageLoad = false
+//        saveButton = false
+//        addFieldDef = [
+//                "googleMap": [
+//                        "widget"   : "MapWidgetVue",
+//                        "showInMap":true,
+//                        "name"     : "googleMap",
+//                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+//                        "height"   :'500px'
+//
+//                ]
+//        ]
+//
+//        currentFrameLayout = ref("defaultDataframeLayout")
+//    }
 }

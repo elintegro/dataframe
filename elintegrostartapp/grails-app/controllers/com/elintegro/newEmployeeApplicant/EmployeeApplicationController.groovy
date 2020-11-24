@@ -66,13 +66,13 @@ class EmployeeApplicationController {
     def addNewSkillSet(){
         def newSkill = request.getJSON()
         ApplicationSkill appSkill = new ApplicationSkill()
-        appSkill.application = Application.findById(newSkill.vueNewEmployeeApplicantAddSkillDataframe_application_id)
-        appSkill.comment = newSkill.vueNewEmployeeApplicantAddSkillDataframe_applicationSkill_comment
-        appSkill.level = newSkill.vueNewEmployeeApplicantAddSkillDataframe_applicationSkill_level.toInteger()
-        appSkill.skill = newSkill.vueNewEmployeeApplicantAddSkillDataframe_applicationSkill_skill
+        appSkill.application = Application.findById(newSkill.applicationId)
+        appSkill.comment = newSkill.persisters.applicationSkill.comment.value
+        appSkill.level = newSkill.persisters.applicationSkill.level.value.toInteger()
+        appSkill.skill = newSkill.persisters.applicationSkill.skill.value
         appSkill.save()
-        def newSkillsAfterSave = [Skill:appSkill.skill,Id:appSkill.id,Comment: appSkill.comment, Level:appSkill.level]
-        def resultData = [success: true,newData:[applicationSkill:newSkillsAfterSave]]
+        def newSkillsAfterSave = [skill:[value:appSkill.skill],id:[value: appSkill.id],comment: [value:  appSkill.comment], level:[value:  appSkill.level]]
+        def resultData = [success: true,persisters:[applicationSkill:newSkillsAfterSave]]
         render (resultData as JSON)
     }
 }

@@ -315,7 +315,7 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 				def keyOldValue = requestParams?.domain_keys?."${myDomainAlias}"."${key}"
 				if(keyOldValue == null ) {
 					requestParams?.domain_keys?."${myDomainAlias}".put(key, keyValue)
-				}else if(keyOldValue != keyValue.toString()){
+				}else if(keyOldValue != keyValue){
 					//EU!!!
 					throw new DataframeException("Save is trying to change Key Value (and it is not Insert!) Could be hacker's attack!")
 				}
