@@ -435,7 +435,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                                     ,name            : "applicationSkill"
                                     ,hql             : """select application.id as AppId,applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:applicationId"""
                                     ,internationalize: true
-                                    ,onClick :[showAsDialog: true, refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe"),]
+//                                    ,onClick :[showAsDialog: true, refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe"),]
                                     ,editButton: true
                                     ,itemKey: "Id"
                                     ,onButtonClick   : [
@@ -443,6 +443,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                                                         [name        : "edit"
                                                          ,MaxWidth: 500
                                                         ,showAsDialog: true
+                                                        ,refreshInitialData:true
                                                         ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
                                                         ,refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe")
                                                         ,vuetifyIcon : [name: "edit"]
@@ -464,12 +465,12 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueNewEmployeeApplicantEditSkillDataframe']
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
-        initOnPageLoad = true
+        initOnPageLoad = false
         putFillInitDataMethod = true
-        doBeforeRefresh = """params['id']= this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
+        doBeforeRefresh = """ console.log("Hello props"+this.vueNewEmployeeApplicantEditSkillDataframe_prop); params['id']= this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
         doBeforeSave = """params['key_vueNewEmployeeApplicantEditSkillDataframe_applicationSkill_id_id'] = this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
         doAfterSave = """ excon.setVisibility("vueNewEmployeeApplicantEditSkillDataframe", false);
-                          excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'vueNewEmployeeSelfAssesmentDataframe_applicationSkill', 'U');
+                          excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'U');
                       """
         hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']

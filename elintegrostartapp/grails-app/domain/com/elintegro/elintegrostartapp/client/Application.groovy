@@ -60,7 +60,7 @@ class Application extends ControlField{
         referredByPerson (nullable: true)
         referredByOrganisation(nullable: true)
         facility(nullable: true)
-        linkedin(nullable: true)
+        linkedin(nullable: true, size: 2..40)
         question1(nullable: true,length: 4096)
         question2(nullable: true,length: 4096)
         comments(nullable: true,length: 4096)

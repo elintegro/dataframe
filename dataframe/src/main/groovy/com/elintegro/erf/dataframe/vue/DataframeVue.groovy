@@ -151,14 +151,14 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 					widget = "DateWidgetVue";
 					break;
 				case "VARCHAR":
-					if(fld.length > BIG_TEXT_FIELD_LENGTH){
-						widget = "TextAreaWidgetVue";
-					}
-					else if (fld.name.toLowerCase().indexOf("email") >= 0) {
+					if (fld.name.toLowerCase().indexOf("email") >= 0) {
 						widget = "EmailWidgetVue";
 					}
 					else if(fld.name.toLowerCase().indexOf("phone") >= 0){
 						widget = "PhoneNumberWidgetVue"
+					}
+					else if(fld.length > BIG_TEXT_FIELD_LENGTH){
+						widget = "TextAreaWidgetVue";
 					}
 					else{
 						widget = "InputWidgetVue";
@@ -316,7 +316,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vueJsBuilder.addToMountedScript("this.${dataframeName}_fillInitData();\n")
 		}
 		if(putFillInitDataMethod){
-
 			vueJsBuilder.addToWatchScript(""" ${dataframeName}_prop: {
                              deep:true,
                              handler: function(val, oldVal){
@@ -327,7 +326,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                                   }
                              }
                      },\n""")
-
 			vueJsBuilder.addToMethodScript(getJsonDataFillScript(this))
 			vueJsBuilder.addToMethodScript(vueDataFillScript.toString())
 		}
@@ -626,7 +624,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                  let params = this.state;    
                  if(!params) return;
                  params["url"] =  '$df.ajaxUrl';
-                 params["doBeforeRefresh"] = function(params){console.log(" Put any doBeforeRefresh scripts here"); ${doBeforeRefresh}};                               
+                 params["doBeforeRefresh"] = function(){console.log(" Put any doBeforeRefresh scripts here"); ${doBeforeRefresh}};                               
                  params["doAfterRefresh"] = function(response){console.log("Inside doAfterRefresh. Put any doAfterRefresh scripts here"); ${doAfterRefresh}};                               
 				 excon.refreshData(params);
              },\n
