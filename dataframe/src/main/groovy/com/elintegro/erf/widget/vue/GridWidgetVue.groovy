@@ -593,8 +593,10 @@ $fieldParams
                               this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
                               ${excon}.setSelectedGridDataToRequestParams(dataRecord, "${refDataframeName}")
-                              Vue.set(this.${refDataframeName}_data, 'key', key);
-                              Vue.set(this.${refDataframeName}_data, 'refreshInitialData', ${refreshInitialData?'Math.random()':false});
+                              let propData = this.${refDataframeName}_data;
+                              propData['key']=  key;
+                              propData['refreshInitialData'] = ${refreshInitialData?'Math.random()':false};
+                              Vue.set(this.${refDataframeName}_data, propData);
                               ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
                               ${excon}.setVisibility("${refDataframeName}", true);
                     \n 

@@ -900,10 +900,11 @@ beans {
         computed = "refreshVueElintegroCommentPageForApplicantDataframe(){return this.vueElintegroCommentPageForApplicantDataframe_prop.key},"
     }
 
-    vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
-        watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
-        computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
-    }
+//    vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
+//        watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
+//        computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
+//    }
+
     vueElintegroApplicantCVDataframe_script(VueJsEntity){ bean ->
         def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
         def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
