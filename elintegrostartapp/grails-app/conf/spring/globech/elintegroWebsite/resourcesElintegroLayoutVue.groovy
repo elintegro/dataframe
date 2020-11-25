@@ -57,7 +57,7 @@ beans {
                                          width = "min-content">
                                      <v-list style="margin-right:30px;">    
                                       <v-list-item><vueElintegroNavigationFirstTwoButtonDataframe/></v-list-item>
-                                      <v-list-item style="margin-left:5%;position:fixed;height:auto;"><vueElintegroAppsDataframe/> </v-list-item>
+                                      <v-list-item style="position:fixed;height:auto;"><vueElintegroAppsDataframe/> </v-list-item>
                                       <v-list-item style="margin-top: 40%;" ><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                          <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
                                       <v-list-item style="margin-top:-12%;margin-left:-10%" ><vueElintegroLanguageSelectorDataframe/></v-list-item>
@@ -115,7 +115,7 @@ beans {
                                      <v-menu offset-y tile z-index = 101 close-on-content-click>
                                          <template v-slot:activator="{ on, attrs }">
                                              <v-flex xs0 sm0 md0 lg0 xl0 class="align-self-end">
-                                             <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">About Us</v-btn>
+                                             <v-btn color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;height:38px;">About Us</v-btn>
                                              </v-flex>
                                          </template>
                                          <v-list width="min-content" style=" margin-right: -30px;margin-left: -30px;">
@@ -127,7 +127,7 @@ beans {
                                      <v-menu offset-y tile z-index = 101 close-on-content-click>
                                          <template v-slot:activator="{ on, attrs }">
                                              <v-flex xs0 sm0 md0 lg0 xl0 class="align-self-end">
-                                             <v-btn class="ma-md-0"color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;margin-top:10px;">Apps</v-btn>
+                                             <v-btn class="ma-md-0"color="#1976D2" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;height:38px;">Apps</v-btn>
                                              </v-flex>
                                          </template>
                                          <v-list width="min-content" style=" margin-right: -30px;margin-left: -30px;">
