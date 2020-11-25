@@ -467,10 +467,10 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         initOnPageLoad = false
         putFillInitDataMethod = true
-        doBeforeRefresh = """ console.log("Hello props"+this.vueNewEmployeeApplicantEditSkillDataframe_prop); params['id']= this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
-        doBeforeSave = """params['key_vueNewEmployeeApplicantEditSkillDataframe_applicationSkill_id_id'] = this.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
+        doBeforeRefresh = """params['id']= self.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
+        doBeforeSave = """params['key_vueNewEmployeeApplicantEditSkillDataframe_applicationSkill_id_id'] = self.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
         doAfterSave = """ excon.setVisibility("vueNewEmployeeApplicantEditSkillDataframe", false);
-                          excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'U');
+                          excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'U', 'transits');
                       """
         hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -481,7 +481,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeApplicantAddSkillDataframe']
         saveButton = false
-        initOnPageLoad = true
+        initOnPageLoad = false
         putFillInitDataMethod = true
         hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:applicationId"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -494,14 +494,14 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeAddtionalQuestionsDataframe']
         initOnPageLoad = false
-        doBeforeSave = """params['key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id');"""
-        hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
+        doBeforeSave = """params['applicationId'] = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');"""
+        hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:applicationId"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         tab = true
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
-        doAfterSave = """self.\$router.push("/vueNewEmployeeThankYouMessageAfterSaveDataframe/0");"""
+        doAfterSave = """self.\$router.push("/thank-you-message/0");"""
         dataframeButtons = [
                 previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
@@ -512,9 +512,12 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeThankYouMessageAfterSaveDataframe']
         saveButton = false
+        initOnPageLoad = true
+        currentRoute = 'thank-you-message'
         route = true
-        doBeforeRefresh= """params['id'] = excon.getFromStore('vueNewEmployeeAddtionalQuestionsDataframe','key_vueNewEmployeeAddtionalQuestionsDataframe_application_id_id');"""
-        hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:id"
+        doBeforeRefresh= """params['applicationId'] = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');"""
+        doAfterRefresh = """setTimeout(function(){ self.\$router.push("/home/0");window.location.reload();}, 10000);"""
+        hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:applicationId"
         currentFrameLayout = ref("vueNewEmployeeThankYouMessageAfterSaveDataframeLayout")
 
     }
@@ -830,7 +833,9 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         isGlobal = true
         saveButton = false
+        initOnPageLoad = true
         route = true
+        currentRoute = 'applicants'
         addFieldDef = [
                 "applicant": [
                         widget            : "GridWidgetVue"
@@ -853,6 +858,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantDetailsDataframe']
         dataframeLabelCode = "Applicants Detail Information"
+        initOnPageLoad = false
         tab = true
         childDataframes = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe"]
         currentFrameLayout = ref("vueElintegroApplicantDetailsDataframeLayout")
@@ -864,12 +870,12 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         tab = true
         saveButton = false
         readonly = true
-        initOnPageLoad = true
+        initOnPageLoad = false
         putFillInitDataMethod = true
         doBeforeRefresh = """params['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
         addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]],
-                       "person.selectedPosition":[widget: "ListWidgetVue"
+                       "selectedPosition":[widget: "ListWidgetVue"
                                                  ,hql:"select application.id as Id, availablePositions.name as Name from Application application  inner join application.availablePositions as availablePositions where application.id=:id"
                                                  ,"displayMember":"Name"
                                                  ,internationalize: true
@@ -887,8 +893,8 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
         tab = true
         saveButton = false
-        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
-        initOnPageLoad = true
+        doBeforeRefresh = """params['id'] = self.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
+        initOnPageLoad = false
         putFillInitDataMethod = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         readonly = true
@@ -913,9 +919,9 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroApplicantCVDataframe']
         tab = true
         saveButton = false
-        initOnPageLoad = true
+        initOnPageLoad = false
         putFillInitDataMethod = true
-        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantCVDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = self.vueElintegroApplicantCVDataframe_prop.key"""
         doAfterRefresh = """self.afterRefreshing(response);"""
         hql = "select application.id as Id, files.fileName, images.name from Application application inner join application.files as files inner join application.images as images where application.id=:id"
         addFieldDef = [
@@ -947,9 +953,9 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroApplicantQuestionAnswerDataframe']
         tab = true
         readonly = true
-        initOnPageLoad = true
+        initOnPageLoad = false
         putFillInitDataMethod = true
-        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = self.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
         saveButton = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
@@ -964,9 +970,9 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroCommentPageForApplicantDataframe']
         tab = true
-        initOnPageLoad = true
+        initOnPageLoad = false
         putFillInitDataMethod = true
-        doBeforeRefresh = """params['id'] = this.vueElintegroCommentPageForApplicantDataframe_prop.key"""
+        doBeforeRefresh = """params['id'] = self.vueElintegroCommentPageForApplicantDataframe_prop.key"""
         saveButton = false
         hql="select application.id,application.comments,application.lastComment from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']

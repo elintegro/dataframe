@@ -46,20 +46,22 @@ abstract class WidgetVue extends Widget<DataframeVue>{
 
     //This assigns a new value and returns true if new value was different then the old one
     @Override
-    boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
+    boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
         if(inputValue.value == null || inputValue.value == "") return true
 
         if(isReadOnly(field)){
             return false
         }
         def oldfldVal = domainInstance."${fieldName}"
-        if(oldfldVal == inputValue.value){
+        String myDomainAlias = domainMetaData.getDomainAlias()
+        def newValue = dataframe.getTypeCastValue2(myDomainAlias, fieldName, inputValue.value)
+        if(oldfldVal == newValue){
             return false
         }
-        if(isMandatory(field) && !inputValue.value){
+        if(isMandatory(field) && !newValue){
             return false
         }
-        domainInstance."${fieldName}" = inputValue.value
+        domainInstance."${fieldName}" = newValue
         return true
     }
 

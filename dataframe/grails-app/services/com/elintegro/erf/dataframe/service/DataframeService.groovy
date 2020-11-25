@@ -313,13 +313,14 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 				def keyValue = domainInstance."${key}"
 				String myDomainAlias = domainClassInfo.getDomainAlias()
 				def keyOldValue = requestParams?.domain_keys?."${myDomainAlias}"."${key}"
-				if(keyOldValue == null ) {
+				def castedKeyOldValue = dataframe.getTypeCastValue2(myDomainAlias, key, keyOldValue)
+				if(castedKeyOldValue == null ) {
 					requestParams?.domain_keys?."${myDomainAlias}".put(key, keyValue)
-				}else if(keyOldValue != keyValue){
+				}else if(castedKeyOldValue != keyValue){
 					//EU!!!
 					throw new DataframeException("Save is trying to change Key Value (and it is not Insert!) Could be hacker's attack!")
 				}
-				domainObj.add(keyOldValue)
+				domainObj.add(castedKeyOldValue)
 			}
 		}
 
@@ -362,7 +363,8 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	}
 
 	public static long getSessionUserId(def session) {
-		String userId = session.getAttribute("userid")
+		def userId = session.getAttribute("userid")
+		userId = userId?Long.valueOf(userId):userId
 		if ( userId == null ) {
 			userId = (long) Holders.grailsApplication.config.guestUserId
 			session.setAttribute("userid", userId)

@@ -866,7 +866,7 @@ beans {
 
     }
     vueNewEmployeeThankYouMessageAfterSaveDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_firstName) + " " + excon.capitalize(this.state.vueNewEmployeeThankYouMessageAfterSaveDataframe_person_lastName)}"""
+        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)}"""
     }
 
     vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
@@ -875,30 +875,30 @@ beans {
         watch = """ tabValue:{handler: function(val, oldVal) {this.vueElintegroApplicantDetailsDataframe_tab_model = val;}},"""
     }
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
-        watch = """ refreshVueElintegroApplicantGeneralInformationDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantGeneralInformationDataframe_fillInitData();}},"""
-        computed = """refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},\n
-                   vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
+//        watch = """ refreshVueElintegroApplicantGeneralInformationDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantGeneralInformationDataframe_fillInitData();}},"""
+//        computed = """refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},\n
+          computed ="""vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
                                         var positions = [];
-                                        var items = this.state.vueElintegroApplicantGeneralInformationDataframe_person_selectedPosition_items;
+                                        var items = this.state.transits.selectedPosition.value;
                                         for(i=0;i<items.length;i++){
                                            positions[i] = items[i].Name;
                                         }
                                         var selectedPosition = positions.join(",\t\t");
                                         return selectedPosition;}"""
     }
-    vueElintegroApplicantSelfAssessmentDataframe_script(VueJsEntity){bean ->
-        watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
-        computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
-    }
-
-    vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
-        watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
-        computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
-    }
-    vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
-        watch = """ refreshVueElintegroCommentPageForApplicantDataframe:{handler: function(val, oldVal) {this.vueElintegroCommentPageForApplicantDataframe_fillInitData();}},"""
-        computed = "refreshVueElintegroCommentPageForApplicantDataframe(){return this.vueElintegroCommentPageForApplicantDataframe_prop.key},"
-    }
+//    vueElintegroApplicantSelfAssessmentDataframe_script(VueJsEntity){bean ->
+//        watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
+//        computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
+//    }
+//
+//    vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
+//        watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
+//        computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
+//    }
+//    vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
+//        watch = """ refreshVueElintegroCommentPageForApplicantDataframe:{handler: function(val, oldVal) {this.vueElintegroCommentPageForApplicantDataframe_fillInitData();}},"""
+//        computed = "refreshVueElintegroCommentPageForApplicantDataframe(){return this.vueElintegroCommentPageForApplicantDataframe_prop.key},"
+//    }
 
 //    vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
 //        watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
@@ -910,8 +910,8 @@ beans {
         def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
         def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
         def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
-        watch = """ refreshVueElintegroApplicantCVDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantCVDataframe_fillInitData();}},\n"""
-        computed = "refreshVueElintegroApplicantCVDataframe(){return this.vueElintegroApplicantCVDataframe_prop.key},\n"
+//        watch = """ refreshVueElintegroApplicantCVDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantCVDataframe_fillInitData();}},\n"""
+//        computed = "refreshVueElintegroApplicantCVDataframe(){return this.vueElintegroApplicantCVDataframe_prop.key},\n"
         methods ="""afterRefreshing(response){
               
                                  var params = response;

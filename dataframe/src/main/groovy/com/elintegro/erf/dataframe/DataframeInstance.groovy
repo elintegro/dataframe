@@ -843,7 +843,7 @@ class DataframeInstance implements DataframeConstants{
 			/**
 			 * This is the heart of this method: applying the value to the domain for saving later!
 			 */
-			isChanged = widget.populateDomainInstanceValue(domainInstance, domainClassInfo, fieldName, field, inputValue) || isChanged
+			isChanged = widget.populateDomainInstanceValue(df, domainInstance, domainClassInfo, fieldName, field, inputValue) || isChanged
 
 		} //persisters.each() { fieldName, fieldValue ->
 		return isChanged

@@ -604,28 +604,33 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		return """ 
                """
 	}
+	/**
+	 * Use 'self' instead of 'this' because of the scope of 'this' issue.
+	 * @param df
+	 * @return
+	 */
 	public String getJsonDataFillScript(df){
 		String dataframeName = df.dataframeName
-		StringBuilder paramsSb = new StringBuilder()
-		String namedParamKey = mainNamedParamKey?:"id"
-		if(route){
-			paramsSb.append("params['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
-		}else{
-			paramsSb.append("""params["$namedParamKey"] = eval(this.namedParamKey);\n""")
-		}
-		if(!ajaxUrlParams.isEmpty()){
-			for(Map.Entry entry: ajaxUrlParams){
-				paramsSb.append("params['$entry.key'] = '$entry.value';\n")
-			}
-		}
+//		StringBuilder paramsSb = new StringBuilder()
+//		String namedParamKey = mainNamedParamKey?:"id"
+//		if(route){
+//			paramsSb.append("params['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
+//		}else{
+//			paramsSb.append("""params["$namedParamKey"] = eval(this.namedParamKey);\n""")
+//		}
+//		if(!ajaxUrlParams.isEmpty()){
+//			for(Map.Entry entry: ajaxUrlParams){
+//				paramsSb.append("params['$entry.key'] = '$entry.value';\n")
+//			}
+//		}
 		return """
              ${dataframeName}_fillInitData: function(){
                  const self = this;
                  let params = this.state;    
                  if(!params) return;
                  params["url"] =  '$df.ajaxUrl';
-                 params["doBeforeRefresh"] = function(){console.log(" Put any doBeforeRefresh scripts here"); ${doBeforeRefresh}};                               
-                 params["doAfterRefresh"] = function(response){console.log("Inside doAfterRefresh. Put any doAfterRefresh scripts here"); ${doAfterRefresh}};                               
+                 params["doBeforeRefresh"] = function(){${doBeforeRefresh}};                               
+                 params["doAfterRefresh"] = function(response){${doAfterRefresh}};                               
 				 excon.refreshData(params);
              },\n
               """
@@ -688,6 +693,13 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
              },\n
               """
 	}
+	/**
+	 * Use 'self' instead of 'this' inside doBeforeSave and doAfterSave because of scope of 'this' issue.
+	 * @param df
+	 * @param vueSaveVariables
+	 * @param vueFileSaveVariables
+	 * @return
+	 */
 	public String getSaveDataScript(df, vueSaveVariables, vueFileSaveVariables){
 		String dataframeName = df.dataframeName
 		StringBuilder embdSaveParms = new StringBuilder("")
@@ -715,13 +727,14 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                   const self = this;
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
-                 params["doBeforeSave"] = function(params){console.log("Put any doBeforeSave Scripts here"); ${doBeforeSave} }
-                 params["doAfterSave"] = function(response){console.log("Inside doAfterSave. Put any doAfterSave scripts here"); 
-                 ${doAfterSave} 
-                 ${doAfterSaveStringBuilder}
-                 excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);}
+                 params["doBeforeSave"] = function(params){${doBeforeSave} }
+                 params["doAfterSave"] = function(response){ 
+														 ${doAfterSave} 
+														 ${doAfterSaveStringBuilder}
+														 excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);
+                 }
 				 excon.saveData(params);
-               },\n"""
+              },\n"""
 	}
 
 	public String getSaveDataScriptbackup(df, vueSaveVariables, vueFileSaveVariables){

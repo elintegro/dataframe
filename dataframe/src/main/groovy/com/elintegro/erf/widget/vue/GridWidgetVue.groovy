@@ -42,7 +42,7 @@ class GridWidgetVue extends WidgetVue {
 
     //This assigns a new value and returns true if new value was different then the old one
     @Override
-    boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
+    boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
         if(isReadOnly(field)){
             return false
         }

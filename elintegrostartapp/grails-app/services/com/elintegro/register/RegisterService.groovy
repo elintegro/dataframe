@@ -35,6 +35,7 @@ import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 import sun.security.tools.keytool.Pair
 
+import javax.servlet.http.HttpServletRequest
 import java.text.SimpleDateFormat
 
 @Transactional
@@ -44,10 +45,10 @@ class RegisterService{
     def mailService
     def springSecurityService
     def emailService
+    def dataframeService
 
-    def registerUser(RegisterCommand command, Role role, Facility facility) {
+    def registerUser(HttpServletRequest request ,RegisterCommand command, Role role, Facility facility) {
         def serviceMessage
-        DataframeController dataframeController = new DataframeController()
         com.elintegro.auth.User user = null
         if (!command.validate()) {
             def error =  command?.errors?.getFieldError()
@@ -58,16 +59,11 @@ class RegisterService{
                 //resultData = ['msg': errMesg, 'success': false]
             }
         }else {
-            def resultData = dataframeController.ajaxSaveRaw()
-            Map domainInstanceMap = resultData?.dfInstance.getSavedDomainsMap();
-            def savedDomainInstances = domainInstanceMap.values()
+            def resultData = dataframeService.saveRaw(request)
 
-            if (savedDomainInstances) {
-                user = getRegisterUserInstance(savedDomainInstances, user)
+            if(resultData.success && resultData.data.domain_keys.user.id){
+                user = User.findById(resultData.data.domain_keys.user.id)
                 UserRole.create(user, role)
-                if (facility) {
-                    facility.addToUsers(user)
-                }
             }
         }
 

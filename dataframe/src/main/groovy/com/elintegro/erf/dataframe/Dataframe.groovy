@@ -587,7 +587,9 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		ret
 	}
 
-	public def getTypeCastValue2(refDomainAlias, refFieldName, paramStringValue){
+	public def getTypeCastValue2(String refDomainAlias, String refFieldName, Object paramStringValue){
+		if(!refDomainAlias && !refFieldName ) throw new IllegalArgumentException("refDomainAlias and refFieldName are missing..")
+		if(!paramStringValue) return paramStringValue
 		def resValue = null;
 		//1. Get domain class
 		def domain = this.parsedHql?.hqlDomains?.get(refDomainAlias)

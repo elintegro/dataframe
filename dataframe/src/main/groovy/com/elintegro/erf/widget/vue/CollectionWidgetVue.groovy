@@ -19,7 +19,7 @@ abstract class CollectionWidgetVue extends WidgetVue {
         return ""
     }
     @Override
-    boolean populateDomainInstanceValue(def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
+    boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
         if(isReadOnly(field)){
             return false
         }
