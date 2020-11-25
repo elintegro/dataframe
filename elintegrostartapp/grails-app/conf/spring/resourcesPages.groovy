@@ -21,7 +21,7 @@ beans {
 				"vueAddNewRecordForCurrentProjectDataframe","vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe","vueDialogBoxForNotLoggedInUserDataframe",
 				"vueGridOfTranslatedTextDataframe","vueTranslatorDataframe","vueHowYouDoDataframe","vueNewsLetterDataframe","vueTranslatorAssistantAfterLoggedInDataframe","vueTranslatorAssistantBeforeLoggedInDataframe",
 				"vueMeetTranslatorAssistantIntroDataframe","vueTranslatorAssistantDataframe","vueElintegroSubMenuDataframe","vueElintegroAboutUsMenuDataframe","vueElintegroAppsDataframe","vueGettingStartedDataframe", "vueCareersDataframe","vueElintegroApplicantsDataframe",
-				"vueContactUsPageDataframe","vueElintegroNavigationFirstTwoButtonDataframe","vueElintegroNavigationButtonBeforeLoggedInDataframe","vueElintegroNavigationButtonAfterLoggedInDataframe","vueElintegroAppBarDataframe","vueElintegroLogoDataframe",
+				"vueContactUsPageDataframe","vueElintegroNavigationFirstTwoButtonDataframe","vueElintegroNavigationButtonBeforeLoggedInDataframe","vueElintegroNavigationButtonAfterLoggedInDataframe","vueElintegroLogoDataframe",
         ]
 		dataframesToShowInMainPage = []
 		containerLayout = "vueElintegroContainerLayout" //outermost layout name
