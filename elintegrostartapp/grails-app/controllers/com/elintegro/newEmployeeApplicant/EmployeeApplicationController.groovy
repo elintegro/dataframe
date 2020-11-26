@@ -5,11 +5,13 @@ import com.elintegro.elintegrostartapp.client.Application
 import com.elintegro.elintegrostartapp.hr.ApplicationSkill
 import com.elintegro.elintegrostartapp.hr.Position
 import com.elintegro.elintegrostartapp.hr.Skills
+import com.elintegro.erf.dataframe.vue.DataMissingException
 import com.elintegro.erf.dataframe.vue.DataframeConstants
 import grails.converters.JSON
 
 class EmployeeApplicationController {
 
+    def springSecurityService
     def index() { }
 
     def createApplicant(){
@@ -74,5 +76,21 @@ class EmployeeApplicationController {
         def newSkillsAfterSave = [skill:[value:appSkill.skill],id:[value: appSkill.id],comment: [value:  appSkill.comment], level:[value:  appSkill.level]]
         def resultData = [success: true,persisters:[applicationSkill:newSkillsAfterSave]]
         render (resultData as JSON)
+    }
+    def addComment(){
+        def currentUser = springSecurityService.currentUser
+        def params = request.getJSON()
+        if(!params.domain_keys.application.id) throw new DataMissingException("application id missing in params")
+        def newComment = params.persisters.application.lastComment.value
+        Application application = Application.findById(Long.valueOf(params.domain_keys.application.id))
+        if(application.comments == null){
+            application.comments = newComment+"\n\n"+ "\t\t\t\t\t\t"+"-"+" "+(currentUser.firstName?:"").concat(" " + currentUser.lastName)
+        }
+        else {
+            application.comments = application.comments.concat("\n\n" + newComment+"\n\n"+ "\t\t\t\t\t\t"+"-"+" "+(currentUser.firstName).concat(" " + currentUser.lastName))
+        }
+        application.save(flush:true)
+        def resultData = [success: true,savedComment:application.comments]
+        render(resultData as JSON)
     }
 }
