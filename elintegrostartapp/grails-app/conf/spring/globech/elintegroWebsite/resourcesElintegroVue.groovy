@@ -847,7 +847,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                         , showGridSearch  : true
                         , internationalize: true
                         , sortable        : true
-                        , onClick         :[showAsDialog: true, refDataframe: ref("vueElintegroApplicantDetailsDataframe"),MaxWidth:800]
+                        , onClick         :[showAsDialog: true ,refreshInitialData: true, refDataframe: ref("vueElintegroApplicantDetailsDataframe"),MaxWidth:800]
 
                 ]
         ]
@@ -874,11 +874,11 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         readonly = true
         initOnPageLoad = false
         putFillInitDataMethod = true
-        doBeforeRefresh = """params['id'] = this.vueElintegroApplicantGeneralInformationDataframe_prop.key """
+        doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
         addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]],
                        "selectedPosition":[widget: "ListWidgetVue"
-                                                 ,hql:"select application.id as Id, availablePositions.name as Name from Application application  inner join application.availablePositions as availablePositions where application.id=:id"
+                                                 ,hql:"select application.id as Id, availablePositions.name as Name from Application application  inner join application.availablePositions as availablePositions where application.id=:applicationId"
                                                  ,"displayMember":"Name"
                                                  ,internationalize: true
                                                  ,valueMember:"id"
@@ -895,7 +895,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
         tab = true
         saveButton = false
-        doBeforeRefresh = """params['id'] = self.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
+        doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
         initOnPageLoad = false
         putFillInitDataMethod = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -904,7 +904,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                 "applicationSkill":[ widget          : "GridWidgetVue"
 
                                      ,name            : "applicationSkill"
-                                     ,hql             : """select application.id as AppId,applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:id"""
+                                     ,hql             : """select application.id as AppId,applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:applicationId"""
                                      ,internationalize: true
 
                 ]
