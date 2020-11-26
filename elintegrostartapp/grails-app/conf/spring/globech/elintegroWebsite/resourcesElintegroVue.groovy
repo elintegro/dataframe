@@ -196,7 +196,8 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
         doAfterSave = """
-excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 'U', "transits");
+                         excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 'U', "transits");
+                         excon.setVisibility("clientProjectEditDataframe", false);
 """
 
         doBeforeSave = """
@@ -697,7 +698,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, language.ename, address.addressText from Person as person left join person.languages language left join person.addresses address where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages, person.addresses from Person as person where person.id=:id"
 //        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages from Person as person where person.id=:id"
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
@@ -737,7 +738,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                          ,"required": "required"
                          ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
                 ],
-                "language.ename":[
+                "person.languages":[
                         widget: "ComboboxVue"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
@@ -747,7 +748,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                         ,multiple: true
                 ],
 
-                "address.addressText":[
+                "person.addresses":[
                         widget: "ListWidgetVue"
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
                         , hql: """select address.id as id, address.addressText as addres from Address as address"""

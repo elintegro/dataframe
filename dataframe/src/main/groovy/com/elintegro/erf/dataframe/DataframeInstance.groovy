@@ -86,6 +86,26 @@ class DataframeInstance implements DataframeConstants{
 		return record
 	}
 
+	def getFieldValueFromDomain(Map field){
+		DomainClassInfo domain  = field.get(FIELD_PROP_DOMAIN)
+		def domainInstance = getFieldDomainInstance(this.record, domain.clazz)
+		def fieldValue = domainInstance?."${field?.name}"
+		return fieldValue
+	}
+
+	private static def getFieldDomainInstance(def records, Class domainClazz){
+		//todo:prevent calling this method for each domain field which are associated in single domain object
+		def fieldDomainInstance = null
+		for (def domainInstance : records){
+			Class recordInstanceClass = domainInstance.class;
+			if (recordInstanceClass.simpleName == domainClazz.simpleName){
+				fieldDomainInstance = domainInstance
+				break
+			}
+		}
+		return fieldDomainInstance
+	}
+
 	def getFieldValue(Map field){
 		return getFieldValue(field?.name)
 	}
@@ -162,6 +182,46 @@ class DataframeInstance implements DataframeConstants{
 	}
 
 	private void populateInstance(){
+
+		if(!df.hql){
+			return;
+		}
+		String hqlRetrieveDataQuery = createDataRetrieveQuery(df)
+		Transaction tx = sessionHibernate.beginTransaction()
+		try{
+			Query query = sessionHibernate.createQuery(hqlRetrieveDataQuery)
+			setNamedParametersFromRequestOrSession(query)
+			this.results = query.list()
+			tx.commit();
+			if(results && results .size() > 0){
+//				results.removeAll(Collections.singleton(null))
+				this.record = results[0]
+			}else{
+				isDefault = true
+				//throw new DataframeException(df, "No record found for the Dataframe");
+			}
+
+		}catch(Exception e){
+			tx.rollback()
+			throw new DataframeException(df, "Error: ${e.message}", e )		}
+	}
+
+	private static String createDataRetrieveQuery(Dataframe df){
+		StringBuilder dataRetrieveQueryBuilder = new StringBuilder()
+		try {
+			String fromString = df.hql.split("from")[1]
+			dataRetrieveQueryBuilder.append("select ")
+			String domainString = String.join(", ", df.parsedHql.hqlDomains.keySet())
+			dataRetrieveQueryBuilder.append(domainString)
+			dataRetrieveQueryBuilder.append(" from "+fromString)
+			log.info("Custom data retrieve query: "+dataRetrieveQueryBuilder.toString())
+		}catch(e){
+			throw new DataframeException(df, "Error on creating custom data retrieve query due to: ${e.message}")
+		}
+		return dataRetrieveQueryBuilder.toString()
+	}
+
+	private void populateInstanceBackUp(){
 
 		if(!df.hql){
 			return;
@@ -431,7 +491,8 @@ class DataframeInstance implements DataframeConstants{
 	private void loadPersistentData(Widget widget, Map fieldProps, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate) {
 		String myDomainAlias
 		if (!isDefault) {
-			def fldValue = getFieldValue(fieldProps)
+//			def fldValue = getFieldValue(fieldProps)
+			def fldValue = getFieldValueFromDomain(fieldProps)
 			myDomainAlias = getFieldDomainAlias(fieldProps)
 			widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, fieldName, additionalDataMap, dfInstance, sessionHibernate, fieldProps)
 		}
