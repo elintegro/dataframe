@@ -893,29 +893,29 @@ beans {
         def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
         methods ="""afterRefreshing(response){
               
-                                 var params = response;
-                                 var fileName = params.vueElintegroApplicantCVDataframe_files_fileName;
-                                  var extension = fileName.split('.').pop();
+                                 let params = response;
+                                 let fileName = params.persisters.files.fileName.value;
+                                  let extension = fileName.split('.').pop();
+                                  let stateValues = excon.getFromStore("vueElintegroApplicantCVDataframe");
                                   if(extension == 'pdf'){
-                                    var defaultImageUrlForPdf = '${pathForPdf}'
-                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForPdf}')   
+                                    let defaultImageUrlForPdf = '${pathForPdf}'
+                                    stateValues.persisters.files.fileName.value = '${pathForPdf}';
                                   }
                                   else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
-                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForExcel}')   
-
+                                    stateValues.persisters.files.fileName.value = '${pathForExcel}';
                                   }
                                   else if(extension == 'doc' || extension == 'docx'){
-                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForDocFile}')   
+                                    stateValues.persisters.files.fileName.value = '${pathForDocFile}';
                                   }
                                   else if(extension == 'csv' || extension == 'CSV'){
-                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForCsvFile}')   
+                                    stateValues.persisters.files.fileName.value = '${pathForCsvFile}';
                                   }
-                                  
                                   excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
                                   
-                                  var applicantId = response.vueElintegroApplicantCVDataframe_application_id;
+                                  var applicantId = response.domain_keys.application.id;
                                   var imageSrc = "fileDownload/imagePreview/"+applicantId;
-                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_images_name',imageSrc);    
+                                  stateValues.persisters.images.name.value = imageSrc;
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe',stateValues);  
                                  
                                   },\n
                               

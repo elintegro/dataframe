@@ -968,7 +968,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroApplicantQuestionAnswerDataframe']
         tab = true
         readonly = true
-        initOnPageLoad = false
+        initOnPageLoad = true
         putFillInitDataMethod = true
         doBeforeRefresh = """params['id'] = self.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
         saveButton = false
