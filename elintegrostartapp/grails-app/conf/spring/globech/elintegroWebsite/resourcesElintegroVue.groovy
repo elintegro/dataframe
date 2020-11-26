@@ -23,18 +23,6 @@ beans {
         putFillInitDataMethod = false
         currentFrameLayout = ref("emptyDataframeLayout")
     }
-    vueElintegroAppBarDataframe(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueElintegroAppBarDataframe']
-        saveButton = false
-        wrapInForm=false
-
-        initOnPageLoad = false
-        isGlobal = true
-        wrapButtons = false
-
-        currentFrameLayout = ref("vueElintegroAppBarDataframeLayout")
-    }
     vueElintegroProgressBarDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ["vueElintegroProgressBarDataframe"]
@@ -53,7 +41,7 @@ beans {
         initOnPageLoad = true
         dataframeButtons = [
                              home : [name: "home", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroHomeDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
-        currentFrameLayout = ref("elintegroNavigationButtonLayout")
+        currentFrameLayout = ref("elintegroNavigationButtonFirstLayout")
     }
     vueElintegroNavigationButtonBeforeLoggedInDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
@@ -62,11 +50,11 @@ beans {
         saveButton = false
         initOnPageLoad = true
         dataframeButtons = [register       : [name: "register", type: "link", showAsDialog: true, attr:"style='color:#1976D2;'",
-                                              refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                                              refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'],"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             login          : [name: "login", type: "link",showAsDialog: true,attr:"style='color:#1976D2;'",
-                                              refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'], "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            careers        : [name: "careers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                                              refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'],"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            contactUs      : [name: "contactUs", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"),"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            careers        : [name: "careers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"),"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                            ]
         wrapButtons = false
 
@@ -137,7 +125,7 @@ beans {
                         "url"         : "assets/home/logo.jpg",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "attr"        : " contain ",
-                        "height"      : "auto",
+                        "height"      : "64",
                         "width"       : "200",
                         //"min-width"   : "40"
 

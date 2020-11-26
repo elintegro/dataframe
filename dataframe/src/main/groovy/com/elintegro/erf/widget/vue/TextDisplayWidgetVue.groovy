@@ -21,11 +21,15 @@ import org.apache.commons.lang.WordUtils
 class TextDisplayWidgetVue extends WidgetVue{
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
+        if(field.hide && field.hide == true){
+            return ""
+        }
         String dataVariableForVue = getFieldName(dataframe, field)
         String fldName = field.name
         def fldNameDefault = WordUtils.capitalizeFully(fldName);
         String labelCode = field.labelCode?:fldName
         boolean isDynamic = field.isDynamic?true:false
+        String elementId = field.elementId?:""
         String modelString = getFieldJSONModelNameVue(field)
         String displayPlaceholder = ""
         if(!isDynamic){
@@ -36,6 +40,6 @@ class TextDisplayWidgetVue extends WidgetVue{
         }else {
             displayPlaceholder = "{{$modelString}}"
         }
-        return """<span>$displayPlaceholder</span>"""
+        return """<span id='$elementId' ${getAttr(field)}>$displayPlaceholder</span>"""
     }
 }
