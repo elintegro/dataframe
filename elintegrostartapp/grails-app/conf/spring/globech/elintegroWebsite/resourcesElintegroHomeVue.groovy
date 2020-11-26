@@ -282,9 +282,9 @@ beans{
                        "confirmPassword":[name:"confirmPassword"
                                           ,widget:"PasswordWidgetVue"
                                           , "insertAfter":"newPassword"
-                                          ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroChangePasswordAfterSignUpDataframe_newPassword)",message:"Password.and.Confirm.Password."]]],
+                                          ,"validationRules":[[condition:"v => !!(v==this.state.transits.newPassword.value)",message:"Password.and.Confirm.Password."]]],
         ]
-        dataframeButtons = [submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        dataframeButtons = [submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.changePasswordAfterSignedUp()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("vueElintegroChangePasswordAfterSignUpDataframeLayout")
     }
 

@@ -859,6 +859,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroApplicantDetailsDataframe']
         dataframeLabelCode = "Applicants Detail Information"
         initOnPageLoad = false
+        route = true
         tab = true
         childDataframes = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe"]
         currentFrameLayout = ref("vueElintegroApplicantDetailsDataframeLayout")

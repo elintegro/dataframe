@@ -345,14 +345,20 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         UserRole userRole = UserRole.findByRoleAndUser(role, user1)
         if (!userRole) {
             def result = registerService.createLeadUser(param)
-            RegistrationCode registrationCode = registrationCode(result.user)
-            String url = generateLink('verifyRegistration', [t: registrationCode.token])
-            if (registrationCode == null || registrationCode.hasErrors()) {
-                flash.error = message(code: 'spring.security.ui.register.miscError') as Object
-                flash.chainedParams = params
-                return
+            if(result.user) {
+                RegistrationCode registrationCode = registrationCode(result.user)
+                String url = generateLink('verifyRegistration', [t: registrationCode.token])
+                if (registrationCode == null || registrationCode.hasErrors()) {
+                    flash.error = message(code: 'spring.security.ui.register.miscError') as Object
+                    flash.chainedParams = params
+                    return
+                }
+                resultData = registerService.sendingEmailAfterSignUp(result.user.firstName, result.password, result.user.email, url, registrationCode.token)
             }
-         resultData = registerService.sendingEmailAfterSignUp(result.user.firstName, result.password, result.user.email, url, registrationCode.token)
+            else {
+                resultData = [success:false,msg:message(code: "user.not.found.could.not.proceed.request"),alert_type: "error"]
+            }
+
 
         }
         else{

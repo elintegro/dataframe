@@ -671,7 +671,7 @@ beans {
                                     }).then(function(responseData){
                                            console.log(responseData);
                                            excon.showMessage(responseData,'vueElintegroSignUpQuizDataframe');
-                                           setTimeout(function(){this.location.reload();}, 6000);
+                                           setTimeout(function(){window.location.reload();}, 6000);
                                     })
                                     
 
@@ -681,7 +681,7 @@ beans {
                                     },\n"""
     }
     vueElintegroChangePasswordAfterSignUpDataframe_script(VueJsEntity){bean ->
-        methods = """saveSignUpForm(){
+        methods = """changePasswordAfterSignedUp(){
                                     var params = this.state;
                                     params['dataframe'] = 'vueElintegroChangePasswordAfterSignUpDataframe';
                                     var self = this;
@@ -694,11 +694,11 @@ beans {
                                           data:params
                                     }).then(function(responseData){
                                            var response = responseData.data;
-                                           excon.showMessage(responseData,'vueElintegroChangePasswordAfterSignUpDataframe');
+                                           excon.showAlertMessage(response);
                                            if(response.success == true){
                                               setTimeout(function(){window.open("/","_self");}, 2000);
                                            }else{
-                                                setTimeout(function(){this.location.reload();},3000);
+                                                setTimeout(function(){window.location.reload();},3000);
                                            }
                                            
                                     })
