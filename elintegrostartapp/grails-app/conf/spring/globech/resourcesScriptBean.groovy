@@ -875,8 +875,6 @@ beans {
         watch = """ tabValue:{handler: function(val, oldVal) {this.vueElintegroApplicantDetailsDataframe_tab_model = val;}},"""
     }
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
-//        watch = """ refreshVueElintegroApplicantGeneralInformationDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantGeneralInformationDataframe_fillInitData();}},"""
-//        computed = """refreshVueElintegroApplicantGeneralInformationDataframe(){return this.vueElintegroApplicantGeneralInformationDataframe_prop.key},\n
           computed ="""vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
                                         var positions = [];
                                         var items = this.state.transits.selectedPosition.value;
@@ -887,32 +885,12 @@ beans {
                                         var selectedPosition = positions.join(",\t\t");
                                         return selectedPosition;}"""
     }
-//    vueElintegroApplicantSelfAssessmentDataframe_script(VueJsEntity){bean ->
-//        watch = """ refreshVueElintegroApplicantSelfAssessmentDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantSelfAssessmentDataframe_fillInitData();}},"""
-//        computed = "refreshVueElintegroApplicantSelfAssessmentDataframe(){return this.vueElintegroApplicantSelfAssessmentDataframe_prop.key},"
-//    }
-//
-//    vueElintegroApplicantQuestionAnswerDataframe_script(VueJsEntity){bean ->
-//        watch = """ refreshVueElintegroApplicantQuestionAnswerDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantQuestionAnswerDataframe_fillInitData();}},"""
-//        computed = "refreshVueElintegroApplicantQuestionAnswerDataframe(){return this.vueElintegroApplicantQuestionAnswerDataframe_prop.key},"
-//    }
-//    vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
-//        watch = """ refreshVueElintegroCommentPageForApplicantDataframe:{handler: function(val, oldVal) {this.vueElintegroCommentPageForApplicantDataframe_fillInitData();}},"""
-//        computed = "refreshVueElintegroCommentPageForApplicantDataframe(){return this.vueElintegroCommentPageForApplicantDataframe_prop.key},"
-//    }
-
-//    vueNewEmployeeApplicantEditSkillDataframe_script(VueJsEntity){bean ->
-//        watch = """ refreshVueNewEmployeeApplicantEditSkillDataframe:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantEditSkillDataframe_fillInitData();}},"""
-//        computed = "refreshVueNewEmployeeApplicantEditSkillDataframe(){return this.vueNewEmployeeApplicantEditSkillDataframe_prop.key},"
-//    }
 
     vueElintegroApplicantCVDataframe_script(VueJsEntity){ bean ->
         def pathForPdf = Holders.grailsApplication.config.images.defaultImagePathForPdf
         def pathForExcel = Holders.grailsApplication.config.images.defaultImagePathForExcel
         def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
         def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
-//        watch = """ refreshVueElintegroApplicantCVDataframe:{handler: function(val, oldVal) {this.vueElintegroApplicantCVDataframe_fillInitData();}},\n"""
-//        computed = "refreshVueElintegroApplicantCVDataframe(){return this.vueElintegroApplicantCVDataframe_prop.key},\n"
         methods ="""afterRefreshing(response){
               
                                  var params = response;
@@ -1002,16 +980,16 @@ beans {
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
         data = """isHidden : false ,showDownloadAllTranslatedFilesButton:false,disableAddButtonWhenItemNotSelect:true,"""
         watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
-                    enableDisableAddButton:{handler: function(val){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
+                    enableDisableAddButton:{handler: function(val,oldVal){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
                     """
-        computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.items.length > 1){return true;}return false;},\n
+        computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.value && this.state.transits.selectedLanguages.value.length > 1){return true;}return false;},\n
                       enableDisableAddButton(){return this.state.transits.notSelectedLanguages.value;},\n
                    """
         methods = """addLanguage(){
                                     var params = this.state;
                                     var self = this;
                                     params['dataframe'] = 'vueTranslatorDataframe';
-                                    params['projectId'] =Number(this.state.keys.projectId);
+                                    params['projectId'] =Number( excon.getFromStore('vueTranslatorDataframe','projectId'));
                                     axios({
                                            method:'post',
                                            url:'translatorAssistant/addLanguage',

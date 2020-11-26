@@ -196,15 +196,17 @@ beans{
                          var projectDetails = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject')
                          var selectedProjectId = Number(projectDetails.projectId)
                          params['projectId']= selectedProjectId
+                         params.namedParameters.projectId.value = selectedProjectId;
+                         params.domain_keys.project.id = selectedProjectId;    
                          excon.saveToStore('vueTranslatorDataframe','projectId',selectedProjectId)"""
         hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
         addFieldDef =[
 
-                "project.name":[widget:"TextDisplayWidgetVue",displayWithLabel:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "project.name":[widget:"TextDisplayWidgetVue",isDynamic:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",isDynamic:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                 "notSelectedLanguages":[
                         widget: "ComboboxVue"
-                        , hql: """select language.id as id, language.ename as ename  from Language as language where language.ename not in (select text.language as language from Text as text where project_id =:projectId  group by language)"""
+                        , hql: """select language.id as id, language.ename as ename  from Language as language"""
                         ,"displayMember":"ename"
                         ,internationalize: true
                         , search:true

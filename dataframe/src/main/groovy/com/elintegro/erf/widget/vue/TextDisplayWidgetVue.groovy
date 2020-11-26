@@ -26,11 +26,15 @@ class TextDisplayWidgetVue extends WidgetVue{
         def fldNameDefault = WordUtils.capitalizeFully(fldName);
         String labelCode = field.labelCode?:fldName
         boolean isDynamic = field.isDynamic?true:false
+        String modelString = getFieldJSONModelNameVue(field)
         String displayPlaceholder = ""
         if(!isDynamic){
             displayPlaceholder = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
-        } else {
-            displayPlaceholder = "{{$dataVariableForVue}}"
+        } else if (isDynamic && labelCode){
+            String label = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
+            displayPlaceholder = "$label"+"\t:\t"+"{{$modelString}}"
+        }else {
+            displayPlaceholder = "{{$modelString}}"
         }
         return """<span>$displayPlaceholder</span>"""
     }

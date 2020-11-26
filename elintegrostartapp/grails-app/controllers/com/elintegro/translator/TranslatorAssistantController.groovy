@@ -59,7 +59,7 @@ class TranslatorAssistantController {
         def selectedLanguage = request.getJSON()
         Project project = Project.findById(selectedLanguage.projectId)
         println(selectedLanguage)
-        for (item in selectedLanguage.vueTranslatorDataframe_project_languages) {
+        for (item in selectedLanguage.transits.notSelectedLanguages.value) {
             if (item.ename != selectedLanguage.vueTranslatorDataframe_project_sourceLanguage) {
                 Text text = new Text()
                 text.project = project
