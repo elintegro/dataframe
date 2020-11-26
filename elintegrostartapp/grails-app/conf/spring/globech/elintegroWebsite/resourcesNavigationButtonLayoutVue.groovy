@@ -6,7 +6,7 @@ import com.elintegro.erf.layout.RowLayoutVue
 beans {
     elintegroNavigationButtonFirstLayout(RowLayoutVue){ bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder ="""<v-row class="mx-0">[DATAFRAME_SCRIPT][home]</v-row> """
+        layoutPlaceHolder ="""<v-row class="mx-n4">[DATAFRAME_SCRIPT][home]</v-row> """
     }
     elintegroNavigationButtonLayout(RowLayoutVue){bean->
         layoutBeanName = bean.name
