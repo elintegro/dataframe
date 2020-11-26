@@ -868,7 +868,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
     vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantGeneralInformationDataframe']
-        hql = "select application.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone from Application application inner join application.applicant person where application.id=:id"
+        hql = "select application.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone from Application application inner join application.applicant person where application.id=:applicationId"
         tab = true
         saveButton = false
         readonly = true
