@@ -319,7 +319,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
     vueNewEmployeeBasicInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeBasicInformationDataframe']
-        hql = "select Person.firstName, Person.lastName, Person.email, Person.phone, application.linkedin, application.availablePositions from Application application inner join application.applicant Person where application.id=:id"
+        hql = "select person.firstName, person.lastName, person.email, person.phone, application.linkedin, application.availablePositions from Application application inner join application.applicant person where application.id=:id"
         initOnPageLoad = false
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
@@ -335,9 +335,17 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
 
         addFieldDef = [
 
-                   "Person.phone":["name":"phone","type":"link","widget":"PhoneNumberWidgetVue",validate: true],
-                    "application.availablePositions"  :[
-                        "widget"             :"ComboboxVue"
+                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "person.email":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'email.required.message']],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "person.phone":[
+                        "name":"phone",
+                        "type":"link",
+                        "widget":"PhoneNumberWidgetVue",
+                        "validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "application.linkedin":["name":"linkedin","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'Linkedin.required.message']],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "application.availablePositions"  :[
+                        widget             :"ComboboxVue"
                         ,internationalize    :true
                         ,initBeforePageLoad  :true
                         ,multiple            :true
@@ -345,6 +353,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                         , search:true
+                        ,attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """
 
                 ],
 
@@ -391,7 +400,8 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                                       ,"widget":"FilesUploadWidgetVue"
                                       , ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                                       ,multiple:true
-                                      ,"accept":"image/*,.pdf,.docx,.doc"
+                                      ,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                      ,"accept":".pdf,.docx,.doc,.csv"
 
                                      ]
         ]
@@ -462,7 +472,10 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                       """
         hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        addFieldDef = ["applicationSkill.skill":[readOnly: true],"applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]], script: """setTimeout(function(){ alert("Hello"); }, 5000);"""]]
+        addFieldDef = ["applicationSkill.skill":[widget: "InputWidgetVue",readOnly: true,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                       "applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """, script: """"""],
+                       "applicationSkill.comment":[widget: "InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """]
+                        ]
         currentFrameLayout = ref("vueNewEmployeeApplicantEditSkillDataframeLayout")
     }
     vueNewEmployeeApplicantAddSkillDataframe(DataframeVue){ bean ->
@@ -473,7 +486,9 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         putFillInitDataMethod = true
         hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill,applicationSkill.level as Level, applicationSkill.comment as Comment from ApplicationSkill applicationSkill inner join applicationSkill.application application where application.id=:applicationId"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        addFieldDef = ["applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]]]]
+        addFieldDef = ["applicationSkill.skill":[widget: "InputWidgetVue",attr: """ autofocus outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                       "applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                        "applicationSkill.comment":[widget: "InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """]]
         dataframeButtons = [save: [name:"save", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""this.addNewSkill();""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
         currentFrameLayout = ref("vueNewEmployeeApplicantAddSkillDataframeLayout")
     }
@@ -490,6 +505,12 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         tab = true
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         doAfterSave = """self.\$router.push("/thank-you-message/0");"""
+        addFieldDef = [
+                "application.question1":[widget:"TextAreaWidgetVue"
+                                         ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,],
+                "application.question2":[widget:"TextAreaWidgetVue"
+                                         ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,]
+        ]
         dataframeButtons = [
                 previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
                            flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]

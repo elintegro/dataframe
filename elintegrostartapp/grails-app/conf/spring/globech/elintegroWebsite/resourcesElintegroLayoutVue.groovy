@@ -165,7 +165,10 @@ beans {
     }
     vueNewEmployeeBasicInformationDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]<v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
+        layoutPlaceHolder = """<v-container id="newEmployeeBasicInformation" class="newEmployeeBasicInformation" fluid>
+                                [DATAFRAME_SCRIPT]
+                                <v-flex class="text-right">[BUTTON_SCRIPT]</v-flex>
+                              </v-container>"""
     }
     vueAddressDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -175,7 +178,9 @@ beans {
     }
     vueNewEmployeeUploadResumeDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+        layoutPlaceHolder = """<v-container id="newEmployeeUploadResume" class="newEmployeeUploadResume" fluid>
+                                    <v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>
+                               </v-container>"""
     }
     vueNewEmployeeSelfAssesmentDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
@@ -205,7 +210,9 @@ beans {
 
     vueNewEmployeeAddtionalQuestionsDataframeLayout(ColumnLayoutVue) {bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+        layoutPlaceHolder = """<v-container id="newEmployeeAdditionalQuestions" class="newEmployeeAdditionalQuestions" fluid>
+                                    <v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>
+                               </v-container>"""
     }
     vueNewEmployeeThankYouMessageAfterSaveDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
