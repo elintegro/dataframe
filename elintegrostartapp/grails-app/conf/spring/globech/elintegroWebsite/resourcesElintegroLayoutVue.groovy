@@ -60,7 +60,7 @@ beans {
                                       <v-list-item style="position:fixed;height:auto;"><vueElintegroAppsDataframe/> </v-list-item>
                                       <v-list-item style="margin-top: 40%;" ><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
                                          <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
-                                      <v-list-item style="margin-top:-12%;margin-left:-10%" ><vueElintegroLanguageSelectorDataframe/></v-list-item>
+                                      <v-list-item style="margin-top:-12%;" ><vueElintegroLanguageSelectorDataframe/></v-list-item>
                                      </v-list>
                                      </v-navigation-drawer>
        </div>"""
@@ -84,7 +84,7 @@ beans {
     }
     vueElintegroLanguageSelectorDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-row class="mx-0">[languages]</v-row>"""
+        layoutPlaceHolder = """[languages]"""
     }
     vueElintegroProgressBarLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
