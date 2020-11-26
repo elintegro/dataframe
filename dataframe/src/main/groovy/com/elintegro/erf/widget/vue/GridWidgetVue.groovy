@@ -592,7 +592,7 @@ $fieldParams
                               this.${refDataframeName}_comp = "";
                               this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
-                              ${excon}.setSelectedGridDataToRequestParams(dataRecord, "${refDataframeName}")
+//                              ${excon}.setSelectedGridDataToRequestParams(dataRecord, "${refDataframeName}")
                               let propData = this.${refDataframeName}_data;
                               propData['key']=  key;
                               propData['refreshInitialData'] = ${refreshInitialData?'Math.random()':false};

@@ -880,6 +880,7 @@ beans {
           computed ="""vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
                                         var positions = [];
                                         var items = this.state.transits.selectedPosition.value;
+                                        if(!items) return;
                                         for(i=0;i<items.length;i++){
                                            positions[i] = items[i].Name;
                                         }

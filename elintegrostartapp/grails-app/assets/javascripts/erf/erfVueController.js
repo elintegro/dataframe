@@ -475,8 +475,8 @@ var excon = new Vue({
         },
         redirectPage:function (dataFrame,pageToRedirect,routeId){
             if(routeId == null){
-            dataFrame.$router.push('/'+pageToRedirect+'/0');
-        }
+                dataFrame.$router.push('/'+pageToRedirect+'/0');
+            }
             else {
                 dataFrame.$router.push('/'+pageToRedirect+'/'+routeId);
             }

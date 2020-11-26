@@ -851,6 +851,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
 
                 ]
         ]
+        childDataframes = ["vueElintegroApplicantDetailsDataframe"]
         currentFrameLayout = ref("vueElintegroApplicantsDataframeLayout")
 
     }
