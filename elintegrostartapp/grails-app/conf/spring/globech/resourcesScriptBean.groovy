@@ -912,14 +912,16 @@ beans {
                                   }
                                   excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
                                   
-                                  var applicantId = response.domain_keys.application.id;
-                                  var imageSrc = "fileDownload/imagePreview/"+applicantId;
-                                  stateValues.persisters.images.name.value = imageSrc;
                                   excon.saveToStore('vueElintegroApplicantCVDataframe',stateValues);  
                                  
                                   },\n
                               
         """
+/*
+                                  var applicantId = response.domain_keys.application.id;
+                                  var imageSrc = "fileDownload/imagePreview/"+applicantId;
+                                  stateValues.persisters.images.name.value = imageSrc;
+*/
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){

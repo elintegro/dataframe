@@ -885,7 +885,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         tab = true
         saveButton = false
         readonly = true
-        initOnPageLoad = false
+        initOnPageLoad = true
         putFillInitDataMethod = true
         doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
@@ -909,7 +909,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         tab = true
         saveButton = false
         doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
-        initOnPageLoad = false
+        initOnPageLoad = true
         putFillInitDataMethod = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         readonly = true
@@ -934,7 +934,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.constructorArgs = ['vueElintegroApplicantCVDataframe']
         tab = true
         saveButton = false
-        initOnPageLoad = false
+        initOnPageLoad = true
         putFillInitDataMethod = true
         doBeforeRefresh = """params['id'] = self.vueElintegroApplicantCVDataframe_prop.key"""
         doAfterRefresh = """self.afterRefreshing(response);"""
@@ -985,7 +985,7 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroCommentPageForApplicantDataframe']
         tab = true
-        initOnPageLoad = false
+        initOnPageLoad = true
         putFillInitDataMethod = true
         doBeforeRefresh = """params['id'] = self.vueElintegroCommentPageForApplicantDataframe_prop.key"""
         saveButton = false
@@ -996,9 +996,6 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
                 "application.comments":[ widget: "TextAreaWidgetVue",
                              name:"Comments",
                              readOnly: true,
-
-
-
                             ],
                 "application.lastComment":[ widget:"TextAreaWidgetVue",
                                 name: "Comment"]

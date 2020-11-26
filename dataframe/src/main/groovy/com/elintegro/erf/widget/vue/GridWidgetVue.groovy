@@ -545,7 +545,7 @@ $fieldParams
         dataframe.childrenDataframes.add(refDataframeName)
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
         store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
-        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true, parentData:{}},\n")
+        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true, \nrefreshInitialData: 8.0,\n parentData:{}},\n")
 
         if(onClickMap.showAsDialog){
             resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" width='${getWidth(onClickMap)}' max-width='${getMaxWidth(onClickMap)}' >""")
@@ -595,7 +595,7 @@ $fieldParams
 //                              ${excon}.setSelectedGridDataToRequestParams(dataRecord, "${refDataframeName}")
                               let propData = this.${refDataframeName}_data;
                               propData['key']=  key;
-                              propData['refreshInitialData'] = ${refreshInitialData?'Math.random()':false};
+                              propData['refreshInitialData'] = ${refreshInitialData?'Math.random()':'8.0'};
                               Vue.set(this.${refDataframeName}_data, propData);
                               ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
                               ${excon}.setVisibility("${refDataframeName}", true);
