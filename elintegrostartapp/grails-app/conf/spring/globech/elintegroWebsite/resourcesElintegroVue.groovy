@@ -497,7 +497,11 @@ excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeAddtionalQuestionsDataframe']
         initOnPageLoad = false
-        doBeforeSave = """params['applicationId'] = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');"""
+        doBeforeSave = """var applicationId = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
+                       params['applicationId'] = applicationId;
+                       params.persisters.application.id.value = applicationId;
+                       params.namedParameters.applicationId.value = applicationId;
+                       params.domain_keys.application.id = applicationId; """
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:applicationId"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         saveButton = true
