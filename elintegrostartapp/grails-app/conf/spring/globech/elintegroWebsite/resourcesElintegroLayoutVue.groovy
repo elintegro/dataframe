@@ -54,14 +54,16 @@ beans {
                                      <v-navigation-drawer v-model="drawer"
                                          app
                                          temporary
-                                         width = "min-content">
-                                     <v-list style="margin-right:30px;">    
-                                      <v-list-item><vueElintegroNavigationFirstTwoButtonDataframe/></v-list-item>
-                                      <v-list-item style="position:fixed;height:auto;"><vueElintegroAppsDataframe/> </v-list-item>
-                                      <v-list-item style="margin-top: 40%;" ><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
-                                         <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></v-list-item>
-                                      <v-list-item style="margin-top:-12%;" ><vueElintegroLanguageSelectorDataframe/></v-list-item>
-                                     </v-list>
+                                         width = "min-content"
+                                     >
+                                         <v-list>    
+                                              <v-list-item class="mx-4 mb-n4"><vueElintegroNavigationFirstTwoButtonDataframe/></v-list-item>
+                                              <v-list-item><vueElintegroAppsDataframe/></v-list-item>
+                                              <v-list-item class="mt-n4"><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                                 <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/>
+                                              </v-list-item>
+                                              <v-list-item class="px-6 mt-n4"><vueElintegroLanguageSelectorDataframe/></v-list-item>
+                                         </v-list>
                                      </v-navigation-drawer>
        </div>"""
     }
