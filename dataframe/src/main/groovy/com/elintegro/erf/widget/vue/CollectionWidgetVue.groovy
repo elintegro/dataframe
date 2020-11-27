@@ -72,7 +72,7 @@ abstract class CollectionWidgetVue extends WidgetVue {
             for(int j=0; j<items.size(); j++){
                 Map item = (Map) items[j]
                 for(int k=0; k<value.size(); k++){
-                    if(item."$displayMember" == value[k]){//check if same item and add to list
+                    if(item."$displayMember" == value[k]?."$displayMember"){//check if same item and add to list
                         valueList.add(item)
                         continue;
                     }
@@ -282,7 +282,7 @@ abstract class CollectionWidgetVue extends WidgetVue {
             String displayMember = fieldProps.displayMember?:"name"
             if(fieldProps.internationalize){
                 resultList.each {
-                    Map value1 = ["$valueMember":it.getAt("id"), "$displayMember":getMessageSource().getMessage(it.getAt("$displayMember"), null, it.getAt("$displayMember"), LocaleContextHolder.getLocale())]
+                    Map value1 = [(valueMember):it.getAt("id"), (displayMember):getMessageSource().getMessage(it.getAt("$displayMember"), null, it.getAt("$displayMember"), LocaleContextHolder.getLocale())]
                     res.push(value1)
                 }
             }else {
