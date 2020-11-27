@@ -83,7 +83,6 @@ beans{
                         , hql: """select project.id as projectId , project.name as Name , users.id as Id from Project project inner join project.users users where users.id = :session_userid"""
                         ,"displayMember":"Name"
                         ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' """
-                        , search:true
                         ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ]
         ]
@@ -166,7 +165,6 @@ beans{
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
                         ,"displayMember":"ename"
                         ,"valueMember":"id"
-                        , search:true
                         ,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,multiple: false
                 ],
@@ -209,7 +207,6 @@ beans{
                         , hql: """select language.id as id, language.ename as ename  from Language as language"""
                         ,"displayMember":"ename"
                         ,internationalize: true
-                        , search:true
                         ,multiple: true
                         ,attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,valueMember:"id"
@@ -228,6 +225,7 @@ beans{
                         , hql: """select text.language as language from Text text inner join text.project project  where project_id = :projectId and text.language != project.sourceLanguage group by language"""
                         ,"displayMember":"language"
                         ,internationalize: true
+                        ,itemString : true
                         ,valueMember:"projectId"
                         ,OnClick:"translatedText(item)"
 
