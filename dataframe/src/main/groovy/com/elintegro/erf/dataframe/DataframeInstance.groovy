@@ -49,6 +49,7 @@ class DataframeInstance implements DataframeConstants{
 	private Map<String, Object> sessionParams
 	private List results
 	private def record
+	private Map retrievedDomainData = [:]
 	private Map resultMap = [:];
 	private JSONObject jData
 	private Map<String, String> namedParmeters = [:]
@@ -87,23 +88,8 @@ class DataframeInstance implements DataframeConstants{
 	}
 
 	def getFieldValueFromDomain(Map field){
-		DomainClassInfo domain  = field.get(FIELD_PROP_DOMAIN)
-		def domainInstance = getFieldDomainInstance(this.record, domain.clazz)
-		def fieldValue = domainInstance?."${field?.name}"
-		return fieldValue
-	}
-
-	private static def getFieldDomainInstance(def records, Class domainClazz){
-		//todo:prevent calling this method for each domain field which are associated in single domain object
-		def fieldDomainInstance = null
-		for (def domainInstance : records){
-			Class recordInstanceClass = domainInstance.class;
-			if (recordInstanceClass.simpleName == domainClazz.simpleName){
-				fieldDomainInstance = domainInstance
-				break
-			}
-		}
-		return fieldDomainInstance
+		def domainInstance = retrievedDomainData.get(field.get(FIELD_PROP_DOMAIN_ALIAS))
+		return domainInstance?."${field?.name}"
 	}
 
 	def getFieldValue(Map field){
@@ -186,16 +172,17 @@ class DataframeInstance implements DataframeConstants{
 		if(!df.hql){
 			return;
 		}
-		String hqlRetrieveDataQuery = createDataRetrieveQuery(df)
+		List hqlDomains = new ArrayList<>(df.parsedHql.hqlDomains.keySet())
+		String dataRetrieveHql = createDataRetrieveHql(df, hqlDomains)
 		Transaction tx = sessionHibernate.beginTransaction()
 		try{
-			Query query = sessionHibernate.createQuery(hqlRetrieveDataQuery)
+			Query query = sessionHibernate.createQuery(dataRetrieveHql)
 			setNamedParametersFromRequestOrSession(query)
 			this.results = query.list()
 			tx.commit();
 			if(results && results .size() > 0){
-//				results.removeAll(Collections.singleton(null))
 				this.record = results[0]
+				setRetrievedDomainDataMap(hqlDomains)
 			}else{
 				isDefault = true
 				//throw new DataframeException(df, "No record found for the Dataframe");
@@ -206,19 +193,28 @@ class DataframeInstance implements DataframeConstants{
 			throw new DataframeException(df, "Error: ${e.message}", e )		}
 	}
 
-	private static String createDataRetrieveQuery(Dataframe df){
-		StringBuilder dataRetrieveQueryBuilder = new StringBuilder()
+	private static String createDataRetrieveHql(Dataframe df, List hqlDomains){
+		StringBuilder dataRetrieveHqlBuilder = new StringBuilder()
+		String fromString = "from"
 		try {
-			String fromString = df.hql.split("from")[1]
-			dataRetrieveQueryBuilder.append("select ")
-			String domainString = String.join(", ", df.parsedHql.hqlDomains.keySet())
-			dataRetrieveQueryBuilder.append(domainString)
-			dataRetrieveQueryBuilder.append(" from "+fromString)
-			log.info("Custom data retrieve query: "+dataRetrieveQueryBuilder.toString())
+			String hqlFromSuffix = df.hql.split(fromString)[1]
+			dataRetrieveHqlBuilder.append("select ")
+			String domainString = String.join(", ", hqlDomains)
+			dataRetrieveHqlBuilder.append(domainString)
+			dataRetrieveHqlBuilder.append(" ${fromString} "+hqlFromSuffix)
+			log.info("Custom data retrieve query: "+dataRetrieveHqlBuilder.toString())
 		}catch(e){
 			throw new DataframeException(df, "Error on creating custom data retrieve query due to: ${e.message}")
 		}
-		return dataRetrieveQueryBuilder.toString()
+		return dataRetrieveHqlBuilder.toString()
+	}
+
+	private def setRetrievedDomainDataMap(List hqlDomains){
+		int recordIndex = 0
+		for(def domainInstance : record) {
+			retrievedDomainData.put(hqlDomains[recordIndex], domainInstance)
+			recordIndex++
+		}
 	}
 
 	private void populateInstanceBackUp(){
