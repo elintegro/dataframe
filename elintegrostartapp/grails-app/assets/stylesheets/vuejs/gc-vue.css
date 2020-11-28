@@ -40,6 +40,15 @@ tr.selected td {
 .appBar{
     height: 65px;
 }
+#newEmployeeBasicInformation{
+    padding-top: 1%;
+}
+#newEmployeeUploadResume{
+    padding-top: 1%;
+}
+#newEmployeeAdditionalQuestions{
+    padding-top: 1%;
+}
 /*.first-banner{*/
 /*    background-size:cover;*/
 /*    height:auto;*/

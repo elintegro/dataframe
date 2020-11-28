@@ -140,7 +140,7 @@ abstract class CollectionWidgetVue extends WidgetVue {
         }
     }
 
-    private Map generateInitialData(DataframeVue dataframe, Map field){
+    protected Map generateInitialData(DataframeVue dataframe, Map field){
 
         if(!field.initBeforePageLoad){
             return [keys: [], result:[], selectedData: [:]]

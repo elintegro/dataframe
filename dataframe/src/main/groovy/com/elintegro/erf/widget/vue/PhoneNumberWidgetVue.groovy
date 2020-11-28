@@ -37,6 +37,7 @@ class PhoneNumberWidgetVue extends WidgetVue{
                  :rules = "${fldName}_rule"
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}
+                 ${getAttr(field)}
                 ></v-text-field>
                """
     }

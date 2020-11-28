@@ -137,6 +137,11 @@ images {
 	}
 //	storageLocation = "/opt/tomcat-8/webapps"
 	storageLocation = "/usr/local/opt/apache-tomcat-9.0.33/webapps"
+	environments{
+		development {
+			storageLocation = "${userHome}/.elintegrostartapp"
+		}
+	}
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
 	defaultImagePath = "/assets/$defaultImageName"

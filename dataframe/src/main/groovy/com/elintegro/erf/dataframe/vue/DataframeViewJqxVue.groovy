@@ -127,17 +127,17 @@ public class DataframeViewJqxVue implements DataframeView {
             resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" $scrollable $persistent width='initial' max-width='500px'>""")
             resultPageHtml.append(refDataframe.getComponentName("resetForm=true"))
 //            resultPageHtml.append("""<component :is='${refDataframeName.toLowerCase()}' ref='${refDataframeName.toLowerCase()}_ref' :${refDataframeName}_prop="${refDataframeName}_data" :key='randomKey'></component>""")
-            resultPageHtml.append("""</v-dialog>""")
+            resultPageHtml.append("""</v-dialog>\n""")
         } else if(dfButton.showAsMenu && dfButton.showAsMenu.attr){
             String attr = dfButton.showAsMenu.attr?:"left"
             String attachTo = dfButton.showAsMenu.attachTo?:"$dataframeName-id"
             resultPageHtml.append("""<v-menu v-model="visibility.${refDataframeName}" :close-on-content-click="false" z-index='99' max-width="200" :nudge-width="200" $attr attach="$attachTo">""")
             resultPageHtml.append(refDataframe.getComponentName(""))
-            resultPageHtml.append("""</v-menu>""")
+            resultPageHtml.append("""</v-menu>\n""")
         }else{
             resultPageHtml.append("""<div v-show="visibility.${refDataframeName}" max-width="500px">""")
             resultPageHtml.append(refDataframe.getComponentName(":key='randomKey'"))
-            resultPageHtml.append("""</div>""")
+            resultPageHtml.append("""</div>\n""")
         }
         //Add computed and watch scripts for dialog box
         vueJsBuilder.addToComputedScript("""randomKey: function(){excon.generateRandom();},\n""")
@@ -166,7 +166,7 @@ public class DataframeViewJqxVue implements DataframeView {
         if(fields.popup) {
             resultPageHtml.append("""<v-menu v-model="visibility.${refDataframeName}" :close-on-content-click="false" z-index='99' max-width="200" :nudge-width="200" $attr attach="$attachTo">""")
             resultPageHtml.append(refDataframe.getComponentName(""))
-            resultPageHtml.append("""</v-menu>""")
+            resultPageHtml.append("""</v-menu>\n""")
         }
         return resultPageHtml.toString()
     }

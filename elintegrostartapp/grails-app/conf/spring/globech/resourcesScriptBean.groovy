@@ -893,33 +893,35 @@ beans {
         def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
         methods ="""afterRefreshing(response){
               
-                                 var params = response;
-                                 var fileName = params.vueElintegroApplicantCVDataframe_files_fileName;
-                                  var extension = fileName.split('.').pop();
+                                 let params = response;
+                                 let fileName = params.persisters.files.fileName.value;
+                                  let extension = fileName.split('.').pop();
+                                  let stateValues = excon.getFromStore("vueElintegroApplicantCVDataframe");
                                   if(extension == 'pdf'){
-                                    var defaultImageUrlForPdf = '${pathForPdf}'
-                                    excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForPdf}')   
+                                    let defaultImageUrlForPdf = '${pathForPdf}'
+                                    stateValues.persisters.files.fileName.value = '${pathForPdf}';
                                   }
                                   else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
-                                       excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForExcel}')   
-
+                                    stateValues.persisters.files.fileName.value = '${pathForExcel}';
                                   }
                                   else if(extension == 'doc' || extension == 'docx'){
-                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForDocFile}')   
+                                    stateValues.persisters.files.fileName.value = '${pathForDocFile}';
                                   }
                                   else if(extension == 'csv' || extension == 'CSV'){
-                                      excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName','${pathForCsvFile}')   
+                                    stateValues.persisters.files.fileName.value = '${pathForCsvFile}';
                                   }
-                                  
                                   excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
                                   
-                                  var applicantId = response.vueElintegroApplicantCVDataframe_application_id;
-                                  var imageSrc = "fileDownload/imagePreview/"+applicantId;
-                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_images_name',imageSrc);    
+                                  excon.saveToStore('vueElintegroApplicantCVDataframe',stateValues);  
                                  
                                   },\n
                               
         """
+/*
+                                  var applicantId = response.domain_keys.application.id;
+                                  var imageSrc = "fileDownload/imagePreview/"+applicantId;
+                                  stateValues.persisters.images.name.value = imageSrc;
+*/
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
@@ -1000,14 +1002,16 @@ beans {
                                                                    });
                              },\n
                              translatedText(params){
-                                        var previouslyClickedValue = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage')
+                                        let stateValues = excon.getFromStore('vueGridOfTranslatedTextDataframe')
+                                        let previouslyClickedValue = stateValues.targetLanguage
                                         if(previouslyClickedValue == ""){
                                         this.isHidden = !this.isHidden
                                         }else{
                                         this.isHidden = true
                                         }
-                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','targetLanguage',params.language)
-                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.keys.projectId)
+                                        stateValues.targetLanguage = params.language;
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe',stateValues);
+                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.projectId)
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.persisters.project.sourceLanguage.value)
 
                              },\n
@@ -1126,25 +1130,25 @@ beans {
 
     }
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
-        data = """vueGridOfTranslatedTextDataframe_button_translateWithGoogle:true,vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile:false,progressBarEnable:false,"""
+        data = """showtranslateWithGoogleButton:true, showDownloadTargetPropertyFileButton:false, progressBarEnable:false,"""
         watch = """ refreshVueGridOfTranslatedTextDataframe:{handler: function(val, oldVal) {this.vueGridOfTranslatedTextDataframe_fillInitData();}},"""
         computed = """refreshVueGridOfTranslatedTextDataframe(){var targetLanguage = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
                             return targetLanguage;}"""
         methods = """
                   buttonShowHide(response){
-                                        var retrivedData = response.additionalData.vueGridOfTranslatedTextDataframe_translatedText.dictionary;
+                                        var retrivedData = response.transits.translatedText.items;
                                         if(retrivedData.length > 1){
-                                        this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=true;
-                                        this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                        this.showDownloadTargetPropertyFileButton=true;
+                                        this.showtranslateWithGoogleButton=false;
                                         }
                                         else{
-                                        this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=true;
-                                        this.vueGridOfTranslatedTextDataframe_button_downloadTargetPropertyFile=false;
+                                        this.showtranslateWithGoogleButton=true;
+                                        this.showDownloadTargetPropertyFileButton=false;
                                         }
                   },\n
                                     retrieveTranslatedText(){
                                          this.progressBarEnable = true;
-                                         this.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                         this.showtranslateWithGoogleButton=false;
                                          var params = this.state;
                                          var self = this;
                                          var myVar = setInterval(function(){
@@ -1154,7 +1158,9 @@ beans {
                                                       data: params
                                                }).then(function(responseData){
                                                       var response = Math.round(responseData.data);
-                                                      excon.saveToStore('vueElintegroProgressBarDataframe','progressValue',response)
+                                                      let stateValuesForProgressBar = excon.getFromStore('vueElintegroProgressBarDataframe');
+                                                      stateValuesForProgressBar['progressValue'] = response;
+                                                      excon.saveToStore('vueElintegroProgressBarDataframe',stateValuesForProgressBar);
                                                       if(self.progressBarEnable == false){clearInterval(myVar)}
                                                });
                                          } ,1000);
@@ -1165,7 +1171,7 @@ beans {
                                               data: params
                                          }).then(function(responseData){
                                               self.vueGridOfTranslatedTextDataframe_fillInitData();
-                                              self.vueGridOfTranslatedTextDataframe_button_translateWithGoogle=false;
+                                              self.showtranslateWithGoogleButton=false;
                                               var response = responseData.data;
                                               self.progressBarEnable = false;
                                          });

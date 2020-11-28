@@ -35,7 +35,7 @@ class InputWidgetVue extends WidgetVue {
             ${isDisabled(dataframe, field)?":disabled = true":""}
             ${isReadOnly?"readonly":''}
             ${toolTip(field)}
-            style="width:${getWidth(field)}; height:${getHeight(field, "40px")};"
+            style="width:${getWidth(field)}; height:${getHeight(field)};"
             autocomplete = $autoComplete
             $clearable
             ${getAttr(field)}

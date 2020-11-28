@@ -38,6 +38,7 @@ class FilesDisplayWidgetVue extends WidgetVue {
         return html
 
     }
+/*
     String getStateDataVariable(DataframeVue dataframe, Map field) {
         String fldParam = dataframe.getDataVariableForVue(field)
         String defImgUrl = getDefaultImageName()
@@ -48,6 +49,7 @@ class FilesDisplayWidgetVue extends WidgetVue {
                   ${fldParam}_alt:'$alt', \n"""
 
     }
+*/
     private String getDefaultImageName(){
 
         return Holders.config.images.defaultImagePathForPdf

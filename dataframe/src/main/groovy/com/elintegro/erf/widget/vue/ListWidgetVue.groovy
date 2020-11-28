@@ -33,7 +33,10 @@ class ListWidgetVue extends CollectionWidgetVue {
     private String getHtmlStructure(DataframeVue dataframe, Map field, String fldName, String label) {
         String displayMember = field.displayMember ?: 'name'
 //        String modelString = getModelString(dataframe, field)
-        String modelString = getFieldJSONModelNameVue(field)
+        String modelString = ''
+        String itemsStr = getFieldJSONItems(field)
+        boolean itemString = field.itemString?:false
+        modelString = itemString?itemsStr:getFieldJSONModelNameVue(field)
         String onClick = field.OnClick?:""
         """
            <v-list ${isDisabled(dataframe, field) ? "disabled" : ""} flat ${getAttr(field)}>
