@@ -36,21 +36,30 @@ class TranslatorService {
         String targetLanguageCode = language1.code
         Project project = Project.findById(projectId)
         def sourceRecords = Text.findAllByProjectAndLanguage(project,sourceLanguage)
+        def translatedRecords = Text.findAllByProjectAndLanguage(project, targetLanguage)
         session.setAttribute("TA_NUMBER_OF_RECORDS_TO_TRANSLATE",sourceRecords.size())
-        long counter = 0
-            for(Text record:sourceRecords){
-                if(counter % 5 == 0) {
+        if (translatedRecords.size() <= 1) {
+            long counter = 0
+            for (Text record : sourceRecords) {
+                if (counter % 5 == 0) {
                     session.setAttribute("TA_NUMBER_OF_TRANSLATED_RECORDS", counter)
                 }
-                def translatedText = translateFromGoogle(sourceLanguageCode, targetLanguageCode, record.text)
-                Text text = new Text()
-                text._key = record._key
-                text.text = translatedText
-                text.language = targetLanguage
-                text.project = project
-                text.save(flush: true)
-                counter++
+                if (record.text) {
+                    def translatedText = translateFromGoogle(sourceLanguageCode, targetLanguageCode, record.text)
+                    Text text = new Text()
+                    text._key = record._key
+                    text.text = translatedText
+                    text.language = targetLanguage
+                    text.project = project
+                    text.save(flush: true)
+                    counter++
+                } else {
+                    log.error("Text not found");
+                }
             }
+        }else {
+            log.error("Texts are already translated...")
+        }
 
 
     }

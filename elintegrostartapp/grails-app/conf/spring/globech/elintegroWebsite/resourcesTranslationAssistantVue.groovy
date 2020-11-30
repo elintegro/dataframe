@@ -244,7 +244,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueAddNewRecordForCurrentProjectDataframe']
         initOnPageLoad = true
-        putFillInitDataMethod = true
+        putFillInitDataMethod = false
         saveButton = false
         doBeforeRefresh = """ params['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId')"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
@@ -312,7 +312,7 @@ beans{
         doBeforeRefresh = """params['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
                            params['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
                            params['sourceLanguage'] =excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage'); """
-        doAfterRefresh = """self.buttonShowHide(response);"""
+
         addFieldDef = ["translatedText":[
                                      widget: "GridWidgetVue"
                                      ,name: "translatedText"
@@ -345,8 +345,8 @@ beans{
                                                          ,vuetifyIcon: [name: "delete"]
                                                         ]]]]
         ]]
-        dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = 'showtranslateWithGoogleButton' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""],
-                            downloadTargetPropertyFile: [name: "downloadTargetPropertyFile",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = 'showDownloadTargetPropertyFileButton' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.downloadTargetFile()"""]
+        dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = '!buttonShowHide' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""],
+                            downloadTargetPropertyFile: [name: "downloadTargetPropertyFile",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = 'buttonShowHide' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.downloadTargetFile()"""]
         ]
         childDataframes = ["vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe","vueDialogBoxForNotLoggedInUserDataframe"]
         currentFrameLayout= ref("vueGridOfTranslatedTextDataframeLayout")

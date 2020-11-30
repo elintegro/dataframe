@@ -245,6 +245,25 @@ var excon = new Vue({
         updateState: function(response){
             store.commit("updateState", response)
         },
+        /**
+         * Call this method for refreshing data of one dataframe from another dataframe.
+         * params = this.state;
+         * params should contain dataframe name.
+         * @param url
+         * @param doBeforeRefresh
+         * @param doAfterRefresh
+         * @param params
+         */
+
+        fillInitialData : function (url, params, doBeforeRefresh=()=>{}, doAfterRefresh=()=>{}){
+            if(!params) return;
+            if(!url) throw new Error("Url is missing .");
+            if(!params.dataframe) throw new Error("Dataframe name missing from params.");
+            params["url"] =  url;
+            params["doBeforeRefresh"] = doBeforeRefresh;
+            params["doAfterRefresh"] = doAfterRefresh;
+            this.refreshData(params);
+        },
         refreshData : function(params){
             store.dispatch("refreshData", params);
         },
