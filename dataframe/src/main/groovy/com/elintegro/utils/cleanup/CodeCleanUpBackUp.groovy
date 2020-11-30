@@ -4,6 +4,132 @@ package com.elintegro.utils.cleanup
 
 class CodeCleanUpBackUp {
 
+    /*
+    <--------------------------DataframeVue code start here --------------------------->
+    	public String getJsonDataFillScriptbackup(df){
+		String dataframeName = df.dataframeName
+		StringBuilder paramsSb = new StringBuilder()
+		String namedParamKey = mainNamedParamKey?:"id"
+		if(route){
+			paramsSb.append("params['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
+		}else{
+			paramsSb.append("""params["$namedParamKey"] = eval(this.namedParamKey);\n""")
+		}
+		if(!ajaxUrlParams.isEmpty()){
+			for(Map.Entry entry: ajaxUrlParams){
+				paramsSb.append("params['$entry.key'] = '$entry.value';\n")
+			}
+		}
+		String updateStoreScriptcaller = ""
+		if(createStore){
+//			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n excon.updateStoreState(resData, stateVar,${dataframeName}Var);"""
+		}
+		return """
+             ${dataframeName}_fillInitData: function(){
+                excon.saveToStore('$dataframeName','doRefresh',false);
+                let params = this.state;\n
+                const propData = this.${dataframeName}_prop;
+                 if(propData){
+                    params = propData;
+                    if(this.namedParamKey == '' || this.namedParamKey == undefined){
+                        this.namedParamKey = "this.${dataframeName}_prop.key?this.${dataframeName}_prop.key:this.\$store.state.${dataframeName}.key";
+                    }
+                 }
+                ${paramsSb.toString()}
+                params['dataframe'] = '$dataframeName';
+                $doBeforeRefresh
+                this.overlay_dataframe = true;
+                let self = this;
+				axios({
+                          method:'post',
+                          url:'$df.ajaxUrl',
+                          data: params
+                      }).then(function (responseData) {
+                        let resData = responseData.data;
+                        let response = resData?resData.data:'';
+                       if(response != null && response != '' && response  != undefined){
+//                           response["stateName"] = "$dataframeName";
+//                           ${dataframeName}Var.updateState(response);
+//                           ${dataframeName}Var.${dataframeName}_populateJSONData(response);
+							 excon.saveToStore("${dataframeName}", "persisters", response.persisters);
+                        }
+                        $doAfterRefresh
+                   self.overlay_dataframe = false;
+                  ${updateStoreScriptcaller}
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+             },\n
+              """
+	}
+
+	public String getSaveDataScriptbackup(df, vueSaveVariables, vueFileSaveVariables){
+		String dataframeName = df.dataframeName
+		StringBuilder embdSaveParms = new StringBuilder("")
+		if(embeddedDataframes.size()>0){
+			embeddedDataframes.each{
+				if(it.trim() != ""){
+					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it}_ref") && this.\$refs.${it}_ref){for(var a in this.\$refs.${it}_ref.\$data){\n
+                                              var dashA = a.split('_').join('-');
+                                              params[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
+				}
+			}
+		}
+		 TODO: remove it after tests
+		String addKeyToVueStore
+		if(!putFillInitDataMethod){
+			addKeyToVueStore = """var nodeArr = response.nodeId; if(nodeArr && Array.isArray(nodeArr) && nodeArr.length){excon.saveToStore("$dataframeName", "key", response.nodeId[0]);}\n"""
+		}
+		doAfterSaveStringBuilder.append("""
+                    var ajaxFileSave = ${dataframeName}Var.params.ajaxFileSave;
+                    if(ajaxFileSave){
+                       for(let i in ajaxFileSave) {
+                         const value = ajaxFileSave[i];
+                         $vueFileSaveVariables
+  						 self[value.fieldName+'_ajaxFileSave'](responseData, params);
+					   }
+                    }
+                  $addKeyToVueStore
+				""")
+				TODO: remove it after tests
+    return """
+${dataframeName}_save: function(){
+                  let params = this.state;
+                  $vueSaveVariables
+${embdSaveParms?.toString()}
+${doBeforeSave}
+                  params['dataframe'] = '$dataframeName';
+                  console.log(params)
+                  if (this.\$refs.${dataframeName}_form.validate()) {
+                      this.${dataframeName}_save_loading = true;
+                      const self = this;
+                      axios({
+                          method:'post',
+                          url:'$df.ajaxSaveUrl',
+                          data: params
+                      }).then(function (responseData) {
+                        self.${dataframeName}_save_loading = false;
+                        var response = responseData.data;
+                        //TODO: add here assignment of response object to the proper vue structure
+                        excon.saveToStore("${dataframeName}", "domain_keys", responseData.data.data.domain_keys);
+                        excon.showAlertMessage(response);
+			            	if(response.success){
+                               ${doAfterSave}
+                        	}
+                      }).catch(function (error) {
+                              self.${dataframeName}_save_loading = false;
+                              console.log(error);
+                      });
+                  }
+
+               },\n"""
+}
+
+
+<--------------------------DataframeVue code end here --------------------------->
+     */
+
 /*    <------------------- DataframeInstance code start here ------------------------->
 
   public def retrieveAndGetJson(){

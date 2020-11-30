@@ -102,6 +102,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	String doBeforeDelete = "false" //by default delete is not allowed, unless somebody defined a script to turn it into true
 	@OverridableByEditor
 	String doAfterDelete = ""
+	String doAfterReset = ""
 	ParsedHql parsedHql
 	public 	List pkFields = []
 	def groovySql

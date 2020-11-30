@@ -126,37 +126,6 @@ class ResultPageHtmlBuilder {
         finalScriptSb.append(getMainPgVueCompRegistrationString(gcMainPgObj)) // dfr components registration
         finalScriptSb.append("\n},\n")// components registration completed
         finalScriptSb.append("methods:{\n")
-        finalScriptSb.append("""
-                   
-                    refreshDataForGrid: function(response, fldName, operation = "U"){
-                       
-                          const newData = response.newData;
-                          if(!newData) return;
-                          const selectedRow = this[fldName +'_selectedrow'];
-                          const editedIndex = this.state[fldName +'_items'].indexOf(selectedRow);
-                          let row = {};
-                          for(let key in newData){
-                              let dataMap = newData[key];
-                              for(let j in dataMap){
-                                 if(selectedRow){
-                                    if (key in selectedRow) {
-                                      row[key] = dataMap[j];
-                                    }
-                                 } else {
-                                    row[key] = dataMap[j];
-                                 }
-                                  
-                              }
-                          }
-                          if (operation==="I") {
-                              this.state[fldName +'_items'].push(row)
-                          } else {
-                              Object.assign(this.state[fldName +'_items'][editedIndex], row)
-                          }
-//                          this.gridDataframes[refreshParams.dataframe] = false; 
-                },
-
-         """)
         finalScriptSb.append("}, \n") //methods end
         finalScriptSb.append("})")
         finalScriptSb.append("</script>")
