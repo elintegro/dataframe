@@ -315,4 +315,39 @@ private Query createSQLQuery() {
     <------------------- DataframeInstance code ends here ------------------------->
  */
 
+    /*
+    <------------------- GridWidgetVue code start here ------------------------->
+ private static String getGridValuesScript(String parentDataframeName, String fldName
+                                              ,StringBuilder fieldParams, DataframeVue refDataframe){
+        String refDataframeName = refDataframe.dataframeName
+        return """
+                         ${parentDataframeName}Var.${fldName}_selectedrow = dataRecord;
+                   var params = {'dataframe':'$refDataframeName'};
+                   $fieldParams
+                   axios.get('$refDataframe.ajaxUrl', {
+                    params: params
+                }).then(function (responseData) {
+                        var response = responseData.data.data;
+                        console.log(response);
+                        excon.setVisibility(${refDataframeName}, true);
+                        var refParams = ${parentDataframeName}Var.\$refs.${refDataframeName}_ref.params;
+                        var gridRefreshParams = {};
+                        gridRefreshParams['isGridRefresh'] = true;
+                        gridRefreshParams['fieldName'] = '$fldName';
+                        gridRefreshParams['parentDataframe'] = '$parentDataframeName';
+                        gridRefreshParams['dataframe'] = '$refDataframeName';
+                        refParams['gridRefreshParams'] = gridRefreshParams;
+
+                        ${refDataframe.doAfterRefresh}
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+"""
+
+    }
+
+    <------------------- GridWidgetVue code end here ------------------------->
+     */
 }

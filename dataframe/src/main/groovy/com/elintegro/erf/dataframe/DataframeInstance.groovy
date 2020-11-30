@@ -211,72 +211,25 @@ class DataframeInstance implements DataframeConstants{
 	 * and return the map which can be converted to json on controller.
 	 */
 	public def buildDefaultJson(){
-
-		//retrieving from DB!
-		//populateInstance()
-
+		jData = copyDomainFieldMap()
 		Map jsonRet = [:];
-		Map jsonMapDf = [:];
-		Map jsonAdditionalData = [:];
-		Map jsonDefaults = [:];
 
 		//if( isGood()){
 		//!!!!!!!!!!!!!!!!!!!!!!!!! main loop on fields
 		df.fields.getList().each{ fieldName ->
 			Map mapFieldValue = df.fields.get(fieldName)
-
 			if(isFieldExistInDb(mapFieldValue)){
-
 				def fldValue = mapFieldValue.defaultValue
-				def fldDefaultValue = mapFieldValue.defaultValue
-				jsonMapDf.put(fieldName, fldValue)
-				jsonDefaults.put(fieldName, fldDefaultValue)
+				Widget widget = getFieldWidget(mapFieldValue)
+				widget.setPersistedValueToResponse(jData, fldValue, getFieldDomainAlias(mapFieldValue), fieldName, [:], this, sessionHibernate, mapFieldValue)
 			}
 		}
 
-		//}
-		jsonMapDf.put("keys", getNamedParameters())
-		jsonMapDf.put("additionalData", jsonAdditionalData)
-
-		//Replace default add datan with relev values
-		jsonDefaults.put("keys", getNamedParameters())
-		jsonDefaults.put("additionalData", jsonAdditionalData)
-
-		//These are for refresh parent dataframe, if provided (aka requested):
-		def parentDataframe = requestParams.get('parentDataframe')
-		def parentNode = requestParams.get('parentNode')
-		def parentLevel = requestParams.get('level')
-		def parentFieldName = requestParams.get('parentFieldName')
-		def parentNodeLevel = getLevelFromUiIdConstruct(parentNode)
-
 		log.debug("\n *******   Request Params: when retrieved \n" + reqParamPrintout(requestParams) + "\n ***************\n")
 
-		//TODO: 1 All this should be coming from additionalParameters jsonMapDf[additionalParams]
-		//df.dataFrameParamsToRefresh = [parentNode:parentNode, parentDataframe:parentDataframe, level:parentLevel, parentFieldName:parentFieldName]
-		def html = df.getHtml()
-		jsonRet.put("html", html)
-		jsonRet.put("parentDataframe", parentDataframe)
-		jsonRet.put("parentNode", parentNode)
-		jsonRet.put("level", parentLevel)
-		jsonRet.put("parentFieldName", parentFieldName)
-		//TODO: 1
-
-		jsonRet.put("data", jsonMapDf)
-		jsonRet.put("default",jsonDefaults)
 		jsonRet.put("operation","R");
 		jsonRet.put("dataframe",df.dataframeName);
-
-		String domainAlias = df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0)
-
-		jsonRet.put("dataFrameParamsToRefresh",
-				[   'parentNode':parentNode,
-					'parentNodeId':getIdFromUiIdConstruct(parentNode),
-					'parentNodeLevel':getLevelFromUiIdConstruct(parentNode),
-					'parentDataframe':parentDataframe,
-					'level':parentLevel,
-					'parentFieldName': Dataframe.buildFullFieldName_(df.dataframeName, domainAlias, parentFieldName)
-				])
-
+		jsonRet.put("data", jData)
 		return jsonRet
 	}
 
@@ -295,7 +248,7 @@ class DataframeInstance implements DataframeConstants{
 			populateInstance()
 		}
 
-		jData = new JSONObject((Map) SerializationUtils.clone(df.domainFieldMap))
+		jData = copyDomainFieldMap()
 
 		Map jsonRet = [:];
 		Map jsonMapDf = [:];
@@ -1266,6 +1219,10 @@ class DataframeInstance implements DataframeConstants{
 			}
 		}
 		return false;
+	}
+
+	private JSONObject copyDomainFieldMap(){
+		return new JSONObject((Map) SerializationUtils.clone(df.domainFieldMap))
 	}
 
 }
