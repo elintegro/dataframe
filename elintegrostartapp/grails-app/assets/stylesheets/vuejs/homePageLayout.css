@@ -44,6 +44,11 @@
      animation-iteration-count: infinite;
      animation-timing-function: linear;
  }
+ @media screen and (max-width:965px) {
+     .mainContainer .our_home #apps{
+         padding-left: 0;
+     }
+ }
 .mainContainer .our_home .paragraph{
     color: black;
     font-size: 25px;
