@@ -911,7 +911,7 @@ beans {
                                     var params = this.state;
                                     var self = this;
                                     params['dataframe'] = 'vueElintegroCommentPageForApplicantDataframe';
-                                    exon.callApi('EmployeeApplication/addComment', 'post', params).then(function(responseData){
+                                    excon.callApi('EmployeeApplication/addComment', 'post', params).then(function(responseData){
                                                                    var response = responseData.data;
                                                                    self.vueElintegroCommentPageForApplicantDataframe_fillInitData()
                                     });
