@@ -391,6 +391,14 @@ beans {
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
         computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},
                        vueElintegroProfileMenuDataframe_person_email(){return this.state.persisters.person.email.value}"""
+        methods = """logout: function(){
+                                     const self =this;
+                                     let params={};
+                                     excon.callApiWithQuery('logoff', 'POST', params).then((response)=>{
+                                         self.\$router.push("/")
+                                         window.location.reload();
+                                    })
+                    }"""
     }
     vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
         created = """this.vueElintegroProfileMenuDataframeShow();"""

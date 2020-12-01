@@ -134,7 +134,6 @@ var excon = new Vue({
             throw "No object for the path " + key;
         },
 
-        /*
                 matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {
 
                     var sourceDataframeVars = this.getFromStore(fromDataframe);
@@ -159,7 +158,6 @@ var excon = new Vue({
 
                 },
 
-        */
         /*
                 updateStoreState: function(response, stateVar, propKey){
 
@@ -291,8 +289,7 @@ var excon = new Vue({
          * @param params
          * @returns {*}
          */
-        callApiWithQuery: function(url, method, params){
-            method = method || 'GET';
+        callApiWithQuery: function(url, method="GET", params={}){
             return axios({
                 method:method,
                 url: url,
