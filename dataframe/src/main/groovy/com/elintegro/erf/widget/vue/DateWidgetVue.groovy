@@ -95,9 +95,9 @@ class DateWidgetVue extends WidgetVue {
 
     @Override
     boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
-        if(isReadOnly(field)){
-            return false
-        }
+        if(isReadOnly(field)) return false
+        if(!inputValue || !inputValue.value) return false
+
         def oldfldVal = domainInstance."${fieldName}"
         if(oldfldVal == inputValue.value){
             return false

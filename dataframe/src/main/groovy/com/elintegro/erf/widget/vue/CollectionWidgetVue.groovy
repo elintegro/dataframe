@@ -20,9 +20,9 @@ abstract class CollectionWidgetVue extends WidgetVue {
     }
     @Override
     boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
-        if(isReadOnly(field)){
-            return false
-        }
+        if(isReadOnly(field)) return false
+        if(!inputValue || !inputValue.value) return false
+
         JSONArray selectedItems =  (inputValue.value instanceof JSONArray)?inputValue.value:convertToJSONArrayIfSingleJSONObject(inputValue.value)
         JSONArray availableItems = inputValue.items
 

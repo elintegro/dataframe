@@ -1037,7 +1037,7 @@ class DataframeInstance implements DataframeConstants{
 		}
 		if (field.containsKey("regex")){
 			String regex = field.get("regex")?.toString()?.replaceAll("/","")
-			if (!fldValStr.find(regex)){
+			if (fldValStr && !fldValStr.find(regex)){
 				return false
 			}
 		}
