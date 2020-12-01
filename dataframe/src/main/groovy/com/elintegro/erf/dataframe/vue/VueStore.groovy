@@ -59,6 +59,7 @@ class VueStore {
         return sbb.toString()
     }
 
+/*
     String buildState(dataframeName){
         if(state.length() == 0){
             return ""
@@ -70,6 +71,7 @@ class VueStore {
 
         return sbb.toString()
     }
+*/
 
     String buildStateJSON(DataframeVue dataframe){
         StringBuilder sbb = new StringBuilder()
@@ -77,6 +79,7 @@ class VueStore {
         dataframe.domainFieldMap["dataframe"] = dataframe.dataframeName
         sbb.append(MapUtil.convertMapToJSONString(dataframe.domainFieldMap))
         sbb.append(""",\n""")
+        sbb.append(state?state.toString():"")
 
 /*
         if(state != null && state.length() > 0) {

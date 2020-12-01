@@ -18,7 +18,7 @@ beans {
 //        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
-        vueStore = ["state": "loggedIn: false,\n"]
+//        vueStore = ["state": "loggedIn: false,\n"]
 
         putFillInitDataMethod = false
         currentFrameLayout = ref("emptyDataframeLayout")

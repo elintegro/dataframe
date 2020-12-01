@@ -42,7 +42,7 @@ beans {
                          excon.saveToStore("vueApplicationFormDataframe","vueApplicationFormDataframe_tab_model",'vueAddressDataframe-tab-id');
                          """
 
-        vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
+//        vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
         childDataframes=["vueAddressDataframe", "vueMedicalRecordDataframe", "vueMedicationsGridDataframe"]
 
 //        doAfterSave = """setTimeout(function(){ this.location.reload();}, 3000);"""

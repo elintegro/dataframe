@@ -777,9 +777,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vStore.addToState(initValues.state)
 		}
 
+/*
 		vStore.addToState("key:''\n,")
 		vStore.addToState("doRefresh: {},\n")
 		vStore.addToState("newData: {},\n")
+*/
 	}
 
 	public List getKeyFieldNameForNamedParameter(df){

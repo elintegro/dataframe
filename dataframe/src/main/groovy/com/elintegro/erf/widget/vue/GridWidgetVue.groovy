@@ -486,7 +486,7 @@ $fieldParams
         boolean refreshInitialData = onClickMap.refreshInitialData ?:false
         if(dataframe.createStore || dataframe.vueStore){
             VueStore store = dataframe.getVueJsBuilder().getVueStore()
-            store.addToState("${fldName}_grid:{},\n")
+//            store.addToState("${fldName}_grid:{},\n")
             updateStoreCallScript = "this.${refDataframeName}_updateStore(dataRecord);"
             dataframe.getVueJsBuilder().addToMethodScript("""${refDataframeName}_updateStore: function(data){
                             Vue.set(this.${refDataframeName}_data, 'parentData', data);

@@ -195,6 +195,7 @@ beans {
                                         },\n"""
     }
 
+/*
     loginNavigationVue_script(VueJsEntity) { bean ->
         data = "loginNavigationVue_show:true,"
         watch = """registerStateChanged:{handler: function(response, oldVal) {
@@ -203,7 +204,8 @@ beans {
                loginClose:{handler: function(response, oldVal) {
                                        this.vueLoginDataframe_display = false;
                                        }}"""
-        computed = """registerStateChanged() {return this.\$store.state.loginNavigationVue;},\nloginClose() {return this.\$store.state.vueInitDataframe.vueLoginDataframe_display;}
+        computed = """registerStateChanged() {return this.\$store.state.loginNavigationVue;},\n
+                loginClose() {return this.\$store.state.vueInitDataframe.vueLoginDataframe_display;}
                                               """
         methods =
                 """  enableDisableNotification:function(data){
@@ -213,6 +215,7 @@ beans {
                                                } ,  \n
                                                """
     }
+*/
 
 
     vueAddressDataframe_script(VueJsEntity) { bean ->
@@ -257,11 +260,13 @@ beans {
                     },"""
     }
 
+/*
     vueLoginDataframe_script(VueJsEntity) { bean ->
         methods = """dialogBoxClose(){
                     console.log("login dataframe close button.");
                     },"""
     }
+*/
     vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
         methods = """
                    forgotPassword(){
@@ -311,6 +316,7 @@ beans {
                   """
     }
 
+/*
     vueAfterLoggedinDataframe_script(VueJsEntity) { bean ->
         data = "avatarSize : 40,\n"
         created = "this.populateAfterLoggedIn();\n"
@@ -341,6 +347,7 @@ beans {
                             
                      },"""
     }
+*/
     vueElintegroLoginDataframe_script(VueJsEntity) { bean ->
         boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
         String loginAuthenticateUrl = loginWithSpringSecurity?"login/authenticate" : "login/loginUser"
@@ -351,7 +358,7 @@ beans {
                                      params["username"] = this.state.persisters.user.username.value;
                                      params["password"] = this.state.persisters.user.password.value;
                                      params["remember-me"] = this.state.transits.rememberMe.value;
-                                     excon.callApi('$loginAuthenticateUrl', 'post', params).then((response)=>{
+                                     excon.callApiWithQuery('$loginAuthenticateUrl', 'POST', params).then((response)=>{
                                            window.location.reload();
                                     })
                     }"""
@@ -396,13 +403,16 @@ beans {
         data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
 
+/*
     vueApplicationFormDataframe_script(VueJsEntity) { bean ->
         data = "vueApplicationFormDataframe_tab_model : this.tabValue,\nvueApplicationFormDataframe_display: true, \n"
         computed = """tabValue(){return this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model}"""
         watch = """ tabValue:{handler: function(val, oldVal) {this.vueApplicationFormDataframe_tab_model = val;}},"""
 
     }
+*/
 
+/*
     vueMedicalRecordDataframe_script(VueJsEntity){bean->
         computed = """ 
                       closePrescriptionMedication(){
@@ -417,17 +427,23 @@ beans {
     vueMedicationsGridDataframe_script(VueJsEntity){bean ->
         created = "this.getDefaultDataHeaders(); "
     }
-    vueMedicationsGridDetailDataframe_script(VueJsEntity){bean -> /* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*/
+    vueMedicationsGridDetailDataframe_script(VueJsEntity){bean -> */
+/* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*//*
+
         watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridDetailDataframe_fillInitData();}},"""
         computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordDetailDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
 
-    vueMedicationsGridEditDataframe_script(VueJsEntity){bean -> /* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*/
+    vueMedicationsGridEditDataframe_script(VueJsEntity){bean -> */
+/* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*//*
+
         watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridEditDataframe_fillInitData();}},"""
         computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordEditDataframe', 'key');
                                       return (data!='' && data!= undefined)?data:null},"""
     }
+*/
+/*
     vueRegisterMenuDataframe_script(VueJsEntity){bean ->
 
         methods = """ showContactDetails: function(dfrName, contactType){
@@ -443,6 +459,7 @@ beans {
                        })
                       }"""
     }
+*/
     vueEmployeeAddressDataframe_script(VueJsEntity) { bean ->
 
         data = """ updatedAddressValue:'', \n """
@@ -484,6 +501,7 @@ beans {
                                      vueEmployeeAddressDataframeVar.vueEmployeeAddressDataframe_address_addressLine = result[0].formatted_address;
                     },"""
     }
+/*
     vueProviderAddressDataframe_script(VueJsEntity) { bean ->
 
         data = """ updatedAddressValue:'', \n """
@@ -566,6 +584,7 @@ beans {
                                      vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_addressLine = result[0].formatted_address;
                     },"""
     }
+*/
     vueAddressDetailDataframe_script(VueJsEntity) { bean ->
 
         watch = """ refreshVueAddressDataframe:{handler: function(val, oldVal) {this.vueAddressDetailDataframe_fillInitData();}},"""
@@ -892,13 +911,17 @@ beans {
     }
     vueTranslatorAssistantAfterLoggedInDataframe_script(VueJsEntity) {
         data = """disableWhenItemNotExist:true,"""
+/*
         watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantAfterLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
         computed = """ enableDisableTranstaleButtonComputed(){return this.state.transits.projectList.value;}"""
+*/
     }
     vueTranslatorAssistantBeforeLoggedInDataframe_script(VueJsEntity) {
         data = """disableWhenItemNotExist:true,"""
+/*
         watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantBeforeLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
         computed = """ enableDisableTranstaleButtonComputed(){return this.state.transits.projectList.value;}"""
+*/
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(timeOut){
@@ -928,12 +951,14 @@ beans {
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
         data = """isHidden : false ,showDownloadAllTranslatedFilesButton:false,disableAddButtonWhenItemNotSelect:true,"""
+/*
         watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
                     enableDisableAddButton:{handler: function(val,oldVal){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
                     """
         computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.value && this.state.transits.selectedLanguages.value.length > 1){return true;}return false;},\n
                       enableDisableAddButton(){return this.state.transits.notSelectedLanguages.value;},\n
                    """
+*/
         methods = """addLanguage(){
                                     var params = this.state;
                                     var self = this;
@@ -948,16 +973,15 @@ beans {
                                         let stateValues = excon.getFromStore('vueGridOfTranslatedTextDataframe')
                                         let previouslyClickedValue = stateValues.targetLanguage
                                         if(previouslyClickedValue == ""){
-                                        this.isHidden = !this.isHidden
+                                            this.isHidden = !this.isHidden
                                         }else{
-                                        this.isHidden = true
+                                            this.isHidden = true
                                         }
                                         stateValues.targetLanguage = params.language;
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe',stateValues);
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.projectId)
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.persisters.project.sourceLanguage.value)
-                                        let url = 'dataframe/ajaxValues';
-                                        excon.fillInitialData(url, stateValues);
+                                        excon.fillInitialData(stateValues);
 
                              },\n
                              
@@ -1033,9 +1057,11 @@ beans {
         """
     }
     vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
+/*
         watch = """ refreshVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe:{handler: function(val, oldVal) {this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_fillInitData();}},"""
         computed = """refreshVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(){var textToEdit = this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text;
                             return textToEdit;}"""
+*/
         methods = """
                    updateEditedTextInGrid(){
                                       var translatedData = {text:this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text, targetLanguage:this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.targetLanguage};
@@ -1084,7 +1110,7 @@ beans {
                                                       let stateValuesForProgressBar = excon.getFromStore('vueElintegroProgressBarDataframe');
                                                       stateValuesForProgressBar['progressValue'] = response;
                                                       excon.saveToStore('vueElintegroProgressBarDataframe',stateValuesForProgressBar);
-                                                      excon.fillInitialData('dataframe/ajaxValues', stateValuesForProgressBar);
+                                                      excon.fillInitialData(stateValuesForProgressBar);
                                                       if(self.progressBarEnable == false){clearInterval(myVar)}
                                                });
                                          } ,1000);
@@ -1116,8 +1142,10 @@ beans {
 
     }
     vueEditTranslatedRecordsOfGridDataframe_script(VueJsEntity){bean ->
+/*
         watch = """ refreshVueEditTranslatedRecordsOfGridDataframe:{handler: function(val, oldVal) {this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();}},"""
         computed = "refreshVueEditTranslatedRecordsOfGridDataframe(){return this.vueEditTranslatedRecordsOfGridDataframe_prop.key},"
+*/
         methods ="""
                     googleTranslateForEachRecord(){
                     var params = this.state;

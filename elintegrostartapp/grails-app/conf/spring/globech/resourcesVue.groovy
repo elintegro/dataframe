@@ -31,7 +31,7 @@ beans {
 //        childDataframes = ["vueLoginDataframe"]
         //Vue parameters
         isGlobal = true
-        vueStore = ["state":"loggedIn: false,\n"]
+//        vueStore = ["state":"loggedIn: false,\n"]
 
         putFillInitDataMethod = false
         currentFrameLayout = ref("emptyDataframeLayout")
@@ -45,7 +45,7 @@ beans {
         hql = "select facility.id, facility.facilityName from Facility facility inner join facility.users as user where user.id=:session_userid"
         initOnPageLoad = true
 
-        vueStore = ["state": "facilityName: '', \nfacilityId:'',\n"]
+//        vueStore = ["state": "facilityName: '', \nfacilityId:'',\n"]
         doAfterRefresh = """excon.saveToStore("vueAppNameDataframe","facilityId", vueAppNameDataframeVar.vueAppNameDataframe_facility_id);"""
         addFieldDef =[
                 "facility.facilityName":[
@@ -72,7 +72,7 @@ beans {
         //Vue parameters attr:"v-if='this.\$store.state.vueToolbarDataframe.newApplication_display'", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
         isGlobal = true
         createStore = true
-        vueStore = ["state":"newApplication_display: true,\n"]
+//        vueStore = ["state":"newApplication_display: true,\n"]
         wrapButtons = false
 
         dataframeButtons = [NewApplication:[name:"NewApplication", type:"link", route: true, routeIdScript: "0", refDataframe: ref("vueApplicationFormDataframe"), roles: "ROLE_ADMIN", accessType: "ifAnyGranted"],
@@ -96,7 +96,7 @@ beans {
         //Vue parameters attr:"v-if='this.\$store.state.vueToolbarDataframe.newApplication_display'", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
         isGlobal = true
         createStore = true
-        vueStore = ["state":"event_manager: true,\n"]
+//        vueStore = ["state":"event_manager: true,\n"]
 
         dataframeButtons = [ReportClientEvent:[name:"ReportClientEvent", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "0", refDataframe: ref("vueRecordEventDataframe"), roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
                             IssueRequest:[name:"IssueRequest", type:"link", attr: "open-on-hover", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_CLIENT"], accessType: "ifAnyGranted"],
@@ -288,8 +288,6 @@ beans {
         bean.constructorArgs = ['vueAlertMsgDataframe']
         saveButton = false
         wrapInForm=false
-
-        initOnPageLoad = false
 
         isGlobal = true
 

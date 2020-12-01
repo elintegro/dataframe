@@ -7,7 +7,7 @@ beans {
         /**IMPORTANT: Need to put child dataframe bbefore parent dataframes*/
 		allDataframesList = [
                  //Global dataframes...
-				"vueInitDataframe","vueElintegroProgressBarDataframe","vueElintegroLanguageSelectorDataframe",
+				"vueInitDataframe", "vueAlertMsgDataframe", "vueElintegroProgressBarDataframe","vueElintegroLanguageSelectorDataframe",
 
 				//Dataframes used in Home page...
 				"vueFirstContainerDataframe","vueOurWorkContainerDataframe","vueOurProcessContainerDataframe","vueCollaborationContainerDataframe",

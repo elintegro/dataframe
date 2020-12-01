@@ -134,108 +134,112 @@ var excon = new Vue({
             throw "No object for the path " + key;
         },
 
-        matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {
+        /*
+                matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {
 
-            var sourceDataframeVars = this.getFromStore(fromDataframe);
-            var targetDataframeVars = this.getFromStore(toDataframe);
+                    var sourceDataframeVars = this.getFromStore(fromDataframe);
+                    var targetDataframeVars = this.getFromStore(toDataframe);
 
-            for(let varName in targetDataframeVars) {
-                let keyPrefix = "key_" + toDataframe;
-                let indStart = varName.indexOf("key_" + toDataframe);
-                if(indStart >= 0) {//The variable is a key
-                    let indEnd = varName.lastIndexOf("_");
-                    let varToSearch = "key" + varName.substring(keyPrefix.length, indEnd);
-                    //Find keys in sourceDataframe and populate in the target with naming convention whatever in target is key_<targetDataframeName>_<domainName>_<fieldName>_<namingParameter>
-                    //Should be keu_<domainName>_<fieldName>, for example In target: key_<TargetDataframe>_application_id_id, in source: key_application_id
-                    for(let varFromName in sourceDataframeVars){
-                        if(varFromName === varToSearch){ //this is our key variable, grab the value and set for the key variable in the target Dataframe
-                            this.saveToStore(toDataframe, varName, sourceDataframeVars[varFromName]);
-                            break;
-                        }
-                    }
-                }
-            }
-
-        },
-
-        updateStoreState: function(response, stateVar, propKey){
-
-            var dataframe = response.dataframe;
-            let stateVarDf = stateVar+"."+dataframe;
-            var response = response.data
-            let id = response.keys["id"]?response.keys["id"]:'';
-            let stateVarObj1 = eval(stateVarDf);
-
-            if(stateVarObj1){
-                Vue.set(eval(' stateVarObj1'), 'key', id);
-            }
-            if(response.hasOwnProperty('additionalData') ) {
-                Object.keys(response.additionalData).forEach(function (key) {
-                    var embDfr = response.additionalData[key];
-                    if (embDfr.hasOwnProperty('data')){
-                        if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
-                            this.updateStoreState(embDfr, stateVar)
-                        } else {
-                            dataframe = embDfr.dataframe;
-                            if(dataframe){
-
-                                let stateVarDf =stateVar + "." + dataframe;
-                                if(embDfr.data.hasOwnProperty('keys')){
-                                    let id = embDfr.data.keys["id"];
-                                    let stateVarObj2 = eval(stateVarDf);
-                                    if(stateVarObj2){
-                                        Vue.set(eval('stateVarObj2'), 'key', id);
-                                        let propKey1 = propKey +"." +dataframe + "_data";
-                                        Vue.set(eval(propKey1), 'key', id);
-                                    }
+                    for(let varName in targetDataframeVars) {
+                        let keyPrefix = "key_" + toDataframe;
+                        let indStart = varName.indexOf("key_" + toDataframe);
+                        if(indStart >= 0) {//The variable is a key
+                            let indEnd = varName.lastIndexOf("_");
+                            let varToSearch = "key" + varName.substring(keyPrefix.length, indEnd);
+                            //Find keys in sourceDataframe and populate in the target with naming convention whatever in target is key_<targetDataframeName>_<domainName>_<fieldName>_<namingParameter>
+                            //Should be keu_<domainName>_<fieldName>, for example In target: key_<TargetDataframe>_application_id_id, in source: key_application_id
+                            for(let varFromName in sourceDataframeVars){
+                                if(varFromName === varToSearch){ //this is our key variable, grab the value and set for the key variable in the target Dataframe
+                                    this.saveToStore(toDataframe, varName, sourceDataframeVars[varFromName]);
+                                    break;
                                 }
-
                             }
                         }
                     }
 
-                });
+                },
+
+        */
+        /*
+                updateStoreState: function(response, stateVar, propKey){
+
+                    var dataframe = response.dataframe;
+                    let stateVarDf = stateVar+"."+dataframe;
+                    var response = response.data
+                    let id = response.keys["id"]?response.keys["id"]:'';
+                    let stateVarObj1 = eval(stateVarDf);
+
+                    if(stateVarObj1){
+                        Vue.set(eval(' stateVarObj1'), 'key', id);
+                    }
+                    if(response.hasOwnProperty('additionalData') ) {
+                        Object.keys(response.additionalData).forEach(function (key) {
+                            var embDfr = response.additionalData[key];
+                            if (embDfr.hasOwnProperty('data')){
+                                if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
+                                    this.updateStoreState(embDfr, stateVar)
+                                } else {
+                                    dataframe = embDfr.dataframe;
+                                    if(dataframe){
+
+                                        let stateVarDf =stateVar + "." + dataframe;
+                                        if(embDfr.data.hasOwnProperty('keys')){
+                                            let id = embDfr.data.keys["id"];
+                                            let stateVarObj2 = eval(stateVarDf);
+                                            if(stateVarObj2){
+                                                Vue.set(eval('stateVarObj2'), 'key', id);
+                                                let propKey1 = propKey +"." +dataframe + "_data";
+                                                Vue.set(eval(propKey1), 'key', id);
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+
+                        });
+                    }
+                },
+
+        */
+        showAlertMessage: function(response, dataframeName="vueAlertMsgDataframe"){
+            const msg = response.msg;
+            if(msg){
+                if(response.success) {
+                    this._setAlertMessage(msg, dataframeName);
+                }else {
+                    this._setAlertMessage(msg, 'error', dataframeName);
+                }
             }
         },
 
-        showAlertMessage: function(success, msg){
-            if(success) {
-                if(msg){
-                    store.commit('alertMessage', {'snackbar':true, 'alert_type':'success', 'alert_message':msg});
-                }
-            }else {
-                if(msg){
-                    store.commit('alertMessage', {'snackbar':true, 'alert_type':'error', 'alert_message':msg});
-                }
-            }
+        _setAlertMessage: function(msg, type="success", dataframeName){
+            store.commit(dataframeName, {'snackbar':true, 'alert_type':type, 'alert_message':msg})
         },
 
-        showAlertMessage: function(response){
-            if(response.success) {
-                if(response.msg){
-                    store.commit('alertMessage', {'snackbar':true, 'alert_type':'success', 'alert_message':response.msg});
-                }
-            }else {
-                if(response.msg){
-                    store.commit('alertMessage', {'snackbar':true, 'alert_type':'error', 'alert_message':response.msg})
-                }
-            }
-        },
+        //todo deprecate this method and use notify() method instead
         showMessage: function(responseData,dataframeName){
             let response = responseData.data;
-            let stateDataOfThisDataframe = store.getters.getState(dataframeName);
-            let alertProps = stateDataOfThisDataframe.alertProp;
-            Vue.set(alertProps,'snackbar',true);
-            Vue.set(alertProps,'alert_type',response.alert_type);
-            Vue.set(alertProps,'alert_message',response.msg);
+            let stateData = store.getters.getState(dataframeName);
+            let alertProps = stateData.alertProp;
+            alertProps['snackbar'] = true;
+            alertProps['alert_type'] = response.alert_type;
+            alertProps['alert_message'] = response.msg;
+            Vue.set(stateData.alertProp, alertProps);
         },
 
+        notify: function(responseData,dataframeName){
+            let response = responseData.data;
+            let stateData = store.getters.getState(dataframeName);
+            let alertProps = stateData.alertProp;
+            alertProps['snackbar'] = true;
+            alertProps['alert_type'] = response.alert_type;
+            alertProps['alert_message'] = response.msg;
+            Vue.set(stateData.alertProp, alertProps);
+        },
         closeDataframe: function(dataframeName){
             var dfNameDisplay = dataframeName +"_display";
-            // if(this.\$store.state.vueInitDataframe){
             excon.saveToStore("dataframeShowHideMaps", dfNameDisplay, false);
-            // Vue.set(this.\$store.state.vueInitDataframe, dfNameDisplay, false);
-            // }
         },
 
         generateRandom: function(){
@@ -255,10 +259,10 @@ var excon = new Vue({
          * @param params
          */
 
-        fillInitialData : function (url, params, doBeforeRefresh=()=>{}, doAfterRefresh=()=>{}){
+        fillInitialData : function (params, url = 'dataframe/ajaxValues', doBeforeRefresh=()=>{}, doAfterRefresh=()=>{}){
             if(!params) return;
-            if(!url) throw new Error("Url is missing .");
             if(!params.dataframe) throw new Error("Dataframe name missing from params.");
+
             params["url"] =  url;
             params["doBeforeRefresh"] = doBeforeRefresh;
             params["doAfterRefresh"] = doAfterRefresh;
@@ -280,6 +284,21 @@ var excon = new Vue({
             })
         },
 
+        /**
+         * Use this for passing Get Query params (not as JSON)
+         * @param url
+         * @param method
+         * @param params
+         * @returns {*}
+         */
+        callApiWithQuery: function(url, method, params){
+            method = method || 'GET';
+            return axios({
+                method:method,
+                url: url,
+                params: params
+            })
+        },
         addToResponse: function (questionId, question, answerType, response) {
             var params = new Object();
             params.questionId = questionId;
