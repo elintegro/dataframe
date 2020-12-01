@@ -12,24 +12,8 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 
 package com.elintegro.erf.widget.vue
-
-import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.DataframeException
-import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.DomainClassInfo
-import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.erf.dataframe.vue.DataframeVue
-import com.elintegro.erf.dataframe.DbResult
-import com.elintegro.erf.dataframe.ParsedHql
-import com.elintegro.erf.dfEditor.DfInstance
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import grails.converters.JSON
-import grails.util.Holders
 import groovy.util.logging.Slf4j
-import org.apache.commons.lang.StringUtils
-import org.grails.web.json.JSONArray
-import org.grails.web.json.JSONObject
 import org.springframework.context.i18n.LocaleContextHolder
 import org.apache.commons.lang.WordUtils
 
@@ -66,26 +50,10 @@ class ComboboxVue extends CollectionWidgetVue {
         }
 
         Map domainFieldMap = dataframe.domainFieldMap
-        Map fldJSON = null
-        if(dataframe.isDatabaseField(field)){ //Put it to PERSISTERS section
-            Map persisters = domainFieldMap.get(Dataframe.PERSISTERS)
-            Map domainJSON = persisters.get(field.get(Dataframe.FIELD_PROP_DOMAIN_ALIAS))
-            fldJSON = domainJSON.get(field.get(Dataframe.FIELD_PROP_NAME))
-        }else{//Put it to TRANSITS section
-            Map transits = domainFieldMap.get(Dataframe.TRANSITS)
-            fldJSON = transits.get(field.get(Dataframe.FIELD_PROP_NAME))
-        }
+        Map fldJSON = getDomainFieldJsonMap(dataframe, field)
         fldJSON?.put("items", res)
 
         return domainFieldMap
-/*
-
-        return [$dataVariable:${selMap?selMap as JSON:"\"\""},\n
-                  ${dataVariable}_items:${res as JSON} ,\n
-                  ${dataVariable}_keys:${keys as JSON},\n
-                """
-*/
-
     }
 
     private String getHtmlStructure(DataframeVue dataframe, Map field, String fldName, String label){

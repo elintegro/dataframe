@@ -22,7 +22,6 @@ import com.elintegro.utils.MapUtil
 import grails.converters.JSON
 import grails.util.Holders
 import org.apache.commons.lang.WordUtils
-import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -38,29 +37,6 @@ class GridWidgetVue extends WidgetVue {
     String embDDfr = "";
     private static final String headers = "headers"
     private static final String defaultData = "defaultData"
-
-
-    //This assigns a new value and returns true if new value was different then the old one
-    @Override
-    boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
-        if(isReadOnly(field)){
-            return false
-        }
-        JSONArray selectedItems = inputValue.value
-        JSONArray availableItems = inputValue.items
-
-        if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
-            def oldfldVal = domainInstance."${fieldName}"
-            if(oldfldVal == inputValue.value) return false
-            domainInstance."${fieldName}" = inputValue.value
-        }else if(domainClassInfo.isToMany(fieldName)){
-            return saveHasManyAssociation(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
-        }else if(domainClassInfo.isToOne(fieldName)){
-            def oldfldVal = domainInstance."${fieldName}".value
-            domainInstance."${fieldName}" = inputValue.value[0] //TODO: check if there is not exception in case of single choice
-        }
-        return true
-    }
 
     boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
         Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
@@ -152,8 +128,7 @@ $fieldParams
         field.put("gridMetaData", fieldMetaData);
         field.put("parsedHql", parsedHql);
         List dataHeader = []
-        boolean showRefreshMethod = false
-            fieldMetaData.each {metaField ->
+        fieldMetaData.each {metaField ->
             def propItemText = metaField.alias?:metaField.name
             def propItemVal  = metaField.name
             String headerText = propItemText.capitalize()
@@ -221,11 +196,6 @@ $fieldParams
 
         }
         field.put("gridDataframeList", gridDataframeList);
-        showRefreshMethod = showRefreshMethod || field.showRefreshMethod?true:false
-        if(showRefreshMethod){
-            dataframe.getVueJsBuilder().addToMethodScript(refreshGrid(fldName, refDataframeName, dataframe))
-        }
-
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
         return """
 
@@ -236,6 +206,7 @@ $fieldParams
         </template>
          """
     }
+
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         def search = field?.showGridSearch
@@ -299,7 +270,6 @@ $fieldParams
             }
         }
         String fldName = dataframe.getDataVariableForVue(field);
-        String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
         dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){
                                                                     if(this.${getFieldJSONItems(field)}){
                                                                         return true;
@@ -378,37 +348,6 @@ $fieldParams
                 }
             }
         }
-    }
-
-    private static String getGridValuesScript(String parentDataframeName, String fldName
-                                              ,StringBuilder fieldParams, DataframeVue refDataframe){
-        String refDataframeName = refDataframe.dataframeName
-        return """ 
-                         ${parentDataframeName}Var.${fldName}_selectedrow = dataRecord;
-                   var params = {'dataframe':'$refDataframeName'};
-                   $fieldParams
-                   axios.get('$refDataframe.ajaxUrl', {
-                    params: params
-                }).then(function (responseData) {
-                        var response = responseData.data.data;
-                        console.log(response);
-                        excon.setVisibility(${refDataframeName}, true);
-                        var refParams = ${parentDataframeName}Var.\$refs.${refDataframeName}_ref.params;
-                        var gridRefreshParams = {};
-                        gridRefreshParams['isGridRefresh'] = true;
-                        gridRefreshParams['fieldName'] = '$fldName';
-                        gridRefreshParams['parentDataframe'] = '$parentDataframeName';
-                        gridRefreshParams['dataframe'] = '$refDataframeName';
-                        refParams['gridRefreshParams'] = gridRefreshParams;
-                        
-                        ${refDataframe.doAfterRefresh}                        
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-
-"""
-
     }
 
     private void getOnButtonClickScript(onButtonClick, DataframeVue dataframe,  StringBuilder onclickDfrBuilder
@@ -494,40 +433,6 @@ $fieldParams
                                              ${getShowDetailJavascript(onClick, dataframe, fldName, fieldOfName)}
                                              },\n""")
 
-    }
-
-    private String refreshGrid(String fldName, String refDataframeName, Dataframe dataframe){
-        return """
-                    refreshDataForGrid: function(response, fldName, operation = "U"){
-                       
-                          var selectedRow = this.${fldName}_selectedrow;
-                          var editedIndex = this.${fldName}_items.indexOf(selectedRow);
-                          var data = responseData.data;
-                          var operation = data.operation;
-                          var newData = data.newData;
-                          var row = {};
-                          jQuery.each(newData, function(key, value) {
-                              var dataMap = value;
-                              jQuery.each(dataMap, function (key, value) {
-                                 if(selectedRow){
-                                    if (key in selectedRow) {
-                                      row[key] = value;
-                                    }
-                                 } else {
-                                    row[key] = value;
-                                 }
-                                  
-                              });
-                          });
-                          if (operation==="I") {
-                              this.${fldName}_items.push(row)
-                          } else {
-                              Object.assign(this.${fldName}_items[editedIndex], row)
-                          }
-//                          this.gridDataframes[refreshParams.dataframe] = false; 
-                },\n
-
-            """
     }
 
     private String getRefDataframeHtml(Map onClickMap, DataframeVue dataframe, String fldName, def gridDataframeList){

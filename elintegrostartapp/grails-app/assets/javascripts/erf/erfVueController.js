@@ -280,34 +280,6 @@ var excon = new Vue({
             })
         },
 
-        formatData:function(param){
-            var params = [];
-
-            var survey = param.survey;
-            if(!survey){
-                return
-            }
-            console.log(survey);
-            var questionCHoicesPair = this.constructCHoices(survey);
-            let choiceMap = questionCHoicesPair.choiceMap;
-            for(var data of questionCHoicesPair.keyset){
-                console.log(data + ":" + survey[data]);
-                var splits = data.split("_");
-                var answerType = splits[1];
-                var questionId = splits[2];
-                var response = survey[data];
-                if(answerType === "MultipleChoice" || answerType === "RadioList" || answerType === "DropdownCustom" || answerType === "SingleChoice"){
-                    response = choiceMap[questionId];
-                } else if("ListInput" === answerType){
-                    response = this.createResponseFromList(response);
-                }
-                let question ="";
-                params.push(this.addToResponse(questionId, question, answerType, response));
-            }
-
-            return params;
-        },
-
         addToResponse: function (questionId, question, answerType, response) {
             var params = new Object();
             params.questionId = questionId;
@@ -328,77 +300,6 @@ var excon = new Vue({
             return re;
         },
 
-        constructCHoices: function(survey){
-
-            var _map = {choiceMap:'', keyset:''};
-            let _set = new Set();
-            var choiceMap = new Object();
-            for(var data in survey) {
-
-                var splits = data.split("_");
-                var answerType = splits[1];
-                var questionId = splits[2];
-                if(answerType === "MultipleChoice" || answerType === "RadioList" || answerType === "DropdownCustom" || answerType === "SingleChoice") {
-
-                    var response = survey[data];
-                    if(!response){
-                        continue;
-                    }
-                    if(!response.choice){
-                        continue;
-                    }
-                    if(answerType === "MultipleChoice"){
-                        let e = "question_"+answerType +"_"+questionId;
-                        _set.add(e);
-                    }else {
-                        _set.add(data);
-                    }
-                    if(answerType === "DropdownCustom"){
-                        let choiceList = [];
-                        for(let resp of response){
-                            choiceList.push(resp.choice);
-                        }
-                        choiceMap[questionId] = choiceList;
-                    } else if(answerType === "MultipleChoice"){
-
-                        if(!choiceMap.hasOwnProperty(questionId)){
-                            choiceMap[questionId] = [];
-                        }
-                        let input = '';
-                        if(response.hasTextField){
-                            let formatedInputVar = 'question_' + answerType + "_"+questionId+"_"+response.choiceId+"_input";
-                            input = survey[formatedInputVar]?survey[formatedInputVar]:'';
-                        }
-                        choiceMap[questionId].push({choiceId:response.choiceId, choice:response.choice, input: input});
-                    } else if(answerType === "RadioList"){
-                        let input = '';
-                        if(response.hasTextField){
-                            input = response.input;
-                        }
-                        choiceMap[questionId] = {choiceId:response.choiceId, choice: response.choice, input: input}
-                    }else {
-
-                        choiceMap[questionId] = response.choice;
-                    }
-
-                }
-            }
-            _map.keyset = _set;
-            _map.choiceMap = choiceMap;
-            return _map;
-        },
-
-        updateQuestionGrid(response){
-            let stateData = response;
-            if(stateData){
-                let rowData = {Id:stateData.questionId ,Question:stateData.question, SortOrder: stateData.sortOrder}
-                let oldData = excon.getStateWithKey({key:'vueQuestionsGridDataframe', innerKey:'vueQuestionsGridDataframe_question_grid_items'});
-                oldData.push(rowData);
-                stateData['stateName'] = 'vueQuestionsGridDataframe';
-                stateData["vueQuestionsGridDataframe_question_grid_items"] = oldData;
-                store.commit("updateState", stateData);
-            }
-        },
         refreshDataForGrid: function(response, dataframeName, fldName, operation = "U", type="persisters"){
 
             const newData = response['persisters'][fldName];//hard guess that it will always be persisters

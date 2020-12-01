@@ -21,6 +21,7 @@ import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.InputWidgetVue
 import com.elintegro.erf.widget.vue.WidgetVue
 import com.elintegro.utils.DataframeFileUtil
+import com.elintegro.utils.StringUtil
 import grails.util.Holders
 import groovy.util.logging.Slf4j
 
@@ -261,8 +262,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		StringBuilder resultPageHtml = new StringBuilder()
 		resultPageHtml.append(this.currentFrameLayout?.layoutPlaceHolder?:"")
 
-		//creating method for each dataframes for populating data
-		vueDataFillScript.append("${dataframeName}_populateJSONData: function(response){\n")
 		List fldsList = fields.getList()
 		int seq = 0
 		int fieldCount = 0;
@@ -290,9 +289,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vueFileSaveVariables.append("params[\"$it\""+"] = response.namedParameters.id.value;\n")
 			vueDataFillScript.append("this.${convertToDataVariableFromat(it)} = response['${convertToReturnedDataVariableFromat(it)}']?response['${convertToReturnedDataVariableFromat(it)}']:\"\"\n")
 		}
-
-		vueDataFillScript.append("},\n") //closing populateJSONData() method
-
 		StringBuilder buttonHtmlStringBuilder = new StringBuilder()
 		StringBuilder refDataframeHtmlStringBuilder = new StringBuilder() //Holds html for dialog or InDiVHtml
 		if(vueSaveVariablesScriptString.isEmpty()){
@@ -327,7 +323,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                              }
                      },\n""")
 			vueJsBuilder.addToMethodScript(getJsonDataFillScript(this))
-			vueJsBuilder.addToMethodScript(vueDataFillScript.toString())
+			vueJsBuilder.addToMethodScript(populateJSONDataScript(vueDataFillScript))
 		}
 		constructVueComponent(vueJsBuilder, resultPageHtml.toString())
 //		vueStoreScript = vueJsBuilder.getVueStore().buildVueStoreScript()
@@ -394,9 +390,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		//TODO: So this methid should be depricated as soon as new concept works!
 		//vueStateVariable.append(widget.getStateDataVariable(this, field))
 		widget.getStateDataVariablesMap(this, field) //This method will enhance domainFieldMap with required info, specificaly "items" for dictionary
-
-		vueDataFillScript.append(widget.getValueSetter(this, field, divId, fldId, key))
-		vueDataFillScript.append("\n")
+		String valueSetterString = widget.getValueSetter(this, field, divId, fldId, key)
+		if (!StringUtil.isNullOrEmpty(valueSetterString)){
+			vueDataFillScript.append(valueSetterString)
+			vueDataFillScript.append("\n")
+		}
 		vueSaveVariables.append(widget.getVueSaveVariables(this, field))
 /*
 		if (field?.validate) {
@@ -611,18 +609,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	 */
 	public String getJsonDataFillScript(df){
 		String dataframeName = df.dataframeName
-//		StringBuilder paramsSb = new StringBuilder()
-//		String namedParamKey = mainNamedParamKey?:"id"
-//		if(route){
-//			paramsSb.append("params['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
-//		}else{
-//			paramsSb.append("""params["$namedParamKey"] = eval(this.namedParamKey);\n""")
-//		}
-//		if(!ajaxUrlParams.isEmpty()){
-//			for(Map.Entry entry: ajaxUrlParams){
-//				paramsSb.append("params['$entry.key'] = '$entry.value';\n")
-//			}
-//		}
 		return """
              ${dataframeName}_fillInitData: function(){
                  const self = this;
@@ -635,64 +621,16 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
              },\n
               """
 	}
-
-	public String getJsonDataFillScriptbackup(df){
-		String dataframeName = df.dataframeName
-		StringBuilder paramsSb = new StringBuilder()
-		String namedParamKey = mainNamedParamKey?:"id"
-		if(route){
-			paramsSb.append("params['$namedParamKey'] = this.\$route.params.routeId?this.\$route.params.routeId:1;")
-		}else{
-			paramsSb.append("""params["$namedParamKey"] = eval(this.namedParamKey);\n""")
+	//todo:Make sure we need this method
+	private String populateJSONDataScript(vueDataFillScript){
+		//creating method for each dataframes for populating data
+		if (!StringUtil.isNullOrEmpty(vueDataFillScript.toString())){
+			StringUtil.insert(vueDataFillScript, "${dataframeName}_populateJSONData: function(response){\n")
+			vueDataFillScript.append("},\n") //closing populateJSONData() method
 		}
-		if(!ajaxUrlParams.isEmpty()){
-			for(Map.Entry entry: ajaxUrlParams){
-				paramsSb.append("params['$entry.key'] = '$entry.value';\n")
-			}
-		}
-		String updateStoreScriptcaller = ""
-		if(createStore){
-//			updateStoreScriptcaller = """ const stateVar = "${dataframeName}Var.\$store.state";\n excon.updateStoreState(resData, stateVar,${dataframeName}Var);"""
-		}
-		return """
-             ${dataframeName}_fillInitData: function(){
-                excon.saveToStore('$dataframeName','doRefresh',false);
-                let params = this.state;\n
-                const propData = this.${dataframeName}_prop;
-                 if(propData){
-                    params = propData; 
-                    if(this.namedParamKey == '' || this.namedParamKey == undefined){
-                        this.namedParamKey = "this.${dataframeName}_prop.key?this.${dataframeName}_prop.key:this.\$store.state.${dataframeName}.key"; 
-                    }
-                 }
-                ${paramsSb.toString()}
-                params['dataframe'] = '$dataframeName';
-                $doBeforeRefresh
-                this.overlay_dataframe = true;
-                let self = this;
-				axios({
-                          method:'post',
-                          url:'$df.ajaxUrl',
-                          data: params
-                      }).then(function (responseData) {
-                        let resData = responseData.data;
-                        let response = resData?resData.data:'';
-                       if(response != null && response != '' && response  != undefined){
-//                           response["stateName"] = "$dataframeName";
-//                           ${dataframeName}Var.updateState(response);
-//                           ${dataframeName}Var.${dataframeName}_populateJSONData(response);
-							 excon.saveToStore("${dataframeName}", "persisters", response.persisters);
-                        }
-                        $doAfterRefresh 
-                   self.overlay_dataframe = false;
-                  ${updateStoreScriptcaller} 
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-             },\n
-              """
+		return vueDataFillScript.toString()
 	}
+
 	/**
 	 * Use 'self' instead of 'this' inside doBeforeSave and doAfterSave because of scope of 'this' issue.
 	 * @param df
@@ -737,67 +675,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
               },\n"""
 	}
 
-	public String getSaveDataScriptbackup(df, vueSaveVariables, vueFileSaveVariables){
-		String dataframeName = df.dataframeName
-		StringBuilder embdSaveParms = new StringBuilder("")
-		if(embeddedDataframes.size()>0){
-			embeddedDataframes.each{
-				if(it.trim() != ""){
-					embdSaveParms.append("""if(this.\$refs.hasOwnProperty("${it}_ref") && this.\$refs.${it}_ref){for(var a in this.\$refs.${it}_ref.\$data){\n
-                                              var dashA = a.split('_').join('-');
-                                              params[dashA] = this.\$refs.${it}_ref.\$data[a];\n}}\n""")
-				}
-			}
-		}
-		/* TODO: remove it after tests
-		String addKeyToVueStore
-		if(!putFillInitDataMethod){
-			addKeyToVueStore = """var nodeArr = response.nodeId; if(nodeArr && Array.isArray(nodeArr) && nodeArr.length){excon.saveToStore("$dataframeName", "key", response.nodeId[0]);}\n"""
-		}
-		doAfterSaveStringBuilder.append("""
-                    var ajaxFileSave = ${dataframeName}Var.params.ajaxFileSave;
-                    if(ajaxFileSave){
-                       for(let i in ajaxFileSave) {
-                         const value = ajaxFileSave[i];
-                         $vueFileSaveVariables
-  						 self[value.fieldName+'_ajaxFileSave'](responseData, params);
-					   }
-                    }
-                  $addKeyToVueStore
-				""")
-				*/
-		return """
-              ${dataframeName}_save: function(){
-                  let params = this.state;                                    
-                  $vueSaveVariables
-                  ${embdSaveParms?.toString()}
-                  ${doBeforeSave}
-                  params['dataframe'] = '$dataframeName';
-                  console.log(params)
-                  if (this.\$refs.${dataframeName}_form.validate()) {
-                      this.${dataframeName}_save_loading = true;
-                      const self = this;
-                      axios({
-                          method:'post',
-                          url:'$df.ajaxSaveUrl',
-                          data: params
-                      }).then(function (responseData) {
-                        self.${dataframeName}_save_loading = false;
-                        var response = responseData.data;                        
-                        //TODO: add here assignment of response object to the proper vue structure                                                
-                        excon.saveToStore("${dataframeName}", "domain_keys", responseData.data.data.domain_keys);
-                        excon.showAlertMessage(response);
-			            	if(response.success){
-                               ${doAfterSave}
-                        	}
-                      }).catch(function (error) {
-                              self.${dataframeName}_save_loading = false;
-                              console.log(error);
-                      });
-                  }
-
-               },\n"""
-	}
 	public String getResetScript(df, List<String> keyFieldNames){
 
 		String dataframeName = df.dataframeName

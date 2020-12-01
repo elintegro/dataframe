@@ -142,7 +142,7 @@ abstract class CollectionWidgetVue extends WidgetVue {
 
     protected Map generateInitialData(DataframeVue dataframe, Map field){
 
-        if(!field.initBeforePageLoad){
+        if(!isInitBeforePageLoad(field)){
             return [keys: [], result:[], selectedData: [:]]
         }
         String displayMember = field.displayMember?:"name"

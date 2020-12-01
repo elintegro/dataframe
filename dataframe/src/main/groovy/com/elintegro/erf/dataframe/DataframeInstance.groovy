@@ -17,7 +17,6 @@ import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.Widget
 import grails.gorm.transactions.Transactional
-import grails.test.mixin.gorm.Domain
 import grails.util.Holders
 import groovy.util.logging.Slf4j
 import org.apache.commons.lang.ClassUtils
@@ -111,62 +110,6 @@ class DataframeInstance implements DataframeConstants{
 		return df.parsedHql.indexOfFileds.containsKey(mapFieldValue.name)
 	}
 
-	private def retrieveAndGetJsonNew(){
-
-		if(!df.hql){
-			return;
-		}
-
-		Query query = createSQLQuery()
-
-		setNamedParametersFromRequestOrSession(query)
-
-		jData = new JSONObject(df.domainFieldMap)
-		df.writableDomains.each { domainName, domain ->
-			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
-			PersistentEntity queryDomain = domainClassInfo.getValue();
-			def domainInstance = domainClassInfo.clazz.findById(namedParmeters.get("id")) //todo hardcoded just for now
-			df.fields.getList().each{ fieldName ->
-				Map fieldProps = df.fields.get(fieldName)
-				String myDomainAlias = null
-				if(isFieldExistInDb(fieldProps)){ //todo first make it work for persistents
-					def fldValue = domainInstance."${fieldProps.name}"
-					myDomainAlias = fieldProps.get(DataframeConstants.FIELD_PROP_DOMAIN_ALIAS)
-					Widget widget = fieldProps.get(DataframeConstants.FIELD_PROP_WIDGET_OBJECT)
-					String persistentDomainFieldName = fieldProps.get(DataframeConstants.FIELD_PROP_NAME)
-					List items = getAssociationData(domainClassInfo, fieldProps.name, fieldProps)
-					widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, persistentDomainFieldName, [items:items])
-				}
-			}
-		}
-		Map jsonRet = [:]
-		addKeyDataForNamedParameters([:]) // adding key- fields for vue js
-		jsonRet.put("data", jData)
-		return jsonRet
-	}
-
-	private List getAssociationData(DomainClassInfo domainClassInfo, String fieldName, Map field){
-		ArrayList resList = []
-		if(domainClassInfo.isAssociation(fieldName) || domainClassInfo.isManyToMany(fieldName)){
-			String hql = field.hql
-			if(!hql) throw new MissingFieldException("this widget requires a hql statement")
-			Query query = sessionHibernate.createQuery(hql);
-			Transaction tx = sessionHibernate.beginTransaction()
-			def results = query.list()
-			String valueMember = field.valueMember?:"id"
-			String displayMember = field.displayMember?:"name"
-			if(results.size()>1){
-				results.each{
-					Map res = [:]
-					res[valueMember] = it[0]
-					res[displayMember] = it[1]
-					resList.add(res)
-				}
-			}
-		}
-		return resList
-	}
-
 	private void populateInstance(){
 
 		if(!df.hql){
@@ -215,53 +158,6 @@ class DataframeInstance implements DataframeConstants{
 			retrievedDomainData.put(hqlDomains[recordIndex], domainInstance)
 			recordIndex++
 		}
-	}
-
-	private void populateInstanceBackUp(){
-
-		if(!df.hql){
-			return;
-		}
-
-		Query query = createSQLQuery()
-
-		setNamedParametersFromRequestOrSession(query)
-
-		Transaction tx = sessionHibernate.beginTransaction()
-		try{
-
-			this.results = query.list()
-			tx.commit();
-			if(results && results .size() > 0){
-//				this.record = results[0] //TODO: its hard coded assumption we have only one record per Dataframe!
-				calculateFieldValuesAsKeyValueMap();// todo merge with below method
-				this.record = results.size()==1? results[0]:calculateFieldValuesAsKeyValueMapNew(results)
-				log.debug(this.record.toString())
-			}else{
-				isDefault = true
-				//throw new DataframeException(df, "No record found for the Dataframe");
-			}
-
-		}catch(Exception e){
-			tx.rollback()
-			throw new DataframeException(df, "Error: ${e.message}", e )		}
-	}
-
-	private Query createSQLQuery() {
-		Query query;
-		String sqlGenerated;
-
-		try {
-			sqlGenerated = df.parsedHql.getSqlTranslatedFromHql()
-			query = sessionHibernate.createQuery(df.hql);
-			if (df.sql) {
-				log.debug(" SQL was defined in the bean: ${df.sql}") //TODO if specified, run this thing ...
-			}
-			log.debug(" hql = $df.hql \n sqlGenerated = $sqlGenerated \n sql = $df.sql \n")
-		} catch (Exception e) {
-			throw new DataframeException(df, "Hql-Sql creation problem " + e + "\n hql = $df.hql \n sql = $df.sql\n");
-		}
-		return query
 	}
 
 	private void setNamedParametersFromRequestOrSession(Query query) {
@@ -315,72 +211,25 @@ class DataframeInstance implements DataframeConstants{
 	 * and return the map which can be converted to json on controller.
 	 */
 	public def buildDefaultJson(){
-
-		//retrieving from DB!
-		//populateInstance()
-
+		jData = copyDomainFieldMap()
 		Map jsonRet = [:];
-		Map jsonMapDf = [:];
-		Map jsonAdditionalData = [:];
-		Map jsonDefaults = [:];
 
 		//if( isGood()){
 		//!!!!!!!!!!!!!!!!!!!!!!!!! main loop on fields
 		df.fields.getList().each{ fieldName ->
 			Map mapFieldValue = df.fields.get(fieldName)
-
 			if(isFieldExistInDb(mapFieldValue)){
-
 				def fldValue = mapFieldValue.defaultValue
-				def fldDefaultValue = mapFieldValue.defaultValue
-				jsonMapDf.put(fieldName, fldValue)
-				jsonDefaults.put(fieldName, fldDefaultValue)
+				Widget widget = getFieldWidget(mapFieldValue)
+				widget.setPersistedValueToResponse(jData, fldValue, getFieldDomainAlias(mapFieldValue), fieldName, [:], this, sessionHibernate, mapFieldValue)
 			}
 		}
 
-		//}
-		jsonMapDf.put("keys", getNamedParameters())
-		jsonMapDf.put("additionalData", jsonAdditionalData)
-
-		//Replace default add datan with relev values
-		jsonDefaults.put("keys", getNamedParameters())
-		jsonDefaults.put("additionalData", jsonAdditionalData)
-
-		//These are for refresh parent dataframe, if provided (aka requested):
-		def parentDataframe = requestParams.get('parentDataframe')
-		def parentNode = requestParams.get('parentNode')
-		def parentLevel = requestParams.get('level')
-		def parentFieldName = requestParams.get('parentFieldName')
-		def parentNodeLevel = getLevelFromUiIdConstruct(parentNode)
-
 		log.debug("\n *******   Request Params: when retrieved \n" + reqParamPrintout(requestParams) + "\n ***************\n")
 
-		//TODO: 1 All this should be coming from additionalParameters jsonMapDf[additionalParams]
-		//df.dataFrameParamsToRefresh = [parentNode:parentNode, parentDataframe:parentDataframe, level:parentLevel, parentFieldName:parentFieldName]
-		def html = df.getHtml()
-		jsonRet.put("html", html)
-		jsonRet.put("parentDataframe", parentDataframe)
-		jsonRet.put("parentNode", parentNode)
-		jsonRet.put("level", parentLevel)
-		jsonRet.put("parentFieldName", parentFieldName)
-		//TODO: 1
-
-		jsonRet.put("data", jsonMapDf)
-		jsonRet.put("default",jsonDefaults)
 		jsonRet.put("operation","R");
 		jsonRet.put("dataframe",df.dataframeName);
-
-		String domainAlias = df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0)
-
-		jsonRet.put("dataFrameParamsToRefresh",
-				[   'parentNode':parentNode,
-					'parentNodeId':getIdFromUiIdConstruct(parentNode),
-					'parentNodeLevel':getLevelFromUiIdConstruct(parentNode),
-					'parentDataframe':parentDataframe,
-					'level':parentLevel,
-					'parentFieldName': Dataframe.buildFullFieldName_(df.dataframeName, domainAlias, parentFieldName)
-				])
-
+		jsonRet.put("data", jData)
 		return jsonRet
 	}
 
@@ -399,7 +248,7 @@ class DataframeInstance implements DataframeConstants{
 			populateInstance()
 		}
 
-		jData = new JSONObject((Map) SerializationUtils.clone(df.domainFieldMap))
+		jData = copyDomainFieldMap()
 
 		Map jsonRet = [:];
 		Map jsonMapDf = [:];
@@ -427,25 +276,10 @@ class DataframeInstance implements DataframeConstants{
 		jsonDefaults.put("keys", getNamedParameters())
 		jsonDefaults.put("additionalData", jsonAdditionalData)
 
-		//These are for refresh parent dataframe, if provided (aka requested):
-		def parentDataframe = requestParams?.parentDataframe
-		def parentNode = requestParams?.parentNode
-		def parentLevel = requestParams?.level
-		def parentFieldName = requestParams?.parentFieldName
-		def parentNodeLevel = getLevelFromUiIdConstruct(parentNode)
 
 		log.debug("\n *******   Request Params: when retrieved \n" + reqParamPrintout(requestParams) + "\n ***************\n")
 
-		//TODO: 1 All this should be coming from additionalParameters jsonMapDf[additionalParams]
-		//df.dataFrameParamsToRefresh = [parentNode:parentNode, parentDataframe:parentDataframe, level:parentLevel, parentFieldName:parentFieldName]
-		def html = df.getHtml()
-		jsonRet.put("html", html)
-		jsonRet.put("parentDataframe", parentDataframe)
-		jsonRet.put("parentNode", parentNode)
-		jsonRet.put("level", parentLevel)
-		jsonRet.put("parentFieldName", parentFieldName)
-		jsonRet.put("dataframe",df.dataframeName);
-		//TODO: 1
+		//TODO: default data need to assign for each new json structure
 		if (isDefault){
 			jsonRet.put("data",jsonDefaults)
 		}else {
@@ -454,18 +288,7 @@ class DataframeInstance implements DataframeConstants{
 		}
 		jsonRet.put("default",jsonDefaults)
 		jsonRet.put("operation","R");
-
 		String domainAlias = df.hql?df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0):"";
-
-		jsonRet.put("dataFrameParamsToRefresh",
-				[   'parentNode':parentNode,
-					'parentNodeId':getIdFromUiIdConstruct(parentNode),
-					'parentNodeLevel':getLevelFromUiIdConstruct(parentNode),
-					'parentDataframe':parentDataframe,
-					'level':parentLevel,
-					'parentFieldName': Dataframe.buildFullFieldName_(df.dataframeName, domainAlias, parentFieldName)
-				])
-
 		return jsonRet
 	}
 
@@ -1396,6 +1219,10 @@ class DataframeInstance implements DataframeConstants{
 			}
 		}
 		return false;
+	}
+
+	private JSONObject copyDomainFieldMap(){
+		return new JSONObject((Map) SerializationUtils.clone(df.domainFieldMap))
 	}
 
 }

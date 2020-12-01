@@ -1,13 +1,6 @@
-import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.DataframeException
-import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.DbResult
-import com.elintegro.erf.dataframe.ParsedHql
+
 import com.elintegro.erf.dataframe.vue.DataframeVue
-import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.widget.vue.CollectionWidgetVue
-import com.elintegro.erf.widget.vue.WidgetVue
-import grails.converters.JSON
 import org.apache.commons.lang.WordUtils
 import org.springframework.context.i18n.LocaleContextHolder
 
