@@ -30,6 +30,7 @@ beans {
         wrapInForm=false
         initOnPageLoad = false
         isGlobal = true
+        addFieldDef = ["progressBar":[widget: "ProgressBarWidgetVue","flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroProgressBarLayout")
 
     }

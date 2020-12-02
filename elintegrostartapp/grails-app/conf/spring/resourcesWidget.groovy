@@ -2,6 +2,7 @@ import com.elintegro.erf.widget.vue.AlertWidgetVue
 import com.elintegro.erf.widget.vue.ButtonWidgetVue
 import com.elintegro.erf.widget.vue.CheckboxWidgetVue
 import com.elintegro.erf.widget.vue.ComboboxVue
+import com.elintegro.erf.widget.vue.ProgressBarWidgetVue
 import com.elintegro.erf.widget.vue.RadioButtonWidgetVue
 import com.elintegro.erf.widget.vue.DataframeWidgetVue
 import com.elintegro.erf.widget.vue.DateWidgetVue
@@ -59,6 +60,7 @@ beans {
 	FilesUploadWidgetVue(FilesUploadWidgetVue){}
 	FilesDisplayWidgetVue(FilesDisplayWidgetVue){}
 	ListWidgetVue(ListWidgetVue){}
+	ProgressBarWidgetVue(ProgressBarWidgetVue){}
 
 	CarouselWidgetVue(CarouselWidgetVue){}
 

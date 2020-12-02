@@ -206,7 +206,11 @@ var excon = new Vue({
                 if(response.success) {
                     this._setAlertMessage(msg,'success', dataframeName);
                 }else {
-                    this._setAlertMessage(msg, 'error', dataframeName);
+                    if (response.alert_type === 'info') {
+                        this._setAlertMessage(msg, 'info', dataframeName)
+                    } else {
+                        this._setAlertMessage(msg, 'error', dataframeName);
+                    }
                 }
             }
         },

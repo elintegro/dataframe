@@ -41,13 +41,16 @@ class ListWidgetVue extends CollectionWidgetVue {
         """
            <v-list ${isDisabled(dataframe, field) ? "disabled" : ""} flat ${getAttr(field)}>
                   <v-subheader>$label</v-subheader>
-                  <v-list-item-group color="#1976D2">
+                  <v-list-item-group  active-class="blue">
+                   <v-card style="border:1px solid; border-color:rgb(42, 182, 246);">
                        <v-list-item  v-for="(item, i) in ${modelString}" :key="i">
                           <v-list-item-content>
                                <v-list-item-title v-model = "item.$displayMember" v-text="item.${displayMember}" @click="${onClick}">
                                </v-list-item-title>
+                               <v-divider style="border-color:rgb(42, 182, 246);"></v-divider>
                           </v-list-item-content>
                        </v-list-item>
+                  </v-card>
                   </v-list-item-group>
            </v-list>
         """

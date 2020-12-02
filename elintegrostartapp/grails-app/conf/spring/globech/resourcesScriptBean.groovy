@@ -359,35 +359,13 @@ beans {
                                      params["password"] = this.state.persisters.user.password.value;
                                      params["remember-me"] = this.state.transits.rememberMe.value;
                                      excon.callApiWithQuery('$loginAuthenticateUrl', 'POST', params).then((response)=>{
-                                           window.location.reload();
+                                           excon.showAlertMessage(response.data);
+                                           excon.setVisibility('vueElintegroLoginDataframe',false)
+                                            setTimeout(function(){window.location.reload();}, 3000);
                                     })
                     }"""
     }
-    vueElintegroRegisterDataframe_script(VueJsEntity) { bean ->
-        data = "vueElintegroRegisterDataframe_display:true,\n checkboxSelected: [],\n"
-        methods = """
-                   showAlertMessageToUser(response){
-                   if(response.success == true){
-                         response['alert_type'] = 'success'
-                         var responseData = {data:response}
-                         excon.showMessage(responseData,'vueElintegroRegisterDataframe');
-                         setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe', false);}, 6000);
-                   }else{
-                         response['alert_type'] = 'error';
-                         var responseData = {data:response}
-                         excon.showMessage(response,'vueElintegroRegisterDataframe');
-                         setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe', false);}, 6000);
-                   }
-        },\n """
-    }
 
-//    vueRegisterDataframe_script(VueJsEntity) { bean ->
-//        data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
-//    }
-
-//    vueProfileMenuDataframe_script(VueJsEntity) { bean ->
-//        computed = """ vueProfileMenuDataframe_person_fullName(){return excon.capitalize(this.vueProfileMenuDataframe_person_firstName) + " " + excon.capitalize(this.vueProfileMenuDataframe_person_lastName)}"""
-//    }
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
         computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},
                        vueElintegroProfileMenuDataframe_person_email(){return this.state.persisters.person.email.value}"""
@@ -918,18 +896,20 @@ beans {
                   }"""
     }
     vueTranslatorAssistantAfterLoggedInDataframe_script(VueJsEntity) {
-        data = """disableWhenItemNotExist:true,"""
-/*
-        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantAfterLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
         computed = """ enableDisableTranstaleButtonComputed(){return this.state.transits.projectList.value;}"""
-*/
+        methods = """enterTranslatorPage(){
+                     excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',this.state.transits.projectList.value);
+                     excon.redirectPage(this,'translator')
+
+                 }"""
     }
     vueTranslatorAssistantBeforeLoggedInDataframe_script(VueJsEntity) {
-        data = """disableWhenItemNotExist:true,"""
-/*
-        watch = """enableDisableTranstaleButtonComputed:{handler:function(val,oldVal){this.disableWhenItemNotExist = excon.enableDisableButton('vueTranslatorAssistantBeforeLoggedInDataframe',val); excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',val) }}"""
-        computed = """ enableDisableTranstaleButtonComputed(){return this.state.transits.projectList.value;}"""
-*/
+        computed = """ enableDisableTranstaleButtonComputed(){if(this.state.transits.projectList.value){return false}else{return true;};}"""
+        methods = """enterTranslatorPage(){
+                     excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',this.state.transits.projectList.value);
+                     excon.redirectPage(this,'translator')
+
+                 }"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(timeOut){
@@ -952,21 +932,19 @@ beans {
                                                                     excon.saveToStore("vueTranslatorAssistantBeforeLoggedInDataframe", stateVariable)
                                                                }
                                                      }
-                                                     excon.showMessage(responseData,'vueCreateProjectForTranslationDataframe');
-                                                     setTimeout(function(){excon.setVisibility('vueCreateProjectForTranslationDataframe', false);}, timeOut);
+                                                     excon.showAlertMessage(response);
+                                                     excon.setVisibility('vueCreateProjectForTranslationDataframe', false);
                                     });
                     }"""
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
         data = """isHidden : false ,showDownloadAllTranslatedFilesButton:false,disableAddButtonWhenItemNotSelect:true,"""
-/*
-        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
-                    enableDisableAddButton:{handler: function(val,oldVal){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
-                    """
-        computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.value && this.state.transits.selectedLanguages.value.length > 1){return true;}return false;},\n
-                      enableDisableAddButton(){return this.state.transits.notSelectedLanguages.value;},\n
+//        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
+//                    enableDisableAddButton:{handler: function(val,oldVal){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
+//                    """
+        computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.items && this.state.transits.selectedLanguages.items.length > 1){return true;}return false;},\n
+                      enableDisableAddButton(){if(this.state.transits.notSelectedLanguages.value){return false;}else{return true}},\n
                    """
-*/
         methods = """addLanguage(){
                                     var params = this.state;
                                     var self = this;
@@ -1096,16 +1074,24 @@ beans {
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
         data = """showTranslateWithGoogleButton:true, showDownloadTargetPropertyFileButton:false, progressBarEnable:false,"""
 //        watch = """ refreshGridOfTranslatedTextDataframe:{deep:true,handler: function(val,oldVal) {this.vueGridOfTranslatedTextDataframe_fillInitData();}},"""
-        computed = """buttonShowHide(){
-                                       var retrivedData = this.state.transits.translatedText.items;
-                                       if(retrivedData.length > 1){
-                                          
-                                          return true;
-                                       }
-                                       else{
-                                            return false; 
-                                       }
-                                      },\n"""
+        computed = """downLoadButtonShowHide(){
+                          var retrivedData = this.state.transits.translatedText.items;
+                          if(retrivedData.length > 1 && this.progressBarEnable == false){
+                             return false;
+                          }
+                          else{
+                              return true; 
+                          }
+        },\n
+                       translateWithGoogleButtonShowHide(){
+                          var retrivedData = this.state.transits.translatedText.items;
+                          if(retrivedData.length > 1 || this.progressBarEnable == true){
+                             return false;
+                          }
+                          else{
+                              return true;
+                       }
+        },\n"""
         methods = """ retrieveTranslatedText(){
                                          this.progressBarEnable = true;
                                          this.showTranslateWithGoogleButton = false;
@@ -1114,11 +1100,7 @@ beans {
                                          var myVar = setInterval(function(){
                                          excon.callApi('translatorAssistant/intermediateRequest', 'post', params).then(function(responseData){
                                                       var response = Math.round(responseData.data);
-                                                      console.log(response);
-                                                      let stateValuesForProgressBar = excon.getFromStore('vueElintegroProgressBarDataframe');
-                                                      stateValuesForProgressBar['progressValue'] = response;
-                                                      excon.saveToStore('vueElintegroProgressBarDataframe',stateValuesForProgressBar);
-                                                      excon.fillInitialData(stateValuesForProgressBar);
+                                                      excon.saveToStore('vueElintegroProgressBarDataframe', 'progressBarValue', {'progressValue':response})
                                                       if(self.progressBarEnable == false){clearInterval(myVar)}
                                                });
                                          } ,1000);

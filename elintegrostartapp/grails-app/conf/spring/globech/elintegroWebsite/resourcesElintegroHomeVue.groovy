@@ -25,7 +25,8 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFirstContainerDataframe']
         saveButton = false
-        doAfterRefresh = """self.changeWords();"""
+        initOnPageLoad = true
+        doAfterRefresh = """console.log("this is inside home page"); self.changeWords(response);"""
         addFieldDef = [
                 "build":["widget":"TextDisplayWidgetVue"
                             ,"name":"build"

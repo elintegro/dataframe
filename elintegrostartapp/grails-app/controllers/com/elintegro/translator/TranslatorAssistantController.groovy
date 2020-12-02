@@ -33,7 +33,7 @@ class TranslatorAssistantController {
                 }
 
                 project.save(flush: true)
-                def resultData = [success: true, newData: project, params: project]
+                def resultData = [success: true, newData: project, params: project,msg:""]
                 render(resultData as JSON)
             }
         }

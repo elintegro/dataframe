@@ -74,7 +74,7 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
                 msg = messageSource.getMessage('springSecurity.errors.login.locked', null, "Account Locked", request.locale)
             }
             else if (exception instanceof BadCredentialsException) {
-                msg = messageSource.getMessage('springSecurity.errors.login.locked', null, "Bad Credentials", request.locale)
+                msg = messageSource.getMessage('springSecurity.incorrect.username.password', null, "Bad Credentials", request.locale)
             }
             else {
                 msg = messageSource.getMessage('springSecurity.errors.login.fail', null, "Authentication Failure", request.locale)
