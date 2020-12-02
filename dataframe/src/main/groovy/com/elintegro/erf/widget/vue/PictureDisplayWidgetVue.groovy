@@ -59,19 +59,19 @@ class PictureDisplayWidgetVue extends WidgetVue{
     }
 
     boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalData, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
-        String defImgUrl = fieldProps.url?:getDefaultImageName()
-        def imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/"
-        String url = value?imageUrl+value:defImgUrl
-        String alt = value?:defImgUrl
-        jData?.persisters?."${domainAlias}"."${fieldName}".value = url
+        jData?.persisters?."${domainAlias}"."${fieldName}".value = getUrl(fieldProps, value)
     }
 
     boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalData, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        jData?.transits?."${fieldName}".value = getUrl(fieldProps, value)
+    }
+
+    private String getUrl(Map fieldProps, def value){
         String defImgUrl = fieldProps.url?:getDefaultImageName()
         def imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/"
         String url = value?imageUrl+value:defImgUrl
         String alt = value?:defImgUrl
-        jData?.transits?."${fieldName}".value = url
+        return url
     }
 
     private String getDefaultImageName(){

@@ -667,9 +667,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                  params["url"] =  '$df.ajaxSaveUrl';
                  params["doBeforeSave"] = function(params){${doBeforeSave} }
                  params["doAfterSave"] = function(response){ 
-														 ${doAfterSave} 
-														 ${doAfterSaveStringBuilder}
-														 excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);
+								 ${doAfterSave} 
+                                 ${doAfterSaveStringBuilder}
+                                 excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);
                  }
 				 excon.saveData(params);
               },\n"""

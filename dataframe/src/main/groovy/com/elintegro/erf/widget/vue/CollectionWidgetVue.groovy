@@ -82,24 +82,25 @@ abstract class CollectionWidgetVue extends WidgetVue {
         return valueList
     }
 
-    boolean isSelectionEqualsToOld(JSONArray jarr1, JSONArray jarr2){
+    private boolean isSelectionEqualsToOld(Collection array1, Collection array2){
         boolean isEqual = true;
-        if (jarr1.size() != jarr2.size()) {
+        if (array1.size() != array2.size()) {
             return false;
         } else {
-            Set<Object> s1 = getSetOfIds(jarr1)
-            Set<Object> s2 = getSetOfIds(jarr2)
+            Set<Object> s1 = getSetOfIds(array1)
+            Set<Object> s2 = getSetOfIds(array2)
             return isSetsEqual(s1, s2)
         }
 
         return isEqual
     }
 
-    Set<Object> getSetOfIds(JSONArray ar1){
+    private Set<Object> getSetOfIds(Collection ar1){
         Set<Object> set1 = new HashSet()
-        ar1.each{el -> set1.add(el.value.id)}
+        ar1.each{el -> set1.add(el.id)}
         return set1
     }
+
     private boolean isSetsEqual(Set s1, Set s2){
         s1.each{ el->
             if(!s2.contains(el)){
