@@ -837,7 +837,7 @@ beans {
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
           computed ="""vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
                                         var positions = [];
-                                        var items = this.state.transits.selectedPosition.value;
+                                        var items = this.state.persisters.application.availablePositions.value;
                                         if(!items) return;
                                         for(i=0;i<items.length;i++){
                                            positions[i] = items[i].Name;

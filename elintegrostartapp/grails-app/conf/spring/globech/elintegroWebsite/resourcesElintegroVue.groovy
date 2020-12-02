@@ -733,7 +733,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
         childDataframes=["vueElintegroResetPasswordDataframe"]
-//        doAfterSave = """setTimeout(function(){ self.\$router.push('/');this.location.reload();}, 3000);"""
+        doAfterSave = """setTimeout(function(){ self.\$router.push('/');window.location.reload();}, 3000);"""
         route = true
         addFieldDef =[
                 "person.id":[
@@ -883,7 +883,7 @@ beans {
     vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantGeneralInformationDataframe']
-        hql = "select application.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone from Application application inner join application.applicant person where application.id=:applicationId"
+        hql = "select application.id as Id,person.firstName as FirstName,person.lastName as LastName,person.email as Email,person.phone as Phone, application.availablePositions from Application application inner join application.applicant person where application.id=:applicationId"
         tab = true
         saveButton = false
         readonly = true
@@ -892,9 +892,9 @@ beans {
         doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
         addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]],
-                       "selectedPosition":[widget: "ListWidgetVue"
-                                                 ,hql:"select application.id as Id, availablePositions.name as Name from Application application  inner join application.availablePositions as availablePositions where application.id=:applicationId"
-                                                 ,"displayMember":"Name"
+                       "application.availablePositions":[widget: "ListWidgetVue"
+                                                 ,hql:"select pos.id as id, pos.name as name from Position pos"
+                                                 ,"displayMember":"name"
                                                  ,internationalize: true
                                                  ,valueMember:"id"
                                                  ,attr: """v-show = false """
