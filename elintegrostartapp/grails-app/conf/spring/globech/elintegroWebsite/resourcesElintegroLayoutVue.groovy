@@ -36,6 +36,7 @@ beans {
                                             <vueElintegroLogoDataframe/>
                                        </v-toolbar-title>
                                        <v-spacer></v-spacer>
+                                       <vueAlertMsgDataframe/>
                                        <v-toolbar-items class="hidden-md-and-down">
                                             <vueElintegroNavigationFirstTwoButtonDataframe/>
                                             <vueElintegroAppsDataframe/>

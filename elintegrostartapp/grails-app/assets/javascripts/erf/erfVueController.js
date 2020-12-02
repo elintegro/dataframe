@@ -201,10 +201,10 @@ var excon = new Vue({
 
         */
         showAlertMessage: function(response, dataframeName="vueAlertMsgDataframe"){
-            const msg = response.msg;
+            const msg = response.message?response.message:response.msg
             if(msg){
                 if(response.success) {
-                    this._setAlertMessage(msg, dataframeName);
+                    this._setAlertMessage(msg,'success', dataframeName);
                 }else {
                     this._setAlertMessage(msg, 'error', dataframeName);
                 }
@@ -212,7 +212,7 @@ var excon = new Vue({
         },
 
         _setAlertMessage: function(msg, type="success", dataframeName){
-            store.commit(dataframeName, {'snackbar':true, 'alert_type':type, 'alert_message':msg})
+            this.saveToStore(dataframeName,'alertProp', {'snackbar':true, 'alert_type':type, 'alert_message':msg})
         },
 
         //todo deprecate this method and use notify() method instead

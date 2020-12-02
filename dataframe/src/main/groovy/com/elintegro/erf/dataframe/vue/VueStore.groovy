@@ -23,6 +23,7 @@ import org.grails.web.json.JSONObject
 class VueStore {
 
     private StringBuilder state = null
+    private Map stateMap = null
     private StringBuilder mutation = null
     private StringBuilder getter = null
     private StringBuilder actions = null
@@ -30,6 +31,7 @@ class VueStore {
 
     VueStore(){
         state = new StringBuilder()
+        stateMap = new HashMap()
         getter = new StringBuilder()
         mutation = new StringBuilder()
         actions = new StringBuilder("")
@@ -41,6 +43,9 @@ class VueStore {
 
     void addToState(def value){
         state.append(value)
+    }
+    void addToState(String key, Object value){
+        stateMap.put(key, value);
     }
 
     String getDataframeVisibilityMap(){
@@ -77,6 +82,7 @@ class VueStore {
         StringBuilder sbb = new StringBuilder()
         sbb.append("""$dataframe.dataframeName: \n""")
         dataframe.domainFieldMap["dataframe"] = dataframe.dataframeName
+        dataframe.domainFieldMap.putAll(stateMap)
         sbb.append(MapUtil.convertMapToJSONString(dataframe.domainFieldMap))
         sbb.append(""",\n""")
         sbb.append(state?state.toString():"")

@@ -92,7 +92,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         try {
             sendVerifyRegistrationMail registrationCode, user, command.email
             verificationEmailMessage = message(code: 'registration.mail.success')
-            resultData = ['msg': verificationEmailMessage, 'success': true]
+            resultData = ['msg': verificationEmailMessage, 'success': true, data:requestParams, alert_type: 'success']
         } catch (Exception e) {
             log.error(e)
             verificationEmailMessage = message(code: 'registration.mail.noConnection')
