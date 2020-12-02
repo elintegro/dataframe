@@ -74,7 +74,7 @@ beans {
                                           var response = responseData.data;
                                           if(response.success == true){
                                              excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',response.projectDetails);
-                                             excon.showMessage(responseData,'vueTranslatorDataframe');
+                                             excon.showAlertMessage(response);
                                              excon.redirectPage(vueInitDataframeVar,'translator');
                                           }
                                       })
@@ -276,13 +276,13 @@ beans {
                                        response['alert_type'] = 'error'
                                        response['msg'] = 'You must enter your email.';
                                        var responseData = {data:response};
-                                       excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                       excon.showAlertMessage(responseData);
                                   }else{
                                         params['email'] = this.state.persisters.user.email.value ;
                                         var self = this;
                                         excon.callApi('register/forgotPassword', 'post', params).then(function(responseData){
                                                 var response = responseData.data;
-                                                excon.showMessage(responseData,'vueElintegroForgetPasswordDataframe');
+                                                excon.showAlertMessage(response);
                                                 if(response.success == true){
                                                   setTimeout(function(){excon.redirectPage(self,"home");},6000);
                                                 }else{
@@ -304,7 +304,7 @@ beans {
                                     params['token'] = location[1]
                                     excon.callApi('register/changeForgotPassword', 'post', params).then(function(responseData){
                                            var response = responseData.data;
-                                           excon.showMessage(responseData,'vueElintegroChangeForgotPasswordDataframe');
+                                           excon.showAlertMessage(response);
                                            if(response.success == true){
                                              excon.setVisibility('vueElintegroLoginDataframe',true);
                                            }else{
@@ -361,7 +361,7 @@ beans {
                                      excon.callApiWithQuery('$loginAuthenticateUrl', 'POST', params).then((response)=>{
                                            excon.showAlertMessage(response.data);
                                            excon.setVisibility('vueElintegroLoginDataframe',false)
-                                            setTimeout(function(){window.location.reload();}, 3000);
+                                           window.location.reload();
                                     })
                     }"""
     }
@@ -663,7 +663,7 @@ beans {
                                     var self = this;
                                     excon.callApi('register/createLeadUser', 'post', params).then(function(responseData){
                                            console.log(responseData);
-                                           excon.showMessage(responseData,'vueElintegroSignUpQuizDataframe');
+                                           excon.showAlertMessage(responseData.data);
                                            setTimeout(function(){window.location.reload();}, 6000);
                                     })
                                     },\n"""
@@ -840,7 +840,7 @@ beans {
                                         var items = this.state.persisters.application.availablePositions.value;
                                         if(!items) return;
                                         for(i=0;i<items.length;i++){
-                                           positions[i] = items[i].Name;
+                                           positions[i] = items[i].name;
                                         }
                                         var selectedPosition = positions.join(",\t\t");
                                         return selectedPosition;}"""
@@ -984,7 +984,7 @@ beans {
                                                                     document.body.appendChild(fileLink);
                                                                     fileLink.click();
                                                                 }else{
-                                                                     excon.showMessage(responseData,'vueTranslatorDataframe');
+                                                                     excon.showAlertMessage(response);
                                                                 }      
                                                         });
                                        }
@@ -1003,20 +1003,20 @@ beans {
     }
     vueAddNewRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
         methods = """
-                    translateText(params){
-                                        excon.saveToStore('vueAddNewRecordForCurrentProjectDataframe','vueAddNewRecordForCurrentProjectDataframe_textToTranslate_selectedrow',params)
+                    translateText(param){
+                                        excon.saveToStore('vueAddNewRecordForCurrentProjectDataframe','textToTranslate_selectedrow',param)
                                         var params = this.state;
-                                        params['targetLanguage'] = params.targetLanguage;
+                                        params['targetLanguage'] = param.TargetLanguage;
                                         params['dataframe'] = 'vueAddNewRecordForCurrentProjectDataframe';
                                         excon.callApi('translatorAssistant/translateNewlyAddedRecord', 'post', params).then(function(responseData){
                                                  var response = responseData.data;
-                                                 excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
+                                                 excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'textToTranslate', 'U', 'transits'); 
                                         })
                     },\n
                     saveNewlyAddedRecord(){
                                        var params = this.state;
                                        var self = this;
-                                       if(this.state.vueAddNewRecordForCurrentProjectDataframe_key != "" && this.state.vueAddNewRecordForCurrentProjectDataframe_text != ""){
+                                       if(this.state.transits.key.value != "" && this.state.transits.sourceText.value != ""){
                                            excon.callApi('translatorAssistant/saveNewlyAddedRecord', 'post', params).then(function(responseData){
                                                var response = responseData.data;
                                                excon.setVisibility('vueAddNewRecordForCurrentProjectDataframe',false);
@@ -1029,7 +1029,7 @@ beans {
                     },\n
                     closeVueAddNewRecordForCurrentProjectDataframe(){
                                     var params = this.state;
-                                    if(this.state.vueAddNewRecordForCurrentProjectDataframe_key != "" && this.state.vueAddNewRecordForCurrentProjectDataframe_text != ""){
+                                    if(this.state.transits.key.value != "" && this.state.transits.sourceText.value != ""){
                                        var confirmMessage = confirm("Are you sure want to abandon the changes?");
                                        if(confirmMessage){
                                                 excon.setVisibility("vueAddNewRecordForCurrentProjectDataframe", false);
@@ -1072,8 +1072,7 @@ beans {
 
     }
     vueGridOfTranslatedTextDataframe_script(VueJsEntity){ bean ->
-        data = """showTranslateWithGoogleButton:true, showDownloadTargetPropertyFileButton:false, progressBarEnable:false,"""
-//        watch = """ refreshGridOfTranslatedTextDataframe:{deep:true,handler: function(val,oldVal) {this.vueGridOfTranslatedTextDataframe_fillInitData();}},"""
+        data = """progressBarEnable:false,"""
         computed = """downLoadButtonShowHide(){
                           var retrivedData = this.state.transits.translatedText.items;
                           if(retrivedData.length > 1 && this.progressBarEnable == false){
@@ -1132,10 +1131,6 @@ beans {
 
     }
     vueEditTranslatedRecordsOfGridDataframe_script(VueJsEntity){bean ->
-/*
-        watch = """ refreshVueEditTranslatedRecordsOfGridDataframe:{handler: function(val, oldVal) {this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();}},"""
-        computed = "refreshVueEditTranslatedRecordsOfGridDataframe(){return this.vueEditTranslatedRecordsOfGridDataframe_prop.key},"
-*/
         methods ="""
                     googleTranslateForEachRecord(){
                     var params = this.state;
@@ -1145,17 +1140,21 @@ beans {
                     params['projectId'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');
                     params['dataframe'] = 'vueEditTranslatedRecordsOfGridDataframe';
                     excon.callApi('translatorAssistant/translateEachRecordWithGoogle', 'post', params).then(function(responseData){
-                                                                   var response = responseData.data;
-                                                                   excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text', response.translatedText); 
+                                                                   let response = responseData.data;
+                                                                   let stateValuesForEditTranslatedRecordsOfGridDataframe = excon.getFromStore('vueEditTranslatedRecordsOfGridDataframe')
+                                                                   stateValuesForEditTranslatedRecordsOfGridDataframe.persisters.translatedText.text.value = response.translatedText
+                                                                   excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe', stateValuesForEditTranslatedRecordsOfGridDataframe); 
                                                                    });
                     },\n
                     closeVueEditTranslatedRecordsOfGridDataframe(){
-                     var textBeforeEditing = excon.getFromStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing')
-                     var textAfterEditing = this.state.vueEditTranslatedRecordsOfGridDataframe_text_text;
+                     let stateValuesForEditTranslatedRecordsOfGridDataframe = excon.getFromStore('vueEditTranslatedRecordsOfGridDataframe')
+                     var textBeforeEditing = stateValuesForEditTranslatedRecordsOfGridDataframe.textBeforeEditing;
+                     var textAfterEditing = stateValuesForEditTranslatedRecordsOfGridDataframe.persisters.translatedText.text.value;
                      if(textBeforeEditing != textAfterEditing){
                        var result = confirm("Are you sure want to abandon the changes?");
                         if(result){
-                                excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','vueEditTranslatedRecordsOfGridDataframe_text_text',textBeforeEditing)
+                                stateValuesForEditTranslatedRecordsOfGridDataframe.persisters.translatedText.text.value = textBeforeEditing;
+                                excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe',stateValuesForEditTranslatedRecordsOfGridDataframe);
                                 excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
                         }
                          return false;

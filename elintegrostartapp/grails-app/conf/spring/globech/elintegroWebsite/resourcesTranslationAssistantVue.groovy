@@ -246,17 +246,22 @@ beans{
         initOnPageLoad = true
         putFillInitDataMethod = false
         saveButton = false
-        doBeforeRefresh = """ params['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId')"""
+        doBeforeRefresh = """ let projectId = excon.getFromStore('vueTranslatorDataframe','projectId');
+                              params['projectId'] = projectId;
+                              params.domain_keys.project.id = projectId;
+                              params.namedParameters.projectId.value = projectId;
+                              params.persisters.project.id.value = projectId;
+                          """
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = """select project.id ,project.sourceLanguage from Project project where project.id = :projectId """
         addFieldDef = [
-                "project.key":[widget:"InputWidgetVue" ,attr: """ autofocus outlined background-color='#EBF9FF !important' color='#2AB6F6' ""","validationRules":[[condition:"v => !!v",message:"key.required.message"],[condition:"v =>  (v && new RegExp(/^\\S+\$/).test(v))",message:"key.donot.have.space"]]],
-                "project.sourceText":[ widget:"InputWidgetVue","validationRules":[[condition:"v => !!v",message:"text.required.message"]],attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
-                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",displayWithLabel:true,insertAfter:'project.text'],
+                "key":[widget:"InputWidgetVue" ,attr: """ autofocus outlined background-color='#EBF9FF !important' color='#2AB6F6' ""","validationRules":[[condition:"v => !!v",message:"key.required.message"],[condition:"v =>  (v && new RegExp(/^\\S+\$/).test(v))",message:"key.donot.have.space"]]],
+                "sourceText":[ widget:"InputWidgetVue","validationRules":[[condition:"v => !!v",message:"text.required.message"]],attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",isDynamic:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],],
                 "textToTranslate":[
                           name: 'textToTranslate'
                         , widget: "GridWidgetVue"
-                        , hql:"""select text.language as targetLanguage,text.text as text from Text text inner join text.project project  where project_id = :projectId and text.language != project.sourceLanguage  group by language"""
+                        , hql:"""select text.language as TargetLanguage,text.text as Text from Text text inner join text.project project  where project_id = :projectId and text.language != project.sourceLanguage  group by language"""
                         , internationalize: true
                         , sortable        : true
                         ,editButton       : true
@@ -322,13 +327,14 @@ beans{
                                      , internationalize: true
                                      ,attr: """style="overflow-y:auto; max-height:500px;" """
                                      , sortable        : true
-                                     ,onClick :[showAsDialog: true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
+//                                     ,onClick :[showAsDialog: true,refreshInitialData:true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,editButton: true
                                      ,onButtonClick   : [
                                                         ['actionName': 'Edit Text', 'buttons': [
                                                         [name        : "edit"
                                                          ,editButton: true
                                                         ,MaxWidth: 700
+                                                        ,refreshInitialData:true
                                                         ,showAsDialog: true
                                                         ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
                                                         ,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe")
@@ -356,24 +362,29 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueEditTranslatedRecordsOfGridDataframe']
         saveButton = true
-        initOnPageLoad = true
+        initOnPageLoad = false
         putFillInitDataMethod = true
         saveButtonAttr = """style='background-color:#2ab6f6; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doBeforeRefresh =  """params['id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
-        doAfterRefresh = """excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.vueEditTranslatedRecordsOfGridDataframe_text_text);"""
-        doBeforeSave = """params['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = this.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
+        doBeforeRefresh =  """ let textId = self.vueEditTranslatedRecordsOfGridDataframe_prop.key;
+                              params['id'] = textId;
+                            params.domain_keys.translatedText.id = textId;
+                            params.persisters.translatedText.id.value = textId;
+                            params.namedParameters.id.value = textId;
+                          """
+        doAfterRefresh = """excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.persisters.translatedText.text.value);"""
+        doBeforeSave = """params['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = self.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
         doAfterSave = """ excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
-                          excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.params.vueEditTranslatedRecordsOfGridDataframe_text_text);
-                          excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'vueGridOfTranslatedTextDataframe_translatedText', 'U');
+                          excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.persisters.translatedText.text.value);
+                          excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'translatedText', 'U', 'transits');
                       """
-        hql = """select text.id as Id, text._key as Key, text.text as Text from Text text where text.id =:id"""
+        hql = """select translatedText.id as Id, translatedText._key as Key, translatedText.text as Text from Text translatedText where translatedText.id =:id"""
         addFieldDef = [
-                "text._key":[widget:"InputWidgetVue"
+                "translatedText._key":[widget:"InputWidgetVue"
                              ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
                              readOnly: true,],
-                "text.text":[widget:"TextAreaWidgetVue"
+                "translatedText.text":[widget:"TextAreaWidgetVue"
                              ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
                              ]
         ]

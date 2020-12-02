@@ -142,7 +142,7 @@ beans{
                                             </v-tooltip>
                                         </v-flex>
                                         <v-row class="px-8">
-                                           [project.sourceLanguage][project.key][project.sourceText][textToTranslate]
+                                           [project.sourceLanguage][key][sourceText][textToTranslate]
                                         </v-row>
                                         <v-row class="pa-8" style="text-align: center;">[save]</v-row>
                                     </v-card>

@@ -145,40 +145,40 @@ class TranslatorAssistantController {
          Language language1 = Language.findByEname(param.targetLanguage)
          String targetLanguageCode = language1.code
          Project project = Project.findById(param.projectId)
-         Text text = Text.findByProjectAndLanguageAnd_key(project,param.sourceLanguage,param.vueEditTranslatedRecordsOfGridDataframe_text__key)
+         Text text = Text.findByProjectAndLanguageAnd_key(project,param.sourceLanguage,param.persisters.translatedText._key.value)
          def translatedText = translatorService.translateFromGoogle(sourceLanguageCode, targetLanguageCode, text.text)
          def resultData = [success: true,translatedText:translatedText]
          render(resultData as JSON)
      }
     def translateNewlyAddedRecord(){
         def param = request.getJSON()
-        Language language = Language.findByEname(param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
+        Language language = Language.findByEname(param.persisters.project.sourceLanguage.value)
         String sourceLanguageCode = language.code
         Language language1 = Language.findByEname(param.targetLanguage)
         String targetLanguageCode = language1.code
-        def translatedText = translatorService.translateFromGoogle(sourceLanguageCode, targetLanguageCode, param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText )
-        def dataAfterTranslation = [targetLanguage:param.targetLanguage, text:translatedText]
-        def resultData = [success: true, newData: [textToTranslate:dataAfterTranslation],params:param]
+        def translatedText = translatorService.translateFromGoogle(sourceLanguageCode, targetLanguageCode, param.transits.sourceText.value )
+        def dataAfterTranslation = [language:[value:param.targetLanguage], text:[value: translatedText]]
+        def resultData = [success: true, persisters: [textToTranslate:dataAfterTranslation],params:param]
         render(resultData as JSON)
     }
     def saveNewlyAddedRecord(){
         def param = request.getJSON()
-        Project project = Project.findById(param.vueAddNewRecordForCurrentProjectDataframe_project_id)
-        Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project,param.vueAddNewRecordForCurrentProjectDataframe_key,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText,param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage)
+        Project project = Project.findById(param.projectId)
+        Text text = Text.findByProjectAnd_keyAndTextAndLanguage(project, param.transits.key.value, param.transits.sourceText.value, param.persisters.project.sourceLanguage.value)
         if(text == null) {
             Text newText = new Text()
             newText.project = project
-            newText._key = param.vueAddNewRecordForCurrentProjectDataframe_key
-            newText.text = param.vueAddNewRecordForCurrentProjectDataframe_project_sourceText
-            newText.language = param.vueAddNewRecordForCurrentProjectDataframe_project_sourceLanguage
+            newText._key = param.transits.key.value
+            newText.text = param.transits.sourceText.value
+            newText.language = param.persisters.project.sourceLanguage.value
             newText.save(flush: true)
         }
-        for(item in param.vueAddNewRecordForCurrentProjectDataframe_textToTranslate_items){
+        for(item in param.transits.textToTranslate.items){
             Text text1 = new Text()
             text1.project = project
-            text1.language = item.targetLanguage
-            text1._key = param.vueAddNewRecordForCurrentProjectDataframe_key
-            text1.text = item.text
+            text1.language = item.TargetLanguage
+            text1._key =  param.transits.key.value
+            text1.text = item.Text
             text1.save(flush: true)
         }
         def resultData = [success: true, params: param]
