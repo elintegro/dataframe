@@ -39,7 +39,7 @@ class ProfileDetailController {
         }
         render(resultData as JSON)
     }
-    def imageData = {
+    def imageData (){
         def currentUser = springSecurityService.currentUser
         Person person = Person.findByEmail(currentUser)
         def imageName

@@ -69,7 +69,7 @@ class PictureDisplayWidgetVue extends WidgetVue{
     private String getUrl(Map fieldProps, def value){
         String defImgUrl = fieldProps.url?:getDefaultImageName()
         def imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/"
-        String url = value?imageUrl+value:defImgUrl
+        String url = value?"profileDetail/imageData/$value":defImgUrl
         String alt = value?:defImgUrl
         return url
     }

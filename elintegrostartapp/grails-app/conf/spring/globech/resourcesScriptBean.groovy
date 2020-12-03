@@ -52,11 +52,13 @@ beans {
                             if(personId){
                                 let userProfileMenu = excon.getFromStore("vueElintegroProfileMenuDataframe");
                                 userProfileMenu.persisters.person.id = personId;
+                                userProfileMenu.persisters.person.mainPicture.value = 'profileDetail/imageData'
                                 userProfileMenu.domain_keys.person.id = personId;
                                 userProfileMenu.namedParameters.session_userid.value = personId;
                                 excon.saveToStore("vueElintegroProfileMenuDataframe", userProfileMenu);
                                 let userProfile = excon.getFromStore("vueElintegroUserProfileDataframe");
                                 userProfile.persisters.person.id = personId;
+                                userProfile.persisters.person.mainPicture.value = 'profileDetail/imageData'
                                 userProfile.domain_keys.person.id = personId;
                                 userProfile.namedParameters.id.value = personId;
                                 excon.callApi('dataframe/ajaxValues', 'POST', userProfile).then((response)=>{

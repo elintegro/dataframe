@@ -330,7 +330,7 @@ beans{
 //                                     ,onClick :[showAsDialog: true,refreshInitialData:true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,editButton: true
                                      ,onButtonClick   : [
-                                                        ['actionName': 'Edit Text', 'buttons': [
+                                                        ['actionName': 'Edit/Delete Text', 'buttons': [
                                                         [name        : "edit"
                                                          ,editButton: true
                                                         ,MaxWidth: 700

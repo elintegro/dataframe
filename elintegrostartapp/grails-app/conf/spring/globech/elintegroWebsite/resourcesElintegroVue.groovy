@@ -687,9 +687,7 @@ beans {
         isGlobal = true
         saveButton = false
         initOnPageLoad=true
-//        route = true
         wrapInForm = true
-//        "url":"https://s3.us-east-2.amazonaws.com/elintegro1",
         addFieldDef = [
                 "person.mainPicture": [
                         "widget" : "PictureDisplayWidgetVue",
@@ -733,6 +731,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
         childDataframes=["vueElintegroResetPasswordDataframe"]
+        doBeforeSave = """params.persisters.person.mainPicture.value = params.transits.uploadPicture.value[0].imageName;"""
         doAfterSave = """setTimeout(function(){ self.\$router.push('/');window.location.reload();}, 3000);"""
         route = true
         addFieldDef =[
