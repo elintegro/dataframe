@@ -345,6 +345,7 @@ beans{
                                                          ,valueMember: 'Id'
                                                          ,ajaxDeleteUrl:"translatorAssistant/deleteRecord"
                                                          ,doBeforeDelete:"""params['projectId'] =  excon.getFromStore('vueGridOfTranslatedTextDataframe','projectId');"""
+                                                         ,fieldType:"transits"
                                                          ,doAfterDelete:"""self.vueGridOfTranslatedTextDataframe_fillInitData();"""
                                                          ,tooltip: [message:"tooltip.grid.delete",internationalization: true]
                                                          ,refDataframe: ref("vueDeleteTranslatedRecordsOfGridDataframe")

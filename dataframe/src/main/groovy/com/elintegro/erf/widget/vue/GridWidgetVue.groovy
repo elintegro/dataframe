@@ -372,7 +372,7 @@ $fieldParams
                 String btnName = ""
                 String methodScript = ""
                 if(deleteButton){
-                    methodScript= constructGridDeleteScript(buttonMaps, fldName, dataframe.dataframeName)
+                    methodScript= constructGridDeleteScript(buttonMaps, fldName, dataframe.dataframeName , nameOfField)
                     btnName = "deleteButton"
                     vIcon.name = "delete"
 
@@ -507,17 +507,27 @@ $fieldParams
                     \n 
                     """
     }
-    private String constructGridDeleteScript(Map buttonMaps,  String fldName, String parentDataframeName){
+    /**
+     * send 'fieldType'(persisters or transits) from buttonMaps (from descriptor) to delete grid data.
+     * for example check delete button used in grid of  'vueGridOfTranslatedTextDataframe' in resourceTranslationAssistantVue.groovy
+     * @param buttonMaps
+     * @param fldName
+     * @param parentDataframeName
+     * @param nameOfField
+     * @return
+     */
+    private String constructGridDeleteScript(Map buttonMaps,  String fldName, String parentDataframeName, String nameOfField){
         DataframeVue buttonRefDataframe = getReferenceDataframe(buttonMaps.refDataframe)
         String valueMember =buttonMaps.valueMember?:"id"
         String doBeforeDelete = buttonMaps.doBeforeDelete?:""
         String doAfterDelete = buttonMaps.doAfterDelete?:""
+        String fieldType = buttonMaps.fieldType?:"persisters"
         StringBuilder requestFieldParams = new StringBuilder()
         List<String> keyFieldNames = buttonRefDataframe.getKeyFieldNameForNamedParameter(buttonRefDataframe)
 
         requestFieldParams.append("params['dataframe'] = '$buttonRefDataframe.dataframeName';\n")
         requestFieldParams.append("params['parentDataframe'] = '$parentDataframeName';\n")
-        requestFieldParams.append("params['fieldName'] = '$fldName';\n")
+        requestFieldParams.append("params['fieldName'] = '$nameOfField';\n")
         requestFieldParams.append("params['id'] = dataRecord.id?dataRecord.id:dataRecord.Id;")
         keyFieldNames.each {
             if (it.split('_').collect().contains(valueMember)){
@@ -533,35 +543,29 @@ $fieldParams
         }
         String confirmMessage = buttonMaps.message?:"Are you sure ?"
         String url =  buttonMaps.ajaxDeleteUrl?: ajaxDeleteUrl
-//                            confirm('${confirmMessage}');
         return """
-                
-    var params = {};
-    var editedIndex = this.state.${fldName}_items.indexOf(dataRecord);
-    ${requestFieldParams.toString()}
-    $doBeforeDelete
-    if(dataRecord.$valueMember){
-        if(!confirm("${messageSource.getMessage("delete.confirm.message", null, "delete.confirm.message", LocaleContextHolder.getLocale())}"))return
-        const self = this;
-        axios({
-            method:'post',
-            url:'$url',
-            data: params
-        }).then(function (responseData) {
-            if (responseData.data.success){
-                self.state.${fldName}_items.splice(editedIndex, 1);
-            }
-            $doAfterDelete
-        })
-            .catch(function (error) {
-                console.log(error);
-            });
-    } else {
-
-                this.state.${fldName}_items.splice(editedIndex, 1);
-    }
-                    \n 
-          """
+                var params = {};
+                var editedIndex = this.state.${fieldType}.${nameOfField}.items.indexOf(dataRecord);
+                ${requestFieldParams.toString()}
+                $doBeforeDelete
+                if(dataRecord.$valueMember){
+                    if(!confirm("${messageSource.getMessage("delete.confirm.message", null, "delete.confirm.message", LocaleContextHolder.getLocale())}"))return
+                    const self = this;
+                    excon.callApi('$url', 'post', params).then(function (responseData){
+                        if (responseData.data.success){
+                            self.state.${fieldType}.${nameOfField}.items.splice(editedIndex, 1);
+                        }
+                        $doAfterDelete
+                    })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                } else {
+            
+                            this.state.${fieldType}.${nameOfField}.items.splice(editedIndex, 1);
+                }
+        \n 
+        """
     }
 
     public Map getDefaultData(List<MetaField> fieldMetaData){

@@ -896,7 +896,7 @@ beans {
                   }"""
     }
     vueTranslatorAssistantAfterLoggedInDataframe_script(VueJsEntity) {
-        computed = """ enableDisableTranstaleButtonComputed(){return this.state.transits.projectList.value;}"""
+        computed = """ enableDisableTranstaleButtonComputed(){if(this.state.transits.projectList.value){return false}else{return true;};}"""
         methods = """enterTranslatorPage(){
                      excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',this.state.transits.projectList.value);
                      excon.redirectPage(this,'translator')
@@ -938,10 +938,7 @@ beans {
                     }"""
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
-        data = """isHidden : false ,showDownloadAllTranslatedFilesButton:false,disableAddButtonWhenItemNotSelect:true,"""
-//        watch = """ showOrHideDownloadAllFilesButton:{handler: function(val){ if(val == true){this.showDownloadAllTranslatedFilesButton = true;}else{this.showDownloadAllTranslatedFilesButton = false;}}},\n
-//                    enableDisableAddButton:{handler: function(val,oldVal){this.disableAddButtonWhenItemNotSelect = excon.enableDisableButton('vueTranslatorDataframe',val);}},\n
-//                    """
+        data = """isHidden : false, """
         computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.items && this.state.transits.selectedLanguages.items.length > 1){return true;}return false;},\n
                       enableDisableAddButton(){if(this.state.transits.notSelectedLanguages.value){return false;}else{return true}},\n
                    """

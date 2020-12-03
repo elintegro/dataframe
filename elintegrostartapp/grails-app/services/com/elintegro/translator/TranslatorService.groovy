@@ -105,7 +105,7 @@ class TranslatorService {
         Project project = Project.findById(projectId)
         def counter = 0
         def resultData
-        for (item in param.vueTranslatorDataframe_project_language_items) {
+        for (item in param.transits.selectedLanguages.items) {
             Language language = Language.findByEname(item.language)
             def fileName = "messages_" + language.code + ".properties"
             def text = Text.findAll("from Text text where text.language = ${item.language} and project_id = ${project} and text._key != null and text.text != null ")
