@@ -109,7 +109,7 @@ beans{
                                                     <v-card class="borderInTranslation"> 
                                                          <v-row class="px-8">
                                                                 [DATAFRAME_SCRIPT]
-                                                            <v-row>
+                                                            <v-row class="mx-0 pa-1">
                                                                 [BUTTON_SCRIPT]
                                                             </v-row>
                                                         </v-row>

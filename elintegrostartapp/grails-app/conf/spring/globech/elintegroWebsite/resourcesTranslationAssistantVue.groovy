@@ -48,7 +48,7 @@ beans{
         addFieldDef = [
                 "translatorAssistant":["widget":"TextDisplayWidgetVue"
                             ,"name":"translatorAssistant"
-                            ,elementId: "translatorAssistant"
+                            ,elementId: "translatorAssistantBeforeLoggedIn"
                             ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
                 "projectList":[
@@ -75,7 +75,7 @@ beans{
         addFieldDef = [
                 "translatorAssistant":["widget":"TextDisplayWidgetVue"
                                        ,"name":"translatorAssistant"
-                                       ,elementId: "translatorAssistant"
+                                       ,elementId: "translatorAssistantAfterLoggedIn"
                                        ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
                 "projectList":[
@@ -83,6 +83,7 @@ beans{
                         , hql: """select project.id as projectId , project.name as Name , users.id as Id from Project project inner join project.users users where users.id = :session_userid"""
                         ,"displayMember":"Name"
                         ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' """
+                        , search:true
                         ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ]
         ]
@@ -232,9 +233,9 @@ beans{
                 ],
         ]
         dataframeButtons=[
-                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = 'showOrHideDownloadAllFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md12', 'lg6', 'xl6']],
-                addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg6', 'xl6']],
-                projectManager: [name: "projectManager",type: "button",attr: """style='background-color:#2ab6f6; color:white; text-transform: capitalize;'""",script: """this.\$router.push("/translator-assistant/0");""",flexGridValues:['xs12', 'sm12', 'md12', 'lg6', 'xl6']]
+                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = 'showOrHideDownloadAllFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                projectManager: [name: "projectManager",type: "button",attr: """style='background-color:#2ab6f6; color:white; text-transform: capitalize;'""",script: """this.\$router.push("/translator-assistant/0");""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
         ]
         childDataframes = ['vueAddNewRecordForCurrentProjectDataframe','vueGridOfTranslatedTextDataframe']
         currentFrameLayout= ref("vueElintegroTranslatorDataframeLayout")
