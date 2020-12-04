@@ -262,7 +262,7 @@ beans{
 
         ]
         dataframeButtons = [
-                submit: [name: "submit", type: "link",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }

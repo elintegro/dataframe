@@ -888,7 +888,7 @@ beans {
                                          var myVar = setInterval(function(){
                                          excon.callApi('translatorAssistant/intermediateRequest', 'post', params).then(function(responseData){
                                                       var response = Math.round(responseData.data);
-                                                      excon.saveToStore('vueElintegroProgressBarDataframe', 'progressBarValue', {'progressValue':response})
+                                                      excon.saveToStore('vueElintegroProgressBarDataframe', 'progressBarValue', {'progressValue':response,'progressText':'Translating...'})
                                                       if(self.progressBarEnable == false){clearInterval(myVar)}
                                                });
                                          } ,1000);

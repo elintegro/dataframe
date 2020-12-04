@@ -292,6 +292,7 @@ beans {
         initOnPageLoad = false
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
         doAfterSave = """
@@ -683,7 +684,7 @@ beans {
         bean.constructorArgs = ['vueElintegroUserProfileDataframe']
 
         dataframeLabelCode = "User.Profile"
-        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages, person.addresses from Person as person where person.id=:id"
+        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages from Person as person where person.id=:id"
 //        hql = "select person.id, person.mainPicture,person.email, person.firstName, person.lastName, person.bday, person.phone, person.languages from Person as person where person.id=:id"
         saveButton = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
@@ -734,15 +735,6 @@ beans {
                         ,multiple: true
                 ],
 
-                "person.addresses":[
-                        widget: "ListWidgetVue"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
-                        , hql: """select address.id as id, address.addressText as addres from Address as address"""
-                        ,"displayMember":"addres"
-                        ,"valueMember":"id"
-                        , search:true
-                        ,multiple: true
-                ],
                 "person.mainPicture":[
                         "widget" : "PictureDisplayWidgetVue",
                         "aspectRatio":"2.5",
@@ -760,9 +752,10 @@ beans {
                         ,editButton: true
                         ,deleteButton:true
                 ]
+
         ]
 
-        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button",attr: """style='background-color:#1976D2; color:white;' """, url: "", showAsDialog: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueElintegroResetPasswordDataframe")] ]
+        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button",attr: """style='background-color:#1976D2; color:white;'  """, url: "", showAsDialog: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueElintegroResetPasswordDataframe")] ]
 
         currentFrameLayout = ref("vueElintegroUserProfileDataframeLayout")
 
@@ -962,8 +955,8 @@ beans {
                 "application.lastComment":[ widget:"TextAreaWidgetVue",
                                 name: "Comment"]
         ]
-        dataframeButtons = [  save: [name:"save",type:"button",script: """this.addCommentsForApplicant(); """ ,flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
-                              previous: [name:"previous", type: "button", script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
+        dataframeButtons = [  save: [name:"save",type:"button",attr: """style='background-color:#1976D2; color:white;' """, script: """this.addCommentsForApplicant(); """ ,flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                              previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");
                                                                                 \n""", flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
         ]
         currentFrameLayout = ref("vueElintegroCommentPageForApplicantDataframeLayout")

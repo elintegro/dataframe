@@ -12,7 +12,7 @@ class ProgressBarWidgetVue extends WidgetVue {
                 <v-container>
                            <v-row class="fill-height" align-content="center" justify="center">
                               <v-col class="subtitle-1 text-center" cols="12">
-                                Loading...
+                                <h3>{{state.progressBarValue.progressText}}</h3>
                               </v-col>
                               <v-col cols="12">
                                      <v-progress-linear
@@ -29,10 +29,8 @@ class ProgressBarWidgetVue extends WidgetVue {
     }
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
-        store.addToState("progressBarValue",
-                [
-                        progressValue: '',
-                ]
+        store.addToState("progressBarValue",[progressValue: '',progressText:''],
+
         )
 
         return """

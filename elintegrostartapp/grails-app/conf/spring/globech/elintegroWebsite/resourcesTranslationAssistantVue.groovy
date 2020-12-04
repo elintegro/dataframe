@@ -61,8 +61,8 @@ beans{
                 ]
         ]
         dataframeButtons =[
-                translation:[name:"translate",type: "link",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' :disabled='enableDisableTranstaleButtonComputed' """,script: """this.enterTranslatorPage();""",flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
-                createProject:[name: "createProject",type: "button",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
+                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;'  :disabled='enableDisableTranstaleButtonComputed' """,script: """this.enterTranslatorPage();""",flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
+                createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
         currentFrameLayout = ref("vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout")
@@ -88,8 +88,8 @@ beans{
                 ]
         ]
         dataframeButtons =[
-                translation:[name:"translate",type: "link",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' :disabled='enableDisableTranstaleButtonComputed' """,script: """this.enterTranslatorPage()""",flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
-                createProject:[name: "createProject",type: "button",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
+                translation:[name:"translate",type: "link",attr: """style='background-color:#1976D2; color:white;'  :disabled='enableDisableTranstaleButtonComputed' """,script: """this.enterTranslatorPage()""",flexGridValues:['xs0', 'sm4', 'md4', 'lg4', 'xl4'] ],
+                createProject:[name: "createProject",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,showAsDialog: true,refDataframe: ref("vueCreateProjectForTranslationDataframe"),flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'] ]
         ]
         childDataframes = ['vueTranslatorDataframe','vueCreateProjectForTranslationDataframe']
         currentFrameLayout = ref("vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout")
@@ -177,6 +177,7 @@ beans{
                 ],
                 "save":["widget":"ButtonWidgetVue"
                         ,"name":"save"
+                        ,attr: """style='background-color:#1976D2; color:white;' """
                         ,script: """let timeOut = 6000;this.saveProject(timeOut);"""
                         ,flexGridValues:['xs0', 'sm0', 'md6', 'lg6', 'xl6']
                 ]
@@ -217,7 +218,7 @@ beans{
                         "widget"     : "ButtonWidgetVue",
                         "insertAfter":"notSelectedLanguages",
                         script       : """ this.addLanguage()""",
-                        "attr"       :"style='background-color:#2ab6f6; color:white; margin-top:13px;'",
+                        "attr"       :"style='background-color:#1976D2; color:white; margin-top:13px;'",
                         disabled     :"enableDisableAddButton",
                         "flexGridValues":['xs12', 'sm12', 'md1', 'lg1', 'xl1'],
                 ],
@@ -233,9 +234,9 @@ beans{
                 ],
         ]
         dataframeButtons=[
-                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = 'showOrHideDownloadAllFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                projectManager: [name: "projectManager",type: "button",attr: """style='background-color:#2ab6f6; color:white; text-transform: capitalize;'""",script: """this.\$router.push("/translator-assistant/0");""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#1976D2; color:white;'  v-show = 'showOrHideDownloadAllFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                projectManager: [name: "projectManager",type: "button",attr: """style='background-color:#1976D2; color:white; text-transform: capitalize;'""",script: """this.\$router.push("/translator-assistant/0");""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
         ]
         childDataframes = ['vueAddNewRecordForCurrentProjectDataframe','vueGridOfTranslatedTextDataframe']
         currentFrameLayout= ref("vueElintegroTranslatorDataframeLayout")
@@ -289,7 +290,7 @@ beans{
 
         ]
         dataframeButtons=[
-                save: [name: "save",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script:"this.saveNewlyAddedRecord();"]
+                save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script:"this.saveNewlyAddedRecord();"]
         ]
         childDataframes = ['vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe']
         currentFrameLayout = ref("vueAddNewRecordForCurrentProjectDataframeLayout")
@@ -305,7 +306,7 @@ beans{
         doAfterRefresh = """ params.transits.text.value = self.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.Text;"""
         addFieldDef = ["text":[ widget: "TextAreaWidgetVue",attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """]]
         dataframeButtons=[
-                save: [name: "save",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script:"this.updateEditedTextInGrid();"]
+                save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script:"this.updateEditedTextInGrid();"]
         ]
         currentFrameLayout = ref("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframeLayout")
     }
@@ -353,8 +354,8 @@ beans{
                                                          ,vuetifyIcon: [name: "delete"]
                                                         ]]]]
         ]]
-        dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = 'translateWithGoogleButtonShowHide' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""],
-                            downloadTargetPropertyFile: [name: "downloadTargetPropertyFile",type: "button",attr: """style='background-color:#2ab6f6; color:white;' v-show = '!downLoadButtonShowHide' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.downloadTargetFile()"""]
+        dataframeButtons = [translateWithGoogle: [name: "translateWithGoogle",type: "button",attr: """style='background-color:#1976D2; color:white;'  v-show = 'translateWithGoogleButtonShowHide' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.retrieveTranslatedText()"""],
+                            downloadTargetPropertyFile: [name: "downloadTargetPropertyFile",type: "button",attr: """style='background-color:#1976D2; color:white;'  v-show = '!downLoadButtonShowHide' """,flexGridValues:['xs12', 'sm12', 'md0', 'lg0', 'xl0'],script: """this.downloadTargetFile()"""]
         ]
         childDataframes = ["vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe","vueDialogBoxForNotLoggedInUserDataframe"]
         currentFrameLayout= ref("vueGridOfTranslatedTextDataframeLayout")
@@ -366,7 +367,7 @@ beans{
         saveButton = true
         initOnPageLoad = false
         putFillInitDataMethod = true
-        saveButtonAttr = """style='background-color:#2ab6f6; color:white;' """
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doBeforeRefresh =  """ let textId = self.vueEditTranslatedRecordsOfGridDataframe_prop.key;
@@ -390,8 +391,8 @@ beans{
                              ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
                              ]
         ]
-        dataframeButtons = [googleTranslate: [name: "googleTranslate",type: "button",attr: """style='background-color:#2ab6f6; color:white;'""",script: """ this.googleTranslateForEachRecord();""",flexGridValues:['xs12', 'sm12', 'md4', 'lg4', 'xl4']],
-                            restore: [name: "restore",type: "button",attr:"""style='background-color:#2ab6f6; color:white;'""",script: """this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();""", flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2']]
+        dataframeButtons = [googleTranslate: [name: "googleTranslate",type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """ this.googleTranslateForEachRecord();""",flexGridValues:['xs12', 'sm12', 'md4', 'lg4', 'xl4']],
+                            restore: [name: "restore",type: "button",attr:"""style='background-color:#1976D2; color:white;' """,script: """this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();""", flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2']]
         ]
         currentFrameLayout = ref("vueEditTranslatedRecordsOfGridDataframeLayout")
     }
@@ -408,8 +409,8 @@ beans{
         saveButton = false
         route = true
         currentRoute = 'login-page'
-        dataframeButtons = [register: [name: "register",type: "button", showAsDialog: true, attr:"""style='background-color:#2ab6f6; color:white;'""", refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
-                            login: [name: "login",type:"button",showAsDialog: true,attr:"""style='background-color:#2ab6f6; color:white;'""",refDataframe: ref("vueElintegroLoginDataframe"),tooltip: [message: 'Login'], flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
+        dataframeButtons = [register: [name: "register",type: "button", showAsDialog: true, attr:"""style='background-color:#1976D2; color:white;' """, refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'], "flexGridValues": ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                            login: [name: "login",type:"button",showAsDialog: true,attr:"""style='background-color:#1976D2; color:white;' """,refDataframe: ref("vueElintegroLoginDataframe"),tooltip: [message: 'Login'], flexGridValues:['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
         ]
         currentFrameLayout =ref("vueDialogBoxForNotLoggedInUserDataframeLayout")
     }
