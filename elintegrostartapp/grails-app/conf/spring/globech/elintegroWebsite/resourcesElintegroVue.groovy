@@ -168,43 +168,10 @@ beans {
                         ,avatarWidth      :'400'
                         ,avatarHeight     :'auto'
                         ,url:'/'
-                        ,onButtonClick : [
-                        ['actionName': 'Edit client Project', 'buttons': [
-                                [name : "edit"
-                                 ,MaxWidth: 500
-                                 ,showAsDialog: true
-                                 ,tooltip : [message: "tooltip.grid.edit", internationalization: true]
-                                 ,refDataframe: ref("clientProjectEditDataframe")
-                                 ,vuetifyIcon : [name: "edit"]
-                                 ,refreshInitialData:true
-                                ]]]]
 
                 ]
         ]
-        childDataframes = ['clientProjectEditDataframe']
         currentFrameLayout = ref("clientProjectPageDataframeLayout")
-
-    }
-    clientProjectEditDataframe(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['clientProjectEditDataframe']
-        hql = """select clientProject.id, clientProject.clientName, clientProject.projectName, clientProject.logo, clientProject.description, clientProject.linkToWebsite from ClientProject clientProject where clientProject.id=:id"""
-
-        initOnPageLoad = true
-        putFillInitDataMethod = true
-        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        saveButton = true
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-
-        doAfterSave = """
-                         excon.refreshDataForGrid(response,'vueClientProjectDataframe', 'clientProject', 'U', "transits");
-                         excon.setVisibility("clientProjectEditDataframe", false);
-"""
-
-        doBeforeSave = """
-"""
-        doBeforeRefresh=""""""
-        currentFrameLayout = ref("defaultDataframeLayout")
 
     }
     vueElintegroAppsDataframe(DataframeVue){bean ->
@@ -377,11 +344,7 @@ beans {
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         tab = true
         isGlobal = false
-        //Was in >>>>>>> EWEB-68-refactoring
-        //isGlobal = true
         doBeforeSave = """
-            //Take key fields values from previous dataframe and apply them for the key field of this dataframe to update the record, rather then insert a new one.                          
-            excon.matchKeysFromDataframeTo("vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe");
               const applicationId = excon.getFromStore("vueNewEmployeeBasicInformationDataframe", "domain_keys.application.id")  
               params.persisters.application.id.value = applicationId;
               params.namedParameters.id.value = applicationId;
@@ -410,8 +373,6 @@ beans {
 
         dataframeButtons = [ previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
                                         flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
-//                             next:[name:"next", type: "button",script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeSelfAssesmentDataframe-tab-id");\n""",
-//                                   flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("vueNewEmployeeUploadResumeDataframeLayout")
     }
@@ -551,7 +512,7 @@ beans {
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         route = true
         currentRoute = 'contact-us'
-        doAfterSave = """excon.showAlertMessage(response);"""
+        doAfterSave = """excon.showAlertMessage(response);window.location.reload();"""
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
                 "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue",validate: true]]
@@ -637,7 +598,7 @@ beans {
                 "confirmPassword":[name:"confirmPassword"
                                    ,widget:"PasswordWidgetVue"
                                    , "insertAfter":"newPassword"
-                                   ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroChangeForgotPasswordDataframe_newPassword)",message:"Password.and.Confirm.Password."]]],
+                                   ,"validationRules":[[condition:"v => !!(v==this.state.transits.newPassword.value)",message:"Password.and.Confirm.Password."]]],
         ]
         dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.changeForgotPassword();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroForgetPasswordDataframeLayout")
@@ -692,7 +653,7 @@ beans {
                 "person.mainPicture": [
                         "widget" : "PictureDisplayWidgetVue",
                         "layout": "<v-layout align-center justify-center><v-avatar :size=\"90\" style='margin-top:0px;' color=\"grey lighten-4\">[FIELD_SCRIPT]</v-avatar></v-layout>",
-                        "aspectRatio":"2.5",
+                        "aspectRatio":"1.0",
                 ],
                 "person.firstName": [
                         "widget" : "InputWidgetVue",

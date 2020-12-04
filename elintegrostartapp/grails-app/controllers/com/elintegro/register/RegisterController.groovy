@@ -140,7 +140,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     def forgotPassword() {
         def params = request.getJSON()
 
-        ForgotPasswordCommand forgotPasswordCommand = getForgetPasswordCommandObject(params.email)
+        ForgotPasswordCommand forgotPasswordCommand = getForgetPasswordCommandObject(params.persisters.user.email.value)
         def user = findUserByUsername(forgotPasswordCommand.username)
         def jsonMap
         String msg
@@ -201,7 +201,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
        if (registrationCode) {
            try {
                User user1 = User.findByUsername(registrationCode.username)
-               user1.password = param.vueElintegroChangeForgotPasswordDataframe_newPassword
+               user1.password = param.transits.newPassword.value
                user1.save(flush: true)
                registrationCode.delete(flush: true)
                msg = message(code: 'password.changed.successfully')

@@ -185,8 +185,6 @@ beans {
 
     }
     vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
-//        data = """progressBarValue:'',"""
-//        watch =  """progressBarValueChanged:{handler: function(val, oldVal) {this.progressBarValue = val;}},\n"""
         computed = """progressBarValue(){ 
                                           var progressValue = this.state.progressValue;
                                           if(progressValue == undefined || progressValue == null || progressValue == ''){
@@ -196,29 +194,6 @@ beans {
                                           }
                                         },\n"""
     }
-
-/*
-    loginNavigationVue_script(VueJsEntity) { bean ->
-        data = "loginNavigationVue_show:true,"
-        watch = """registerStateChanged:{handler: function(response, oldVal) {
-                                       this.enableDisableNotification(response.data);
-                                       }},
-               loginClose:{handler: function(response, oldVal) {
-                                       this.vueLoginDataframe_display = false;
-                                       }}"""
-        computed = """registerStateChanged() {return this.\$store.state.loginNavigationVue;},\n
-                loginClose() {return this.\$store.state.vueInitDataframe.vueLoginDataframe_display;}
-                                              """
-        methods =
-                """  enableDisableNotification:function(data){
-                                                if(data.success){
-                                                    this.vueRegisterDataframe_display = false;
-                                                }
-                                               } ,  \n
-                                               """
-    }
-*/
-
 
     vueAddressDataframe_script(VueJsEntity) { bean ->
 
@@ -262,13 +237,7 @@ beans {
                     },"""
     }
 
-/*
-    vueLoginDataframe_script(VueJsEntity) { bean ->
-        methods = """dialogBoxClose(){
-                    console.log("login dataframe close button.");
-                    },"""
-    }
-*/
+
     vueElintegroForgetPasswordDataframe_script(VueJsEntity){bean ->
         methods = """
                    forgotPassword(){
@@ -286,9 +255,9 @@ beans {
                                                 var response = responseData.data;
                                                 excon.showAlertMessage(response);
                                                 if(response.success == true){
-                                                  setTimeout(function(){excon.redirectPage(self,"home");},6000);
+                                                  setTimeout(function(){excon.redirectPage(self,"home");},3000);
                                                 }else{
-                                                     setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe',true);},4000);
+                                                     setTimeout(function(){excon.setVisibility('vueElintegroRegisterDataframe',true);},3000);
                                                 }
                                         })
                                   }
@@ -318,38 +287,6 @@ beans {
                   """
     }
 
-/*
-    vueAfterLoggedinDataframe_script(VueJsEntity) { bean ->
-        data = "avatarSize : 40,\n"
-        created = "this.populateAfterLoggedIn();\n"
-        methods = """populateAfterLoggedIn: function(){
-                            var authType = this.\$store.state.vueInitDataframe.authentication
-                            var name = "";
-                            var imgUrl = "";
-                            if(authType == 'oauth'){
-                                var details = this.\$store.state.vueInitDataframe
-                               this.vueAfterLoggedinDataframe_person_firstName = details.name;
-                                this.vueAfterLoggedinDataframe_person_mainPicture = details.imageUrl;
-                            }else{
-                var params = {};
-                params["id"] = eval(this.namedParamKey);
-                params['dataframe'] = 'vueAfterLoggedinDataframe';
-                excon.callApi('dataframe/ajaxValues', 'get', params).then(function(responseData) {
-                    if(responseData == undefined ||  responseData.data == undefined || responseData.data.data == undefined){
-                        console.log("Error login for the user");
-                        store.commit('alertMessage', {'snackbar':true, 'alert_type':'error', 'alert_message':"Login failed"})
-                    }
-                    var response = responseData.data.data;
-                    imgUrl = response['vueAfterLoggedinDataframe.person.mainPicture'] ?  '/images/'+response['vueAfterLoggedinDataframe.person.mainPicture'] : "assets/default_profile.jpg";
-                    vueAfterLoggedinDataframeVar.vueAfterLoggedinDataframe_person_mainPicture = imgUrl;
-                }).catch(function(error) {
-                    console.log(error);
-                });
-                            }
-                            
-                     },"""
-    }
-*/
     vueElintegroLoginDataframe_script(VueJsEntity) { bean ->
         boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
         String loginAuthenticateUrl = loginWithSpringSecurity?"login/authenticate" : "login/loginUser"
@@ -391,63 +328,6 @@ beans {
         data = "vueRegisterDataframe_display:true,\n checkboxSelected: [],\n"
     }
 
-/*
-    vueApplicationFormDataframe_script(VueJsEntity) { bean ->
-        data = "vueApplicationFormDataframe_tab_model : this.tabValue,\nvueApplicationFormDataframe_display: true, \n"
-        computed = """tabValue(){return this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model}"""
-        watch = """ tabValue:{handler: function(val, oldVal) {this.vueApplicationFormDataframe_tab_model = val;}},"""
-
-    }
-*/
-
-/*
-    vueMedicalRecordDataframe_script(VueJsEntity){bean->
-        computed = """ 
-                      closePrescriptionMedication(){
-                                      return this.\$store.state.vuePrescribedMedicationsDataframe_display;
-                                      },\n"""
-        watch = """
-                    closePrescriptionMedication:{handler: function(val, oldVal) {
-                             this.vuePrescribedMedicationsDataframe_display = false;}},\n"""
-
-    }
-
-    vueMedicationsGridDataframe_script(VueJsEntity){bean ->
-        created = "this.getDefaultDataHeaders(); "
-    }
-    vueMedicationsGridDetailDataframe_script(VueJsEntity){bean -> */
-/* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*//*
-
-        watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridDetailDataframe_fillInitData();}},"""
-        computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordDetailDataframe', 'key');
-                                      return (data!='' && data!= undefined)?data:null},"""
-    }
-
-    vueMedicationsGridEditDataframe_script(VueJsEntity){bean -> */
-/* watch = """ vueApplicationFormDetailDataframe_prop: { deep:true, handler: function(){ this.vueApplicationFormDetailDataframe_fillInitData(); } },"""*//*
-
-        watch = """ callInitMethod:{handler: function(val, oldVal) {this.vueMedicationsGridEditDataframe_fillInitData();}},"""
-        computed = """ callInitMethod(){  const data = excon.getFromStore('vueMedicalRecordEditDataframe', 'key');
-                                      return (data!='' && data!= undefined)?data:null},"""
-    }
-*/
-/*
-    vueRegisterMenuDataframe_script(VueJsEntity){bean ->
-
-        methods = """ showContactDetails: function(dfrName, contactType){
-                         routeId = contactType?contactType:""
-                         dfrName = dfrName.toLowerCase();
-                         this.\$router.push({
-                         name: dfrName,
-                         path: dfrName,
-                         params: {
-                           dfrName: "test",
-                           routeId: contactType
-                         }
-                       })
-                      }"""
-    }
-*/
     vueEmployeeAddressDataframe_script(VueJsEntity) { bean ->
 
         data = """ updatedAddressValue:'', \n """
@@ -489,90 +369,7 @@ beans {
                                      vueEmployeeAddressDataframeVar.vueEmployeeAddressDataframe_address_addressLine = result[0].formatted_address;
                     },"""
     }
-/*
-    vueProviderAddressDataframe_script(VueJsEntity) { bean ->
 
-        data = """ updatedAddressValue:'', \n """
-        methods = """updateAddressFields(result){
-                    console.log("updateAddressFields.");
-                        var results = result[0].address_components;
-                        jQuery(results).each(function(index){
-                                         let typeString = jQuery(this)[0].types[0];
-                                         let nameString = jQuery(this)[0].long_name;
-                                         if(typeString =="subpremise"){
-                                         console.log("Apartment:"+typeString+"::::::"+nameString);
-                                         vueProviderAddressDataframeVar.vueProviderAddressDataframe_address_apartment = nameString;
-                                         }
-                                         if(typeString =="street_address"){
-                                         console.log("Street:"+typeString+"::::::"+nameString);
-                                         vueProviderAddressDataframeVar.vueProviderAddressDataframe_address_area = nameString;
-                                         }
-                                         if(typeString =="route"){
-                                         console.log("Street:"+typeString+"::::::"+nameString);
-                                          vueProviderAddressDataframeVar.vueProviderAddressDataframe_address_street = nameString;
-                                         }
-                                         if(typeString =="locality"){
-                                         console.log("City:"+typeString+"::::::"+nameString);
-                                         vueProviderAddressDataframeVar.vueProviderAddressDataframe_address_cityString = nameString;
-                                         }
-                                         if(typeString =="country"){
-                                           console.log("Country:"+typeString+"::::::"+ nameString);
-                                          vueProviderAddressDataframeVar.vueProviderAddressDataframe_address_countryString = nameString;
-                                         }
-                                         if(typeString =="postal_code"){
-                                          vueProviderAddressDataframeVar.vueProviderAddressDataframe_address_postalZip = nameString;
-                                         }
-                                         if(typeString =="street_number"){
-                                         console.log("street_number:"+typeString+"::::::"+nameString);
-                                          jQuery("#addressDataframe-address-streetNbr").val(nameString);
-                                         }
-                                     });
-                                     vueProviderAddressDataframeVar.vueProviderAddressDataframe_address_addressText = result[0].formatted_address;
-                                     vueProviderAddressDataframeVar.vueProviderAddressDataframe_address_addressLine = result[0].formatted_address;
-                    },"""
-    }
-    vueVendorAddressDataframe_script(VueJsEntity) { bean ->
-
-        data = """ updatedAddressValue:'', \n """
-        methods = """updateAddressFields(result){
-                    console.log("updateAddressFields.");
-                        var results = result[0].address_components;
-                        jQuery(results).each(function(index){
-                                         let typeString = jQuery(this)[0].types[0];
-                                         let nameString = jQuery(this)[0].long_name;
-                                         if(typeString =="subpremise"){
-                                         console.log("Apartment:"+typeString+"::::::"+nameString);
-                                         vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_apartment = nameString;
-                                         }
-                                         if(typeString =="street_address"){
-                                         console.log("Street:"+typeString+"::::::"+nameString);
-                                         vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_area = nameString;
-                                         }
-                                         if(typeString =="route"){
-                                         console.log("Street:"+typeString+"::::::"+nameString);
-                                          vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_street = nameString;
-                                         }
-                                         if(typeString =="locality"){
-                                         console.log("City:"+typeString+"::::::"+nameString);
-                                         vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_cityString = nameString;
-                                         }
-                                         if(typeString =="country"){
-                                           console.log("Country:"+typeString+"::::::"+ nameString);
-                                          vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_countryString = nameString;
-                                         }
-                                         if(typeString =="postal_code"){
-                                          vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_postalZip = nameString;
-                                         }
-                                         if(typeString =="street_number"){
-                                         console.log("street_number:"+typeString+"::::::"+nameString);
-                                          jQuery("#addressDataframe-address-streetNbr").val(nameString);
-                                         }
-                                     });
-                                     vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_addressText = result[0].formatted_address;
-                                     vueVendorAddressDataframeVar.vueVendorAddressDataframe_address_addressLine = result[0].formatted_address;
-                    },"""
-    }
-*/
     vueAddressDetailDataframe_script(VueJsEntity) { bean ->
 
         watch = """ refreshVueAddressDataframe:{handler: function(val, oldVal) {this.vueAddressDetailDataframe_fillInitData();}},"""
@@ -666,7 +463,7 @@ beans {
                                     excon.callApi('register/createLeadUser', 'post', params).then(function(responseData){
                                            console.log(responseData);
                                            excon.showAlertMessage(responseData.data);
-                                           setTimeout(function(){window.location.reload();}, 6000);
+                                           window.location.reload();
                                     })
                                     },\n"""
     }
@@ -684,7 +481,7 @@ beans {
                                            if(response.success == true){
                                               setTimeout(function(){window.open("/","_self");}, 2000);
                                            }else{
-                                                setTimeout(function(){window.location.reload();},3000);
+                                                setTimeout(function(){window.location.reload();},2000);
                                            }
                                            
                                     })
@@ -963,9 +760,9 @@ beans {
                                             this.isHidden = true
                                         }
                                         stateValues.targetLanguage = params.language;
+                                        stateValues['projectId'] = this.state.projectId;
+                                        stateValues['sourceLanguage'] = this.state.persisters.project.sourceLanguage.value;
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe',stateValues);
-                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','projectId',this.state.projectId)
-                                        excon.saveToStore('vueGridOfTranslatedTextDataframe','sourceLanguage',this.state.persisters.project.sourceLanguage.value)
                                         excon.fillInitialData(stateValues);
 
                              },\n
@@ -993,8 +790,6 @@ beans {
                                                  excon.redirectPage(self,"login-page");
                                             })
                                        }                 
-                                        
-                                        
                              },\n
 
 
@@ -1042,16 +837,11 @@ beans {
         """
     }
     vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
-/*
-        watch = """ refreshVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe:{handler: function(val, oldVal) {this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_fillInitData();}},"""
-        computed = """refreshVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(){var textToEdit = this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text;
-                            return textToEdit;}"""
-*/
         methods = """
                    updateEditedTextInGrid(){
-                                      var translatedData = {text:this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text, targetLanguage:this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.targetLanguage};
-                                      var response = {newData:{textToTranslate:translatedData}};
-                                      excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'vueAddNewRecordForCurrentProjectDataframe_textToTranslate', 'U'); 
+                                      var translatedData = {text:{value:this.state.transits.text.value}, language:{value:this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.TargetLanguage}};
+                                      var response = {persisters:{textToTranslate:translatedData}};
+                                      excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'textToTranslate', 'U', 'transits'); 
                                       excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
                    },\n
                    closeVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(){

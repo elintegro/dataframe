@@ -301,9 +301,9 @@ beans{
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         saveButton = false
         doBeforeRefresh = """ params['projectId'] = excon.getFromStore('vueTranslatorDataframe','projectId');
-                              this.state.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_text_text = this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.text;
                           """
-        addFieldDef = ["text.text":[ widget: "TextAreaWidgetVue",attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """]]
+        doAfterRefresh = """ params.transits.text.value = self.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.Text;"""
+        addFieldDef = ["text":[ widget: "TextAreaWidgetVue",attr: """ outlined   background-color='#EBF9FF !important' color='#2AB6F6' """]]
         dataframeButtons=[
                 save: [name: "save",type: "button",attr: """style='background-color:#2ab6f6; color:white;' """,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script:"this.updateEditedTextInGrid();"]
         ]

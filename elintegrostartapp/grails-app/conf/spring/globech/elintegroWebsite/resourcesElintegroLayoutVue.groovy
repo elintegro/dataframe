@@ -240,10 +240,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-card color="light-blue darken-2 mt-2" text id="vueElintegroAfterLoggedinDataframe_id" @click="vueElintegroProfileMenuDataframe_display = true;" ><v-layout row align-center justify-center> [person.mainPicture][REF_FIELD]</v-layout></v-card>"""
     }
-//    vueElintegroProfileMenuDataframeLayout(ColumnLayoutVue){bean ->
-//        layoutBeanName = bean.name
-//        layoutPlaceHolder = """<v-card color="default" text id="vueElintegroProfileMenuDataframe-id" style="overflow: hidden;"><v-form  ref='vueElintegroProfileMenuDataframe_form'><v-container class="pa-2"><v-layout wrap><v-flex xs12 sm12 md12 lg12 xl12><v-subheader class="subheading">Hello, {{vueElintegroProfileMenuDataframe_person_fullName}}</v-subheader></v-flex>[person.mainPicture]</v-layout></v-container></v-form>[BUTTON_SCRIPT]</v-card>"""
-//    }
+
     vueElintegroProfileMenuDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 style="width:250px;" > <v-card round class='rounded-card' color="default" text id="vueElintegroProfileMenuDataframe-id" style="overflow: hidden;">
@@ -309,31 +306,5 @@ beans {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-    buttonTechnologiesLayout(RowLayoutVue){bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex> <router-view name='vueTechnologiesDataframe'/>
-
-                                           </v-flex>"""
-    }*/
-//    buttonLayout(ColumnLayoutVue){bean ->
-//        layoutBeanName = bean.name
-//        layoutPlaceHolder = """<v-flex >[home] [clientsProjects] [technologies] [gettingStarted]</v-flex>
-//                                   <v-flex>[carrers] [contactUs] [login] [register] </v-flex>"""
-//    }
-
 
 }

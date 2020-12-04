@@ -31,7 +31,7 @@ beans {
 				"vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe","vueElintegroApplicantDetailsDataframe",
 
 				//Dataframes used in client project and technologies page
-				"vueTechnologiesDataframe","clientProjectEditDataframe","vueClientProjectDataframe",
+				"vueTechnologiesDataframe","vueClientProjectDataframe",
 
 				//Dataframes used in login/registration flow...
 				"vueElintegroForgetPasswordDataframe","vueElintegroChangeForgotPasswordDataframe","vueElintegroLoginDataframe","vueElintegroRegisterDataframe",
