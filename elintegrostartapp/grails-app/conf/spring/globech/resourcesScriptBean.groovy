@@ -642,25 +642,28 @@ beans {
         methods ="""afterRefreshing(response){
               
                                  let params = response;
-                                 let fileName = params.persisters.files.fileName.value;
-                                  let extension = fileName.split('.').pop();
-                                  let stateValues = excon.getFromStore("vueElintegroApplicantCVDataframe");
-                                  if(extension == 'pdf'){
-                                    let defaultImageUrlForPdf = '${pathForPdf}'
-                                    stateValues.persisters.files.fileName.value = '${pathForPdf}';
-                                  }
-                                  else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
-                                    stateValues.persisters.files.fileName.value = '${pathForExcel}';
-                                  }
-                                  else if(extension == 'doc' || extension == 'docx'){
-                                    stateValues.persisters.files.fileName.value = '${pathForDocFile}';
-                                  }
-                                  else if(extension == 'csv' || extension == 'CSV'){
-                                    stateValues.persisters.files.fileName.value = '${pathForCsvFile}';
-                                  }
-                                  excon.saveToStore('vueElintegroApplicantCVDataframe','vueElintegroApplicantCVDataframe_files_fileName_name',fileName)
-                                  
-                                  excon.saveToStore('vueElintegroApplicantCVDataframe',stateValues);  
+                                 if(params.persisters){
+                                     let fileName = params.persisters.files.fileName.value;
+                                      let extension = fileName.split('.').pop();
+                                      let stateValues = excon.getFromStore("vueElintegroApplicantCVDataframe");
+                                      if(extension == 'pdf'){
+                                        let defaultImageUrlForPdf = '${pathForPdf}'
+                                        stateValues.persisters.files.fileName.value = '${pathForPdf}';
+                                      }
+                                      else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
+                                        stateValues.persisters.files.fileName.value = '${pathForExcel}';
+                                      }
+                                      else if(extension == 'doc' || extension == 'docx'){
+                                        stateValues.persisters.files.fileName.value = '${pathForDocFile}';
+                                      }
+                                      else if(extension == 'csv' || extension == 'CSV'){
+                                        stateValues.persisters.files.fileName.value = '${pathForCsvFile}';
+                                      }
+                                      stateValues.persisters.files.fileName.value_name = fileName;
+                                      excon.saveToStore('vueElintegroApplicantCVDataframe',stateValues);
+                                  }else{
+                                  console.log("File not found...")
+                                  }  
                                  
                                   },\n
                               

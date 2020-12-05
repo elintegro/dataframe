@@ -694,7 +694,7 @@ beans {
         wrapInForm=true
         childDataframes=["vueElintegroResetPasswordDataframe"]
         doBeforeSave = """params.persisters.person.mainPicture.value = params.transits.uploadPicture.value[0].imageName;"""
-        doAfterSave = """setTimeout(function(){ self.\$router.push('/');window.location.reload();}, 3000);"""
+        doAfterSave = """setTimeout(function(){window.location.reload();}, 3000);"""
         route = true
         addFieldDef =[
                 "person.id":[
