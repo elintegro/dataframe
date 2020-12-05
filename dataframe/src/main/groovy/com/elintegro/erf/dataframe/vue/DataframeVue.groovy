@@ -396,12 +396,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vueDataFillScript.append("\n")
 		}
 		vueSaveVariables.append(widget.getVueSaveVariables(this, field))
-/*
-		if (field?.validate) {
-			String valKey = getDataVariableForVue(field) + "_rule"
-			vueDataVariable.append("$valKey : ${field.validate.rule},\n")
-		}
-*/
 		return [fieldLayout, fieldCount]
 	}
 
@@ -432,7 +426,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				List gridvaluesSave = flexGridValuesForSaveButton?:LayoutVue.defaultButtonGridValues
 				String saveGridValueString = LayoutVue.convertListToString(gridvaluesSave)
 				String saveButtonLabel = messageSource.getMessage("${dataframeName}.button.save", null, messageSource.getMessage("button.save", null, "Save", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
-//				buttonHtmlStringBuilder.append(applyLayoutForButton("<v-btn type='button' class='text-capitalize' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr>${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString))     // TODO  i18n
 				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $saveButtonAlignment' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr :loading='${dataframeName}_save_loading' >${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString)     // TODO  i18n
 				vueJsBuilder.addToMethodScript(getSaveDataScript(this, vueSaveVariables, vueFileSaveVariables))
 				this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "saveButton", btnScript)
@@ -446,7 +439,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 				String insertButtonAlignment = insertButtonAlignment?:"left"
 				String insertButtonLabel = messageSource.getMessage("${dataframeName}.button.insert", null, messageSource.getMessage("button.insert", null, "Insert", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
-				//buttonHtmlStringBuilder.append(applylayoutforbutton("<v-btn type='button' class='text-capitalize' id='$dataframename-insert' @click='${dataframename}_insert' $insertbuttonattr>${insertbuttonlabel}</v-btn>\n", layoutforinsertbutton, insertgridvaluestring))
 				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $insertButtonAlignment' id='$dataframeName-insert' @click='${dataframeName}_insert' $insertButtonAttr>${insertButtonLabel}</v-btn>\n", layoutForInsertButton, insertGridValueString)
 				vueJsBuilder.addToMethodScript(getResetScript(this, keyFieldNames))
 				this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "insertButton", btnScript)
@@ -459,7 +451,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 			String resetButtonAlignment = resetButtonAlignment?:"left"
 			String resetButtonLabel = messageSource.getMessage("${dataframeName}.button.reset", null, messageSource.getMessage("button.reset", null, "Reset", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
-			//buttonHtmlStringBuilder.append(applylayoutforbutton("<v-btn type='button' class='text-capitalize' id='$dataframename-insert' @click='${dataframename}_insert' $insertbuttonattr>${insertbuttonlabel}</v-btn>\n", layoutforinsertbutton, insertgridvaluestring))
 			String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $resetButtonAlignment' id='$dataframeName-reset' @click='${dataframeName}_reset' $resetButtonAttr>${resetButtonLabel}</v-btn>\n", layoutForResetButton, resetGridValueString)
 			vueJsBuilder.addToMethodScript(getResetScript(this, keyFieldNames))
 			this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, "resetButton", btnScript)
@@ -485,17 +476,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			}
 		}
 
-/*		if (ajaxCreateUrl){
-			def ajaxScripts = getAjaxDefaultValueScripts()
-			resultPageJs.append(ajaxScripts)
-		}*/
 		for(Entry<String, DFButton> entry: dataframeButtons.entrySet()){
 			DFButton btn = (DFButton)entry.value;
 			btn.name = entry.key;
 			String btnScript = getBtnWidget(btn)
 
 			this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, btn.name, btnScript)
-			//buttonHtmlStringBuilder.append(btnString)
 
 			DataframeVue refDf
 			if(btn.refDataframe){
@@ -508,9 +494,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 
 		this.currentFrameLayout.applyLayoutForButton(resultHtml, remainingButtons, wrapButtons)
-		/*buttonHtmlStringBuilder.append("</v-layout></v-container></v-card-actions>\n")
-		buttonHtmlStringBuilder.append(" <font color='red'><div id='$dataframeName-errorContainer'></div></font>\n");*/
-
 	}
 
 	private void constructVueComponent(VueJsBuilder vueJsBuilder, String dfrHtml){
@@ -776,12 +759,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(initValues && initValues.state){
 			vStore.addToState(initValues.state)
 		}
-
-/*
-		vStore.addToState("key:''\n,")
-		vStore.addToState("doRefresh: {},\n")
-		vStore.addToState("newData: {},\n")
-*/
 	}
 
 	public List getKeyFieldNameForNamedParameter(df){
@@ -834,9 +811,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		String gridValueString = LayoutVue.convertListToString(flexGridValues)
 		String btnStringWithLayout = applyLayoutForButton(btnString.toString(), layout, gridValueString)
 		String btnStringWithLayoutAndSpringSecurity = WidgetVue.wrapWithSpringSecurityVue( btn, btnStringWithLayout)
-		//String btnStringWithLayoutAndSpringSecurity = WidgetVue.wrapWithSpringSecurity( btn, btnStringWithLayout)
 		return btnStringWithLayoutAndSpringSecurity
-		//return btnStringWithLayout
 	}
 
 	private String applyLayoutForButton(String btnString, String LayoutString, String gridValueString){

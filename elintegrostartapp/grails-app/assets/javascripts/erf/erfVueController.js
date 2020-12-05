@@ -277,7 +277,6 @@ var excon = new Vue({
             store.dispatch("saveData", params);
         },
         callApi: function(url, method, params){
-            console.log(params)
             method = method || 'post';
             return axios({
                 method:method,

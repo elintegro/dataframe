@@ -58,13 +58,6 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
     }
     //	saves onetomany and manytomany
     private boolean saveHasManyAssociation(JSONArray inputValue, def refDomainClass, String fieldName, def domainInstance) {
-        def oldfldVal = domainInstance."${fieldName}"
-//        if (oldfldVal) {
-//            JSONArray oldfldValArr = new JSONArray(domainInstance."${fieldName}")
-//            if (isSelectionEqualsToOld(oldfldVal, inputValue)) {
-//                return false
-//            }
-//        }
         domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
         //Here i have tried to save fileName,fileType,fileStorageSize in Files table ,if we need to save other attributes(fields) in future, change this code accordingly.
         //Todo : Need to make this code more generic if possible so that we don't have to manually add hardcoded fields (like fileName,fileType.. )

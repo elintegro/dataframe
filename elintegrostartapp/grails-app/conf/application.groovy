@@ -139,12 +139,12 @@ images {
 	storageLocation = "/usr/local/opt/apache-tomcat-9.0.33/webapps"
 	environments{
 		development {
-			storageLocation = "${userHome}/.elintegrostartapp"
+			storageLocation = "${userHome}/.$appName"
 		}
 	}
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
-	defaultImagePath = "/assets/$defaultImageName"
+	defaultImagePath = "assets/$defaultImageName"
 	defaultImageForPdf = "defaultPdfIcon.PNG"
 	defaultImagePathForPdf = "assets/$defaultImageForPdf"
 	defaultImageForExcel = 'defaultExcelFileIcon.PNG'

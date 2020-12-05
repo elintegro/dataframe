@@ -36,13 +36,10 @@ class DfrCompBuilder {
         StringBuilder vueActionsSb = new StringBuilder()
         StringBuilder vueStateGlobalSb = new StringBuilder()
 
-//        List dataframesList = new ArrayList()
         for(String df: dataframes){
             dfrCompToRegisterSb.append(VueJsBuilder.createCompRegistrationString(df))
             DataframeVue dataframe = DataframeVue.getDataframe(df)
-//            dataframesList.add(dataframe)
             dataframe.getHtml()
-//            initVueScript(df)
             if(dataframe.isGlobal){
                 ResultPageHtmlBuilder.registeredComponents?.add(dataframe.dataframeName)
                 vueGlobalCompScriptSb.append(dataframe.getJavascript()+"\n")
@@ -122,89 +119,6 @@ class DfrCompBuilder {
         return vueStoreSb.toString()
     }
 
-    private static void createStoreScript( dataframes, StringBuilder vueStoreSb){
-        StringBuilder stateSb = new StringBuilder()
-        StringBuilder mutationSb = new StringBuilder()
-        stateSb.append("state:{\n")
-        mutationSb.append("mutations:{\n")
-        for(String dfs: dataframes){
-            DataframeVue df = DataframeVue.getDataframe(dfs)
-            String dataframeName = df.dataframeName
-            String dataframeStateNameString = "$dataframeName:{\nkey:'',\n}"
-            if(df.createStore && df.vueStore.isEmpty() && !df.stateStringBuilder){
-                stateSb.append(dataframeStateNameString)
-                stateSb.append(",\n")
-//                appendStateForChildrenDfr(stateSb, df)
-            }else{
-                if(!df.vueStore.isEmpty()){
-//                    if(df.vueStore.state){
-                    if(!stateSb.contains("$dataframeName")){
-                        stateSb.append("$dataframeName:{\n")
-                        stateSb.append("key:'',\n")
-                        stateSb.append(df.vueStore.state)
-                        stateSb.append("},\n")
-                    }else{
-                        String stateConstruct = "$dataframeName:{\nkey:'',\n" + df.vueStore.state + df.stateStringBuilder.toString() + "},\n"
-                        int stInd = stateSb.indexOf("$dataframeStateNameString")
-                        int ltInd = dataframeStateNameString.length() + 1
-                        if(stInd > -1){
-                            stateSb.replace(stInd, ltInd , stateConstruct)
-                        }
-                    }
-//                    }
-
-                    if(df.vueStore.mutations){
-                        mutationSb.append(df.vueStore.mutations)
-                    }
-                }
-            }
-            stateSb.append(df.store.state?.toString())
-            mutationSb.append(df.store.mutation?.toString())
-        }
-        stateSb.append(ResultPageHtmlBuilder.globalParametersInStore?.toString())
-        stateSb.append("},\n") //End of State
-        mutationSb.append("},\n")
-        vueStoreSb.append(stateSb.toString())
-        vueStoreSb.append(mutationSb.toString())
-
-//        createStoreScriptMap(dataframes)
-    }
-
-    private static void createStoreScriptMap(List dataframeList){
-        Map store = new HashMap()
-        store.put("state", new HashMap())
-        store.put("mutations", new ArrayList())
-        Map state = store.get("state")
-        List mutations = store.get("mutations")
-        for(String dfs: dataframeList) {
-            DataframeVue df = DataframeVue.getDataframe(dfs)
-            String dataframeName = df.dataframeName
-            if(df.createStore && df.vueStore.isEmpty()){
-                if(!state.containsKey(dataframeName)){
-                    Map stateMap = new HashMap()
-                    state.put(dataframeName, stateMap)
-                }
-            }else{
-                if(!df.vueStore.isEmpty()){
-                    if(df.vueStore.state){
-                        if(state.containsKey(dataframeName)){
-                            List oldDataframeList = state.get(dataframeName) as List
-                            oldDataframeList.add(df.vueStore.state)
-                        }else{
-                            state.put(dataframeName, df.vueStore.state)
-                        }
-                    }
-
-                    if(df.vueStore.mutations){
-                        mutations.add(df.vueStore.mutations)
-                    }
-                }
-            }
-        }
-
-        println store.toString()
-
-    }
 // The following method puts child states inside parent state.
     private static appendStateForChildrenDfr(stateSb, df){
         List childrenDataframesL = new ArrayList()

@@ -52,13 +52,13 @@ beans {
                             if(personId){
                                 let userProfileMenu = excon.getFromStore("vueElintegroProfileMenuDataframe");
                                 userProfileMenu.persisters.person.id = personId;
-                                userProfileMenu.persisters.person.mainPicture.value = 'profileDetail/imageData'
+//                                userProfileMenu.persisters.person.mainPicture.value = 'profileDetail/imageData'
                                 userProfileMenu.domain_keys.person.id = personId;
                                 userProfileMenu.namedParameters.session_userid.value = personId;
                                 excon.saveToStore("vueElintegroProfileMenuDataframe", userProfileMenu);
                                 let userProfile = excon.getFromStore("vueElintegroUserProfileDataframe");
                                 userProfile.persisters.person.id = personId;
-                                userProfile.persisters.person.mainPicture.value = 'profileDetail/imageData'
+//                                userProfile.persisters.person.mainPicture.value = 'profileDetail/imageData'
                                 userProfile.domain_keys.person.id = personId;
                                 userProfile.namedParameters.id.value = personId;
                                 excon.callApi('dataframe/ajaxValues', 'POST', userProfile).then((response)=>{
@@ -199,7 +199,6 @@ beans {
 
         data = """ updatedAddressValue:'', \n """
         methods = """updateAddressFields(result){
-                    console.log("updateAddressFields.");
                         var results = result[0].address_components;
                         for(var i = 0; i < results.length; i++){
                                          let typeString = results[i].types[0];
@@ -332,7 +331,6 @@ beans {
 
         data = """ updatedAddressValue:'', \n """
         methods = """updateAddressFields(result){
-                    console.log("updateAddressFields.");
                         var results = result[0].address_components;
                         jQuery(results).each(function(index){
                                          let typeString = jQuery(this)[0].types[0];
@@ -372,10 +370,11 @@ beans {
 
     vueAddressDetailDataframe_script(VueJsEntity) { bean ->
 
+/*
         watch = """ refreshVueAddressDataframe:{handler: function(val, oldVal) {this.vueAddressDetailDataframe_fillInitData();}},"""
         computed = "refreshVueAddressDataframe(){return this.\$store.state.vueContactDetailDataframe.key},"
+*/
         methods = """updateAddressFields(result){
-                    console.log("updateAddressFields.");
                         var results = result[0].address_components;
                         jQuery(results).each(function(index){
                                          let typeString = jQuery(this)[0].types[0];
@@ -415,10 +414,11 @@ beans {
     vueAddressEditDataframe_script(VueJsEntity) { bean ->
 
         data = """ updatedAddressValue:'', \n """
+/*
         watch = """ refreshVueAddressDataframe:{handler: function(val, oldVal) {this.vueAddressEditDataframe_fillInitData();}},"""
         computed = "refreshVueAddressDataframe(){return this.\$store.state.vueContactEditDataframe.key},"
+*/
         methods = """updateAddressFields(result){
-                    console.log("updateAddressFields.");
                         var results = result[0].address_components;
                         jQuery(results).each(function(index){
                                          let typeString = jQuery(this)[0].types[0];
@@ -461,7 +461,6 @@ beans {
                                     params['dataframe'] = 'vueElintegroSignUpQuizDataframe';
                                     var self = this;
                                     excon.callApi('register/createLeadUser', 'post', params).then(function(responseData){
-                                           console.log(responseData);
                                            excon.showAlertMessage(responseData.data);
                                            window.location.reload();
                                     })
@@ -499,7 +498,6 @@ beans {
                              link.click();
                    },\n
                    changeSelectedLanguageValue(params){
-                           console.log(params);
                            var currentUrl = window.location.href;
                            var splittedCurrentUrl = currentUrl.split("#");
                            var replacedCurrentUrl = splittedCurrentUrl[0].replace('$defaultUrl/','');
@@ -568,10 +566,8 @@ beans {
                       /* This method is an example of possibility to manipulate the objects on the Front-end*/
                       newEmployeeBasicInformation_doSomething(){
                        //Can use all javascript arsenal
-                       console.log("Inside employeeinformation")
                        // Can create variabbles and access this.state.<dataframe> JSON objects
                        var details = this.state.vueNewEmployeeBasicInformationDataframe
-                       console.log(details)
                        //Run existing methods, defined in Datfram descriptor and generated by the framework 
                        if (this.\$refs.vueNewEmployeeBasicInformationDataframe_form.validate()){
                        //Even call a backend!
@@ -579,7 +575,6 @@ beans {
                           var response = responseData;
                           //Use excon object to store/retrieve data fro the store.state.<dataframe>....
                           excon.saveToStore("vueNewEmployeeBasicInformationDataframe","state",response.data.data)                                                                                                            
-                          console.log(response)                            
                         });
                 
                         excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
@@ -592,18 +587,13 @@ beans {
         methods = """
                  fillApplicationSkillTable(){  
                  var details = this.state.vueNewEmployeeSelfAssesmentDataframe
-                 console.log(details);
                  var params = {};
                        var self = this;
                        params['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
-                       
                        params['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
                        excon.callApi('EmployeeApplication/initiateSkillSet', 'post', params).then(function(responseData){
                          self.vueNewEmployeeSelfAssesmentDataframe_fillInitData();
-                         
                           var response = responseData;
-                          console.log(response)
-                        
                 });
                  
                   }
@@ -619,7 +609,6 @@ beans {
                                            var response = responseData.data;
                                            excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
                                            excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'I','transits');                                                 
-                                           console.log(response)                      
                                     });
                   }"""
 

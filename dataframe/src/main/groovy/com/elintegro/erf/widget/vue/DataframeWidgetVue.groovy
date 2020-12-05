@@ -92,16 +92,6 @@ class DataframeWidgetVue extends WidgetVue{
         }
     }
 
-    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-        Dataframe refDataframe = getReferenceDataframe(field.dataframe)
-        String fldParam = dataframe.getFieldId(field)
-        String refDataframeName = refDataframe.dataframeName
-//        String namedParamKey = "this.\$store.state.${dataframe.dataframeName}.${refDataframeName}.key"
-        String namedParamKey = "this.\$store.state.${refDataframeName}.key"
-
-        return ""
-    }
-
     String getComputedMethods(DataframeVue dataframe, Map field, String divId, String fldId, String key){
         Dataframe refDataframe = getReferenceDataframe(field.dataframe)
         return vuecomputedMethodScriptString
@@ -118,8 +108,6 @@ class DataframeWidgetVue extends WidgetVue{
         //validations
         assert(fieldnameToReload)
         def inputFieldValue = inputData.get(fieldnameToReload)
-
-//		assert(inputFieldValue)
 
         def vMember = fieldProps.valueMember
         assert(vMember)

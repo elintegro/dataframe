@@ -13,8 +13,6 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
-import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.util.Holders
@@ -69,7 +67,8 @@ class PictureDisplayWidgetVue extends WidgetVue{
     private String getUrl(Map fieldProps, def value){
         String defImgUrl = fieldProps.url?:getDefaultImageName()
         def imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/"
-        String url = value?"profileDetail/imageData/$value":defImgUrl
+        String api = fieldProps.api?:"fileDownload/fileDownload"
+        String url = value?(api + "/" + value):defImgUrl
         String alt = value?:defImgUrl
         return url
     }

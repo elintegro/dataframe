@@ -28,7 +28,6 @@ class PhoneNumberWidgetVue extends WidgetVue{
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = getFieldName(dataframe, field)
         boolean isReadOnly = dataframe.isReadOnly(field)
-        //String modelString = dataframe.getFieldJSONModelNameVue(field)
         String label = field.label
         return """
                <v-text-field
@@ -57,24 +56,6 @@ class PhoneNumberWidgetVue extends WidgetVue{
     }
 
 
-//    @Override
-//    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) {
-//        String errorMessage = field.errMessage?:"Phone Number must be valid"
-//        def phoneRegex = Holders.getGrailsApplication().getParentContext().getMessage("phone.validation.expression", null, Holders.grailsApplication.config.regex.phone?:null, LocaleContextHolder.getLocale());
-//        if (phoneRegex){
-//            field.put("regex",phoneRegex)
-//            String regex = "/${phoneRegex}/"
-//            if (field?.validate){
-//                def rule = field.validate.rule
-//                rule.add('(v) => '+regex+".test(v) || '$errorMessage'")
-//            }else {
-//                field << ["validate":["rule":['(v) => '+regex+".test(v) || '$errorMessage'"]]]
-//            }
-//        }
-//        String vueInstance = dataframe.dataframeName+"_instance"
-////        return """this.$dataVariable = response['$key'];"""
-//        return ""
-//    }
        String unitTestForPhoneRegex(Locale locale){
        def phoneRegex = Holders.getGrailsApplication().getParentContext().getMessage("phone.validation.expression", null, null, locale);
        println(phoneRegex)

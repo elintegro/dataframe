@@ -79,44 +79,6 @@ class LayoutVue extends Layout {
     private openingTagAttached = false
     int fieldCount = 0
 
-
-
-    //Load all Layouts from the com.elintegro.erf.layout package:
-    static{
-
-        //List<Class<?>> classLst = com.elintegro.utils.FactoryUtils.getClassesForPackage(Layout.class.package)
-
-        //List classLst2 = new File("/com/elintegro/erf/layout")
-
-        /*new File("/com/elintegro/erf/layout").eachFile(){file ->
-            if(file.getName()){
-                Class clazz = Class.forName(file.getName(), true, Thread.currentThread().contextClassLoader)
-                Layout newLayoutObj = clazz.newInstance()
-                newLayoutObj.setLayoutName()
-                layouts.put(file.getName(), newLayoutObj)
-            }
-            */
-        println("Inside Layout")
-    }
-
-
-    /**
-     * The layouts are equal if thir names are equal and placeHolder is null (standard layouts)
-     * or names are equal and placeholders are equal (custom layouts)
-     * @param compLayout
-     * @return
-     */
-    final boolean equals(LayoutVue compLayout){
-        boolean ret = false
-
-        if(this.name == name && !layoutPlaceHolder){
-            ret = true
-        }else if(this.name == name && layoutPlaceHolder == layoutPlaceHolder){
-            ret = true
-        }
-        return ret
-    }
-
     void applyLayoutForField(StringBuilder resultPagehtml, StringBuilder fieldsHtmlBuilder, String widgetForm, String fieldName, String fldNameAlias, String childDataframe) throws LayoutException{
         String eitherFieldNamePlaceHolder = "[$fieldName]"
         String childFieldNamePlaceHolder = childDataframe.trim()?"[$childDataframe]":"[EMBEDDED_DATAFRAME_SCRIPT]"
@@ -228,20 +190,6 @@ class LayoutVue extends Layout {
         insertDataframeLabel(resultPageHtml, df)
     }
 
-    private String setDataframeFields(String dfrHtml, String formattedDfName, String defaultMarkupPlaceholder, String dataframeHtmltoAppend, DataframeVue df){
-
-
-        StringBuilder sb = new StringBuilder()
-        sb.append(getWrapperLayoutForFieldsInGroupOpenTag())
-        sb.append(dfrHtml)
-        sb.append(getErrorContainerHtml())
-        sb.append(dataframeHtmltoAppend)
-        sb.append(getWrapperLayoutForFieldsInGroupCloseTag())
-        dfrHtml = this.layoutPlaceHolder.replace(formattedDfName, sb.toString())
-        dfrHtml = insertDataframeLabel(dfrHtml, df)
-        return dfrHtml
-    }
-
     private void insertDataframeLabel(StringBuilder resultPageHtml, DataframeVue df){
 
 
@@ -311,25 +259,6 @@ class LayoutVue extends Layout {
             }
         }
     }
-    void applyLayout(StringBuffer resultPage, WidgetVue widget, String widgetForm, String fieldName, int seq) throws LayoutException {
-
-        if(seq == 0){//I'm calling for the first time (field)
-            resultPage.append(wrapWithTag("<v-flex>", convertListToString(flexGridValues), widgetForm))
-        }
-
-//        def retInd = applyLayoutForCustomPlaceholder(resultPage, widget, widgetForm, fieldName, seq)
-
-        if(retInd < 0){
-            numberOfNonCustomFields++
-            applyLayoutForField(resultPage, widget, widgetForm, fieldName, seq)
-        }
-
-        if(seq == this.numberFields-1){ //I'm calling for the last time
-            numberOfNonCustomFields = 0
-//            resultPage.append(lastSectionEnd)
-        }
-    }
-
     public static String convertListToString(flexGridValues){
         if(flexGridValues == null || flexGridValues.isEmpty()){
             return ""
@@ -380,97 +309,6 @@ class LayoutVue extends Layout {
         LayoutVue layoutVue = (LayoutVue)Holders.grailsApplication.mainContext.getBean(containerLayoutStr)
         return layoutVue
     }
-
-//    Older layout bbuilder methods
-   /* public static String constructFinalHtml(dataframes){
-        StringBuilder resultPageHtml = new StringBuilder();
-        for(def df : dataframes) {
-            DataframeVue dataframe = (DataframeVue)Holders.grailsApplication.mainContext.getBean(df)
-            applyFinalLayout(resultPageHtml, dataframe)
-//            resultPageHtml.append(dataframe.getComponentName().toString()+"\n")
-        }
-//        addWrapperClasses(resultPageHtml)
-//        addNavigationPanel(resultPageHtml)
-//        addFooterPanel(resultPageHtml)
-//        wrapWithTag("<v-app>","",resultPageHtml)
-//        wrapWithTag("<div>","id='app'",resultPageHtml)
-
-        return resultPageHtml.toString()
-
-    }
-
-    private static String applyFinalLayout(resultPageHtml, df){
-        StringBuilder constructedLayoutHtml = new StringBuilder()
-        String formattedDfName = df.dataframeName?"["+df.dataframeName+"]":""
-//        Set<String> layoutsSet = new HashSet()
-        def dfrFrameLayout = df.currentFrameLayout
-//        String fullLayout = addAllParentLayouts(df.currentFrameLayout, constructedLayoutHtml, resultPageHtml)
-        String fullLayout = addAllParentLayouts(dfrFrameLayout, constructedLayoutHtml, resultPageHtml)
-        if(resultPageHtml == null || resultPageHtml.length() == 0){
-            resultPageHtml.append(fullLayout)
-        }
-        String currentLayoutName = dfrFrameLayout.layoutBeanName
-        if(currentLayoutName.equalsIgnoreCase("defaultDataframeLayout")){
-            String markupPlaceholder = "[DATAFRAME_MARKUP]"
-            int stInd = resultPageHtml.indexOf(markupPlaceholder)
-            if(stInd>0){
-                int endInd = stInd + markupPlaceholder.length()
-                resultPageHtml.replace(stInd, endInd, df.getHtml())
-//                resultPageHtml.replace(stInd, endInd, df.getComponentName())
-            }
-        }else {
-            int stInd = resultPageHtml.indexOf(formattedDfName)
-            if(stInd>0){
-                int endInd = stInd + formattedDfName.length()
-                resultPageHtml.replace(stInd, endInd, df.getHtml())
-//                resultPageHtml.replace(stInd, endInd, df.getComponentName())
-            }
-        }
-
-    }
-
-    private static String addAllParentLayouts(currentLayout, constructedLayoutHtml, resultPageHtml){
-        LayoutVue parentLayout = currentLayout?.parentLayout
-        if(!parentLayout){
-            return constructedLayoutHtml.toString()
-        }
-        
-        String dataframeLayoutName = currentLayout.layoutBeanName
-        String formattedDataframeLayoutName = "["+dataframeLayoutName + "]"
-//        layoutsSet.add(formattedDataframeLayoutName)
-        String parentLayoutPlaceholder = parentLayout.layoutPlaceHolder?:""
-        int stInd = parentLayoutPlaceholder.indexOf(formattedDataframeLayoutName)
-        int endInd = stInd + formattedDataframeLayoutName.length()
-
-        if(constructedLayoutHtml){
-            int sI = resultPageHtml.indexOf(formattedDataframeLayoutName)
-            if(sI>0){
-                int eI = sI + formattedDataframeLayoutName.length()
-                resultPageHtml.replace(sI,eI, constructedLayoutHtml.toString())
-                println("Adding Layout: "+dataframeLayoutName)
-                return resultPageHtml.toString()
-            }else{
-                if(stInd>0){
-                    parentLayoutPlaceholder = parentLayoutPlaceholder.replace(formattedDataframeLayoutName, constructedLayoutHtml.toString())
-                }
-                constructedLayoutHtml = new StringBuilder()
-                constructedLayoutHtml.append(parentLayoutPlaceholder)
-                addAllParentLayouts(parentLayout, constructedLayoutHtml, resultPageHtml)
-            }
-        }else{
-            String currentLayoutPlaceholder = currentLayout.layoutPlaceHolder
-            *//*if(stInd>0){
-//                int endInd = stInd + formattedDataframeLayoutName.length()
-                parentLayoutPlaceholder = parentLayoutPlaceholder.replace(formattedDataframeLayoutName, currentLayoutPlaceholder)
-            }*//*
-            *//*constructedLayoutHtml.append(parentLayoutPlaceholder)*//*
-            constructedLayoutHtml.append(currentLayoutPlaceholder)
-            addAllParentLayouts(currentLayout, constructedLayoutHtml, resultPageHtml)
-        }
-    }*/
-
-//    Newer component bbased layout bubilder methods
-
 
     private static String addWrapperClasses(resultPage){
         List contentAttrList = [""]
@@ -582,14 +420,12 @@ class LayoutVue extends Layout {
             if(stInd>0){
                 int endInd = stInd + markupPlaceholder.length()
                 resultPageHtml.replace(stInd, endInd, df.getHtml())
-//                resultPageHtml.replace(stInd, endInd, df.getComponentName())
             }
         }else {
             int stInd = resultPageHtml.indexOf(formattedDfName)
             if(stInd>0){
                 int endInd = stInd + formattedDfName.length()
                 resultPageHtml.replace(stInd, endInd, df.getHtml())
-//                resultPageHtml.replace(stInd, endInd, df.getComponentName())
             }
         }
     }

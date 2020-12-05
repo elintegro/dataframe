@@ -24,7 +24,6 @@ class TextDisplayWidgetVue extends WidgetVue{
         if(field.hide && field.hide == true){
             return ""
         }
-        String dataVariableForVue = getFieldName(dataframe, field)
         String fldName = field.name
         def fldNameDefault = WordUtils.capitalizeFully(fldName);
         String labelCode = field.labelCode?:fldName

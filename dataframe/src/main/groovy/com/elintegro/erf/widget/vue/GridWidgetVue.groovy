@@ -291,7 +291,6 @@ $fieldParams
 
     public Map loadAdditionalData(DataframeInstance dataframeInst, Map fieldProps, String fieldnameToReload, Map inputData, def dbSession){
         DataframeVue dataframe = dataframeInst.df;
-//        Map fieldProps = dataframe.fields.get(fieldnameToReload);
         //Add fields from the Dataframe as possible input parameters for the additional HQL:
         inputData.putAll(dataframeInst.getFieldValuesAsKeyValueMap());
         Map sessionParams = dataframeInst.sessionParams
@@ -313,7 +312,6 @@ $fieldParams
                 parsedHql = new ParsedHql(fieldProps.hql, dataframe.grailsApplication, dataframe.sessionFactory)
             }
             List dataHeader =  fieldProps.get("dataHeader");
-//            getNamedParameterValue(dataframeInst,inputData, parsedHql, fieldProps)
             def dbSession = dataframe.sessionFactory.openSession()
             DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
             List resultList = dbRes.getResultList();
@@ -331,13 +329,11 @@ $fieldParams
 
     public void getNamedParameterValue(dfInstance,inputData, parsedHql, fieldProps){
         Dataframe dataframe = dfInstance.df
-//        Map sessionParams = dfInstance.sessionParams
         if(parsedHql.namedParameters){
             parsedHql.namedParameters.each{
                 String key = it.getKey()
                 if(fieldProps.containsKey(key)){
                     String hql = fieldProps.get(key)
-//                inputData << sessionParams
                     ParsedHql parsedHql1 = new ParsedHql(hql, dataframe.grailsApplication, dataframe.sessionFactory)
                     DbResult dbRes = new DbResult(hql, inputData, dataframe.sessionFactory.openSession(), parsedHql1)
                     List resultList = dbRes.getResultList()
@@ -454,12 +450,10 @@ $fieldParams
 
         if(onClickMap.showAsDialog){
             resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" width='${getWidth(onClickMap)}' max-width='${getMaxWidth(onClickMap)}' >""")
-//            resultPageHtml.append(refDataframe.getComponentName())
             resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref' :${refDataframeName}_prop="${refDataframeName}_data"></component>""")
             resultPageHtml.append("""</v-dialog>""")
         }else{
             resultPageHtml.append("""<div v-show="visibility.${refDataframeName}" max-width="${getMaxWidth(onClickMap)}">""")
-//            resultPageHtml.append(refDataframe.getComponentName())
             resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref' :${refDataframeName}_prop="${refDataframeName}_data" v-bind:refreshGrid="true"></component>""")
             resultPageHtml.append("""</div>""")
         }
@@ -597,10 +591,6 @@ $fieldParams
 
         metadata.put("columns", getColumns(wdgHql, dataframe, fieldMetaData))
 
-        //String pkString = "";
-        //(dataframe.metaFieldService.getPk(fieldMetaData)).collect { pkString += ( pkString ? "," : "" ) + "$it"  };
-
-        //metadata.put("pk", pkString);
         metadata.put("pk", dataframe.metaFieldService.getPk(fieldMetaData));
 
 

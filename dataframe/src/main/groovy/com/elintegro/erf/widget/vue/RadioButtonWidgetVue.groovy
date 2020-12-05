@@ -58,14 +58,6 @@ class RadioButtonWidgetVue extends CollectionWidgetVue {
         fldJSON?.put("items", res)
 
         return domainFieldMap
-/*
-
-        return [$dataVariable:${selMap?selMap as JSON:"\"\""},\n
-                  ${dataVariable}_items:${res as JSON} ,\n
-                  ${dataVariable}_keys:${keys as JSON},\n
-                """
-*/
-
     }
 
     private String getRadioButtons(DataframeVue dataframe, Map field, String fldName, String label){
@@ -77,17 +69,10 @@ class RadioButtonWidgetVue extends CollectionWidgetVue {
              },\n """)
         }
         boolean isReadOnly = dataframe.isReadOnly(field)
-        String typeString = ""
-        if(!isSearchable(field)){
-            typeString = """type="button" """
-        }
-
         String displayMember = field.displayMember?:'name'
         String valueMember = field.valueMember?:'id'
         String itemsStr = getFieldJSONItems(field)
-        String modelString1 = getModelString(dataframe, field) //TODO: decide which one is correct?
         String modelString = getFieldJSONModelNameVue(field)
-        String dataVariable = dataframe.getDataVariableForVue(field)//TODO: may be we do not need it!
         return """
 
             <v-radio-group v-model="${modelString}">

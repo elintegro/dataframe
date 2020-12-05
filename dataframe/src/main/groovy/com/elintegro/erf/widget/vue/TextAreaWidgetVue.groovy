@@ -22,7 +22,6 @@ class TextAreaWidgetVue extends WidgetVue {
         boolean isReadOnly = dataframe.isReadOnly(field)
         String rows = field.rows?:'4'
         String marginBottom = field.marginBottom?:'auto'
-        //String modelString = dataframe.getFieldJSONModelNameVue(field)
         return """<v-textarea
           name="$fldName"
           label="${getLabel(field)}"

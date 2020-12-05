@@ -605,18 +605,23 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		}
 		return resValue;
 	}
-
+	protected Object getInitDataFromWidget(String fieldName, Map fieldProps){
+		if(!fieldProps.widget) return ""
+		//Init values if default values are required when creating layouts
+		Widget widgetObj = getWidget(fieldProps)
+		Object initValue = widgetObj.getInitValues(this, fieldProps)
+		//Add placeholder to additional data, if exists:
+		return initValue
+	}
 	protected addTransitFieldsToDataStructure(String fieldName, Map fieldProp) {
 		if (!this.domainFieldMap.containsKey(TRANSITS)) {
 			this.domainFieldMap.put(TRANSITS, [:])
 		}
 		Map domainFieldMapTans = this.domainFieldMap.get(TRANSITS);
 
-		//Init values if default values are required when creating layouts
-		Widget widgetObj = getWidget(fieldProp)
-		Object initValue = widgetObj.getInitValues(this, fieldProp)
 		//Add placeholder to additional data, if exists:
-		domainFieldMapTans.put(fieldName, ["${VALUE_ENTRY}": initValue])
+//		domainFieldMapTans.put(fieldName, ["${VALUE_ENTRY}":""])
+		domainFieldMapTans.put(fieldName, ["${VALUE_ENTRY}": getInitDataFromWidget(fieldName, fieldProp)])
 	}
 
 	protected void addField(String fieldName, Map<String, Object> fieldProp){
@@ -1946,7 +1951,8 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		Map domainFields = domainFieldMapPers.get(field.domain.domainAlias)
 		//TODO: remove this comment if null is acceptable as default value in the JSON converter
 		//domainFields.put(field.name, field.defaultValue ? field.defaultValue : "")
-		domainFields.put(field.name, ["${VALUE_ENTRY}":field.defaultValue]) //TODO: add here rule and dictionary if defined
+//		domainFields.put(field.name, ["${VALUE_ENTRY}":field.defaultValue]) //TODO: add here rule and dictionary if defined
+		domainFields.put(field.name, ["${VALUE_ENTRY}":getInitDataFromWidget(field.name, domainFieldMapPers)]) //TODO: add here rule and dictionary if defined
 
 		if(!this.domainFieldMap.containsKey(DOMAIN_KEYS)){
 			this.domainFieldMap.put( DOMAIN_KEYS, [:])

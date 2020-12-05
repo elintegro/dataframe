@@ -115,7 +115,6 @@ class MultiSelectComboboxVue extends WidgetVue {
             queryDomain = dfInst.getPersistentEntityFromDomainMap(domain)
             Map keysNamesAndValue = [:];
             dfInst.getKeysNamesAndValueForPk(keysNamesAndValue, domain, inputData);
-//            keysNamesAndValue = dfInst.getKeysAndValues(domain);
             if (!keysNamesAndValue.isEmpty()){
                 domainInstance = dfInst.retrieveDomainInstanceForUpdate(keysNamesAndValue, queryDomain);
             }

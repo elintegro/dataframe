@@ -36,8 +36,7 @@ class DateWidgetVue extends WidgetVue {
         String localeString = locale?"locale='$locale'":""
         String dateFormatPlaceholder = getMessageSource().getMessage("date.format.hint", null, "date.format.hint", LocaleContextHolder.getLocale())
         String menuAttr = field.menuAttr?:""
-//        :nudge-right="40"
-//
+
         String modelString = getFieldJSONModelNameVue(field)
         return """
                     <v-menu

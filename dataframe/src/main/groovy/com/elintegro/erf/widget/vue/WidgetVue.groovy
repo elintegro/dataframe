@@ -76,7 +76,6 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     }
 
     String getVuePropVariable(DataframeVue dataframe, Map field) {
-        String dataVariable = dataframe.getDataVariableForVue(field)
         return """ '${dataframe.dataframeName}_data' """
 
     }
@@ -128,20 +127,10 @@ abstract class WidgetVue extends Widget<DataframeVue>{
 
 
     String getVueSaveVariables(DataframeVue dataframe, Map field){
-        String thisFieldName = dataframe.getFieldId(field)
-        String dataVariable = dataframe.getDataVariableForVue(field)
-//        String dataVariable = dataframe.getDataVariableForVueCapitalized(field)
-//        return """params['$thisFieldName'] = this.$dataVariable;\n"""
         return ""
     }
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-        def defaultValue = field.defaultValue?:""
-        String fillState = ""
-/*
-        return """this.$dataVariable = response['$key']?response['$key']:"$defaultValue\";
-                """
-*/
         return ""
     }
 
@@ -170,10 +159,6 @@ abstract class WidgetVue extends Widget<DataframeVue>{
 
     protected String getFlexAttr(DataframeVue dataframe, Map field){
         return field.flexAttr?:""
-    }
-
-    String getEmbeddedCompScript(){
-        return ""
     }
 
     String getEmbdDfrName(){
@@ -207,13 +192,8 @@ abstract class WidgetVue extends Widget<DataframeVue>{
 
     @Override
     public Object getInitValues(DataframeVue df, Map field){
-        return null
+        return ""
     }
-
-/*    protected DataframeVue getDataframe(dataframeName){
-        DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(dataframeName)
-        return refDataframe
-    }*/
 
     String getMethodsScript(DataframeVue dataframe, Map field, String divId, String fldId, String key){
         return """""";
@@ -316,13 +296,6 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     public static String getHashIdAttribute(String hashId){
         return " :id=\"" + hashId + "\""
     }
-
-/*
-    public static String getHashIdSpan(String hashId){
-        return "<span " + getHashIdAttribute(hashId) + "/>"
-    }
-*/
-
 
     public static enum SecurityTag {
 
