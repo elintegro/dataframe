@@ -419,6 +419,15 @@ var excon = new Vue({
             else {
                 dataFrame.$router.push('/'+pageToRedirect+'/'+routeId);
             }
+        },
+        getImageDataInfo:function (file){
+            let imageData = {};
+            if(file){
+                imageData["imageName"] = file.name;
+                imageData["imageSize"] = file.size;
+                imageData["imageType"] = file.type;
+            }
+            return imageData
         }
     }
 
