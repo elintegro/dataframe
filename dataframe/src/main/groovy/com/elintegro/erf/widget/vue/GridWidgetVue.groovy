@@ -17,6 +17,7 @@ import com.elintegro.erf.dataframe.*
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.vue.DataMissingException
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.utils.MapUtil
 import grails.converters.JSON
@@ -168,7 +169,8 @@ $fieldParams
             requestFieldParams.append("\nparams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
         field.put("dataHeader", dataHeader);
-        VueStore store = dataframe.getVueJsBuilder().getVueStore()
+        VueJsBuilder vueJsBuilder = dataframe.getVueJsBuilder()
+        VueStore store = vueJsBuilder.getVueStore()
         store.addToState("${field.name}_selectedrow : '',\n")
         def parentDataframeName = dataframe.dataframeName
         String onClickMethod    = " "
@@ -177,7 +179,7 @@ $fieldParams
         if (onClick){
 //            showRefreshMethod   = true
             if(onClick.script){
-                dataframe.getVueJsBuilder().addToMethodScript(""" 
+                vueJsBuilder.addToMethodScript(""" 
                    ${fldName}_showDetail: function(dataRecord){
                               ${onClick.script}
                     },\n 
@@ -195,6 +197,7 @@ $fieldParams
             getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader, field.name)
 
         }
+        putPropWatcherForChildDataframes(dataframe)
         field.put("gridDataframeList", gridDataframeList);
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
         return """
@@ -242,6 +245,32 @@ $fieldParams
         fldJSON?.put(items, gridItems)
         fldJSON?.put(headers, gridHeaders)
         return dataframe.domainFieldMap
+    }
+
+    private void putPropWatcherForChildDataframes(DataframeVue dataframe){
+       List childDfrs = dataframe.childrenDataframes
+        if(childDfrs){
+            for(String dfr: childDfrs) {
+                if (!dfr) continue
+                DataframeVue child = DataframeVue.getDataframeByName(dfr) as DataframeVue
+                String dfrName = child.dataframeName
+
+                if(child.putFillInitDataMethod) {
+                    VueJsBuilder vueJsBuilder = child.getVueJsBuilder()
+                    vueJsBuilder.addToWatchScript(""" ${dfrName}_prop: {
+                             immediate:true,
+                             deep:true,
+                             handler: function(val, oldVal){
+                                  if(val.refreshInitialData){
+                                     this.${dfrName}_fillInitData();
+                                  } else {
+                                      console.log("${dfrName}_prop has refreshInitialData as false or undefined. Could not refresh.");
+                                  }
+                             }
+                     },\n""")
+                }
+            }
+        }
     }
 
     String getStateDataVariable(DataframeVue dataframe, Map field){
@@ -477,27 +506,16 @@ $fieldParams
         }
         DataframeVue refDataframe = getReferenceDataframe(onClickMap.refDataframe)
         String refDataframeName = refDataframe.dataframeName
-        boolean refreshInitialData = onClickMap.refreshInitialData ?:false
-        if(dataframe.createStore || dataframe.vueStore){
-            VueStore store = dataframe.getVueJsBuilder().getVueStore()
-//            store.addToState("${fldName}_grid:{},\n")
-            updateStoreCallScript = "this.${refDataframeName}_updateStore(dataRecord);"
-            dataframe.getVueJsBuilder().addToMethodScript("""${refDataframeName}_updateStore: function(data){
-                            Vue.set(this.${refDataframeName}_data, 'parentData', data);
-                    },\n """)
-        }
+        boolean refreshInitialData = onClickMap.refreshInitialData ?:true
         return """
-                              $updateStoreCallScript
-                              this.${refDataframeName}_comp = "";
                               this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
-//                              ${excon}.setSelectedGridDataToRequestParams(dataRecord, "${refDataframeName}")
+                              ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
+                              ${excon}.setVisibility("${refDataframeName}", true);
                               let propData = this.${refDataframeName}_data;
                               propData['key']=  key;
                               propData['refreshInitialData'] = ${refreshInitialData?'Math.random()':'8.0'};
                               Vue.set(this.${refDataframeName}_data, propData);
-                              ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
-                              ${excon}.setVisibility("${refDataframeName}", true);
                     \n 
                     """
     }

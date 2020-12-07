@@ -280,10 +280,18 @@ beans {
         dataframeLabelCode = "New Employee Applicant Registration"
         initOnPageLoad = false
         saveButton = false
-        isGlobal = true
+        wrapInForm = false
         route = true
-        childDataframes = ['vueNewEmployeeBasicInformationDataframe','vueNewEmployeeUploadResumeDataframe','vueNewEmployeeSelfAssesmentDataframe','vueNewEmployeeAddtionalQuestionsDataframe']
-        currentFrameLayout = ref("vueNewEmployeeApplicantDataframeLayout")
+        addFieldDef = [
+                "tab":[
+                        widget: "TabWidgetVue",
+                        dataframes : ['vueNewEmployeeBasicInformationDataframe','vueNewEmployeeUploadResumeDataframe','vueNewEmployeeSelfAssesmentDataframe','vueNewEmployeeAddtionalQuestionsDataframe']
+                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,flexAttr: "pt-0"
+                ]
+        ]
+//        childDataframes = ['vueNewEmployeeBasicInformationDataframe','vueNewEmployeeUploadResumeDataframe','vueNewEmployeeSelfAssesmentDataframe','vueNewEmployeeAddtionalQuestionsDataframe']
+        currentFrameLayout = ref("vueElintegroApplicantDetailsDataframeLayout")
     }
     vueNewEmployeeBasicInformationDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
@@ -499,8 +507,6 @@ beans {
 
     }
 
-
-
     vueContactUsPageDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueContactUsPageDataframe']
@@ -604,7 +610,6 @@ beans {
         dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.changeForgotPassword();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroForgetPasswordDataframeLayout")
     }
-
 
     vueElintegroRegisterDataframe(DataframeVue){ bean ->
 
@@ -794,6 +799,7 @@ beans {
 
         currentFrameLayout = ref("defaultDialogBoxLayout")
     }
+
     vueElintegroApplicantsDataframe(DataframeVue) { bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroApplicantsDataframe']
@@ -828,9 +834,15 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantDetailsDataframe']
         dataframeLabelCode = "Applicants Detail Information"
         initOnPageLoad = false
-        route = true
-        tab = true
-        childDataframes = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe"]
+//        tab = true
+        addFieldDef = [
+                "tab":[
+                        widget: "TabWidgetVue",
+                        dataframes : ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe"]
+                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ]
+        ]
+//        childDataframes = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe"]
         currentFrameLayout = ref("vueElintegroApplicantDetailsDataframeLayout")
     }
     vueElintegroApplicantGeneralInformationDataframe(DataframeVue){bean ->

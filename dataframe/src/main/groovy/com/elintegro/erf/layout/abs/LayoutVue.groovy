@@ -48,7 +48,7 @@ class LayoutVue extends Layout {
     static def grailsApplication
 
     static final String DEFAULT_FIELD_LAYOUT="""
-						<v-flex <%print gridValueString%> ><% print widget %></v-flex>
+						<v-flex <%print gridValueString%> <%print flexAttr%> ><% print widget %></v-flex>
 	"""
 //    <div id='<% print divId %>'>
     static final String DEFAULT_DATAFRAME_LAYOUT = """
