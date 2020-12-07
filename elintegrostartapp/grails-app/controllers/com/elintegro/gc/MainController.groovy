@@ -73,11 +73,7 @@ class MainController {
 
 	def test() {
 
-		treeWidgetDataframe.init()
-		[dataframe:treeWidgetDataframe]
-
-		//render(view: "t")
-		render(view: "test1")
+		render(view: "/test/test1")
     }
 
 	def test1() {

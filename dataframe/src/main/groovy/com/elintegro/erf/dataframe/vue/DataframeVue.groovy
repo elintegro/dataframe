@@ -502,10 +502,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		externalTemplateId?vueJsBuilder.addToTemplateScript("#$externalTemplateId"):vueJsBuilder.addToTemplateScript(dfrHtml)
 		//EU!!! Here we are adding to data!
 		vueJsBuilder.addToDataScript("overlay_dataframe:false,\n ${dataframeName}_save_loading:false,\nnamedParamKey:'',\n params:{},\n")
-		if(tab){
-			vueJsBuilder.addToDataScript("${dataframeName}_tab_model : '',\n")
-					.addToMethodScript(""" tabClicked:function(){${putFillInitDataMethod?"this.${dataframeName}_fillInitData();":""}},\n""")
-		}
+
 		if(vueJsEntity.data){
 			vueJsBuilder.addToDataScript(vueJsEntity.data)
 

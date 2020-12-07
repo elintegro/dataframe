@@ -58,7 +58,7 @@ class TestController {
         if(params.reloadPage){
             reloadPage = params.reloadPage
         }
-        render(view: '/newVue', model:[reloadPage:reloadPage, msg:msg, constructedPageHtml:struct.initHtml, constructedPageScript: struct.finalScript])
+        render(view: '/home', model:[reloadPage:reloadPage, msg:msg, constructedPageHtml:struct.initHtml, constructedPageScript: struct.finalScript])
     }
 
     def test(){
