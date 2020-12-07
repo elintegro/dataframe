@@ -13,17 +13,20 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.dataframe
 
+import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.Widget
 import grails.gorm.transactions.Transactional
 import grails.util.Holders
 import groovy.util.logging.Slf4j
 import org.apache.commons.lang.ClassUtils
+import org.apache.commons.lang.SerializationUtils
 import org.apache.commons.lang.StringUtils
 import org.grails.datastore.mapping.model.PersistentEntity
 import org.grails.datastore.mapping.model.PersistentProperty
 import org.grails.orm.hibernate.cfg.HibernatePersistentEntity
 import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 import org.hibernate.Query
 import org.hibernate.Transaction
 import org.springframework.web.context.request.RequestContextHolder
@@ -38,18 +41,20 @@ import javax.servlet.http.HttpSession
  *
  */
 @Slf4j
-class DataframeInstance {
+class DataframeInstance implements DataframeConstants{
 	private final Dataframe df
 	private final Dataframe parentDf
 	private final Map<String, String> requestParams
 	private Map<String, Object> sessionParams
 	private List results
 	private def record
+	private Map retrievedDomainData = [:]
 	private Map resultMap = [:];
+	private JSONObject jData
 	private Map<String, String> namedParmeters = [:]
 	private Map savedDomainsMap = [:];
 	private List<DataframeVue> hasManyDomainsList = []
-	private def sessionHibernate
+	def sessionHibernate
 	private boolean insertOccured = false;
 	public final String prefixForHistoryTable = "Ledger"
 
@@ -66,7 +71,7 @@ class DataframeInstance {
 		this.requestParams = requestParams
 		this.df = df
 //		sessionHibernate = SessionFactoryUtils.getSession(df.parsedHql.sessionFactory, true)
-		sessionHibernate = df.parsedHql.sessionFactory.openSession()
+		sessionHibernate = df.sessionFactory.openSession()
 	}
 
 	public void setSessionParameters(Map<String, Object> sessionParams){
@@ -79,6 +84,11 @@ class DataframeInstance {
 
 	def getDfRecord(){
 		return record
+	}
+
+	def getFieldValueFromDomain(Map field){
+		def domainInstance = retrievedDomainData.get(field.get(FIELD_PROP_DOMAIN_ALIAS))
+		return domainInstance?."${field?.name}"
 	}
 
 	def getFieldValue(Map field){
@@ -97,27 +107,7 @@ class DataframeInstance {
 		if(!df.hql){
 			return false;
 		}
-		String nm = mapFieldValue.name
-		boolean t = df.parsedHql.indexOfFileds.containsKey(mapFieldValue.name)
 		return df.parsedHql.indexOfFileds.containsKey(mapFieldValue.name)
-	}
-
-	/**
-	 *
-	 */
-	public Map getAdditionalData(String fieldName, Map parameterMap){
-		Map additionalData = [:]
-
-		def widgetObj = df.getWidget(fieldName)
-		def widgetObjDbg = df.fields.get(fieldName)?.get("widgetObject") //TODO: remove it 
-		if(fieldName.contains("paymentMethods")){
-			println "checking paymentMethods"
-		}
-
-		if(widgetObj){
-			additionalData = widgetObj.loadAdditionalData(this, fieldName, parameterMap, sessionHibernate)
-		}
-		return additionalData
 	}
 
 	private void populateInstance(){
@@ -125,75 +115,66 @@ class DataframeInstance {
 		if(!df.hql){
 			return;
 		}
-
-		Query query;
-		String sqlGenerated;
-
-		try{
-			sqlGenerated = df.parsedHql.getSqlTranslatedFromHql()
-			query =  sessionHibernate.createQuery(df.hql);
-			if(df.sql){
-				log.debug(" SQL was defined in the bean: ${df.sql}") //TODO if specified, run this thing ...
-			}
-			log.debug(" hql = $df.hql \n sqlGenerated = $sqlGenerated \n sql = $df.sql \n")
-		}catch(Exception e){
-			log.error("Hql-Sql creation problem "+e+"\n hql = $df.hql \n sql = $df.sql\n")
-		}
-
-		//EU!!!! Here we put right key field value for retrieving right record from DB
-
-		for (String parameter : query.getNamedParameters()) {
-
-			//Get named parameters from Dataframe (Its a Map that keys are parameter name (like :ownerId, without :)
-			// and the value of each element is Array of 2 elements: correspondent domain alias and field name
-			def namedParam = df.getNamedParameter(parameter);
-			String refDomainAlias =  namedParam[0];
-			String refFieldName =  namedParam[1];
-			//Build the name that suppose to be in the request with the value, coming from the front-end
-			String buildParamName = Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, parameter);
-
-			def namedParamvalue = null
-			String paramStringValue1 = ""
-			if(requestParams.containsKey(buildParamName) || requestParams.containsKey(parameter)){
-				String paramStringValue = requestParams.get(buildParamName);
-				paramStringValue1 = requestParams.get(parameter);
-				namedParamvalue = df.getTypeCastValue2(refDomainAlias, refFieldName, paramStringValue1);
-			}else{
-				if(parameter.indexOf(Dataframe.SESSION_PARAM_NAME_PREFIX) > -1){
-					paramStringValue1 = getSessionParamValue(parameter, sessionParams)
-					namedParamvalue = df.getTypeCastValue2(refDomainAlias, refFieldName, paramStringValue1);
-				}
-			}
-			namedParmeters.put(parameter, paramStringValue1)
-			query.setParameter(parameter, namedParamvalue)
-		}
-
-/*		if(requestParams.containsKey(buildParamName)){
-			String paramValue = requestParams.get(buildParamName) //EU!!! here we are trying to find a request param with the name <dataframe>-<paramName>, it is wrong!!!
-			def value = df.getTypeCastValueFromHql(parameter, requestParams.get(parameter))
-		}
-*/
-		namedParmeters.put("now", new Date())
-
+		List hqlDomains = new ArrayList<>(df.parsedHql.hqlDomains.keySet())
+		String dataRetrieveHql = createDataRetrieveHql(df, hqlDomains)
 		Transaction tx = sessionHibernate.beginTransaction()
 		try{
-
+			Query query = sessionHibernate.createQuery(dataRetrieveHql)
+			setNamedParametersFromRequestOrSession(query)
 			this.results = query.list()
 			tx.commit();
-			if(results){
-				this.record = results[0] //TODO: its hard coded assumption we have only one record per Dataframe!
-				calculateFieldValuesAsKeyValueMap();
-				log.debug("");
+			if(results && results .size() > 0){
+				this.record = results[0]
+				setRetrievedDomainDataMap(hqlDomains)
 			}else{
 				isDefault = true
-//				throw new DataframeException("No record found for the Dataframe");
+				//throw new DataframeException(df, "No record found for the Dataframe");
 			}
 
 		}catch(Exception e){
 			tx.rollback()
-			log.error"Error: ${e.message}", e
+			throw new DataframeException(df, "Error: ${e.message}", e )		}
+	}
+
+	private static String createDataRetrieveHql(Dataframe df, List hqlDomains){
+		StringBuilder dataRetrieveHqlBuilder = new StringBuilder()
+		String fromString = "from"
+		try {
+			String hqlFromSuffix = df.hql.split(fromString)[1]
+			dataRetrieveHqlBuilder.append("select ")
+			String domainString = String.join(", ", hqlDomains)
+			dataRetrieveHqlBuilder.append(domainString)
+			dataRetrieveHqlBuilder.append(" ${fromString} "+hqlFromSuffix)
+			log.info("Custom data retrieve query: "+dataRetrieveHqlBuilder.toString())
+		}catch(e){
+			throw new DataframeException(df, "Error on creating custom data retrieve query due to: ${e.message}")
+		}
+		return dataRetrieveHqlBuilder.toString()
+	}
+
+	private def setRetrievedDomainDataMap(List hqlDomains){
+		int recordIndex = 0
+		for(def domainInstance : record) {
+			retrievedDomainData.put(hqlDomains[recordIndex], domainInstance)
+			recordIndex++
+		}
+	}
+
+	private void setNamedParametersFromRequestOrSession(Query query) {
+		for (String parameter : query.getNamedParameters()) {
+
+			def namedParam = df.getNamedParameter(parameter);
+			String refDomainAlias = namedParam[0];
+			String refFieldName = namedParam[1];
+
+			def namedParameterFromRequestJsonValue = getNamedParameterFromRequestJson(requestParams, parameter, refDomainAlias, refFieldName)
+
+			namedParmeters.put(parameter, namedParameterFromRequestJsonValue.toString())
+			//TODO: check if the string represantation works corrrectly for each value type!
+			query.setParameter(parameter, namedParameterFromRequestJsonValue)
 		}
 
+		namedParmeters.put("now", new Date())
 	}
 
 
@@ -230,78 +211,25 @@ class DataframeInstance {
 	 * and return the map which can be converted to json on controller.
 	 */
 	public def buildDefaultJson(){
-
-		//retrieving from DB!
-		//populateInstance()
-
+		jData = copyDomainFieldMap()
 		Map jsonRet = [:];
-		Map jsonMapDf = [:];
-		Map jsonAdditionalData = [:];
-		Map jsonDefaults = [:];
 
 		//if( isGood()){
 		//!!!!!!!!!!!!!!!!!!!!!!!!! main loop on fields
 		df.fields.getList().each{ fieldName ->
 			Map mapFieldValue = df.fields.get(fieldName)
 			if(isFieldExistInDb(mapFieldValue)){
-
 				def fldValue = mapFieldValue.defaultValue
-				def fldDefaultValue = mapFieldValue.defaultValue
-				jsonMapDf.put(fieldName, fldValue)
-				jsonDefaults.put(fieldName, fldDefaultValue)
-
-				//Additional data:
-				//Map jsonAdditionalDataField = getAdditionalData(fieldName, jsonMapDf) //TODO: load defaultAdditional data!!!!
-				//if(jsonAdditionalDataField){
-				//	jsonAdditionalData.put(fieldName.replace(Dataframe.DOT,Dataframe.DASH), jsonAdditionalDataField)
-				//}
-
+				Widget widget = getFieldWidget(mapFieldValue)
+				widget.setPersistedValueToResponse(jData, fldValue, getFieldDomainAlias(mapFieldValue), fieldName, [:], this, sessionHibernate, mapFieldValue)
 			}
-		}//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-		//}
-		jsonMapDf.put("keys", getNamedParameters())
-		jsonMapDf.put("additionalData", jsonAdditionalData)
-
-		//Replace default add datan with relev values
-		jsonDefaults.put("keys", getNamedParameters())
-		jsonDefaults.put("additionalData", jsonAdditionalData)
-
-		//These are for refresh parent dataframe, if provided (aka requested):
-		def parentDataframe = requestParams.get('parentDataframe')
-		def parentNode = requestParams.get('parentNode')
-		def parentLevel = requestParams.get('level')
-		def parentFieldName = requestParams.get('parentFieldName')
-		def parentNodeLevel = getLevelFromUiIdConstruct(parentNode)
+		}
 
 		log.debug("\n *******   Request Params: when retrieved \n" + reqParamPrintout(requestParams) + "\n ***************\n")
 
-		//TODO: 1 All this should be coming from additionalParameters jsonMapDf[additionalParams]
-		//df.dataFrameParamsToRefresh = [parentNode:parentNode, parentDataframe:parentDataframe, level:parentLevel, parentFieldName:parentFieldName]
-		def html = df.getHtml()
-		jsonRet.put("html", html)
-		jsonRet.put("parentDataframe", parentDataframe)
-		jsonRet.put("parentNode", parentNode)
-		jsonRet.put("level", parentLevel)
-		jsonRet.put("parentFieldName", parentFieldName)
-		//TODO: 1
-
-		jsonRet.put("data", jsonMapDf)
-		jsonRet.put("default",jsonDefaults)
 		jsonRet.put("operation","R");
 		jsonRet.put("dataframe",df.dataframeName);
-
-		String domainAlias = df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0)
-
-		jsonRet.put("dataFrameParamsToRefresh",
-				[   'parentNode':parentNode,
-					'parentNodeId':getIdFromUiIdConstruct(parentNode),
-					'parentNodeLevel':getLevelFromUiIdConstruct(parentNode),
-					'parentDataframe':parentDataframe,
-					'level':parentLevel,
-					'parentFieldName': Dataframe.buildFullFieldName_(df.dataframeName, domainAlias, parentFieldName)
-				])
-
+		jsonRet.put("data", jData)
 		return jsonRet
 	}
 
@@ -319,6 +247,9 @@ class DataframeInstance {
 			//retrieving from DB!
 			populateInstance()
 		}
+
+		jData = copyDomainFieldMap()
+
 		Map jsonRet = [:];
 		Map jsonMapDf = [:];
 		Map jsonAdditionalData = [:];
@@ -331,31 +262,11 @@ class DataframeInstance {
 		if( isGood() || isDefault){
 			//!!!!!!!!!!!!!!!!!!!!!!!!! main loop on fields
 			df.fields.getList().each{ fieldName ->
-				Map mapFieldValue = df.fields.get(fieldName)
-				if(isFieldExistInDb(mapFieldValue)){
-					if (!isDefault){
-						def fldValue = getFieldValue(mapFieldValue)
-//						jsonMapDf.put(fieldName, fldValue)
-						jsonMapDf.put(fieldName.replace(Dataframe.DOT,DataframeVue.UNDERSCORE), fldValue) //Chnaged Dot to Underscore for vue
-					}
-					def fldDefaultValue = mapFieldValue.defaultValue
-//					jsonDefaults.put(fieldName, fldDefaultValue)
-					jsonDefaults.put(fieldName.replace(Dataframe.DOT,DataframeVue.UNDERSCORE), fldDefaultValue) //Chnaged Dot to Underscore for vue
-					//Additional data:
-				}
-
-				//Try to load Additional Data:
-				Map jsonAdditionalDataField = getAdditionalData(fieldName, additionalDataRequestParamMap);
-				if(jsonAdditionalDataField){
-//					if (mapFieldValue.externalDomainField && !isDefault){
-//						jsonMapDf.put(fieldName, jsonAdditionalDataField)
-//					}
-//					jsonAdditionalData.put(fieldName.replace(Dataframe.DOT,Dataframe.DASH), jsonAdditionalDataField);
-					jsonAdditionalData.put(fieldName.replace(Dataframe.DOT,DataframeVue.UNDERSCORE), jsonAdditionalDataField); // Changed Dash to underscore for vue
-				}
-
-			}//!!!!!
-
+				Map fieldProps = df.fields.get(fieldName)
+				String myDomainAlias = null
+				//load data for widgets
+				loadDataForWidgets(fieldProps, additionalDataRequestParamMap)
+			}
 		}
 		addKeyDataForNamedParameters(jsonMapDf) // adding key- fields for vue js
 		jsonMapDf.put("keys", getNamedParameters())
@@ -365,45 +276,53 @@ class DataframeInstance {
 		jsonDefaults.put("keys", getNamedParameters())
 		jsonDefaults.put("additionalData", jsonAdditionalData)
 
-		//These are for refresh parent dataframe, if provided (aka requested):
-		def parentDataframe = requestParams.get('parentDataframe')
-		def parentNode = requestParams.get('parentNode')
-		def parentLevel = requestParams.get('level')
-		def parentFieldName = requestParams.get('parentFieldName')
-		def parentNodeLevel = getLevelFromUiIdConstruct(parentNode)
 
 		log.debug("\n *******   Request Params: when retrieved \n" + reqParamPrintout(requestParams) + "\n ***************\n")
 
-		//TODO: 1 All this should be coming from additionalParameters jsonMapDf[additionalParams]
-		//df.dataFrameParamsToRefresh = [parentNode:parentNode, parentDataframe:parentDataframe, level:parentLevel, parentFieldName:parentFieldName]
-		def html = df.getHtml()
-		jsonRet.put("html", html)
-		jsonRet.put("parentDataframe", parentDataframe)
-		jsonRet.put("parentNode", parentNode)
-		jsonRet.put("level", parentLevel)
-		jsonRet.put("parentFieldName", parentFieldName)
-		jsonRet.put("dataframe",df.dataframeName);
-		//TODO: 1
+		//TODO: default data need to assign for each new json structure
 		if (isDefault){
 			jsonRet.put("data",jsonDefaults)
 		}else {
-			jsonRet.put("data", jsonMapDf)
+			//jsonRet.put("data", jsonMapDf)
+			jsonRet.put("data", jData)
 		}
 		jsonRet.put("default",jsonDefaults)
 		jsonRet.put("operation","R");
-
 		String domainAlias = df.hql?df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0):"";
-
-		jsonRet.put("dataFrameParamsToRefresh",
-				[   'parentNode':parentNode,
-					'parentNodeId':getIdFromUiIdConstruct(parentNode),
-					'parentNodeLevel':getLevelFromUiIdConstruct(parentNode),
-					'parentDataframe':parentDataframe,
-					'level':parentLevel,
-					'parentFieldName': Dataframe.buildFullFieldName_(df.dataframeName, domainAlias, parentFieldName)
-				])
-
 		return jsonRet
+	}
+
+	private void loadDataForWidgets(Map fieldProps, Map additionalDataRequestParamMap){
+
+		String fieldName = fieldProps.get(FIELD_PROP_NAME)
+		Widget widget = (Widget) fieldProps.get(FIELD_PROP_WIDGET_OBJECT)
+		if (isFieldExistInDb(fieldProps)){
+			loadPersistentData(widget, fieldProps, fieldName, additionalDataRequestParamMap, this, sessionHibernate)
+		}else {
+			loadTransientData(widget, fieldProps, fieldName, additionalDataRequestParamMap, this, sessionHibernate)
+		}
+	}
+
+	private void loadTransientData(Widget widget, Map fieldProps, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate) {
+			widget.setTransientValueToResponse(jData, additionalDataMap.get(df.VALUE_ENTRY), getFieldDomainAlias(fieldProps), fieldProps.get(DataframeConstants.FIELD_PROP_NAME), additionalDataMap, dfInstance, sessionHibernate, fieldProps)
+	}
+
+	private void loadPersistentData(Widget widget, Map fieldProps, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate) {
+		String myDomainAlias
+		if (!isDefault) {
+//			def fldValue = getFieldValue(fieldProps)
+			def fldValue = getFieldValueFromDomain(fieldProps)
+			myDomainAlias = getFieldDomainAlias(fieldProps)
+			widget.setPersistedValueToResponse(jData, fldValue, myDomainAlias, fieldName, additionalDataMap, dfInstance, sessionHibernate, fieldProps)
+		}
+	}
+
+	private String getFieldDomainAlias(Map fieldProps){
+		return fieldProps.get(FIELD_PROP_DOMAIN_ALIAS)
+	}
+
+	private Widget getFieldWidget(Map fieldProps){
+		return fieldProps.get(FIELD_PROP_WIDGET_OBJECT)
 	}
 
 	private void addKeyDataForNamedParameters(jsonMapDf){
@@ -414,7 +333,10 @@ class DataframeInstance {
 				String refDomainAlias =  namedParam[0];
 				String refFieldName =  namedParam[1];
 				String keyNamedParam = DataframeVue.buildFullFieldNameKeyParamWithDot(df, refDomainAlias, refFieldName, key);
-				jsonMapDf.put(keyNamedParam, value)
+//				jsonMapDf.put(keyNamedParam, value)
+				jsonMapDf.put("$refDomainAlias",["$refFieldName": value, "$key":value]) //todo check if this works for all cases
+
+				jData?."${DOMAIN_KEYS}".putAll(jsonMapDf)
 			}
 
 		}
@@ -436,30 +358,84 @@ class DataframeInstance {
 	 */
 
 	@Transactional
-	public List commit() throws DataManipulationException {
+	public boolean commit() throws DataManipulationException {
+		boolean ret = true
 		for ( Map.Entry<String, Object> domainInstanceName : savedDomainsMap.entrySet()) {
-			def doaminToSave = domainInstanceName.value
-			doaminToSave.save()
+			def domainToSave = domainInstanceName.value[1]
+			ret = domainToSave.save() && ret
 		}
+		return ret
 	}
 
 
-	public List save() throws DataManipulationException{
+	public boolean save() throws DataManipulationException{
 		return save(true)
 	}
 
-	public List save(boolean doCommit) throws DataManipulationException{
-		List doaminInstancesForSave = [];
+	public boolean save(boolean doCommit) throws DataManipulationException{
+		saveEmbeddedDataframe()
+		return saveWritableDomains(doCommit)
+	}
 
-		//Run save for embedded DFs first:
-		for( Map.Entry<String, DataframeVue> emdDfEntry: df.getEmbeddedDataframe()){
+	private boolean saveWritableDomains(boolean doCommit){
+		List domainInstancesForSave = []
+		df.writableDomains.each { domainName, domain ->
+
+			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
+
+			if (!(savedDomainsMap.containsKey(domainClassInfo.getDomainAlias()))) {
+				//2. Get domain Key fields to decide if this insert or update
+				boolean isInsert = isInsertDomainInstance(domainClassInfo);
+				def domainInstance = null;
+				def historyDomainInstance = null
+				if (isInsert) { //Create new domain Instance
+					domainInstance = createNewDomainInstance(domainClassInfo);
+				} else { //Retrieve domain Instance
+					domainInstance = retrieveDomainInstanceForUpdate(domainClassInfo);
+					historyDomainInstance = createNewDomainInstanceForHistoryDomain(domainClassInfo)
+				}
+
+				if (applyNewValuesToDomainInstance(domainInstance, requestParams, domainClassInfo, historyDomainInstance)) {
+					if (commitDomainInstance(domainInstance, doCommit)) {
+						//domainInstancesForSave.add(domainInstance);
+						//TODO: see if we can use one of those structures instead of 2 of them!!! - domainInstancesForSave we use in controller, so once refactoring, we will
+						//use savedDomainsMap, retrieving from domainInstance and deprcate domainInstancesForSave
+						savedDomainsMap.put(domainClassInfo.getDomainAlias(), [domain, domainInstance, isInsert]);
+					}
+				}
+			}
+		}
+		return true
+	}
+
+	private boolean commitDomainInstance(domainInstance, isChanged){
+		if(isChanged){
+			try{
+//				historyDomainInstance.close()
+				domainInstance.save(flush: true, failOnError:true)
+				return true
+			}catch(Throwable ee){
+				println(ee.getMessage())
+				log.error("Error saving " + domainInstance.toString() + "for params: " + keysNamesAndValue + " : "+ee.getMessage())
+				return false
+			}
+		}else{
+			log.warn("Somebody hit the save button but never changed a thing, so we will not invoke save ! ")
+			return true
+		}
+
+		return false
+	}
+	private void saveEmbeddedDataframe() {
+//Run save for embedded DFs first:
+		for (Map.Entry<String, DataframeVue> emdDfEntry : df.getEmbeddedDataframe()) {
 			DataframeVue embDf = emdDfEntry.getValue();
 			def key = emdDfEntry.getKey()
 			def dfInstance = new DataframeInstance(embDf, requestParams)
 			def res = dfInstance.save();
 			embeddedDomainInstance.add(res)
 			// =====   Assign new key values to key fields here if insert happened
-			embDf.parsedHql.getNamedParameters().each{paramName, paramData ->
+			embDf.parsedHql.getNamedParameters().each { paramName, paramData ->
 				String domainAlias = paramData[0]
 				String dbFieldname = paramData[1];
 				def domainMap = embDf.parsedHql.hqlDomains.get(domainAlias);
@@ -468,11 +444,11 @@ class DataframeInstance {
 				String keyFldNameToPopulateWithValue = DataframeVue.buildFullFieldNameKeyParam(embDf, domainAlias, dbFieldname, paramName);//Changed for vue
 				String keyCurrentValue = requestParams.get(keyFldNameToPopulateWithValue);
 				//Finding new Value:
-				res.each{ domainInst ->
-					String domainShortNameFromInstance = getMyDomaunShortName(domainInst);
-					if(domainShortNameFromInstance.equals(domainShortName)){
+				res.each { domainInst ->
+					String domainShortNameFromInstance = getMyDomainShortName(domainInst);
+					if (domainShortNameFromInstance.equals(domainShortName)) {
 						String newValue = String.valueOf(domainInst."${dbFieldname}");
-						if(!newValue.equals(keyCurrentValue)){
+						if (!newValue.equals(keyCurrentValue)) {
 							requestParams.put(keyFldNameToPopulateWithValue, newValue);
 						}
 					}
@@ -487,91 +463,55 @@ class DataframeInstance {
 //				}
 
 		}
-
-		df.writableDomains.each{ domainName, domain ->
-
-			PersistentEntity queryDomain = null;
-			DomainClassInfo parsedDomain = domain.get("parsedDomain");
-			String domainAlias =  parsedDomain.getDomainAlias();
-
-			if(parsedDomain != null){
-				queryDomain =  parsedDomain.getValue();
-			}else{
-				throw new DataframeException("Cannot find domain to save a record for Datafame ${df.dataframeName}");
-			}
-
-			//String doaminFullName = df.dataframeName + Dataframe.DASH + domainAlias;
-			String doaminFullName = domainAlias;
-			if(!(savedDomainsMap.containsKey(doaminFullName))){
-				//2. Get domain Key fields to decide if this insert or update
-				Map keysNamesAndValue = [:];
-				boolean isInsert  = isInsertDomainInstance(keysNamesAndValue, domain);
-				def domainInstance = null;
-				def historyDomainInstance = null
-				if(isInsert){ //Create new domain Instance
-					insertOccured = true;
-					domainInstance = createNewDomainInstance(keysNamesAndValue, queryDomain);
-				}else{ //Retrieve domain Instance
-					domainInstance = retrieveDomainInstanceForUpdate(keysNamesAndValue, queryDomain);
-					historyDomainInstance = createNewDomainInstanceForHistoryDomain(keysNamesAndValue, queryDomain)
-				}
-
-				if(applyNewValuesToDomainInstanceAndSave(domainInstance, requestParams, keysNamesAndValue, domain, historyDomainInstance, doCommit)){
-					doaminInstancesForSave.add(domainInstance);
-					savedDomainsMap.put(doaminFullName, domainInstance);
-				}
-			}
-		}//End of df.writableDomains.each{
-
-		return doaminInstancesForSave;
-
-		//TODO: bellow code may me needed in future for one-to-many and bidirectional relational domain save
-//		if (hasManyDomainsList.size() > 0){
-//			hasManyDomainsList.each { embdfr ->
-//				String domainAlias = embdfr.hql?embdfr.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0):""
-//				def parentFieldName = df.hql?df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0):""
-//				def keyFldNameToPopulateWithValue = Dataframe.buildFullFieldName_(embdfr.dataframeName, domainAlias, parentFieldName)
-//				String keyCurrentValue = requestParams.get(keyFldNameToPopulateWithValue)
-//				def parentNameParams = df.parsedHql.getNamedParameters().values().toArray()[0]
-//				def dbFieldname = parentNameParams[1]
-//				doaminInstancesForSave.each{ domainInst ->
-//					String newValue = String.valueOf(domainInst."${dbFieldname}")
-//					if(!newValue.equals(keyCurrentValue)){
-//						requestParams.put(keyFldNameToPopulateWithValue, newValue)
-//					}
-//				}
-//				def dfInstance1 = new DataframeInstance(embdfr, requestParams)
-//				def res = dfInstance1.save()
-//
-//			}
-//		}
 	}
 
 
-
 	public boolean isInsertOccured() {
-		return insertOccured;
+		return insertOccured
 	}
 
 
 	public def getSavedDomainsMap(){
-		return savedDomainsMap;
+		return savedDomainsMap
 	}
 
+	public def isMultipleDomainsToSave(){
+		return (savedDomainsMap?.size() > 1)
+	}
 
-	private def createNewDomainInstance(Map keysNamesAndValue, PersistentEntity domain){
-		def newInstance =  domain.newInstance()
-		//Populate the keys TODO: do we really need it?
+	public boolean setInterDomainRelationships(Map savedDomainMap) {
+		if (!isMultipleDomainsToSave() || !isInsertOccured()) {return false}
+		for(JoinParsed join : df?.parsedHql?.joins){
+			def srcDomain = savedDomainMap.get(join.sourceDomain)
+			def defSrcDomainInstance = srcDomain[1]
+			def targetDomainInstance = savedDomainMap.get(join.targetDomain)
+			defSrcDomainInstance."${join.sourceField}" = targetDomainInstance[1]
+			defSrcDomainInstance.save(flush: true)
+		}
+		return true
+	}
 
+	private def createNewDomainInstance(DomainClassInfo  domainClassInfo) {
+		PersistentEntity queryDomain = domainClassInfo.getValue();
+		def newInstance = null
+		try {
+
+			newInstance = queryDomain.newInstance()
+		}catch(Exception ee){
+			log.error("What is it " + ee)
+		}
+		if(!newInstance){
+			throw new DataframeException(df, "Error creating a new instance ${domainClassInfo.domainAlias}")
+		}
 		return newInstance
 	}
-	private def createNewDomainInstanceForHistoryDomain(Map keysNamesAndValue, PersistentEntity domain){
+	private def createNewDomainInstanceForHistoryDomain(DomainClassInfo  domainClassInfo){
+		PersistentEntity domain = domainClassInfo.getValue();
 		Class domainName = constructHistoryDomainName(domain)
 		def newInstance = null
 		if(domainName){
 			newInstance =  domainName.newInstance()
 		}
-
 		return newInstance
 	}
 
@@ -604,79 +544,52 @@ class DataframeInstance {
 		return null;
 	}
 
-	public def retrieveDomainInstanceForUpdate(Map keysNamesAndValue, PersistentEntity domainClass){
+	public def retrieveDomainInstanceForUpdate(DomainClassInfo domainClassInfo){
+		PersistentEntity domainClass = domainClassInfo.getValue()
 		def currentInstance = null
 
-		Long idValue = getIdValue(keysNamesAndValue)
+		String domainAlias = domainClassInfo.getDomainAlias()
+		JSONObject domainKeys = requestParams?.domain_keys?."${domainAlias}"
 
-		if(idValue != null && idValue > 0){ //Retrieve by ID
-			currentInstance = domainClass.newInstance().get(idValue)
-		}else{ //It should be GrailsDomainClass instead of PersistentEntity for the following part to work.
-			String domainFullClassName = domainClass.getName()
-			int indexOfLastDot = domainFullClassName.lastIndexOf(".")
-			String domainClassName = domainFullClassName.substring(indexOfLastDot+1, domainFullClassName.length())
-			StringBuilder wherepart = new StringBuilder()
-			Map quryParamsMap = [:]
-			int i = 1
-			keysNamesAndValue.each{name, value ->
-				wherepart.append(" m.${name}=:${name} ")
-				if(i < keysNamesAndValue.size()){
-					wherepart.append(" and ")
+
+		StringBuilder findFuncName = new StringBuilder();
+		StringBuilder arguments = new StringBuilder();
+
+		int lastIndex = 1
+		domainKeys.each{key, value ->
+			//This is the most common case:
+			lastIndex++
+			String keyField = key.toString().toLowerCase().capitalize()
+			if(domainKeys.size() == 1 && (key == "id" || key == "Id") && !value && !StringUtils.isEmpty(value.toString()) && !value.toString().equalsIgnoreCase("new")){
+				return domainClass.newInstance().get(value)
+			}else{
+				arguments.append(value)
+				if(findFuncName.size() == 0){
+					findFuncName.append("findBy").append(keyField)
+				}else {
+					findFuncName.append("And").append(keyField)
+					if(lastIndex < domainKeys.size()-1) arguments.append(",")
 				}
-				quryParamsMap.put(name, value)
 			}
-//			try {
-				currentInstance = domainClass.find("from $domainClassName as m where $wherepart", quryParamsMap)
-//			}
-//			catch (Exception ee){
-//				log.error("Problem finding domain class $domainClassName")
-//			}
 		}
-		return currentInstance
+//		findFuncName.append(arguments)
+//		return domainClass.newInstance()."${findFuncName.toString()}" //Todo see why this is not working
+		return domainClassInfo.clazz."${findFuncName.toString()}"(arguments.toString())
 	}
 
-	private boolean isInsertDomainInstance(Map keysNamesAndValue, Map domain) {
-		Map inputData = requestParams
-		Set keys = domain.get("keys")
-		String keyFieldName = constructKeyFieldName(domain, inputData)
-		boolean isInsert = false
-		if(requestParams.containsKey(keyFieldName)){
-			String keyFyullParamValue = requestParams.get(keyFieldName);
-			keysNamesAndValue.put(keyFieldName, keyFyullParamValue);
-			if(StringUtils.isEmpty(keyFyullParamValue) || "[New]".equalsIgnoreCase(keyFyullParamValue) || "undefined".equals(keyFyullParamValue)){
-				requestParams.put(keyFieldName, null);
-				isInsert = true;
+	public boolean isInsertDomainInstance(DomainClassInfo domainClassInfo) {
+
+		String domainAlias = domainClassInfo.getDomainAlias()
+		Map domainKeys = requestParams?.domain_keys?."${domainAlias}"
+
+
+		for(def value:  domainKeys.values()){
+			if(!value || StringUtils.isEmpty(value.toString()) || value.toString().toLowerCase() == "new"){
+				insertOccured = true
+				return true
 			}
 		}
-		/*keys.each {keyName ->
-			//String buildParamName = Dataframe.buildKeyFieldParam(df.dataframeName, keyName)
-			def namedParam = df.getNamedParameter(keyName);
-			String refDomainAlias =  namedParam[0];
-			String refFieldName =  namedParam[1];
-			def pkField = getPkField();
-
-			if(pkField.equals(refFieldName)){
-				keyNamedParam = Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, keyName); //This is child key param name
-			}else {
-				String keyFieldName = dataframeName+"-"+domainAlias + "-" + pkField
-			}
-			String keyRefParam = Dataframe.buildFullFieldNameRefParam(df, keyName);//This is a full name, suppose to be in each dataframe, parent or child
-
-			String parentKeyParamValue = null;
-			String keyFyullParamValue = null;
-
-			if(requestParams.containsKey(keyNamedParam)){
-				keyFyullParamValue = requestParams.get(keyNamedParam);
-				keysNamesAndValue.put(keyNamedParam, keyFyullParamValue);
-				if(StringUtils.isEmpty(keyFyullParamValue) || "[New]".equalsIgnoreCase(keyFyullParamValue) || "undefined".equals(keyFyullParamValue)){
-					requestParams.put(keyNamedParam, null);
-					isInsert = true;
-				}
-			}
-		}*/
-
-		isInsert = isInsert || (keysNamesAndValue.size() < keys.size())
-		return isInsert
+		return insertOccured;
 	}
 
 	private Map<String, String> getParentRefNames(DataframeVue refDataframe) {
@@ -722,47 +635,19 @@ class DataframeInstance {
 		return keysNamesAndValue
 	}
 
-	private String constructKeyFieldName(def domain, Map inputData){
-		Set keys = domain.get("keys")
-		String keyFieldName = ""
-		String dataframeName = df.dataframeName
+	private Set<String> constructKeyFieldName(def domain){
+		Set keysNamedParams = domain.get("domainKeys")
 		String domainAlias = domain.get("domainAlias")
-		String pkField = getPkField();
-		if(keys.size() == 0){
-			keyFieldName = dataframeName+df.UNDERSCORE+domainAlias + df.UNDERSCORE + pkField
-		}
-		else {
-			keys.each {keyName ->
-				def namedParam = df.getNamedParameter(keyName);
-				String refDomainAlias =  namedParam[0];
-				String refFieldName =  namedParam[1];
-				if(domainAlias == refDomainAlias){
-					if(domainAlias.equals(refDomainAlias) && pkField.equals(refFieldName)){
-						keyFieldName = Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, keyName); //This is child key param name
-					}else {
-						keyFieldName = dataframeName+df.UNDERSCORE+domainAlias +df.UNDERSCORE + pkField
-					}
-				}
-			}
+		Set<String> keyFieldName = new HashSet<String>()
+		String dataframeName = df.dataframeName
+		keysNamedParams.each { param ->
+			keyFieldName.add(dataframeName+df.UNDERSCORE+domainAlias + df.UNDERSCORE + param)
 		}
 		return keyFieldName
-
 	}
 
-	/*private Map getKeysAndValues(Map domain) {
-		Map keysNamesAndValue = [:]
-		Set keys = domain.get("keys")
-		keys?.each {keyName ->
-			String buildParamName = Dataframe.buildFullFieldNameKeyParam(df, keyName);
-			if(requestParams.containsKey(buildParamName)){
-				String paramValue = requestParams.get(buildParamName)
-				keysNamesAndValue.put(keyName, paramValue)
-			}
-		}
-		return keysNamesAndValue
-	}*/
 
-	private getNewValueForParameter(String parameterName, Map allParams) {
+	private getNewValueForParameter(String parameterName, Map params) {
 		if(!df.getParsedHql().namedParameters.containsKey(parameterName)){
 			throw new DataManipulationException("Parameter required: ${parameterName}, but not found in parameter map");
 		}
@@ -771,29 +656,29 @@ class DataframeInstance {
 
 		String parFullName = df.getFieldId(namingParamValue[0], namingParamValue[1])
 
-		if(!allParams.containsKey(parFullName)){
+		if(!params.containsKey(parFullName)){
 			throw new DataManipulationException("Cannot identify the record for update: dataframe = ${df.dataframeName} with parameter ${parFullName}");
 		}
 
-		def paramValue = allParams.get(parFullName)
+		def paramValue = params.get(parFullName)
 		return paramValue
 	}
 
-	public boolean isParameterRelatedToDomain(HibernatePersistentEntity doaminClass, String myDomainAlias, String paramName){
+	public boolean isParameterRelatedToDomain(HibernatePersistentEntity domainClass, String myDomainAlias, String paramName){
 
 		if(paramName.startsWith("parent")){
 			return false;
 		}
 		String paramNameTocheck = paramName;
 		String fieldName = df.getFieldNameFromFieldId(paramNameTocheck);
-		String domainAliasFromParam = df.getFieldDoaminFromFieldId(paramNameTocheck);
+		String domainAliasFromParam = df.getFieldDomainFromFieldId(paramNameTocheck);
 
 		if(myDomainAlias.indexOf(domainAliasFromParam) > -1){
 
-//			boolean hasPersistantProperty = doaminClass.hasPersistentProperty(fieldName);
-			boolean hasPersistantProperty = hasPersistentProperty(fieldName, doaminClass)
+//			boolean hasPersistantProperty = domainClass.hasPersistentProperty(fieldName);
+			boolean hasPersistantProperty = hasPersistentProperty(fieldName, domainClass)
 			//todo: remove ispers as I thought it is not necessary, so check and add accordingly as required
-//			boolean ispers = hasPersistantProperty?doaminClass.getPropertyByName(fieldName)?.isPersistent():false;
+//			boolean ispers = hasPersistantProperty?domainClass.getPropertyByName(fieldName)?.isPersistent():false;
 //			if(hasPersistantProperty || ispers){
 			if(hasPersistantProperty){
 				return true;
@@ -802,188 +687,77 @@ class DataframeInstance {
 		return false
 	}
 
-	private static getMyDomaunShortName(def domainInstance){
+	private static getMyDomainShortName(def domainInstance){
 		def clazz = domainInstance.class;
 //		def domainClass = new DefaultGrailsDomainClass(clazz);
 //		return domainClass.shortName;
 		return ClassUtils.getShortClassName(clazz);
 	}
 
-	public boolean applyNewValuesToDomainInstanceAndSave(def domainInstance, Map requestParams, Map keysNamesAndValue, Map domainMap, def historyDomainInstance, boolean doCommit){
+	public boolean applyNewValuesToDomainInstance(def domainInstance, JSONObject requestParams, DomainClassInfo domainClassInfo, def historyDomainInstance){
 
 		boolean isChanged = false
 		boolean isValidate = true
-//		def clazz = domainInstance.class
-//		def domainClass = new DefaultGrailsDomainClass(clazz)
-		DomainClassInfo parsedDomain = domainMap.get("parsedDomain")
-		HibernatePersistentEntity domainClass = parsedDomain.getValue();
-//		def domainClass = new HibernatePersistentEntity(clazz, Holders.grailsApplication.mappingContext)
-//		String myDomainName = domainClass.shortName
-		String myDomainName = getMyDomaunShortName(domainInstance)
-
-		String myDomainAlias = parsedDomain.getDomainAlias()
+		HibernatePersistentEntity hibernetPersistentEntity = domainClassInfo.getValue();
+		String myDomainName = getMyDomainShortName(domainInstance)
+		String myDomainAlias = domainClassInfo.getDomainAlias()
 
 		if( StringUtils.isEmpty(myDomainAlias)){
-			throw new DataframeException(" Trying to save Instance of ${myDomainName} for dataframe ${df.dtataframename}, that does not suppose to have this domain for saving!");
+			throw new DataframeException(" Trying to save Instance of ${myDomainName} for dataframe ${df.dataframeName}, that does not suppose to have this domain for saving!");
 		}
 
 		//*************   MAIN LOOP on PARAMETERS!!!! **************
-		requestParams.each() { paramName, paramValue ->
+		Map persisters = requestParams?.persisters?."${myDomainAlias}"
+		persisters?.each() { fieldName, inputValue ->
 
-			String fieldName = df.getFieldNameFromFieldId(paramName);
-//            Checking if historyDomainInstance is null and setting the values of parentId and last updated timestamp of parent table
-			if(historyDomainInstance){
-				if(fieldName == "id"){
-					historyDomainInstance. parentId = domainInstance."${fieldName}"
-					if(hasPersistentProperty("lastUpdated", domainClass)){
-						historyDomainInstance.lastUpdated = domainInstance.lastUpdated
-					}
-				}
+			Widget widget = df.getFieldWidget(myDomainAlias, fieldName)
+			Map field = df.getFieldByDomainAliasAndFieldName(myDomainAlias, fieldName)
+			saveHistoryDomain(historyDomainInstance, domainInstance, domainClassInfo, fieldName, hibernetPersistentEntity, inputValue)
+			//TODO: refactor it, please!!!
+
+			isValidate = fieldValidate(field, inputValue)
+			if (!isValidate){
+				//todo: check validation for field latest grails version 3.3.0
+				throw new DataframeException("Field validation Failed for: "+fieldName)
 			}
+			/**
+			 * This is the heart of this method: applying the value to the domain for saving later!
+			 */
+			isChanged = widget.populateDomainInstanceValue(df, domainInstance, domainClassInfo, fieldName, field, inputValue) || isChanged
 
-			boolean isParameterRelatedToDoamin = isParameterRelatedToDomain(domainClass, myDomainAlias, paramName)
-			if(isParameterRelatedToDoamin){
-				def prop = domainClass.getPropertyByName(fieldName)
-				def oldfldVal = domainInstance."${fieldName}";
-				if(historyDomainInstance){
-					if(!(df.metaFieldService.isAssociation(prop))) {
-						historyDomainInstance."${fieldName}" = oldfldVal //Saving the old data to history table
-					}else{
-						if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
-							def refDomainClass = prop.associatedEntity.getJavaClass()
-							def savedInstance = saveHasManyAssociation(paramValue,refDomainClass,fieldName,historyDomainInstance)
-							historyDomainInstance = savedInstance
-						}
-					}
-					//                Saving the historyDomainInstance
-					historyDomainInstance.save(failOnError: true)
-				}
-				def fldVal = null
-				if(!(df.metaFieldService.isAssociation(prop))){
-
-					fldVal = DbResult.getTypeCastValue( paramValue, prop)
-					if(oldfldVal == null || !oldfldVal.equals(fldVal)){
-						if(fldVal != null){
-							isValidate = fieldValidate(fieldName,fldVal?.toString())
-							if (!isValidate){
-								//todo: check validation for field latest grails version 3.3.0
-//								throw new DataframeException("Field validation Failed")
-							}
-							domainInstance."${fieldName}" = fldVal
-						}
-						isChanged = true
-					}
-				}else {
-
-					if(paramName.startsWith("ref")){ //I'm looking into
-						paramValue = getReferencedFieldValue(requestParams, paramName);
-					}
-
-					try{
-//						if(StringUtils.isEmpty(paramValue)){
-//							fldVal = 0L;
-//						}else{
-						if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
-							def refDomainClass = prop.associatedEntity.getJavaClass()
-							def savedInstance = saveHasManyAssociation(paramValue,refDomainClass,fieldName,domainInstance)
-							domainInstance = savedInstance
-							isChanged = true
-
-						}else{
-
-
-							if(StringUtils.isEmpty(paramValue)){
-								fldVal = 0L;
-							}else {
-								fldVal = Long.valueOf(paramValue)//df.getTypeCastValue( paramValue, prop)
-							}
-							if(oldfldVal == null || !oldfldVal.id.equals(fldVal)){
-								def nestedInstance = prop.getType().get(Long.valueOf(fldVal))
-								domainInstance."${fieldName}" = nestedInstance
-								isChanged = true
-							}
-						}
-
-//						}
-
-					}catch(Exception e){
-						log.debug"Debugging: ${e.message}", e
-						throw new DataframeException(" Converting parameter value of ${paramValue} to Long was failed");
-					}
-
-//					boolean qq = (oldfldVal == null || !oldfldVal.id.equals(fldVal) && !(prop.isManyToMany() || prop.isOneToMany()));
-
-
-				}
-			}
-
-		} //requestParams.each() { fieldName, fieldValue ->
-		//		applying Insert Fields
-		if(isInsertOccured()){
-			df.insertFields.each{fldName,fldValue->
-				def fldList = fldName.toString().split('\\.',-1)
-				def domain = fldList.getAt(0)
-				def field =  fldList.getAt(1)
-				def valueToSave
-				if(fldValue.indexOf("session_") > -1){
-					valueToSave = getSession().getAttribute(fldValue.toString().substring(fldValue.indexOf("_") + 1))?:(long)Holders.grailsApplication.config.guestUserId
-
-				}else{
-					valueToSave = fldValue
-				}
-				try{
-//					if(domainClass.hasPersistentProperty(field)){
-					if(hasPersistentProperty(field, domainClass)){
-						def propr = domainClass.getPropertyByName(field)
-						if(!(df.metaFieldService.isAssociation(propr))){
-							def fldVal = DbResult.getTypeCastValue( valueToSave, propr)
-							domainInstance."$field" = fldVal
-						}else{
-//							def clz = propr.referencedPropertyType
-							def clz = propr.associatedEntity.getJavaClass()
-							def associationClass = clz.findById(Long.valueOf(valueToSave))
-							if(associationClass){
-								if(propr.getType()== Set){
-									field = field.toLowerCase().capitalize()
-									domainInstance."addTo${field}"(associationClass)
-								}else{
-									def fldVal = propr.getType().get(Long.valueOf(valueToSave))
-									domainInstance."$field" = fldVal
-								}
-							}else{
-								log.error("Error: No field found for Id: "+valueToSave+" in Domain: "+domainClass.getShortName())
-							}
-						}
-
-					}else{
-						log.error("Error: Field "+field+" not available for domain: "+domainClass.getShortName())
-					}
-				}catch(Exception e){
-					log.error("Error: Saving Insert Data, Failed with exception: "+e)
-				}
-			}
-		}
-
-		if(isChanged){
-			try{
-//				historyDomainInstance.close()
-				if(doCommit) {
-					domainInstance.save(flush: true)
-				}
-				return true
-			}catch(Throwable ee){
-				println "error----------"+ee
-				log.error("Error saving " + domainInstance.toString() + "for params: " + keysNamesAndValue)
-				return false
-			}
-		}else{
-			log.warn("Somebody hit the save button but never changed a thing, so we will not invoke save ! ")
-			return true
-		}
-
-		return false
+		} //persisters.each() { fieldName, fieldValue ->
+		return isChanged
 	}//End of method applyNewValuesToDomainInstance
 
+	private boolean saveHistoryDomain(def historyDomainInstance, def domainInstance, DomainClassInfo domainClassInfo, String fieldName, HibernatePersistentEntity hibernetPersistentEntity, def inputValue){
+//            Checking if historyDomainInstance is null and setting the values of parentId and last updated timestamp of parent table
+		if(historyDomainInstance){
+			if(fieldName == "id"){
+				historyDomainInstance. parentId = domainInstance."${fieldName}"
+				if(hasPersistentProperty("lastUpdated", hibernetPersistentEntity)){
+					historyDomainInstance.lastUpdated = domainInstance.lastUpdated
+				}
+			}
+		}
+
+		//boolean isParameterRelatedToDomain = this.isParameterRelatedToDomain(domainClass, myDomainAlias, paramName)
+		//if(isParameterRelatedToDomain){
+		PersistentProperty prop = domainClassInfo.getPropertyByName(fieldName)
+		def oldfldVal = domainInstance."${fieldName}";
+		if(historyDomainInstance){
+			if(!(df.metaFieldService.isAssociation(prop))) {
+				historyDomainInstance."${fieldName}" = oldfldVal //Saving the old data to history table
+			}else{
+				if((df.metaFieldService.isManyToMany(prop)) || (df.metaFieldService.isOneToMany(prop))){
+					def refDomainClass = domainClassInfo.getRefDomainClass(fieldName)
+					def savedInstance = saveHasManyAssociation(inputValue,refDomainClass,fieldName,historyDomainInstance)
+					historyDomainInstance = savedInstance
+				}
+			}
+			//                Saving the historyDomainInstance
+			historyDomainInstance.save(failOnError: true)
+		}
+	}
 	private static Boolean hasPersistentProperty(String propertyName, HibernatePersistentEntity domainClass){
 		/**commented code put here because may be it will required */
 //		for (String propertyNames:domainClass.persistentPropertyNames){
@@ -998,13 +772,18 @@ class DataframeInstance {
 
 //	saves onetomany and manytomany
 	private def saveHasManyAssociation(paramValue,refDomainClass,fieldName,domainInstance){
-		def formattedJSON = "["+paramValue+"]"
-		JSONArray jsonArray = new JSONArray(formattedJSON);
+		//def formattedJSON = paramValue
+		JSONArray jsonArray = new JSONArray(paramValue);
 		domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
 		jsonArray.each{val ->
 			val.each{
-				def refDomainObj  = refDomainClass.get(Long.valueOf(it.value))
-				domainInstance."addTo${fieldName.toLowerCase().capitalize()}"(refDomainObj)
+				if(it.key == "id"){
+					def refDomainObj  = refDomainClass.get(Long.valueOf(it.value))
+					String fn = fieldName.capitalize()
+					String fn1 = fieldName.capitalize()
+					domainInstance."addTo${fieldName.capitalize()}"(refDomainObj)
+
+				}
 			}
 
 		}
@@ -1100,11 +879,8 @@ class DataframeInstance {
 	}
 
 	public def reloadField(String fieldnameToReload, Map inputData){
-
-		Widget t = df.getWidget(fieldnameToReload);
-
-		def result  = df.getWidget(fieldnameToReload).loadAdditionalData(df, fieldnameToReload, inputData, sessionHibernate)
-
+		//Widget t = df.getWidget(fieldnameToReload);
+		def result  = df.getWidget(fieldnameToReload)?.loadAdditionalData(df, fieldnameToReload, inputData, sessionHibernate)
 		return result
 	}
 
@@ -1199,6 +975,41 @@ class DataframeInstance {
 				resultMap.put(fldName, val);
 			}
 		}
+		return resultMap
+	}
+
+	/**
+	 *
+	 * @param result = [[1, "hello", 987654321", "hebrew"],[1, "hello", 987654321", "french"]]
+	 * @return [1, "hello", 987654321", ["hebrew", "french"]]
+	 */
+	private List calculateFieldValuesAsKeyValueMapNew(List record){
+        List recordToCompareWith
+		if(record){
+			List lst = df.fields.getDbList()
+			int recSize = record.size()
+			recordToCompareWith = (List)record[0] //First record taken for comparison
+			for(int i = 1; i < recSize; i++) {
+				combineRecords((List)record[i], recordToCompareWith)
+			}
+		}
+		return recordToCompareWith
+	}
+	private void combineRecords(List currentRecord, List recordToCompareWith){
+		for(int j = 0; j < currentRecord.size(); j++) {
+			if(recordToCompareWith[j] instanceof List){//First time its just record[0] not List, subsequent times it is List
+				if(!recordToCompareWith[j].contains(currentRecord[j])){
+					recordToCompareWith[j].add(currentRecord[j])
+				}
+			} else { //changes recordToCompareWith[j] to List
+				if(currentRecord[j] != recordToCompareWith[j]){
+					def oldVal = recordToCompareWith[j]
+					List newList = [oldVal]
+					newList.add(currentRecord[j])
+					recordToCompareWith[j] = newList
+				}
+			}
+		}
 	}
 
 	public boolean fieldValidate(String fieldName, String fldVal){
@@ -1216,6 +1027,23 @@ class DataframeInstance {
 		}
 		return validateFlag
 	}
+
+	public boolean fieldValidate(Map field, def fldVal){
+
+		def fldValStr = fldVal?.value?.toString()
+		if(field.get("notNull") && fldValStr == null){
+			if(field.get("pk")) return true
+			return false
+		}
+		if (field.containsKey("regex")){
+			String regex = field.get("regex")?.toString()?.replaceAll("/","")
+			if (fldValStr && !fldValStr.find(regex)){
+				return false
+			}
+		}
+		return true
+	}
+
 
 	public def getQueryDomainInstance(Map domain){
 		PersistentEntity queryDomain = getPersistentEntityFromDomainMap(domain)
@@ -1268,14 +1096,133 @@ class DataframeInstance {
 		}
 	}
 
-//	public def getKeysNamesAndValueForPk(keysNamesAndValue, domain, Map inputData) {
-//
-//		String keyFieldName = constructKeyFieldName(domain, inputData)
-//		String formatKeyFieldName = keyFieldName.replace(df.DASH, df.DOT)
-// 		if(inputData.containsKey(formatKeyFieldName)){
-//			String paramValue = inputData.get(formatKeyFieldName)
-//			keysNamesAndValue.put(keyFieldName, paramValue)
-//		}
-//	}
+
+	public def getNamedParameterFromRequestJson(JSONObject requestParams, String namedParameter, String refDomainAlias, String refFieldName){
+
+		//Serach for Session:
+		if(namedParameter.indexOf(Dataframe.SESSION_PARAM_NAME_PREFIX) > -1){
+			String paramStringValue = getSessionParamValue(namedParameter, sessionParams)
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, paramStringValue);
+		}
+
+		if(!requestParams) return null
+
+		//Search in request parameters:
+		if (requestParams.containsKey(namedParameter)){
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, requestParams.get(namedParameter))
+		}
+
+		//search in namedParameter
+		def nField = getNamedParameterField(requestParams, namedParameter)
+		if (nField){return typeCastNamedParameterValue(refDomainAlias, refFieldName, nField)}
+
+		//Search in request parameters:
+//		Map requestNamedParams = requestParams.request_parameters?."${namedParameter}"
+//		if(requestNamedParams?.containsKey(namedParameter)){return requestNamedParams.get(namedParameter)}
+
+		//Search in Persisters:
+		def pField = getPersisterField(requestParams, refDomainAlias, refFieldName)
+		if(pField) {return typeCastNamedParameterValue(refDomainAlias, refFieldName, pField)}
+
+		//Search in transits:
+		def tField = getTransitField(requestParams, namedParameter)
+		if(tField) {return typeCastNamedParameterValue(refDomainAlias, refFieldName, tField)}
+
+		//Search in domain Keys:
+		Map domainKeys = requestParams.domain_keys?."${refDomainAlias}"
+		if(domainKeys?.containsKey(refFieldName)){
+//			return typeCastNamedParameterValue(refDomainAlias, refFieldName, domainKeys.get(refFieldName).value)
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, domainKeys.get(refFieldName))
+		}
+
+		//Serch in old style requestparameters for back compitability:
+		String buildParamName = Dataframe.buildFullFieldNameKeyParam(df, refDomainAlias, refFieldName, namedParameter);
+		if(requestParams.containsKey(buildParamName)){
+			return typeCastNamedParameterValue(refDomainAlias, refFieldName, requestParams.get(buildParamName))
+		}
+
+		return null
+	}//End of method applyNewValuesToDomainInstance
+
+	private def typeCastNamedParameterValue(refDomainAlias, refFieldName, paramValue){
+		return df.getTypeCastValue2(refDomainAlias, refFieldName, paramValue);
+	}
+
+	static def getNamedParameterField(JSONObject requestParams, namedParam){
+		Map namedParameters = getNamedParameters(requestParams)
+		if(namedParameters?.containsKey(namedParam)) {
+			return namedParameters.get(namedParam)?.value
+		}
+		return null
+	}
+
+	static Map getNamedParameters(JSONObject requestParams){
+		return requestParams.namedParameters
+	}
+
+	static def getPersisterField(JSONObject requestParams, String domainAlias, String fieldName){
+		Map persisters = getPersisters(requestParams)
+		if(persisters?.containsKey(domainAlias)) {
+			Map persistersDomain = persisters?."${domainAlias}"
+			if (persistersDomain?.containsKey(fieldName)) {
+				return persistersDomain.get(fieldName)?.value
+			}
+		}
+		return null
+	}
+	static Map getPersisters(JSONObject requestParams){
+		return requestParams.persisters
+	}
+
+	static String getTransitField(JSONObject requestParams, String fieldName){
+		Map transits = getTransits(requestParams)
+		if(transits?.containsKey(fieldName)){
+			return transits.get(fieldName).value
+		}
+		return null
+	}
+
+	static Map getTransits(JSONObject requestParams){
+		return requestParams.transits
+	}
+
+	static String getDomainKeyField(JSONObject requestParams, String domainAlias, String fieldName){
+		Map domainKeys = getDomainKeys(requestParams)
+		if(domainKeys?.containsKey(domainAlias)) {
+			Map domainKeyDomain = domainKeys?."${domainAlias}"
+			if (domainKeyDomain?.containsKey(fieldName)) {
+				return domainKeyDomain.get(fieldName)?.value
+			}
+		}
+		return null
+	}
+	static Map getDomainKeys(JSONObject requestParams){
+		return requestParams.domain_keys
+	}
+
+	public static boolean setFieldItems(JSONObject jData, Map field, Map additionlData){
+		String fldDomain = (field.domain?.domainAlias?.size() > 0) ? field.domain.domainAlias : ""
+		String fieldType = field.containsKey("domain") ? PERSISTERS : TRANSITS
+		if(jData.containsKey(fieldType)){
+			JSONObject node = jData.get(fieldType)
+			JSONObject fieldNode = null
+			if(fieldType == PERSISTERS){
+				if(node.containsKey(fldDomain)) {
+					JSONObject domainNode = node.get(fldDomain)
+					fieldNode = domainNode.containsKey(field.name) ? domainNode.get(field.name) : null
+				}
+			}else{
+				fieldNode = node.containsKey(field.name)? node.get(field.name) : null
+			}
+			if(fieldNode){
+				fieldNode = additionlData
+			}
+		}
+		return false;
+	}
+
+	private JSONObject copyDomainFieldMap(){
+		return new JSONObject((Map) SerializationUtils.clone(df.domainFieldMap))
+	}
 
 }

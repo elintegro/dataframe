@@ -66,7 +66,7 @@ class CountDisplayVue extends WidgetVue{
         Map fieldProps = df.fields.get(fieldnameToReload)
 
         String wdgHql = fieldProps?.hql
-        ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory);
+        ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory, "${df.dataframeName}:${fieldnameToReload}");
         int count = 0
         if(wdgHql){
             DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);

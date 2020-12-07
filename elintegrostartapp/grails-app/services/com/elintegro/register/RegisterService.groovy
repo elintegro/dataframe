@@ -35,6 +35,7 @@ import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 import sun.security.tools.keytool.Pair
 
+import javax.servlet.http.HttpServletRequest
 import java.text.SimpleDateFormat
 
 @Transactional
@@ -44,10 +45,10 @@ class RegisterService{
     def mailService
     def springSecurityService
     def emailService
+    def dataframeService
 
-    def registerUser(RegisterCommand command, Role role, Facility facility) {
+    def registerUser(HttpServletRequest request ,RegisterCommand command, Role role, Facility facility) {
         def serviceMessage
-        DataframeController dataframeController = new DataframeController()
         com.elintegro.auth.User user = null
         if (!command.validate()) {
             def error =  command?.errors?.getFieldError()
@@ -58,16 +59,11 @@ class RegisterService{
                 //resultData = ['msg': errMesg, 'success': false]
             }
         }else {
-            def resultData = dataframeController.ajaxSaveRaw()
-            Map domainInstanceMap = resultData?.dfInstance.getSavedDomainsMap();
-            def savedDomainInstances = domainInstanceMap.values()
+            def resultData = dataframeService.saveRaw(request)
 
-            if (savedDomainInstances) {
-                user = getRegisterUserInstance(savedDomainInstances, user)
+            if(resultData.success && resultData.data.domain_keys.user.id){
+                user = User.findById(resultData.data.domain_keys.user.id)
                 UserRole.create(user, role)
-                if (facility) {
-                    facility.addToUsers(user)
-                }
             }
         }
 
@@ -90,10 +86,10 @@ class RegisterService{
         def result
         try{
             User user1 = new User()
-            user1.email = param.vueElintegroSignUpQuizDataframe_person_email
-            user1.username = param.vueElintegroSignUpQuizDataframe_person_email
-            user1.firstName = param.vueElintegroSignUpQuizDataframe_person_firstName
-            user1.lastName = param.vueElintegroSignUpQuizDataframe_person_lastName
+            user1.email = param.persisters.person.email.value
+            user1.username = param.persisters.person.email.value
+            user1.firstName = param.persisters.person.firstName.value
+            user1.lastName = param.persisters.person.lastName.value
             def password = new Random().toString().replaceAll("java.util.","")
             user1.password = password
             user1.enabled = true
@@ -104,22 +100,22 @@ class RegisterService{
             UserRole.create(user1,role,true)
 
             Person applicant = new Person()
-            applicant.firstName = param.vueElintegroSignUpQuizDataframe_person_firstName
-            applicant.lastName = param.vueElintegroSignUpQuizDataframe_person_lastName
-            applicant.email = param.vueElintegroSignUpQuizDataframe_person_email
-            applicant.phone = param.vueElintegroSignUpQuizDataframe_person_phone
+            applicant.firstName = param.persisters.person.firstName.value
+            applicant.lastName = param.persisters.person.lastName.value
+            applicant.email = param.persisters.person.email.value
+            applicant.phone = param.persisters.person.phone.value
             applicant.user = user1
             applicant.save()
 
             Lead lead = new Lead()
             lead.applicant = applicant
-            lead.leadDescription = param.vueElintegroSignUpQuizDataframe_lead_leadDescription['Answer']
-            lead.leadStage = param.vueElintegroSignUpQuizDataframe_lead_leadStage['Answer']
-            lead.leadBudget = param.vueElintegroSignUpQuizDataframe_lead_leadBudget['Answer']
-            lead.nameOfProject = param.vueElintegroSignUpQuizDataframe_lead_nameOfProject
-            lead.descriptionOfProject = param.vueElintegroSignUpQuizDataframe_lead_descriptionOfProject
+            lead.leadDescription = param.persisters.lead.leadDescription.value['Answer']
+            lead.leadStage = param.persisters.lead.leadStage.value['Answer']
+            lead.leadBudget = param.persisters.lead.leadBudget.value['Answer']
+            lead.nameOfProject = param.persisters.lead.nameOfProject.value
+            lead.descriptionOfProject = param.persisters.lead.descriptionOfProject.value
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-            Date date = inputFormat.parse(param.vueElintegroSignUpQuizDataframe_lead_deadline)
+            Date date = inputFormat.parse(param.persisters.lead.deadline.value)
             lead.deadline = date
             lead.save()
 

@@ -14,14 +14,13 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.erf.widget
 
 import com.elintegro.erf.dataframe.Dataframe
+import org.grails.datastore.mapping.model.PersistentEntity
 
 abstract class AbstractWidget {
 
 	def abstract getHeaderScript(Dataframe dataframe, Map info)
 	def abstract  getBodyScript(Dataframe dataframe, Map info)
 	def abstract  getHtml(Dataframe dataframe, Map info)
-
-
 
 }
 

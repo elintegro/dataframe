@@ -31,11 +31,11 @@ class NumberInputWidgetVue extends WidgetVue {
         def min = field.min == null ? 0 : field.min
         def max = field.max == null ? (Math.pow(10, digits) - 1) : field.max
         def step = field.step ? field.step : 0
-        String modelString = getModelString(dataframe, field)
+        String modelString =getFieldJSONModelNameVue(field)
 
         return """<v-text-field
-            label="${getLabel(field)}" type="number"
-            v-model = "$modelString" 
+            label="${getLabel(field)}" type="number" 
+            v-model = "${modelString}"
             ${validate(field) ? ":rules = '${fldName}_rule'" : ":rules = generalRule"}
             ${isDisabled(dataframe, field) ? ":disabled = true" : ""}
             ${isReadOnly?"readonly":''}
@@ -43,13 +43,12 @@ class NumberInputWidgetVue extends WidgetVue {
             max=$max
             step=$step
             ${toolTip(field)}
-            style="width:${getWidth(field)}; height:${getHeight(field, '50px')};"
+            style="width:${getWidth(field)}; height:${getHeight(field)};"
             ${getAttr(field)}
           ></v-text-field>"""
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
-        String dataVariable = dataframe.getDataVariableForVue(field)
         def length = field.length?:6
         length = (int)Math.sqrt(length)
 //        String rule = """ [v => /[0-9]/.test(v) || 'Only digits are allowed', v => (v && v.length <= $length) || 'Name must be less than or equal to $length characters']"""

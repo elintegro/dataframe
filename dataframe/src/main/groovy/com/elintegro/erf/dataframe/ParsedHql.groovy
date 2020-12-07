@@ -24,16 +24,42 @@ import org.hibernate.hql.spi.QueryTranslator
 import org.hibernate.hql.spi.QueryTranslatorFactory
 import org.hibernate.persister.entity.SingleTableEntityPersister
 import org.hibernate.type.Type
+import org.springframework.orm.hibernate3.SessionFactoryUtils
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class ParsedHql {
 
+	static final int HQL_WHOLE_MATCH = 0
+	static final int HQL_FIELDS_CLAUSE = 1
+	static final int HQL_FROM_CLAUSE = 2
+	//static final int HQL_JOIN_CLAUSE = 3
+	static final int HQL_WHERE_CLAUSE = 3
+
+
 	String hql
 	String sqlString
+
 	String fieldStr
 	String fromStr
+	String fromStr_
+	String joinStr
+	List<JoinParsed> joins = []
+	String groupByStr
+	String orderByStr
+	String whereStr
+	String groupBy
+	String orderBy
+
+	String selectStr
+	String whereClauseStr
+	String joinClauseStr
+	String groupByClauseStr
+	String orderByClauseStr
+
+
+
 	String[] fieldsArr
 	Map fields = new LinkedHashMap()
 	Map aliasDomainFields = [:]
@@ -43,18 +69,96 @@ class ParsedHql {
 	def  grailsApplication
 	def sessionFactory
 	Map namedParameters = [:]
+	//def hqlExtractRegex = /(?i)select\s+(?<select>.+?)(?i)from\s+(?<from>.+?)(?<join>(?:(?i)right\s+|(?i)left\s+)?(?:(?i)outer\s+|(?i)inner\s+)?(?i)join\s+(?:.+))(?i)where\s+(?<where>.+)/
+	final static String baseRegexPart = /^select\s+(?<select>.+)from\s+(?<from>.+)/
+	final static String joinRegexLeftRightPart = /(?:\s+right\s+|\s+left\s+)/
+	final static String joinRegexInnerOuterPart = /(?:\s+outer\s+|\s+inner\s+)/
+	final static String joinRegexPart = /(?:join\s+(?<joincond>.+))/
+	final static String whereRegexPart = /(?:where\s+(?<where>.+))/
+	final static String groupbyRegexPart = /(?<groupby>group\s+by\s+(?<groupbyClause>.+))/
+	final static String orderbyRegexPart = /(?<orderby>order\s+by\s+(?<orderbyClause>.+))/
+	def hqlExtractRegex;
 
+	//def hqlExtractRegex = /select\s+(?<select>.+?)from\s+(?<from>.+?)(?<join>(?:right\s+|left\s+)?(?:outer\s+|inner\s+)?join\s+(?:.+))?(?:where\s+(?<where>.+?))?/
+	Pattern hqlPattern
+	def joinRegexClause = /((?i)right\s+|(?i)left\s+)?((?i)outer\s+|(?i)inner\s+)?(?i)join\s+/
+	String dataframeName
 
-	ParsedHql(String hql, def grailsApplication, def sessionFactory){
+	ParsedHql(){
+		print "Emty constructor, called for tests!"
+	}
+
+	private void init(String hql, def grailsApplication, def sessionFactory, String dataframeName){
 		this.hql = hql?hql.trim().replaceAll("(?!.)\\s", ""):"";
 		this.grailsApplication=grailsApplication
 		this.sessionFactory = sessionFactory
+		this.dataframeName = dataframeName
 		parseHQLInit()
+	}
+
+	ParsedHql(String hql, def grailsApplication, def sessionFactory){
+		init(hql, grailsApplication, sessionFactory, "unknown")
+	}
+
+	ParsedHql(String hql, def grailsApplication, def sessionFactory, String dataframeName){
+		init(hql, grailsApplication, sessionFactory, dataframeName)
+	}
+
+	private buildRegexToParseHql(){
+		StringBuilder hqlExtractRegexSb = new StringBuilder();
+		hqlExtractRegexSb.append(baseRegexPart)
+
+		//join
+		String joinExist = hql.toLowerCase().find(/\s+join\s+/)
+		if(joinExist) {
+			hqlExtractRegexSb.append(/(?<join>/)
+			String joinRigntLeftExist = hql.toLowerCase().find(joinRegexLeftRightPart)
+			if (joinRigntLeftExist) {
+				hqlExtractRegexSb.append(joinRegexLeftRightPart)
+			}
+			String joinInnerOuterExist = hql.toLowerCase().find(joinRegexInnerOuterPart)
+			if (joinInnerOuterExist) {
+				hqlExtractRegexSb.append(joinRegexInnerOuterPart)
+			}
+			hqlExtractRegexSb.append(joinRegexPart).append(/)/)
+		}
+
+		String whereExists = hql.toLowerCase().find(/\s+where\s+/)
+		int whereInd = 0
+		if(whereExists){
+			hqlExtractRegexSb.append(whereRegexPart)
+			whereInd = hql.toLowerCase().indexOf(whereExists)
+		}
+
+		String groupByClause = hql.toLowerCase().find(/group\s+by/)
+		int groupByInd = 0
+		if(groupByClause){
+			groupByInd = hql.toLowerCase().indexOf(groupByClause)
+			if(groupByInd > whereInd){
+				hqlExtractRegexSb.append(groupbyRegexPart)
+			}else{
+				throw new DataframeException(String.format("Dataframe %s: Group by clause should be after WHERE clause and before ORDER BY clause in dataframe's hql", dataframeName))
+			}
+		}
+
+		String orderByClause = hql.toLowerCase().find(/order\s+by/)
+		if(orderByClause){
+			int orderByInd = hql.toLowerCase().indexOf(orderByClause)
+			if(orderByInd > whereInd && orderByInd > groupByInd ){
+				hqlExtractRegexSb.append(orderbyRegexPart)
+			}else{
+				throw new DataframeException(String.format("Dataframe %s: Order by clause should be after WHERE and Group BY clauses in dataframe's hql", dataframeName))
+			}
+		}
+		hqlExtractRegex = hqlExtractRegexSb.append("\$").toString()
+
+		hqlPattern = Pattern.compile(hqlExtractRegex, Pattern.CASE_INSENSITIVE);
 	}
 
 	private def parseHQLInit(){
 
 		if(hql){
+			buildRegexToParseHql()
             def session = sessionFactory.openSession()
 //            def session = SessionFactoryUtils.getSession(sessionFactory, true)
 			Query query =  session.createQuery(hql);
@@ -95,6 +199,7 @@ class ParsedHql {
 				
 			}
 
+			//TODO: this code should be depricated and extractParts method will do the job!
 			def HqlFldMatcher = (hql =~ /^(?i)select\s(.+?)\s(?i)from\s.*/)
 			def HqlFromMatcher = (hql =~ /.*(?i)from\s(.+?)\s(?i)where\s.*/)
 			fieldStr = HqlFldMatcher.matches()?HqlFldMatcher[0][1]:""//
@@ -107,12 +212,19 @@ class ParsedHql {
 				fromStr = getReplacedJoinString(fromStr)
 			}
 
+			if (!extractParts(hql)){
+				throw new DataframeException("There is a parsing error of hql: ${hql}")
+			}
+
+			//TODO: END of the depricated fragment
+
 			QueryTranslatorFactory ast = new ASTQueryTranslatorFactory();
 			QueryTranslator queryTranslator = ast.createQueryTranslator( hql , hql , Collections.EMPTY_MAP, sessionFactory, null );
 			queryTranslator.compile( Collections.EMPTY_MAP, true );
 			def retTypes = queryTranslator.getReturnTypes()
 			sqlString = queryTranslator.getSQLString()
-					
+
+
 			getFromMap(fromStr);
 
 			//def qIdent = queryTranslator.getQueryIdentifier()
@@ -124,6 +236,75 @@ class ParsedHql {
 						
 			fillFieldMap(fieldStr, retTypes)
 
+		}
+	}
+
+
+	public boolean extractParts(String hql) throws DataframeException{
+		try {
+			String hqlTemp = hql.replaceAll(/(\s+)/, " ");
+
+			Matcher hqlMatcher = hqlPattern.matcher(hqlTemp);
+			boolean isMatchs = hqlMatcher.matches();
+
+			if (isMatchs && hqlMatcher?.hasGroup()) {
+				//TODO" fieldStr_ and fieldStr_ should be replaced to fieldStr fieldStr
+				if(hqlMatcher.groupCount() < 2) {
+					throw new DataframeException(dataframeName, "Select statement must have at least both Select and From clauses!")
+				}
+
+				fieldStr = extractClause(hqlMatcher,"select")
+				fromStr_ = extractClause(hqlMatcher,"from")
+				whereStr = extractClause(hqlMatcher,"where")
+				whereClauseStr = extractClause(hqlMatcher,"whereClause")
+				joinStr = extractClause(hqlMatcher, "join")
+				joinClauseStr = extractClause(hqlMatcher, "joinClause")
+				groupByStr = extractClause(hqlMatcher, "groupby")
+				groupByClauseStr = extractClause(hqlMatcher, "groupbyClause")
+				orderByStr = extractClause(hqlMatcher, "orderby")
+				orderByClauseStr = extractClause(hqlMatcher, "orderbyClause")
+
+				extractJoins(joinStr)
+
+				//fromStr = fromStr_
+
+				return true
+			}
+		}catch(IllegalStateException exp){
+			throw new DataframeException("No match found for sql ${hql} Exception: ${exp}")
+		}
+		return false
+	}
+
+	String extractClause(Matcher hqlMatcher, String clause){
+		return extractClause(hqlMatcher, clause, false)
+	}
+	String extractClause(Matcher hqlMatcher, String clause, boolean mandatory){
+		try {
+			return hqlMatcher.group(clause)?.trim()
+		}catch(IllegalArgumentException iae){
+			if(mandatory) {
+				throw new DataframeException(dataframeName, "The ${clause} clause is mandatory!", iae)
+			}else{
+				return null
+			}
+		}
+	}
+
+	public extractJoins(String joinStr){
+		if(StringUtils.isEmpty(joinStr)){return}
+
+		String[] joinsStringArr = joinStr.split(joinRegexClause)
+		String joinStr_ = joinStr
+		joinsStringArr?.each{ joinClause ->
+			if(!StringUtils.isEmpty(joinClause)) {
+				int joinClauseInd = joinStr_.indexOf(joinClause)
+				String joinElementWordWithOption = joinStr_.substring(0, joinClauseInd) //TODO: maybe -1 here?
+				JoinParsed jp =new JoinParsed(joinElementWordWithOption, joinClause, this)
+				joins.add(jp)
+				joinStr_ = joinStr_.substring(joinElementWordWithOption.length() + joinClause.length())
+				fromStr_ += ",${jp.targetDomain} ${jp.targetDomain}"
+			}
 		}
 	}
 
@@ -169,12 +350,12 @@ class ParsedHql {
 			if(tblDtl.length == 1){
 				tblDtl = tbl.trim().split(/\s/)
 			}
-			String doaminAlias = tblDtl.length>1?tblDtl[1]:tblDtl[0];
+			String domainAlias = tblDtl.length>1?tblDtl[1]:tblDtl[0];
 			String tableName = tblDtl[0];
 			String domainName = tblDtl[0];
-			DomainClassInfo dci = getDomainFromPath(domainName, doaminAlias, tableName, parentDomain)
+			DomainClassInfo dci = getDomainFromPath(domainName, domainAlias, tableName, parentDomain)
 			String domainShortName = dci.getSimpleDomainName();
-			hqlDomains.put(doaminAlias, dci);
+			hqlDomains.put(domainAlias, dci);
 			hqlDomainsNameMap.put(domainShortName, dci);
 			if(!parentDomain){
 				parentDomain = domainShortName
@@ -268,10 +449,9 @@ class ParsedHql {
 				indexOfFileds.put(field.substring(field.indexOf(".")+1), index)
 			}else{
 				fieldName = field.trim();
-//				def doamin = hqlDomains[ve[0]]
 				def domain = hqlDomains.values().first()
-				String doaminAlias = domain.getAt("domainAlias");
-				fields.put(fldkey, ["domain": domain, "alias": alias, "domainAlias" : doaminAlias, "name" : fieldName, "tableName" : fldOwner, "fldNmAlias": fldNmAlias])
+				String domainAlias = domain.getDomainAlias();
+				fields.put(fldkey, ["domain": domain, "alias": alias, "domainAlias" : domainAlias, "name" : fieldName, "tableName" : fldOwner, "fldNmAlias": fldNmAlias])
 				indexOfFileds.put(field.trim(), index)
 			}
 			aliasDomainFields.put(Dataframe.getAliasFieldKey(fldOwner, fieldName), alias);

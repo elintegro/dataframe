@@ -1,9 +1,9 @@
-package com.elintegro.elintegrostartapp.client.Lead
+package com.elintegro.school
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class GroovySpec extends Specification implements DomainUnitTest<Groovy> {
+class ParentSpec extends Specification implements DomainUnitTest<Parent> {
 
     def setup() {
     }

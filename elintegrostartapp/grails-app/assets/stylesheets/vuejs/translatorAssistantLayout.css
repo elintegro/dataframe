@@ -28,7 +28,11 @@
     border-radius: 3px;
     border-spacing: 0px 25px;
 }
-.translatorAssistantContainer  .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout #translatorAssistant{
+.translatorAssistantContainer  .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout #translatorAssistantBeforeLoggedIn{
+    font-family: Roboto;
+    color: black;
+}
+.translatorAssistantContainer  .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout #translatorAssistantAfterLoggedIn{
     font-family: Roboto;
     color: black;
 }
@@ -55,19 +59,21 @@
     font-family:Roboto;
 }
 .translatorAssistantContainer .howYouDoSection .imageRow{
-    max-width: 70%;
-    position: relative;
-
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr;
+   grid-template-areas: ". . . up " "down down down .";
 }
 .translatorAssistantContainer .howYouDoSection .imageRow .image1{
-    max-width: 65%;
-    left: 65%;
-    z-index: 2;
+    grid-area: down;
+    z-index: 1;
+    grid-column: 1 /span 3;
+    grid-row: 7/span 5;
 }
 .translatorAssistantContainer .howYouDoSection .imageRow .image2{
-    position: absolute;
-    top: 76%;
-    z-index: 1;
+    grid-area:up;
+    grid-column: 2 /span 5;
+    grid-row:1 /span 7;
+    z-index: 2;
 }
 .translatorAssistantContainer .howYouDoSection #vueHowYouDoDataframe_translateApp{
     background-color: black;
@@ -76,16 +82,7 @@
     font-family:Roboto;
     padding: 20px;
 }
-@media screen and (max-width: 1220px) and (min-width: 960px) {
-    .translatorAssistantContainer .howYouDoSection .imageRow{
-        padding-top: 25%;
-    }
-}
-@media screen and (max-width: 960px) and (min-width: 400px){
-    .translatorAssistantContainer .howYouDoSection {
-        height: 1000px;
-    }
-}
+
 .translatorAssistantContainer .newsLetter{
     background-color: #2ab6f6;
 }

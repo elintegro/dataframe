@@ -25,7 +25,7 @@ class TextAreaWidgetVue extends WidgetVue {
         return """<v-textarea
           name="$fldName"
           label="${getLabel(field)}"
-          v-model = "${getModelString(dataframe, field)}" 
+          v-model = "${getFieldJSONModelNameVue(field)}"  
           ${validate(field)?":rules = '${fldName}_rule'":""}
           ${isDisabled(dataframe, field)?":disabled = true":""}
           ${isReadOnly?"readonly":''}

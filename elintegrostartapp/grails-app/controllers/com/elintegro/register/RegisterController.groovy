@@ -46,7 +46,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 
         def requestParams = request.getJSON()
         def resultData
-        String dfrName = requestParams["dataframe"] + "_user_email"
+//        String dfrName = requestParams["dataframe"] + "_user_email"
         //FacilityUserRegistration facilityUserReg = FacilityUserRegistration.findByExpectedUser(requestParams[dfrName])
 
         String expectedRole = requestParams["role"]
@@ -67,7 +67,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
 //        }else{ //expected User is registering for the facility and expected role is correct
 
         RegisterCommand command = getRegisterValidationObj(requestParams)
-        grails.util.Pair result = registerService.registerUser(command, regRole, null)
+        grails.util.Pair result = registerService.registerUser(request, command, regRole, null)
 
         com.elintegro.auth.User user = result.getaValue()
         def returnedMessage = result.getbValue()
@@ -92,7 +92,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         try {
             sendVerifyRegistrationMail registrationCode, user, command.email
             verificationEmailMessage = message(code: 'registration.mail.success')
-            resultData = ['msg': verificationEmailMessage, 'success': true]
+            resultData = ['msg': verificationEmailMessage, 'success': true, data:requestParams, alert_type: 'success']
         } catch (Exception e) {
             log.error(e)
             verificationEmailMessage = message(code: 'registration.mail.noConnection')
@@ -140,7 +140,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     def forgotPassword() {
         def params = request.getJSON()
 
-        ForgotPasswordCommand forgotPasswordCommand = getForgetPasswordCommandObject(params.email)
+        ForgotPasswordCommand forgotPasswordCommand = getForgetPasswordCommandObject(params.persisters.user.email.value)
         def user = findUserByUsername(forgotPasswordCommand.username)
         def jsonMap
         String msg
@@ -201,7 +201,7 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
        if (registrationCode) {
            try {
                User user1 = User.findByUsername(registrationCode.username)
-               user1.password = param.vueElintegroChangeForgotPasswordDataframe_newPassword
+               user1.password = param.transits.newPassword.value
                user1.save(flush: true)
                registrationCode.delete(flush: true)
                msg = message(code: 'password.changed.successfully')
@@ -330,32 +330,35 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
     private static RegisterCommand getRegisterValidationObj(requestParams) {
         String dataframeName = requestParams.dataframe
         RegisterCommand command = new RegisterCommand()
-        String emailKey = dataframeName + "_user_email"
-        String passwordKey = dataframeName + "_user_password"
-        String password2Key = dataframeName + "_password2"
-        command.email = requestParams.get(emailKey)
+        command.email = requestParams.persisters.user.email.value
         command.username = command.email
-        command.password = requestParams.get(passwordKey)
-        command.password2 = requestParams.get(password2Key)
+        command.password = requestParams.persisters.user.password.value
+        command.password2 = requestParams.transits.password2.value
         return command
     }
 
     def createLeadUser() {
         def param = request.getJSON()
         def resultData
-        User user1 = User.findByUsername(param.vueElintegroSignUpQuizDataframe_person_email)
+        User user1 = User.findByUsername(param.persisters.person.email.value)
         Role role = Role.findByName("ROLE_LEAD")
         UserRole userRole = UserRole.findByRoleAndUser(role, user1)
         if (!userRole) {
             def result = registerService.createLeadUser(param)
-            RegistrationCode registrationCode = registrationCode(result.user)
-            String url = generateLink('verifyRegistration', [t: registrationCode.token])
-            if (registrationCode == null || registrationCode.hasErrors()) {
-                flash.error = message(code: 'spring.security.ui.register.miscError') as Object
-                flash.chainedParams = params
-                return
+            if(result.user) {
+                RegistrationCode registrationCode = registrationCode(result.user)
+                String url = generateLink('verifyRegistration', [t: registrationCode.token])
+                if (registrationCode == null || registrationCode.hasErrors()) {
+                    flash.error = message(code: 'spring.security.ui.register.miscError') as Object
+                    flash.chainedParams = params
+                    return
+                }
+                resultData = registerService.sendingEmailAfterSignUp(result.user.firstName, result.password, result.user.email, url, registrationCode.token)
             }
-         resultData = registerService.sendingEmailAfterSignUp(result.user.firstName, result.password, result.user.email, url, registrationCode.token)
+            else {
+                resultData = [success:false,msg:message(code: "user.not.found.could.not.proceed.request"),alert_type: "error"]
+            }
+
 
         }
         else{
@@ -371,9 +374,9 @@ class RegisterController extends grails.plugin.springsecurity.ui.RegisterControl
         RegistrationCode registrationCode = RegistrationCode.findByToken(param.token)
         if(registrationCode) {
             User user1 = User.findByUsername(registrationCode.username)
-            def isCurrentPasswordValid = passwordEncoder.isPasswordValid(user1.password, param.vueElintegroChangePasswordAfterSignUpDataframe_currentPassword, null)
+            def isCurrentPasswordValid = passwordEncoder.isPasswordValid(user1.password, param.transits.currentPassword.value, null)
             if (isCurrentPasswordValid == true) {
-                user1.password = param.vueElintegroChangePasswordAfterSignUpDataframe_newPassword
+                user1.password = param.transits.newPassword.value
                 user1.save(flush: true)
 
                 try {

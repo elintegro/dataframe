@@ -15,6 +15,21 @@ package com.elintegro.erf.dataframe
 
 import grails.util.Holders
 import groovy.util.logging.Slf4j
+import org.grails.datastore.mapping.model.PersistentProperty
+import org.grails.datastore.mapping.model.types.Association
+import org.grails.datastore.mapping.model.types.Basic
+import org.grails.datastore.mapping.model.types.Custom
+import org.grails.datastore.mapping.model.types.Embedded
+import org.grails.datastore.mapping.model.types.EmbeddedCollection
+import org.grails.datastore.mapping.model.types.Identity
+import org.grails.datastore.mapping.model.types.ManyToMany
+import org.grails.datastore.mapping.model.types.ManyToOne
+import org.grails.datastore.mapping.model.types.OneToMany
+import org.grails.datastore.mapping.model.types.OneToOne
+import org.grails.datastore.mapping.model.types.Simple
+import org.grails.datastore.mapping.model.types.TenantId
+import org.grails.datastore.mapping.model.types.ToMany
+import org.grails.datastore.mapping.model.types.ToOne
 import org.grails.orm.hibernate.cfg.HibernatePersistentEntity
 import org.hibernate.persister.entity.AbstractEntityPersister
 import org.hibernate.persister.entity.SingleTableEntityPersister
@@ -27,12 +42,12 @@ import org.hibernate.persister.entity.SingleTableEntityPersister
 class DomainClassInfo {
 
     def  grailsApplication
-    String key  //domain Simple name like "User"
-    HibernatePersistentEntity value // One of the Doamin class representation
+    String key  //domain Simple name like "User" TODO: this field should be renamed to "name" to reflect its real meaning
+    HibernatePersistentEntity value // One of the Domain class representation
     Class clazz; //java domain class
-    SingleTableEntityPersister persister// One of the Doamin class representation
+    SingleTableEntityPersister persister// One of the Domain class representation
     String tablename
-    String domainAlias //Alias as it was defined in the HQL by a developer
+    String domainAlias //Alias as it was defined in the HQL by a developer or by deafault should be equal to the Domain class name
 
     public DomainClassInfo(Class clazz, String domainAlias, String tableName, SingleTableEntityPersister persister) {
         this.tablename = tableName
@@ -55,6 +70,89 @@ class DomainClassInfo {
         return persister
     }
 
+    public PersistentProperty getPropertyByName(String fieldName) {
+        return value.getPropertyByName(fieldName)
+    }
+
+    public getRefDomainClass(String fieldName){
+        if (isAssociation(fieldName)) {
+            return getPropertyByName(fieldName).associatedEntity.getJavaClass()
+        }
+        return null
+    }
+
+    public boolean isAssociation(String fieldName){
+        if (getPropertyByName(fieldName) instanceof Association){return true}
+        return false
+    }
+
+    public boolean isBasic(String fieldName){
+        if (getPropertyByName(fieldName) instanceof Basic){return true}
+        return false
+    }
+
+    public boolean isCustom(String fieldName){
+        if (getPropertyByName(fieldName) instanceof Custom){return true}
+        return false
+    }
+
+    public boolean isEmbedded(String fieldName){
+        if (getPropertyByName(fieldName) instanceof Embedded){return true}
+        return false
+    }
+
+    public boolean isEmbeddedCollection(String fieldName){
+        if (getPropertyByName(fieldName) instanceof EmbeddedCollection){return true}
+        return false
+    }
+
+    public boolean isIdentity(String fieldName){
+        if (getPropertyByName(fieldName) instanceof Identity){return true}
+        return false
+    }
+
+
+    public boolean isManyToMany(String fieldName){
+        if (getPropertyByName(fieldName) instanceof ManyToMany){return true}
+        return false
+    }
+
+    public boolean isManyToOne(String fieldName){
+        if (getPropertyByName(fieldName) instanceof ManyToOne){return true}
+        return false
+    }
+
+    public boolean isOneToMany(String fieldName){
+        if (getPropertyByName(fieldName) instanceof OneToMany){return true}
+        return false
+    }
+
+
+    public boolean isOneToOne(String fieldName){
+        if (getPropertyByName(fieldName) instanceof OneToOne){return true}
+        return false
+    }
+
+    public boolean isSimple(String fieldName){
+        if (getPropertyByName(fieldName) instanceof Simple){return true}
+        return false
+    }
+
+    public boolean isTenantId(String fieldName){
+        if (getPropertyByName(fieldName) instanceof TenantId){return true}
+        return false
+    }
+
+    public boolean isToMany(String fieldName){
+        if (getPropertyByName(fieldName) instanceof ToMany){return true}
+        return false
+    }
+
+    public boolean isToOne(String fieldName){
+        if (getPropertyByName(fieldName) instanceof ToOne){return true}
+        return false
+    }
+
     @Override
     public String toString(){
         return "Domain simple name:" + key + " Domain alias: " + domainAlias + " Domain class: " + clazz.name;
@@ -71,4 +169,8 @@ class DomainClassInfo {
         }
         return fieldDbName.replaceAll('`',"")
     }
+
+
+
+
 }

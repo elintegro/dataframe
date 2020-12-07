@@ -137,9 +137,14 @@ images {
 	}
 //	storageLocation = "/opt/tomcat-8/webapps"
 	storageLocation = "/usr/local/opt/apache-tomcat-9.0.33/webapps"
+	environments{
+		development {
+			storageLocation = "${userHome}/.$appName"
+		}
+	}
 	imageDirectory = "images"
 	defaultImageName = "default_profile.jpg"
-	defaultImagePath = "/assets/$defaultImageName"
+	defaultImagePath = "assets/$defaultImageName"
 	defaultImageForPdf = "defaultPdfIcon.PNG"
 	defaultImagePathForPdf = "assets/$defaultImageForPdf"
 	defaultImageForExcel = 'defaultExcelFileIcon.PNG'
@@ -319,6 +324,7 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 //			password = "qbohfoj"
 			username = "developer"
 			password = "java11"
+
 		}
 	}
 	test {
@@ -334,8 +340,8 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 	develop {
 		dataSource {
 			//CHANGE DATASOURCE HERE
-//			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
-			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
+			dbCreate = 'create-drop' //"update" // one of 'create', 'create-drop','update'
+//			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
 			url = "jdbc:mysql://localhost:3306/elintegrostartapp_db" // todo:change after fix the server
 			username = "root"
 			password = "root"
@@ -577,7 +583,7 @@ grails.plugin.springsecurity.ui.forgotPassword.emailBody = '''\
 Hi $user.firstName,<br/>
 <br/>
 Please, click
-&nbsp;<a href="$url">here</a> to reset your password.s
+&nbsp;<a href="$url">here</a> to reset your password.
 <br/><br/>
 '''
 emailService.emailWithPassword = '''\
@@ -605,6 +611,7 @@ welcome. Next steps to build your app.
 '''
 elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com,sumanneupane19982055@gmail.com, shai@gmail.com,rabindra@gmail.com"
 
+application.languages = """'fr','en','es'"""
 
 //elintegro.contuctus.email.interval = 20000     //send email once in 20 seconds
 //elintegro.contuctus.email.interval = 5*60*1000 //send email once in 5 minutes.

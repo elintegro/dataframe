@@ -50,9 +50,9 @@ class FKWidgetVue extends WidgetVue{
             String keyFieldName = Dataframe.buildFullFieldNameKeyParam(refDataframe, entry.key);
             String parentFieldName = Dataframe.buildFullFieldNameParentParam(refDataframe, keyField);
             String dataVariable = dataframe.getDataVariableForVue(field)
-            buildParentAndRefParams.append("allParams[\"$parentFieldName\"] = \"$thisFieldName\";\n")
-            buildParentAndRefParams.append("allParams[\"ref_$dataVariable\"] = \"$keyFieldName\";\n")
-            buildParentAndRefParams.append("allParams['$dataVariable'] = this.state.$dataVariable;\n")
+            buildParentAndRefParams.append("params[\"$parentFieldName\"] = \"$thisFieldName\";\n")
+            buildParentAndRefParams.append("params[\"ref_$dataVariable\"] = \"$keyFieldName\";\n")
+            buildParentAndRefParams.append("params['$dataVariable'] = this.state.$dataVariable;\n")
         }
         if(refDataframe.saveButton){
             return ""
@@ -61,16 +61,7 @@ class FKWidgetVue extends WidgetVue{
         }
     }
 
-    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-        Dataframe refDataframe = getReferenceDataframe(field.parent)
-        String fldParam = dataframe.getFieldId(field)
-        String refDataframeName = refDataframe.dataframeName
-        String namedParamKey = "this.\$store.state.${refDataframeName}.key"
-        return ""
-    }
-
     String getComputedMethods(DataframeVue dataframe, Map field, String divId, String fldId, String key){
-        Dataframe refDataframe = getReferenceDataframe(field.parent)
         return vuecomputedMethodScriptString
     }
 
@@ -85,8 +76,6 @@ class FKWidgetVue extends WidgetVue{
         //validations
         assert(fieldnameToReload)
         def inputFieldValue = inputData.get(fieldnameToReload)
-
-//		assert(inputFieldValue)
 
         def vMember = fieldProps.valueMember?inputData.get("name"): fieldProps.valueMember
         assert(vMember)

@@ -81,7 +81,7 @@ class MultiSelectComboboxVue extends WidgetVue {
         String valueMember = field.valueMember
         String dataVariable = dataframe.getDataVariableForVue(field)
         String thisFieldName = dataframe.getFieldId(field)
-        return """allParams["$thisFieldName"] = excon.mapStringify(this.$dataVariable, '$valueMember'),\n"""
+        return """params["$thisFieldName"] = excon.mapStringify(this.$dataVariable, '$valueMember'),\n"""
     }
 
     public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){
@@ -90,7 +90,7 @@ class MultiSelectComboboxVue extends WidgetVue {
         Map fieldProps = df.fields.get(fieldnameToReload)
 
         String wdgHql = fieldProps?.hql
-        ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory);
+        ParsedHql parsedHql = new ParsedHql(wdgHql, df.grailsApplication, df.sessionFactory, "${df.dataframeName}:${fieldnameToReload}");
 
         if(wdgHql){
             DbResult dbRes = new DbResult(wdgHql, inputData, session, parsedHql);
@@ -115,7 +115,6 @@ class MultiSelectComboboxVue extends WidgetVue {
             queryDomain = dfInst.getPersistentEntityFromDomainMap(domain)
             Map keysNamesAndValue = [:];
             dfInst.getKeysNamesAndValueForPk(keysNamesAndValue, domain, inputData);
-//            keysNamesAndValue = dfInst.getKeysAndValues(domain);
             if (!keysNamesAndValue.isEmpty()){
                 domainInstance = dfInst.retrieveDomainInstanceForUpdate(keysNamesAndValue, queryDomain);
             }

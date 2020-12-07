@@ -13,7 +13,6 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package gc
 
-import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.gc.data.DataInit
 import org.apache.commons.lang.StringUtils
 
@@ -22,26 +21,23 @@ class BootStrap {
     def grailsApplication
     def init = { servletContext ->
 
-
         def languages = DataInit.initLanguage()
         servletContext.setAttribute("LANG_4_SELECT", languages)
-
 
         String dbCreateVal  = grailsApplication.config.dataSource.dbCreate
 
         if(!StringUtils.isEmpty(dbCreateVal) && dbCreateVal.indexOf("create") > -1){
-
             def user1 = DataInit.initFirstUser()
             servletContext.setAttribute("USER", user1)
-
-            DataInit.initelintegrostartappReferences(user1)
-            DataInit.initElintegroClientProject()
-            DataInit.initelintegrostartappSkills()
-            DataInit.initelintegrostartappPosition()
-            DataInit.initelintegrostartappQuestionTable()
-            DataInit.initelintegrostartappAnswerTable()
-            DataInit.initTestimonials()
+            DataInit.initElintegroWebsiteReferences(user1)
         }
+
+        DataInit.initElintegroClientProject()
+        DataInit.initElintegroWebsiteSkills()
+        DataInit.initElintegroWebsitePosition()
+        DataInit.initElintegroWebsiteQuestionTable()
+        DataInit.initElintegroWebsiteAnswerTable()
+        DataInit.initElintegroWebsiteTestimonials()
 
         //DataInit.initNotification()
         DataInit.initFrequencyUnit()
@@ -55,4 +51,5 @@ class BootStrap {
 
     def destroy = {
     }
+
 }

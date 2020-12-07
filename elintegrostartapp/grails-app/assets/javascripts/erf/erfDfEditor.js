@@ -40,10 +40,10 @@ jQuery(document).ready(function () {
                 return false;
             }
             var urlDefault = "/elintegrostartapp/dfEditor/editorValues";
-            var allParams = {'page':parentPageNode,'dataframe':dataframe};
+            var params = {'page':parentPageNode,'dataframe':dataframe};
             jQuery.ajax({
                 url: urlDefault,
-                data: allParams,
+                data: params,
                 type: 'POST',
                 success: function(returnedRefreshData){
                     try {

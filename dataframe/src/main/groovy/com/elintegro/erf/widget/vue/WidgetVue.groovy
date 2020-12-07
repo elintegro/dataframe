@@ -13,9 +13,13 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
+import com.elintegro.annotation.OverridableByEditor
 import com.elintegro.erf.dataframe.DFButton
 import com.elintegro.erf.dataframe.Dataframe
+import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.ScriptBuilder
+import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
@@ -23,6 +27,8 @@ import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.erf.widget.Widget
 import grails.util.Holders
 import grails.util.Environment
+import org.grails.datastore.mapping.model.PersistentEntity
+import org.grails.web.json.JSONObject
 import org.springframework.context.ApplicationContext
 import org.springframework.context.i18n.LocaleContextHolder
 
@@ -35,44 +41,96 @@ import org.springframework.context.i18n.LocaleContextHolder
  */
 abstract class WidgetVue extends Widget<DataframeVue>{
     /** Dependency injection for the springSecurityService. */
+    public static final String items = "items"
+    public static final String excon = "excon"
+
+    //This assigns a new value and returns true if new value was different then the old one
+    @Override
+    boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
+        if(inputValue.value == null || inputValue.value == "") return true
+
+        if(isReadOnly(field)){
+            return false
+        }
+        def oldfldVal = domainInstance."${fieldName}"
+        String myDomainAlias = domainMetaData.getDomainAlias()
+        def newValue = dataframe.getTypeCastValue2(myDomainAlias, fieldName, inputValue.value)
+        if(oldfldVal == newValue){
+            return false
+        }
+        if(isMandatory(field) && !newValue){
+            return false
+        }
+        domainInstance."${fieldName}" = newValue
+        return true
+    }
+
+    @Override
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        jData?.persisters?."${domainAlias}"."${fieldName}".value = value
+    }
+
+    @Override
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        jData?.transits?."${fieldName}".value = value
+    }
 
     String getVuePropVariable(DataframeVue dataframe, Map field) {
-        String dataVariable = dataframe.getDataVariableForVue(field)
         return """ '${dataframe.dataframeName}_data' """
 
     }
+    public String getFieldJSONNameVue(Map field){
+            String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
+            String fieldType = field.containsKey("domain") ? PERSISTERS : TRANSITS
+            return "state.${fieldType}${DOT}${fldDomainAndDot}${field.name}";
+    }
+
+    public String getFieldJSONModelNameVue(Map field){
+        return "${getFieldJSONNameVue(field)}.value";
+    }
+    public String getFieldJSONNameVueWithoutState(Map field){
+        String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
+        String fieldType = field.containsKey("domain") ? PERSISTERS : TRANSITS
+        return "${fieldType}${DOT}${fldDomainAndDot}${field.name}.value";
+    }
+    public String getFieldJSONItems(Map field){
+        String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
+        return "${getFieldJSONNameVue(field)}${DOT}${items}";
+    }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
-        String validationString = ""
+        String dataVariable = dataframe.getDataVariableForVue(field)
+        String validationString = """ ${dataVariable}_rule: "",\n"""
         if(validate(field)){
             String validationRules = validationRules(field)
-            String dataVariable = dataframe.getDataVariableForVue(field)
+            //TODO: Here we need to use right variable from our state structure! And need to check in any Widget!
             validationString = """ ${dataVariable}_rule: $validationRules,\n"""
         }
         return """$validationString"""
     }
 
+    //EU!!! This is where the DVue component variable is created TODO: depricate this and build the new one, using JSON
     String getStateDataVariable(DataframeVue dataframe, Map field){
 
         String dataVariable = dataframe.getDataVariableForVue(field)
         return """$dataVariable:\"\",\n"""
     }
 
+    //This method may return additional data for each Widget, by deafault it returns empty Map
+    Map getStateDataVariablesMap(DataframeVue dataframe, Map field){
+        return [:]
+    }
+
+    String[] getStateDataProps(DataframeVue dataframe, Map field){
+        return [field.domain?.key, field.name, field.defaultValue]
+    }
+
+
     String getVueSaveVariables(DataframeVue dataframe, Map field){
-        String thisFieldName = dataframe.getFieldId(field)
-        String dataVariable = dataframe.getDataVariableForVue(field)
-//        String dataVariable = dataframe.getDataVariableForVueCapitalized(field)
-//        return """allParams['$thisFieldName'] = this.$dataVariable;\n"""
         return ""
     }
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-        def defaultValue = field.defaultValue?:""
-        String fillState = ""
-/*
-        return """this.$dataVariable = response['$key']?response['$key']:"$defaultValue\";
-                """
-*/
         return ""
     }
 
@@ -99,12 +157,8 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return false
     }
 
-    protected String getFlexAttr(DataframeVue dataframe, Map field){
+    public String getFlexAttr(DataframeVue dataframe, Map field){
         return field.flexAttr?:""
-    }
-
-    String getEmbeddedCompScript(){
-        return ""
     }
 
     String getEmbdDfrName(){
@@ -136,10 +190,10 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return """""";
     }
 
-/*    protected DataframeVue getDataframe(dataframeName){
-        DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(dataframeName)
-        return refDataframe
-    }*/
+    @Override
+    public Object getInitValues(DataframeVue df, Map field){
+        return ""
+    }
 
     String getMethodsScript(DataframeVue dataframe, Map field, String divId, String fldId, String key){
         return """""";
@@ -242,13 +296,6 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     public static String getHashIdAttribute(String hashId){
         return " :id=\"" + hashId + "\""
     }
-
-/*
-    public static String getHashIdSpan(String hashId){
-        return "<span " + getHashIdAttribute(hashId) + "/>"
-    }
-*/
-
 
     public static enum SecurityTag {
 
@@ -401,9 +448,25 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return label
     }
 
-    protected boolean isMandatory(Map field){
-        boolean notNull = field.notNull
-        boolean required = field.required
-        return notNull || required
+    protected static Map getDomainFieldJsonMap(DataframeVue dataframe, Map field){
+        Map domainFieldMap = dataframe.domainFieldMap
+        Map fieldJSON = [:]
+        if(dataframe.isDatabaseField(field)){
+            Map persisters = domainFieldMap.get(Dataframe.PERSISTERS)
+            Map domainJSON = persisters.get(field.get(Dataframe.FIELD_PROP_DOMAIN_ALIAS))
+            fieldJSON = domainJSON.get(field.get(Dataframe.FIELD_PROP_NAME))
+        }else{
+            Map transits = domainFieldMap.get(Dataframe.TRANSITS)
+            fieldJSON = transits.get(field.get(Dataframe.FIELD_PROP_NAME))
+        }
+        return fieldJSON
     }
+
+    protected static boolean isInitBeforePageLoad(Map field){
+        if (field?.initBeforePageLoad){
+            return true
+        }
+        return false
+    }
+
 }

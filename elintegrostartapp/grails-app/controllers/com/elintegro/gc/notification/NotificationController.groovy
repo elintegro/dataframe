@@ -35,10 +35,11 @@ class NotificationController {
     def notificationService
     def messageSource
     def springSecurityService
+    def dataframeService
 
     def notification(){
         DataframeController dataframeController = new DataframeController()
-        def results = dataframeController.ajaxValuesRaw()
+        def results = dataframeService.ajaxValuesRaw()
         def customDfrParamsToRefresh = [:]
         def notificationData = notificationService.getUserNotificationData()
         customDfrParamsToRefresh =  [

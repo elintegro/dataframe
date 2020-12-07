@@ -277,7 +277,7 @@ beans{
         layoutPlaceHolder = """
                                     <v-container class="footer" fluid>
                                         <v-row>
-                                            <v-col class="photoCol" cols="12" xs= "12" sm="12" md="6" lg="6">
+                                            <v-col class="photoCol" cols="12" xs= "12" sm="6" md="6" lg="6">
                                                 <v-img src="assets/home/plant.png"></v-img>
                                             </v-col>
                                             <v-col cols="12" xs= "12" sm="12" md="12" lg="12">    

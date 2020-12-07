@@ -13,9 +13,10 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
-import com.elintegro.erf.dataframe.DataframeException
+import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.util.Holders
+import org.grails.web.json.JSONObject
 
 class PictureDisplayWidgetVue extends WidgetVue{
     @Override
@@ -27,7 +28,7 @@ class PictureDisplayWidgetVue extends WidgetVue{
         String aspectRatio  = field.aspectRatio?field.aspectRatio:"2.75"
         String heightString = height?"height=$height":""
         String widthString  = width?"""width=$width """:""
-        String modelString = getModelString(dataframe, field)
+        String modelString = getFieldJSONModelNameVue(field)
         String html =  """<v-img
            id = "$fldParam"
           :src="$modelString"
@@ -55,20 +56,22 @@ class PictureDisplayWidgetVue extends WidgetVue{
 
     }
 
-    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-
-/*
-        return """this.$dataVariable = response['$key']?"$imgUrl"+response['$key']:"$defImgUrl";\n
-                  this.${dataVariable}_alt = response['$key']?response['$key']:"$defImgUrl";"""
-*/
-        return ""
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalData, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        jData?.persisters?."${domainAlias}"."${fieldName}".value = getUrl(fieldProps, value)
     }
 
-    String getVueSaveVariables(DataframeVue dataframe, Map field){
-        return """"""
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalData, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        jData?.transits?."${fieldName}".value = getUrl(fieldProps, value)
     }
 
-
+    private String getUrl(Map fieldProps, def value){
+        String defImgUrl = fieldProps.url?:getDefaultImageName()
+        def imageUrl = Holders.grailsApplication.config.images.storageLocation + "/images/"
+        String api = fieldProps.api?:"fileDownload/fileDownload"
+        String url = value?(api + "/" + value):defImgUrl
+        String alt = value?:defImgUrl
+        return url
+    }
 
     private String getDefaultImageName(){
 //        def imgUrl = field.url?field.url: Holders.config.aws.s3.defaultS3Url
@@ -77,5 +80,9 @@ class PictureDisplayWidgetVue extends WidgetVue{
             return "/" + defaultImageName
         }*/
         return Holders.config.images.defaultImagePath
+    }
+
+    public Object getInitValues(DataframeVue df, Map fieldProps){
+        return fieldProps.url?:getDefaultImageName()
     }
 }

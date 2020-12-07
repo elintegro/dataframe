@@ -46,6 +46,7 @@ class GridDataframeController {
         def dataframe = params.dataframe
         def paramz = params
         def keys = params.keys
+
         if (dataframe=="participantsGrid"){
             GridDataFrame gridDataframe = getGridDataframe(params)
             // TODO get the hql from gridDataframe
@@ -69,15 +70,6 @@ class GridDataframeController {
 
         render jsonMap as JSON
     }
-    def saveGridData(){
-        def param = request.getJSON()
-        //Todo: here after getting selected row data we have to save those data in generic way by finding the correct domain class..
-        println(param)
-        render(success:false)
-
-        }
-
-
 
 
 

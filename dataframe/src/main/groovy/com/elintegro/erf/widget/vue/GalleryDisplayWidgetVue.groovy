@@ -48,21 +48,6 @@ class GalleryDisplayWidgetVue extends WidgetVue{
 
     }
 
-    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-        String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
-
-/*
-        return """
-               var fullFieldName = '$fullFieldName';
-               var orginalImages = response.additionalData[fullFieldName]['orginalImages'];
-               var thumbnailImages = response.additionalData[fullFieldName]['thumbnailImages'];
-               this.${dataVariable}_images = orginalImages;
-               this.${dataVariable}_thumbnailImages = thumbnailImages;
-              """
-*/
-        return ""
-    }
-
     public Map loadAdditionalData(DataframeInstance dfInst, String fieldnameToReload, Map inputData, def session){
         Dataframe df = dfInst.df;
         Map fieldProps = df.fields.get(fieldnameToReload)

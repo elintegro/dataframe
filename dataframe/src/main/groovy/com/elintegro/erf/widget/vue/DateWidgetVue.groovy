@@ -13,11 +13,15 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
+import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
+import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 import org.springframework.context.i18n.LocaleContextHolder
+
+import java.text.SimpleDateFormat
 
 /**
  * Created by kchapagain on Oct, 2018.
@@ -28,19 +32,18 @@ class DateWidgetVue extends WidgetVue {
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = getFieldName(dataframe, field)
         boolean isReadOnly = dataframe.isReadOnly(field)
-        String locale = field.locale?:"he"
+        String locale = field.locale?:"en"
         String localeString = locale?"locale='$locale'":""
         String dateFormatPlaceholder = getMessageSource().getMessage("date.format.hint", null, "date.format.hint", LocaleContextHolder.getLocale())
         String menuAttr = field.menuAttr?:""
-//        :nudge-right="40"
-//
-        String modelString = getModelString(dataframe, field)
+
+        String modelString = getFieldJSONModelNameVue(field)
         return """
                     <v-menu
                         ref="${fldName}_menu"
                         v-model="${fldName}_menu"
                         :close-on-content-click="false"
-                        :return-value.sync="$modelString"
+                        :return-value.sync="${modelString}"
                         transition="scale-transition"
                         offset-y
                         full-width
@@ -56,64 +59,55 @@ class DateWidgetVue extends WidgetVue {
                             v-on="on"
                             hint="$dateFormatPlaceholder"
                             persistent-hint
-                            prepend-icon="event"
+                            prepend-icon=""
+                            prepend-inner-icon="event"
                             @click:prepend="onIconClick_$fldName"
                             readonly
                             id="${fldName}_id"
-                            
+                            ${getAttr(field)}
                             ${toolTip(field)}
                     ></v-text-field>
                 </template>
-                ${isReadOnly?"":"""<v-date-picker $localeString v-model="${modelString}" ${getAttr(field)} no-title scrollable @input="\$refs.${fldName}_menu.save($modelString)"></v-date-picker>"""}
+                ${isReadOnly?"":"""<v-date-picker $localeString v-model="${modelString}" no-title scrollable @input="\$refs.${fldName}_menu.save($modelString)"></v-date-picker>"""}
                 </v-menu>
                 """
     }
 
-    String getStateDataVariable(DataframeVue dataframe, Map field) {
+    String getVueDataVariable(DataframeVue dataframe, Map field){
+
         String dataVariable = dataframe.getDataVariableForVue(field)
-/*
-       dataframe.getVueJsBuilder().addToMethodScript("""formatDate: function(date) {
-               if (!date) return null;
-               var d = new Date(date);
-               this.$dataVariable = d.toISOString();
-               return d.format("dd/mm/yyyy")
-                          },\n
-                    parseDate: function(date) {
-                                if (!date) return null
-                                  const [month, day, year] = date.split('/')
-                                  var al = `\${year}-\${month.padStart(2, '0')}-\${day.padStart(2, '0')}`
-                                  return al
-                             },\n
-                             onIconClick_$dataVariable:function(e){
-                                \$('#${dataVariable}_id').addClass('date-menu-position');
-                                this.${dataVariable}_menu = !this.${dataVariable}_menu;
-                             },\n""")
-*/
-        String modelString = getModelString(dataframe, field)
-        dataframe.getVueJsBuilder().addToComputedScript(""" 
+        String modelString = getFieldJSONModelNameVue(field)
+        dataframe.getVueJsBuilder().addToMethodScript("""
+
+        onIconClick_$dataVariable:function(e){
+           \$('#${dataVariable}_id').addClass('date-menu-position');
+           this.${dataVariable}_menu = !this.${dataVariable}_menu;
+                            },\n
+        """).addToComputedScript(""" 
         ${dataVariable}_formatted() {
             if (!this.$modelString) return null;
             var d = new Date(this.$modelString);
             this.$modelString = d.toISOString();
             return d.format("dd/mm/yyyy")
         },\n""")
-        String fromSuper = super.getVueDataVariable(dataframe, field)
-        return """$fromSuper
-                  """
-
-    }
-
-    String getVueDataVariable(DataframeVue dataframe, Map field){
-
-        String dataVariable = dataframe.getDataVariableForVue(field)
-        dataframe.getVueJsBuilder().addToMethodScript("""
-
-                             onIconClick_$dataVariable:function(e){
-                                \$('#${dataVariable}_id').addClass('date-menu-position');
-                                this.${dataVariable}_menu = !this.${dataVariable}_menu;
-},\n
-        """)
         return """${dataVariable}_menu:'',\n"""
     }
 
+    @Override
+    boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
+        if(isReadOnly(field)) return false
+        if(!inputValue || !inputValue.value) return false
+
+        def oldfldVal = domainInstance."${fieldName}"
+        if(oldfldVal == inputValue.value){
+            return false
+        }
+        if(isMandatory(field) && !inputValue.value){
+            return false
+        }
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        Date date = inputFormat.parse(inputValue.value)
+        domainInstance."${fieldName}" = date
+        return true
+    }
 }

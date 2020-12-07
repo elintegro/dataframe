@@ -16,6 +16,11 @@ package com.elintegro.erf.widget
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DomainClassInfo
+import com.elintegro.erf.dataframe.vue.DataframeConstants
+import com.elintegro.erf.dataframe.vue.DataframeVue
+import org.grails.datastore.mapping.model.PersistentEntity
+import org.grails.web.json.JSONObject
 
 /**
  * This abstract could classdefines a main method for each widget;
@@ -24,14 +29,17 @@ import com.elintegro.erf.dataframe.DataframeInstance
  * @author Eugenelip
  *
  */
-abstract class Widget<T> {
+abstract class Widget<T> implements DataframeConstants{
 
 	abstract  String  getHeaderScript(T dataframe, Map info, String divId)
 	abstract  String  getBodyScript(T dataframe, Map info)
 	abstract  String  getHtml(T dataframe, Map field)
 	abstract  String getEnabledDisabledFunction(T dataframe, Map field)
 	abstract String getValueSetter(T dataframe, Map field, String divId, String fldId, String key)
-
+	abstract boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue)
+	abstract boolean setPersistedValueToResponse(JSONObject inputValue, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps)
+	abstract boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps)
+	abstract  Object  getInitValues(T dataframe, Map field)
 	public static final int ONE_SIMBOL_WITH = 6;
 
 	public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldName, Map inputData, def dbSession){
@@ -87,6 +95,20 @@ abstract class Widget<T> {
 			value = (attrib == null)?defaultVal:Boolean.valueOf(attrib);
 		}
 		return value
+	}
+
+	public static boolean isReadOnly(Map field){
+		if (field?.readOnly){
+			return true
+		}
+		return false
+	}
+
+	public static boolean isMandatory(Map field){
+		if (field?.notNull){
+			return true
+		}
+		return false
 	}
 
 

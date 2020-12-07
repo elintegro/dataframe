@@ -13,27 +13,20 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.widget.vue
 
-import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.DataframeException
-import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.ResultPageHtmlBuilder
+import com.elintegro.erf.dataframe.*
+import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.vue.DataMissingException
 import com.elintegro.erf.dataframe.vue.DataframeVue
-import com.elintegro.erf.dataframe.DbResult
-import com.elintegro.erf.dataframe.ParsedHql
-import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import com.elintegro.erf.dataframe.vue.VueStore
 import com.elintegro.utils.MapUtil
 import grails.converters.JSON
 import grails.util.Holders
+import org.apache.commons.lang.WordUtils
+import org.grails.web.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.i18n.LocaleContextHolder
-import org.apache.commons.lang.WordUtils
-import groovy.util.logging.Slf4j
-
-
 /**
  * Created by kchapagain on Nov, 2018.
  */
@@ -42,8 +35,30 @@ class GridWidgetVue extends WidgetVue {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "dataframe/ajaxDeleteExpire"
-    public String gridSaveUrl = "gridDataframe/saveGridData"
     String embDDfr = "";
+    private static final String headers = "headers"
+    private static final String defaultData = "defaultData"
+
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
+        if(additionalData.containsKey(items)){
+            jData?.persisters?."${domainAlias}"."${fieldName}"."${items}" = additionalData."${items}"
+        }
+        if(additionalData.containsKey(headers)){
+            jData?.persisters?."${domainAlias}"."${fieldName}"."${headers}" = additionalData."${headers}"
+        }
+    }
+
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataMap, sessionHibernate)
+        if(additionalData.containsKey(items)){
+            jData?.transits?."${fieldName}"."${items}" = additionalData."${items}"
+        }
+        if(additionalData.containsKey(headers)){
+            jData?.transits?."${fieldName}"."${headers}" = additionalData."${headers}"
+        }
+    }
+
 
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
@@ -60,9 +75,13 @@ class GridWidgetVue extends WidgetVue {
         }
         String searchPlaceholder = getMessageSource().getMessage("Search", null, "Search", LocaleContextHolder.getLocale())
         String labelStyle = field.labelStyle?:""
-        String modelString = getModelString(dataframe, field)
+//        String modelString = getModelString(dataframe, field)
+        String modelString = getFieldJSONModelNameVue(field)
+        String itemsStr = getFieldJSONItems(field)
+        String headerString = "${getFieldJSONNameVue(field)}${DOT}${headers}"
         String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
         String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
+        String itemKey = field.itemKey?:"id"
         return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
 
        ${showGridSearch?"""
@@ -79,9 +98,10 @@ class GridWidgetVue extends WidgetVue {
             </v-col></v-row>
         """:""}
        <v-data-table
-            :headers="${modelString}_headers"
-            :items="${modelString}_items"
+            :headers="${headerString}"
+            :items="${itemsStr}"
             :items-per-page="-1"
+            item-key="${itemKey}"
             ${showGridSearch?":search='${fldName}_search'":""}
             ${dataTableAttribbutes.toString()}
             ${getAttr(field)}
@@ -101,17 +121,14 @@ $fieldParams
         String headerWidth = field.headerWidth?:''
         String valueMember = field?.valueMember
         boolean internationalize = field.internationalize?true:false
-        String editableField = field.editableField?:""
-        boolean saveEditedFieldData = field.saveEditedFieldData?:false
         StringBuilder requestFieldParams   = new StringBuilder()
         StringBuilder fieldParams          = new StringBuilder();
-        String onClickMethod    = " "
-        ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory);
+
+        ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory, "${dataframe.dataframeName}:${field.name}" );
         List<MetaField> fieldMetaData      = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
         field.put("gridMetaData", fieldMetaData);
         field.put("parsedHql", parsedHql);
         List dataHeader = []
-        boolean showRefreshMethod = false
         fieldMetaData.each {metaField ->
             def propItemText = metaField.alias?:metaField.name
             def propItemVal  = metaField.name
@@ -147,45 +164,22 @@ $fieldParams
                         }
                     }
                 }
-                if(editableField == headerText){
-
-                    tdString = """\n<td class ='$headerClass' >
-                                    <v-edit-dialog
-                                          :return-value.sync="props.item.$propItemText"
-                                          large persistent
-                                          @save="save(props.item)"
-                                          @cancel="cancel"
-                                          @open="open"
-                                          @close="close">
-                                          <div >{{ props.item.$propItemText }}</div>
-                                          <template v-slot:input>
-                                              <div class="mt-4 title">Update $editableField</div>
-                                          </template>
-                                          <template v-slot:input>
-                                             <v-text-field
-                                                v-model="props.item.$propItemText"
-                                                label="Edit" single-line counter autofocus >
-                                             </v-text-field>
-                                          </template>
-                                                                  
-                                    </v-edit-dialog> 
-                    </td> """
-
-
-                }
-
                 fieldParams.append(tdString)
             }
-            requestFieldParams.append("\nallParams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
+            requestFieldParams.append("\nparams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
         }
         field.put("dataHeader", dataHeader);
+        VueJsBuilder vueJsBuilder = dataframe.getVueJsBuilder()
+        VueStore store = vueJsBuilder.getVueStore()
+        store.addToState("${field.name}_selectedrow : '',\n")
         def parentDataframeName = dataframe.dataframeName
+        String onClickMethod    = " "
         String refDataframeName = ""
         List gridDataframeList= []
         if (onClick){
 //            showRefreshMethod   = true
             if(onClick.script){
-                dataframe.getVueJsBuilder().addToMethodScript(""" 
+                vueJsBuilder.addToMethodScript(""" 
                    ${fldName}_showDetail: function(dataRecord){
                               ${onClick.script}
                     },\n 
@@ -194,83 +188,28 @@ $fieldParams
                 DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
                 refDataframeName = refDataframe.dataframeName
                 onClickMethod    = "${fldName}_showDetail$refDataframeName(props.item)"
-                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName)
+                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName, field.name)
             }
         }
 
         if (onButtonClick){
 //            showRefreshMethod = true
-            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader)
+            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader, field.name)
 
         }
+//        putPropWatcherForChildDataframes(dataframe)
         field.put("gridDataframeList", gridDataframeList);
-        showRefreshMethod = showRefreshMethod || field.showRefreshMethod?true:false
-        if(showRefreshMethod){
-            dataframe.getVueJsBuilder().addToMethodScript(refreshGrid(fldName, refDataframeName, dataframe))
-        }
-        if(editableField){
-            dataframe.getVueJsBuilder().addToDataScript("""
-                snack: false,
-                snackColor: '',
-                snackText: '',
-           """).addToMethodScript("""
-                save (data) {
-                 var allParams = this.state;
-                 allParams['dataOfSelectedRow'] = data;
-                 allParams['dataframe'] = '$dataframe.dataframeName'
-                 var self = this;
-                 if($saveEditedFieldData == true){
-                                     axios({
-                                           method:'post',
-                                           url:'$gridSaveUrl',
-                                           data: allParams
-                                     }).then(function(responseData){
-                                             var response = responseData.data;
-                                             self.snack = true
-                                             self.snackColor = 'success'
-                                             self.snackText = 'Data saved'
-                                     });
-                 }                    
-                 else{
-                      this.snack = true
-                      this.snackColor = 'success'
-                      this.snackText = 'Data updated'
-                 }          
-               
-            },\n
-            cancel () {
-                this.snack = true
-                this.snackColor = 'error'
-                this.snackText = 'Canceled'
-            },\n
-            open () {
-                this.snack = true
-                this.snackColor = 'info'
-                this.snackText = 'Dialog opened'
-            },\n
-            close () {
-                console.log('Dialog closed')
-            },\n
-            savedChangeData(){
-              var allParams = this.state;
-              console.log("Inside saved change data");
-            }
-              """)
-
-
-        }
-
-
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
         return """
 
         <template slot="item" slot-scope="props">
-          <tr @click.stop="${onClickMethod}" @change = "savedChangeData();" :key="props.item.$valueMember">
+          <tr @click.stop="${onClickMethod}" :key="props.item.$valueMember">
             $draggIndicator ${fieldParams.toString()}
           </tr>  
         </template>
          """
     }
+
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
         def search = field?.showGridSearch
@@ -291,6 +230,48 @@ $fieldParams
 """
 
     }
+
+    Map getStateDataVariablesMap(DataframeVue dataframe, Map field){
+        List gridItems = []
+        List gridHeaders = []
+        if (isInitBeforePageLoad(field)){
+            Map result = getGridData(dataframe, field, [:])
+            if (result){
+                gridItems = result."${items}"
+                gridHeaders = result."${headers}"
+            }
+        }
+        Map fldJSON = getDomainFieldJsonMap(dataframe, field)
+        fldJSON?.put(items, gridItems)
+        fldJSON?.put(headers, gridHeaders)
+        return dataframe.domainFieldMap
+    }
+
+    private void putPropWatcherForChildDataframes(DataframeVue dataframe){
+       List childDfrs = dataframe.childrenDataframes
+        if(childDfrs){
+            for(String dfr: childDfrs) {
+                if (!dfr) continue
+                DataframeVue child = DataframeVue.getDataframeByName(dfr) as DataframeVue
+                String dfrName = child.dataframeName
+
+                if(child.putFillInitDataMethod) {
+                    VueJsBuilder vueJsBuilder = child.getVueJsBuilder()
+                    vueJsBuilder.addToWatchScript(""" ${dfrName}_prop: {
+                             deep:true,
+                             handler: function(val, oldVal){
+                                  if(val.refreshInitialData){
+                                     this.${dfrName}_fillInitData();
+                                  } else {
+                                      console.log("${dfrName}_prop has refreshInitialData as false or undefined. Could not refresh.");
+                                  }
+                             }
+                     },\n""")
+                }
+            }
+        }
+    }
+
     String getStateDataVariable(DataframeVue dataframe, Map field){
 
         String dataVariable = dataframe.getDataVariableForVue(field)
@@ -302,7 +283,6 @@ $fieldParams
         return """
            ${dataVariable}_headers: [],
            ${dataVariable}_items: [],
-           ${dataVariable}_selectedrow:{},
 """
     }
 
@@ -318,10 +298,11 @@ $fieldParams
             }
         }
         String fldName = dataframe.getDataVariableForVue(field);
-        String fullFieldName = key.replace(Dataframe.DOT,Dataframe.DASH)
-        dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){if(this.state.${dataVariable}_items.length){
-                  return true;
-               }},\n""")
+        dataframe.getVueJsBuilder().addToComputedScript(""" ${fldName}_display: function(){
+                                                                    if(this.${getFieldJSONItems(field)}){
+                                                                        return true;
+                                                                    }
+                                                                  },\n""")
         return """
                $namedParamKey 
               """
@@ -336,20 +317,22 @@ $fieldParams
         return embDDfr
     }
 
-    public Map loadAdditionalData(DataframeInstance dataframeInst, String fieldnameToReload, Map inputData, def dbSession){
-        Map result=[:];
-        Dataframe dataframe = dataframeInst.df;
-        Map fieldProps = dataframe.fields.get(fieldnameToReload);
-
+    public Map loadAdditionalData(DataframeInstance dataframeInst, Map fieldProps, String fieldnameToReload, Map inputData, def dbSession){
+        DataframeVue dataframe = dataframeInst.df;
         //Add fields from the Dataframe as possible input parameters for the additional HQL:
         inputData.putAll(dataframeInst.getFieldValuesAsKeyValueMap());
+        Map sessionParams = dataframeInst.sessionParams
+        if (sessionParams){
+            inputData << sessionParams
+        }
+        Map result= getGridData(dataframe, fieldProps, inputData)
+        return result
+    }
 
+    private def getGridData(DataframeVue dataframe, Map fieldProps, Map inputData){
+        Map result=[:];
         String wdgHql = fieldProps?.hql;
         if(wdgHql){
-            Map sessionParams = dataframeInst.sessionParams
-            if (sessionParams){
-                inputData << sessionParams
-            }
             List<MetaField> fieldMetaData =  fieldProps.get("gridMetaData");
             ParsedHql parsedHql =  fieldProps.get("parsedHql");
             if(parsedHql == null){
@@ -357,32 +340,28 @@ $fieldParams
                 parsedHql = new ParsedHql(fieldProps.hql, dataframe.grailsApplication, dataframe.sessionFactory)
             }
             List dataHeader =  fieldProps.get("dataHeader");
-            getNamedParameterValue(dataframeInst,inputData, parsedHql, fieldProps)
+            def dbSession = dataframe.sessionFactory.openSession()
             DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
             List resultList = dbRes.getResultList();
-            result.put("dictionary", resultList);
-            result.put("headers", dataHeader);
-            result.put("defaultData", getDefaultData(fieldMetaData));
-
+            result.put(items, resultList);
+            result.put(headers, dataHeader);
+            result.put(defaultData, getDefaultData(fieldMetaData));
             if(!(fieldProps.containsKey("metaData") && fieldProps.get("metaData"))){
                 fieldProps.put("metaData", getDataFields(wdgHql, dataframe, fieldMetaData));
             }
-
             result.put("metaData", fieldProps.get("metaData"));
-
         }
         return result
     }
 
+
     public void getNamedParameterValue(dfInstance,inputData, parsedHql, fieldProps){
         Dataframe dataframe = dfInstance.df
-//        Map sessionParams = dfInstance.sessionParams
         if(parsedHql.namedParameters){
             parsedHql.namedParameters.each{
                 String key = it.getKey()
                 if(fieldProps.containsKey(key)){
                     String hql = fieldProps.get(key)
-//                inputData << sessionParams
                     ParsedHql parsedHql1 = new ParsedHql(hql, dataframe.grailsApplication, dataframe.sessionFactory)
                     DbResult dbRes = new DbResult(hql, inputData, dataframe.sessionFactory.openSession(), parsedHql1)
                     List resultList = dbRes.getResultList()
@@ -395,39 +374,8 @@ $fieldParams
         }
     }
 
-    private static String getGridValuesScript(String parentDataframeName, String fldName
-                                              ,StringBuilder fieldParams, DataframeVue refDataframe){
-        String refDataframeName = refDataframe.dataframeName
-        return """ 
-                         ${parentDataframeName}Var.${fldName}_selectedrow = dataRecord;
-                   var allParams = {'dataframe':'$refDataframeName'};
-                   $fieldParams
-                   axios.get('$refDataframe.ajaxUrl', {
-                    params: allParams
-                }).then(function (responseData) {
-                        var response = responseData.data.data;
-                        console.log(response);
-                        excon.setVisibility(${refDataframeName}, true);
-                        var refParams = ${parentDataframeName}Var.\$refs.${refDataframeName}_ref.params;
-                        var gridRefreshParams = {};
-                        gridRefreshParams['isGridRefresh'] = true;
-                        gridRefreshParams['fieldName'] = '$fldName';
-                        gridRefreshParams['parentDataframe'] = '$parentDataframeName';
-                        gridRefreshParams['dataframe'] = '$refDataframeName';
-                        refParams['gridRefreshParams'] = gridRefreshParams;
-                        
-                        ${refDataframe.doAfterRefresh}                        
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-
-"""
-
-    }
-
     private void getOnButtonClickScript(onButtonClick, DataframeVue dataframe,  StringBuilder onclickDfrBuilder
-                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader){
+                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader, String nameOfField){
         String buttonHoverMessage = ""
         onButtonClick.each{Map onButtonClickMaps ->
             String actionName = getMessageSource().getMessage(onButtonClickMaps?.actionName?:"", null, onButtonClickMaps?.actionName?:"", LocaleContextHolder.getLocale())
@@ -448,23 +396,23 @@ $fieldParams
                 String btnName = ""
                 String methodScript = ""
                 if(deleteButton){
-                    methodScript= constructGridDeleteScript(buttonMaps, fldName, dataframe.dataframeName)
+                    methodScript= constructGridDeleteScript(buttonMaps, fldName, dataframe.dataframeName , nameOfField)
                     btnName = "deleteButton"
                     vIcon.name = "delete"
 
                 }else if(editButton){
                     btnName = "editButton"
                     vIcon.name = "edit"
-                    methodScript = getEditJavascript(buttonMaps, dataframe, fldName)
+                    methodScript = getEditJavascript(buttonMaps, dataframe, fldName, nameOfField)
                 } else if(showDetail){
                     btnName = "detailsButton"
-                    methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName)
+                    methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName, nameOfField)
                 } else {
                     methodScript = buttonMaps.script
                     btnName = buttonMaps.name
                     if(!btnName) throw new DataMissingException("name is required for each action buttons")
                     if(buttonMaps?.refDataframe && !buttonMaps.script){
-                        methodScript= getEditJavascript(buttonMaps, dataframe, fldName)
+                        methodScript= getEditJavascript(buttonMaps, dataframe, fldName, nameOfField)
                     }
                     if(!methodScript){
                         methodScript = ""
@@ -500,49 +448,15 @@ $fieldParams
     }
 
     private void getOnClickScript(def onClick, DataframeVue dataframe, String refDataframeName, StringBuilder onclickDfrBuilder, def gridDataframeList
-                                  , String fldName){
+                                  , String fldName, String fieldOfName){
 
         String stateName = fldName + "_onClick"
 
         onclickDfrBuilder.append(getRefDataframeHtml(onClick, dataframe, fldName, gridDataframeList))
         dataframe.getVueJsBuilder().addToMethodScript(""" ${fldName}_showDetail$refDataframeName: function(dataRecord){
-                                             ${getShowDetailJavascript(onClick, dataframe, fldName)}
+                                             ${getShowDetailJavascript(onClick, dataframe, fldName, fieldOfName)}
                                              },\n""")
 
-    }
-
-    private String refreshGrid(String fldName, String refDataframeName, Dataframe dataframe){
-        return """
-                    refreshDataForGrid: function(response, fldName, operation = "U"){
-                       
-                          var selectedRow = this.${fldName}_selectedrow;
-                          var editedIndex = this.${fldName}_items.indexOf(selectedRow);
-                          var data = responseData.data;
-                          var operation = data.operation;
-                          var newData = data.newData;
-                          var row = {};
-                          jQuery.each(newData, function(key, value) {
-                              var dataMap = value;
-                              jQuery.each(dataMap, function (key, value) {
-                                 if(selectedRow){
-                                    if (key in selectedRow) {
-                                      row[key] = value;
-                                    }
-                                 } else {
-                                    row[key] = value;
-                                 }
-                                  
-                              });
-                          });
-                          if (operation==="I") {
-                              this.${fldName}_items.push(row)
-                          } else {
-                              Object.assign(this.${fldName}_items[editedIndex], row)
-                          }
-//                          this.gridDataframes[refreshParams.dataframe] = false; 
-                },\n
-
-            """
     }
 
     private String getRefDataframeHtml(Map onClickMap, DataframeVue dataframe, String fldName, def gridDataframeList){
@@ -560,16 +474,14 @@ $fieldParams
         dataframe.childrenDataframes.add(refDataframeName)
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
         store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
-        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true, parentData:{}},\n")
+        dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_data:{key:'', \nrefreshGrid: true, \nrefreshInitialData: 8.0,\n parentData:{}},\n")
 
         if(onClickMap.showAsDialog){
             resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" width='${getWidth(onClickMap)}' max-width='${getMaxWidth(onClickMap)}' >""")
-//            resultPageHtml.append(refDataframe.getComponentName())
             resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref' :${refDataframeName}_prop="${refDataframeName}_data"></component>""")
             resultPageHtml.append("""</v-dialog>""")
         }else{
             resultPageHtml.append("""<div v-show="visibility.${refDataframeName}" max-width="${getMaxWidth(onClickMap)}">""")
-//            resultPageHtml.append(refDataframe.getComponentName())
             resultPageHtml.append("""<component :is='${refDataframeName}_comp' ref='${refDataframeName}_ref' :${refDataframeName}_prop="${refDataframeName}_data" v-bind:refreshGrid="true"></component>""")
             resultPageHtml.append("""</div>""")
         }
@@ -581,11 +493,11 @@ $fieldParams
         return resultPageHtml.toString()
     }
 
-    private String getEditJavascript(Map onClickMap, DataframeVue dataframe, String fldName){
-        return getShowDetailJavascript(onClickMap, dataframe, fldName)
+    private String getEditJavascript(Map onClickMap, DataframeVue dataframe, String fldName, String nameOfField){
+        return getShowDetailJavascript(onClickMap, dataframe, fldName, nameOfField)
     }
 
-    private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName){
+    private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName, String nameOfField){
         String parentDataframeName = dataframe.dataframeName
         String updateStoreCallScript = ""
         if(!onClickMap.refDataframe){
@@ -593,82 +505,78 @@ $fieldParams
         }
         DataframeVue refDataframe = getReferenceDataframe(onClickMap.refDataframe)
         String refDataframeName = refDataframe.dataframeName
-        boolean refreshInitialData = onClickMap.refreshInitialData ?:false
-        if(dataframe.createStore || dataframe.vueStore){
-            VueStore store = dataframe.getVueJsBuilder().getVueStore()
-            store.addToState("${fldName}_grid:{},\n")
-            updateStoreCallScript = "this.${refDataframeName}_updateStore(dataRecord);"
-            dataframe.getVueJsBuilder().addToMethodScript("""${refDataframeName}_updateStore: function(data){
-                            Vue.set(this.${refDataframeName}_data, 'parentData', data);
-                    },\n """)
-        }
+        boolean refreshInitialData = onClickMap.refreshInitialData ?:true
         return """
-                              $updateStoreCallScript
-                              this.${refDataframeName}_comp = "";
                               this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
-                              Vue.set(this.${refDataframeName}_data, 'key', key);
-                              Vue.set(this.${refDataframeName}_data, 'refreshInitialData', ${refreshInitialData?'Math.random()':false});
-                              excon.saveToStore('${parentDataframeName}', '${fldName}_selectedrow', dataRecord);
-                              excon.setVisibility("${refDataframeName}", true);
+                              ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
+                              ${excon}.setVisibility("${refDataframeName}", true);
+                              let propData = this.${refDataframeName}_data;
+                              propData['key']=  key;
+                              propData['refreshInitialData'] = ${refreshInitialData?'Math.random()':'8.0'};
+                              Vue.set(this.${refDataframeName}_data, propData);
                     \n 
                     """
     }
-    private String constructGridDeleteScript(Map buttonMaps,  String fldName, String parentDataframeName){
+    /**
+     * send 'fieldType'(persisters or transits) from buttonMaps (from descriptor) to delete grid data.
+     * for example check delete button used in grid of  'vueGridOfTranslatedTextDataframe' in resourceTranslationAssistantVue.groovy
+     * @param buttonMaps
+     * @param fldName
+     * @param parentDataframeName
+     * @param nameOfField
+     * @return
+     */
+    private String constructGridDeleteScript(Map buttonMaps,  String fldName, String parentDataframeName, String nameOfField){
         DataframeVue buttonRefDataframe = getReferenceDataframe(buttonMaps.refDataframe)
         String valueMember =buttonMaps.valueMember?:"id"
         String doBeforeDelete = buttonMaps.doBeforeDelete?:""
         String doAfterDelete = buttonMaps.doAfterDelete?:""
+        String fieldType = buttonMaps.fieldType?:"persisters"
         StringBuilder requestFieldParams = new StringBuilder()
         List<String> keyFieldNames = buttonRefDataframe.getKeyFieldNameForNamedParameter(buttonRefDataframe)
 
-        requestFieldParams.append("allParams['dataframe'] = '$buttonRefDataframe.dataframeName';\n")
-        requestFieldParams.append("allParams['parentDataframe'] = '$parentDataframeName';\n")
-        requestFieldParams.append("allParams['fieldName'] = '$fldName';\n")
-        requestFieldParams.append("allParams['id'] = dataRecord.id?dataRecord.id:dataRecord.Id;")
+        requestFieldParams.append("params['dataframe'] = '$buttonRefDataframe.dataframeName';\n")
+        requestFieldParams.append("params['parentDataframe'] = '$parentDataframeName';\n")
+        requestFieldParams.append("params['fieldName'] = '$nameOfField';\n")
+        requestFieldParams.append("params['id'] = dataRecord.id?dataRecord.id:dataRecord.Id;")
         keyFieldNames.each {
             if (it.split('_').collect().contains(valueMember)){
                 if(valueMember.equalsIgnoreCase("id")){
 
-                    requestFieldParams.append("\nallParams['").append(it).append("'] = allParams['id'];\n");
+                    requestFieldParams.append("\nparams['").append(it).append("'] = params['id'];\n");
                 }else{
 
-                    requestFieldParams.append("\nallParams['").append(it).append("'] = dataRecord.").append(valueMember).append(";\n");
+                    requestFieldParams.append("\nparams['").append(it).append("'] = dataRecord.").append(valueMember).append(";\n");
                 }
             }
 
         }
         String confirmMessage = buttonMaps.message?:"Are you sure ?"
         String url =  buttonMaps.ajaxDeleteUrl?: ajaxDeleteUrl
-//                            confirm('${confirmMessage}');
         return """
-                
-    var allParams = {};
-    var editedIndex = this.state.${fldName}_items.indexOf(dataRecord);
-    ${requestFieldParams.toString()}
-    $doBeforeDelete
-    if(dataRecord.$valueMember){
-        if(!confirm("${messageSource.getMessage("delete.confirm.message", null, "delete.confirm.message", LocaleContextHolder.getLocale())}"))return
-        const self = this;
-        axios({
-            method:'post',
-            url:'$url',
-            data: allParams
-        }).then(function (responseData) {
-            if (responseData.data.success){
-                self.state.${fldName}_items.splice(editedIndex, 1);
-            }
-            $doAfterDelete
-        })
-            .catch(function (error) {
-                console.log(error);
-            });
-    } else {
-
-                this.state.${fldName}_items.splice(editedIndex, 1);
-    }
-                    \n 
-          """
+                var params = {};
+                var editedIndex = this.state.${fieldType}.${nameOfField}.items.indexOf(dataRecord);
+                ${requestFieldParams.toString()}
+                $doBeforeDelete
+                if(dataRecord.$valueMember){
+                    if(!confirm("${messageSource.getMessage("delete.confirm.message", null, "delete.confirm.message", LocaleContextHolder.getLocale())}"))return
+                    const self = this;
+                    excon.callApi('$url', 'post', params).then(function (responseData){
+                        if (responseData.data.success){
+                            self.state.${fieldType}.${nameOfField}.items.splice(editedIndex, 1);
+                        }
+                        $doAfterDelete
+                    })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                } else {
+            
+                            this.state.${fieldType}.${nameOfField}.items.splice(editedIndex, 1);
+                }
+        \n 
+        """
     }
 
     public Map getDefaultData(List<MetaField> fieldMetaData){
@@ -700,10 +608,6 @@ $fieldParams
 
         metadata.put("columns", getColumns(wdgHql, dataframe, fieldMetaData))
 
-        //String pkString = "";
-        //(dataframe.metaFieldService.getPk(fieldMetaData)).collect { pkString += ( pkString ? "," : "" ) + "$it"  };
-
-        //metadata.put("pk", pkString);
         metadata.put("pk", dataframe.metaFieldService.getPk(fieldMetaData));
 
 

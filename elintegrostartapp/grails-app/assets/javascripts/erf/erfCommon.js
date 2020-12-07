@@ -45,11 +45,11 @@ jQuery(document).ready(function() {
 	};
 
 	Dataframe.getFormparams = function(formParams){
-		var allParams = {};
+		var params = {};
 		jQuery.each(formParams.serializeArray(), function(i, field) {
-			allParams[field.name] = field.value;
+			params[field.name] = field.value;
 		});
-		return allParams;
+		return params;
 	}
 
 	Dataframe.setHiddenFieldsForInsert = function(dataframeName, formParams){
@@ -69,12 +69,12 @@ jQuery(document).ready(function() {
 	 */
 
 	Dataframe.defaultDataframeInit = function(dataframeName){
-		var allParams = {'dataframe':dataframeName};  // TODO automatically add the id's for this dataframe
+		var params = {'dataframe':dataframeName};  // TODO automatically add the id's for this dataframe
 		var urlDefault = "/elintegrostartapp/dataframe/ajaxCreateNew";
 
 		jQuery.ajax({
 			url: urlDefault,
-			data: allParams,
+			data: params,
 			type: 'POST',
 			success: Dataframe.returnedRefreshData
 		});
