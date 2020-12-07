@@ -49,6 +49,16 @@ tr.selected td {
 #newEmployeeAdditionalQuestions{
     padding-top: 1%;
 }
+#applicantGeneralInformation{
+    padding-top: 1%;
+}
+#applicantQuestionAnswer{
+    padding-top: 1%;
+}
+#applicantCommentPage{
+    padding-top: 1%;
+}
+
 /*.first-banner{*/
 /*    background-size:cover;*/
 /*    height:auto;*/

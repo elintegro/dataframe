@@ -844,7 +844,10 @@ beans {
         putFillInitDataMethod = true
         doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
-        addFieldDef = ["person.phone":[name: "phone","validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]],
+        addFieldDef = ["person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                       "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                       "person.email":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'email.required.message']],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                       "person.phone":[name: "phone",attr:"""outlined background-color='#EBF9FF !important' color='#2AB6F6'""", "validationRules":[[condition:"v => !!v", message: 'Phone.is.required']]],
                        "application.availablePositions":[widget: "ListWidgetVue"
                                                  ,hql:"select pos.id as id, pos.name as name from Position pos"
                                                  ,"displayMember":"name"
@@ -929,6 +932,14 @@ beans {
         saveButton = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
+        addFieldDef = [
+                "application.question1":[widget:"TextAreaWidgetVue"
+                                         ,readOnly: true
+                                         ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,],
+                "application.question2":[widget:"TextAreaWidgetVue"
+                                         ,readOnly: true
+                                         ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,]
+        ]
         dataframeButtons = [ next: [name:"next", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroCommentPageForApplicantDataframe-tab-id");
                                                                                 \n""", flexGridValues:['xs3', 'sm3', 'md6', 'lg6', 'xl6']],
                              previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantCVDataframe-tab-id");
@@ -951,9 +962,12 @@ beans {
                 "application.comments":[ widget: "TextAreaWidgetVue",
                              name:"Comments",
                              readOnly: true,
+                             attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                             ],
                 "application.lastComment":[ widget:"TextAreaWidgetVue",
-                                name: "Comment"]
+                                name: "Comment"
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                ]
         ]
         dataframeButtons = [  save: [name:"save",type:"button",attr: """style='background-color:#1976D2; color:white;' """, script: """this.addCommentsForApplicant(); """ ,flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
                               previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """, script:"""excon.saveToStore("vueElintegroApplicantDetailsDataframe", "vueElintegroApplicantDetailsDataframe_tab_model","vueElintegroApplicantQuestionAnswerDataframe-tab-id");

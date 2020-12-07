@@ -289,20 +289,28 @@ beans {
     }
     vueElintegroApplicantGeneralInformationDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<div>[DATAFRAME_SCRIPT]
-                          <v-flex style="margin-top:-45px; margin-left: -1%;"><v-row>
-                          <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><span style='color:#757575;'>Selected Positions</span>:&nbsp; {{vueElintegroApplicantGeneralInformationDataframe_person_selectedposition}}</v-col>
-                          </v-row>
-                          </v-flex>
-                          <v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></div>"""
+        layoutPlaceHolder = """
+                              <v-container id="newEmployeeBasicInformation" class="applicantGeneralInformation" fluid>
+                                [DATAFRAME_SCRIPT]
+                                 <v-flex style="margin-top:-45px; margin-left: -1%;">
+                                   <v-row>
+                                    <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12"><span style='color:#757575;'>Selected Positions</span>:&nbsp; {{vueElintegroApplicantGeneralInformationDataframe_person_selectedposition}}</v-col>
+                                   </v-row>
+                                </v-flex>
+                                <v-flex class="text-right">[BUTTON_SCRIPT]</v-flex>
+                              </v-container>"""
     }
     vueElintegroApplicantQuestionAnswerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+        layoutPlaceHolder = """<v-container id="applicantQuestionAnswer" class="applicantQuestionAnswer" fluid>
+                                    <v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>
+                               </v-container>"""
     }
     vueElintegroCommentPageForApplicantDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>"""
+        layoutPlaceHolder = """<v-container id="applicantQuestionAnswer" class="applicantCommentPage" fluid>
+                                    <v-flex xs12 sm12 md6 lg6 xl6>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-flex>
+                               </v-container>"""
 
 
     }
