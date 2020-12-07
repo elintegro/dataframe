@@ -275,14 +275,16 @@ beans{
         initOnPageLoad = false
         isGlobal = true
         route = true
-        addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue"],
+        addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                        "newPassword":[name:"newPassword"
                                       ,widget:"PasswordWidgetVue"
+                                      ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                       ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && new RegExp('^(?=.*?[#?!@%^&*-])').test(v))",message:"password.contain.special.character"]
                                                           ,[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]],
                        "confirmPassword":[name:"confirmPassword"
                                           ,widget:"PasswordWidgetVue"
                                           , "insertAfter":"newPassword"
+                                          ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                           ,"validationRules":[[condition:"v => !!(v==this.state.transits.newPassword.value)",message:"Password.and.Confirm.Password."]]],
         ]
         dataframeButtons = [submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.changePasswordAfterSignedUp()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]

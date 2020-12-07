@@ -35,7 +35,7 @@ class EmailWidgetVue extends WidgetVue{
                  ${validate(field)?":rules = '${fldName}_rule'":""}
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}
-                 style="width:${getWidth(field)}; height:${getHeight(field, '30px')};"   
+                 style="width:${getWidth(field)}; height:${getHeight(field)};"   
                  ${getAttr(field)}
                 ></v-text-field>
                """

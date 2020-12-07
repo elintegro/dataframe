@@ -516,7 +516,10 @@ beans {
         doAfterSave = """excon.showAlertMessage(response);window.location.reload();"""
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
-                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue",validate: true]]
+                "contactUs.name":["name":"Name","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "contactUs.email":["name":"Name","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue",validate: true,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "contactUs.textOfMessage":["name":"Name","widget":"TextAreaWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],]
 
         //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
 
@@ -534,9 +537,9 @@ beans {
         initOnPageLoad = false
         isGlobal = true
 
-        addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150]
-                       ,"user.username":["widget" : "EmailWidgetVue",attr: "autofocus", "name": "user.username", autoComplete:"on", "width":150,placeholder:"Enter your email", "errMessage":"Username should be an email"]
-                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px',flexGridValues: ['xs11', 'sm11', 'md11', 'lg11', 'xl11'],]
+        addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150, attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """]
+                       ,"user.username":["widget" : "EmailWidgetVue",attr: "autofocus outlined background-color='#EBF9FF !important' color='#2AB6F6' ", "name": "user.username", autoComplete:"on", "width":150,placeholder:"Enter your email", "errMessage":"Username should be an email"]
+                       ,"rememberMe":["widget" : "CheckboxWidgetVue",flexGridValues: ['xs11', 'sm11', 'md11', 'lg11', 'xl11'],]
         ]
 
         dataframeButtons = [logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:10px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'120px', height: '35px'], script:"""
@@ -553,11 +556,11 @@ beans {
                                                                                              var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
                                                                                               """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
-                            login:[name:"login", type: "button", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
+                            login:[name:"login", type: "button", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
                                    script:"this.login();",
                                    "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                            forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
-                                                                layout: "<v-flex xs6 sm6 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],]
+                            forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']]
+                        ]
 
 
 
@@ -576,7 +579,7 @@ beans {
         isGlobal = true
         doAfterRefresh = """excon.setVisibility('vueElintegroLoginDataframe',false);"""
         addFieldDef =[
-                "user.email":[widget: "EmailWidgetVue",attr: "autofocus", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'email.required.message']]],
+                "user.email":[widget: "EmailWidgetVue",attr: "autofocus outlined background-color='#EBF9FF !important' color='#2AB6F6'", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'email.required.message']]],
         ]
         dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.forgotPassword();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroForgetPasswordDataframeLayout")
@@ -595,11 +598,11 @@ beans {
                 "newPassword":[name:"newPassword"
                                ,widget:"PasswordWidgetVue"
                                ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && new RegExp('^(?=.*?[#?!@%^&*-])').test(v))",message:"password.contain.special.character"]
-                                                   ,[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]],
+                                                   ,[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                 "confirmPassword":[name:"confirmPassword"
                                    ,widget:"PasswordWidgetVue"
                                    , "insertAfter":"newPassword"
-                                   ,"validationRules":[[condition:"v => !!(v==this.state.transits.newPassword.value)",message:"Password.and.Confirm.Password."]]],
+                                   ,"validationRules":[[condition:"v => !!(v==this.state.transits.newPassword.value)",message:"Password.and.Confirm.Password."]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
         ]
         dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.changeForgotPassword();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroForgetPasswordDataframeLayout")
@@ -627,14 +630,14 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doAfterSave = """ excon.setVisibility('vueElintegroRegisterDataframe',false);"""
         addFieldDef =[
-                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","validationRules":[[condition:"v => !!v", message: 'email.required.message']],"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname"
+                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' ""","validationRules":[[condition:"v => !!v", message: 'email.required.message']],"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                   ,"validationRules":[[condition:"v => !!v",message:"FirstName.required.message"],[condition: "v => (v && v.length <= 30)",message:"FirstName.must.be.less.than.30"]]],
-                "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname"
+                "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                  ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"],[condition:"v => (v && v.length <= 30)", message:"LastName.must.be.less.than.30"]]]
-                ,"user.password":[widget: "PasswordWidgetVue", "width":"150"
+                ,"user.password":[widget: "PasswordWidgetVue", "width":"150",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                   ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]]
-                ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password"
+                ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                               ,"validationRules":[[condition:"v => !!(v == excon.getStateDataframeFieldValue(this, 'user', 'password') )",message:"Password.and.Confirm.Password."]]]
         ]
 
@@ -704,25 +707,30 @@ beans {
 
                 "person.firstName":[
                         widget: "InputWidgetVue",
-                        "required": "required"],
+                        "required": "required",
+                        attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
 
                 "person.lastName":[
                         widget: "InputWidgetVue"
                         ,"required": "required"
+                        ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                 ],
                 "person.bday":[
                         widget: "DateWidgetVue"
                         ,"required": "required"
+                        ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg12', 'xl4']],
                 "person.email":[
                          widget: "EmailWidgetVue"
                         ,"required": "required"
                         ,readOnly: true
+                         ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                         ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                 ],
                 "person.phone":[
                           widget: "PhoneNumberWidgetVue"
                          ,"required": "required"
+                          ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                          ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
                 ],
                 "person.languages":[
@@ -733,6 +741,7 @@ beans {
                         ,"valueMember":"id"
                         , search:true
                         ,multiple: true
+                        ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                 ],
 
                 "person.mainPicture":[

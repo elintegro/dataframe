@@ -36,7 +36,7 @@ class PasswordWidgetVue extends WidgetVue {
             ${isReadOnly ? "readonly" : ''}
             @click:append="${fldName}_show = !${fldName}_show"
             ${toolTip(field)}
-            style="width:${getWidth(field)}; height:${getHeight(field, '30px')};"
+            style="width:${getWidth(field)}; height:${getHeight(field)};"
             ${getAttr(field)}
           ></v-text-field>"""
         if (field?.layout) {

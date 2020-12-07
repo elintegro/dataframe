@@ -59,15 +59,16 @@ class DateWidgetVue extends WidgetVue {
                             v-on="on"
                             hint="$dateFormatPlaceholder"
                             persistent-hint
-                            prepend-icon="event"
+                            prepend-icon=""
+                            prepend-inner-icon="event"
                             @click:prepend="onIconClick_$fldName"
                             readonly
                             id="${fldName}_id"
-                            
+                            ${getAttr(field)}
                             ${toolTip(field)}
                     ></v-text-field>
                 </template>
-                ${isReadOnly?"":"""<v-date-picker $localeString v-model="${modelString}" ${getAttr(field)} no-title scrollable @input="\$refs.${fldName}_menu.save($modelString)"></v-date-picker>"""}
+                ${isReadOnly?"":"""<v-date-picker $localeString v-model="${modelString}" no-title scrollable @input="\$refs.${fldName}_menu.save($modelString)"></v-date-picker>"""}
                 </v-menu>
                 """
     }

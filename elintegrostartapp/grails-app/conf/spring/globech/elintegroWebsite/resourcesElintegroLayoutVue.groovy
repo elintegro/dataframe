@@ -216,9 +216,9 @@ beans {
     }
     vueElintegroLoginDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class="rounded-card" style="width:320px; border-radius:10px;"><v-toolbar dark color="blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class="rounded-card" style="width:320px; border-radius:10px;"><v-toolbar dark color="blue darken-2" class="mb-5"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
                                 <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click="closeDataframe"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT]<v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
+                                </v-btn><span>Close</span></v-tooltip></v-toolbar><v-row class="px-2">[user.username][user.password][rememberMe]</v-row><v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
     }
     vueElintegroForgetPasswordDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -230,7 +230,7 @@ beans {
 
     vueElintegroRegisterDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' ><v-toolbar dark color="blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' ><v-toolbar dark color="blue darken-2" class="mb-5"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
                                 <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
                                 </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT]<v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
