@@ -249,7 +249,7 @@ var excon = new Vue({
         },
 
         updateState: function(response){
-            store.commit("updateState", response)
+            store.commit("updateData", response)
         },
         /**
          * Call this method for refreshing data of one dataframe from another dataframe.
@@ -343,12 +343,12 @@ var excon = new Vue({
             state['stateName'] = dataframeName;
             if (operation==="I") {
                 state[type][fldName]['items'].push(row);
-                store.commit('updateState', state)
+                store.commit('updateData', state)
             } else {
                 const selectedRow = state[fldName +'_selectedrow'];
                 const editedIndex = items.indexOf(selectedRow);
                 Object.assign(state[type][fldName]['items'][editedIndex], row);
-                store.commit('updateState', state)
+                store.commit('updateData', state)
             }
         },
 

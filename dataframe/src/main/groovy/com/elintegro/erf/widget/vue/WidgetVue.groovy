@@ -157,7 +157,7 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return false
     }
 
-    protected String getFlexAttr(DataframeVue dataframe, Map field){
+    public String getFlexAttr(DataframeVue dataframe, Map field){
         return field.flexAttr?:""
     }
 

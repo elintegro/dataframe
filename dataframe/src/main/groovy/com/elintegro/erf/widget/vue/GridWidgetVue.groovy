@@ -197,7 +197,7 @@ $fieldParams
             getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader, field.name)
 
         }
-        putPropWatcherForChildDataframes(dataframe)
+//        putPropWatcherForChildDataframes(dataframe)
         field.put("gridDataframeList", gridDataframeList);
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
         return """
@@ -258,7 +258,6 @@ $fieldParams
                 if(child.putFillInitDataMethod) {
                     VueJsBuilder vueJsBuilder = child.getVueJsBuilder()
                     vueJsBuilder.addToWatchScript(""" ${dfrName}_prop: {
-                             immediate:true,
                              deep:true,
                              handler: function(val, oldVal){
                                   if(val.refreshInitialData){

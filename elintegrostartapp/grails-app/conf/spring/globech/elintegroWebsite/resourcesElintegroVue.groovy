@@ -287,7 +287,8 @@ beans {
                         widget: "TabWidgetVue",
                         dataframes : ['vueNewEmployeeBasicInformationDataframe','vueNewEmployeeUploadResumeDataframe','vueNewEmployeeSelfAssesmentDataframe','vueNewEmployeeAddtionalQuestionsDataframe']
                         ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-                        ,flexAttr: "pt-0"
+                        ,flexAttr: "pa-0"
+
                 ]
         ]
 //        childDataframes = ['vueNewEmployeeBasicInformationDataframe','vueNewEmployeeUploadResumeDataframe','vueNewEmployeeSelfAssesmentDataframe','vueNewEmployeeAddtionalQuestionsDataframe']
@@ -300,6 +301,7 @@ beans {
         initOnPageLoad = false
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
+        dataframeLabelCode = """Basic.information"""
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
@@ -349,6 +351,7 @@ beans {
         hql = "select application.id, application.images,  application.files from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
+        dataframeLabelCode = """Upload.resume"""
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         tab = true
@@ -390,6 +393,7 @@ beans {
         bean.constructorArgs = ['vueNewEmployeeSelfAssesmentDataframe']
         initOnPageLoad = false
         putFillInitDataMethod = true
+        dataframeLabelCode = """Self.assessment"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         tab = true
         saveButton = false
@@ -469,6 +473,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeAddtionalQuestionsDataframe']
         initOnPageLoad = false
+        dataframeLabelCode = """Additional.questions"""
         doBeforeSave = """var applicationId = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
                        params['applicationId'] = applicationId;
                        params.persisters.application.id.value = applicationId;
@@ -849,6 +854,8 @@ beans {
                         widget: "TabWidgetVue",
                         dataframes : ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe"]
                         ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,flexAttr: "pa-0"
+                        ,showCloseButton:true
                 ]
         ]
 //        childDataframes = ["vueElintegroApplicantGeneralInformationDataframe","vueElintegroApplicantSelfAssessmentDataframe","vueElintegroApplicantCVDataframe","vueElintegroApplicantQuestionAnswerDataframe","vueElintegroCommentPageForApplicantDataframe"]
@@ -862,6 +869,7 @@ beans {
         saveButton = false
         readonly = true
         initOnPageLoad = true
+        dataframeLabelCode = """General.information"""
         putFillInitDataMethod = true
         doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantGeneralInformationDataframe_prop.key """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
@@ -889,6 +897,7 @@ beans {
         saveButton = false
         doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
         initOnPageLoad = true
+        dataframeLabelCode = """Self.assessment"""
         putFillInitDataMethod = true
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         readonly = true
@@ -915,6 +924,7 @@ beans {
         saveButton = false
         initOnPageLoad = true
         putFillInitDataMethod = true
+        dataframeLabelCode = """applicant.cv"""
         doBeforeRefresh = """params['id'] = self.vueElintegroApplicantCVDataframe_prop.key"""
         doAfterRefresh = """self.afterRefreshing(response);"""
         hql = "select application.id as Id, files.fileName, images.name from Application application inner join application.files as files inner join application.images as images where application.id=:id"
@@ -948,6 +958,7 @@ beans {
         tab = true
         readonly = true
         initOnPageLoad = true
+        dataframeLabelCode = """Questions.answers"""
         putFillInitDataMethod = true
         doBeforeRefresh = """params['id'] = self.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
         saveButton = false
@@ -974,11 +985,11 @@ beans {
         tab = true
         initOnPageLoad = true
         putFillInitDataMethod = true
+        dataframeLabelCode = """Comment.page"""
         doBeforeRefresh = """params['id'] = self.vueElintegroCommentPageForApplicantDataframe_prop.key"""
         saveButton = false
         hql="select application.id,application.comments,application.lastComment from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-
         addFieldDef =[
                 "application.comments":[ widget: "TextAreaWidgetVue",
                              name:"Comments",

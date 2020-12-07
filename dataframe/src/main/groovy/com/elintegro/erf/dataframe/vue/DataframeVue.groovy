@@ -313,9 +313,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 		if(putFillInitDataMethod){
 			vueJsBuilder.addToWatchScript(""" ${dataframeName}_prop: {
+                             immediate:true,
                              deep:true,
                              handler: function(val, oldVal){
-                                  if(val.refreshInitialData){
+                                  if(val && val.refreshInitialData){
                                      this.${dataframeName}_fillInitData();
                                   } else {
                                       console.log("${dataframeName}_prop has refreshInitialData as false or undefined. Could not refresh.");
