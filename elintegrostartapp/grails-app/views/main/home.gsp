@@ -62,6 +62,7 @@
         <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     </g:else>
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
+    <asset:stylesheet href="/vuejs/multiple-image-upload.css"/>
     <asset:stylesheet href="/vuejs/vuetify-v2.0.5.css"/>
     <asset:stylesheet href="/vuejs/gc-vue.css"/>
     <asset:stylesheet href="/vuejs/homePageLayout.css"/>
@@ -102,13 +103,14 @@ ${constructedPageHtml}
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
 <script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/v-tooltip"></script>
-<asset:javascript src="/vuejs/v-eutil.min.js"/>
+%{--<asset:javascript src="/vuejs/v-eutil.min.js"/>--}%
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.googleMapsApi.apiKey}">
 </script>
 <asset:javascript src="/erf/i18Messages.js"/>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <asset:javascript src="/erf/erfVueController.js"/>
 <asset:javascript src="/vuejs/vuex.js"/>
+<asset:javascript src="/vuejs/multiple-image-upload.umd.min.js"/>
 ${constructedPageScript}
 <script>
 

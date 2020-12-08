@@ -24,60 +24,27 @@ import org.grails.web.json.JSONObject
 /**
  * Created by kchapagain on Dec, 2018.
  */
-class PictureUploadWidgetVue extends WidgetVue {
+class PictureUploadWidgetVueBackup extends WidgetVue{
     @Override
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = getFieldName(dataframe, field)
-        registerComponent(dataframe)
-        boolean multiple = field?.multiple?:false
-        boolean editButton = field?.editButton?:false
-        boolean deleteButton = field?.deleteButton?:false
-        boolean addButton = field?.addButton?:true
-        String primaryText = field?.primaryText?:""
-        String browseText = field?.browseText?:"Browse picture(s)"
-        String dragText = field?.dragText?:"Drag pictures"
-        String dropText = field?.dropText?:"Drop your file here ..."
-        String markIsPrimary = field?.markIsPrimary?:""
-        String popupText = field?.popupText?:""
-        String idUpload = field?.idUpload
-        String idEdit = field?.idEdit
-        def maxImage = field?.maxImage?:5
-        boolean camera = field?.camera?:false
-        boolean videoHeight = field?.videoHeight
-        boolean videoWidth = field?.videoWidth
-        boolean canvasHeight = field?.canvasHeight
-        boolean canvasWidth = field?.canvasWidth
+        boolean multiple = field?.multiple
+        boolean editButton = field?.editButton
+        boolean deleteButton = field?.deleteButton
         return """
-              <div ${getAttr(field)} style="display: flex;">
-               <v-image-upload
-                  :multiple=$multiple
+              <div ${getAttr(field)}>
+               <v-eutil-image-upload 
+                  ${multiple?":multiple= 'true'":""} 
                   @upload-success="${fldName}_uploadImages" 
-                  @limit-exceeded="${fldName}_limitExceeded" 
-                  ${deleteButton ? "@before-remove='${fldName}_beforeRemove'" : ""}
-                  ${editButton ? "@edit-image='${fldName}_editImage'" : ""}
+                  ${deleteButton?"@before-remove='${fldName}_beforeRemove'":""}
+                  ${editButton?"@edit-image='${fldName}_editImage'":""}
+                  ${editButton?":edit-button=true":""}
+                  ${deleteButton?":delete-button=true":""}
                   ${toolTip(field)}  
-                    ${idUpload ? "id-upload=$idUpload" : ""}
-                    ${idEdit ? "edit-upload=$idEdit" : ""}
-                    :max-image=$maxImage
-                    :camera = $camera
-                    ${videoHeight ? ":video-height=$videoHeight" : ""}
-                    ${videoWidth ? ":video-width=$videoWidth" : ""}
-                    ${canvasHeight ? ":canvas-height=$canvasHeight" : ""}
-                    ${canvasWidth ? ":canvas-width=$canvasWidth" : ""}
-                    primary-text = "$primaryText"
-                    browse-text = "$browseText"
-                    drag-text = "$dragText"
-                    drop-text="$dropText"
-                    mark-is-primary-text="$markIsPrimary"
-                    popup-text="$popupText"
-                    :show-delete=$deleteButton
-                    :show-edit=$editButton
-                    :show-add=$addButton
-            ></v-image-upload>
-               </div>
+                >
+               </v-eutil-image-upload></div>
                """
     }
-
     @Override
     boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainClassInfo, String fieldName, Map field, def inputValue){
         if(isReadOnly(field)){
@@ -98,13 +65,12 @@ class PictureUploadWidgetVue extends WidgetVue {
         }
         return true
     }
-
-    private JSONArray convertToJSONArrayIfSingleJSONObject(JSONObject value) {
+    private JSONArray convertToJSONArrayIfSingleJSONObject(JSONObject value){
         JSONArray jn = new JSONArray()
         jn.add(value)
         return jn
     }
-
+    //	saves onetomany and manytomany
     private boolean saveHasManyAssociation(JSONArray inputValue, def refDomainClass, String fieldName, def domainInstance) {
         domainInstance?.(StringUtils.uncapitalize(fieldName))?.clear()
         //Here i have tried to save imageName,imageType,imageSize in Images table ,if we need to save other attributes(fields) in future, need to change this code accordingly.
@@ -128,54 +94,52 @@ class PictureUploadWidgetVue extends WidgetVue {
         String valueScript = """"""
         return """
            ${fldName}_files: [],
-           ${fldName}_imagesData: [],
 """
 
     }
 
-    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException {
+    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         String fldName = dataVariable
-        def defaultValue = field.defaultValue ?: ""
+        def defaultValue = field.defaultValue?:""
         String fillState = ""
-        String genId = fldName + "-file"
-        String domainAlias = getDataFrameDomainAlias(divId)
+        String genId = fldName+"-file"
+        String domainAlias= getDataFrameDomainAlias(divId)
         String valueMember = field.valueMember
-        String fieldNameToReload = dataframe.dataframeName + '.' + domainAlias + '.' + valueMember
+        String fieldNameToReload = dataframe.dataframeName+'.'+domainAlias+'.'+valueMember
         boolean deleteButton = field?.deleteButton
         boolean editButton = field?.editButton
-        boolean markIsPrimary = field?.markIsPrimary?:false
         dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
                 .addToMethodScript("""
-           ${fldName}_uploadImages: function(file, currentIndex, imageList){
-                        this.${fldName}_files.push(file);
-                        let imageData = ${excon}.getImageDataInfo(file);
-                        this.${fldName}_imagesData.push(imageData);
+           ${fldName}_uploadImages: function(event){
+                        var detailData = event.detail;
+                        var imageList = detailData[3];
+                        this.${fldName}_files = imageList;
+                        let imageArray = [];
+                        for(let i = 0; i < imageList.length; i++){
+                            let imageData = {};
+                            imageData["imageName"] = imageList[i].name; 
+                            imageData["imageSize"] = imageList[i].size;
+                            imageData["imageType"] = imageList[i].type;
+                            imageArray.push(imageData);
+                        }
                         let stateVariable = excon.getFromStore("$dataframe.dataframeName");
-                        stateVariable.${getFieldJSONNameVueWithoutState(field)} = this.${fldName}_imagesData;
-                        excon.saveToStore("$dataframe.dataframeName", stateVariable);
+                        stateVariable.${getFieldJSONNameVueWithoutState(field)} = imageArray;
+                        excon.saveToStore("$dataframe.dataframeName", stateVariable)
                         
                     },\n
-           ${deleteButton ? """${fldName}_beforeRemove: function(currentIndex, beforeRemove){
+           ${deleteButton?"""${fldName}_beforeRemove: function(event){
+                            var detailData = event.detail;
+                            var beforeRemove = detailData[1];
                             var r = confirm("Remove image !");
                             if (r == true) {
                                 beforeRemove()
-                                if(typeof this.${fldName}_files[currentIndex] != 'undefined') {
-                                    this.${fldName}_files.splice(currentIndex, 1);
-                                    this.${fldName}_imagesData.splice(currentIndex, 1);
-                                    excon.getFromStore("$dataframe.dataframeName").${getFieldJSONNameVueWithoutState(field)} = this.${fldName}_imagesData;
-                                }
+                                this.${fldName}_files = detailData[2];
                             } 
+                    },\n  """:""}
+           ${editButton ? """${fldName}_editImage: function(event){
+                            var detailData = event.detail;
+                            this.${fldName}_files = detailData[3];
                     },\n  """ : ""}
-           ${editButton ? """${fldName}_editImage: function(file, currentIndex, fileList){
-                            this.${fldName}_files[currentIndex] = file;
-                            excon.getFromStore("$dataframe.dataframeName").${getFieldJSONNameVueWithoutState(field)}[currentIndex] = ${excon}.getImageDataInfo(file);
-                    },\n  """ : ""}
-           ${markIsPrimary ? """${fldName}_markIsPrimary: function(currentIndex, fileList){
-                            console.log('markIsPrimary data', index, fileList);
-                    },\n  """ : ""}
-           ${fldName}_limitExceeded: function(limitAmount){
-                            alert('Limit exceeded');
-                    },\n
            ${fldName}_ajaxFileSave: function(data, params){
                         var fileList = this.${fldName}_files;
                         if(fileList.length > 0){
@@ -211,21 +175,15 @@ class PictureUploadWidgetVue extends WidgetVue {
                 """
     }
 
-    String getCreatedScript(DataframeVue dataframe, Map field, String divId, String fldId, String key) {
+    String getCreatedScript(DataframeVue dataframe, Map field, String divId, String fldId, String key){
         String fldName = dataframe.getDataVariableForVue(field)
         return """this.${fldName}_computedFileUploadParams();\n"""
     }
 
-    private static String getDataFrameDomainAlias(String divId) {
+    private static String getDataFrameDomainAlias(String divId){
         String[] fieldArr = divId.split("-")
-        if (fieldArr.size() > 2) {
+        if (fieldArr.size() > 2){
             return fieldArr[1]
         }
-    }
-
-    private static void registerComponent(DataframeVue dataframe){
-        dataframe.vueJsBuilder.addToComponentScript("""
-         'v-image-upload' : MultipleImageUploadWithWebCam,
-        """)
     }
 }

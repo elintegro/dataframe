@@ -370,7 +370,9 @@ beans {
                                       ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                                       ,multiple:true
                                       ,editButton: true
-                                      ,deleteButton:true  ],
+                                      ,deleteButton:true
+                                      ,camera:false
+                ],
 
                 "application.files":["name":"files"
                                       ,"widget":"FilesUploadWidgetVue"
@@ -769,6 +771,7 @@ beans {
                         ,multiple:false
                         ,editButton: true
                         ,deleteButton:true
+                        ,camera: true
                 ]
 
         ]
