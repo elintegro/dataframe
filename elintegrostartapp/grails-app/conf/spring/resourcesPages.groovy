@@ -21,7 +21,7 @@ beans {
 				//Dataframes used in new employee registration flow of careers page...
 				"vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
 				 "vueNewEmployeeApplicantAddSkillDataframe","vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe",
-				 "vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe","vueCareersPageButtonDataframe",
+				 "vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 
 				//Dataframes used in user profile...
 				"vueElintegroResetPasswordDataframe","vueElintegroUserProfileDataframe","vueElintegroProfileMenuDataframe",

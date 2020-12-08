@@ -260,19 +260,18 @@ beans {
         initOnPageLoad = false
         route = true
         //childDataframes = ["vueCareersPageButtonDataframe"]
+        addFieldDef=[
+                        "careersHeader":["widget":"TextDisplayWidgetVue"
+                                 ,"name":"careersHeader"
+                                 ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        ],
+                        "careersDescription":["widget":"TextDisplayWidgetVue"
+                                         ,"name":"careersDescription"
+                                         ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                ]]
+        dataframeButtons = [registerForNewEmployee: [name: "register", type: "button",route: true,routeIdScript: "0", attr:" width= '100' style='background-color:#1976D2; color:white;' ", refDataframe: ref("vueNewEmployeeApplicantDataframe"),
+                                                     "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueCareersDataframeLayout")
-    }
-    vueCareersPageButtonDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueCareersPageButtonDataframe']
-        dataframeLabelCode = "Careers"
-        saveButton = false
-        initOnPageLoad = false
-        isGlobal = true
-        dataframeButtons = [registerForNewEmployee: [name: "register", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueNewEmployeeApplicantDataframe"),
-                                                     "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
-        currentFrameLayout = ref("emptyDataframeLayout")
-
     }
     vueNewEmployeeApplicantDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
