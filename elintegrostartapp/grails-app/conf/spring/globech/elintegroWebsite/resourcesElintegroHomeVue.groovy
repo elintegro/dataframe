@@ -218,8 +218,7 @@ beans{
         saveButton = false
         initOnPageLoad = false
         isGlobal = true
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        hql = """select  lead.leadDescription, lead.leadStage, lead.leadBudget,lead.nameOfProject, lead.descriptionOfProject,lead.deadline, person.firstName, person.lastName, person.email , person.phone from Lead lead inner join lead.applicant person  where lead.id=:id"""
+        hql = """select  lead.leadDescription, lead.leadStage, lead.leadBudget, lead.nameOfProject, lead.deadline, lead.descriptionOfProject, person.firstName, person.lastName, person.email , person.phone from Lead lead inner join lead.applicant person  where lead.id=:id"""
         addFieldDef = [
                         "lead.leadDescription":[
                                 widget:"ComboboxVue"
@@ -228,7 +227,9 @@ beans{
                                 ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
                                 ,"displayMember": "Answer"
                                 ,"valueMember"  : "id"
-                                ,search:true],
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,search:true
+                                ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.leadStage":[
                                widget:"ComboboxVue"
                                ,internationalize    :true
@@ -236,7 +237,9 @@ beans{
                                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadStage'"""
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
-                               ,search:true],
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,search:true
+                               ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.leadBudget":[
                                widget:"ComboboxVue"
                                ,initBeforePageLoad  :true
@@ -244,25 +247,50 @@ beans{
                                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadBudget'"""
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
-                               ,search:true],
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,search:true
+                               ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.nameOfProject":[
                                widget:"InputWidgetVue"
                                ,name: "nameOfProject"
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                                ],
+                       "lead.deadline":[
+                                widget:"DateWidgetVue"
+                                ,name: "deadline"
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                       ],
                        "lead.descriptionOfProject":[
                                widget:"TextAreaWidgetVue"
                                ,name: "descriptionOfProject"
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                        ],
-                       "lead.deadline":[
-                               widget:"DateWidgetVue"
-                               ,name: "deadline"
+                       "person.firstName":[
+                                widget:"InputWidgetVue"
+                                ,name: "firstName"
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
-
-                       "person.phone":["name":"phone","widget":"PhoneNumberWidgetVue",validate: true],
+                       "person.lastName":[
+                                widget:"InputWidgetVue"
+                                ,name: "lastName"
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                       ],
+                       "person.email":[
+                               widget:"EmailWidgetVue"
+                               ,name: "email"
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                       ],
+                       "person.phone":["name":"phone","widget":"PhoneNumberWidgetVue",validate: true,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' ""","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
 
         ]
         dataframeButtons = [
-                submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }
