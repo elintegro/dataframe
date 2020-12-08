@@ -570,8 +570,8 @@ beans {
                                                                                               """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
                             login:[name:"login", type: "button", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
                                    script:"this.login();",
-                                   "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                            forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']]
+                                   "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                            forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
                         ]
 
 
