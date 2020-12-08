@@ -319,7 +319,16 @@ beans{
     }
     vueElintegroSignUpQuizDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT]<v-card-actions class="justify-center">[BUTTON_SCRIPT]</v-card-actions></v-flex>"""
+        layoutPlaceHolder = """<v-container grid-list-sm fluid>
+                                        <v-layout wrap class="text-center">
+                                             [lead.leadDescription][lead.leadStage][lead.leadBudget]
+                                             [lead.nameOfProject] [lead.deadline]
+                                             [lead.descriptionOfProject]
+                                             [person.firstName] [person.lastName]
+                                             [person.email] [person.phone]
+                                             [submit]
+                                        </v-layout>
+                               </v-container>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
 
     }

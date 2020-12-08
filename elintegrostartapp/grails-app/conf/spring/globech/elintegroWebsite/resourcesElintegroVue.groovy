@@ -260,19 +260,18 @@ beans {
         initOnPageLoad = false
         route = true
         //childDataframes = ["vueCareersPageButtonDataframe"]
+        addFieldDef=[
+                        "careersHeader":["widget":"TextDisplayWidgetVue"
+                                 ,"name":"careersHeader"
+                                 ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        ],
+                        "careersDescription":["widget":"TextDisplayWidgetVue"
+                                         ,"name":"careersDescription"
+                                         ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                ]]
+        dataframeButtons = [registerForNewEmployee: [name: "register", type: "button",route: true,routeIdScript: "0", attr:" width= '100' style='background-color:#1976D2; color:white;' ", refDataframe: ref("vueNewEmployeeApplicantDataframe"),
+                                                     "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueCareersDataframeLayout")
-    }
-    vueCareersPageButtonDataframe(DataframeVue) { bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueCareersPageButtonDataframe']
-        dataframeLabelCode = "Careers"
-        saveButton = false
-        initOnPageLoad = false
-        isGlobal = true
-        dataframeButtons = [registerForNewEmployee: [name: "register", type: "link",route: true,routeIdScript: "0", refDataframe: ref("vueNewEmployeeApplicantDataframe"),
-                                                     "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
-        currentFrameLayout = ref("emptyDataframeLayout")
-
     }
     vueNewEmployeeApplicantDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
@@ -371,7 +370,9 @@ beans {
                                       ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                                       ,multiple:true
                                       ,editButton: true
-                                      ,deleteButton:true  ],
+                                      ,deleteButton:true
+                                      ,camera:false
+                ],
 
                 "application.files":["name":"files"
                                       ,"widget":"FilesUploadWidgetVue"
@@ -569,8 +570,8 @@ beans {
                                                                                               """, "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
                             login:[name:"login", type: "button", attr: """color='blue darken-2' dark style="width: 10px; margin-left:65px;" """,
                                    script:"this.login();",
-                                   "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                            forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']]
+                                   "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                            forgetPassword:[name: "forgetPassword", type: "link", attr:"""style='color:#1976D2;margin-left:2px;' """,script: """excon.redirectPage(this,"forget-password");excon.setVisibility('vueElintegroLoginDataframe',false);""", "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']]
                         ]
 
 
@@ -770,6 +771,7 @@ beans {
                         ,multiple:false
                         ,editButton: true
                         ,deleteButton:true
+                        ,camera: true
                 ]
 
         ]
