@@ -36,6 +36,7 @@ class PictureUploadWidgetVue extends WidgetVue {
         String primaryText = field?.primaryText?:""
         String browseText = field?.browseText?:"Browse picture(s)"
         String dragText = field?.dragText?:"Drag pictures"
+        String dropText = field?.dropText?:"Drop your file here ..."
         String markIsPrimary = field?.markIsPrimary?:""
         String popupText = field?.popupText?:""
         String idUpload = field?.idUpload
@@ -66,6 +67,7 @@ class PictureUploadWidgetVue extends WidgetVue {
                     primary-text = "$primaryText"
                     browse-text = "$browseText"
                     drag-text = "$dragText"
+                    drop-text="$dropText"
                     mark-is-primary-text="$markIsPrimary"
                     popup-text="$popupText"
                     :show-delete=$deleteButton
@@ -172,7 +174,7 @@ class PictureUploadWidgetVue extends WidgetVue {
                             console.log('markIsPrimary data', index, fileList);
                     },\n  """ : ""}
            ${fldName}_limitExceeded: function(limitAmount){
-                            alert('Limit exceeded image size: '+limitAmount);
+                            alert('Limit exceeded : '+limitAmount);
                     },\n
            ${fldName}_ajaxFileSave: function(data, params){
                         var fileList = this.${fldName}_files;
