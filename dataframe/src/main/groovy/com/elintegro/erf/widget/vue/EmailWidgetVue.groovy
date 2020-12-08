@@ -26,31 +26,19 @@ class EmailWidgetVue extends WidgetVue{
     String getHtml(DataframeVue dataframe, Map field) {
         String fldName = dataframe.getDataVariableForVue(field)
         boolean isReadOnly = dataframe.isReadOnly(field)
-        String modelString = getModelString(dataframe, field)
         String placeholder = field.placeholder?:"Enter your ${field.name}."
         return """
                <v-text-field
                  label="${getLabel(field)}"
                  placeholder = "${placeholder}"
-                 v-model="${modelString}"
+                 v-model = "${getFieldJSONModelNameVue(field)}" 
                  ${validate(field)?":rules = '${fldName}_rule'":""}
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}
-                 style="width:${getWidth(field)}; height:${getHeight(field, '30px')};"   
+                 style="width:${getWidth(field)}; height:${getHeight(field)};"   
                  ${getAttr(field)}
                 ></v-text-field>
                """
-    }
-    String getVueSaveVariables(DataframeVue dataframe, Map field){
-        String thisFieldName = dataframe.getFieldId(field)
-        String dataVariable = dataframe.getDataVariableForVue(field)
-        return """allParams['$dataVariable'] = this.state.$dataVariable;\n allParams['email'] = this.state.$dataVariable;\n"""
-    }
-    @Override
-    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) {
-        String vueInstance = dataframe.dataframeName+"_instance"
-//        return """this.$dataVariable = response['$key'];"""
-        return ""
     }
 
     @Override

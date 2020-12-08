@@ -48,10 +48,6 @@ class ResultPageHtmlBuilder {
     SpringSecurityService springSecurityService
 
     ResultPageHtmlBuilder(){
-//        registeredComponents = new HashSet<>()
-    }
-    public static constructFinalHtml(dataframes){
-//        LayoutVue.constructFinalHtml(dataframes)
     }
 
     public Map<String, String> getFinalHtmlandScript(PageDFRegistryVue gcMainPgObj){
@@ -83,7 +79,6 @@ class ResultPageHtmlBuilder {
         String initHmtl = layoutStructM.initHtml
         StringBuilder finalScriptSb = new StringBuilder()
         finalScriptSb.append("<script>\n")
-//        finalScriptSb.append("<script type='text/babel'>\n")
         //Initialize Store
         finalScriptSb.append("let store = new Vuex.Store({\n")
         finalScriptSb.append(dfrComps.vueStore)
@@ -126,37 +121,6 @@ class ResultPageHtmlBuilder {
         finalScriptSb.append(getMainPgVueCompRegistrationString(gcMainPgObj)) // dfr components registration
         finalScriptSb.append("\n},\n")// components registration completed
         finalScriptSb.append("methods:{\n")
-        finalScriptSb.append("""
-                   
-                    refreshDataForGrid: function(response, fldName, operation = "U"){
-                       
-                          const newData = response.newData;
-                          if(!newData) return;
-                          const selectedRow = this[fldName +'_selectedrow'];
-                          const editedIndex = this.state[fldName +'_items'].indexOf(selectedRow);
-                          let row = {};
-                          for(let key in newData){
-                              let dataMap = newData[key];
-                              for(let j in dataMap){
-                                 if(selectedRow){
-                                    if (key in selectedRow) {
-                                      row[key] = dataMap[j];
-                                    }
-                                 } else {
-                                    row[key] = dataMap[j];
-                                 }
-                                  
-                              }
-                          }
-                          if (operation==="I") {
-                              this.state[fldName +'_items'].push(row)
-                          } else {
-                              Object.assign(this.state[fldName +'_items'][editedIndex], row)
-                          }
-//                          this.gridDataframes[refreshParams.dataframe] = false; 
-                },
-
-         """)
         finalScriptSb.append("}, \n") //methods end
         finalScriptSb.append("})")
         finalScriptSb.append("</script>")
@@ -270,10 +234,8 @@ class ResultPageHtmlBuilder {
         disObj.compRegScript.setLength(0) //Resetting compRegScript for another layout obj
         if(!disObj.childDataframes.isEmpty()){
             for(String compS : disObj.childDataframes){
-                DataframeVue lytT = DataframeVue.getDataframe(compS) // todo check if component is Layout or Dataframe first
                 if(!registeredComponents.contains(compS)){
                     compBuilder.append(VueJsBuilder.createCompRegistrationString(compS))
-//                    lytT.componentRegistered = true
                     registeredComponents.add(compS)
                 }
             }

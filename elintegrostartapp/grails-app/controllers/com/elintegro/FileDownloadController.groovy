@@ -10,8 +10,8 @@ class FileDownloadController {
 
     def fileDownload() {
         def fileName = params.id+"."+params.format
-        def fileLocation = Holders.grailsApplication.config.images.storageLocation+"/images/"
-        def fileUrl = fileLocation + fileName
+        if (!fileName || fileName == "undefined.null") render ""
+        def fileUrl = Holders.grailsApplication.config.images.storageLocation+"/images/"+fileName
         def file = new File(fileUrl)
         if (file.exists()) {
 

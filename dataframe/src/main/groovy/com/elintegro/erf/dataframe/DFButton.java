@@ -34,6 +34,7 @@ public class DFButton {
 	Map callBackParams; // For callback successScripts, failureScripts etc
 	String style;
 	public String doBeforeSave; // Script just before Ajax save
+	public String doAfterSave=""; // Script just after Ajax save
 	public boolean showAsDialog = false; //Show the refDataframe as Dialog??
 	public boolean route = false; // Show as Route??
 	public Map tooltip;

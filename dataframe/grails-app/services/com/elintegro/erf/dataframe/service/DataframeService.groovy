@@ -13,13 +13,18 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.dataframe.service
 
-import com.elintegro.erf.dataframe.DataFrameInitialization
-import com.elintegro.erf.dataframe.DataManipulationException
-import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.ParsedHql
+import com.elintegro.erf.dataframe.*
 import com.elintegro.erf.dataframe.db.fields.MetaField
 import com.elintegro.erf.dataframe.db.types.DataType
+import com.elintegro.erf.dataframe.vue.DataframeConstants
+import com.elintegro.model.DataframeResponse
+import grails.util.Holders
+import grails.web.servlet.mvc.GrailsParameterMap
 import org.grails.core.DefaultGrailsDomainClass
+import org.springframework.context.MessageSource
+import org.springframework.context.i18n.LocaleContextHolder
+
+import javax.servlet.http.HttpSession
 
 class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	Dataframe parent
@@ -254,11 +259,9 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 
 	
    public String getHtml(String layout){
-	   println ">>>>>> dataframe service ------ In getHtml()"
 	   if(!resultPage ||  !currentLayout || currentLayout != layout){
 	   	prepare(layout)
 	   }
-	   println "resultpage: "+ resultPage
 	   return resultPage  
    }
   
@@ -280,4 +283,92 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	   scripts =  resultPageJs.toString()
 	   return resultPage
    }
+
+	public DataframeResponse saveRaw(def request){
+		def requestParams = request.getJSON()
+
+		Dataframe dataframe = Dataframe.getDataframeByName(requestParams)
+		def dataframeInstance = new DataframeInstance(dataframe, requestParams)
+		def operation = 'U'; //Update
+		def result;
+
+		try {
+			result = dataframeInstance.save(true);
+		}catch(Exception e){
+			log.error("Failed to save data for dataframe ${dataframeInstance.df.dataframeName} Error : \n " + e)
+		}
+
+		if(dataframeInstance.isInsertOccured()){
+			operation = "I";
+		}
+
+		Map savedResultMap = dataframeInstance.getSavedDomainsMap();
+
+		savedResultMap.each { domainAlias, domainObj ->
+			def domain = domainObj[0]
+			def domainInstance = domainObj[1]
+			boolean isInsertDomainInstance = domainObj[2]
+			DomainClassInfo domainClassInfo = domain.get(DataframeConstants.PARSED_DOMAIN);
+			domain?.domainKeys?.each{ key ->
+				def keyValue = domainInstance."${key}"
+				String myDomainAlias = domainClassInfo.getDomainAlias()
+				def keyOldValue = requestParams?.domain_keys?."${myDomainAlias}"."${key}"
+				def castedKeyOldValue = dataframe.getTypeCastValue2(myDomainAlias, key, keyOldValue)
+				if(castedKeyOldValue == null ) {
+					requestParams?.domain_keys?."${myDomainAlias}".put(key, keyValue)
+				}else if(castedKeyOldValue != keyValue){
+					//EU!!!
+					throw new DataframeException("Save is trying to change Key Value (and it is not Insert!) Could be hacker's attack!")
+				}
+				domainObj.add(castedKeyOldValue)
+			}
+		}
+
+		if (dataframeInstance.isMultipleDomainsToSave() && dataframeInstance.isInsertOccured()){
+			//inter-domain relationship
+			dataframeInstance.setInterDomainRelationships(savedResultMap)
+		}
+
+		MessageSource messageSource = dataframe.messageSource
+		DataframeResponse response = new DataframeResponse()
+		response.operation = operation //todo: make sure is this required in this node?
+		response.data = requestParams
+		response.data.put(response.operation, operation)
+		String msg
+		if(result) {
+			msg = messageSource.getMessage("data.save.success", null, "save.success", LocaleContextHolder.getLocale())
+		} else {
+			response.success = false
+			msg = messageSource.getMessage("data.save.not.valid", null, "data.not.valid", LocaleContextHolder.getLocale())
+		}
+		response.message = msg
+		//response.dataframeInstance = dataframeInstance
+
+		return response
+	}
+
+
+	def ajaxValuesRaw(def request, HttpSession session) {
+		def requestParams = request.getJSON()
+		Dataframe dataframe = Dataframe.getDataframeByName(requestParams)
+		def userId = getSessionUserId(session)
+		def dfInstance = new DataframeInstance(dataframe, requestParams)
+
+		dfInstance.setSessionParameters(DataframeInstance.getSessionAtributes(session))
+
+		def jsonMap = dfInstance.readAndGetJson()
+
+		def inp = dfInstance.getFieldValuesAsKeyValueMap()
+		return jsonMap
+	}
+
+	public static long getSessionUserId(def session) {
+		def userId = session.getAttribute("userid")
+		userId = userId?Long.valueOf(userId):userId
+		if ( userId == null ) {
+			userId = (long) Holders.grailsApplication.config.guestUserId
+			session.setAttribute("userid", userId)
+		}
+		return userId
+	}
 }

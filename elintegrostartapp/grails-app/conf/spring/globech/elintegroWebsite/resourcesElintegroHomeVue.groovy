@@ -25,7 +25,8 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFirstContainerDataframe']
         saveButton = false
-        doAfterRefresh = """self.changeWords();"""
+        initOnPageLoad = true
+        doAfterRefresh = """self.changeWords(response);"""
         addFieldDef = [
                 "build":["widget":"TextDisplayWidgetVue"
                             ,"name":"build"
@@ -146,6 +147,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuotesContainerDataframe']
         saveButton = false
+        initOnPageLoad = true
         flexGridValues= ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
                 customerSay:["widget":"TextDisplayWidgetVue"
@@ -169,12 +171,12 @@ beans{
                                             align="center"
                                             justify="center"
                                          >
-                                            <v-col cols="12" xs="1"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
+                                            <v-col cols="2" xs="2"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.quote}}</v-col>
-                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
+                                            <v-col cols="0" xs="0" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
                                                 
                                             </v-col>
-                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},  {{item.title}}</v-col>
+                                            <v-col cols="12" xs="2" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},  {{item.title}}</v-col>
                                          </v-row>
                                     </v-card>
                                     """
@@ -260,7 +262,7 @@ beans{
 
         ]
         dataframeButtons = [
-                submit: [name: "submit", type: "link",attr: """style='background-color:#2ab6f6; color:#1a1b1f;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }
@@ -273,17 +275,19 @@ beans{
         initOnPageLoad = false
         isGlobal = true
         route = true
-        addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue"],
+        addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                        "newPassword":[name:"newPassword"
                                       ,widget:"PasswordWidgetVue"
+                                      ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                       ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && new RegExp('^(?=.*?[#?!@%^&*-])').test(v))",message:"password.contain.special.character"]
                                                           ,[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]],
                        "confirmPassword":[name:"confirmPassword"
                                           ,widget:"PasswordWidgetVue"
                                           , "insertAfter":"newPassword"
-                                          ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroChangePasswordAfterSignUpDataframe_newPassword)",message:"Password.and.Confirm.Password."]]],
+                                          ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                          ,"validationRules":[[condition:"v => !!(v==this.state.transits.newPassword.value)",message:"Password.and.Confirm.Password."]]],
         ]
-        dataframeButtons = [submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        dataframeButtons = [submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.changePasswordAfterSignedUp()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("vueElintegroChangePasswordAfterSignUpDataframeLayout")
     }
 

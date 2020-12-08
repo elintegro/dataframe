@@ -13,6 +13,10 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.utils
 
+import groovy.json.JsonBuilder
+import groovy.util.logging.Slf4j
+
+@Slf4j
 class MapUtil {
 
     public static def findDeep(Map m, String key) {
@@ -36,4 +40,41 @@ class MapUtil {
         }
         m.findResult { k, v -> v instanceof Map ? putDeepValue(v, key, value) : null }
     }
+    public static String convertMapToJSONString(Map map){
+
+        /*
+        ObjectMapper mapper = new ObjectMapper();
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        mapper.writeValue(out, map);
+        final byte[] data = out.toByteArray();
+        String dataJsonString_ = new String(data)
+        */
+        try {
+            JsonBuilder bld = new JsonBuilder(map)
+            String dataJsonString = bld.toPrettyString()
+            return dataJsonString
+        }catch(Exception e){
+            log.error("Failing to convert map to ${map.toString()}JSON error = ${e}")
+        }
+    }
+
+    public static String convertMapToJSONString(Object obj){
+
+        /*
+        ObjectMapper mapper = new ObjectMapper();
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        mapper.writeValue(out, map);
+        final byte[] data = out.toByteArray();
+        String dataJsonString_ = new String(data)
+        */
+        try {
+            JsonBuilder bld = new JsonBuilder(obj)
+            String dataJsonString = bld.toPrettyString()
+            return dataJsonString
+        }catch(Exception e){
+            log.error("Failing to convert map to ${obj.toString()}JSON error = ${e}")
+        }
+    }
+
+
 }

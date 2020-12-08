@@ -29,7 +29,7 @@ class LanguageTranslateController {
 
     }
     def languageTranslator(){
-        Language language1 = Language.findByEname(params.id)
+        Language language1 = Language.findById(params.id)
 //      '/?lang=ne'
         redirect(uri:'?lang='+language1.code)
     }

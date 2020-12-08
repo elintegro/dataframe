@@ -109,7 +109,7 @@ beans{
                                                     <v-card class="borderInTranslation"> 
                                                          <v-row class="px-8">
                                                                 [DATAFRAME_SCRIPT]
-                                                            <v-row>
+                                                            <v-row class="mx-0 pa-1">
                                                                 [BUTTON_SCRIPT]
                                                             </v-row>
                                                         </v-row>
@@ -142,7 +142,7 @@ beans{
                                             </v-tooltip>
                                         </v-flex>
                                         <v-row class="px-8">
-                                           [project.sourceLanguage][project.key][project.sourceText][textToTranslate]
+                                           [project.sourceLanguage][key][sourceText][textToTranslate]
                                         </v-row>
                                         <v-row class="pa-8" style="text-align: center;">[save]</v-row>
                                     </v-card>
@@ -201,10 +201,10 @@ beans{
                                                 </v-row>
                                             </v-col>    
                                             <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
-                                            <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" class="text-center">
+                                            <v-col cols="12" xs="12" sm="0" md="4" xl="4" lg="4">
                                                 <v-row class="imageRow">
-                                                    <v-img alt ="howYouDo" class="image1" src="assets/home/laptoPhoto2.png"></v-img>
-                                                    <v-img alt ="howYouDo"  class= "image2" src="assets/home/laptoPhoto1.png"></v-img>
+                                                    <v-img alt ="howYouDo" class="image1" src="assets/home/laptoPhoto1.png"></v-img>
+                                                    <v-img alt ="howYouDo"  class= "image2" src="assets/home/laptoPhoto2.png"></v-img>
                                                 </v-row>
                                              </v-col>
                                              <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>

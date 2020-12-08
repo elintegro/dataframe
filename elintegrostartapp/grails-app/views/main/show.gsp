@@ -25,7 +25,6 @@
         <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
     </g:else>
     <asset:stylesheet href="/vuejs/gc-vue.css"/>
-    <asset:stylesheet href="/vuejs/homePageLayout.css"/>
 
 </head>
 <body>
