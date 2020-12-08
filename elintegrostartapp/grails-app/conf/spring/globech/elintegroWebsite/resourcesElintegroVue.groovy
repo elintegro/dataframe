@@ -449,7 +449,7 @@ beans {
         putFillInitDataMethod = true
         doBeforeRefresh = """
                              excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueNewEmployeeApplicantEditSkillDataframe', 
-                                                            'namedParamKey': 'applicationId', 
+                                                            'namedParamKey': 'id', 
                                                             'getValueFrom': 'vueNewEmployeeSelfAssesmentDataframe', 
                                                             'fieldName':'applicationSkill',
                                                             'key': 'Id'});
@@ -458,7 +458,7 @@ beans {
         doAfterSave = """ excon.setVisibility("vueNewEmployeeApplicantEditSkillDataframe", false);
                           excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'U', 'transits');
                       """
-        hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:applicationId"
+        hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = ["applicationSkill.skill":[widget: "InputWidgetVue",readOnly: true,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                        "applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """, script: """"""],
@@ -517,16 +517,14 @@ beans {
         initOnPageLoad = true
         currentRoute = 'thank-you-message'
         route = true
-//        params['applicationId'] = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
-        doBeforeRefresh= """
-                             excon.setValuesForNamedParams({'setValueTo': 'vueNewEmployeeThankYouMessageAfterSaveDataframe', 
-                                                            'namedParamKey': 'applicationId', 
+        doBeforeRefresh= """excon.setValuesForNamedParams({'setValueTo': 'vueNewEmployeeThankYouMessageAfterSaveDataframe', 
+                                                            'namedParamKey': 'id', 
                                                             'getValueFrom': 'vueNewEmployeeBasicInformationDataframe', 
                                                             'fieldName':'application',
                                                             'key': 'id'});
 """
         doAfterRefresh = """setTimeout(function(){ self.\$router.push("/home/0");window.location.reload();}, 10000);"""
-        hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:applicationId"
+        hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:id"
         currentFrameLayout = ref("vueNewEmployeeThankYouMessageAfterSaveDataframeLayout")
 
     }
