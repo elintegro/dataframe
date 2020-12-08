@@ -174,7 +174,7 @@ class PictureUploadWidgetVue extends WidgetVue {
                             console.log('markIsPrimary data', index, fileList);
                     },\n  """ : ""}
            ${fldName}_limitExceeded: function(limitAmount){
-                            alert('Limit exceeded : '+limitAmount);
+                            alert('Limit exceeded');
                     },\n
            ${fldName}_ajaxFileSave: function(data, params){
                         var fileList = this.${fldName}_files;
