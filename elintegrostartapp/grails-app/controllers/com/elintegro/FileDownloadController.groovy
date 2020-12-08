@@ -10,7 +10,8 @@ class FileDownloadController {
 
     def fileDownload() {
         def fileName = params.id+"."+params.format
-        def fileUrl = getUrlByExtensionFor(fileName)
+        if (!fileName || fileName == "undefined.null") render ""
+        def fileUrl = Holders.grailsApplication.config.images.storageLocation+"/images/"+fileName
         def file = new File(fileUrl)
         if (file.exists()) {
 
@@ -23,28 +24,6 @@ class FileDownloadController {
 
         } else {
             log.error("Such file +$fileName+ doesn't exist.")
-            render ""
-        }
-    }
-
-    private String getUrlByExtensionFor(String fileName){
-
-        if(!fileName) return ""
-
-        def extension = fileName - ~/.*(?<=\.)/
-        if(extension == 'pdf'){
-            return Holders.grailsApplication.config.images.defaultImagePathForPdf
-        }
-        else if(extension == 'xlsx' || extension == 'xlsm' || extension == 'xlsb' || extension == 'xltx'){
-            return Holders.grailsApplication.config.images.defaultImagePathForExcel
-        }
-        else if(extension == 'doc' || extension == 'docx'){
-            return Holders.grailsApplication.config.images.defaultImagePathForDocFile
-        }
-        else if(extension == 'csv' || extension == 'CSV'){
-            return Holders.grailsApplication.config.images.defaultImagePathForCsvFile
-        } else { // For actual images
-            return Holders.grailsApplication.config.images.storageLocation+"/images/" + fileName
         }
     }
 

@@ -513,6 +513,7 @@ $fieldParams
                               ${excon}.setVisibility("${refDataframeName}", true);
                               let propData = this.${refDataframeName}_data;
                               propData['key']=  key;
+                              propData['parentData'] = dataRecord;
                               propData['refreshInitialData'] = ${refreshInitialData?'Math.random()':'8.0'};
                               Vue.set(this.${refDataframeName}_data, propData);
                     \n 

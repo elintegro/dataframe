@@ -65,13 +65,14 @@ class FilesDisplayWidgetVue extends WidgetVue {
 
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
         String fldName = dataVariable
+        String modelString = getFieldJSONModelNameVue(field)
         dataframe.getVueJsBuilder().addToMethodScript("""
                ${fldName}_url:function(){
-                                    var fileName = this.state.${fldName}_name;
+                                    var fileName = this.${modelString}_name;
                                     var fileURL = '/fileDownload/fileDownload/'+fileName
                                     var fileLink = document.createElement('a');
                                     fileLink.href = fileURL;
-                                    fileLink.setAttribute('download', this.state.${fldName}_name);
+                                    fileLink.setAttribute('download', this.${modelString}_name);
                                     document.body.appendChild(fileLink);
                                     fileLink.click();
                }
