@@ -134,29 +134,29 @@ var excon = new Vue({
             throw "No object for the path " + key;
         },
 
-                matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {
+        matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {
 
-                    var sourceDataframeVars = this.getFromStore(fromDataframe);
-                    var targetDataframeVars = this.getFromStore(toDataframe);
+            var sourceDataframeVars = this.getFromStore(fromDataframe);
+            var targetDataframeVars = this.getFromStore(toDataframe);
 
-                    for(let varName in targetDataframeVars) {
-                        let keyPrefix = "key_" + toDataframe;
-                        let indStart = varName.indexOf("key_" + toDataframe);
-                        if(indStart >= 0) {//The variable is a key
-                            let indEnd = varName.lastIndexOf("_");
-                            let varToSearch = "key" + varName.substring(keyPrefix.length, indEnd);
-                            //Find keys in sourceDataframe and populate in the target with naming convention whatever in target is key_<targetDataframeName>_<domainName>_<fieldName>_<namingParameter>
-                            //Should be keu_<domainName>_<fieldName>, for example In target: key_<TargetDataframe>_application_id_id, in source: key_application_id
-                            for(let varFromName in sourceDataframeVars){
-                                if(varFromName === varToSearch){ //this is our key variable, grab the value and set for the key variable in the target Dataframe
-                                    this.saveToStore(toDataframe, varName, sourceDataframeVars[varFromName]);
-                                    break;
-                                }
-                            }
+            for(let varName in targetDataframeVars) {
+                let keyPrefix = "key_" + toDataframe;
+                let indStart = varName.indexOf("key_" + toDataframe);
+                if(indStart >= 0) {//The variable is a key
+                    let indEnd = varName.lastIndexOf("_");
+                    let varToSearch = "key" + varName.substring(keyPrefix.length, indEnd);
+                    //Find keys in sourceDataframe and populate in the target with naming convention whatever in target is key_<targetDataframeName>_<domainName>_<fieldName>_<namingParameter>
+                    //Should be keu_<domainName>_<fieldName>, for example In target: key_<TargetDataframe>_application_id_id, in source: key_application_id
+                    for(let varFromName in sourceDataframeVars){
+                        if(varFromName === varToSearch){ //this is our key variable, grab the value and set for the key variable in the target Dataframe
+                            this.saveToStore(toDataframe, varName, sourceDataframeVars[varFromName]);
+                            break;
                         }
                     }
+                }
+            }
 
-                },
+        },
 
         /*
                 updateStoreState: function(response, stateVar, propKey){
@@ -398,6 +398,94 @@ var excon = new Vue({
                 }
             }
         },
+        /**
+         *
+         excon.setValuesForRequestParams({'setValueTo': 'vueElintegroUserProfileDataframe',
+                                                            'type': 'persisters',
+                                                            'domainAlias':'person',
+                                                            'getValueFrom': 'vueNewEmployeeBasicInformationDataframe',
+                                                            'fieldName':'application',
+                                                            'key': 'id'});
+         * @param object
+         */
+        setValuesForRequestParams: function(object){
+            if(!object.setValueTo) throw "setValueTo key must have dataframeName in params"
+            if(!object.getValueFrom) throw "getValueFrom key must have dataframeName in params"
+            if(!object.domainAlias) throw "domainAlias is required"
+            let type = object.type?object.type:'persisters';// 'persisters' or 'transits'
+            object.type = type;
+            if(object instanceof Array){
+                for(let obj in object){
+                    this._setValuesToRequestParams(obj)
+                }
+            } else if (object instanceof Object){
+                this._setValuesToRequestParams(object)
+            } else {
+                throw "Only Objects allowed"
+            }
+        },
+        _setValuesToRequestParams: function(object){
+            const getValueFrom = this.getFromStore(object.getValueFrom)
+            const val = getValueFrom.fieldName[key];
+            let setValueTo = this.getFromStore(object.setValueTo)
+            setValueTo[object.type][object.domainAlias][object.fieldName].value = val;
+            this.saveToStore(object.setValueTo, setValueTo);
+        },
+        setValuesForNamedParamsFromGrid: function(object){
+            if(object instanceof Array){
+                for(let obj in object){
+                    obj['grid'] = true;
+                    this._setValuesForNamedParams(obj)
+                }
+            } else if (object instanceof Object){
+                object['grid'] = true;
+                this._setValuesForNamedParams(object)
+            } else {
+                throw "Only Objects allowed"
+            }
+        },
+        setValuesForNamedParams: function(object){
+            if(object instanceof Array){
+                for(let obj in object){
+                    this._setValuesForNamedParams(obj)
+                }
+            } else if (object instanceof Object){
+                this._setValuesForNamedParams(object)
+            } else {
+                throw "Only Objects allowed"
+            }
+        },
+        _setValuesForNamedParams: function(object){
+            if(!object.namedParamKey) throw "namedParamKey is missing in params"
+            if(!object.setValueTo) throw "setValueTo key must have dataframeName in params"
+            this._getValuesForParams(object)
+            let setValueTo = this.getFromStore(object.setValueTo)
+            setValueTo[object.namedParamKey] = this._getValuesForParams(object);
+            this.saveToStore(object.setValueTo, setValueTo);
+        },
+        _getValuesForParams: function(object){
+            if(!object.getValueFrom) throw "getValueFrom key must have dataframeName in params"
+            if(!object.fieldName) throw "fieldName is required in params"
+
+            const getValueFrom = this.getFromStore(object.getValueFrom)
+            let value = '';
+            if(object.grid){// for children of grid
+                const gridRow = getValueFrom[object.fieldName].selectedRow;
+                value = object.key?gridRow[object.key]:gridRow;
+            } else {
+                value = this._getValueFromDomainKeys(getValueFrom, object.fieldName, object.key);
+            }
+            return value
+        },
+        //Assumption that there will always be id in domain_keys
+        _getValueFromDomainKeys: function(getValueFrom, fieldName, key){
+            if(!getValueFrom.domain_keys) return '';
+            let val = getValueFrom.domain_keys[fieldName];
+            if(key){
+               val = val[key];
+            }
+            return val
+        },
         enableDisableButton:function (dataframeName , valueToObserve){
             let state = store.getters.getState(dataframeName);
             let dataToChange;
@@ -419,6 +507,9 @@ var excon = new Vue({
             else {
                 dataFrame.$router.push('/'+pageToRedirect+'/'+routeId);
             }
+        },
+        refreshPage: function(){
+            window.location.reload;
         }
     }
 

@@ -398,7 +398,13 @@ beans {
         tab = true
         saveButton = false
         flexGridValuesForSaveButton =['xs6', 'sm6', 'md6', 'lg6', 'xl6']
-        doBeforeRefresh = """params['applicationId']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
+//        params['applicationId']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
+        doBeforeRefresh = """
+                             excon.setValuesForNamedParams({'setValueTo': 'vueNewEmployeeSelfAssesmentDataframe', 
+                                                            'namedParamKey': 'applicationId', 
+                                                            'getValueFrom': 'vueNewEmployeeBasicInformationDataframe', 
+                                                            'fieldName':'application',
+                                                            'key': 'id'});
                              """
         doAfterSave = """
                          excon.saveToStore("vueNewEmployeeAddtionalQuestionsDataframe","key", response.nodeId[0]);
@@ -441,12 +447,18 @@ beans {
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         initOnPageLoad = false
         putFillInitDataMethod = true
-        doBeforeRefresh = """params['id']= self.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
-        doBeforeSave = """params['key_vueNewEmployeeApplicantEditSkillDataframe_applicationSkill_id_id'] = self.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
+        doBeforeRefresh = """
+                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueNewEmployeeApplicantEditSkillDataframe', 
+                                                            'namedParamKey': 'applicationId', 
+                                                            'getValueFrom': 'vueNewEmployeeSelfAssesmentDataframe', 
+                                                            'fieldName':'applicationSkill',
+                                                            'key': 'Id'});
+"""
+//        doBeforeSave = """params['key_vueNewEmployeeApplicantEditSkillDataframe_applicationSkill_id_id'] = self.vueNewEmployeeApplicantEditSkillDataframe_prop.key"""
         doAfterSave = """ excon.setVisibility("vueNewEmployeeApplicantEditSkillDataframe", false);
                           excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'U', 'transits');
                       """
-        hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:id"
+        hql = "select applicationSkill.id as Id, applicationSkill.skill as Skill, applicationSkill.level as Level, applicationSkill.comment as Comment  from ApplicationSkill applicationSkill where applicationSkill.id=:applicationId"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = ["applicationSkill.skill":[widget: "InputWidgetVue",readOnly: true,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                        "applicationSkill.level":["max":10,  "validationRules":[[condition:"v => (v && new RegExp('^([0-9]|1[0])\$').test(v))",message:"digits.not.valid"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """, script: """"""],
@@ -505,7 +517,14 @@ beans {
         initOnPageLoad = true
         currentRoute = 'thank-you-message'
         route = true
-        doBeforeRefresh= """params['applicationId'] = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');"""
+//        params['applicationId'] = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
+        doBeforeRefresh= """
+                             excon.setValuesForNamedParams({'setValueTo': 'vueNewEmployeeThankYouMessageAfterSaveDataframe', 
+                                                            'namedParamKey': 'applicationId', 
+                                                            'getValueFrom': 'vueNewEmployeeBasicInformationDataframe', 
+                                                            'fieldName':'application',
+                                                            'key': 'id'});
+"""
         doAfterRefresh = """setTimeout(function(){ self.\$router.push("/home/0");window.location.reload();}, 10000);"""
         hql = "select person.firstName, person.lastName from Application application inner join application.applicant person where application.id=:applicationId"
         currentFrameLayout = ref("vueNewEmployeeThankYouMessageAfterSaveDataframeLayout")
@@ -524,7 +543,7 @@ beans {
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         route = true
         currentRoute = 'contact-us'
-        doAfterSave = """excon.showAlertMessage(response);window.location.reload();"""
+        doAfterSave = """excon.showAlertMessage(response);excon.refreshPage;"""
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
                 "contactUs.name":["name":"Name","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
@@ -706,8 +725,9 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
         childDataframes=["vueElintegroResetPasswordDataframe"]
-        doBeforeSave = """params.persisters.person.mainPicture.value = params.transits.uploadPicture.value[0].imageName;"""
-        doAfterSave = """setTimeout(function(){window.location.reload();}, 3000);"""
+        doBeforeSave = """params.persisters.person.mainPicture.value = params.transits.uploadPicture.value[0].imageName;
+"""
+        doAfterSave = """setTimeout(function(){excon.refreshPage();}, 1000);"""
         route = true
         addFieldDef =[
                 "person.id":[
@@ -871,7 +891,13 @@ beans {
         initOnPageLoad = true
         dataframeLabelCode = """General.information"""
         putFillInitDataMethod = true
-        doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantGeneralInformationDataframe_prop.key """
+        doBeforeRefresh = """
+                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroApplicantGeneralInformationDataframe', 
+                                                            'namedParamKey': 'applicationId', 
+                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'fieldName':'applicant',
+                                                            'key': 'Id'});
+                          """
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
         addFieldDef = ["person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                        "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
@@ -895,7 +921,13 @@ beans {
         bean.constructorArgs = ['vueElintegroApplicantSelfAssessmentDataframe']
         tab = true
         saveButton = false
-        doBeforeRefresh = """params['applicationId'] = self.vueElintegroApplicantSelfAssessmentDataframe_prop.key"""
+        doBeforeRefresh = """
+                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroApplicantSelfAssessmentDataframe', 
+                                                            'namedParamKey': 'applicationId', 
+                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'fieldName':'applicant',
+                                                            'key': 'Id'});
+"""
         initOnPageLoad = true
         dataframeLabelCode = """Self.assessment"""
         putFillInitDataMethod = true
@@ -925,9 +957,15 @@ beans {
         initOnPageLoad = true
         putFillInitDataMethod = true
         dataframeLabelCode = """applicant.cv"""
-        doBeforeRefresh = """params['id'] = self.vueElintegroApplicantCVDataframe_prop.key"""
+        doBeforeRefresh = """
+                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroApplicantCVDataframe', 
+                                                            'namedParamKey': 'applicationId', 
+                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'fieldName':'applicant',
+                                                            'key': 'Id'});
+"""
         doAfterRefresh = """self.afterRefreshing(response);"""
-        hql = "select application.id as Id, files.fileName, images.name from Application application inner join application.files as files inner join application.images as images where application.id=:id"
+        hql = "select application.id as Id, files.fileName, images.name from Application application inner join application.files as files inner join application.images as images where application.id=:applicationId"
         addFieldDef = [
                 "files.fileName":[
                                   name:"fileName"
@@ -960,10 +998,16 @@ beans {
         initOnPageLoad = true
         dataframeLabelCode = """Questions.answers"""
         putFillInitDataMethod = true
-        doBeforeRefresh = """params['id'] = self.vueElintegroApplicantQuestionAnswerDataframe_prop.key"""
+        doBeforeRefresh = """
+                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroApplicantQuestionAnswerDataframe', 
+                                                            'namedParamKey': 'applicationId', 
+                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'fieldName':'applicant',
+                                                            'key': 'Id'});
+"""
         saveButton = false
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:id"
+        hql = "select application.id as Id, application.question1, application.question2 from Application application where application.id=:applicationId"
         addFieldDef = [
                 "application.question1":[widget:"TextAreaWidgetVue"
                                          ,readOnly: true
@@ -986,9 +1030,15 @@ beans {
         initOnPageLoad = true
         putFillInitDataMethod = true
         dataframeLabelCode = """Comment.page"""
-        doBeforeRefresh = """params['id'] = self.vueElintegroCommentPageForApplicantDataframe_prop.key"""
+        doBeforeRefresh = """
+                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroCommentPageForApplicantDataframe', 
+                                                            'namedParamKey': 'applicationId', 
+                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'fieldName':'applicant',
+                                                            'key': 'Id'});
+"""
         saveButton = false
-        hql="select application.id,application.comments,application.lastComment from Application application where application.id=:id"
+        hql="select application.id,application.comments,application.lastComment from Application application where application.id=:applicationId"
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef =[
                 "application.comments":[ widget: "TextAreaWidgetVue",
