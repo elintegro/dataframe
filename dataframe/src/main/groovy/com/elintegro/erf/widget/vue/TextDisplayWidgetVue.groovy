@@ -30,6 +30,7 @@ class TextDisplayWidgetVue extends WidgetVue{
         boolean isDynamic = field.isDynamic?true:false
         String elementId = field.elementId?:""
         String modelString = getFieldJSONModelNameVue(field)
+        String onClick = field.onClick?:""
         String displayPlaceholder = ""
         if(!isDynamic){
             displayPlaceholder = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
@@ -39,6 +40,6 @@ class TextDisplayWidgetVue extends WidgetVue{
         }else {
             displayPlaceholder = "{{$modelString}}"
         }
-        return """<span id='$elementId' ${getAttr(field)}>$displayPlaceholder</span>"""
+        return """<span id='$elementId' @click = "${onClick}" ${getAttr(field)}>$displayPlaceholder</span>"""
     }
 }

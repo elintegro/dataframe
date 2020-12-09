@@ -39,7 +39,7 @@ beans {
 				//Dataframes used in translator assistant application...
 				"vueCreateProjectForTranslationDataframe","vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe",
 				"vueAddNewRecordForCurrentProjectDataframe","vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe",
-				"vueDialogBoxForNotLoggedInUserDataframe","vueGridOfTranslatedTextDataframe","vueTranslatorDataframe","vueHowYouDoDataframe","vueNewsLetterDataframe",
+				"vueDialogBoxForNotLoggedInUserDataframe","vueGridOfTranslatedTextDataframe","vueGridOfSourceTextDataframe","vueTranslatorDataframe","vueHowYouDoDataframe","vueNewsLetterDataframe",
 				"vueTranslatorAssistantAfterLoggedInDataframe","vueTranslatorAssistantBeforeLoggedInDataframe","vueMeetTranslatorAssistantIntroDataframe",
 				"vueTranslatorAssistantDataframe",
 

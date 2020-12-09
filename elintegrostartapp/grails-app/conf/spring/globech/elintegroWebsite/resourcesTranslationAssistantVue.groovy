@@ -203,7 +203,12 @@ beans{
         addFieldDef =[
 
                 "project.name":[widget:"TextDisplayWidgetVue",isDynamic:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "project.sourceLanguage":[widget:"TextDisplayWidgetVue",isDynamic:true,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                "project.sourceLanguage":[
+                        widget:"TextDisplayWidgetVue"
+                        ,isDynamic:true
+                        ,type: "link"
+                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,onClick:"sourceText();" ],
                 "notSelectedLanguages":[
                         widget: "ComboboxVue"
                         , hql: """select language.id as id, language.ename as ename  from Language as language"""
@@ -238,7 +243,7 @@ beans{
                 addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                 projectManager: [name: "projectManager",type: "button",attr: """style='background-color:#1976D2; color:white; text-transform: capitalize;'""",script: """this.\$router.push("/translator-assistant/0");""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
         ]
-        childDataframes = ['vueAddNewRecordForCurrentProjectDataframe','vueGridOfTranslatedTextDataframe']
+        childDataframes = ['vueAddNewRecordForCurrentProjectDataframe','vueGridOfSourceTextDataframe','vueGridOfTranslatedTextDataframe']
         currentFrameLayout= ref("vueElintegroTranslatorDataframeLayout")
 
     }
@@ -309,6 +314,30 @@ beans{
                 save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],script:"this.updateEditedTextInGrid();"]
         ]
         currentFrameLayout = ref("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframeLayout")
+    }
+    vueGridOfSourceTextDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueGridOfSourceTextDataframe']
+        saveButton = false
+        initOnPageLoad = true
+        flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        doBeforeRefresh = """
+                           params['projectId'] =  excon.getFromStore('vueGridOfSourceTextDataframe','projectId');
+                           params['sourceLanguage'] =excon.getFromStore('vueGridOfSourceTextDataframe','sourceLanguage'); """
+
+        addFieldDef = ["originalSourceText":[
+                widget: "GridWidgetVue"
+                ,name: "originalSourceText"
+                , hql             : """select text.id as Id, text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :sourceLanguage and text._key != null"""
+                , gridWidth       : 820
+                , showGridSearch  : true
+                , internationalize: true
+                ,attr: """style="overflow-y:auto; max-height:500px;" """
+                , sortable        : true
+
+        ]]
+        currentFrameLayout= ref("vueGridOfSourceTextDataframeLayout")
+
     }
     vueGridOfTranslatedTextDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
