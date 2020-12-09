@@ -303,6 +303,49 @@ beans {
                                     })
                     }"""
     }
+    vueElintegroLoginWithOTPDataframe_script(VueJsEntity){bean ->
+        data = """showSendCodeButton : false ,showThisFieldAfterCodeSent : false,"""
+        watch = """showHideSendCodeButton:{handler: function(val, oldVal){ this.showSendCodeButton = val;}},\n"""
+        computed = """showHideSendCodeButton(){ if(this.state.transits.emailOrPhone.value){ return true;} else{return false;}},\n"""
+        methods = """sendVerificationCode(){
+                              var allParams = this.state;
+                              allParams['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              axios({
+                                    method:'post',
+                                    url:'login/sendVerificationCodeForLoginWithOTP',
+                                    data:allParams
+                              }).then(function(responseData){
+                                console.log(responseData);
+                                var response = responseData.data;
+                                excon.showAlertMessage(response);
+                                if(response.success == true){
+                                 self.showThisFieldAfterCodeSent = true;
+                                 self.showSendCodeButton = false;
+                                }
+                                else{
+                                  excon.setVisibility('vueElintegroRegisterDataframe',true);
+                                }
+                              })
+                 },\n
+                 loginWithVerificationCode(){
+                              var allParams = this.state;
+                              allParams['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              axios({
+                                    method:'post',
+                                    url:'login/loginWithOTP',
+                                    data:allParams
+                              }).then(function(responseData){
+                                console.log(responseData);
+                                var response = responseData.data;
+                                 excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                excon.showAlertMessage(response);
+                                setTimeout(function(){window.location.reload();},2000);
+                              })
+                 },\n
+                 """
+    }
 
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
         computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},

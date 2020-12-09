@@ -53,7 +53,7 @@ beans {
         dataframeButtons = [register       : [name: "register", type: "link", showAsDialog: true, attr:"style='color:#1976D2;'",
                                               refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'],"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             login          : [name: "login", type: "link",showAsDialog: true,attr:"style='color:#1976D2;'",
-                                              refDataframe: ref("vueElintegroLoginDataframe"), tooltip: [message: 'Login'],"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                                              refDataframe: ref("vueElintegroLoginTabDataframe"), tooltip: [message: 'Login'],"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             contactUs      : [name: "contactUs", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"),"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             careers        : [name: "careers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"),"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                            ]
@@ -538,6 +538,23 @@ beans {
 
         currentFrameLayout = ref("contactUsPageDataframeLayout")
     }
+    vueElintegroLoginTabDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroLoginTabDataframe']
+        initOnPageLoad = false
+        saveButton = false
+        isGlobal = true
+        addFieldDef = [
+                "tab":[
+                        widget: "TabWidgetVue",
+                        dataframes : ['vueElintegroLoginDataframe','vueElintegroLoginWithOTPDataframe']
+                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,flexAttr: "pa-0"
+
+                ]
+        ]
+        currentFrameLayout = ref("vueElintegroLoginTabDataframeLayout")
+    }
     vueElintegroLoginDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueElintegroLoginDataframe']
@@ -577,6 +594,31 @@ beans {
 
 
         currentFrameLayout = ref("vueElintegroLoginDataframeLayout")
+    }
+    vueElintegroLoginWithOTPDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueElintegroLoginWithOTPDataframe']
+        currentRoute = 'login-with-otp'
+        initOnPageLoad = false
+        dataframeLabelCode = """Login.with.otp"""
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        saveButton = false
+        isGlobal = true
+        addFieldDef = [
+                "emailOrPhone":[name:"emailOrPhone",widget: "InputWidgetVue",placeholder: "Enter your email or phone"],
+                "sendCode":[widget: "ButtonWidgetVue"
+                            ,insertAfter: "emailOrPhone"
+                            ,attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;' v-show = 'showSendCodeButton' """
+                            ,script: """this.sendVerificationCode();"""],
+                "verificationCode":[widget:"InputWidgetVue",placeholder: "Enter the verification code",attr: """v-show = 'showThisFieldAfterCodeSent'"""],
+                "codeNotReceived":[widget: "TextDisplayWidgetVue",isDynamic:false,attr: """v-show='showThisFieldAfterCodeSent'""", "flexGridValues": ['xs8', 'sm8', 'md8', 'lg8', 'xl8']],
+                "resendCode":[widget: "ButtonWidgetVue"
+                              ,insertAfter: "codeNotReceived"
+                              ,attr: """style='background-color:white;color:#1976D2; text-transform:capitalize;margin-left:-20px;margin-top:-5px;' text v-show='showThisFieldAfterCodeSent' """
+                              ,"flexGridValues": ['xs4', 'sm4', 'md4', 'lg4', 'xl4']]]
+        dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' v-show='showThisFieldAfterCodeSent' """,script: """this.loginWithVerificationCode();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
+        currentFrameLayout = ref("vueElintegroLoginWithOTPDataframeLayout")
+
     }
     vueElintegroForgetPasswordDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper

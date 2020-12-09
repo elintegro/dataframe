@@ -1,9 +1,9 @@
-package com.elintegro.school
+package com.elintegro.otpVerification
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class ChildSpec extends Specification implements DomainUnitTest<Child> {
+class OtpSpec extends Specification implements DomainUnitTest<Otp> {
 
     def setup() {
     }
