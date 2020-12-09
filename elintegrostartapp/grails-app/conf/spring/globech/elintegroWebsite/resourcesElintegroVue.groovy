@@ -400,9 +400,9 @@ beans {
         flexGridValuesForSaveButton =['xs6', 'sm6', 'md6', 'lg6', 'xl6']
 //        params['applicationId']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
         doBeforeRefresh = """
-                             excon.setValuesForNamedParams({'setValueTo': 'vueNewEmployeeSelfAssesmentDataframe', 
+                             excon.setValuesForNamedParams({'targetDataframe': 'vueNewEmployeeSelfAssesmentDataframe', 
                                                             'namedParamKey': 'applicationId', 
-                                                            'getValueFrom': 'vueNewEmployeeBasicInformationDataframe', 
+                                                            'sourceDataframe': 'vueNewEmployeeBasicInformationDataframe', 
                                                             'fieldName':'application',
                                                             'key': 'id'});
                              """
@@ -448,9 +448,9 @@ beans {
         initOnPageLoad = false
         putFillInitDataMethod = true
         doBeforeRefresh = """
-                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueNewEmployeeApplicantEditSkillDataframe', 
+                             excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueNewEmployeeApplicantEditSkillDataframe', 
                                                             'namedParamKey': 'id', 
-                                                            'getValueFrom': 'vueNewEmployeeSelfAssesmentDataframe', 
+                                                            'sourceDataframe': 'vueNewEmployeeSelfAssesmentDataframe', 
                                                             'fieldName':'applicationSkill',
                                                             'key': 'Id'});
 """
@@ -517,9 +517,11 @@ beans {
         initOnPageLoad = true
         currentRoute = 'thank-you-message'
         route = true
-        doBeforeRefresh= """excon.setValuesForNamedParams({'setValueTo': 'vueNewEmployeeThankYouMessageAfterSaveDataframe', 
+//        params['applicationId'] = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
+        doBeforeRefresh= """
+                             excon.setValuesForNamedParams({'targetDataframe': 'vueNewEmployeeThankYouMessageAfterSaveDataframe', 
                                                             'namedParamKey': 'id', 
-                                                            'getValueFrom': 'vueNewEmployeeBasicInformationDataframe', 
+                                                            'sourceDataframe': 'vueNewEmployeeBasicInformationDataframe', 
                                                             'fieldName':'application',
                                                             'key': 'id'});
 """
@@ -890,9 +892,9 @@ beans {
         dataframeLabelCode = """General.information"""
         putFillInitDataMethod = true
         doBeforeRefresh = """
-                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroApplicantGeneralInformationDataframe', 
+                             excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueElintegroApplicantGeneralInformationDataframe', 
                                                             'namedParamKey': 'applicationId', 
-                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'sourceDataframe': 'vueElintegroApplicantsDataframe', 
                                                             'fieldName':'applicant',
                                                             'key': 'Id'});
                           """
@@ -920,9 +922,9 @@ beans {
         tab = true
         saveButton = false
         doBeforeRefresh = """
-                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroApplicantSelfAssessmentDataframe', 
+                             excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueElintegroApplicantSelfAssessmentDataframe', 
                                                             'namedParamKey': 'applicationId', 
-                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'sourceDataframe': 'vueElintegroApplicantsDataframe', 
                                                             'fieldName':'applicant',
                                                             'key': 'Id'});
 """
@@ -956,9 +958,9 @@ beans {
         putFillInitDataMethod = true
         dataframeLabelCode = """applicant.cv"""
         doBeforeRefresh = """
-                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroApplicantCVDataframe', 
+                             excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueElintegroApplicantCVDataframe', 
                                                             'namedParamKey': 'applicationId', 
-                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'sourceDataframe': 'vueElintegroApplicantsDataframe', 
                                                             'fieldName':'applicant',
                                                             'key': 'Id'});
 """
@@ -997,9 +999,9 @@ beans {
         dataframeLabelCode = """Questions.answers"""
         putFillInitDataMethod = true
         doBeforeRefresh = """
-                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroApplicantQuestionAnswerDataframe', 
+                             excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueElintegroApplicantQuestionAnswerDataframe', 
                                                             'namedParamKey': 'applicationId', 
-                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'sourceDataframe': 'vueElintegroApplicantsDataframe', 
                                                             'fieldName':'applicant',
                                                             'key': 'Id'});
 """
@@ -1029,9 +1031,9 @@ beans {
         putFillInitDataMethod = true
         dataframeLabelCode = """Comment.page"""
         doBeforeRefresh = """
-                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueElintegroCommentPageForApplicantDataframe', 
+                             excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueElintegroCommentPageForApplicantDataframe', 
                                                             'namedParamKey': 'applicationId', 
-                                                            'getValueFrom': 'vueElintegroApplicantsDataframe', 
+                                                            'sourceDataframe': 'vueElintegroApplicantsDataframe', 
                                                             'fieldName':'applicant',
                                                             'key': 'Id'});
 """
