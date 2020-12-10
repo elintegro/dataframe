@@ -34,7 +34,7 @@ beans {
 				"vueTechnologiesDataframe","vueClientProjectDataframe",
 
 				//Dataframes used in login/registration flow...
-				"vueElintegroForgetPasswordDataframe","vueElintegroChangeForgotPasswordDataframe","vueElintegroLoginDataframe","vueElintegroRegisterDataframe",
+				"vueElintegroForgetPasswordDataframe","vueElintegroChangeForgotPasswordDataframe","vueElintegroLoginDataframe","vueElintegroLoginWithOTPDataframe","vueElintegroLoginTabDataframe","vueElintegroRegisterDataframe",
 
 				//Dataframes used in translator assistant application...
 				"vueCreateProjectForTranslationDataframe","vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe",

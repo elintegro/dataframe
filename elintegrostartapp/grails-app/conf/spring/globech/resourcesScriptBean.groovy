@@ -303,6 +303,53 @@ beans {
                                     })
                     }"""
     }
+    vueElintegroLoginWithOTPDataframe_script(VueJsEntity){bean ->
+        data = """showSendCodeButton : false ,showThisFieldAfterCodeSent : false,"""
+        watch = """showHideSendCodeButton:{handler: function(val, oldVal){ this.showSendCodeButton = val;}},\n"""
+        computed = """showHideSendCodeButton(){ if(this.state.transits.emailOrPhone.value){ return true;} else{return false;}},\n"""
+        methods = """sendVerificationCode(){
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              excon.callApi('login/sendVerificationCodeForLoginWithOTP', 'post', params).then(function(responseData){
+                                console.log(responseData);
+                                var response = responseData.data;
+                                excon.showAlertMessage(response);
+                                if(response.success == true){
+                                 self.showThisFieldAfterCodeSent = true;
+                                 self.showSendCodeButton = false;
+                                }
+                                else{
+                                  excon.setVisibility('vueElintegroRegisterDataframe',true);
+                                }
+                              })
+                 },\n
+                 loginWithVerificationCode(){
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              excon.callApi('login/loginWithOTP', 'post', params).then(function(responseData){
+                                console.log(responseData);
+                                 var response = responseData.data;
+                                 if(response.success == true){
+                                     excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                     window.location.reload();
+                                 }  
+                                 excon.showAlertMessage(response);
+                              })
+                 },\n
+                 resendVerificationCode(){
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              excon.callApi('login/resendOTPcode', 'post', params).then(function(responseData){
+                                console.log(responseData);
+                                var response = responseData.data;
+                                excon.showAlertMessage(response);
+                              }) 
+                 },\n
+                 """
+    }
 
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
         computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},

@@ -1,9 +1,9 @@
-package com.elintegro.school
+package com.elintegro.login
 
-import grails.testing.gorm.DomainUnitTest
+import grails.testing.services.ServiceUnitTest
 import spock.lang.Specification
 
-class ChildSpec extends Specification implements DomainUnitTest<Child> {
+class LoginServiceSpec extends Specification implements ServiceUnitTest<LoginService>{
 
     def setup() {
     }

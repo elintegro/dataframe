@@ -412,7 +412,10 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 				if(!embeddedDataframes.contains(compS)){
 					embeddedDataframes.add(compS)
 				}
-				vueJsBuilder.addToComponentScript(VueJsBuilder.createCompRegistrationString(compS))
+				DataframeVue dataframe = DataframeVue.getDataframe(compS)
+				if(!dataframe.isGlobal){
+					vueJsBuilder.addToComponentScript(VueJsBuilder.createCompRegistrationString(compS))
+				}
 				ResultPageHtmlBuilder.registeredComponents.add(compS)
 			}
 		}
@@ -744,6 +747,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(childrenDataframes){
 			childrenDataframes.each{
 				if(it && it.trim()!="" && !registeredComponents.contains(it)){
+					DataframeVue dataframe = DataframeVue.getDataframe(it)
+					if(!dataframe.isGlobal)
 					vueJsBuilder.addToComponentScript(VueJsBuilder.createCompRegistrationString(it))
 				}
 			}

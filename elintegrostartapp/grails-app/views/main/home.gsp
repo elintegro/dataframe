@@ -43,7 +43,7 @@
     </g:else>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <g:if test="${Environment.current == Environment.PRODUCTION}">
+    <g:if test="${Environment.current != Environment.DEVELOPMENT}">
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     </g:if>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
