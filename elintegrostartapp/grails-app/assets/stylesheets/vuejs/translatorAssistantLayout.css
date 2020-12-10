@@ -32,15 +32,6 @@
     font-family: Roboto;
     color: black;
 }
-#sourceLanguageLink{
-    cursor: pointer;
-}
-#sourceLanguageLink:hover{
-    text-decoration:underline;
-    text-shadow: 1px 1px 20px skyblue;
-    text-decoration-color: skyblue;
-    text-decoration-thickness: 5px;
-}
 .translatorAssistantContainer .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout .tranlatorIcon{
     padding-left: 30%;
 }

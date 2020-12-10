@@ -206,7 +206,7 @@ beans{
                 "project.sourceLanguage":[
                         widget:"TextDisplayWidgetVue"
                         ,isDynamic:true
-                        ,elementId:"sourceLanguageLink"
+                        ,link : true
                         ,type: "link"
                         ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                         ,onClick:"sourceText();" ],
