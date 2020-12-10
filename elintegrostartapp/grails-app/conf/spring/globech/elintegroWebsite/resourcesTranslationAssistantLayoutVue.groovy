@@ -173,6 +173,16 @@ beans{
                                  </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
     }
+    vueDeleteSourceRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card class="borderInTranslation">
+                                 [DATAFRAME_SCRIPT]
+                                 <v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions>
+                                 </v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
+
+    }
     vueGridOfTranslatedTextDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card class="borderInTranslation">

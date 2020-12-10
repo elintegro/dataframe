@@ -334,8 +334,21 @@ beans{
                 , internationalize: true
                 ,attr: """style="overflow-y:auto; max-height:500px;" """
                 , sortable        : true
-
-        ]]
+                ,onButtonClick   : [
+                ['actionName': 'Delete Text', 'buttons': [
+                        [deleteButton:true
+                         ,maxWidth:500
+                         ,valueMember: 'Id'
+                         ,ajaxDeleteUrl:"translatorAssistant/deleteRecord"
+                         ,doBeforeDelete:"""params['projectId'] =  excon.getFromStore('vueGridOfSourceTextDataframe','projectId');"""
+                         ,fieldType:"transits"
+                         ,doAfterDelete:"""self.vueGridOfSourceTextDataframe_fillInitData();"""
+                         ,tooltip: [message:"tooltip.grid.delete",internationalization: true]
+                         ,refDataframe: ref("vueDeleteSourceRecordsOfGridDataframe")
+                         ,vuetifyIcon: [name: "delete"]
+                        ]
+                ]]
+        ]]]
         currentFrameLayout= ref("vueGridOfSourceTextDataframeLayout")
 
     }
@@ -424,6 +437,13 @@ beans{
                             restore: [name: "restore",type: "button",attr:"""style='background-color:#1976D2; color:white;' """,script: """this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();""", flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2']]
         ]
         currentFrameLayout = ref("vueEditTranslatedRecordsOfGridDataframeLayout")
+    }
+    vueDeleteSourceRecordsOfGridDataframe(DataframeVue){bean->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueDeleteSourceRecordsOfGridDataframe']
+        saveButton = false
+        hql = "select text.id from Text text where text.id=:id"
+        currentFrameLayout =ref("vueDeleteSourceRecordsOfGridDataframeLayout")
     }
     vueDeleteTranslatedRecordsOfGridDataframe(DataframeVue){bean->
         bean.parent = dataFrameSuper
