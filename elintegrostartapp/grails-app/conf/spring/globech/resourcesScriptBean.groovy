@@ -729,7 +729,7 @@ beans {
                     }"""
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
-        data = """isHidden : false, """
+        data = """isHidden : false, showGridOfSourceText : false """
         computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.items && this.state.transits.selectedLanguages.items.length > 1){return true;}return false;},\n
                       enableDisableAddButton(){if(this.state.transits.notSelectedLanguages.value){return false;}else{return true}},\n
                    """
@@ -743,7 +743,21 @@ beans {
                                                   var response = responseData.data;
                                     });
                              },\n
+                             sourceText(){
+                                     if(this.isHidden == true){
+                                            this.isHidden = false;
+                                     }
+                                    let stateValues = excon.getFromStore('vueGridOfSourceTextDataframe')
+                                    stateValues['projectId'] = this.state.projectId;
+                                    stateValues['sourceLanguage'] = this.state.persisters.project.sourceLanguage.value;
+                                    excon.saveToStore('vueGridOfSourceTextDataframe',stateValues);
+                                    excon.fillInitialData(stateValues);
+                                    this.showGridOfSourceText = true;
+                             }, \n
                              translatedText(params){
+                                        if(this.showGridOfSourceText == true){
+                                            this.showGridOfSourceText = false;
+                                        }
                                         let stateValues = excon.getFromStore('vueGridOfTranslatedTextDataframe')
                                         let previouslyClickedValue = stateValues.targetLanguage
                                         if(previouslyClickedValue == ""){
