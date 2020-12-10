@@ -550,6 +550,7 @@ beans {
                         dataframes : ['vueElintegroLoginDataframe','vueElintegroLoginWithOTPDataframe']
                         ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                         ,flexAttr: "pa-0"
+                        ,showCloseButton: true
 
                 ]
         ]
@@ -610,13 +611,13 @@ beans {
                             ,insertAfter: "emailOrPhone"
                             ,attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;' v-show = 'showSendCodeButton' """
                             ,script: """this.sendVerificationCode();"""],
-                "verificationCode":[name: "verificationCode", widget:"InputWidgetVue",placeholder: "Enter the verification code",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' v-show = 'showThisFieldAfterCodeSent'"""],
-                "codeNotReceived":[widget: "TextDisplayWidgetVue",isDynamic:false,attr: """v-show='showThisFieldAfterCodeSent'""", "flexGridValues": ['xs8', 'sm8', 'md8', 'lg8', 'xl8']],
+                "verificationCode":[name: "verificationCode", widget:"InputWidgetVue",placeholder: "Enter the verification code",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' v-if = 'showThisFieldAfterCodeSent'"""],
+                "codeNotReceived":[widget: "TextDisplayWidgetVue",isDynamic:false,attr: """v-show='showThisFieldAfterCodeSent'""", "flexGridValues": ['xs9', 'sm9', 'md9', 'lg9', 'xl9']],
                 "resendCode":[widget: "ButtonWidgetVue"
                               ,insertAfter: "codeNotReceived"
                               ,attr: """style='background-color:white;color:#1976D2; text-transform:capitalize;margin-left:-20px;margin-top:-5px;' text v-show='showThisFieldAfterCodeSent' """
                               ,script: """this.resendVerificationCode();"""
-                              ,"flexGridValues": ['xs4', 'sm4', 'md4', 'lg4', 'xl4']]]
+                              ,"flexGridValues": ['xs3', 'sm3', 'md3', 'lg3', 'xl3']]]
         dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' v-show='showThisFieldAfterCodeSent' """,script: """this.loginWithVerificationCode();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroLoginWithOTPDataframeLayout")
 
