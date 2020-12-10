@@ -39,6 +39,8 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
     def emailService
     def authenticationService
     def user = null
+    def loginService
+    def passwordEncoder
 
     def ajaxSuccess() {
         User userDetails
@@ -203,60 +205,18 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
     }
     def sendVerificationCodeForLoginWithOTP(){
         def params = request.getJSON();
-        def result
-        User user1 = User.findByUsername(params.transits.emailOrPhone.value)
-        if(user1) {
-            Otp otpAlreadyExist = Otp.findByUser(user1)
-            if (user1 && !otpAlreadyExist) {
-                String verificationCode = new DecimalFormat("000000").format(new Random().nextInt(999999));
-                Otp otp = new Otp()
-                def encodedVerificationCode = springSecurityService.encodePassword(verificationCode)
-                otp.verificationCode = encodedVerificationCode
-                otp.createTime = new Date()
-                otp.expireTime = new Date().plus(1)
-                otp.user = user1
-                otp.save()
-                def conf = Holders.grailsApplication.config
-                String emailBody = conf.loginController.emailForLoginWithOTP
-                Map emailParams = [verificationCode: verificationCode]
-                try {
-                    emailService.sendMail(user1.email, emailParams, emailBody)
-                    result = [success: true, msg: "We.sent.verification.code", alert_type: "success"]
-                } catch (Exception e) {
-                    log.error("Email sending failed" + e)
-                    result = [success: false, msg: "Couldnot.send.mail", alert_type: "error"]
-                    println("email sending failed" + e)
-                }
-
-            } else {
-                result = [success: true, msg: "Otp.code.already.sent", alert_type: "info"]
-            }
-        }else {
-            result = [success: false, msg: "We.dont.have.user.with.this.email", alert_type: "error"]
-        }
+        def result = loginService.sendVerificationCodeForLoginWithOTP(params)
         render result as JSON
     }
     def loginWithOTP(){
         def param = request.getJSON()
-        println(param)
-        User user1 = User.findByUsername(param.transits.emailOrPhone.value)
-        Otp otp = Otp.findByUser(user1)
-        TimeDuration duration = TimeCategory.minus(new Date(), otp.createTime)
-        def result
-        if(otp && duration.hours <= 24){
-            try {
-                springSecurityService.reauthenticate(user1.username,otp.verificationCode)
-                otp.delete(flush:true)
-                result = [success: true,msg: "Login.successful",alert_type: "success"]
-            }catch(Exception e){
-                log.error("Couldn't authenticate this user.")
-                result = [success: false,msg: "Couldnot.authenticate.this.user",alert_type: "error"]
-            }
-        }
-        else{
-            result = [success: false,msg:"This.code.has.been.expired",alert_type: "error"]
-
-        }
+        def result = loginService.loginWithOTP(param)
         render result as JSON
     }
+    def resendOTPcode(){
+        def param = request.getJSON()
+        def resultData = loginService.resendOTPcode(param)
+        render resultData as JSON
+    }
+
 }

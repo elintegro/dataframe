@@ -308,14 +308,10 @@ beans {
         watch = """showHideSendCodeButton:{handler: function(val, oldVal){ this.showSendCodeButton = val;}},\n"""
         computed = """showHideSendCodeButton(){ if(this.state.transits.emailOrPhone.value){ return true;} else{return false;}},\n"""
         methods = """sendVerificationCode(){
-                              var allParams = this.state;
-                              allParams['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
                               var self = this;
-                              axios({
-                                    method:'post',
-                                    url:'login/sendVerificationCodeForLoginWithOTP',
-                                    data:allParams
-                              }).then(function(responseData){
+                              excon.callApi('login/sendVerificationCodeForLoginWithOTP', 'post', params).then(function(responseData){
                                 console.log(responseData);
                                 var response = responseData.data;
                                 excon.showAlertMessage(response);
@@ -329,20 +325,28 @@ beans {
                               })
                  },\n
                  loginWithVerificationCode(){
-                              var allParams = this.state;
-                              allParams['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
                               var self = this;
-                              axios({
-                                    method:'post',
-                                    url:'login/loginWithOTP',
-                                    data:allParams
-                              }).then(function(responseData){
+                              excon.callApi('login/loginWithOTP', 'post', params).then(function(responseData){
+                                console.log(responseData);
+                                 var response = responseData.data;
+                                 if(response.success == true){
+                                     excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                     window.location.reload();
+                                 }  
+                                 excon.showAlertMessage(response);
+                              })
+                 },\n
+                 resendVerificationCode(){
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              excon.callApi('login/resendOTPcode', 'post', params).then(function(responseData){
                                 console.log(responseData);
                                 var response = responseData.data;
-                                 excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
                                 excon.showAlertMessage(response);
-                                setTimeout(function(){window.location.reload();},2000);
-                              })
+                              }) 
                  },\n
                  """
     }
