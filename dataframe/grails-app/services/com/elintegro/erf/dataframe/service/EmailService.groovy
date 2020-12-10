@@ -37,7 +37,7 @@ class EmailService {
                     async true
                     to email
                     from conf.grails.mail.username
-                    subject conf.ui.register.emailSubject?:"Elintegro Inc"
+                    subject conf.ui.register.emailSubject?:"Elintegro App Factory"
                     html emailBody.toString()
                 }
     }

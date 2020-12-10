@@ -16,8 +16,12 @@ package com.elintegro.register
 import com.elintegro.auth.User
 import com.elintegro.crm.Person
 import com.elintegro.gc.AuthenticationService
+import com.elintegro.otpVerification.Otp
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
+import grails.util.Holders
+import groovy.time.*
+
 //import grails.plugin.springsecurity.rest.oauth.OauthUser
 import org.springframework.security.authentication.AccountExpiredException
 import org.springframework.security.authentication.BadCredentialsException
@@ -26,12 +30,17 @@ import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.LockedException
 import org.springframework.security.web.WebAttributes
 
+import java.text.DecimalFormat
+
 class LoginController extends grails.plugin.springsecurity.LoginController {
 
 //    def springSecurityService
 //    def messageSource
+    def emailService
     def authenticationService
     def user = null
+    def loginService
+    def passwordEncoder
 
     def ajaxSuccess() {
         User userDetails
@@ -194,4 +203,20 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
 
         return userInfo
     }
+    def sendVerificationCodeForLoginWithOTP(){
+        def params = request.getJSON();
+        def result = loginService.sendVerificationCodeForLoginWithOTP(params)
+        render result as JSON
+    }
+    def loginWithOTP(){
+        def param = request.getJSON()
+        def result = loginService.loginWithOTP(param)
+        render result as JSON
+    }
+    def resendOTPcode(){
+        def param = request.getJSON()
+        def resultData = loginService.resendOTPcode(param)
+        render resultData as JSON
+    }
+
 }

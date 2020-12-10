@@ -303,6 +303,53 @@ beans {
                                     })
                     }"""
     }
+    vueElintegroLoginWithOTPDataframe_script(VueJsEntity){bean ->
+        data = """showSendCodeButton : false ,showThisFieldAfterCodeSent : false,"""
+        watch = """showHideSendCodeButton:{handler: function(val, oldVal){ this.showSendCodeButton = val;}},\n"""
+        computed = """showHideSendCodeButton(){ if(this.state.transits.emailOrPhone.value){ return true;} else{return false;}},\n"""
+        methods = """sendVerificationCode(){
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              excon.callApi('login/sendVerificationCodeForLoginWithOTP', 'post', params).then(function(responseData){
+                                console.log(responseData);
+                                var response = responseData.data;
+                                excon.showAlertMessage(response);
+                                if(response.success == true){
+                                 self.showThisFieldAfterCodeSent = true;
+                                 self.showSendCodeButton = false;
+                                }
+                                else{
+                                  excon.setVisibility('vueElintegroRegisterDataframe',true);
+                                }
+                              })
+                 },\n
+                 loginWithVerificationCode(){
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              excon.callApi('login/loginWithOTP', 'post', params).then(function(responseData){
+                                console.log(responseData);
+                                 var response = responseData.data;
+                                 if(response.success == true){
+                                     excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                     window.location.reload();
+                                 }  
+                                 excon.showAlertMessage(response);
+                              })
+                 },\n
+                 resendVerificationCode(){
+                              var params = this.state;
+                              params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              var self = this;
+                              excon.callApi('login/resendOTPcode', 'post', params).then(function(responseData){
+                                console.log(responseData);
+                                var response = responseData.data;
+                                excon.showAlertMessage(response);
+                              }) 
+                 },\n
+                 """
+    }
 
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
         computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},
@@ -729,7 +776,7 @@ beans {
                     }"""
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
-        data = """isHidden : false, """
+        data = """isHidden : false, showGridOfSourceText : false """
         computed = """showOrHideDownloadAllFilesButton(){if(this.state.transits.selectedLanguages.items && this.state.transits.selectedLanguages.items.length > 1){return true;}return false;},\n
                       enableDisableAddButton(){if(this.state.transits.notSelectedLanguages.value){return false;}else{return true}},\n
                    """
@@ -743,7 +790,21 @@ beans {
                                                   var response = responseData.data;
                                     });
                              },\n
+                             sourceText(){
+                                     if(this.isHidden == true){
+                                            this.isHidden = false;
+                                     }
+                                    let stateValues = excon.getFromStore('vueGridOfSourceTextDataframe')
+                                    stateValues['projectId'] = this.state.projectId;
+                                    stateValues['sourceLanguage'] = this.state.persisters.project.sourceLanguage.value;
+                                    excon.saveToStore('vueGridOfSourceTextDataframe',stateValues);
+                                    excon.fillInitialData(stateValues);
+                                    this.showGridOfSourceText = true;
+                             }, \n
                              translatedText(params){
+                                        if(this.showGridOfSourceText == true){
+                                            this.showGridOfSourceText = false;
+                                        }
                                         let stateValues = excon.getFromStore('vueGridOfTranslatedTextDataframe')
                                         let previouslyClickedValue = stateValues.targetLanguage
                                         if(previouslyClickedValue == ""){

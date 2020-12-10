@@ -115,7 +115,7 @@ beans{
                                                         </v-row>
                                                     </v-card>
                                                 </v-col>
-                                                <v-col cols="12" xs="12" sm="12" md="8" xl="8" lg="8"><vueGridOfTranslatedTextDataframe v-if="isHidden"/></v-col>
+                                                <v-col cols="12" xs="12" sm="12" md="8" xl="8" lg="8"><vueGridOfTranslatedTextDataframe v-if="isHidden"/><vueGridOfSourceTextDataframe v-if="showGridOfSourceText"/></v-col>
                                             </v-row>
                                         </v-container>
                                         <vueHowYouDoDataframe/>
@@ -164,6 +164,24 @@ beans{
                                         <v-row class="pa-1" style="text-align: center;">[save]</v-row>
                                     </v-card>
                               </v-flex> """
+    }
+    vueGridOfSourceTextDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card class="borderInTranslation">
+                                 [DATAFRAME_SCRIPT]
+                                 <v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions>
+                                 </v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+    }
+    vueDeleteSourceRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean ->
+        layoutBeanName = bean.name
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card class="borderInTranslation">
+                                 [DATAFRAME_SCRIPT]
+                                 <v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions>
+                                 </v-card></v-flex>"""
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+
+
     }
     vueGridOfTranslatedTextDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
