@@ -35,7 +35,7 @@ var excon = new Vue({
                 if(obj.hasOwnProperty(key)){
                     Vue.set(obj, key, value);
                 } else {
-                    value?Vue.set(obj,key, value):Vue.set(store.state, containerVariable, key);
+                    key?Vue.set(obj,key, value):Vue.set(store.state, containerVariable, value); //todo:make sure this works for all condition
                 }
             } else {
                 Vue.set(store.state, containerVariable, key);
