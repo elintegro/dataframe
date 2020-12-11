@@ -65,15 +65,7 @@ var excon = new Vue({
             }
 
         },
-        saveToStateTest: function(containerVariable, key, value=''){
-            if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
-                return
-            }
-            const obj = eval("store.state."+ containerVariable +"");
-            if (obj){
-                Vue.set(obj, key, value);
-            }
-        },
+
         saveToState: function(containerVariable, value=''){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
                 return
