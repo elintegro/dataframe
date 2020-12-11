@@ -636,7 +636,7 @@ beans {
                  var details = this.state.vueNewEmployeeSelfAssesmentDataframe
                  var params = {};
                        var self = this;
-                       params['id'] = excon.getFromStore('vueNewEmployeeUploadResumeDataframe','key_vueNewEmployeeUploadResumeDataframe_application_id_id')
+                            params['id']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
                        params['dataframe'] = 'vueNewEmployeeSelfAssesmentDataframe';
                        excon.callApi('EmployeeApplication/initiateSkillSet', 'post', params).then(function(responseData){
                          self.vueNewEmployeeSelfAssesmentDataframe_fillInitData();

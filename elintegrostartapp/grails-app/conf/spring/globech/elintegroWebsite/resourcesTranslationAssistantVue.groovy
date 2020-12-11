@@ -413,14 +413,15 @@ beans{
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doBeforeRefresh =  """ let textId = self.vueEditTranslatedRecordsOfGridDataframe_prop.key;
-                              params['id'] = textId;
-                            params.domain_keys.translatedText.id = textId;
-                            params.persisters.translatedText.id.value = textId;
-                            params.namedParameters.id.value = textId;
+        doBeforeRefresh =  """
+                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueEditTranslatedRecordsOfGridDataframe', 
+                                                            'namedParamKey': 'id', 
+                                                            'getValueFrom': 'vueGridOfTranslatedTextDataframe', 
+                                                            'fieldName':'translatedText',
+                                                            'key': 'Id'});
                           """
         doAfterRefresh = """excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.persisters.translatedText.text.value);"""
-        doBeforeSave = """params['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = self.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
+//        doBeforeSave = """params['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = self.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
         doAfterSave = """ excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
                           excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.persisters.translatedText.text.value);
                           excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'translatedText', 'U', 'transits');
