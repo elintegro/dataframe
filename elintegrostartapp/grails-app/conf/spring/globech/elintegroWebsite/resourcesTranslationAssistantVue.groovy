@@ -414,9 +414,9 @@ beans{
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doBeforeRefresh =  """
-                             excon.setValuesForNamedParamsFromGrid({'setValueTo': 'vueEditTranslatedRecordsOfGridDataframe', 
+                             excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueEditTranslatedRecordsOfGridDataframe',
                                                             'namedParamKey': 'id', 
-                                                            'getValueFrom': 'vueGridOfTranslatedTextDataframe', 
+                                                            'sourceDataframe': 'vueGridOfTranslatedTextDataframe', 
                                                             'fieldName':'translatedText',
                                                             'key': 'Id'});
                           """
