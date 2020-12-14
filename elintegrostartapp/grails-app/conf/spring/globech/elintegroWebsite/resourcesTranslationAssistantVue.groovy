@@ -333,10 +333,18 @@ beans{
                 , gridWidth       : 820
                 , showGridSearch  : true
                 , internationalize: true
-                ,attr: """style="overflow-y:auto; max-height:500px;" """
+                ,attr: """style="overflow-y:auto; max-height:500px;overflow-wrap: anywhere; overflow-x:hidden;" dense  """
                 , sortable        : true
                 ,onButtonClick   : [
-                ['actionName': 'Delete Text', 'buttons': [
+                ['actionName': 'Actions', 'buttons': [
+                        [
+                                editButton: true
+                                ,MaxWidth: 700
+                                ,refreshInitialData:true
+                                ,showAsDialog: true
+                                ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
+                                ,vuetifyIcon : [name: "edit"]
+                        ],
                         [deleteButton:true
                          ,maxWidth:500
                          ,valueMember: 'Id'
@@ -370,7 +378,7 @@ beans{
                                      , gridWidth       : 820
                                      , showGridSearch  : true
                                      , internationalize: true
-                                     ,attr: """style="overflow-y:auto; max-height:500px;" """
+                                     ,attr: """style="overflow-y:auto; max-height:500px;overflow-wrap: anywhere; overflow-x:hidden;" dense """
                                      , sortable        : true
 //                                     ,onClick :[showAsDialog: true,refreshInitialData:true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,editButton: true
