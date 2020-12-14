@@ -664,11 +664,6 @@ beans {
         computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)}"""
     }
 
-    vueElintegroApplicantDetailsDataframe_script(VueJsEntity){bean->
-//        data = "vueElintegroApplicantDetailsDataframe_tab_model : this.tabValue,\nvueElintegroApplicantDetailsDataframe_display: true, \n"
-//        computed = """tabValue(){return this.\$store.state.vueElintegroApplicantDetailsDataframe.vueElintegroApplicantDetailsDataframe_tab_model}"""
-//        watch = """ tabValue:{handler: function(val, oldVal) {this.vueElintegroApplicantDetailsDataframe_tab_model = val;}},"""
-    }
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
           computed ="""vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
                                         var positions = [];
@@ -715,11 +710,6 @@ beans {
                                   },\n
                               
         """
-/*
-                                  var applicantId = response.domain_keys.application.id;
-                                  var imageSrc = "fileDownload/imagePreview/"+applicantId;
-                                  stateValues.persisters.images.name.value = imageSrc;
-*/
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
@@ -973,7 +963,17 @@ beans {
 
     }
     vueEditTranslatedRecordsOfGridDataframe_script(VueJsEntity){bean ->
-        methods ="""
+        methods ="""saveEditedRecordOfTranslatedText(){
+                       var params = this.state;
+                       var self = this;
+                       excon.callApi('translatorAssistant/saveEditedRecordOfTranslatedText', 'post', params).then(function(responseData){
+                          let response = responseData.data;
+                          excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
+                          excon.showAlertMessage(response)
+                          excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.persisters.translatedText.text.value);
+                          excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'translatedText', 'U', 'transits');
+                       });
+                    },\n
                     googleTranslateForEachRecord(){
                     var params = this.state;
                     var self = this;

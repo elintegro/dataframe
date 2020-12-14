@@ -410,8 +410,8 @@ var excon = new Vue({
         setValuesForNamedParamsFromGrid: function(object){
             if(object instanceof Array){
                 for(let obj in object){
-                    obj['grid'] = true;
-                    this._setValuesForNamedParams(obj)
+                    object[obj]['grid'] = true;
+                    this._setValuesForNamedParams(object[obj])
                 }
             } else if (object instanceof Object){
                 object['grid'] = true;
