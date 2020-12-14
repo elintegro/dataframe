@@ -122,7 +122,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	String popUpTitle=""
 	@OverridableByEditor
 	Map summaryAfterSave = [showSummary: false]
-	static int BIG_TEXT_FIELD_LENGTH = 50;
+	static int BIG_TEXT_FIELD_LENGTH = 255;
 
 	@OverridableByEditor
 	protected String currentRoute

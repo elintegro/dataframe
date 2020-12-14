@@ -138,6 +138,20 @@ class TranslatorAssistantController {
         def result = [success: true,projectDetails:projectDetails,alert_type:"success",msg:"Please click Download to download your file(s)."]
         render(result as JSON)
     }
+    def saveEditedRecordOfTranslatedText(){
+        def param = request.getJSON()
+        def result
+        try {
+            Text text = Text.findByIdAnd_keyAndLanguage(param.id, param.persisters.translatedText._key.value, param.targetLanguage)
+            text.text = param.persisters.translatedText.text.value
+            text.save(flush:true)
+            result = [success: true, newData: param, persisters: param.persisters, msg:"Data saved",alert_type: "success"]
+        }catch(Exception e){
+            log.error("Couldn't save data"+e);
+            result = [success:false, msg:"Couldn't save data",alert_type: "error"]
+        }
+        render result as JSON
+    }
      def translateEachRecordWithGoogle(){
          def param = request.getJSON()
          Language language = Language.findByEname(param.sourceLanguage)
