@@ -333,43 +333,6 @@ beans{
                 , gridWidth       : 820
                 , showGridSearch  : true
                 , internationalize: true
-                ,attr: """style="overflow-y:auto; max-height:500px;" """
-                , sortable        : true
-                ,onButtonClick   : [
-                ['actionName': 'Delete Text', 'buttons': [
-                        [deleteButton:true
-                         ,maxWidth:500
-                         ,valueMember: 'Id'
-                         ,ajaxDeleteUrl:"translatorAssistant/deleteRecord"
-                         ,doBeforeDelete:"""params['projectId'] =  excon.getFromStore('vueGridOfSourceTextDataframe','projectId');"""
-                         ,fieldType:"transits"
-                         ,doAfterDelete:"""self.vueGridOfSourceTextDataframe_fillInitData();"""
-                         ,tooltip: [message:"tooltip.grid.delete",internationalization: true]
-                         ,refDataframe: ref("vueDeleteSourceRecordsOfGridDataframe")
-                         ,vuetifyIcon: [name: "delete"]
-                        ]
-                ]]
-        ]]]
-        currentFrameLayout= ref("vueGridOfSourceTextDataframeLayout")
-
-    }
-    vueGridOfSourceTextDataframe(DataframeVue){ bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueGridOfSourceTextDataframe']
-        saveButton = false
-        initOnPageLoad = true
-        flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doBeforeRefresh = """
-                           params['projectId'] =  excon.getFromStore('vueGridOfSourceTextDataframe','projectId');
-                           params['sourceLanguage'] =excon.getFromStore('vueGridOfSourceTextDataframe','sourceLanguage'); """
-
-        addFieldDef = ["originalSourceText":[
-                widget: "GridWidgetVue"
-                ,name: "originalSourceText"
-                , hql             : """select text.id as Id, text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :sourceLanguage and text._key != null"""
-                , gridWidth       : 820
-                , showGridSearch  : true
-                , internationalize: true
                 ,attr: """style="overflow-y:auto; max-height:500px;overflow-wrap: anywhere; overflow-x:hidden;" dense  """
                 , sortable        : true
                 ,onButtonClick   : [
