@@ -111,7 +111,7 @@ beans{
                                                                 [DATAFRAME_SCRIPT]
                                                             <v-row class="mx-0 pa-1">
                                                                 [BUTTON_SCRIPT]
-                                                            </v-row>
+                                                            </v-row> 
                                                         </v-row>
                                                     </v-card>
                                                 </v-col>

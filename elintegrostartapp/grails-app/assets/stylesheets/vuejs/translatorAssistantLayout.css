@@ -41,6 +41,24 @@
     margin-right: 0px;
 
 }
+.borderInTranslation .v-data-table__wrapper{
+    overflow-x: hidden;
+}
+.borderInTranslation .v-data-table__wrapper table tr td{
+    overflow-wrap: anywhere;
+}
+.borderInTranslation .v-data-table__wrapper table thead th{
+    font-size: 1rem;
+    font-weight: bold;
+    color: black;
+    font-style: oblique;
+}
+.borderInTranslation .v-data-table__wrapper table tr:nth-child(odd) td{
+    background-color: #ffccebe6;
+}
+.borderInTranslation .v-data-table__wrapper table tr:nth-child(even) td{
+    background-color: #cce3ff;
+}
 .translatorAssistantContainer .howYouDoSection{
     background-color: #f5fbff;
     padding-bottom: 100px;
