@@ -336,12 +336,13 @@ beans{
                 ,attr: """style="overflow-y:auto; max-height:500px;overflow-wrap: anywhere; overflow-x:hidden;" dense  """
                 , sortable        : true
                 ,onButtonClick   : [
-                ['actionName': 'Actions', 'buttons': [
+                ['actionName': 'Edit/Delete Text', 'buttons': [
                         [
                                 editButton: true
                                 ,MaxWidth: 700
                                 ,refreshInitialData:true
                                 ,showAsDialog: true
+                                ,refDataframe: ref("vueEditSourceRecordsOfGridDataframe")
                                 ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
                                 ,vuetifyIcon : [name: "edit"]
                         ],
@@ -359,7 +360,41 @@ beans{
                 ]]
         ]]]
         currentFrameLayout= ref("vueGridOfSourceTextDataframeLayout")
+        childDataframes = ["vueEditSourceRecordsOfGridDataframe"]
 
+    }
+    vueEditSourceRecordsOfGridDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueEditSourceRecordsOfGridDataframe']
+        saveButton = true
+        initOnPageLoad = false
+        putFillInitDataMethod = true
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        doBeforeRefresh =  """
+                            excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueEditSourceRecordsOfGridDataframe',
+                                                                    'namedParamKey': 'id', 
+                                                                    'sourceDataframe': 'vueGridOfSourceTextDataframe', 
+                                                                    'fieldName':'originalSourceText',
+                                                                    'key': 'Id'} 
+                                                                    );
+                          """
+        doAfterRefresh = """excon.saveToStore('vueEditSourceRecordsOfGridDataframe','textBeforeEditing',response.persisters.originalSourceText.text.value);"""
+        doAfterSave = """ excon.saveToStore('vueEditSourceRecordsOfGridDataframe','textBeforeEditing',response.persisters.originalSourceText.text.value);
+                          excon.refreshDataForGrid(response,'vueGridOfSourceTextDataframe', 'originalSourceText', 'U', 'transits');
+                          excon.setVisibility("vueEditSourceRecordsOfGridDataframe", false);"""
+        hql = """select  originalSourceText.id as Id, originalSourceText._key as Key, originalSourceText.text as Text from Text originalSourceText where originalSourceText.id=:id"""
+        addFieldDef = [
+                "originalSourceText._key":[widget:"InputWidgetVue"
+                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                                       readOnly: true,],
+                "originalSourceText.text":[widget:"TextAreaWidgetVue"
+                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                ]
+        ]
+
+        currentFrameLayout = ref("vueEditSourceRecordsOfGridDataframeLayout")
     }
     vueGridOfTranslatedTextDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper

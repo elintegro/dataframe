@@ -962,6 +962,25 @@ beans {
         """
 
     }
+    vueEditSourceRecordsOfGridDataframe_script(VueJsEntity){bean ->
+        methods = """closeVueEditSourceRecordsOfGridDataframe(){
+                     let stateValuesForEditSourceRecordsOfGridDataframe = excon.getFromStore('vueEditSourceRecordsOfGridDataframe')
+                     var textBeforeEditing = stateValuesForEditSourceRecordsOfGridDataframe.textBeforeEditing;
+                     var textAfterEditing = stateValuesForEditSourceRecordsOfGridDataframe.persisters.originalSourceText.text.value;
+                     if(textBeforeEditing != textAfterEditing){
+                       var result = confirm("Are you sure want to abandon the changes?");
+                        if(result){
+                                stateValuesForEditSourceRecordsOfGridDataframe.persisters.originalSourceText.text.value = textBeforeEditing;
+                                excon.saveToStore('vueEditSourceRecordsOfGridDataframe',stateValuesForEditSourceRecordsOfGridDataframe);
+                                excon.setVisibility("vueEditSourceRecordsOfGridDataframe", false);
+                        }
+                         return false;
+                     }
+                          excon.setVisibility("vueEditSourceRecordsOfGridDataframe", false);
+                     
+                    },\n
+                  """
+    }
     vueEditTranslatedRecordsOfGridDataframe_script(VueJsEntity){bean ->
         methods ="""saveEditedRecordOfTranslatedText(){
                        var params = this.state;
@@ -1003,7 +1022,7 @@ beans {
                      }
                           excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
                      
-                    }
+                    },\n
                     """
     }
 
