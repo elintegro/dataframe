@@ -387,7 +387,7 @@ beans{
         hql = """select  originalSourceText.id as Id, originalSourceText._key as Key, originalSourceText.text as Text from Text originalSourceText where originalSourceText.id=:id"""
         addFieldDef = [
                 "originalSourceText._key":[widget:"InputWidgetVue"
-                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' disabled """,
                                        readOnly: true,],
                 "originalSourceText.text":[widget:"TextAreaWidgetVue"
                                        ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
@@ -474,9 +474,9 @@ beans{
         hql = """select  translatedText._key as Key, translatedText.text as Text, nonTranslatedText.text as SourceText from Text translatedText, Text nonTranslatedText where translatedText._key =:Key and translatedText._key = nonTranslatedText._key and nonTranslatedText.language =:sourceLanguage and translatedText.language =:targetLanguage"""
         addFieldDef = [
                 "translatedText._key":[widget:"InputWidgetVue"
-                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' disabled """,
                                        readOnly: true,],
-                "nonTranslatedText.text":[widget:"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,readOnly: true],
+                "nonTranslatedText.text":[widget:"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' disabled """,readOnly: true],
                 "translatedText.text":[widget:"TextAreaWidgetVue"
                                        ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
                 ]
