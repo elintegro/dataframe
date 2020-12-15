@@ -40,7 +40,7 @@ class ListWidgetVue extends CollectionWidgetVue {
         """
            <v-list ${isDisabled(dataframe, field) ? "disabled" : ""} flat ${getAttr(field)}>
                   <v-subheader>$label</v-subheader>
-                  <v-list-item-group  active-class="blue">
+                  <v-list-item-group>
                    <v-card style="border:1px solid; border-color:rgb(42, 182, 246);">
                        <v-list-item  v-for="(item, i) in ${modelString}" :key="i">
                           <v-list-item-content>
