@@ -21,6 +21,7 @@ import com.elintegro.model.DataframeResponse
 import grails.util.Holders
 import grails.web.servlet.mvc.GrailsParameterMap
 import org.grails.core.DefaultGrailsDomainClass
+import org.grails.web.json.JSONObject
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder
 
@@ -348,8 +349,7 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	}
 
 
-	def ajaxValuesRaw(def request, HttpSession session) {
-		def requestParams = request.getJSON()
+	def ajaxValuesRaw(JSONObject requestParams, HttpSession session) {
 		Dataframe dataframe = Dataframe.getDataframeByName(requestParams)
 		def userId = getSessionUserId(session)
 		def dfInstance = new DataframeInstance(dataframe, requestParams)

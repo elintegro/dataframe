@@ -38,8 +38,8 @@ class NotificationController {
     def dataframeService
 
     def notification(){
-        DataframeController dataframeController = new DataframeController()
-        def results = dataframeService.ajaxValuesRaw()
+        def requestParams = request.getJSON()
+        def results = dataframeService.ajaxValuesRaw(requestParams, session)
         def customDfrParamsToRefresh = [:]
         def notificationData = notificationService.getUserNotificationData()
         customDfrParamsToRefresh =  [
