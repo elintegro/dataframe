@@ -24,7 +24,7 @@ import javax.xml.crypto.Data
 
 class DfrCompBuilder {
 
-    public Map constructDfrComps(dataframes){
+    public Map constructDfrComps(List dataframes){
         StringBuilder vueRoutesSb = new StringBuilder()
         StringBuilder dfrCompToRegisterSb = new StringBuilder()
         StringBuilder vueComponentInitScriptsSb = new StringBuilder()

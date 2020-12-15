@@ -587,7 +587,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                """
 	}
 	/**
-	 * Use 'self' instead of 'this' because of the scope of 'this' issue.
+	 * Use 'self' instead of 'this' because scope of 'this' is different in callbacks
 	 * @param df
 	 * @return
 	 */

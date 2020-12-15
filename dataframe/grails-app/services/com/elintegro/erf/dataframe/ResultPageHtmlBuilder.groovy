@@ -74,8 +74,8 @@ class ResultPageHtmlBuilder {
         String containerLayoutS = gcMainPgObj.containerLayout
         List dataframesL = gcMainPgObj.allDataframesList
         registeredComponents = new HashSet<>()
-        Map layoutStructM = constructLayoutComps(containerLayoutS)
-        Map dfrComps = constructDfrComps(dataframesL)
+        Map layoutStructM = constructLayoutComps(containerLayoutS) //constructs layouts
+        Map dfrComps = constructDfrComps(dataframesL)// constructs dataframes
         String initHmtl = layoutStructM.initHtml
         StringBuilder finalScriptSb = new StringBuilder()
         finalScriptSb.append("<script>\n")
@@ -144,7 +144,6 @@ class ResultPageHtmlBuilder {
         StringBuilder ltSb = new StringBuilder()
         int index = 0;
         for(String ltS : contLytObj.children){
-            LayoutVue lytT = LayoutVue.getLayoutVue(ltS)
             if(!registeredComponents.contains(ltS)){
                 ltSb.append(VueJsBuilder.createCompRegistrationString(ltS, index))
                 index++;
@@ -202,7 +201,7 @@ class ResultPageHtmlBuilder {
         StringBuilder sb = new StringBuilder()
         for(String s : mainPageDataframeList){
             if(!builtComponents.contains(s)){
-                DataframeVue dfrT = DataframeVue.getDataframe(s) // todo check if the component is Layout or Dataframe first
+               // todo check if the component is Layout or Dataframe first
                 if(!registeredComponents.contains(s)){
                     sb.append(VueJsBuilder.createCompRegistrationString(s.trim()))
                     registeredComponents.add(s)
@@ -391,4 +390,3 @@ class ResultPageHtmlBuilder {
 
 
 }
-

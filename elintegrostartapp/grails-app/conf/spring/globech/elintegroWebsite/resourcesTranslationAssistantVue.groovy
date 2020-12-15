@@ -353,6 +353,86 @@ beans{
         currentFrameLayout= ref("vueGridOfSourceTextDataframeLayout")
 
     }
+    vueGridOfSourceTextDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueGridOfSourceTextDataframe']
+        saveButton = false
+        initOnPageLoad = true
+        flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        doBeforeRefresh = """
+                           params['projectId'] =  excon.getFromStore('vueGridOfSourceTextDataframe','projectId');
+                           params['sourceLanguage'] =excon.getFromStore('vueGridOfSourceTextDataframe','sourceLanguage'); """
+
+        addFieldDef = ["originalSourceText":[
+                widget: "GridWidgetVue"
+                ,name: "originalSourceText"
+                , hql             : """select text.id as Id, text._key as Key, text.text as Text from Text text where project_id =:projectId and text.language = :sourceLanguage and text._key != null"""
+                , gridWidth       : 820
+                , showGridSearch  : true
+                , internationalize: true
+                ,attr: """style="overflow-y:auto; max-height:500px;overflow-wrap: anywhere; overflow-x:hidden;" dense  """
+                , sortable        : true
+                ,onButtonClick   : [
+                ['actionName': 'Edit/Delete Text', 'buttons': [
+                        [
+                                editButton: true
+                                ,MaxWidth: 700
+                                ,refreshInitialData:true
+                                ,showAsDialog: true
+                                ,refDataframe: ref("vueEditSourceRecordsOfGridDataframe")
+                                ,tooltip     : [message: "tooltip.grid.edit", internationalization: true]
+                                ,vuetifyIcon : [name: "edit"]
+                        ],
+                        [deleteButton:true
+                         ,maxWidth:500
+                         ,valueMember: 'Id'
+                         ,ajaxDeleteUrl:"translatorAssistant/deleteRecord"
+                         ,doBeforeDelete:"""params['projectId'] =  excon.getFromStore('vueGridOfSourceTextDataframe','projectId');"""
+                         ,fieldType:"transits"
+                         ,doAfterDelete:"""self.vueGridOfSourceTextDataframe_fillInitData();"""
+                         ,tooltip: [message:"tooltip.grid.delete",internationalization: true]
+                         ,refDataframe: ref("vueDeleteSourceRecordsOfGridDataframe")
+                         ,vuetifyIcon: [name: "delete"]
+                        ]
+                ]]
+        ]]]
+        currentFrameLayout= ref("vueGridOfSourceTextDataframeLayout")
+        childDataframes = ["vueEditSourceRecordsOfGridDataframe"]
+
+    }
+    vueEditSourceRecordsOfGridDataframe(DataframeVue){ bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueEditSourceRecordsOfGridDataframe']
+        saveButton = true
+        initOnPageLoad = false
+        putFillInitDataMethod = true
+        saveButtonAttr = """style='background-color:#1976D2; color:white;' """
+        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
+        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        doBeforeRefresh =  """
+                            excon.setValuesForNamedParamsFromGrid({'targetDataframe': 'vueEditSourceRecordsOfGridDataframe',
+                                                                    'namedParamKey': 'id', 
+                                                                    'sourceDataframe': 'vueGridOfSourceTextDataframe', 
+                                                                    'fieldName':'originalSourceText',
+                                                                    'key': 'Id'} 
+                                                                    );
+                          """
+        doAfterRefresh = """excon.saveToStore('vueEditSourceRecordsOfGridDataframe','textBeforeEditing',response.persisters.originalSourceText.text.value);"""
+        doAfterSave = """ excon.saveToStore('vueEditSourceRecordsOfGridDataframe','textBeforeEditing',response.persisters.originalSourceText.text.value);
+                          excon.refreshDataForGrid(response,'vueGridOfSourceTextDataframe', 'originalSourceText', 'U', 'transits');
+                          excon.setVisibility("vueEditSourceRecordsOfGridDataframe", false);"""
+        hql = """select  originalSourceText.id as Id, originalSourceText._key as Key, originalSourceText.text as Text from Text originalSourceText where originalSourceText.id=:id"""
+        addFieldDef = [
+                "originalSourceText._key":[widget:"InputWidgetVue"
+                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                                       readOnly: true,],
+                "originalSourceText.text":[widget:"TextAreaWidgetVue"
+                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                ]
+        ]
+
+        currentFrameLayout = ref("vueEditSourceRecordsOfGridDataframeLayout")
+    }
     vueGridOfTranslatedTextDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueGridOfTranslatedTextDataframe']
@@ -370,7 +450,7 @@ beans{
                                      , gridWidth       : 820
                                      , showGridSearch  : true
                                      , internationalize: true
-                                     ,attr: """style="overflow-y:auto; max-height:500px;" """
+                                     ,attr: """style="overflow-y:auto; max-height:500px;overflow-wrap: anywhere; overflow-x:hidden;" dense """
                                      , sortable        : true
 //                                     ,onClick :[showAsDialog: true,refreshInitialData:true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,editButton: true
@@ -407,38 +487,45 @@ beans{
     vueEditTranslatedRecordsOfGridDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueEditTranslatedRecordsOfGridDataframe']
-        saveButton = true
+        saveButton = false
         initOnPageLoad = false
         putFillInitDataMethod = true
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md2', 'lg2', 'xl2']
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        doBeforeRefresh =  """ let textId = self.vueEditTranslatedRecordsOfGridDataframe_prop.key;
-                              params['id'] = textId;
-                            params.domain_keys.translatedText.id = textId;
-                            params.persisters.translatedText.id.value = textId;
-                            params.namedParameters.id.value = textId;
+        doBeforeRefresh =  """
+                            excon.setValuesForNamedParamsFromGrid([{'targetDataframe': 'vueEditTranslatedRecordsOfGridDataframe',
+                                                                    'namedParamKey': 'id', 
+                                                                    'sourceDataframe': 'vueGridOfTranslatedTextDataframe', 
+                                                                    'fieldName':'translatedText',
+                                                                    'key': 'Id'},
+                                                                    {'targetDataframe': 'vueEditTranslatedRecordsOfGridDataframe',
+                                                                    'namedParamKey': 'Key',
+                                                                    'sourceDataframe': 'vueGridOfTranslatedTextDataframe',
+                                                                    'fieldName':'translatedText',
+                                                                    'key': 'Key'}, 
+                                                                    ]);
+                           params['targetLanguage'] = excon.getFromStore('vueGridOfTranslatedTextDataframe','targetLanguage');
+                           params['sourceLanguage'] =excon.getFromStore('vueGridOfTranslatedTextDataframe','sourceLanguage'); 
                           """
         doAfterRefresh = """excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.persisters.translatedText.text.value);"""
-        doBeforeSave = """params['key_vueEditTranslatedRecordsOfGridDataframe_text_id_id'] = self.vueEditTranslatedRecordsOfGridDataframe_prop.key"""
-        doAfterSave = """ excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
-                          excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe','textBeforeEditing',response.persisters.translatedText.text.value);
-                          excon.refreshDataForGrid(response,'vueGridOfTranslatedTextDataframe', 'translatedText', 'U', 'transits');
-                      """
-        hql = """select translatedText.id as Id, translatedText._key as Key, translatedText.text as Text from Text translatedText where translatedText.id =:id"""
+        hql = """select  translatedText._key as Key, translatedText.text as Text, nonTranslatedText.text as SourceText from Text translatedText, Text nonTranslatedText where translatedText._key =:Key and translatedText._key = nonTranslatedText._key and nonTranslatedText.language =:sourceLanguage and translatedText.language =:targetLanguage"""
         addFieldDef = [
                 "translatedText._key":[widget:"InputWidgetVue"
-                             ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
-                             readOnly: true,],
+                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                                       readOnly: true,],
+                "nonTranslatedText.text":[widget:"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,readOnly: true],
                 "translatedText.text":[widget:"TextAreaWidgetVue"
-                             ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
-                             ]
+                                       ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                ]
         ]
-        dataframeButtons = [googleTranslate: [name: "googleTranslate",type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """ this.googleTranslateForEachRecord();""",flexGridValues:['xs12', 'sm12', 'md4', 'lg4', 'xl4']],
-                            restore: [name: "restore",type: "button",attr:"""style='background-color:#1976D2; color:white;' """,script: """this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();""", flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2']]
+        dataframeButtons = [save: [name: "save",type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """ this.saveEditedRecordOfTranslatedText();""",flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2']],
+                            googleTranslate: [name: "googleTranslate",type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """ this.googleTranslateForEachRecord();""",flexGridValues:['xs12', 'sm12', 'md4', 'lg4', 'xl4']],
+                            restore: [name: "restore",type: "button",attr:"""style='background-color:#1976D2; color:white;' """,script: """this.vueEditTranslatedRecordsOfGridDataframe_fillInitData();""", flexGridValues:['xs12', 'sm12', 'md2', 'lg2', 'xl2']],
         ]
         currentFrameLayout = ref("vueEditTranslatedRecordsOfGridDataframeLayout")
     }
+
     vueDeleteSourceRecordsOfGridDataframe(DataframeVue){bean->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueDeleteSourceRecordsOfGridDataframe']

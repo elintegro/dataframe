@@ -124,7 +124,7 @@ public class DataframeViewJqxVue implements DataframeView {
         if(dfButton.showAsDialog){
             String scrollable = dfButton.scrollable?"scrollable":""
             String persistent = dfButton.persistent?"persistent":""
-            resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" $scrollable $persistent width='initial' max-width='500px'>""")
+            resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" $scrollable $persistent width='initial' :retain-focus="false" max-width='500px'>""")
             resultPageHtml.append(refDataframe.getComponentName("resetForm=true"))
 //            resultPageHtml.append("""<component :is='${refDataframeName.toLowerCase()}' ref='${refDataframeName.toLowerCase()}_ref' :${refDataframeName}_prop="${refDataframeName}_data" :key='randomKey'></component>""")
             resultPageHtml.append("""</v-dialog>\n""")

@@ -509,6 +509,9 @@ $fieldParams
         return """
                               this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
+                              let gridState = ${excon}.getFromStore('${parentDataframeName}');
+                              gridState.$nameOfField = {'selectedRow': dataRecord}; 
+                              ${excon}.saveToStore('${parentDataframeName}', gridState);
                               ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
                               ${excon}.setVisibility("${refDataframeName}", true);
                               let propData = this.${refDataframeName}_data;
