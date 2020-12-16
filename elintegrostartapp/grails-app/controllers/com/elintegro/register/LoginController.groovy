@@ -212,6 +212,11 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
         def result = loginService.sendVerificationCodeForLoginWithOTP(params)
         render result as JSON
     }
+    def sendVerificationCodeAfterRegisterConfirmedWithOTP(){
+        def params = request.getJSON();
+        def result = loginService.sendVerificationCodeAfterRegisterConfirmedWithOTP(params)
+        render result as JSON
+    }
     def loginWithOTP(){
         def param = request.getJSON()
         def result = loginService.loginWithOTP(param)
@@ -226,6 +231,12 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
        RegistrationCode registrationCode = RegistrationCode.findByToken(params.id)
        if (!registrationCode) {
            flash.error = message(code: 'spring.security.ui.register.badCode')
+           redirect uri: "/"
+           return
+       }
+       TimeDuration duration = TimeCategory.minus(new Date(), registrationCode.dateCreated)
+       if(duration.hours > 24){
+           flash.error = message(code: 'This.code.has.been.expired')
            redirect uri: "/"
            return
        }

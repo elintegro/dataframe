@@ -315,27 +315,49 @@ beans {
                               params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
                               let self = this;
                               excon.callApi('login/sendVerificationCodeForLoginWithOTP', 'post', params).then(function(responseData){
-                                console.log(responseData);
-                                var response = responseData.data;
-                                excon.showAlertMessage(response);
-                                if(response.success == true){
-                                 self.showThisFieldAfterCodeSent = true;
-                                 self.showSendCodeButton = false;
-                                }
-                                else{
-                                  excon.setVisibility('vueElintegroRegisterDataframe',true);
-                                }
+                                    let response = responseData.data;
+                                    excon.saveToStore('vueElintegroLoginWithOTPDataframe','currentLocationUrl',response.currentRoute);
+                                    if(response.success == true){
+                                         self.showThisFieldAfterCodeSent = true;
+                                         self.showSendCodeButton = false;
+                                         excon.showAlertMessage(response);
+
+                                    }
+                                    else{
+                                        if(response.askForRegistration == true){
+                                           let confirmMessage = confirm(response.msg);
+                                           if(confirmMessage){
+                                                            self.showSendCodeButton = false;
+                                                            let self1 = self;
+                                                            let params = response.params;
+                                                            excon.callApi('login/sendVerificationCodeAfterRegisterConfirmedWithOTP', 'post', params).then(function(responseData){
+                                                                        let response = responseData.data;
+                                                                        if(response.success == true){
+                                                                            self1.showThisFieldAfterCodeSent = true;
+                                                                            excon.showAlertMessage(response);
+                                                                        }
+                                                            })
+                                           }
+                                           else{
+                                               excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                               excon.refreshPage();
+                                           }
+                                        }
+                                       
+                                    }
                               })
                  },\n
                  loginWithVerificationCode(){
                               var params = this.state;
                               params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              params['currentLocationUrl'] = excon.getFromStore('vueElintegroLoginWithOTPDataframe','currentLocationUrl');
+
                               var self = this;
                               excon.callApi('login/loginWithOTP', 'post', params).then(function(responseData){
-                                console.log(responseData);
                                  var response = responseData.data;
                                  if(response.success == true){
                                      excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                     self.\$router.push(response.currentLocationUrl)
                                      window.location.reload();
                                  }  
                                  excon.showAlertMessage(response);

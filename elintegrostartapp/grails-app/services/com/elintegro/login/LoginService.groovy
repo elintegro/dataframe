@@ -50,21 +50,26 @@ class LoginService {
             }
         }
         else {
-            User user = new User()
-            user.email = params.transits.emailOrPhone.value
-            user.username = params.transits.emailOrPhone.value
-            user.password = new Random().toString()
-            user.save(flush:true)
-            Person applicant = new Person()
-            applicant.firstName = params.transits.emailOrPhone.value
-            applicant.lastName = params.transits.emailOrPhone.value
-            applicant.email = params.transits.emailOrPhone.value
-            applicant.user = user
-            applicant.save(flush:true)
-            Otp otp = new Otp()
-            RegistrationCode registrationCode = registrationCode(user)
-            result = sendVerificationCode(user, otp, registrationCode.token, "/elintegro-user-profile/$user.id")
+            message = messageSource.getMessage( 'ask.for.registration',null,'Failed', LocaleContextHolder.getLocale())
+            result = [success: false, msg: message, alert_type: "error", askForRegistration:true, params:params]
         }
+        return result
+    }
+    def sendVerificationCodeAfterRegisterConfirmedWithOTP(def params){
+        User user = new User()
+        user.email = params.transits.emailOrPhone.value
+        user.username = params.transits.emailOrPhone.value
+        user.password = new Random().toString()
+        user.save(flush:true)
+        Person applicant = new Person()
+        applicant.firstName = "null"
+        applicant.lastName = "null"
+        applicant.email = params.transits.emailOrPhone.value
+        applicant.user = user
+        applicant.save(flush:true)
+        Otp otp = new Otp()
+        RegistrationCode registrationCode = registrationCode(user)
+        def result = sendVerificationCode(user, otp, registrationCode.token, "/elintegro-user-profile/$user.id")
         return result
     }
     def loginWithOTP(def param){
@@ -83,8 +88,16 @@ class LoginService {
                     }
                     springSecurityService.reauthenticate(user1.username, param.transits.verificationCode.value)
                     otp.delete(flush: true)
-                    msg = messageSource.getMessage( 'Login.successful',null,'Success', LocaleContextHolder.getLocale())
-                    result = [success: true, msg: msg, alert_type: "success"]
+                    def routeId = 0
+                    def currentLocationUrl = param.currentLocationUrl
+                    if(param.currentLocationUrl == "/elintegro-user-profile/$user1.id"){
+                        msg = messageSource.getMessage( 'Please.update.your.profile',null,'Success', LocaleContextHolder.getLocale())
+                        routeId = user1.id
+                        currentLocationUrl = "elintegro-user-profile"
+                    }else {
+                        msg = messageSource.getMessage( 'Login.successful',null,'Success', LocaleContextHolder.getLocale())
+                    }
+                    result = [success: true, msg: msg, alert_type: "success",userId: user1.id, currentLocationUrl:currentLocationUrl, routeId:routeId]
                 } catch (Exception e) {
                     log.error("Couldn't authenticate this user." + e)
                     msg = messageSource.getMessage( 'Couldnot.authenticate.this.user',null,'Failed', LocaleContextHolder.getLocale())
@@ -140,7 +153,7 @@ class LoginService {
         try {
             emailService.sendMail(user1.email, emailParams, emailBody)
             msg = messageSource.getMessage( 'We.sent.verification.code',null,'Success', LocaleContextHolder.getLocale())
-            result = [success: true, msg:msg, alert_type: "success"]
+            result = [success: true, msg:msg, alert_type: "success",currentRoute:currentRoute, userId: user1.id]
         } catch (Exception e) {
             log.error("Email sending failed" + e)
             msg = messageSource.getMessage( 'Couldnot.send.mail',null,'Success', LocaleContextHolder.getLocale())
