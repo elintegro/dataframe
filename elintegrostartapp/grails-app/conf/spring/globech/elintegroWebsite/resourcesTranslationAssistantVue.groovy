@@ -333,10 +333,10 @@ beans{
                 , gridWidth       : 820
                 , showGridSearch  : true
                 , internationalize: true
-                ,attr: """style="overflow-y:auto; max-height:500px;"   """
+                ,attr: """style="overflow-y:auto; max-height:500px;" dense  """
                 , sortable        : true
                 ,onButtonClick   : [
-                ['actionName': 'Edit/Delete Text', 'buttons': [
+                ['actionName': 'Actions', 'buttons': [
                         [
                                 editButton: true
                                 ,MaxWidth: 700
@@ -413,7 +413,7 @@ beans{
                                      , gridWidth       : 820
                                      , showGridSearch  : true
                                      , internationalize: true
-                                     ,attr: """style="overflow-y:auto; max-height:500px;"   """
+                                     ,attr: """style="overflow-y:auto; max-height:500px;" dense  """
                                      , sortable        : true
 //                                     ,onClick :[showAsDialog: true,refreshInitialData:true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,onButtonClick   : [
