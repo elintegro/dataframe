@@ -229,7 +229,7 @@ beans{
                         "flexGridValues":['xs12', 'sm12', 'md1', 'lg1', 'xl1'],
                 ],
                 "selectedLanguages":[
-                        widget: "ListWidgetVue"
+                        widget: "SimpleTableListWidgetVue"
                         , hql: """select text.language as language from Text text inner join text.project project  where project_id = :projectId and text.language != project.sourceLanguage group by language"""
                         ,"displayMember":"language"
                         ,internationalize: true
@@ -333,7 +333,7 @@ beans{
                 , gridWidth       : 820
                 , showGridSearch  : true
                 , internationalize: true
-                ,attr: """style="overflow-y:auto; max-height:500px;"   """
+                ,attr: """style="overflow-y:auto; max-height:500px;" dense  """
                 , sortable        : true
                 ,onButtonClick   : [
                 ['actionName': 'Actions', 'buttons': [
@@ -378,7 +378,7 @@ beans{
                                      , gridWidth       : 820
                                      , showGridSearch  : true
                                      , internationalize: true
-                                     ,attr: """style="overflow-y:auto; max-height:500px;"   """
+                                     ,attr: """style="overflow-y:auto; max-height:500px;" dense  """
                                      , sortable        : true
 //                                     ,onClick :[showAsDialog: true,refreshInitialData:true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,onButtonClick   : [

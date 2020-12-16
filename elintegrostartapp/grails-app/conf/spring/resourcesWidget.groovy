@@ -30,6 +30,7 @@ beans {
 	FilesUploadWidgetVue(FilesUploadWidgetVue){}
 	FilesDisplayWidgetVue(FilesDisplayWidgetVue){}
 	ListWidgetVue(ListWidgetVue){}
+	SimpleTableListWidgetVue(SimpleTableListWidgetVue){}
 	ProgressBarWidgetVue(ProgressBarWidgetVue){}
 	CarouselWidgetVue(CarouselWidgetVue){}
 	LanguageSelectorWidgetVue(LanguageSelectorWidgetVue){}
