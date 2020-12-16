@@ -229,7 +229,7 @@ beans{
                         "flexGridValues":['xs12', 'sm12', 'md1', 'lg1', 'xl1'],
                 ],
                 "selectedLanguages":[
-                        widget: "ListWidgetVue"
+                        widget: "SimpleTableListWidgetVue"
                         , hql: """select text.language as language from Text text inner join text.project project  where project_id = :projectId and text.language != project.sourceLanguage group by language"""
                         ,"displayMember":"language"
                         ,internationalize: true
