@@ -19,8 +19,11 @@ import com.elintegro.gc.AuthenticationService
 import com.elintegro.otpVerification.Otp
 import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
+import grails.plugin.springsecurity.ui.RegistrationCode
+import grails.plugin.springsecurity.ui.strategy.RegistrationCodeStrategy
 import grails.util.Holders
 import groovy.time.*
+import org.springframework.context.i18n.LocaleContextHolder
 
 //import grails.plugin.springsecurity.rest.oauth.OauthUser
 import org.springframework.security.authentication.AccountExpiredException
@@ -41,6 +44,7 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
     def user = null
     def loginService
     def passwordEncoder
+    RegistrationCodeStrategy uiRegistrationCodeStrategy
 
     def ajaxSuccess() {
         User userDetails
@@ -213,10 +217,34 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
         def result = loginService.loginWithOTP(param)
         render result as JSON
     }
-    def resendOTPcode(){
+    def resendOTPcodeAndLink(){
         def param = request.getJSON()
-        def resultData = loginService.resendOTPcode(param)
+        def resultData = loginService.resendOTPcodeAndLink(param)
         render resultData as JSON
     }
+   def verifyLoginRegisterWithOtpByToken(){
+       RegistrationCode registrationCode = RegistrationCode.findByToken(params.id)
+       if (!registrationCode) {
+           flash.error = message(code: 'spring.security.ui.register.badCode')
+           redirect uri: "/"
+           return
+       }
+       def user = uiRegistrationCodeStrategy.finishRegistration(registrationCode)
+       if (!user) {
+           flash.error = message(code: 'spring.security.ui.register.badCode')
+           redirect uri: "/"
+           return
+       }
+       if (user.hasErrors()) {
+           return
+       }
+       Otp otp = Otp.findByUser(user)
+       if(otp){
+           otp.delete(flush:true)
+       }
+
+       flash.message = message(code: 'spring.security.ui.register.complete')
+       redirect uri: "#$params.location"
+   }
 
 }

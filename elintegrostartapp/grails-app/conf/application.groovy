@@ -611,7 +611,9 @@ welcome. Next steps to build your app.
 '''
 loginController.emailForLoginWithOTP = '''
 To login with OTP, we just need to make sure this account is yours. <br/><br/>
-To login with OTP, use this verification code : <b> ${verificationCode}</b>.<br/><br/>
+You can acomplish it in 2 ways:
+1. Click <a href="$url">here</a> to  go straight to your account. <br/>
+2.  Use this verification code : <b> ${verificationCode}</b> in your login box.<br/><br/>
 This code will be expired after 24 hours. <br/><br/>
 Thanks,<br/>
 Elintegro App Factory team

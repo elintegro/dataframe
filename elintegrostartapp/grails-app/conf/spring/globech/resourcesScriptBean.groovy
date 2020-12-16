@@ -308,9 +308,12 @@ beans {
         watch = """showHideSendCodeButton:{handler: function(val, oldVal){ this.showSendCodeButton = val;}},\n"""
         computed = """showHideSendCodeButton(){ if(this.state.transits.emailOrPhone.value){ return true;} else{return false;}},\n"""
         methods = """sendVerificationCode(){
-                              var params = this.state;
+                              let params = this.state;
+                              let currentUrl = window.location.href;
+                              let splittedCurrentUrl = currentUrl.split("#");
+                              params['currentRoute'] = splittedCurrentUrl[1]
                               params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
-                              var self = this;
+                              let self = this;
                               excon.callApi('login/sendVerificationCodeForLoginWithOTP', 'post', params).then(function(responseData){
                                 console.log(responseData);
                                 var response = responseData.data;
@@ -341,8 +344,11 @@ beans {
                  resendVerificationCode(){
                               var params = this.state;
                               params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              let currentUrl = window.location.href;
+                              let splittedCurrentUrl = currentUrl.split("#");
+                              params['currentRoute'] = splittedCurrentUrl[1]
                               var self = this;
-                              excon.callApi('login/resendOTPcode', 'post', params).then(function(responseData){
+                              excon.callApi('login/resendOTPcodeAndLink', 'post', params).then(function(responseData){
                                 console.log(responseData);
                                 var response = responseData.data;
                                 excon.showAlertMessage(response);
