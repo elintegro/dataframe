@@ -304,35 +304,63 @@ beans {
                     }"""
     }
     vueElintegroLoginWithOTPDataframe_script(VueJsEntity){bean ->
-        data = """showSendCodeButton : false ,showThisFieldAfterCodeSent : false,"""
-        watch = """showHideSendCodeButton:{handler: function(val, oldVal){ this.showSendCodeButton = val;}},\n"""
-        computed = """showHideSendCodeButton(){ if(this.state.transits.emailOrPhone.value){ return true;} else{return false;}},\n"""
+        data = """showThisFieldAfterCodeSent : false,"""
+        computed = """showHideSendCodeButton(){ 
+                                              let stateValues = excon.getFromStore('vueElintegroLoginWithOTPDataframe');
+                                             if(stateValues.transits.emailOrPhone.value  && this.showThisFieldAfterCodeSent == false){ return true;} else{return false;}},\n"""
         methods = """sendVerificationCode(){
-                              var params = this.state;
+                              let params = this.state;
+                              let currentUrl = window.location.href;
+                              let splittedCurrentUrl = currentUrl.split("#");
+                              params['currentRoute'] = splittedCurrentUrl[1]
                               params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
-                              var self = this;
+                              let self = this;
                               excon.callApi('login/sendVerificationCodeForLoginWithOTP', 'post', params).then(function(responseData){
-                                console.log(responseData);
-                                var response = responseData.data;
-                                excon.showAlertMessage(response);
-                                if(response.success == true){
-                                 self.showThisFieldAfterCodeSent = true;
-                                 self.showSendCodeButton = false;
-                                }
-                                else{
-                                  excon.setVisibility('vueElintegroRegisterDataframe',true);
-                                }
+                                    let response = responseData.data;
+                                    excon.saveToStore('vueElintegroLoginWithOTPDataframe','currentLocationUrl',response.currentRoute);
+                                    if(response.success == true){
+                                         self.showThisFieldAfterCodeSent = true;
+                                         excon.showAlertMessage(response);
+                                    }
+                                    else if(response.success == false && response.askForRegistration == true){
+                                          let stateValues = response.params
+                                          stateValues['currentLocationUrl'] = response.currentRoute;
+                                          excon.saveToStore('vueElintegroLoginWithOTPDataframe',stateValues);
+                                          let confirmMessage = confirm(response.msg);
+                                          if(confirmMessage){
+                                                  let self1 = self;
+                                                  let params = response.params;
+                                                  excon.callApi('login/sendVerificationCodeAfterRegisterConfirmedWithOTP', 'post', params).then(function(responseData){
+                                                              let response = responseData.data;
+                                                              if(response.success == true){
+                                                                 excon.saveToStore('vueElintegroLoginWithOTPDataframe','currentLocationUrl',response.currentRoute);
+                                                                 self1.showThisFieldAfterCodeSent = true;
+                                                                 excon.showAlertMessage(response);
+                                                              }
+                                                  })
+                                          }else{
+                                               excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                               excon.refreshPage();
+                                          }        
+                                    }
+                                    else{
+                                        excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                        excon.showAlertMessage(response);
+                                    }
+                                   
                               })
                  },\n
                  loginWithVerificationCode(){
                               var params = this.state;
                               params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              params['currentLocationUrl'] = excon.getFromStore('vueElintegroLoginWithOTPDataframe','currentLocationUrl');
+
                               var self = this;
                               excon.callApi('login/loginWithOTP', 'post', params).then(function(responseData){
-                                console.log(responseData);
                                  var response = responseData.data;
                                  if(response.success == true){
                                      excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                     self.\$router.push(response.currentLocationUrl)
                                      window.location.reload();
                                  }  
                                  excon.showAlertMessage(response);
@@ -341,8 +369,11 @@ beans {
                  resendVerificationCode(){
                               var params = this.state;
                               params['dataframe'] = 'vueElintegroLoginWithOTPDataframe';
+                              let currentUrl = window.location.href;
+                              let splittedCurrentUrl = currentUrl.split("#");
+                              params['currentRoute'] = splittedCurrentUrl[1]
                               var self = this;
-                              excon.callApi('login/resendOTPcode', 'post', params).then(function(responseData){
+                              excon.callApi('login/resendOTPcodeAndLink', 'post', params).then(function(responseData){
                                 console.log(responseData);
                                 var response = responseData.data;
                                 excon.showAlertMessage(response);
