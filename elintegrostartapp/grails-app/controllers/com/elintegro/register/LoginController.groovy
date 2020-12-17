@@ -219,7 +219,7 @@ class LoginController extends grails.plugin.springsecurity.LoginController {
     }
     def loginWithOTP(){
         def param = request.getJSON()
-        def result = loginService.loginWithOTP(param)
+        def result = loginService.loginWithOTP(param, session)
         render result as JSON
     }
     def resendOTPcodeAndLink(){

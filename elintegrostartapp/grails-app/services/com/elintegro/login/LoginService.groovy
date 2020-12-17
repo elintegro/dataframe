@@ -14,6 +14,7 @@ import groovy.time.TimeDuration
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.transaction.interceptor.TransactionAspectSupport
 
+import javax.servlet.http.HttpSession
 import java.text.DecimalFormat
 
 @Transactional
@@ -51,7 +52,7 @@ class LoginService {
         }
         else {
             message = messageSource.getMessage( 'ask.for.registration',null,'Failed', LocaleContextHolder.getLocale())
-            result = [success: false, msg: message, alert_type: "error", askForRegistration:true, params:params]
+            result = [success: false, msg: message, alert_type: "error", askForRegistration:true, params:params, currentRoute: currentRoute]
         }
         return result
     }
@@ -72,51 +73,59 @@ class LoginService {
         def result = sendVerificationCode(user, otp, registrationCode.token, "/elintegro-user-profile/$user.id")
         return result
     }
-    def loginWithOTP(def param){
+    def loginWithOTP(def param, HttpSession session){
         User user1 = User.findByUsername(param.transits.emailOrPhone.value)
         Otp otp = Otp.findByUser(user1)
-        TimeDuration duration = TimeCategory.minus(new Date(), otp.createTime)
         def result
         def msg
-        if(otp && duration.hours <= 24){
-            def isOtpValid = passwordEncoder.isPasswordValid(otp.verificationCode, param.transits.verificationCode.value, null)
-            if(isOtpValid == true) {
-                try {
-                    RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.emailOrPhone.value)
-                    if(registrationCode){
-                        registrationCode.delete(flush:true)
+        if(otp) {
+            def counter = session.getAttribute("NO_OF_ATTEMPTS_FOR_OTP")?:0;
+            TimeDuration duration = TimeCategory.minus(new Date(), otp.createTime)
+            if (otp && duration.hours <= 24 && counter<= 10) {
+                def isOtpValid = passwordEncoder.isPasswordValid(otp.verificationCode, param.transits.verificationCode.value, null)
+                if (isOtpValid == true) {
+                    try {
+                        RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.emailOrPhone.value)
+                        if (registrationCode) {
+                            registrationCode.delete(flush: true)
+                        }
+                        springSecurityService.reauthenticate(user1.username, param.transits.verificationCode.value)
+                        otp.delete(flush: true)
+                        def routeId = 0
+                        def currentLocationUrl = param.currentLocationUrl
+                        if (param.currentLocationUrl == "/elintegro-user-profile/$user1.id") {
+                            msg = messageSource.getMessage('Please.update.your.profile', null, 'Success', LocaleContextHolder.getLocale())
+                            routeId = user1.id
+                        } else {
+                            msg = messageSource.getMessage('Login.successful', null, 'Success', LocaleContextHolder.getLocale())
+                        }
+                        result = [success: true, msg: msg, alert_type: "success", userId: user1.id, currentLocationUrl: currentLocationUrl, routeId: routeId]
+                    } catch (Exception e) {
+                        log.error("Couldn't authenticate this user." + e)
+                        msg = messageSource.getMessage('Couldnot.authenticate.this.user', null, 'Failed', LocaleContextHolder.getLocale())
+                        result = [success: false, msg: msg, alert_type: "error"]
                     }
-                    springSecurityService.reauthenticate(user1.username, param.transits.verificationCode.value)
-                    otp.delete(flush: true)
-                    def routeId = 0
-                    def currentLocationUrl = param.currentLocationUrl
-                    if(param.currentLocationUrl == "/elintegro-user-profile/$user1.id"){
-                        msg = messageSource.getMessage( 'Please.update.your.profile',null,'Success', LocaleContextHolder.getLocale())
-                        routeId = user1.id
-                        currentLocationUrl = "elintegro-user-profile"
-                    }else {
-                        msg = messageSource.getMessage( 'Login.successful',null,'Success', LocaleContextHolder.getLocale())
-                    }
-                    result = [success: true, msg: msg, alert_type: "success",userId: user1.id, currentLocationUrl:currentLocationUrl, routeId:routeId]
-                } catch (Exception e) {
-                    log.error("Couldn't authenticate this user." + e)
-                    msg = messageSource.getMessage( 'Couldnot.authenticate.this.user',null,'Failed', LocaleContextHolder.getLocale())
+                } else {
+                    counter++
+                    session.setAttribute("NO_OF_ATTEMPTS_FOR_OTP", counter)
+                    log.error("Authentication failed, incorrect verification code.")
+                    msg = messageSource.getMessage('Incorrect.verification.code', null, 'Failed', LocaleContextHolder.getLocale())
                     result = [success: false, msg: msg, alert_type: "error"]
                 }
-            }
-            else {
-                log.error("Authentication failed, incorrect verification code.")
-                msg = messageSource.getMessage( 'Incorrect.verification.code',null,'Failed', LocaleContextHolder.getLocale())
-                result = [success: false, msg:msg, alert_type: "error"]
-            }
 
-        }
-        else{
-            if(otp){
-                otp.delete(flush: true)
+            } else {
+                RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.emailOrPhone.value)
+                if (otp && registrationCode) {
+                    otp.delete(flush: true)
+                    registrationCode.delete(flush: true)
+                }
+                msg = messageSource.getMessage('This.code.has.been.expired', null, 'Failed', LocaleContextHolder.getLocale())
+                result = [success: false, msg: msg, alert_type: "error"]
+
             }
-            msg = messageSource.getMessage( 'This.code.has.been.expired',null,'Failed', LocaleContextHolder.getLocale())
-            result = [success: false,msg:msg,alert_type: "error"]
+        }else{
+            msg = messageSource.getMessage('This.code.has.been.expired', null, 'Failed', LocaleContextHolder.getLocale())
+            result = [success: false, msg: msg, alert_type: "error"]
 
         }
         return result
@@ -146,7 +155,7 @@ class LoginService {
         otp.save()
         def conf = Holders.grailsApplication.config
         String url = conf.grails.serverURL+"/login/verifyLoginRegisterWithOtpByToken/$token?location=$currentRoute"
-        String emailBody = conf.loginController.emailForLoginWithOTP
+        String emailBody = messageSource.getMessage( 'email.message.for.otp.login.register',null,'Email sent', LocaleContextHolder.getLocale())
         Map emailParams = [verificationCode: verificationCode, url:url]
         def result
         def msg

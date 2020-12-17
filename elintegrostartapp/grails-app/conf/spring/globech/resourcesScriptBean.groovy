@@ -304,9 +304,10 @@ beans {
                     }"""
     }
     vueElintegroLoginWithOTPDataframe_script(VueJsEntity){bean ->
-        data = """showSendCodeButton : false ,showThisFieldAfterCodeSent : false,"""
-        watch = """showHideSendCodeButton:{handler: function(val, oldVal){ this.showSendCodeButton = val;}},\n"""
-        computed = """showHideSendCodeButton(){ if(this.state.transits.emailOrPhone.value){ return true;} else{return false;}},\n"""
+        data = """showThisFieldAfterCodeSent : false,"""
+        computed = """showHideSendCodeButton(){ 
+                                              let stateValues = excon.getFromStore('vueElintegroLoginWithOTPDataframe');
+                                             if(stateValues.transits.emailOrPhone.value  && this.showThisFieldAfterCodeSent == false){ return true;} else{return false;}},\n"""
         methods = """sendVerificationCode(){
                               let params = this.state;
                               let currentUrl = window.location.href;
@@ -319,32 +320,34 @@ beans {
                                     excon.saveToStore('vueElintegroLoginWithOTPDataframe','currentLocationUrl',response.currentRoute);
                                     if(response.success == true){
                                          self.showThisFieldAfterCodeSent = true;
-                                         self.showSendCodeButton = false;
                                          excon.showAlertMessage(response);
-
                                     }
-                                    else{
-                                        if(response.askForRegistration == true){
-                                           let confirmMessage = confirm(response.msg);
-                                           if(confirmMessage){
-                                                            self.showSendCodeButton = false;
-                                                            let self1 = self;
-                                                            let params = response.params;
-                                                            excon.callApi('login/sendVerificationCodeAfterRegisterConfirmedWithOTP', 'post', params).then(function(responseData){
-                                                                        let response = responseData.data;
-                                                                        if(response.success == true){
-                                                                            self1.showThisFieldAfterCodeSent = true;
-                                                                            excon.showAlertMessage(response);
-                                                                        }
-                                                            })
-                                           }
-                                           else{
+                                    else if(response.success == false && response.askForRegistration == true){
+                                          let stateValues = response.params
+                                          stateValues['currentLocationUrl'] = response.currentRoute;
+                                          excon.saveToStore('vueElintegroLoginWithOTPDataframe',stateValues);
+                                          let confirmMessage = confirm(response.msg);
+                                          if(confirmMessage){
+                                                  let self1 = self;
+                                                  let params = response.params;
+                                                  excon.callApi('login/sendVerificationCodeAfterRegisterConfirmedWithOTP', 'post', params).then(function(responseData){
+                                                              let response = responseData.data;
+                                                              if(response.success == true){
+                                                                 excon.saveToStore('vueElintegroLoginWithOTPDataframe','currentLocationUrl',response.currentRoute);
+                                                                 self1.showThisFieldAfterCodeSent = true;
+                                                                 excon.showAlertMessage(response);
+                                                              }
+                                                  })
+                                          }else{
                                                excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
                                                excon.refreshPage();
-                                           }
-                                        }
-                                       
+                                          }        
                                     }
+                                    else{
+                                        excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                        excon.showAlertMessage(response);
+                                    }
+                                   
                               })
                  },\n
                  loginWithVerificationCode(){
