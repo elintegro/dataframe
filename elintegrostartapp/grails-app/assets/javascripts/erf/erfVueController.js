@@ -502,7 +502,7 @@ var excon = new Vue({
             return dataToChange
         },
         redirectPage:function (dataFrame,pageToRedirect,routeId){
-            if(routeId == null){
+            if(routeId == null || routeId === 0){
                 dataFrame.$router.push('/'+pageToRedirect+'/0');
             }
             else {
@@ -510,7 +510,7 @@ var excon = new Vue({
             }
         },
         refreshPage: function(){
-            window.location.reload;
+            window.location.reload();
         },
         getImageDataInfo:function (file){
             let imageData = {};

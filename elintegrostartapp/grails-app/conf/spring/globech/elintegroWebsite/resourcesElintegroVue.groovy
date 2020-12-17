@@ -628,7 +628,7 @@ beans {
                 "emailOrPhone":[name:"emailOrPhone",widget: "InputWidgetVue",placeholder: "Enter your email or phone",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6'"""],
                 "sendCode":[widget: "ButtonWidgetVue"
                             ,insertAfter: "emailOrPhone"
-                            ,attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;' v-show = 'showSendCodeButton' """
+                            ,attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;' v-show = 'showHideSendCodeButton' """
                             ,script: """this.sendVerificationCode();"""],
                 "verificationCode":[name: "verificationCode", widget:"InputWidgetVue",placeholder: "Enter the verification code",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' v-if = 'showThisFieldAfterCodeSent'"""],
                 "codeNotReceived":[widget: "TextDisplayWidgetVue",isDynamic:false,attr: """v-show='showThisFieldAfterCodeSent'""", "flexGridValues": ['xs9', 'sm9', 'md9', 'lg9', 'xl9']],

@@ -609,13 +609,6 @@ Click <a href="$urlToChangePassword">here</a> to change your password.
 registerService.emailSubjectAfterSignUp = ''' ${name}, 
 welcome. Next steps to build your app.
 '''
-loginController.emailForLoginWithOTP = '''
-To login with OTP, we just need to make sure this account is yours. <br/><br/>
-To login with OTP, use this verification code : <b> ${verificationCode}</b>.<br/><br/>
-This code will be expired after 24 hours. <br/><br/>
-Thanks,<br/>
-Elintegro App Factory team
-'''
 elintegro.contuctus.email.sendto = "elintegroinc@gmail.com, pangenirabindra5@gmail.com,sumanneupane19982055@gmail.com, shai@gmail.com,rabindra@gmail.com"
 
 application.languages = """'fr','en','es'"""

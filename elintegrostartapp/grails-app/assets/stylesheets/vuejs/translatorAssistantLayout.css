@@ -52,11 +52,12 @@
     font-weight: bold;
     color: black;
     font-style: oblique;
-    background-color: #7be236;
 }
-
+.borderInTranslation .v-data-table__wrapper table tr:nth-child(odd) td{
+    background-color: #ffccebe6;
+}
 .borderInTranslation .v-data-table__wrapper table tr:nth-child(even) td{
-    background-color: #f1f7fd;
+    background-color: #cce3ff;
 }
 .translatorAssistantContainer .howYouDoSection{
     background-color: #f5fbff;
