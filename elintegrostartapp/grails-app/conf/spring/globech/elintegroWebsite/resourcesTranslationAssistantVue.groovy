@@ -325,6 +325,7 @@ beans{
         doBeforeRefresh = """
                            params['projectId'] =  excon.getFromStore('vueGridOfSourceTextDataframe','projectId');
                            params['sourceLanguage'] =excon.getFromStore('vueGridOfSourceTextDataframe','sourceLanguage'); """
+        doAfterRefresh = """excon.saveToStore('vueGridOfSourceTextDataframe','gridTitleFromState',self.state.sourceLanguage)"""
 
         addFieldDef = ["originalSourceText":[
                 widget: "GridWidgetVue"
@@ -333,6 +334,7 @@ beans{
                 , gridWidth       : 820
                 , showGridSearch  : true
                 , internationalize: true
+                ,isDynamic        : true
                 ,attr: """style="overflow-y:auto; max-height:500px;" dense  """
                 , sortable        : true
                 ,onButtonClick   : [
@@ -413,7 +415,8 @@ beans{
                                      , gridWidth       : 820
                                      , showGridSearch  : true
                                      , internationalize: true
-                                     ,attr: """style="overflow-y:auto; max-height:500px;"   """
+                                     ,isDynamic        : true
+                                     ,attr: """style="overflow-y:auto; max-height:500px;" dense  """
                                      , sortable        : true
 //                                     ,onClick :[showAsDialog: true,refreshInitialData:true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
                                      ,onButtonClick   : [

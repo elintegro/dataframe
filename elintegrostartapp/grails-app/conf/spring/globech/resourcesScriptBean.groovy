@@ -834,6 +834,7 @@ beans {
                                             this.isHidden = true
                                         }
                                         stateValues.targetLanguage = params.language;
+                                        stateValues.gridTitleFromState = params.language;
                                         stateValues['projectId'] = this.state.projectId;
                                         stateValues['sourceLanguage'] = this.state.persisters.project.sourceLanguage.value;
                                         excon.saveToStore('vueGridOfTranslatedTextDataframe',stateValues);

@@ -79,7 +79,13 @@ class GridWidgetVue extends WidgetVue {
         String modelString = getFieldJSONModelNameVue(field)
         String itemsStr = getFieldJSONItems(field)
         String headerString = "${getFieldJSONNameVue(field)}${DOT}${headers}"
-        String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
+        boolean isDynamic = field.isDynamic?:false
+        String gridTitle
+        if(isDynamic){
+            gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label\t{{state.gridTitleFromState}}</v-card-title>""":""
+        }else {
+            gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
+        }
         String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
         String itemKey = field.itemKey?:"id"
         return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
@@ -212,6 +218,8 @@ $fieldParams
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
+        VueStore store = dataframe.getVueJsBuilder().getVueStore()
+        store.addToState("gridTitleFromState: '',\n")//need to set this title from dataframe(doAfterRefresh) or script bean...
         def search = field?.showGridSearch
         List gridDataframeNames = field?.gridDataframeList
         String gridDataframeNamesBuilder = ""
