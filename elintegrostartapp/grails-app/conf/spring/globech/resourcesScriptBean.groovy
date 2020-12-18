@@ -362,7 +362,7 @@ beans {
                                      excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
                                      self.\$router.push(response.currentLocationUrl)
                                      window.location.reload();
-                                 }else{
+                                 }else if(response.success == false && response.incorrectVerificationCode != true){
                                      excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
                                      setTimeout(function(){excon.refreshPage();}, 2000);
                                  }  
