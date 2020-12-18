@@ -314,8 +314,8 @@ beans {
 
         addFieldDef = [
 
-                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
-                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "person.firstName":["name":"firstName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'FirstName.required.message']],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "person.lastName":["name":"lastName","type":"link","widget":"InputWidgetVue","validationRules":[[condition:"v => !!v", message: 'LastName.required.message'],[condition:"v => (v && v.length <= 30)",message:"LastName.must.be.less.than.30"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                 "person.email":["name":"email","type":"link","widget":"EmailWidgetVue","validationRules":[[condition:"v => !!v", message: 'email.required.message']],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                 "person.phone":[
                         "name":"phone",
@@ -549,7 +549,7 @@ beans {
         addFieldDef = [
                 "contactUs.name":["name":"Name","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                 "contactUs.email":["name":"Name","widget":"InputWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
-                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue",validate: true,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                "contactUs.phone":[name:"phone",widget: "PhoneNumberWidgetVue","validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                 "contactUs.textOfMessage":["name":"Name","widget":"TextAreaWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],]
 
         //  dataframeButtons = [Submit: [name: "submit", type: "link", url:"ElintegroWebsite/ContactUs","flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
@@ -625,12 +625,12 @@ beans {
         saveButton = false
         isGlobal = true
         addFieldDef = [
-                "emailOrPhone":[name:"emailOrPhone",widget: "InputWidgetVue",placeholder: "Enter your email or phone",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6'"""],
+                "email":[name:"email",widget: "InputWidgetVue",placeholder: "Enter your email here.",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6'"""],
                 "sendCode":[widget: "ButtonWidgetVue"
-                            ,insertAfter: "emailOrPhone"
+                            ,insertAfter: "email"
                             ,attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;' v-show = 'showHideSendCodeButton' """
                             ,script: """this.sendVerificationCode();"""],
-                "verificationCode":[name: "verificationCode", widget:"InputWidgetVue",placeholder: "Enter the verification code",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' v-if = 'showThisFieldAfterCodeSent'"""],
+                "verificationCode":[name: "verificationCode", widget:"InputWidgetVue",placeholder: "Enter the verification code you received.",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' v-if = 'showThisFieldAfterCodeSent'"""],
                 "codeNotReceived":[widget: "TextDisplayWidgetVue",isDynamic:false,attr: """v-show='showThisFieldAfterCodeSent'""", "flexGridValues": ['xs9', 'sm9', 'md9', 'lg9', 'xl9']],
                 "resendCode":[widget: "ButtonWidgetVue"
                               ,insertAfter: "codeNotReceived"
@@ -770,8 +770,18 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl4']
         wrapInForm=true
         childDataframes=["vueElintegroResetPasswordDataframe"]
-        doBeforeSave = """params.persisters.person.mainPicture.value = params.transits.uploadPicture.value[0].imageName;
-"""
+        doBeforeSave = """if(params.transits.uploadPicture.value){
+                            params.persisters.person.mainPicture.value = params.transits.uploadPicture.value[0].imageName;
+                          }
+                          else if(params.persisters.person.mainPicture.value != "assets/default_profile.jpg"){
+                                 let imageName = params.persisters.person.mainPicture.value.replace('fileDownload/fileDownload/','');
+                                 params.persisters.person.mainPicture.value = imageName;
+                          }
+                          else{
+                               params.persisters.person.mainPicture.value = '';
+                          }
+                         
+        """
         doAfterSave = """setTimeout(function(){excon.refreshPage();}, 1000);"""
         route = true
         addFieldDef =[
@@ -783,12 +793,15 @@ beans {
                 "person.firstName":[
                         widget: "InputWidgetVue",
                         "required": "required",
-                        attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
+                        attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,
+                        "validationRules":[[condition:"v => !!v", message:"FirstName.required.message"]],
+                ],
 
                 "person.lastName":[
                         widget: "InputWidgetVue"
                         ,"required": "required"
                         ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                        ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"]]
                 ],
                 "person.bday":[
                         widget: "DateWidgetVue"
@@ -806,7 +819,7 @@ beans {
                           widget: "PhoneNumberWidgetVue"
                          ,"required": "required"
                           ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
-                         ,"validate":["rule":["v => !!v || 'Phone Number is required'"]]
+                         ,"validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]],
                 ],
                 "person.languages":[
                         widget: "ComboboxVue"

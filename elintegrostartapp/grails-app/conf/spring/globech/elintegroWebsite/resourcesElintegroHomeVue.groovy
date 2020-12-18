@@ -272,12 +272,14 @@ beans{
                                 widget:"InputWidgetVue"
                                 ,name: "firstName"
                                 ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+//                                ,"validationRules":[[condition:"v => !!v", message:"FirstName.required.message"]]
                                 ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "person.lastName":[
                                 widget:"InputWidgetVue"
                                 ,name: "lastName"
                                 ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"]]
                                 ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "person.email":[
@@ -286,7 +288,12 @@ beans{
                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
-                       "person.phone":["name":"phone","widget":"PhoneNumberWidgetVue",validate: true,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' ""","flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                       "person.phone":[
+                               "name":"phone"
+                               ,"widget":"PhoneNumberWidgetVue"
+                               ,"validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
 
         ]
         dataframeButtons = [
