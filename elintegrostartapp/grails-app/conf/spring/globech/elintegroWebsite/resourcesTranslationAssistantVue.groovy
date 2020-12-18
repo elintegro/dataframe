@@ -55,7 +55,7 @@ beans{
                         widget: "ComboboxVue"
                         , hql: """select project.id as projectId , project.name as Name from Project project where project.users is empty"""
                         ,"displayMember":"Name"
-                        ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' """
+                        ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' outlined """
                         , search:true
                         ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ]
@@ -82,7 +82,7 @@ beans{
                         widget: "ComboboxVue"
                         , hql: """select project.id as projectId , project.name as Name , users.id as Id from Project project inner join project.users users where users.id = :session_userid"""
                         ,"displayMember":"Name"
-                        ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' """
+                        ,attr: """ background-color='#EBF9FF !important' color='#2AB6F6' outlined """
                         , search:true
                         ,flexGridValues: [ 'xs12' ,'sm12', 'md12', 'lg12', 'xl12']
                 ]
@@ -490,7 +490,6 @@ beans{
         ]
         currentFrameLayout = ref("vueEditTranslatedRecordsOfGridDataframeLayout")
     }
-
     vueDeleteSourceRecordsOfGridDataframe(DataframeVue){bean->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueDeleteSourceRecordsOfGridDataframe']

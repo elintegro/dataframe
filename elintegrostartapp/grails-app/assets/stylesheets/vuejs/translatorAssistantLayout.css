@@ -24,6 +24,9 @@
     border-radius: 3px;
     border-spacing: 0px 25px;
 }
+.translatorAssistantContainer .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout .translationAssistantBorder .comboboxAndButtons{
+    border-spacing: 0px 0px;
+}
 .translatorAssistantContainer  .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout #translatorAssistantBeforeLoggedIn{
     font-family: Roboto;
     color: black;
@@ -135,6 +138,7 @@
     border: 1px solid dodgerblue;
     border-radius: 3px;
     padding-top: 3%;
+    padding-bottom: 1%;
 }
 .translatorAssistantContainer .translatorPageContainer{
     margin: 0px;
