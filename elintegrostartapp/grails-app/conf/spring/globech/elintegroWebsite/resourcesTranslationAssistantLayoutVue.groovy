@@ -107,11 +107,12 @@ beans{
                                             <v-row>
                                                 <v-col  cols="12" xs="12" sm="12" md="4" xl="4" lg="4">
                                                     <v-card class="borderInTranslation"> 
-                                                         <v-row class="px-8">
+                                                         <v-row class="px-6 mx-0 listTable">
                                                                 [DATAFRAME_SCRIPT]
                                                             <v-row class="mx-0 pa-1">
-                                                                [BUTTON_SCRIPT]
-                                                            </v-row> 
+                                                                <v-container grid-list-md fluid><v-layout wrap class="text-left">
+                                                                [addNewRecord][downloadAllTranslatedFiles][projectManager]
+                                                            </v-layout></v-container></v-row> 
                                                         </v-row>
                                                     </v-card>
                                                 </v-col>

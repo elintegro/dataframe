@@ -236,17 +236,23 @@ beans{
                         ,itemString : true
                         ,valueMember:"projectId"
                         ,OnClick:"translatedText(item)"
-
+                ],
+                "projectManager":[
+                        "widget" : "ButtonWidgetVue",
+                        icon : true,
+                        script : """ this.\$router.push("/translator-assistant/0");""",
+                        "attr" : """class="ma-2" color="blue" text icon""",
+                        "iconAttr":"""x-large dark""",
+                        vuetifyIcon : "arrow_back",
+                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                 ],
         ]
         dataframeButtons=[
-                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#1976D2; color:white;'  v-show = 'showOrHideDownloadAllFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                projectManager: [name: "projectManager",type: "button",attr: """style='background-color:#1976D2; color:white; text-transform: capitalize;'""",script: """this.\$router.push("/translator-assistant/0");""",flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+                downloadAllTranslatedFiles: [name: "downloadAllTranslatedFiles",type: "button",attr: """style='background-color:#1976D2; color:white;'  v-show = 'showOrHideDownloadAllFilesButton' """,script:""" this.downloadAllTranslatedFiles();""",flexGridValues:['xs12', 'sm6', 'md12', 'lg6', 'xl6']],
+                addNewRecord: [name: "addNewRecord",type: "button",attr: """style='background-color:#1976D2; color:white;'  """,showAsDialog: true, refDataframe: ref("vueAddNewRecordForCurrentProjectDataframe"),flexGridValues:['xs12', 'sm6', 'md12', 'lg6', 'xl6']],
         ]
         childDataframes = ['vueAddNewRecordForCurrentProjectDataframe','vueGridOfSourceTextDataframe','vueGridOfTranslatedTextDataframe']
         currentFrameLayout= ref("vueElintegroTranslatorDataframeLayout")
-
     }
     vueAddNewRecordForCurrentProjectDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper

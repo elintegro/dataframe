@@ -61,6 +61,12 @@
 .borderInTranslation .v-data-table__wrapper table tr:nth-child(even) td{
     background-color: #f1f7fd;
 }
+.borderInTranslation .listTable .v-data-table__wrapper table tr:nth-child(even) td{
+    background:no-repeat ;
+}
+.borderInTranslation .listTable .v-data-table__wrapper table tr:active{
+    background-color: #2e60ff;
+}
 .translatorAssistantContainer .howYouDoSection{
     background-color: #f5fbff;
     padding-bottom: 100px;
