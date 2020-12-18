@@ -48,7 +48,7 @@ class SimpleTableListWidgetVue extends CollectionWidgetVue {
                 </thead>
                 <tbody>
                       <tr
-                        v-for="(item, i) in ${modelString}" :key="i" @click="${onClick}" 
+                        v-for="(item, i) in ${modelString}" :key="i" @click="${onClick}" :id="item.${displayMember}"
                       >
                         <td> {{item.${displayMember}}} </td>
                       </tr>
