@@ -39,7 +39,7 @@ class TabWidgetVue extends WidgetVue{
         }
         setDefaultTabView(dataframe, field, initialTabView)
         String html = """<v-card round style ="overflow:hidden;" >
-                                  <v-tabs color="white" slider-color="yellow"  background-color="blue darken-2" v-model="state.${dataframe.dataframeName}_tab_model">
+                                  <v-tabs color="white" slider-color="yellow"  background-color="blue darken-2" v-model="state.${dataframe.dataframeName}_tab_model" active-class="green">
                                       ${tabHeaders.toString()}
                                       ${getCloseButtonHtml(field)}
                                   </v-tabs>
