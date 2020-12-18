@@ -24,6 +24,9 @@
     border-radius: 3px;
     border-spacing: 0px 25px;
 }
+.translatorAssistantContainer .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout .translationAssistantBorder .comboboxAndButtons{
+    border-spacing: 0px 0px;
+}
 .translatorAssistantContainer  .translatorAssistantBeoforeAndAfterLoggedInDataframeLayout #translatorAssistantBeforeLoggedIn{
     font-family: Roboto;
     color: black;
@@ -57,6 +60,12 @@
 
 .borderInTranslation .v-data-table__wrapper table tr:nth-child(even) td{
     background-color: #f1f7fd;
+}
+.borderInTranslation .listTable .v-data-table__wrapper table tr:nth-child(even) td{
+    background:no-repeat ;
+}
+.borderInTranslation .listTable .v-data-table__wrapper table tr:active{
+    background-color: #2e60ff;
 }
 .translatorAssistantContainer .howYouDoSection{
     background-color: #f5fbff;
@@ -135,6 +144,7 @@
     border: 1px solid dodgerblue;
     border-radius: 3px;
     padding-top: 3%;
+    padding-bottom: 1%;
 }
 .translatorAssistantContainer .translatorPageContainer{
     margin: 0px;

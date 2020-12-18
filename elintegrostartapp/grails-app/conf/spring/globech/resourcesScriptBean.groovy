@@ -818,6 +818,10 @@ beans {
                                      if(this.isHidden == true){
                                             this.isHidden = false;
                                      }
+                                     let stateValuesForTranslatedGridDataframe = excon.getFromStore('vueGridOfTranslatedTextDataframe')
+                                    if(stateValuesForTranslatedGridDataframe.targetLanguage){
+                                        document.getElementById(stateValuesForTranslatedGridDataframe.targetLanguage).style.backgroundColor = "white";
+                                    }
                                     let stateValues = excon.getFromStore('vueGridOfSourceTextDataframe')
                                     stateValues['projectId'] = this.state.projectId;
                                     stateValues['sourceLanguage'] = this.state.persisters.project.sourceLanguage.value;
@@ -831,6 +835,11 @@ beans {
                                         }
                                         let stateValues = excon.getFromStore('vueGridOfTranslatedTextDataframe')
                                         let previouslyClickedValue = stateValues.targetLanguage
+                                        document.getElementById(params.language).style.backgroundColor = "#3B8AD9";
+                                        if(previouslyClickedValue && previouslyClickedValue != params.language)
+                                        {
+                                            document.getElementById(previouslyClickedValue).style.backgroundColor = "white";
+                                        }
                                         if(previouslyClickedValue == ""){
                                             this.isHidden = !this.isHidden
                                         }else{
