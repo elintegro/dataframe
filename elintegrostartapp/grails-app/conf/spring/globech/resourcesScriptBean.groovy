@@ -307,7 +307,7 @@ beans {
         data = """showThisFieldAfterCodeSent : false,"""
         computed = """showHideSendCodeButton(){ 
                                               let stateValues = excon.getFromStore('vueElintegroLoginWithOTPDataframe');
-                                             if(stateValues.transits.emailOrPhone.value  && this.showThisFieldAfterCodeSent == false){ return true;} else{return false;}},\n"""
+                                             if(stateValues.transits.email.value  && this.showThisFieldAfterCodeSent == false){ return true;} else{return false;}},\n"""
         methods = """sendVerificationCode(){
                               let params = this.state;
                               let currentUrl = window.location.href;
@@ -362,6 +362,9 @@ beans {
                                      excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
                                      self.\$router.push(response.currentLocationUrl)
                                      window.location.reload();
+                                 }else{
+                                     excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
+                                     setTimeout(function(){excon.refreshPage();}, 2000);
                                  }  
                                  excon.showAlertMessage(response);
                               })

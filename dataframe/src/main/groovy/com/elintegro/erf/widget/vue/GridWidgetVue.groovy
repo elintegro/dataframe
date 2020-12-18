@@ -88,10 +88,10 @@ class GridWidgetVue extends WidgetVue {
         }
         String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
         String itemKey = field.itemKey?:"id"
-        return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
+        return """<v-card v-show="${fldName}_display"><v-divider/>
 
        ${showGridSearch?"""
-            <v-row><v-col cols='8'></v-col>
+            <v-row><v-col cols='8'  style="margin-left:-30px; align-self:flex-end;">${gridTitle}</v-col>
             <v-col cols="4">
                     <v-text-field
                     v-model="${fldName}_search"

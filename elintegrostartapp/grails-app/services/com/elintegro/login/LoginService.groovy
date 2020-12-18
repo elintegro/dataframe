@@ -27,10 +27,10 @@ class LoginService {
         def result
         def message
         def currentRoute = params.currentRoute
-        User user1 = User.findByUsername(params.transits.emailOrPhone.value)
+        User user1 = User.findByUsername(params.transits.email.value)
         if(user1) {
             Otp otpAlreadyExist = Otp.findByUser(user1)
-            RegistrationCode registrationCodeAlreadyExist = RegistrationCode.findByUsername(params.transits.emailOrPhone.value)
+            RegistrationCode registrationCodeAlreadyExist = RegistrationCode.findByUsername(params.transits.email.value)
             TimeDuration duration
             if (otpAlreadyExist && registrationCodeAlreadyExist) {
                 duration = TimeCategory.minus(new Date(), otpAlreadyExist.createTime)
@@ -58,14 +58,12 @@ class LoginService {
     }
     def sendVerificationCodeAfterRegisterConfirmedWithOTP(def params){
         User user = new User()
-        user.email = params.transits.emailOrPhone.value
-        user.username = params.transits.emailOrPhone.value
+        user.email = params.transits.email.value
+        user.username = params.transits.email.value
         user.password = new Random().toString()
         user.save(flush:true)
         Person applicant = new Person()
-        applicant.firstName = "null"
-        applicant.lastName = "null"
-        applicant.email = params.transits.emailOrPhone.value
+        applicant.email = params.transits.email.value
         applicant.user = user
         applicant.save(flush:true)
         Otp otp = new Otp()
@@ -74,7 +72,7 @@ class LoginService {
         return result
     }
     def loginWithOTP(def param, HttpSession session){
-        User user1 = User.findByUsername(param.transits.emailOrPhone.value)
+        User user1 = User.findByUsername(param.transits.email.value)
         Otp otp = Otp.findByUser(user1)
         def result
         def msg
@@ -85,7 +83,7 @@ class LoginService {
                 def isOtpValid = passwordEncoder.isPasswordValid(otp.verificationCode, param.transits.verificationCode.value, null)
                 if (isOtpValid == true) {
                     try {
-                        RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.emailOrPhone.value)
+                        RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.email.value)
                         if (registrationCode) {
                             registrationCode.delete(flush: true)
                         }
@@ -114,7 +112,7 @@ class LoginService {
                 }
 
             } else {
-                RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.emailOrPhone.value)
+                RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.email.value)
                 if (otp && registrationCode) {
                     otp.delete(flush: true)
                     registrationCode.delete(flush: true)
@@ -131,9 +129,9 @@ class LoginService {
         return result
     }
     def resendOTPcodeAndLink(def param){
-        User user1 = User.findByUsername(param.transits.emailOrPhone.value)
+        User user1 = User.findByUsername(param.transits.email.value)
         Otp otp = Otp.findByUser(user1)
-        RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.emailOrPhone.value)
+        RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.email.value)
         def result
         def msg
         if(user1 && otp && registrationCode){
