@@ -230,7 +230,7 @@ beans {
     vueElintegroLoginWithOTPDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 style="width:360px;">
-                                  <v-row class="px-2">[emailOrPhone]<v-flex class="text-center">[sendCode]</v-flex>[verificationCode][codeNotReceived][resendCode]</v-row>
+                                  <v-row class="px-2">[email]<v-flex class="text-center">[sendCode]</v-flex>[verificationCode][codeNotReceived][resendCode]</v-row>
                                   <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex>
                                </v-flex>"""
     }

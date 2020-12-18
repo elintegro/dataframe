@@ -342,6 +342,7 @@ beans{
                 , internationalize: true
                 ,isDynamic        : true
                 ,attr: """style="overflow-y:auto; max-height:500px;" dense  """
+                ,labelStyle       :"""font-size:1.6rem !important; font-weight:600 !important;"""
                 , sortable        : true
                 ,onButtonClick   : [
                 ['actionName': 'Actions', 'buttons': [
@@ -422,6 +423,7 @@ beans{
                                      , showGridSearch  : true
                                      , internationalize: true
                                      ,isDynamic        : true
+                                     ,labelStyle       :"""font-size:1.6rem !important; font-weight:600 !important;"""
                                      ,attr: """style="overflow-y:auto; max-height:500px;" dense  """
                                      , sortable        : true
 //                                     ,onClick :[showAsDialog: true,refreshInitialData:true,MaxWidth: 700,refDataframe: ref("vueEditTranslatedRecordsOfGridDataframe"),]
