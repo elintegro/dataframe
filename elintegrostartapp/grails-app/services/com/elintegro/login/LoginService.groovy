@@ -42,7 +42,7 @@ class LoginService {
                     result = sendVerificationCode(user1, otp ,registrationCode.token, currentRoute)
                 } else {
                     message = messageSource.getMessage( 'Otp.code.already.sent',null,'Failed', LocaleContextHolder.getLocale())
-                    result = [success: true, msg: message, alert_type: "info"]
+                    result = [success: true, msg: message, alert_type: "info",currentRoute:currentRoute,params:params]
                 }
             } else {
                 Otp otp = new Otp()
@@ -108,10 +108,11 @@ class LoginService {
                     session.setAttribute("NO_OF_ATTEMPTS_FOR_OTP", counter)
                     log.error("Authentication failed, incorrect verification code.")
                     msg = messageSource.getMessage('Incorrect.verification.code', null, 'Failed', LocaleContextHolder.getLocale())
-                    result = [success: false, msg: msg, alert_type: "error"]
+                    result = [success: false, msg: msg, alert_type: "error", incorrectVerificationCode:true]
                 }
 
             } else {
+                session.setAttribute("NO_OF_ATTEMPTS_FOR_OTP", 0)
                 RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.email.value)
                 if (otp && registrationCode) {
                     otp.delete(flush: true)
@@ -131,11 +132,20 @@ class LoginService {
     def resendOTPcodeAndLink(def param){
         User user1 = User.findByUsername(param.transits.email.value)
         Otp otp = Otp.findByUser(user1)
-        RegistrationCode registrationCode = RegistrationCode.findByUsername(param.transits.email.value)
+        RegistrationCode registrationCodeAlreadyExist = RegistrationCode.findByUsername(param.transits.email.value)
+        def token
+        if(registrationCodeAlreadyExist){
+            registrationCodeAlreadyExist.delete(flush: true)
+            RegistrationCode  registrationCode = registrationCode(user1)
+            token = registrationCode.token
+        }else {
+            RegistrationCode  registrationCode = registrationCode(user1)
+            token = registrationCode.token
+        }
         def result
         def msg
-        if(user1 && otp && registrationCode){
-          result = sendVerificationCode(user1, otp, registrationCode.token, param.currentRoute)
+        if(user1 && otp && token){
+            result = sendVerificationCode(user1, otp, token, param.currentRoute)
         }
         else {
             msg = messageSource.getMessage( 'We.dont.have.user.with.this.email',null,'Failed', LocaleContextHolder.getLocale())
@@ -143,6 +153,7 @@ class LoginService {
         }
         return result
     }
+
     def sendVerificationCode(User user1, Otp otp, String token, String currentRoute){
         String verificationCode = new DecimalFormat("000000").format(new Random().nextInt(999999));
         def encodedVerificationCode = springSecurityService.encodePassword(verificationCode)
