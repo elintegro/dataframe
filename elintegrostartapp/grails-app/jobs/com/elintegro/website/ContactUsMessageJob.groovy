@@ -11,7 +11,6 @@ class ContactUsMessageJob {
     }
 
     def execute() {
-      //  println("Job Run")
         contactUsMessageService.sendingMessages()
 
     }

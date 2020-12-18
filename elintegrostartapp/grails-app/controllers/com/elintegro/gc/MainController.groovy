@@ -36,9 +36,6 @@ class MainController {
     //Bean injections:
     GrailsApplication grailsApplication
     def springSecurityService
-    def springSecurityUiService
-    def mailService
-    def messageSource
 	def treeWidgetDataframe
 	def sessionFactory
 	def gcMainPageVue
@@ -49,7 +46,7 @@ class MainController {
     def index() { }
 
 	@Secured(["permitAll"])
-    def show() {
+	def show() {
 		def currentUser = springSecurityService.currentUser
 		Long userId = currentUser?.id
 		if(!userId){
@@ -60,22 +57,23 @@ class MainController {
 		}
 		String firstname = currentUser?.firstName?currentUser?.firstName.toLowerCase().capitalize():""
 		session.setAttribute("userid",userId)
-		def struct = resultPageHtmlBuilder.getFinalHtmlandScript(gcMainPageVue)
+
+		Map<String, String> struct = resultPageHtmlBuilder.getFinalHtmlandScript(gcMainPageVue)
+
+		String securedCode = resultPageHtmlBuilder.applySecurityFilter(struct.get("finalScript"));
+		struct.put("finalScript", securedCode)
+
 		boolean reloadPage = false
 		String msg = params.msg?:""
 		if(params.reloadPage){
 			reloadPage = params.reloadPage
 		}
-		render(view: '/main/show', model:[reloadPage:reloadPage, msg:msg, constructedPageHtml:struct.initHtml, constructedPageScript: struct.finalScript])
+		render(view: '/main/home', model:[reloadPage:reloadPage, msg:msg, constructedPageHtml:struct.initHtml, constructedPageScript: struct.finalScript])
 	}
 
-    def test() {
+	def test() {
 
-        treeWidgetDataframe.init()
-        [dataframe:treeWidgetDataframe]
-
-        //render(view: "t")
-        render(view: "test1")
+		render(view: "/test/test1")
     }
 
 	def test1() {
@@ -85,7 +83,7 @@ class MainController {
 
 	@Secured(["permitAll"])
 	def hqlTest(){
-
+		
 		render(view: "/test/hqlTest")
 	}
 
@@ -152,21 +150,6 @@ class MainController {
 
 				def user = User.findByUsernameAndAccountExpired(params.username, false)
 			if(user){
-				/*def person = Person.findByUser(user)
-				if(person){
-					def owner = Owner.findByPerson(person)
-					def prop = Property.findByOwner(owner)
-					if(prop)
-						prop.delete()
-					if(owner){
-						def acc = Account.findByOwner(owner)
-						if(acc)
-							acc.delete(flush: true)
-						owner.delete(flush:true)
-					}
-
-					person.delete(flush:true)
-				}*/
 				user.accountExpired = true
 				user.save(flush:true)
 				redirect(action:"show", params:[msg:"User deleted"])

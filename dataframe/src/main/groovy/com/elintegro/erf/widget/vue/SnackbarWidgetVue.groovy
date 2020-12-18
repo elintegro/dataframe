@@ -57,13 +57,13 @@ class SnackbarWidgetVue extends WidgetVue{
         def timeout = field?.timeout?:6000
 
         VueStore store = dataframe.getVueJsBuilder().getVueStore()
-        store.addToState("""
-            alertProp:{
-                snackbar: false,
-                alert_type: '',
-                alert_message: ''
-            },\n
-                """)
+        store.addToState("alertProp",
+                [
+                        snackbar: false,
+                        alert_type: '',
+                        alert_message: ''
+                ]
+        )
 
         return """
             y: '$y',

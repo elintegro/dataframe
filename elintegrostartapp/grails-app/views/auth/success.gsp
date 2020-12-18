@@ -1,6 +1,6 @@
 <html>
 <head>
-    <meta http-equiv="refresh" content="0; url=${grailsServerUrl}/" />
+    <meta http-equiv="refresh" content="0; url=/" />
 
     <script>
         var reloadPage = ${reloadPage?true:false};

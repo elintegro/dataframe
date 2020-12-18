@@ -16,8 +16,8 @@ beans{
         currentRoute = 'home'
         childDataframes=['vueFirstContainerDataframe','vueOurWorkContainerDataframe','vueOurProcessContainerDataframe',
                          "vueCollaborationContainerDataframe",'vueOurFrameworkContainerDataframe',
-                         'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe',
-                         'vueQuizPlaceholderContainerDataframe','vueFooterContainerDataframe']
+                         'vueQuotesContainerDataframe','vueOurTechnologiesContainerDataframe'
+                         ]
         currentFrameLayout = ref("vueElintegroHomeDataframeLayout")
 
     }
@@ -25,12 +25,18 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFirstContainerDataframe']
         saveButton = false
-        doAfterRefresh = """self.changeWords();"""
+        initOnPageLoad = true
+        doAfterRefresh = """self.changeWords(response);"""
         addFieldDef = [
                 "build":["widget":"TextDisplayWidgetVue"
                             ,"name":"build"
                             ,elementId: "build"
                             ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                ],
+                "apps":["widget":"TextDisplayWidgetVue"
+                         ,"name":"apps"
+                         ,elementId: "apps"
+                         ,flexGridValues:['xs12', 'sm12', 'md1', 'lg1', 'xl1']
                 ],
                 'buildData':[ "widget":"TextDisplayWidgetVue"
                             ,"name":"buildData"
@@ -141,6 +147,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuotesContainerDataframe']
         saveButton = false
+        initOnPageLoad = true
         flexGridValues= ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         addFieldDef = [
                 customerSay:["widget":"TextDisplayWidgetVue"
@@ -164,12 +171,12 @@ beans{
                                             align="center"
                                             justify="center"
                                          >
-                                            <v-col cols="12" xs="1"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
+                                            <v-col cols="2" xs="2"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.quote}}</v-col>
-                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
+                                            <v-col cols="0" xs="0" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
                                                 
                                             </v-col>
-                                            <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},  {{item.title}}</v-col>
+                                            <v-col cols="12" xs="2" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.name}},  {{item.title}}</v-col>
                                          </v-row>
                                     </v-card>
                                     """
@@ -196,13 +203,13 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueQuizPlaceholderContainerDataframe']
         saveButton = false
+        isGlobal = true
         addFieldDef = [
                 letsTalk:["widget":"TextDisplayWidgetVue"
                              ,"name":"letsTalk"
                              ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
                 ],
         ]
-        childDataframes = ['vueElintegroSignUpQuizDataframe']
         currentFrameLayout = ref("vueQuizPlaceholderContainerDataframeLayout")
     }
     vueElintegroSignUpQuizDataframe(DataframeVue){ bean->
@@ -210,8 +217,8 @@ beans{
         bean.constructorArgs = ['vueElintegroSignUpQuizDataframe']
         saveButton = false
         initOnPageLoad = false
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
-        hql = """select  lead.leadDescription, lead.leadStage, lead.leadBudget,lead.nameOfProject, lead.descriptionOfProject,lead.deadline, person.firstName, person.lastName, person.email , person.phone from Lead lead inner join lead.applicant person  where lead.id=:id"""
+        isGlobal = true
+        hql = """select  lead.leadDescription, lead.leadStage, lead.leadBudget, lead.nameOfProject, lead.deadline, lead.descriptionOfProject, person.firstName, person.lastName, person.email , person.phone from Lead lead inner join lead.applicant person  where lead.id=:id"""
         addFieldDef = [
                         "lead.leadDescription":[
                                 widget:"ComboboxVue"
@@ -220,7 +227,9 @@ beans{
                                 ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
                                 ,"displayMember": "Answer"
                                 ,"valueMember"  : "id"
-                                ,search:true],
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,search:true
+                                ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.leadStage":[
                                widget:"ComboboxVue"
                                ,internationalize    :true
@@ -228,7 +237,9 @@ beans{
                                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadStage'"""
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
-                               ,search:true],
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,search:true
+                               ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.leadBudget":[
                                widget:"ComboboxVue"
                                ,initBeforePageLoad  :true
@@ -236,25 +247,57 @@ beans{
                                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadBudget'"""
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
-                               ,search:true],
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,search:true
+                               ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.nameOfProject":[
                                widget:"InputWidgetVue"
                                ,name: "nameOfProject"
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                                ],
+                       "lead.deadline":[
+                                widget:"DateWidgetVue"
+                                ,name: "deadline"
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                       ],
                        "lead.descriptionOfProject":[
                                widget:"TextAreaWidgetVue"
                                ,name: "descriptionOfProject"
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                        ],
-                       "lead.deadline":[
-                               widget:"DateWidgetVue"
-                               ,name: "deadline"
+                       "person.firstName":[
+                                widget:"InputWidgetVue"
+                                ,name: "firstName"
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+//                                ,"validationRules":[[condition:"v => !!v", message:"FirstName.required.message"]]
+                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
-
-                       "person.phone":["name":"phone","widget":"PhoneNumberWidgetVue",validate: true],
+                       "person.lastName":[
+                                widget:"InputWidgetVue"
+                                ,name: "lastName"
+                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"]]
+                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                       ],
+                       "person.email":[
+                               widget:"EmailWidgetVue"
+                               ,name: "email"
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                       ],
+                       "person.phone":[
+                               "name":"phone"
+                               ,"widget":"PhoneNumberWidgetVue"
+                               ,"validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]
+                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
 
         ]
         dataframeButtons = [
-                submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }
@@ -265,18 +308,21 @@ beans{
         currentRoute = "change-password"
         saveButton = false
         initOnPageLoad = false
+        isGlobal = true
         route = true
-        addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue"],
+        addFieldDef = ["currentPassword":[name:"currentPassword",widget:"PasswordWidgetVue",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """],
                        "newPassword":[name:"newPassword"
                                       ,widget:"PasswordWidgetVue"
+                                      ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                       ,"validationRules":[[condition: "v => !!v ",message:"Password.required.message"],[condition:"v => (v && new RegExp('^(?=.*?[#?!@%^&*-])').test(v))",message:"password.contain.special.character"]
                                                           ,[condition:"v => (v && v.length >= 8)",message:"Password.must.be.greater.than.8"]]],
                        "confirmPassword":[name:"confirmPassword"
                                           ,widget:"PasswordWidgetVue"
                                           , "insertAfter":"newPassword"
-                                          ,"validationRules":[[condition:"v => !!(v==this.state.vueElintegroChangePasswordAfterSignUpDataframe_newPassword)",message:"Password.and.Confirm.Password."]]],
+                                          ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                          ,"validationRules":[[condition:"v => !!(v==this.state.transits.newPassword.value)",message:"Password.and.Confirm.Password."]]],
         ]
-        dataframeButtons = [submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+        dataframeButtons = [submit: [name: "submit", type: "link",attr: """style='background-color:#1976D2; color:white;' """,script: """this.changePasswordAfterSignedUp()""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
         currentFrameLayout = ref("vueElintegroChangePasswordAfterSignUpDataframeLayout")
     }
 
@@ -284,6 +330,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueFooterContainerDataframe']
         saveButton = false
+        isGlobal = true
         addFieldDef = [
                 footerPrivacy:["widget":"ButtonWidgetVue"
                                ,"name":"footerPrivacy"
@@ -300,7 +347,6 @@ beans{
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
-        childDataframes = ["vueFooterPrivacyDataframe","vueTermAndConditionDataframe"]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
     }
     vueFooterPrivacyDataframe(DataframeVue){ bean->
@@ -308,6 +354,7 @@ beans{
         bean.constructorArgs = ['vueFooterPrivacyDataframe']
         saveButton = false
         initOnPageLoad = false
+        isGlobal = true
         addFieldDef = [
                 privacyPolicyHeading:["widget":"TextDisplayWidgetVue"
                                       ,"name":"privacyPolicyHeading"
@@ -324,6 +371,7 @@ beans{
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueTermAndConditionDataframe']
         saveButton = false
+        isGlobal = true
         initOnPageLoad = false
         addFieldDef = [
                 termAndConditionHeading:["widget":"TextDisplayWidgetVue"

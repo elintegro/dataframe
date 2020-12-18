@@ -50,6 +50,9 @@ class OrderedMap {
 	public Map get(String key){
 		return  dataMap.get(key)
 	}
+	public boolean containsKey(String key){
+		return  dataMap.containsKey(key)
+	}
 
 	/**
 	 * 

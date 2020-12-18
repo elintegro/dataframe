@@ -48,6 +48,7 @@ public class MetaFieldService {
 
 	Map<String, Map<String, MetaField>> dbMetaData = new HashMap<String, Map<String, MetaField>>();
 	Map<String, Map<String, MetaField>> dfMetaData = new HashMap<String, Map<String, MetaField>>();
+	Map<String, Map<String, MetaField>> pkMetaData = new HashMap<String, Map<String, MetaField>>(); //map of tables and their PKs
 	
 	/**
 	 *
@@ -121,6 +122,21 @@ public class MetaFieldService {
 			return FKConstraints;
 		}
 	}
+
+	private void addPK(MetaField mtf){
+		if(!pkMetaData.containsKey(mtf.tableName)){pkMetaData.put(mtf.tableName, new HashMap<String, MetaField>())}
+		if(mtf.pk){
+			Map<String, MetaField> pkMap = pkMetaData.get(mtf.tableName)
+			if(!pkMap.containsKey(mtf.key())) {
+				pkMap.put(mtf.key(), mtf)
+			}
+		}
+	}
+
+	Map<String, MetaField> getPKForTable(String tableName){
+		return pkMetaData.get(tableName)
+	}
+
 	/*
 	 * Cretae MetaField's map for a table from the schema in the Database: TODO: make it separate for different DBs (now it is for mySql)
 	 */
@@ -141,7 +157,7 @@ public class MetaFieldService {
 			while (rs.next()) {
 				MetaField mtf = getMetaFieldFromDb(rs, table);
 				tableMetaData.put( mtf.columnName, mtf);
-				
+				addPK(mtf)
 			}		
 		} catch (SQLException e ) {
 			throw new DataframeException(String.format("SQL Problem to build Meta Data for the table %s : Exception: %s", table, e));

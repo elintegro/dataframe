@@ -26,8 +26,9 @@ class UrlMappings {
         "/"("/*")
         "/images/*"("/*")
         "/hqlTest"(controller:"main",action:"hqlTest")
-        "/"(controller: "test", action: "show")
+        "/"(controller: "main", action: "show")
         "/test"(controller: "test", action: "test")
+        "/applicantthankyou"(view:'/applicant_thankyou')
         "/getHtml"(controller: "saaS", action: "getHtml")
         "500"(view:'/error')
     }

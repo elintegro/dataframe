@@ -29,27 +29,23 @@ class FileValidationService{
             }
         }
         def msg
-        def alert_type
         if (V == 0) {//if all records are invalid
             msg = "“ ${fileName} is not in valid format. No records were uploaded. Please check that all the records in the file has the following format: \n" +
                     "\n" +
                     "KEY=TEXT\n" +
                     "\n" +
                     "Where key should have english letters and some special characters like . - _"
-            alert_type = "error"
-            return [msg: msg, alert_type: alert_type]
+            return [success:false, msg: msg, alert_type: 'error']
         } else if ( V == N+V) { //if all record are valid
             msg = "“File ${fileName} was successfully uploaded. ${V} records are saved."
-            alert_type = "success"
-            return [msg: msg, alert_type: alert_type]
+            return [success: true, msg: msg, alert_type: 'success']
         } else {//if part of the records are valid
             msg = "“${N} records out of ${N + V} were excluded. Please check that all the records in the file has the following format: \n" +
                     "\n" +
                     "KEY=TEXT\n" +
                     "\n" +
                     "Where key should have English letters and some special characters like . - _"
-            alert_type = "info"
-            return [msg: msg, alert_type: alert_type]
+            return [success: false, msg: msg, alert_type: 'info']
 
         }
     }

@@ -30,7 +30,7 @@ beans {
 //        app.referredByPerson, app.referredByOrganisation, app.signedBy,   app.applicationDate,
         initOnPageLoad = false
 
-        ajaxSaveUrl = "${contextPath}/applicationForm/save"
+        ajaxSaveUrl = "applicationForm/save"
         //These are values, that overrides the default ones
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         deleteButton = false
@@ -42,7 +42,7 @@ beans {
                          excon.saveToStore("vueApplicationFormDataframe","vueApplicationFormDataframe_tab_model",'vueAddressDataframe-tab-id');
                          """
 
-        vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
+//        vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
         childDataframes=["vueAddressDataframe", "vueMedicalRecordDataframe", "vueMedicationsGridDataframe"]
 
 //        doAfterSave = """setTimeout(function(){ this.location.reload();}, 3000);"""
@@ -104,7 +104,7 @@ beans {
         dataframeLabelCode = "Medical.Record"
         hql = "select record.medicareNo, record.physician, record.otherRequirements, record.person from MedicalRecord as record where record.id=:id"
 
-        ajaxSaveUrl = "${contextPath}/applicationForm/saveMedicalRecord"
+        ajaxSaveUrl = "applicationForm/saveMedicalRecord"
         initOnPageLoad = false
         //These are values, that overrides the default ones
         deleteButton = false
@@ -113,7 +113,7 @@ beans {
 //        isGlobal = true
 //        createStore = true
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        doBeforeSave = "allParams['vueMedicalRecordDataframe-record-person'] = excon.getFromStore('vueContactDataframe', 'key'); \nallParams['applicationId'] = excon.getFromStore('vueApplicationFormDataframe', 'key');"
+        doBeforeSave = "params['vueMedicalRecordDataframe-record-person'] = excon.getFromStore('vueContactDataframe', 'key'); \nparams['applicationId'] = excon.getFromStore('vueApplicationFormDataframe', 'key');"
         doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicationsGridDataframe-tab-id');\n"
 
 
@@ -145,10 +145,10 @@ beans {
 
         dataframeLabelCode = "Add.Medications"
         initOnPageLoad = false
-        ajaxSaveUrl = "${contextPath}/applicationForm/saveMedications"
+        ajaxSaveUrl = "applicationForm/saveMedications"
         doAfterSave = """excon.saveToStore('dataframeShowHideMaps', 'vuePrescribedMedicationsDataframe_display', false);\nexcon.saveToStore('vueMedicationsGridDataframe', 'key', response.nodeId[0]);\n
                           excon.saveToStore("dataframeBuffer","savedResponseData", responseData);"""
-        doBeforeSave = "allParams['medicalRecordId'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"
+        doBeforeSave = "params['medicalRecordId'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"
 
         addFieldDef = [
                 "prescribedMed.medication"     : [
@@ -206,7 +206,7 @@ beans {
         saveButton = false
         initOnPageLoad = false
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
-        doBeforeRefresh = """allParams['id'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"""
+        doBeforeRefresh = """params['id'] = excon.getFromStore('vueMedicalRecordDataframe', 'key');"""
         doAfterSave = "excon.saveToStore('vuePrescribedMedicationsDataframe_display', false);\n"
         childDataframes = ["vuePrescribedMedicationsDataframe"]
         /*,onClick:[showAsDialog: false, refDataframe: ref("vuePrescribedMedicationsDataframe")]
@@ -319,11 +319,11 @@ beans {
 
 
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
-        doBeforeSave = "allParams['personId'] = excon.getFromStore('vueContactDataframe','key');"
+        doBeforeSave = "params['personId'] = excon.getFromStore('vueContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model', 'vueMedicalRecordDataframe-tab-id');"
 
         childDataframes =["vueMapWidgetDataframe"]
-        ajaxSaveUrl = "${contextPath}/applicationForm/saveAddress"
+        ajaxSaveUrl = "applicationForm/saveAddress"
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         deleteButton = false

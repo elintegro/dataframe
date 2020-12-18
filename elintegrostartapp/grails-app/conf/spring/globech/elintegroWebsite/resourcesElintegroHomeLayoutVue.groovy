@@ -36,7 +36,7 @@ beans{
                                         <v-row><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
                                              <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
                                                 <v-row>
-                                                    <h2 class="heading-2">[build]</h2><div class='console-underscore' id='console'>&#95;</div>[buildData]
+                                                    <h2 class="heading-2">[build]</h2>[apps][buildData]
                                                 </v-row>
                                                 <v-row>
                                                    <p class="paragraph">[youWont]
@@ -70,7 +70,6 @@ beans{
                                                         <v-row>
                                                                 <p class="paragraph">
                                                                     [WeDeliverTextParagraphOne]
-
                                                                 </p>
                                                         </v-row>
                                              </v-col>
@@ -278,7 +277,7 @@ beans{
         layoutPlaceHolder = """
                                     <v-container class="footer" fluid>
                                         <v-row>
-                                            <v-col class="photoCol" cols="12" xs= "12" sm="12" md="6" lg="6">
+                                            <v-col class="photoCol" cols="12" xs= "12" sm="6" md="6" lg="6">
                                                 <v-img src="assets/home/plant.png"></v-img>
                                             </v-col>
                                             <v-col cols="12" xs= "12" sm="12" md="12" lg="12">    
@@ -320,7 +319,16 @@ beans{
     }
     vueElintegroSignUpQuizDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex>[DATAFRAME_SCRIPT]<v-card-actions class="justify-center">[BUTTON_SCRIPT]</v-card-actions></v-flex>"""
+        layoutPlaceHolder = """<v-container grid-list-sm fluid>
+                                        <v-layout wrap class="text-center">
+                                             [lead.leadDescription][lead.leadStage][lead.leadBudget]
+                                             [lead.nameOfProject] [lead.deadline]
+                                             [lead.descriptionOfProject]
+                                             [person.firstName] [person.lastName]
+                                             [person.email] [person.phone]
+                                             [submit]
+                                        </v-layout>
+                               </v-container>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
 
     }

@@ -24,37 +24,27 @@ class TextDisplayWidgetVue extends WidgetVue{
         if(field.hide && field.hide == true){
             return ""
         }
-        String dataVariableForVue = getFieldName(dataframe, field)
-        String fldName = getFieldName(dataframe, field)
+        String fldName = field.name
         def fldNameDefault = WordUtils.capitalizeFully(fldName);
         String labelCode = field.labelCode?:fldName
         boolean isDynamic = field.isDynamic?true:false
-        String modelString = getModelString(dataframe, field)
-        String elementId = field.elementId
-        String attr = field.attr
-        String html = """<v-text-field
-            flat
-            solo
-            label="${getLabel(field)}"
-            v-model = "$modelString" 
-            ${isDisabled(dataframe, field)?":disabled = true":""}
-            readonly
-            ${toolTip(field)}
-            style="width:${getWidth(field)}; height:${getHeight(field, "40px")}; margin-top:-12px;$attr"
-            background-color="white"
-            ${getAttr(field)}
-          ></v-text-field>"""
+        String elementId = field.elementId?:""
+        String modelString = getFieldJSONModelNameVue(field)
+        String onClick = field.onClick?:""
+        boolean link = field.link?true:false
         String displayPlaceholder = ""
         if(!isDynamic){
             displayPlaceholder = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
-        } else {
-            displayPlaceholder = "{{$dataVariableForVue}}"
+        } else if (isDynamic && labelCode){
+            String label = getMessageSource().getMessage(labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
+            if(link){
+                displayPlaceholder = "$label"+"\t:\t"+"""<a href='#' style="text-decoration:none !important;" @click = "${onClick}">{{$modelString}}</a>"""
+            }else {
+                displayPlaceholder = "$label" + "\t:\t" + "{{$modelString}}"
+            }
+        }else {
+            displayPlaceholder = "{{$modelString}}"
         }
-        if(field.displayWithLabel && field.displayWithLabel == true){
-            return """<v-row style="margin:auto;">$displayPlaceholder:$html</v-row>"""
-        }
-        else {
-            return """<span id='$elementId' $attr >$displayPlaceholder</span>"""
-        }
+        return """<span id='$elementId'  ${getAttr(field)}>$displayPlaceholder</span>"""
     }
 }

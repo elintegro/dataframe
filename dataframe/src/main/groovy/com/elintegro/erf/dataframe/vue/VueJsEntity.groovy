@@ -31,6 +31,7 @@ class VueJsEntity {
     String computed = ""
     String methods = ""
     String created = ""
+    String beforeCreated = ""
 
 
     public void setAllEntities(Map contMap){
@@ -45,7 +46,9 @@ class VueJsEntity {
         this.routePath = contMap.routePath?:""
         this.methods = contMap.methods?:""
         this.computed = contMap.computed?:""
+        this.beforeCreated = contMap.created?:""
         this.created = contMap.created?:""
+        this.mounted = contMap.mounted?:""
     }
 
 }

@@ -40,8 +40,30 @@ tr.selected td {
 .appBar{
     height: 65px;
 }
+#newEmployeeBasicInformation{
+    padding-top: 1%;
+}
+#newEmployeeUploadResume{
+    padding-top: 1%;
+}
+#newEmployeeAdditionalQuestions{
+    padding-top: 1%;
+}
+#applicantGeneralInformation{
+    padding-top: 1%;
+}
+#applicantQuestionAnswer{
+    padding-top: 1%;
+}
+#applicantCommentPage{
+    padding-top: 1%;
+}
+
 /*.first-banner{*/
 /*    background-size:cover;*/
 /*    height:auto;*/
 /*    background-image:url('/elintegrostartapp/assets/elintegro_banner.jpg');*/
 /*}*/
+.camera-shoot{
+    padding-left: 30px;
+}

@@ -36,12 +36,12 @@ class DataframeWidgetVue extends WidgetVue{
         dataframe.childrenDataframes.add(refDataframeName)
         LayoutVue reflayoutObj = refDataframe.currentFrameLayout
         resultPageHtml.append(reflayoutObj.layoutPlaceHolder?:"")
-        Map propPass = fields.propPass
+        Map props = fields.props
         Map propReturn = fields.propReturn
         StringBuilder propString = new StringBuilder()
-        if(propPass && propPass.containsKey("key")){
-            String key = propPass.key
-            String value = propPass.value
+        if(props && props.containsKey("key")){
+            String key = props.key
+            String value = props.value
             if(key.trim().indexOf(":") == 0)
                 dataframe.getVueJsBuilder().addToDataScript("$value:'',\n")
             propString.append("""$key = '$value' """)
@@ -78,11 +78,11 @@ class DataframeWidgetVue extends WidgetVue{
             String keyField = entry.key;
             String keyFieldName = Dataframe.buildFullFieldNameKeyParam(refDataframe, entry.key);
             String parentFieldName = Dataframe.buildFullFieldNameParentParam(refDataframe, keyField);
-            buildParentAndRefParams.append("allParams[\"$parentFieldName\"] = \"$thisFieldName\";\n")
-            buildParentAndRefParams.append("allParams[\"ref-$thisFieldName\"] = \"$keyFieldName\";\n")
+            buildParentAndRefParams.append("params[\"$parentFieldName\"] = \"$thisFieldName\";\n")
+            buildParentAndRefParams.append("params[\"ref-$thisFieldName\"] = \"$keyFieldName\";\n")
             if(field.hideFK) {
                 String dataVariable = dataframe.getDataVariableForVue(field)
-                buildParentAndRefParams.append("allParams['$thisFieldName'] = this.$dataVariable;\n")
+                buildParentAndRefParams.append("params['$thisFieldName'] = this.$dataVariable;\n")
             }
         }
         if(refDataframe.saveButton){
@@ -90,16 +90,6 @@ class DataframeWidgetVue extends WidgetVue{
         }else {
             return buildParentAndRefParams.toString()
         }
-    }
-
-    String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
-        Dataframe refDataframe = getReferenceDataframe(field.dataframe)
-        String fldParam = dataframe.getFieldId(field)
-        String refDataframeName = refDataframe.dataframeName
-//        String namedParamKey = "this.\$store.state.${dataframe.dataframeName}.${refDataframeName}.key"
-        String namedParamKey = "this.\$store.state.${refDataframeName}.key"
-
-        return ""
     }
 
     String getComputedMethods(DataframeVue dataframe, Map field, String divId, String fldId, String key){
@@ -118,8 +108,6 @@ class DataframeWidgetVue extends WidgetVue{
         //validations
         assert(fieldnameToReload)
         def inputFieldValue = inputData.get(fieldnameToReload)
-
-//		assert(inputFieldValue)
 
         def vMember = fieldProps.valueMember
         assert(vMember)
