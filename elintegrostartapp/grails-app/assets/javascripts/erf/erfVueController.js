@@ -214,8 +214,7 @@ var excon = new Vue({
             Vue.set(stateData.alertProp, alertProps);
         },
         closeDataframe: function(dataframeName){
-            var dfNameDisplay = dataframeName +"_display";
-            excon.saveToStore("dataframeShowHideMaps", dfNameDisplay, false);
+            this.unsetVisibility(dataframeName)
         },
 
         generateRandom: function(){
@@ -350,12 +349,15 @@ var excon = new Vue({
                 throw("Cannot get state for key: " + key);
             }
         },
-        setVisibility: function(dataframeName, setVisible){
+        setVisibility: function(dataframeName, setVisible = true){
             if(setVisible){
                 store.commit('setVisibility', dataframeName);
             } else {
                 store.commit('unsetVisibility', dataframeName);
             }
+        },
+        unsetVisibility: function(dataframeName){
+            store.commit('unsetVisibility', dataframeName);
         },
         reset: function(dataframeName){
 
