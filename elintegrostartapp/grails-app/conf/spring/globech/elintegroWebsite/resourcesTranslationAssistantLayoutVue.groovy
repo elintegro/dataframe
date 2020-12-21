@@ -29,11 +29,11 @@ beans{
         layoutPlaceHolder = """
                                <v-container class="vueMeetTranslatorAssistantIntroDataframeLayout" fluid>
                                     <v-flex xs12 sm12 md12 lg12 x12>
-                                        <v-parallax src="assets/home/rectangle.png" height="120">
-                                            <v-row  align="center" justify="center">
+                                        <v-parallax src="assets/home/rectangle.png" height="auto">
+                                            <v-row  align="center" justify="center" class="mx-0">
                                                 <v-col class="text-center" cols="12">
-                                                    <h1>[meetTranslatorTitle]</h1>
-                                                    <h4>[meetTranslatorSubTitle]</h4>
+                                                    <h1 class='headline'>[meetTranslatorTitle]</h1>
+                                                    <h4 class='subtitle-1'>[meetTranslatorSubTitle]</h4>
                                                 </v-col>
                                             </v-row>
                                         </v-parallax>
