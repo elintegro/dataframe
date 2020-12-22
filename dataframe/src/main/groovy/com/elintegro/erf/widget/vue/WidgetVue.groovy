@@ -85,6 +85,10 @@ abstract class WidgetVue extends Widget<DataframeVue>{
             return "state.${fieldType}${DOT}${fldDomainAndDot}${field.name}";
     }
 
+    protected String getFieldType(Map fieldProps){
+        return fieldProps.containsKey("domain") ? PERSISTERS : TRANSITS
+    }
+
     public String getFieldJSONModelNameVue(Map field){
         return "${getFieldJSONNameVue(field)}.value";
     }
