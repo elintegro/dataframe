@@ -49,7 +49,7 @@ abstract class CollectionWidgetVue extends WidgetVue {
         Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
         if(additionalData && additionalData.containsKey("items")){
             List items = (List)additionalData.items
-            jData?.persisters?."${domainAlias}"."${fieldName}".value = getValueList(fieldProps, items, value, fieldName)
+            jData?.persisters?."${domainAlias}"."${fieldName}".value = getValue(fieldProps, value, fieldName)
             jData?.persisters?."${domainAlias}"."${fieldName}".items = items
         }
     }
@@ -59,7 +59,7 @@ abstract class CollectionWidgetVue extends WidgetVue {
         Map additionalData = loadAdditionalData(dfInstance, fieldProps, fieldName, additionalDataRequestParamMap, sessionHibernate)
         if(additionalData && additionalData.containsKey("items")){
             List items = (List)additionalData.items
-            jData?.transits?."${fieldName}".value = getValueList(fieldProps, items, value, fieldName)
+            jData?.transits?."${fieldName}".value = getValue(fieldProps, value, fieldName)
             jData?.transits?."${fieldName}".items = items
         }
     }
@@ -80,6 +80,19 @@ abstract class CollectionWidgetVue extends WidgetVue {
             }
         }
         return valueList
+    }
+
+    private static def getValue(Map fieldProps, Object value, String fieldName){
+        List valueList = null
+        String displayMember = fieldProps.displayMember?:fieldName
+        String valueMember = fieldProps.valueMember?:fieldName
+        if (value instanceof Collection<?>){
+            for(int k=0; k<value.size(); k++){
+                valueList.add([(displayMember):value?."$displayMember", (valueMember):value?."$valueMember"])
+            }
+            return valueList
+        }
+        return value?[(displayMember):value?."$displayMember", (valueMember):value?."$valueMember"]:null;
     }
 
     private boolean isSelectionEqualsToOld(Collection array1, Collection array2){

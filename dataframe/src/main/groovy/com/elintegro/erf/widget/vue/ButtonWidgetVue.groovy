@@ -26,10 +26,6 @@ class ButtonWidgetVue extends WidgetVue{
         String fldName = getFieldName(dataframe, field)
         def onClick = field.onClick
         def disabled = field.disabled
-        boolean icon = field.icon?:false
-        String iconAttr = field.iconAttr
-        String vuetifyIcon = field.vuetifyIcon
-        String iconScript = """<v-icon $iconAttr>$vuetifyIcon</v-icon>"""
         String refHtml = ""
 
         if(onClick && field.get('onClick')){
@@ -38,17 +34,12 @@ class ButtonWidgetVue extends WidgetVue{
             }
         }
         String script = field.script?:""
-        dataframe.getVueJsBuilder().addToMethodScript("""
+        dataframe.getVueJsBuilder().addToMethodScript("""  
                                ${fldName}_method: function(addressValue){
                                         $script
                                },\n""")
         //Add security access for the button
-        String ret = ""
-        if(icon && vuetifyIcon){
-            ret = wrapWithSpringSecurity(field, """$refHtml<v-btn ${getAttr(field)} ${toolTip(field)} :disabled="$disabled" id='$fldName' @click.stop='${fldName}_method'>${iconScript}</v-btn>\n""")
-        }else{
-            ret = wrapWithSpringSecurity(field, """$refHtml<v-btn ${getAttr(field)} ${toolTip(field)} :disabled="$disabled" id='$fldName' @click.stop='${fldName}_method'>${getLabel(field)}</v-btn>\n""")
-        }
+        String ret = wrapWithSpringSecurity(field, """$refHtml<v-btn ${getAttr(field)} ${toolTip(field)} :disabled="$disabled" id='$fldName' @click.stop='${fldName}_method'>${getLabel(field)}</v-btn>\n""")
         return ret;
     }
 
@@ -66,7 +57,6 @@ class ButtonWidgetVue extends WidgetVue{
         store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
         dataframe.getVueJsBuilder().addToDataScript(" ${refDataframeName}_data:{key:'', refreshGrid:true},\n")
         if(onClick.showAsDialog){
-            dataframe.getVueJsBuilder().addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
             sb.append("""<v-dialog v-model="visibility.${refDataframeName}" width='initial' max-width='500px'>""")
             sb.append(refDataframe.getComponentName("resetForm=true "))
             sb.append("""</v-dialog>""")

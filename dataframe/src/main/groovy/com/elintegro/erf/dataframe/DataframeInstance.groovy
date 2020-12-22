@@ -280,12 +280,7 @@ class DataframeInstance implements DataframeConstants{
 		log.debug("\n *******   Request Params: when retrieved \n" + reqParamPrintout(requestParams) + "\n ***************\n")
 
 		//TODO: default data need to assign for each new json structure
-		if (isDefault){
-			jsonRet.put("data",jsonDefaults)
-		}else {
-			//jsonRet.put("data", jsonMapDf)
-			jsonRet.put("data", jData)
-		}
+		jsonRet.put("data", jData)
 		jsonRet.put("default",jsonDefaults)
 		jsonRet.put("operation","R");
 		String domainAlias = df.hql?df.parsedHql?.hqlDomains?.keySet()?.asList()?.get(0):"";

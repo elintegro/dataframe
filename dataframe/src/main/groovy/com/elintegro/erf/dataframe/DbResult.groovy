@@ -14,8 +14,7 @@ These actions are prohibited by law if you do not accept this License. Therefore
 package com.elintegro.erf.dataframe
 
 import com.elintegro.erf.dataframe.service.MetaFieldService
-import com.elintegro.payment.paymentEnums.PaymentMethods
-import com.elintegro.utils.DateTimdataframe
+import com.elintegro.utils.DateTimeUtil
 import groovy.util.logging.Slf4j
 import org.hibernate.Query
 import org.hibernate.Transaction
@@ -211,7 +210,7 @@ class DbResult {
 		if(value == null || value == "") return null
 //		def typeName = property.getTypePropertyName()
 		def typeName = MetaFieldService.getTypePropertyName(property.type)
-		DateTimdataframe dateTimdataframe = new DateTimdataframe();
+		DateTimeUtil dateTimdataframe = new DateTimeUtil();
 		if("string".indexOf(typeName.toLowerCase())>-1){
 			return value as String
 		}else if("date".indexOf(typeName.toLowerCase())>-1){

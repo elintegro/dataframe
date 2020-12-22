@@ -1,3 +1,4 @@
+package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.vue.CollectionWidgetVue

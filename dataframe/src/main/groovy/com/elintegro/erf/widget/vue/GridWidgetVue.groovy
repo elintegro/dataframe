@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -7,7 +7,7 @@ Copyright © 2007-2019  Elinegro Inc. Eugene Lipkovich, Shai Lipkovich
 This program is under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
 See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works. 
+You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works.
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
@@ -79,19 +79,13 @@ class GridWidgetVue extends WidgetVue {
         String modelString = getFieldJSONModelNameVue(field)
         String itemsStr = getFieldJSONItems(field)
         String headerString = "${getFieldJSONNameVue(field)}${DOT}${headers}"
-        boolean isDynamic = field.isDynamic?:false
-        String gridTitle
-        if(isDynamic){
-            gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label\t{{state.gridTitleFromState}}</v-card-title>""":""
-        }else {
-            gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
-        }
+        String gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label</v-card-title>""":""
         String fieldParams = prepareFieldParams(dataframe, field, onclickDfrBuilder)
         String itemKey = field.itemKey?:"id"
-        return """<v-card v-show="${fldName}_display"><v-divider/>
+        return """<v-card v-show="${fldName}_display"><v-divider/>${gridTitle}
 
        ${showGridSearch?"""
-            <v-row><v-col cols='8'  style="margin-left:-30px; align-self:flex-end;">${gridTitle}</v-col>
+            <v-row><v-col cols='8'></v-col>
             <v-col cols="4">
                     <v-text-field
                     v-model="${fldName}_search"
@@ -218,8 +212,6 @@ $fieldParams
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
-        VueStore store = dataframe.getVueJsBuilder().getVueStore()
-        store.addToState("gridTitleFromState: '',\n")//need to set this title from dataframe(doAfterRefresh) or script bean...
         def search = field?.showGridSearch
         List gridDataframeNames = field?.gridDataframeList
         String gridDataframeNamesBuilder = ""
@@ -256,7 +248,7 @@ $fieldParams
     }
 
     private void putPropWatcherForChildDataframes(DataframeVue dataframe){
-       List childDfrs = dataframe.childrenDataframes
+        List childDfrs = dataframe.childrenDataframes
         if(childDfrs){
             for(String dfr: childDfrs) {
                 if (!dfr) continue
@@ -388,7 +380,7 @@ $fieldParams
         onButtonClick.each{Map onButtonClickMaps ->
             String actionName = getMessageSource().getMessage(onButtonClickMaps?.actionName?:"", null, onButtonClickMaps?.actionName?:"", LocaleContextHolder.getLocale())
             dataHeader.add(['text':actionName.capitalize(), 'keys':actionName, 'value':'name', sortable: false])
-            fieldParams.append("\n<td class='text-start' @click.stop=''>");
+            fieldParams.append("\n<td class='text-start layout' @click.stop=''>");
             onButtonClickMaps.buttons.each {Map buttonMaps->
                 String text = buttonMaps?.buttonName
                 String appendCallbackScript
@@ -496,7 +488,6 @@ $fieldParams
 
         //Add computed and watch scripts for dialog box
         dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_comp: '',\n")
-                .addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
 
         return resultPageHtml.toString()
     }

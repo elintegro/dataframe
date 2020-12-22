@@ -63,7 +63,7 @@ class LayoutVue extends Layout {
     List children = [] // Add all the children's layout names
     List childDataframes = [] //Add all the components to register under this layouts component
     boolean isGlobal = false // Whether or not to register component globally
-    static List defaultGridValues = Holders.grailsApplication.config.vue.flexGridValues.Default
+    static List defaultGridValues = Holders.grailsApplication.config.vue.flexGridValues.Default?:['xs12', 'sm12', 'md4', 'lg4', 'xl4']
     static List defaultButtonGridValues = ['xs12', 'sm12', 'md4', 'lg4', 'xl4']
     List flexGridValues = defaultGridValues
     boolean componentRegistered = false //Set once the component is registered
