@@ -597,7 +597,7 @@ beans {
     }
 
     vueElintegroNavigationDrawerDataframe_script(VueJsEntity){bean ->
-        data = """drawer: false, group: null,"""
+        data = """drawerVisible: false, group: null,"""
     }
     vueElintegroSubMenuDataframe_script(VueJsEntity){bean->
         methods = """

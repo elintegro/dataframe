@@ -50,23 +50,32 @@ beans {
     }
     vueElintegroNavigationDrawerDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<div>
-                                     <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
-                                     <v-navigation-drawer v-model="drawer"
-                                         app
-                                         temporary
-                                         width = "min-content"
-                                     >
-                                         <v-list>    
-                                              <v-list-item class="mx-4 mb-n4"><vueElintegroNavigationFirstTwoButtonDataframe/></v-list-item>
-                                              <v-list-item><vueElintegroAppsDataframe/></v-list-item>
-                                              <v-list-item class="mt-n4"><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
-                                                 <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/>
-                                              </v-list-item>
-                                              <v-list-item class="px-6 mt-n4"><vueElintegroLanguageSelectorDataframe/></v-list-item>
-                                         </v-list>
-                                     </v-navigation-drawer>
-       </div>"""
+        layoutPlaceHolder = """  <div>
+                                      <div style="text-align: left" class="hidden-lg-and-up">
+                                          <v-app-bar-nav-icon class="toggle" @click="drawerVisible = true" ></v-app-bar-nav-icon>
+                                      </div>
+                                        
+                                      <div class="navigationDrawer"
+                                          :style="{
+                                                   width: drawerVisible ? 'min-content' : '0',
+                                          }"
+                                          >
+                                          <v-row class="navigationDrawerContent">
+                                              <h4 class="drawerContentWithHomeButton"><vueElintegroNavigationFirstTwoButtonDataframe/></h4>
+                                              <h4 class="drawerContentWithAppsDataframe"><vueElintegroAppsDataframe/></h4>
+                                              <h4 class="drawerContentWithNavigationButtonsBeforeOrAfterLoggedIn"><vueElintegroNavigationButtonAfterLoggedInDataframe  v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
+                                                     <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></h4>
+                                              <h4 class="drawerContentWithLanguageSelector"><vueElintegroLanguageSelectorDataframe/></h4>
+                                          </v-row>
+                                      </div>
+                                      <div class="drawer-mask"
+                                          :style="{
+                                                width: drawerVisible ? '100vw' : '0',
+                                                opacity: drawerVisible ? '0.6' : '0',
+                                          }"
+                                          @click="drawerVisible = false"
+                                      ></div>
+        </div>"""
     }
     vueElintegroMidSectionLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -141,7 +150,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
                                   [DATAFRAME_SCRIPT]
-                                  <div style="margin-top:-40px; height:320px;">[BUTTON_SCRIPT]</div>
+                                  <div style="margin-top:-40px; height:320px; margin-left:-4px;">[BUTTON_SCRIPT]</div>
                                   </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
