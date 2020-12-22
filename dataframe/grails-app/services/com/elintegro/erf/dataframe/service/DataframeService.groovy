@@ -285,8 +285,7 @@ class DataframeService implements  DataFrameInitialization/*, DataFrameCrud*/{
 	   return resultPage
    }
 
-	public DataframeResponse saveRaw(def request){
-		def requestParams = request.getJSON()
+	public DataframeResponse saveRaw(JSONObject requestParams){
 
 		Dataframe dataframe = Dataframe.getDataframeByName(requestParams)
 		def dataframeInstance = new DataframeInstance(dataframe, requestParams)

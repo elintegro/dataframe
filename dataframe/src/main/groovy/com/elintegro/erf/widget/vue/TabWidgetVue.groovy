@@ -29,7 +29,7 @@ class TabWidgetVue extends WidgetVue{
             Dataframe tabDfr = Dataframe.getDataframeByName(dfr)
             String dfrName = tabDfr.dataframeName
             String dfrLabel = tabDfr.messageSource.getMessage(tabDfr.dataframeLabelCode, null, dfrName, LocaleContextHolder.getLocale())
-            tabHeaders.append(""" <v-tab style ="text-transform:capitalize; color:white;" ripple href="#$dfrName-tab-id">${dfrLabel}</v-tab>\n""")
+            tabHeaders.append(""" <v-tab style ="text-transform:capitalize; color:white;" ripple href="#$dfrName-tab-id" @click.stop='onTabClick("$dfrName")'>${dfrLabel}</v-tab>\n""")
             tabItems.append(""" <v-tab-item value="$dfrName-tab-id" ><$dfrName :${dfrName}_prop='${dataframe.dataframeName}_prop'/></v-tab-item>\n""")
             dataframe.childDataframes.add(dfrName)
             if(first){
@@ -37,6 +37,7 @@ class TabWidgetVue extends WidgetVue{
                 first = false
             }
         }
+        addClickMethodToTab(dataframe, field)
         setDefaultTabView(dataframe, field, initialTabView)
         String html = """<v-card round style ="overflow:hidden;" >
                                   <v-tabs color="white" slider-color="yellow"  background-color="blue darken-2" v-model="state.${dataframe.dataframeName}_tab_model">
@@ -63,6 +64,16 @@ class TabWidgetVue extends WidgetVue{
         }
 
         return ""
+    }
+
+    private void addClickMethodToTab(DataframeVue dataframe, Map fieldProps){
+        String onClickScript = fieldProps.onClickScript?:''
+        dataframe.getVueJsBuilder().addToMethodScript("""
+                onTabClick: function(val){
+                    console.log(this.val);
+                    $onClickScript
+              },
+        """)
     }
 
     private void setDefaultTabView(DataframeVue dataframe, Map field, String initialTabView){

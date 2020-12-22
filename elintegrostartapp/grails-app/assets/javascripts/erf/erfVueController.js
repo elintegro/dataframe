@@ -1,4 +1,3 @@
-
 var excon = new Vue({
     el: '#dfr',
     methods: {
@@ -26,21 +25,6 @@ var excon = new Vue({
             if (typeof s !== 'string') return '';
             return s.charAt(0).toUpperCase() + s.slice(1);
         },
-        saveToStore: function(containerVariable, key, value=''){
-            if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
-                return
-            }
-            if(store.state.hasOwnProperty(containerVariable)){
-                const obj = eval("store.state."+ containerVariable +"");
-                if(obj.hasOwnProperty(key)){
-                    Vue.set(obj, key, value);
-                } else {
-                    key?Vue.set(obj,key, value):Vue.set(store.state, containerVariable, value); //todo:make sure this works for all condition
-                }
-            } else {
-                Vue.set(store.state, containerVariable, key);
-            }
-        },
         goToTab: function(containerDataframe, targetDataframe) {
             //key_<dfname>_<domain>_id_id
             excon.saveToStore(containerDataframe, containerDataframe + "_tab_model", targetDataframe + "-tab-id");
@@ -65,8 +49,16 @@ var excon = new Vue({
             }
 
         },
-
-        saveToState: function(containerVariable, value=''){
+        saveToStateTest: function(containerVariable, key, value=''){
+            if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
+                return
+            }
+            const obj = eval("store.state."+ containerVariable +"");
+            if (obj){
+                Vue.set(obj, key, value);
+            }
+        },
+/*        saveToState: function(containerVariable, value=''){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
                 return
             }
@@ -75,8 +67,8 @@ var excon = new Vue({
                 if(obj.hasOwnProperty(key)){
                     // store.commit(key,value);
                     Vue.set(obj, key, value);
-                    /*var obj1 = eval(""+obj+"."+key)
-                    obj1 = value;*/
+                    /!*var obj1 = eval(""+obj+"."+key)
+                    obj1 = value;*!/
                 } else {
                     // const Obj1 = eval(store.state +"."+ containerVariable);
                     Vue.set(obj,key, value);
@@ -85,7 +77,46 @@ var excon = new Vue({
                 Vue.set(store.state, containerVariable, key);
             }
 
+        }*/
+        /**
+         *saves data to store
+         excon.saveToStore("vueNewEmployeeBasicInformationDataframe",state)
+         excon.saveToStore("vueNewEmployeeBasicInformationDataframe","state",response.data.data)
+         excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id");
+         * @param containerVariable: main key of store (dataframeName usually)
+         * @param key
+         * @param value
+         */
+        saveToStore: function(containerVariable, key, value){
+            if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
+                return
+            }
+            if(store.state.hasOwnProperty(containerVariable)){
+                const obj = eval("store.state."+ containerVariable +"");
+                // if(obj.hasOwnProperty(key)){
+                if(arguments.length === 2){
+                    Vue.set(store.state, containerVariable, key);
+                    return
+                }
+                Vue.set(obj, key, value);
+                // }
+                /*
+                                else {
+                                    (value === null || value === undefined || value === '')?Vue.set(store.state, containerVariable, key):Vue.set(obj,key, value);
+                                }
+                */
+            } else {
+                Vue.set(store.state, containerVariable, key);
+            }
         },
+
+        /**
+         *
+         params['id']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
+         * @param containerVariable: dataframeName mainly of store
+         * @param key
+         * @returns {string|any}
+         */
         getFromStore: function(containerVariable, key=''){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "")){
                 return ""
@@ -150,48 +181,6 @@ var excon = new Vue({
 
                 },
 
-        /*
-                updateStoreState: function(response, stateVar, propKey){
-
-                    var dataframe = response.dataframe;
-                    let stateVarDf = stateVar+"."+dataframe;
-                    var response = response.data
-                    let id = response.keys["id"]?response.keys["id"]:'';
-                    let stateVarObj1 = eval(stateVarDf);
-
-                    if(stateVarObj1){
-                        Vue.set(eval(' stateVarObj1'), 'key', id);
-                    }
-                    if(response.hasOwnProperty('additionalData') ) {
-                        Object.keys(response.additionalData).forEach(function (key) {
-                            var embDfr = response.additionalData[key];
-                            if (embDfr.hasOwnProperty('data')){
-                                if (embDfr.data.hasOwnProperty('additionalData') && embDfr.data.additionalData.data) {
-                                    this.updateStoreState(embDfr, stateVar)
-                                } else {
-                                    dataframe = embDfr.dataframe;
-                                    if(dataframe){
-
-                                        let stateVarDf =stateVar + "." + dataframe;
-                                        if(embDfr.data.hasOwnProperty('keys')){
-                                            let id = embDfr.data.keys["id"];
-                                            let stateVarObj2 = eval(stateVarDf);
-                                            if(stateVarObj2){
-                                                Vue.set(eval('stateVarObj2'), 'key', id);
-                                                let propKey1 = propKey +"." +dataframe + "_data";
-                                                Vue.set(eval(propKey1), 'key', id);
-                                            }
-                                        }
-
-                                    }
-                                }
-                            }
-
-                        });
-                    }
-                },
-
-        */
         showAlertMessage: function(response, dataframeName="vueAlertMsgDataframe"){
             const msg = response.message?response.message:response.msg
             if(msg){
@@ -232,8 +221,7 @@ var excon = new Vue({
             Vue.set(stateData.alertProp, alertProps);
         },
         closeDataframe: function(dataframeName){
-            var dfNameDisplay = dataframeName +"_display";
-            excon.saveToStore("dataframeShowHideMaps", dfNameDisplay, false);
+            this.unsetVisibility(dataframeName)
         },
 
         generateRandom: function(){
@@ -368,12 +356,15 @@ var excon = new Vue({
                 throw("Cannot get state for key: " + key);
             }
         },
-        setVisibility: function(dataframeName, setVisible){
+        setVisibility: function(dataframeName, setVisible = true){
             if(setVisible){
                 store.commit('setVisibility', dataframeName);
             } else {
                 store.commit('unsetVisibility', dataframeName);
             }
+        },
+        unsetVisibility: function(dataframeName){
+            store.commit('unsetVisibility', dataframeName);
         },
         reset: function(dataframeName){
 
@@ -390,6 +381,121 @@ var excon = new Vue({
                 }
             }
         },
+        /**
+         *
+         usage: excon.setValuesForRequestParams({'targetDataframe': 'vueElintegroUserProfileDataframe',
+                                                            'type': 'persisters',
+                                                            'domainAlias':'person',
+                                                            'sourceDataframe': 'vueNewEmployeeBasicInformationDataframe',
+                                                            'fieldName':'application',
+                                                            'key': 'id'});
+         * @param object
+         */
+        setValuesForRequestParams: function(object){
+            if(!object.targetDataframe) throw "targetDataframe key must have dataframeName in params"
+            if(!object.sourceDataframe) throw "sourceDataframe key must have dataframeName in params"
+            if(!object.domainAlias) throw "domainAlias is required"
+            let type = object.type?object.type:'persisters';// 'persisters' or 'transits'
+            object.type = type;
+            if(object instanceof Array){
+                for(let obj in object){
+                    this._setValuesToRequestParams(obj)
+                }
+            } else if (object instanceof Object){
+                this._setValuesToRequestParams(object)
+            } else {
+                throw "Only Objects allowed"
+            }
+        },
+        /**
+         *
+         usage: excon.setValuesForNamedParamsForGrid({'targetDataframe': 'vueElintegroUserProfileDataframe',
+                                                            'namedParamKey':'person',
+                                                            'sourceDataframe': 'vueNewEmployeeBasicInformationDataframe',
+                                                            'fieldName':'application',
+                                                            'key': 'id'});
+         * @param object
+         */
+        setValuesForNamedParamsFromGrid: function(object){
+            if(object instanceof Array){
+                for(let obj in object){
+                    object[obj]['grid'] = true;
+                    this._setValuesForNamedParams(object[obj])
+                }
+            } else if (object instanceof Object){
+                object['grid'] = true;
+                this._setValuesForNamedParams(object)
+            } else {
+                throw "Only Objects allowed"
+            }
+        },
+        /**
+         *
+         usage: excon.setValuesForNamedParams({'targetDataframe': 'vueElintegroUserProfileDataframe',
+                                                            'namedParamKey':'person',
+                                                            'sourceDataframe': 'vueNewEmployeeBasicInformationDataframe',
+                                                            'fieldName':'application',
+                                                            'key': 'id'});
+         * @param object
+         */
+        setValuesForNamedParams: function(object){
+            if(object instanceof Array){
+                for(let obj in object){
+                    this._setValuesForNamedParams(obj)
+                }
+            } else if (object instanceof Object){
+                this._setValuesForNamedParams(object)
+            } else {
+                throw "Only Objects allowed"
+            }
+        },
+        _setValuesToRequestParams: function(object){
+            const sourceDataframe = this.getFromStore(object.sourceDataframe)
+            const val = sourceDataframe.fieldName[key];
+            let targetDataframe = this.getFromStore(object.targetDataframe)
+            targetDataframe[object.type][object.domainAlias][object.fieldName].value = val;
+            this.saveToStore(object.targetDataframe, targetDataframe);
+        },
+        _setValuesForNamedParams: function(object){
+            if(!object.namedParamKey) throw "namedParamKey is missing in params"
+            if(!object.targetDataframe) throw "targetDataframe key must have dataframeName in params"
+            this._getValuesForParams(object)
+            let targetDataframe = this.getFromStore(object.targetDataframe)
+
+            if(!targetDataframe) throw new Error(object.targetDataframe + "doesnot exist. might be a type")
+
+            targetDataframe[object.namedParamKey] = this._getValuesForParams(object);
+            this.saveToStore(object.targetDataframe, targetDataframe);
+        },
+        _getValuesForParams: function(object){
+            if(!object.sourceDataframe) throw "sourceDataframe key must have dataframeName in params"
+            if(!object.fieldName) throw "fieldName is required in params"
+
+            const sourceDataframe = this.getFromStore(object.sourceDataframe)
+
+            if(!sourceDataframe) throw new Error(object.sourceDataframe + "doesnot exist. might be a type")
+
+            let value = '';
+            if(object.grid){// for children of grid
+                const gridRow = sourceDataframe[object.fieldName]
+                if(!gridRow) throw new Error(gridRow + "doesnot exist. might be a type")
+                const selectedRow = gridRow.selectedRow;
+                value = object.key?selectedRow[object.key]:selectedRow;
+            } else {
+                value = this._getValueFromDomainKeys(sourceDataframe, object.fieldName, object.key);
+            }
+            return value
+        },
+        //Assumption that there will always be id in domain_keys
+        _getValueFromDomainKeys: function(sourceDataframe, fieldName, key){
+            if(!sourceDataframe.domain_keys) return '';
+            let val = sourceDataframe.domain_keys[fieldName];
+            if(!val) throw new Error(fieldName + "doesnot exist. might be a type")
+            if(key){
+               val = val[key];
+            }
+            return val
+        },
         enableDisableButton:function (dataframeName , valueToObserve){
             let state = store.getters.getState(dataframeName);
             let dataToChange;
@@ -405,12 +511,15 @@ var excon = new Vue({
             return dataToChange
         },
         redirectPage:function (dataFrame,pageToRedirect,routeId){
-            if(routeId == null){
+            if(routeId == null || routeId === 0){
                 dataFrame.$router.push('/'+pageToRedirect+'/0');
             }
             else {
                 dataFrame.$router.push('/'+pageToRedirect+'/'+routeId);
             }
+        },
+        refreshPage: function(){
+            window.location.reload();
         },
         getImageDataInfo:function (file){
             let imageData = {};

@@ -20,6 +20,7 @@ import com.elintegro.erf.dataframe.service.JavascriptService
 import com.elintegro.erf.dataframe.service.TreeService
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import grails.converters.JSON
+import org.grails.web.json.JSONObject
 import grails.util.Holders
 import org.springframework.context.ApplicationContext
 //import org.codehaus.groovy.grails.commons.ApplicationHolder
@@ -77,7 +78,7 @@ class DataframeController {
 	def ajaxValues() {
 
 //		Dataframe dataframe = getDataframe(params)
-		def requestParams = request.getJSON()
+		JSONObject requestParams = request.getJSON()
 		def jsonMap = dataframeService.ajaxValuesRaw(requestParams, session)
 
 		//def converter = jsonMap as JSON
@@ -138,7 +139,8 @@ class DataframeController {
 	 * @return
 	 */
 	def ajaxSave(){
-		def resultData = dataframeService.saveRaw(request);
+		JSONObject params = request.getJSON()
+		def resultData = dataframeService.saveRaw(params);
 		//resultData.remove("dfInstance")
 /*
 		if(result) {

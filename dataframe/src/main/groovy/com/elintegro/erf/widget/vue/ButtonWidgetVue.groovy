@@ -57,7 +57,6 @@ class ButtonWidgetVue extends WidgetVue{
         store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
         dataframe.getVueJsBuilder().addToDataScript(" ${refDataframeName}_data:{key:'', refreshGrid:true},\n")
         if(onClick.showAsDialog){
-            dataframe.getVueJsBuilder().addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
             sb.append("""<v-dialog v-model="visibility.${refDataframeName}" width='initial' max-width='500px'>""")
             sb.append(refDataframe.getComponentName("resetForm=true "))
             sb.append("""</v-dialog>""")

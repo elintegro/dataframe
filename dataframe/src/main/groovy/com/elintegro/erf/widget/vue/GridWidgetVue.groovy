@@ -488,7 +488,6 @@ $fieldParams
 
         //Add computed and watch scripts for dialog box
         dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_comp: '',\n")
-                .addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
 
         return resultPageHtml.toString()
     }
@@ -509,6 +508,9 @@ $fieldParams
         return """
                               this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
+                              let gridState = ${excon}.getFromStore('${parentDataframeName}');
+                              gridState.$nameOfField = {'selectedRow': dataRecord}; 
+                              ${excon}.saveToStore('${parentDataframeName}', gridState);
                               ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
                               ${excon}.setVisibility("${refDataframeName}", true);
                               let propData = this.${refDataframeName}_data;
