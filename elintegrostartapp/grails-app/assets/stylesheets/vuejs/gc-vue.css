@@ -59,11 +59,55 @@ tr.selected td {
     padding-top: 1%;
 }
 
-/*.first-banner{*/
-/*    background-size:cover;*/
-/*    height:auto;*/
-/*    background-image:url('/elintegrostartapp/assets/elintegro_banner.jpg');*/
-/*}*/
 .camera-shoot{
     padding-left: 30px;
+}
+.navigationDrawerContent {
+    font-weight: 400;
+    color: #0ca3a3;
+}
+.toggle {
+    width: 120px;
+    background: white;
+    color: tomato;
+    border: 0;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.navigationDrawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0; /* initially */
+    overflow: hidden;
+    height: 100vh;
+    padding-left: 0; /* initially */
+    border-left: 1px solid whitesmoke;
+    background: white;
+    z-index: 200;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.drawer-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0; /* initially */
+    height: 100vh;
+    background: #000;
+    opacity: 0.3;
+    z-index: 199;
+    transition: opacity 0.2s;
+}
+.drawerContentWithHomeButton{
+    margin-left: 18px;
+}
+.drawerContentWithAppsDataframe, .drawerContentWithNavigationButtonsBeforeOrAfterLoggedIn{
+    margin-top: -20px;
+}
+.drawerContentWithLanguageSelector{
+    margin-top:-12px;
+    margin-left:5px;
 }
