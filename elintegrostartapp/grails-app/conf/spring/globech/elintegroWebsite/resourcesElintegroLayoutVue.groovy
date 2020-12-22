@@ -225,23 +225,31 @@ beans {
     }
     vueElintegroLoginTabDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """ [DATAFRAME_SCRIPT]"""
+        layoutPlaceHolder = """ [tab]"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
 
     }
     vueElintegroLoginDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 style="width:360px;">
-                                  <v-row class="px-2">[user.username][user.password][rememberMe]</v-row>
-                                  <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex>
-                               </v-flex>"""
+        layoutPlaceHolder = """
+                                  <v-container grid-list-sm><v-layout wrap class="px-8 py-2">
+                                        [user.username][user.password]
+                                        <v-layout row wrap class="text-center align-item=flex-end ">
+                                            [login][logInWithGoogle][logInWithFacebook]
+                                        </v-layout>
+                                        [rememberMe][forgetPassword]
+                                  </v-layout></v-container>
+                               """
     }
     vueElintegroLoginWithOTPDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 style="width:360px;">
-                                  <v-row class="px-2">[email]<v-flex class="text-center">[sendCode]</v-flex>[verificationCode][codeNotReceived][resendCode]</v-row>
-                                  <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex>
-                               </v-flex>"""
+        layoutPlaceHolder = """
+                                <v-container grid-list-sm><v-layout wrap class="pa-8 py-2">
+                                    [email][sendCode]
+                                    [verificationCode][codeNotReceived][resendCode]
+                                    [BUTTON_SCRIPT]
+                                </v-layout></v-container>
+                              """
     }
     vueElintegroForgetPasswordDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
