@@ -545,7 +545,15 @@ var excon = new Vue({
                 imageData["imageType"] = file.type;
             }
             return imageData
+        },
+
+        /**
+         * removes object from list
+         * @param list
+         * @param object
+         */
+        removeFromList: function(list, object){
+            list.splice(object, 1);
         }
     }
-
 });

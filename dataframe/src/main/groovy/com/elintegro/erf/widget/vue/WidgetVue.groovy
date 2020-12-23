@@ -79,6 +79,11 @@ abstract class WidgetVue extends Widget<DataframeVue>{
         return """ '${dataframe.dataframeName}_data' """
 
     }
+
+    protected String getFieldType(Map fieldProps){
+        return fieldProps.containsKey("domain") ? PERSISTERS : TRANSITS
+    }
+
     public String getFieldJSONNameVue(Map field){
             String fldDomainAndDot = (field.domain?.domainAlias?.size() > 0) ? "${field.domain.domainAlias}${DOT}" : ""
             String fieldType = field.containsKey("domain") ? PERSISTERS : TRANSITS
