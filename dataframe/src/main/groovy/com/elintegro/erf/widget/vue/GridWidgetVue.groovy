@@ -460,13 +460,13 @@ $fieldParams
     }
 
     private void getOnClickScript(def onClick, DataframeVue dataframe, String refDataframeName, StringBuilder onclickDfrBuilder, def gridDataframeList
-                                  , String fldName, String fieldOfName){
+                                  , String fldName, Map fieldProps){
 
         String stateName = fldName + "_onClick"
 
         onclickDfrBuilder.append(getRefDataframeHtml(onClick, dataframe, fldName, gridDataframeList))
         dataframe.getVueJsBuilder().addToMethodScript(""" ${fldName}_showDetail$refDataframeName: function(dataRecord){
-                                             ${getShowDetailJavascript(onClick, dataframe, fldName, fieldOfName)}
+                                             ${getShowDetailJavascript(onClick, dataframe, fldName, fieldProps)}
                                              },\n""")
 
     }

@@ -33,16 +33,21 @@ class ButtonWidgetVue extends WidgetVue{
                 refHtml = getRefHtml(onClick, dataframe)
             }
         }
-        String script = field.script?:""
-        dataframe.getVueJsBuilder().addToMethodScript("""  
-                               ${fldName}_method: function(addressValue){
-                                        $script
-                               },\n""")
+        addMethodsToScript(dataframe, field)
         //Add security access for the button
         String ret = wrapWithSpringSecurity(field, """$refHtml<v-btn ${getAttr(field)} ${toolTip(field)} :disabled="$disabled" id='$fldName' @click.stop='${fldName}_method'>${getLabel(field)}</v-btn>\n""")
         return ret;
     }
 
+
+    private void addMethodsToScript(DataframeVue dataframe, Map fieldProps){
+        String fldName = getFieldName(dataframe, fieldProps)
+        String script = fieldProps.script?:""
+        dataframe.getVueJsBuilder().addToMethodScript("""  
+                               ${fldName}_method: function(){
+                                        $script
+                               },\n""")
+    }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         return """"""
