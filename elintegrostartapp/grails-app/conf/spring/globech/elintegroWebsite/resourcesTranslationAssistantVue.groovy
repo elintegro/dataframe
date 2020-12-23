@@ -204,10 +204,12 @@ beans{
                          var transits = excon.getFromStore('vueTranslatorDataframe','transits')
                          let notSelected = transits.notSelectedLanguages.items;
                          let selected = transits.selectedLanguages.items;
-                         if(selected){
+                         if(selected && selected.length != 0){
                              for(let val of selected){
                                 notSelected = notSelected.filter(w => w.ename != val.language && w.ename != response.persisters.project.sourceLanguage.value)
                              }
+                         }else{
+                              notSelected = notSelected.filter(w => w.ename != response.persisters.project.sourceLanguage.value)
                          }
                          transits.notSelectedLanguages.items = notSelected;
                          excon.saveToStore('vueTranslatorDataframe','transits',transits);
