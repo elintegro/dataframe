@@ -206,7 +206,7 @@ beans{
                          let selected = transits.selectedLanguages.items;
                          if(selected){
                              for(let val of selected){
-                                notSelected = notSelected.filter(w => w.ename != val.language)
+                                notSelected = notSelected.filter(w => w.ename != val.language && w.ename != response.persisters.project.sourceLanguage.value)
                              }
                          }
                          transits.notSelectedLanguages.items = notSelected;
