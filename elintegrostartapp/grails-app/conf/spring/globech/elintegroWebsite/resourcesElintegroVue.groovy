@@ -588,7 +588,8 @@ beans {
 
         addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150, attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """,flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
                        ,"user.username":["widget" : "EmailWidgetVue",attr: "autofocus outlined background-color='#EBF9FF !important' color='#2AB6F6' ", "name": "user.username", autoComplete:"on", "width":150,placeholder:"Enter your email", "errMessage":"Username should be an email",flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
-                       ,"rememberMe":["widget" : "CheckboxWidgetVue",flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6'],]
+                       ,"rememberMe":["widget" : "CheckboxWidgetVue",flexGridValues: ['xs8', 'sm6', 'md6', 'lg6', 'xl6'],attr: """ class='mt-5' """]
+                       ,"orTextInLogin":["widget" :"TextDisplayWidgetVue",name: "orTextInLogin",attr: """ style='color:gray;' """, flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
         ]
 
         dataframeButtons = [logInWithGoogle:[name: "logInWithGoogle",type: "image", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl",width:'100%', height: '100%'], script:"""
@@ -599,12 +600,12 @@ beans {
                                                                                                 window.opener.location.reload();
                                                                                                 close();
                                                                                              }*/
-                                                                                              """,flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                             logInWithFacebook:[name: "logInWithFacebook",type: "image", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl"],script:"""
+                                                                                              """,flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
+                             logInWithFacebook:[name: "logInWithFacebook",type: "image", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl",width:'100%', height: '100%'],script:"""
                                                                                              var provider = 'facebook';
                                                                                              var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
-                                                                                              """,flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                                                                                              """,flexGridValues: ['xs6', 'sm6', 'md6', 'lg6', 'xl6']],
                             login:[name:"login", type: "button", attr: """color='blue darken-2' dark width='100%' """,
                                    script:"this.login();",flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                                    ],
@@ -626,7 +627,7 @@ beans {
                 "email":[name:"email",widget: "InputWidgetVue",placeholder: "Enter your email here.",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6'"""],
                 "sendCode":[widget: "ButtonWidgetVue"
                             ,insertAfter: "email"
-                            ,attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;' v-show = 'showHideSendCodeButton' """
+                            ,attr: """style='background-color:#1976D2; color:white;text-transform:capitalize;width:100%;' v-show = 'showHideSendCodeButton' """
                             ,script: """this.sendVerificationCode();"""],
                 "verificationCode":[name: "verificationCode", widget:"InputWidgetVue",placeholder: "Enter the verification code you received.",attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' v-if = 'showThisFieldAfterCodeSent'"""],
                 "codeNotReceived":[widget: "TextDisplayWidgetVue",isDynamic:false,attr: """v-show='showThisFieldAfterCodeSent'""", "flexGridValues": ['xs9', 'sm9', 'md9', 'lg9', 'xl9']],
@@ -635,7 +636,7 @@ beans {
                               ,attr: """style='background-color:white;color:#1976D2; text-transform:capitalize;margin-left:-20px;margin-top:-5px;' text v-show='showThisFieldAfterCodeSent' """
                               ,script: """this.resendVerificationCode();"""
                               ,"flexGridValues": ['xs3', 'sm3', 'md3', 'lg3', 'xl3']]]
-        dataframeButtons = [submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' v-show='showThisFieldAfterCodeSent' """,script: """this.loginWithVerificationCode();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
+        dataframeButtons = [submit: [name: "submit", type: "button",attr: """flex-right style='background-color:#1976D2; color:white;' v-show='showThisFieldAfterCodeSent' """,script: """this.loginWithVerificationCode();""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroLoginWithOTPDataframeLayout")
 
     }
@@ -692,11 +693,11 @@ beans {
 
         dataframeLabelCode = "User.Registration"
         //These are values, that overrides the default ones
-        saveButtonAttr = " color='blue darken-2' dark"
+        saveButtonAttr = " color='blue darken-2' dark width=100% "
         initOnPageLoad = false
         isGlobal = true
         saveButton = true
-        flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        flexGridValues = ['xs12', 'sm6', 'md6', 'lg6', 'xl6']
         wrapInForm=true
 
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
