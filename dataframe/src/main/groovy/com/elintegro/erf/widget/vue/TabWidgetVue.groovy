@@ -58,7 +58,7 @@ class TabWidgetVue extends WidgetVue{
         boolean showCloseButton = field.showCloseButton?:false
         if(showCloseButton){
             return """
-                <v-flex class="text-right" style="margin-top:-15px;"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe" style="color:white;"><v-icon medium >close</v-icon>
+                <v-flex class="text-right" style="align-self:center;"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe" style="color:white;"><v-icon medium >close</v-icon>
                                       </v-btn><span>Close</span></v-tooltip></v-flex>    
                 """
         }

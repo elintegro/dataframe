@@ -225,23 +225,33 @@ beans {
     }
     vueElintegroLoginTabDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """ [DATAFRAME_SCRIPT]"""
+        layoutPlaceHolder = """ [tab]"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
 
     }
     vueElintegroLoginDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 style="width:360px;">
-                                  <v-row class="px-2">[user.username][user.password][rememberMe]</v-row>
-                                  <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex>
-                               </v-flex>"""
+        layoutPlaceHolder = """ <v-flex xs12 sm12 md12 lg12 xl12>
+                                  <v-container grid-list-sm><v-layout wrap class="px-4 pt-4 align-center text-end">
+                                        [user.username][user.password]
+                                        <v-layout row wrap class="text-center align-center">
+                                            [login][orTextInLogin][logInWithGoogle][logInWithFacebook]
+                                        </v-layout>
+                                        [rememberMe][forgetPassword]
+                                  </v-layout></v-container></v-flex>
+                               """
     }
     vueElintegroLoginWithOTPDataframeLayout(RowLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 style="width:360px;">
-                                  <v-row class="px-2">[email]<v-flex class="text-center">[sendCode]</v-flex>[verificationCode][codeNotReceived][resendCode]</v-row>
-                                  <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex>
-                               </v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                                <v-container grid-list-sm><v-layout wrap class="pa-4 pt-4 text-center">
+                                    [email][sendCode][verificationCode]
+                                    <v-layout wrap class="text-start">
+                                        [codeNotReceived][resendCode]
+                                    </v-layout>
+                                    [submit]
+                                </v-layout></v-container></v-flex>
+                              """
     }
     vueElintegroForgetPasswordDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -253,9 +263,24 @@ beans {
 
     vueElintegroRegisterDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' ><v-toolbar dark color="blue darken-2" class="mb-5"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
-                                <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
-                                </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT]<v-flex class="text-right">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
+                                    <v-card round class='rounded-card' >
+                                        <v-toolbar dark color="blue darken-2" class="mb-5">
+                                            <v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
+                                            <v-spacer></v-spacer>
+                                            <v-tooltip bottom>
+                                                <v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe">
+                                                    <v-icon medium >close</v-icon>
+                                                </v-btn><span>Close</span>
+                                            </v-tooltip>
+                                        </v-toolbar>
+                                            <v-container grid-list-sm><v-layout wrap class="text-center px-4 pb-4">
+                                                [user.email]
+                                                [user.firstName][user.lastName]
+                                                [user.password][password2]
+                                                [saveButton]
+                                            </v-layout></v-container>
+                                    </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
 

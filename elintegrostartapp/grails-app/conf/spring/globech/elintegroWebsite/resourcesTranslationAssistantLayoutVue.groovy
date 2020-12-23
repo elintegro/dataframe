@@ -80,7 +80,7 @@ beans{
     }
     vueCreateProjectForTranslationDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl2>
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                                    <v-card round class='rounded-card' >
                                         <v-toolbar dark color="#2ab6f6">
                                             <v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
