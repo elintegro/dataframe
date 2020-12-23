@@ -274,7 +274,7 @@ beans {
                                                 </v-btn><span>Close</span>
                                             </v-tooltip>
                                         </v-toolbar>
-                                            <v-container grid-list-sm><v-layout wrap class="text-center px-4 pb-2">
+                                            <v-container grid-list-sm><v-layout wrap class="text-center px-4 pb-4">
                                                 [user.email]
                                                 [user.firstName][user.lastName]
                                                 [user.password][password2]
