@@ -194,15 +194,16 @@ $fieldParams
                 DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
                 refDataframeName = refDataframe.dataframeName
                 onClickMethod    = "${fldName}_showDetail$refDataframeName(props.item)"
-                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName, field.name)
+                getOnClickScript(onClick, dataframe, refDataframeName, onclickDfrBuilder, gridDataframeList, fldName, field)
             }
         }
 
         if (onButtonClick){
 //            showRefreshMethod = true
-            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader, field.name)
+            getOnButtonClickScript(onButtonClick, dataframe, onclickDfrBuilder, gridDataframeList, fieldParams, fldName, dataHeader, field)
 
         }
+        addMethodsToScript(dataframe, field)
 //        putPropWatcherForChildDataframes(dataframe)
         field.put("gridDataframeList", gridDataframeList);
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
@@ -214,6 +215,17 @@ $fieldParams
           </tr>  
         </template>
          """
+    }
+
+    private void addMethodsToScript(DataframeVue dataframe, Map fieldProps){
+
+        String dataVariable = dataframe.getDataVariableForVue(fieldProps)
+        def dataHeader = fieldProps.dataHeader
+        String headerString = "${getFieldJSONNameVue(fieldProps)}${DOT}${headers}"
+        dataframe.getVueJsBuilder().addToMethodScript(""" getDefaultDataHeaders_${dataVariable} : function(){\n
+                             var defaultDataHeaders = ${dataHeader as JSON};
+                             this.$headerString = defaultDataHeaders;
+                          },\n""")
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
@@ -383,12 +395,12 @@ $fieldParams
     }
 
     private void getOnButtonClickScript(onButtonClick, DataframeVue dataframe,  StringBuilder onclickDfrBuilder
-                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader, String nameOfField){
+                                        , gridDataframeList, StringBuilder fieldParams, String fldName, List dataHeader, Map fieldProps){
         String buttonHoverMessage = ""
         onButtonClick.each{Map onButtonClickMaps ->
             String actionName = getMessageSource().getMessage(onButtonClickMaps?.actionName?:"", null, onButtonClickMaps?.actionName?:"", LocaleContextHolder.getLocale())
             dataHeader.add(['text':actionName.capitalize(), 'keys':actionName, 'value':'name', sortable: false])
-            fieldParams.append("\n<td class='text-start' @click.stop=''>");
+            fieldParams.append("\n<td class='text-start layout' @click.stop=''>");
             onButtonClickMaps.buttons.each {Map buttonMaps->
                 String text = buttonMaps?.buttonName
                 String appendCallbackScript
@@ -404,23 +416,23 @@ $fieldParams
                 String btnName = ""
                 String methodScript = ""
                 if(deleteButton){
-                    methodScript= constructGridDeleteScript(buttonMaps, fldName, dataframe.dataframeName , nameOfField)
+                    methodScript= constructGridDeleteScript(buttonMaps, fldName, dataframe.dataframeName , fieldProps)
                     btnName = "deleteButton"
                     vIcon.name = "delete"
 
                 }else if(editButton){
                     btnName = "editButton"
                     vIcon.name = "edit"
-                    methodScript = getEditJavascript(buttonMaps, dataframe, fldName, nameOfField)
+                    methodScript = getEditJavascript(buttonMaps, dataframe, fldName, fieldProps)
                 } else if(showDetail){
                     btnName = "detailsButton"
-                    methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName, nameOfField)
+                    methodScript = getShowDetailJavascript(buttonMaps, dataframe, fldName, fieldProps)
                 } else {
                     methodScript = buttonMaps.script
                     btnName = buttonMaps.name
                     if(!btnName) throw new DataMissingException("name is required for each action buttons")
                     if(buttonMaps?.refDataframe && !buttonMaps.script){
-                        methodScript= getEditJavascript(buttonMaps, dataframe, fldName, nameOfField)
+                        methodScript= getEditJavascript(buttonMaps, dataframe, fldName, fieldProps)
                     }
                     if(!methodScript){
                         methodScript = ""
@@ -456,13 +468,13 @@ $fieldParams
     }
 
     private void getOnClickScript(def onClick, DataframeVue dataframe, String refDataframeName, StringBuilder onclickDfrBuilder, def gridDataframeList
-                                  , String fldName, String fieldOfName){
+                                  , String fldName, Map fieldProps){
 
         String stateName = fldName + "_onClick"
 
         onclickDfrBuilder.append(getRefDataframeHtml(onClick, dataframe, fldName, gridDataframeList))
         dataframe.getVueJsBuilder().addToMethodScript(""" ${fldName}_showDetail$refDataframeName: function(dataRecord){
-                                             ${getShowDetailJavascript(onClick, dataframe, fldName, fieldOfName)}
+                                             ${getShowDetailJavascript(onClick, dataframe, fldName, fieldProps)}
                                              },\n""")
 
     }
@@ -496,16 +508,15 @@ $fieldParams
 
         //Add computed and watch scripts for dialog box
         dataframe.getVueJsBuilder().addToDataScript("${refDataframeName}_comp: '',\n")
-                .addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
 
         return resultPageHtml.toString()
     }
 
-    private String getEditJavascript(Map onClickMap, DataframeVue dataframe, String fldName, String nameOfField){
-        return getShowDetailJavascript(onClickMap, dataframe, fldName, nameOfField)
+    private String getEditJavascript(Map onClickMap, DataframeVue dataframe, String fldName, Map fieldProps){
+        return getShowDetailJavascript(onClickMap, dataframe, fldName, fieldProps)
     }
 
-    private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName, String nameOfField){
+    private String getShowDetailJavascript(Map onClickMap, DataframeVue dataframe,  String fldName, Map fieldProps){
         String parentDataframeName = dataframe.dataframeName
         String updateStoreCallScript = ""
         if(!onClickMap.refDataframe){
@@ -518,9 +529,9 @@ $fieldParams
                               this.${refDataframeName}_comp = "${refDataframeName}";
                               var key = dataRecord.id?dataRecord.id:(dataRecord.Id|dataRecord.ID);
                               let gridState = ${excon}.getFromStore('${parentDataframeName}');
-                              gridState.$nameOfField = {'selectedRow': dataRecord}; 
+                              gridState.${fieldProps.name} = {'selectedRow': dataRecord}; 
                               ${excon}.saveToStore('${parentDataframeName}', gridState);
-                              ${excon}.saveToStore('${parentDataframeName}', '${nameOfField}_selectedrow', dataRecord);
+                              ${excon}.saveToStore('${parentDataframeName}', '${fieldProps.name}_selectedrow', dataRecord);
                               ${excon}.setVisibility("${refDataframeName}", true);
                               let propData = this.${refDataframeName}_data;
                               propData['key']=  key;
@@ -536,21 +547,22 @@ $fieldParams
      * @param buttonMaps
      * @param fldName
      * @param parentDataframeName
-     * @param nameOfField
+     * @param fieldProps
      * @return
      */
-    private String constructGridDeleteScript(Map buttonMaps,  String fldName, String parentDataframeName, String nameOfField){
+    private String constructGridDeleteScript(Map buttonMaps,  String fldName, String parentDataframeName, Map fieldProps){
         DataframeVue buttonRefDataframe = getReferenceDataframe(buttonMaps.refDataframe)
         String valueMember =buttonMaps.valueMember?:"id"
         String doBeforeDelete = buttonMaps.doBeforeDelete?:""
         String doAfterDelete = buttonMaps.doAfterDelete?:""
-        String fieldType = buttonMaps.fieldType?:"persisters"
+        String fieldType = getFieldType(fieldProps)
+        getFieldJSONNameVue(fieldProps)
         StringBuilder requestFieldParams = new StringBuilder()
         List<String> keyFieldNames = buttonRefDataframe.getKeyFieldNameForNamedParameter(buttonRefDataframe)
 
         requestFieldParams.append("params['dataframe'] = '$buttonRefDataframe.dataframeName';\n")
         requestFieldParams.append("params['parentDataframe'] = '$parentDataframeName';\n")
-        requestFieldParams.append("params['fieldName'] = '$nameOfField';\n")
+        requestFieldParams.append("params['fieldName'] = '${fieldProps.name}';\n")
         requestFieldParams.append("params['id'] = dataRecord.id?dataRecord.id:dataRecord.Id;")
         keyFieldNames.each {
             if (it.split('_').collect().contains(valueMember)){
@@ -568,7 +580,7 @@ $fieldParams
         String url =  buttonMaps.ajaxDeleteUrl?: ajaxDeleteUrl
         return """
                 var params = {};
-                var editedIndex = this.state.${fieldType}.${nameOfField}.items.indexOf(dataRecord);
+                var editedIndex = this.state.${fieldType}.${fieldProps.name}.items.indexOf(dataRecord);
                 ${requestFieldParams.toString()}
                 $doBeforeDelete
                 if(dataRecord.$valueMember){
@@ -576,7 +588,7 @@ $fieldParams
                     const self = this;
                     excon.callApi('$url', 'post', params).then(function (responseData){
                         if (responseData.data.success){
-                            self.state.${fieldType}.${nameOfField}.items.splice(editedIndex, 1);
+                            self.state.${fieldType}.${fieldProps.name}.items.splice(editedIndex, 1);
                         }
                         $doAfterDelete
                     })
@@ -585,7 +597,7 @@ $fieldParams
                         });
                 } else {
             
-                            this.state.${fieldType}.${nameOfField}.items.splice(editedIndex, 1);
+                            this.state.${fieldType}.${fieldProps.name}.items.splice(editedIndex, 1);
                 }
         \n 
         """

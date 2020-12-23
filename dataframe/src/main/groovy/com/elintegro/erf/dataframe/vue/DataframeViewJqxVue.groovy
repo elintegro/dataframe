@@ -139,10 +139,6 @@ public class DataframeViewJqxVue implements DataframeView {
             resultPageHtml.append(refDataframe.getComponentName(":key='randomKey'"))
             resultPageHtml.append("""</div>\n""")
         }
-        //Add computed and watch scripts for dialog box
-        vueJsBuilder.addToComputedScript("""randomKey: function(){excon.generateRandom();},\n""")
-                .addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
-
         return resultPageHtml.toString()
     }
 
@@ -159,7 +155,6 @@ public class DataframeViewJqxVue implements DataframeView {
         VueStore store = vueJsBuilder.getVueStore()
         store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
         vueJsBuilder.addToDataScript(" ${refDataframeName}_data:null,\n")
-        vueJsBuilder.addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
 
         String attachTo = fields.attachTo?:"$dataframeName-id"
         String attr = fields.attr?:"left"

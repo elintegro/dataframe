@@ -809,9 +809,10 @@ beans {
                                     var self = this;
                                     params['dataframe'] = 'vueTranslatorDataframe';
                                     params['projectId'] =Number( excon.getFromStore('vueTranslatorDataframe','projectId'));
+                                    const notSelectedLanguages = params.transits.notSelectedLanguages;
                                     excon.callApi('translatorAssistant/addLanguage', 'post', params).then(function(responseData){
-                                                  self.vueTranslatorDataframe_fillInitData()
-                                                  var response = responseData.data;
+                                                  self.vueTranslatorDataframe_fillInitData();
+                                                  
                                     });
                              },\n
                              sourceText(){

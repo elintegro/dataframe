@@ -1,27 +1,3 @@
-const messages = {
-    en: {
-        message: {
-            hello: 'hello world',
-            true: 'true',
-            false: 'false'
-        }
-    },
-    iw: {
-        message: {
-            confirm:{
-                resetsurvey:'פעולה זו מוחקת את כל נתוני הסקר, האם לבצע?‎‎'
-            },
-            hello: 'hello in Hebrew',
-            true:'כן',
-            false:'לא',
-            Yes:'כן',
-            No:'לא',
-            choice:'יש להקליד ערך',
-            counter:'ספירות'
-        }
-    }
-}
-
 var excon = new Vue({
     el: '#dfr',
     methods: {
@@ -111,21 +87,29 @@ var excon = new Vue({
          * @param key
          * @param value
          */
-        saveToStore: function(containerVariable, key, value=''){
+        saveToStore: function(containerVariable, key, value){
             if((containerVariable == null || containerVariable == undefined || containerVariable == "") && (key == null || key == undefined || key == "")){
                 return
             }
             if(store.state.hasOwnProperty(containerVariable)){
                 const obj = eval("store.state."+ containerVariable +"");
-                if(obj.hasOwnProperty(key)){
-                    Vue.set(obj, key, value);
-                } else {
-                    value?Vue.set(obj,key, value):Vue.set(store.state, containerVariable, key);
+                // if(obj.hasOwnProperty(key)){
+                if(arguments.length === 2){
+                    Vue.set(store.state, containerVariable, key);
+                    return
                 }
+                Vue.set(obj, key, value);
+                // }
+                /*
+                                else {
+                                    (value === null || value === undefined || value === '')?Vue.set(store.state, containerVariable, key):Vue.set(obj,key, value);
+                                }
+                */
             } else {
                 Vue.set(store.state, containerVariable, key);
             }
         },
+
         /**
          *
          params['id']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
@@ -173,29 +157,29 @@ var excon = new Vue({
             throw "No object for the path " + key;
         },
 
-        matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {
+                matchKeysFromDataframeTo: function(fromDataframe, toDataframe) {
 
-            var sourceDataframeVars = this.getFromStore(fromDataframe);
-            var targetDataframeVars = this.getFromStore(toDataframe);
+                    var sourceDataframeVars = this.getFromStore(fromDataframe);
+                    var targetDataframeVars = this.getFromStore(toDataframe);
 
-            for(let varName in targetDataframeVars) {
-                let keyPrefix = "key_" + toDataframe;
-                let indStart = varName.indexOf("key_" + toDataframe);
-                if(indStart >= 0) {//The variable is a key
-                    let indEnd = varName.lastIndexOf("_");
-                    let varToSearch = "key" + varName.substring(keyPrefix.length, indEnd);
-                    //Find keys in sourceDataframe and populate in the target with naming convention whatever in target is key_<targetDataframeName>_<domainName>_<fieldName>_<namingParameter>
-                    //Should be keu_<domainName>_<fieldName>, for example In target: key_<TargetDataframe>_application_id_id, in source: key_application_id
-                    for(let varFromName in sourceDataframeVars){
-                        if(varFromName === varToSearch){ //this is our key variable, grab the value and set for the key variable in the target Dataframe
-                            this.saveToStore(toDataframe, varName, sourceDataframeVars[varFromName]);
-                            break;
+                    for(let varName in targetDataframeVars) {
+                        let keyPrefix = "key_" + toDataframe;
+                        let indStart = varName.indexOf("key_" + toDataframe);
+                        if(indStart >= 0) {//The variable is a key
+                            let indEnd = varName.lastIndexOf("_");
+                            let varToSearch = "key" + varName.substring(keyPrefix.length, indEnd);
+                            //Find keys in sourceDataframe and populate in the target with naming convention whatever in target is key_<targetDataframeName>_<domainName>_<fieldName>_<namingParameter>
+                            //Should be keu_<domainName>_<fieldName>, for example In target: key_<TargetDataframe>_application_id_id, in source: key_application_id
+                            for(let varFromName in sourceDataframeVars){
+                                if(varFromName === varToSearch){ //this is our key variable, grab the value and set for the key variable in the target Dataframe
+                                    this.saveToStore(toDataframe, varName, sourceDataframeVars[varFromName]);
+                                    break;
+                                }
+                            }
                         }
                     }
-                }
-            }
 
-        },
+                },
 
         showAlertMessage: function(response, dataframeName="vueAlertMsgDataframe"){
             const msg = response.message?response.message:response.msg
@@ -545,7 +529,15 @@ var excon = new Vue({
                 imageData["imageType"] = file.type;
             }
             return imageData
+        },
+
+        /**
+         * removes object from list
+         * @param list
+         * @param object
+         */
+        removeFromList: function(list, object){
+            list.splice(object, 1);
         }
     }
-
 });

@@ -24,7 +24,7 @@ import javax.xml.crypto.Data
 
 class DfrCompBuilder {
 
-    public Map constructDfrComps(List dataframes){
+    public Map constructDfrComps(dataframes){
         StringBuilder vueRoutesSb = new StringBuilder()
         StringBuilder dfrCompToRegisterSb = new StringBuilder()
         StringBuilder vueComponentInitScriptsSb = new StringBuilder()
@@ -37,13 +37,13 @@ class DfrCompBuilder {
         StringBuilder vueStateGlobalSb = new StringBuilder()
 
         for(String df: dataframes){
+            dfrCompToRegisterSb.append(VueJsBuilder.createCompRegistrationString(df))
             DataframeVue dataframe = DataframeVue.getDataframe(df)
             dataframe.getHtml()
             if(dataframe.isGlobal){
                 ResultPageHtmlBuilder.registeredComponents?.add(dataframe.dataframeName)
                 vueGlobalCompScriptSb.append(dataframe.getJavascript()+"\n")
             }else {
-                dfrCompToRegisterSb.append(VueJsBuilder.createCompRegistrationString(df))
                 vueComponentInitScriptsSb.append(dataframe.getJavascript()+"\n")
             }
             vueStateSb.append(dataframe.getVueStoreScript().get("state"))
@@ -56,8 +56,8 @@ class DfrCompBuilder {
             if (Environment.current == Environment.DEVELOPMENT) {
                 StringBuilder initDataframeVars = new StringBuilder()
                 initDataframeVars.append("\n================    State: \n").append(vueStateSb)
-                        .append("\n================    Getters: \n").append(vueGettersSb)
-                        .append("\n================    Mutations: \n").append(vueMutationSb)
+                                 .append("\n================    Getters: \n").append(vueGettersSb)
+                                 .append("\n================    Mutations: \n").append(vueMutationSb)
                         .append("\n================    Actions: \n").append(vueActionsSb)
                         .append("\n================    Global State: \n").append(vueStateGlobalSb)
                 DataframeFileUtil.writeStringIntoFile("./logs/${dataframe.dataframeName}/${dataframe.dataframeName}-init-store-state.vue", initDataframeVars.toString())

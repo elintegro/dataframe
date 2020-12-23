@@ -144,6 +144,7 @@ class ResultPageHtmlBuilder {
         StringBuilder ltSb = new StringBuilder()
         int index = 0;
         for(String ltS : contLytObj.children){
+            LayoutVue lytT = LayoutVue.getLayoutVue(ltS)
             if(!registeredComponents.contains(ltS)){
                 ltSb.append(VueJsBuilder.createCompRegistrationString(ltS, index))
                 index++;
@@ -201,7 +202,7 @@ class ResultPageHtmlBuilder {
         StringBuilder sb = new StringBuilder()
         for(String s : mainPageDataframeList){
             if(!builtComponents.contains(s)){
-               // todo check if the component is Layout or Dataframe first
+                DataframeVue dfrT = DataframeVue.getDataframe(s) // todo check if the component is Layout or Dataframe first
                 if(!registeredComponents.contains(s)){
                     sb.append(VueJsBuilder.createCompRegistrationString(s.trim()))
                     registeredComponents.add(s)
@@ -390,3 +391,4 @@ class ResultPageHtmlBuilder {
 
 
 }
+
