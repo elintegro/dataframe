@@ -34,7 +34,7 @@ beans{
         layoutPlaceHolder = """<v-container id ="our_home" class = "our_home" fluid>
                                     <v-flex xs12 sm12 md12 lg12 x12>
                                         <v-row><v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                             <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
+                                             <v-col class="homeAnimationColumn" cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
                                                 <v-row>
                                                     <h2 class="heading-2">[build]</h2>[apps][buildData]
                                                 </v-row>
