@@ -37,11 +37,7 @@ class ButtonWidgetVue extends WidgetVue{
                 refHtml = getRefHtml(onClick, dataframe)
             }
         }
-        String script = field.script?:""
-        dataframe.getVueJsBuilder().addToMethodScript("""
-                               ${fldName}_method: function(addressValue){
-                                        $script
-                               },\n""")
+        addMethodsToScript(dataframe, field)
         //Add security access for the button
         String ret = ""
         if(icon && vuetifyIcon){
@@ -52,6 +48,15 @@ class ButtonWidgetVue extends WidgetVue{
         return ret;
     }
 
+
+    private void addMethodsToScript(DataframeVue dataframe, Map fieldProps){
+        String fldName = getFieldName(dataframe, fieldProps)
+        String script = fieldProps.script?:""
+        dataframe.getVueJsBuilder().addToMethodScript("""  
+                               ${fldName}_method: function(){
+                                        $script
+                               },\n""")
+    }
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         return """"""
@@ -66,7 +71,6 @@ class ButtonWidgetVue extends WidgetVue{
         store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
         dataframe.getVueJsBuilder().addToDataScript(" ${refDataframeName}_data:{key:'', refreshGrid:true},\n")
         if(onClick.showAsDialog){
-            dataframe.getVueJsBuilder().addToComputedScript(""" visibility(){ return this.\$store.getters.getVisibilities;},\n""")
             sb.append("""<v-dialog v-model="visibility.${refDataframeName}" width='initial' max-width='500px'>""")
             sb.append(refDataframe.getComponentName("resetForm=true "))
             sb.append("""</v-dialog>""")

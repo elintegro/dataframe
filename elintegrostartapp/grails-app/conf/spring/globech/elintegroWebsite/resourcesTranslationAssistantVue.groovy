@@ -191,6 +191,7 @@ beans{
         initOnPageLoad = true
         saveButton = false
         route = true
+        vueStore = [state: [currentlySelectedProject:[:]]]
         flexGridValues =['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         doBeforeRefresh = """
                          var projectDetails = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject')
@@ -199,6 +200,20 @@ beans{
                          params.namedParameters.projectId.value = selectedProjectId;
                          params.domain_keys.project.id = selectedProjectId;    
                          excon.saveToStore('vueTranslatorDataframe','projectId',selectedProjectId)"""
+        doAfterRefresh = """
+                         var transits = excon.getFromStore('vueTranslatorDataframe','transits')
+                         let notSelected = transits.notSelectedLanguages.items;
+                         let selected = transits.selectedLanguages.items;
+                         if(selected && selected.length != 0){
+                             for(let val of selected){
+                                notSelected = notSelected.filter(w => w.ename != val.language && w.ename != response.persisters.project.sourceLanguage.value)
+                             }
+                         }else{
+                              notSelected = notSelected.filter(w => w.ename != response.persisters.project.sourceLanguage.value)
+                         }
+                         transits.notSelectedLanguages.items = notSelected;
+                         excon.saveToStore('vueTranslatorDataframe','transits',transits);
+                         """
         hql = """select  project.name , project.sourceLanguage  from Project project where project.id=:projectId """
         addFieldDef =[
 

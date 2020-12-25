@@ -68,7 +68,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	boolean createStore = true
 	boolean putFillInitDataMethod = false
 	String externalTemplateId = ""
-	Map<String, String> vueStore = new HashMap<String, String>();//For creating vue store
+	Map<String, Object> vueStore = new HashMap<String, Object>();//For creating vue store
 	StringBuilder stateStringBuilder = new StringBuilder()// Remove after enchancing vueStore implementation
 	Map onClick = new HashMap() //For onCLick on the surface of dataframe
 	String doBeforeRefresh = ""
@@ -575,10 +575,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 
 	}
 	private String getStateAccessor(){
-		return """
-                state(){
-                   return this.\$store.getters.getState('$dataframeName');
-                },
+		return """ 
+				visibility(){ return this.\$store.getters.getVisibilities;},
+                state(){ return this.\$store.getters.getState('$dataframeName'); },
                """
 	}
 
@@ -599,7 +598,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                  let params = this.state;    
                  if(!params) return;
                  params["url"] =  '$df.ajaxUrl';
-                 params["doBeforeRefresh"] = function(){${doBeforeRefresh}};                               
+                 params["doBeforeRefresh"] = function(){params['callApi'] = true;\n ${doBeforeRefresh}};                               
                  params["doAfterRefresh"] = function(response){${doAfterRefresh}};                               
 				 excon.refreshData(params);
              },\n
@@ -649,11 +648,13 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                   const self = this;
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
-                 params["doBeforeSave"] = function(params){${doBeforeSave} }
+                 params["doBeforeSave"] = function(params){params['callApi'] = true;\n${doBeforeSave} }
                  params["doAfterSave"] = function(response){ 
 								 ${doAfterSave} 
                                  ${doAfterSaveStringBuilder}
-                                 excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);
+							     if(response.domain_keys){
+								    excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);
+   								 }		
                  }
 				 excon.saveData(params);
               },\n"""
@@ -759,8 +760,11 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	public void createVueStore(VueJsBuilder vueJsBuilder){
 		VueStore vStore = vueJsBuilder.getVueStore()
 		Map initValues = this.vueStore
-		if(initValues && initValues.state){
-			vStore.addToState(initValues.state)
+		if(initValues && initValues.state) {
+			for (String key : initValues.state.keySet()) {
+				Object value = initValues.state.get(key)
+				vStore.addToState(key, value)
+			}
 		}
 	}
 

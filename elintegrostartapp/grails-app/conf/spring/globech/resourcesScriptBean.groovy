@@ -176,7 +176,7 @@ beans {
             }
   
             
-        }
+        },\n
         """
     }
 
@@ -233,7 +233,7 @@ beans {
                                      };
                                      vueAddressDataframeVar.state.persisters.address.addressText.value = result[0].formatted_address;
                                      vueAddressDataframeVar.state.persisters.address.addressLine.value = result[0].formatted_address;
-                    },"""
+                    },\n"""
     }
 
 
@@ -282,7 +282,7 @@ beans {
                                            }
                                            
                                     })
-                   }
+                   },\n
                   """
     }
 
@@ -301,7 +301,7 @@ beans {
                                            excon.setVisibility('vueElintegroLoginDataframe',false)
                                            window.location.reload();
                                     })
-                    }"""
+                    },\n"""
     }
     vueElintegroLoginWithOTPDataframe_script(VueJsEntity){bean ->
         data = """showThisFieldAfterCodeSent : false,"""
@@ -386,8 +386,8 @@ beans {
     }
 
     vueElintegroProfileMenuDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},
-                       vueElintegroProfileMenuDataframe_person_email(){return this.state.persisters.person.email.value}"""
+        computed = """ vueElintegroProfileMenuDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},\n
+                       vueElintegroProfileMenuDataframe_person_email(){return this.state.persisters.person.email.value},\n"""
         methods = """logout: function(){
                                      const self =this;
                                      let params={};
@@ -395,13 +395,13 @@ beans {
                                          self.\$router.push("/")
                                          window.location.reload();
                                     })
-                    }"""
+                    },\n"""
     }
     vueElintegroUserProfileDataframe_script(VueJsEntity){bean ->
         created = """this.vueElintegroProfileMenuDataframeShow();"""
 
         methods = """vueElintegroProfileMenuDataframeShow : function(){
-                  excon.setVisibility("vueElintegroProfileMenuDataframe",false)}
+                  excon.setVisibility("vueElintegroProfileMenuDataframe",false)},\n
                   """
     }
     vueMapWidgetDataframe_script(VueJsEntity) { bean ->
@@ -446,7 +446,7 @@ beans {
                                      });
                                      vueEmployeeAddressDataframeVar.vueEmployeeAddressDataframe_address_addressText = result[0].formatted_address;
                                      vueEmployeeAddressDataframeVar.vueEmployeeAddressDataframe_address_addressLine = result[0].formatted_address;
-                    },"""
+                    },\n"""
     }
 
     vueAddressDetailDataframe_script(VueJsEntity) { bean ->
@@ -490,7 +490,7 @@ beans {
                                      });
                                      vueAddressDetailDataframeVar.vueAddressDetailDataframe_address_addressText = result[0].formatted_address;
                                      vueAddressDetailDataframeVar.vueAddressDetailDataframe_address_addressLine = result[0].formatted_address;
-                    },"""
+                    },\n"""
     }
     vueAddressEditDataframe_script(VueJsEntity) { bean ->
 
@@ -534,7 +534,7 @@ beans {
                                      });
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressText = result[0].formatted_address;
                                      vueAddressEditDataframeVar.vueAddressEditDataframe_address_addressLine = result[0].formatted_address;
-                    },"""
+                    },\n"""
     }
     vueElintegroSignUpQuizDataframe_script(VueJsEntity){bean ->
         methods = """saveSignUpForm(){
@@ -632,7 +632,7 @@ beans {
                              else{
                                  excon.redirectPage(self,"login-page")
                              }
-                     }
+                     },\n
         
 
         """
@@ -660,7 +660,7 @@ beans {
                 
                         excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
                         }
-                     }
+                     },\n
                      """
     }
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
@@ -677,7 +677,7 @@ beans {
                           var response = responseData;
                 });
                  
-                  }
+                  },\n
                   """
     }
     vueNewEmployeeApplicantAddSkillDataframe_script(VueJsEntity){bean ->
@@ -691,11 +691,11 @@ beans {
                                            excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
                                            excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'I','transits');                                                 
                                     });
-                  }"""
+                  },\n"""
 
     }
     vueNewEmployeeThankYouMessageAfterSaveDataframe_script(VueJsEntity) { bean ->
-        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)}"""
+        computed = """ vueNewEmployeeThankYouMessageAfterSaveDataframe_person_fullName(){return excon.capitalize(this.state.persisters.person.firstName.value) + " " + excon.capitalize(this.state.persisters.person.lastName.value)},\n"""
     }
 
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
@@ -707,7 +707,7 @@ beans {
                                            positions[i] = items[i].name;
                                         }
                                         var selectedPosition = positions.join(",\t\t");
-                                        return selectedPosition;}"""
+                                        return selectedPosition;},\n"""
     }
 
     vueElintegroApplicantCVDataframe_script(VueJsEntity){ bean ->
@@ -755,23 +755,23 @@ beans {
                                                                    var response = responseData.data;
                                                                    self.vueElintegroCommentPageForApplicantDataframe_fillInitData()
                                     });
-                  }"""
+                  },\n"""
     }
     vueTranslatorAssistantAfterLoggedInDataframe_script(VueJsEntity) {
-        computed = """ enableDisableTranstaleButtonComputed(){if(this.state.transits.projectList.value){return false}else{return true;};}"""
+        computed = """ enableDisableTranstaleButtonComputed(){if(this.state.transits.projectList.value){return false}else{return true;};},\n"""
         methods = """enterTranslatorPage(){
                      excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',this.state.transits.projectList.value);
                      excon.redirectPage(this,'translator')
 
-                 }"""
+                 },\n"""
     }
     vueTranslatorAssistantBeforeLoggedInDataframe_script(VueJsEntity) {
-        computed = """ enableDisableTranstaleButtonComputed(){if(this.state.transits.projectList.value){return false}else{return true;};}"""
+        computed = """ enableDisableTranstaleButtonComputed(){if(this.state.transits.projectList.value){return false}else{return true;};},\n"""
         methods = """enterTranslatorPage(){
                      excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',this.state.transits.projectList.value);
                      excon.redirectPage(this,'translator')
 
-                 }"""
+                 },\n"""
     }
     vueCreateProjectForTranslationDataframe_script(VueJsEntity){bean->
         methods ="""saveProject(timeOut){
@@ -797,7 +797,7 @@ beans {
                                                      excon.showAlertMessage(response);
                                                      excon.setVisibility('vueCreateProjectForTranslationDataframe', false);
                                     });
-                    }"""
+                    },\n"""
     }
     vueTranslatorDataframe_script(VueJsEntity){ bean ->
         data = """isHidden : false, showGridOfSourceText : false """
@@ -809,9 +809,10 @@ beans {
                                     var self = this;
                                     params['dataframe'] = 'vueTranslatorDataframe';
                                     params['projectId'] =Number( excon.getFromStore('vueTranslatorDataframe','projectId'));
+                                    const notSelectedLanguages = params.transits.notSelectedLanguages;
                                     excon.callApi('translatorAssistant/addLanguage', 'post', params).then(function(responseData){
-                                                  self.vueTranslatorDataframe_fillInitData()
-                                                  var response = responseData.data;
+                                                  self.vueTranslatorDataframe_fillInitData();
+                                                  
                                     });
                              },\n
                              sourceText(){

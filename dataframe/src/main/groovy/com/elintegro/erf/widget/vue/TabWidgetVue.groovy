@@ -29,7 +29,7 @@ class TabWidgetVue extends WidgetVue{
             Dataframe tabDfr = Dataframe.getDataframeByName(dfr)
             String dfrName = tabDfr.dataframeName
             String dfrLabel = tabDfr.messageSource.getMessage(tabDfr.dataframeLabelCode, null, dfrName, LocaleContextHolder.getLocale())
-            tabHeaders.append(""" <v-tab style ="text-transform:capitalize; color:white;" ripple href="#$dfrName-tab-id">${dfrLabel}</v-tab>\n""")
+            tabHeaders.append(""" <v-tab style ="text-transform:capitalize; color:white;background-color:gray;border-top-left-radius: 45%;border-top-right-radius: 45%;" ripple href="#$dfrName-tab-id" @click.stop='onTabClick("$dfrName")'>${dfrLabel}</v-tab>\n""")
             tabItems.append(""" <v-tab-item value="$dfrName-tab-id" ><$dfrName :${dfrName}_prop='${dataframe.dataframeName}_prop'/></v-tab-item>\n""")
             dataframe.childDataframes.add(dfrName)
             if(first){
@@ -37,9 +37,10 @@ class TabWidgetVue extends WidgetVue{
                 first = false
             }
         }
+        addClickMethodToTab(dataframe, field)
         setDefaultTabView(dataframe, field, initialTabView)
         String html = """<v-card round style ="overflow:hidden;" >
-                                  <v-tabs color="white" slider-color="yellow"  background-color="blue darken-2" v-model="state.${dataframe.dataframeName}_tab_model" active-class="green">
+                                  <v-tabs hide-slider background-color="blue darken-2" v-model="state.${dataframe.dataframeName}_tab_model" active-class="cyan">
                                       ${tabHeaders.toString()}
                                       ${getCloseButtonHtml(field)}
                                   </v-tabs>
@@ -57,12 +58,22 @@ class TabWidgetVue extends WidgetVue{
         boolean showCloseButton = field.showCloseButton?:false
         if(showCloseButton){
             return """
-                <v-flex class="text-right" style="margin-top:-15px;"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe" style="color:white;"><v-icon medium >close</v-icon>
+                <v-flex class="text-right" style="align-self:center;"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe" style="color:white;"><v-icon medium >close</v-icon>
                                       </v-btn><span>Close</span></v-tooltip></v-flex>    
                 """
         }
 
         return ""
+    }
+
+    private void addClickMethodToTab(DataframeVue dataframe, Map fieldProps){
+        String onClickScript = fieldProps.onClickScript?:''
+        dataframe.getVueJsBuilder().addToMethodScript("""
+                onTabClick: function(val){
+                    console.log(this.val);
+                    $onClickScript
+              },
+        """)
     }
 
     private void setDefaultTabView(DataframeVue dataframe, Map field, String initialTabView){
