@@ -347,7 +347,7 @@ beans {
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueNewEmployeeUploadResumeDataframe']
         initOnPageLoad = false
-        hql = "select application.id, application.images,  application.files from Application application where application.id=:id"
+        hql = "select application.id, application.files from Application application where application.id=:id"
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
         dataframeLabelCode = """Upload.resume"""
@@ -365,21 +365,23 @@ beans {
                          excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeSelfAssesmentDataframe");
                       """
         addFieldDef = [
-                "application.images":["name":"images"
+              /* please put application.images in above hql
+               "application.images":["name":"images"
                                       ,"widget":"PictureUploadWidgetVue"
                                       ,ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                                       ,multiple:true
                                       ,editButton: true
                                       ,deleteButton:true
                                       ,camera:false
-                ],
+                ],*/
 
                 "application.files":["name":"files"
                                       ,"widget":"FilesUploadWidgetVue"
                                       , ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                                       ,multiple:true
+                                      ,validationRules:[[condition:"v => !!v",message:"application.files.required.message"],[condition:"v => (v && v.size <= 3000000)",message:"application.files.required.message.less.than.3MB!"]]
                                       ,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """
-                                      ,"accept":".pdf,.docx,.doc,.csv"
+                                      ,"accept":".pdf,.docx,.doc"
 
                                      ]
         ]
