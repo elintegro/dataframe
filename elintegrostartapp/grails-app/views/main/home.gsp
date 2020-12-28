@@ -68,6 +68,12 @@
     <asset:stylesheet href="/vuejs/homePageLayout.css"/>
     <asset:stylesheet href="/vuejs/translatorAssistantLayout.css"/>
 
+    <link rel="manifest" href="/assets/pwa/manifest.json"/>
+    <script>
+        if('serviceWorker' in navigator){
+            navigator.serviceWorker.register('/assets/pwa/sw.js')
+        }
+    </script>
 </head>
 <body>
 <style>

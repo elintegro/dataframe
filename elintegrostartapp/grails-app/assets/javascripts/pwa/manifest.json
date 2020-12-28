@@ -1,0 +1,11 @@
+{
+  "name": "ElintegroWebApp",
+  "icons": [
+    {
+      "src": "/images/elintegro_logo.png",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone"
+}
