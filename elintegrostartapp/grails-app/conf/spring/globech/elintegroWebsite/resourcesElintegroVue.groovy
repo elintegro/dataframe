@@ -300,6 +300,7 @@ beans {
         initOnPageLoad = false
         flexGridValues = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
         saveButton = true
+        requiresConfirmationMessage = false
         dataframeLabelCode = """Basic.information"""
         saveButtonAttr = """style='background-color:#1976D2; color:white;' """
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
@@ -355,6 +356,7 @@ beans {
         flexGridValuesForSaveButton =['xs3', 'sm3', 'md6', 'lg6', 'xl6']
         tab = true
         isGlobal = false
+        requiresConfirmationMessage = false
         doBeforeSave = """
               const applicationId = excon.getFromStore("vueNewEmployeeBasicInformationDataframe", "domain_keys.application.id")  
               params.persisters.application.id.value = applicationId;
@@ -397,6 +399,7 @@ beans {
         dataframeLabelCode = """Self.assessment"""
         flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
         tab = true
+        requiresConfirmationMessage = false
         saveButton = false
         flexGridValuesForSaveButton =['xs6', 'sm6', 'md6', 'lg6', 'xl6']
 //        params['applicationId']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
