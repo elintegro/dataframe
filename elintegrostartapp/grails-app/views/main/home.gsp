@@ -64,9 +64,9 @@
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
     <asset:stylesheet href="/vuejs/multiple-image-upload.css"/>
     <asset:stylesheet href="/vuejs/vuetify-v2.0.5.css"/>
-    <asset:stylesheet href="/vuejs/gc-vue.css"/>
-    <asset:stylesheet href="/vuejs/homePageLayout.css"/>
-    <asset:stylesheet href="/vuejs/translatorAssistantLayout.css"/>
+    <asset:stylesheet href="/erf/gc-vue.css"/>
+    <asset:stylesheet href="/erf/homePageLayout.css"/>
+    <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
 
     <link rel="manifest" href="/assets/pwa/manifest.json"/>
     <script>
