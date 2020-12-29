@@ -30,7 +30,7 @@ class TabWidgetVue extends WidgetVue{
             Dataframe tabDfr = Dataframe.getDataframeByName(dfr)
             String dfrName = tabDfr.dataframeName
             String dfrLabel = tabDfr.messageSource.getMessage(tabDfr.dataframeLabelCode, null, dfrName, LocaleContextHolder.getLocale())
-            tabHeaders.append(""" <v-tab style ="text-transform:capitalize; color:white;background-color:gray;border-top-left-radius: 45%;border-top-right-radius: 45%;" ripple href="#$dfrName-tab-id" @click.stop='onTabClick("$dfrName")' :disabled='$disableTabs' >${dfrLabel}</v-tab>\n""")
+            tabHeaders.append(""" <v-tab style ="text-transform:capitalize; color:white;background-color:rgb(199, 210, 243);border-top-left-radius: 45%;border-top-right-radius: 45%;" ripple href="#$dfrName-tab-id" @click.stop='onTabClick("$dfrName")' :disabled='$disableTabs' >${dfrLabel}</v-tab>\n""")
             tabItems.append(""" <v-tab-item value="$dfrName-tab-id" ><$dfrName :${dfrName}_prop='${dataframe.dataframeName}_prop'/></v-tab-item>\n""")
             dataframe.childDataframes.add(dfrName)
             if(first){

@@ -13,17 +13,20 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
     String getHtml(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
         String label = field.label
-        boolean multiple = field?.multiple
+        boolean multiple = field.multiple ?:false
+        String accept = field.accept
         String modelString = getModelString(dataframe, field)
 
         return """
             
                <v-file-input
                   label = "$label"
-                  :multiple = $multiple
+                  multiple = $multiple
+                  accept = $accept
                   @change = "${fldName}_uploadFile"
                   ${toolTip(field)}
                   ${getAttr(field)}
+                  ${validate(field)?":rules = '${fldName}_rule'":""}  
                   prepend-icon=""
                   prepend-inner-icon="mdi-file-upload"
                 >
@@ -77,8 +80,14 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
     }
     String getVueDataVariable(DataframeVue dataframe, Map field){
         String fldName = dataframe.getDataVariableForVue(field)
+        String validationString = ""
+        if(validate(field)){
+            String validationRules = validationRules(field)
+            validationString = """ ${fldName}_rule: $validationRules,\n"""
+        }
         return """
-           ${fldName}_files: [],
+                ${fldName}_files: [],
+                $validationString
             """
     }
     String getValueSetter(DataframeVue dataframe, Map field, String divId, String dataVariable, String key) throws DataframeException{
