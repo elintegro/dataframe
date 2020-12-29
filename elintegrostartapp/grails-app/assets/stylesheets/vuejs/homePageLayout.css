@@ -195,11 +195,14 @@
      font-size:30px;
      padding-bottom: 10px;
  }
- .termAndConditionHeadinggText{
-     color:#2ab6f6;
-     align-items: center;
+ #termAndConditionHeading{
+     color:black;
      font-size:30px;
-     padding-bottom: 10px;
+     font-weight: bold;
+ }
+ #updatedTime{
+     color: black;
+     font-weight: bold;
  }
  .footerContainer .footer .row{
      align-items: flex-end;

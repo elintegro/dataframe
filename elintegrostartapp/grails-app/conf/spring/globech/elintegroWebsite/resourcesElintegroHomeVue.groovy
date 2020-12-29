@@ -342,8 +342,7 @@ beans{
                 termAndConditions:["widget":"ButtonWidgetVue"
                                ,"name":"termAndConditions"
                                ,"attr":"""small text tile"""
-                               ,onClick:[showAsDialog: true, refDataframe: ref("vueTermAndConditionDataframe")]
-                               ,script: """excon.setVisibility('vueTermAndConditionDataframe',true);"""
+                               ,script: """excon.redirectPage(this,'terms-and-conditions')"""
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
@@ -372,15 +371,21 @@ beans{
         bean.constructorArgs = ['vueTermAndConditionDataframe']
         saveButton = false
         isGlobal = true
+        route = true
+        currentRoute ="terms-and-conditions"
         initOnPageLoad = false
         addFieldDef = [
                 termAndConditionHeading:["widget":"TextDisplayWidgetVue"
                                       ,"name":"termAndConditionHeading"
-                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                ],
-                loremEpsumText:["widget":"TextDisplayWidgetVue"
-                                ,"name":"loremEpsumText"
-                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
+                                      ,elementId: "termAndConditionHeading"
+                                      ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                updatedTime:["widget":"TextDisplayWidgetVue"
+                             ,"name":"updatedTime"
+                             ,elementId: "updatedTime"
+                             ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                termsAndConditionContent:["widget":"TextDisplayWidgetVue"
+                                ,"name":"termsAndConditionContent"
+                                ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                 ],
         ]
         currentFrameLayout = ref("vueTermAndConditionDataframeLayout")
