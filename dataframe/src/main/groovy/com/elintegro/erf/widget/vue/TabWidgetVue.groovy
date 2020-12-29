@@ -41,7 +41,7 @@ class TabWidgetVue extends WidgetVue{
         addClickMethodToTab(dataframe, field)
         setDefaultTabView(dataframe, field, initialTabView)
         String html = """<v-card round style ="overflow:hidden;" >
-                                  <v-tabs hide-slider v-model="state.${dataframe.dataframeName}_tab_model" active-class="blue darken-2">
+                                  <v-tabs hide-slider background-color="blue darken-2" v-model="state.${dataframe.dataframeName}_tab_model" active-class="cyan">
                                       ${tabHeaders.toString()}
                                       ${getCloseButtonHtml(field)}
                                   </v-tabs>
@@ -59,7 +59,7 @@ class TabWidgetVue extends WidgetVue{
         boolean showCloseButton = field.showCloseButton?:false
         if(showCloseButton){
             return """
-                <v-flex class="text-right" style="align-self:center;"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
+                <v-flex class="text-right" style="align-self:center;"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe" style="color:white;"><v-icon medium >close</v-icon>
                                       </v-btn><span>Close</span></v-tooltip></v-flex>    
                 """
         }
