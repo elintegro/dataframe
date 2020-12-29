@@ -92,6 +92,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	String deleteButtonAttr = ""
 	String vueSaveVariablesScriptString = ""
 	boolean wrapButtons = true
+	boolean requiresConfirmationMessage = true
 
 	// For vue store
 	private VueJsBuilder vueJsBuilder
@@ -648,6 +649,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                   const self = this;
                   let params = this.state;                                    
                  params["url"] =  '$df.ajaxSaveUrl';
+                 params["showAlertMessage"] = ${requiresConfirmationMessage}
                  params["doBeforeSave"] = function(params){params['callApi'] = true;\n${doBeforeSave} }
                  params["doAfterSave"] = function(response){ 
 								 ${doAfterSave} 
@@ -656,7 +658,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 								    excon.saveToStore("${dataframeName}", "domain_keys", response.domain_keys);
    								 }		
                  }
-				 excon.saveData(params);
+                 if(this.\$refs.${dataframeName}_form.validate()){
+				   excon.saveData(params);
+				 }  
               },\n"""
 	}
 
