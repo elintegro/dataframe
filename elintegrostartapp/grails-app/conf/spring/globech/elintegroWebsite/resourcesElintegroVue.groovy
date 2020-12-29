@@ -287,6 +287,7 @@ beans {
                         dataframes : ['vueNewEmployeeBasicInformationDataframe','vueNewEmployeeUploadResumeDataframe','vueNewEmployeeSelfAssesmentDataframe','vueNewEmployeeAddtionalQuestionsDataframe']
                         ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                         ,flexAttr: "pa-0"
+                        ,disableTabs : true
 
                 ]
         ]
@@ -306,7 +307,6 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
         doAfterSave = """
-                                 
                         excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeUploadResumeDataframe");
                       """
 
