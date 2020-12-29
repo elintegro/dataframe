@@ -379,7 +379,7 @@ beans {
                                       ,"widget":"FilesUploadWidgetVue"
                                       , ajaxFileSaveUrl: "fileUpload/ajaxFileSave"
                                       ,multiple:true
-                                      ,validationRules:[[condition:"v => !!v",message:"application.files.required.message"],[condition:"v => (v && v.size <= 3000000)",message:"application.files.required.message.less.than.3MB!"]]
+                                      ,validationRules:[[condition:"v => !!v && (v && v.length > 0)",message:"application.files.required.message"]]
                                       ,attr: """ outlined background-color='#EBF9FF !important' color='#2AB6F6' """
                                       ,"accept":".pdf,.docx,.doc"
 
