@@ -58,6 +58,8 @@ grails.mime.types = [
         mdb:           'application/vnd.ms-access',
 ]
 
+grails.resources.pattern = '/**'
+
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
 
@@ -322,8 +324,8 @@ environments {jdbc:mysql://localhost:3308/ elintegro_website_db_dev
 			url = "jdbc:mysql://localhost:3306/elintegro_website_db_dev?useUnicode=true&characterEncoding=UTF-8"
 //			username = "root"
 //			password = "qbohfoj"
-			username = "developer"
-			password = "java11"
+			username = "root"
+			password = "root"
 
 		}
 	}
