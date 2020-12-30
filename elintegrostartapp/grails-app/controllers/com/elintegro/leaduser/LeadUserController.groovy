@@ -21,6 +21,6 @@ class LeadUserController {
                 returnData.success = false
             }
         }
-        return returnData as JSON
+        render returnData as JSON
     }
 }
