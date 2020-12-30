@@ -142,7 +142,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
                                   [DATAFRAME_SCRIPT]
-                                  <div style="margin-top:-40px; height:125px;">[BUTTON_SCRIPT]</div>
+                                  <div style="margin-top:-40px; height:165px;">[BUTTON_SCRIPT]</div>
                                   </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
@@ -170,8 +170,7 @@ beans {
     }
     vueAddressDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[previous][ALL_OTHER_BUTTONS][googleMap]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[ALL_OTHER_BUTTONS][googleMap]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[ALL_OTHER_BUTTONS]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
     vueNewEmployeeUploadResumeDataframeLayout(ColumnLayoutVue){bean ->
