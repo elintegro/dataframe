@@ -555,16 +555,18 @@ beans {
                                     var currentLocation = window.location.href;
                                     var location = currentLocation.split("/change-password/0?")
                                     params['token'] = location[1]
-                                    excon.callApi('register/changePassword', 'post', params).then(function(responseData){
-                                           var response = responseData.data;
-                                           excon.showAlertMessage(response);
-                                           if(response.success == true){
-                                              setTimeout(function(){window.open("/","_self");}, 2000);
-                                           }else{
-                                                setTimeout(function(){window.location.reload();},2000);
-                                           }
-                                           
-                                    })
+                                    if(this.\$refs.vueElintegroChangePasswordAfterSignUpDataframe_form.validate()){
+                                        excon.callApi('register/changePassword', 'post', params).then(function(responseData){
+                                               var response = responseData.data;
+                                               excon.showAlertMessage(response);
+                                               if(response.success == true){
+                                                  setTimeout(function(){window.open("/","_self");}, 2000);
+                                               }else{
+                                                    setTimeout(function(){window.location.reload();},2000);
+                                               }
+                                               
+                                        })
+                                    }    
 
 
                                     },\n"""
@@ -636,11 +638,6 @@ beans {
         
 
         """
-    }
-    vueNewEmployeeApplicantDataframe_script(VueJsEntity){bean->
-//        data = "vueNewEmployeeApplicantDataframe_tab_model : this.tabValue,\nvueNewEmployeeApplicantDataframe_display: true, \n"
-//        computed = """tabValue(){return this.\$store.state.vueNewEmployeeApplicantDataframe.vueNewEmployeeApplicantDataframe_tab_model}"""
-//        watch = """ tabValue:{handler: function(val, oldVal) {this.vueNewEmployeeApplicantDataframe_tab_model = val;}},"""
     }
     vueNewEmployeeBasicInformationDataframe_script(VueJsEntity){bean ->
         methods = """  

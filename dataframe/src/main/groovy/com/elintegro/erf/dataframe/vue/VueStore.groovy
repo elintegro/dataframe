@@ -184,7 +184,9 @@ class VueStore {
        if(!params.callApi) return;
        excon.callApi(params.url, "POST", params).then((response) =>{
           params["doAfterSave"](response.data.data); 
-          excon.showAlertMessage(response.data);
+          if(params.showAlertMessage == true){
+             excon.showAlertMessage(response.data);
+          }
        }) 
       .catch(function (error) {
           console.log(error);

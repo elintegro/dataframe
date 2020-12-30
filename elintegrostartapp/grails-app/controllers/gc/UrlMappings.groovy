@@ -30,6 +30,7 @@ class UrlMappings {
         "/test"(controller: "test", action: "test")
         "/applicantthankyou"(view:'/applicant_thankyou')
         "/getHtml"(controller: "saaS", action: "getHtml")
+        "/lead-user"(controller: "LeadUser", action: "user")
         "500"(view:'/error')
     }
 }
