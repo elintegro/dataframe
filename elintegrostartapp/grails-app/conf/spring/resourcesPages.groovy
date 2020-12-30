@@ -19,7 +19,7 @@ beans {
 				"vueElintegroNavigationDrawerDataframe",
 
 				//Dataframes used in new employee registration flow of careers page...
-				"vueNewEmployeeBasicInformationDataframe","vueAddressDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
+				"vueNewEmployeeBasicInformationDataframe","vueMapWidgetDataframe","vueAddressDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
 				 "vueNewEmployeeApplicantAddSkillDataframe","vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe",
 				 "vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 
