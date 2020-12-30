@@ -1130,7 +1130,7 @@ beans {
         dataframeLabelCode = "Address.Information"
         hql = "select address.id, address.addressText, address.longitude, address.latitude from Address as address where address.id=:id"
         doBeforeSave = """var domainKeys = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys');
-                          params['personId'] = domainKeys.Person.id """
+                          params['personId'] = domainKeys.person.id """
         doAfterSave = "excon.goToTab('vueNewEmployeeApplicantDataframe','vueNewEmployeeUploadResumeDataframe');"
         ajaxSaveUrl = "applicationForm/saveAddress"
         flexGridValuesForSaveButton = ['xs4', 'sm4', 'md4', 'lg4', 'xl4']
