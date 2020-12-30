@@ -7,7 +7,7 @@ beans {
         /**IMPORTANT: Need to put child dataframe bbefore parent dataframes*/
 		allDataframesList = [
                  //Global dataframes...
-				"vueInitDataframe", "vueAlertMsgDataframe", "vueElintegroProgressBarDataframe","vueElintegroLanguageSelectorDataframe",
+				"vueInitDataframe", "vueAlertMsgDataframe", "vueElintegroProgressBarDataframe","vueElintegroLanguageSelectorDataframe","vueDummyDataframe",
 
 				//Dataframes used in Home page...
 				"vueFirstContainerDataframe","vueOurWorkContainerDataframe","vueOurProcessContainerDataframe","vueCollaborationContainerDataframe",
@@ -19,7 +19,7 @@ beans {
 				"vueElintegroNavigationDrawerDataframe",
 
 				//Dataframes used in new employee registration flow of careers page...
-				"vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
+				"vueNewEmployeeBasicInformationDataframe","vueMapWidgetDataframe","vueAddressDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
 				 "vueNewEmployeeApplicantAddSkillDataframe","vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe",
 				 "vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 
