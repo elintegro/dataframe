@@ -319,8 +319,6 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                              handler: function(val, oldVal){
                                   if(val && val.refreshInitialData){
                                      this.${dataframeName}_fillInitData();
-                                  } else {
-                                      console.log("${dataframeName}_prop has refreshInitialData as false or undefined. Could not refresh.");
                                   }
                              }
                      },\n""")
