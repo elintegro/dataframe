@@ -1129,7 +1129,7 @@ beans {
         bean.autowire='byName'
         dataframeLabelCode = "Address.Information"
 //        hql = "select address.id, address.addressLine, address.street from Address as address where address.id=:id"
-        hql = "select address.addressLine, address.addressLine2, address.id,  address.addressText, address.apartment, address.street, address.cityString, address.countryString, address.postalZip from Address as address where address.id=:id"
+        hql = "select address.addressLine, address.addressLine2, address.id,  address.addressText, address.apartment, address.street, address.cityString, address.countryString, address.postalZip, address.longitude, address.latitude from Address as address where address.id=:id"
         doBeforeSave = """var domainKeys = excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys');
                           params['personId'] = domainKeys.person.id """
         doAfterSave = "excon.goToTab('vueNewEmployeeApplicantDataframe','vueNewEmployeeUploadResumeDataframe');"
@@ -1163,6 +1163,12 @@ beans {
                         insertAfter: "address.addressLine",
                         script       : """ this.updatedAddressValue = this.state.persisters.address.addressLine.value;""",
                         "flexGridValues":['xs4', 'sm4', 'md4', 'lg4', 'xl4'],
+                ],
+                "address.longitude":[
+                        "widget"   : "InputWidgetVue"
+                ],
+                "address.latitude":[
+                        "widget"   : "InputWidgetVue"
                 ],
                 "googleMap": [
                         "widget"      : "DataframeWidgetVue",

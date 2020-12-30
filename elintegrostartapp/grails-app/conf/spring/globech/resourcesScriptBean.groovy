@@ -233,6 +233,8 @@ beans {
                                      };
                                      vueAddressDataframeVar.state.persisters.address.addressText.value = result[0].formatted_address;
                                      vueAddressDataframeVar.state.persisters.address.addressLine.value = result[0].formatted_address;
+                                     vueAddressDataframeVar.state.persisters.address.longitude.value = result[0].geometry.location.lat();
+                                     vueAddressDataframeVar.state.persisters.address.latitude.value = result[0].geometry.location.lng();
                     },\n"""
     }
 
