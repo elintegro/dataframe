@@ -60,6 +60,9 @@ class MapDisplayWidgetVue extends WidgetVue{
             List<MetaField> fieldMetaData = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
             field.put("gridMetaData", fieldMetaData);
             field.put("parsedHql", parsedHql);
+            if (!isContainsLongLatAlias(fieldMetaData)){
+                throw new DataframeException("Hql doesn't contains field alias values $longitude or $latitude")
+            }
         }
         return """$dataVariable:\"\",\n"""
 
@@ -80,6 +83,19 @@ class MapDisplayWidgetVue extends WidgetVue{
         def defaultValue = field.defaultValue?:""
         return """this.$dataVariable = response['$key']?response['$key']:"$defaultValue\";
                 """
+    }
+
+    private static boolean isContainsLongLatAlias(List<MetaField> fieldMetaData){
+        boolean isLong = false
+        boolean isLat = false
+        for (MetaField metaField : fieldMetaData){
+            if (metaField.alias.equals(longitude)){
+                isLong = true
+            }else if (metaField.alias.equals(latitude)){
+                isLat = true
+            }
+        }
+        return isLong && isLat
     }
 
     private static Map loadMapsData(DataframeInstance dataframeInst, Map fieldProps, Map inputData){
