@@ -69,13 +69,15 @@
     <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
 
     <link rel="manifest" href="./manifest.json"/>
-    <script>
-        if('serviceWorker' in navigator){
-            navigator.serviceWorker.register('./sw.js')
-                .then((reg) => console.log("Service worker registered", reg))
-                .catch((err)=>console.log("Service worker not registered", err))
-        }
-    </script>
+    <g:if test="${Environment.current != Environment.DEVELOPMENT}">
+        <script>
+            if('serviceWorker' in navigator){
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log("Service worker registered", reg))
+                    .catch((err)=>console.log("Service worker not registered", err))
+            }
+        </script>
+    </g:if>
 </head>
 <body>
 <style>

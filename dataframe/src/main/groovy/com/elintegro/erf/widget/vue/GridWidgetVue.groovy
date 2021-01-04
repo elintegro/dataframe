@@ -340,13 +340,17 @@ $fieldParams
     public Map loadAdditionalData(DataframeInstance dataframeInst, Map fieldProps, String fieldnameToReload, Map inputData, def dbSession){
         DataframeVue dataframe = dataframeInst.df;
         //Add fields from the Dataframe as possible input parameters for the additional HQL:
-        inputData.putAll(dataframeInst.getFieldValuesAsKeyValueMap());
-        Map sessionParams = dataframeInst.sessionParams
+        createInputParamsData(dataframeInst, inputData)
+        Map result= getGridData(dataframe, fieldProps, inputData)
+        return result
+    }
+
+    public static def createInputParamsData(DataframeInstance dataframeInstance, Map inputData){
+        inputData.putAll(dataframeInstance.getFieldValuesAsKeyValueMap());
+        Map sessionParams = dataframeInstance.sessionParams
         if (sessionParams){
             inputData << sessionParams
         }
-        Map result= getGridData(dataframe, fieldProps, inputData)
-        return result
     }
 
     private def getGridData(DataframeVue dataframe, Map fieldProps, Map inputData){
@@ -354,15 +358,8 @@ $fieldParams
         String wdgHql = fieldProps?.hql;
         if(wdgHql){
             List<MetaField> fieldMetaData =  fieldProps.get("gridMetaData");
-            ParsedHql parsedHql =  fieldProps.get("parsedHql");
-            if(parsedHql == null){
-                log.warn("We have to recreate the Parsed Hql since it is null")
-                parsedHql = new ParsedHql(fieldProps.hql, dataframe.grailsApplication, dataframe.sessionFactory)
-            }
             List dataHeader =  fieldProps.get("dataHeader");
-            def dbSession = dataframe.sessionFactory.openSession()
-            DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
-            List resultList = dbRes.getResultList();
+            List resultList = getResultList(fieldProps, dataframe, wdgHql, inputData)
             result.put(items, resultList);
             result.put(headers, dataHeader);
             result.put(defaultData, getDefaultData(fieldMetaData));
@@ -374,6 +371,17 @@ $fieldParams
         return result
     }
 
+    public static List getResultList(Map fieldProps, DataframeVue dataframe, String wdgHql, Map inputData){
+        ParsedHql parsedHql =  fieldProps.get("parsedHql");
+        if(parsedHql == null){
+            log.warn("We have to recreate the Parsed Hql since it is null")
+            parsedHql = new ParsedHql(fieldProps.hql, dataframe.grailsApplication, dataframe.sessionFactory)
+        }
+        def dbSession = dataframe.sessionFactory.openSession()
+        DbResult dbRes = new DbResult(wdgHql, inputData, dbSession, parsedHql);
+        List resultList = dbRes.getResultList()
+        return resultList
+    }
 
     public void getNamedParameterValue(dfInstance,inputData, parsedHql, fieldProps){
         Dataframe dataframe = dfInstance.df
