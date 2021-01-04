@@ -210,7 +210,7 @@ beans {
         saveButton= false
         initOnPageLoad = false
         dataframeButtons = [
-                        showApplicant  : [name: "showApplicant", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",route: true,routeIdScript: 0,script: """excon.redirectPage(this,'dummy-page');""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                        showApplicant  : [name: "showApplicant", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",route: true,routeIdScript: 0,refDataframe: ref("vueAddMapWidgetDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             quizzable  : [name: "quizzable", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.quizzableApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             translator : [name: "translator", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             ecommerce  : [name: "ecommerce", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: 0,script: """this.ecommerceApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
@@ -1206,14 +1206,28 @@ beans {
 
         currentFrameLayout = ref("defaultDataframeLayout")
     }
-    vueDummyDataframe(DataframeVue){bean ->
+
+    vueAddMapWidgetDataframe(DataframeVue){bean ->
         bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueDummyDataframe']
-        initOnPageLoad = false
-        route = true
-        isGlobal =true
-        currentRoute = "dummy-page"
+        bean.constructorArgs = ['vueAddMapWidgetDataframe']
+        initOnPageLoad = true
         saveButton = false
+        route = true
+        doAfterRefresh="""self.initializeMaps();\n"""
+        addFieldDef = [
+                "googleMap": [
+                        "widget" : "MapDisplayWidgetVue",
+                        "hql":"select address.id as Id, address.addressLine as AddressLine, address.longitude as Longitude, address.latitude as Latitude from Address as address ",
+                        "showInMap":true,
+                        "name" : "googleMap",
+                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "height" :'500px',
+                        "initBeforePageLoad":true,
+                        "displayMember":"AddressLine",
+
+                ]
+        ]
+
         currentFrameLayout = ref("defaultDataframeLayout")
     }
 }

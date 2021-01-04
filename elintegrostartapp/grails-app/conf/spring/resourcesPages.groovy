@@ -7,7 +7,7 @@ beans {
         /**IMPORTANT: Need to put child dataframe bbefore parent dataframes*/
 		allDataframesList = [
                  //Global dataframes...
-				"vueInitDataframe", "vueAlertMsgDataframe", "vueElintegroProgressBarDataframe","vueElintegroLanguageSelectorDataframe","vueDummyDataframe",
+				"vueInitDataframe", "vueAlertMsgDataframe", "vueElintegroProgressBarDataframe","vueElintegroLanguageSelectorDataframe",
 
 				//Dataframes used in Home page...
 				"vueFirstContainerDataframe","vueOurWorkContainerDataframe","vueOurProcessContainerDataframe","vueCollaborationContainerDataframe",
@@ -36,7 +36,10 @@ beans {
 				//Dataframes used in login/registration flow...
 				"vueElintegroForgetPasswordDataframe","vueElintegroChangeForgotPasswordDataframe","vueElintegroLoginDataframe","vueElintegroLoginWithOTPDataframe","vueElintegroLoginTabDataframe","vueElintegroRegisterDataframe",
 
-				//Dataframes used in translator assistant application...
+				//Dataframes used in displaying map
+				 "vueAddMapWidgetDataframe",
+
+				 //Dataframes used in translator assistant application...
 				"vueCreateProjectForTranslationDataframe","vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe",
 				"vueAddNewRecordForCurrentProjectDataframe","vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe","vueDeleteSourceRecordsOfGridDataframe",
 				"vueDialogBoxForNotLoggedInUserDataframe","vueGridOfTranslatedTextDataframe","vueEditSourceRecordsOfGridDataframe","vueGridOfSourceTextDataframe","vueTranslatorDataframe","vueHowYouDoDataframe","vueNewsLetterDataframe",
