@@ -113,7 +113,6 @@ ${constructedPageHtml}
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
 <script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/v-tooltip"></script>
-%{--<asset:javascript src="/vuejs/v-eutil.min.js"/>--}%
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.googleMapsApi.apiKey}">
 </script>
 <asset:javascript src="/erf/i18Messages.js"/>
