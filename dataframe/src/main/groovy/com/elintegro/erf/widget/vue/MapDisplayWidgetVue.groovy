@@ -122,7 +122,7 @@ class MapDisplayWidgetVue extends WidgetVue{
         String displayMember = field?.displayMember
         int zoom = field?.zoom?:8
         String mapTypeId = field?.mapTypeId?:"ROADMAP"
-        String addListenerScript = field?.addListenerScript
+        String addListenerScript = field?.addListenerScript?:""
         String markerClickEvent = """google.maps.event.addListener(marker, 'click', (function (marker, i) {
                                              return function () {
                                                  infowindow.setContent(locations[i]['${displayMember}']);
