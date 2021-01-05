@@ -142,7 +142,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
                                   [DATAFRAME_SCRIPT]
-                                  <div style="margin-top:-40px; height:165px;">[BUTTON_SCRIPT]</div>
+                                  <div style="margin-top:-40px; height:125px;">[BUTTON_SCRIPT]</div>
                                   </v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }

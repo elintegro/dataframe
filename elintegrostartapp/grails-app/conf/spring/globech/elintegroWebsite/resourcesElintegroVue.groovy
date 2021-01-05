@@ -210,7 +210,7 @@ beans {
         saveButton= false
         initOnPageLoad = false
         dataframeButtons = [
-                        showApplicant  : [name: "showApplicant", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",route: true,routeIdScript: 0,refDataframe: ref("vueAddMapWidgetDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                        //showApplicant  : [name: "showApplicant", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",route: true,routeIdScript: 0,refDataframe: ref("vueAddMapWidgetDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             quizzable  : [name: "quizzable", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",script: """this.quizzableApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             translator : [name: "translator", type: "link",attr:"style='color:#1976D2;margin-top:-15px;'",route: true,routeIdScript: 0, refDataframe: ref("vueTranslatorAssistantDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             ecommerce  : [name: "ecommerce", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: 0,script: """this.ecommerceApp();""", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
@@ -285,7 +285,7 @@ beans {
         addFieldDef = [
                 "tab":[
                         widget: "TabWidgetVue",
-                        dataframes : ['vueNewEmployeeBasicInformationDataframe','vueAddressDataframe','vueNewEmployeeUploadResumeDataframe','vueNewEmployeeSelfAssesmentDataframe','vueNewEmployeeAddtionalQuestionsDataframe']
+                        dataframes : ['vueNewEmployeeBasicInformationDataframe','vueNewEmployeeUploadResumeDataframe','vueNewEmployeeSelfAssesmentDataframe','vueNewEmployeeAddtionalQuestionsDataframe']
                         ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                         ,flexAttr: "pa-1"
                         ,disableTabs : true
@@ -308,7 +308,7 @@ beans {
         flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
 
         doAfterSave = """
-                        excon.goToTab("vueNewEmployeeApplicantDataframe", "vueAddressDataframe");
+                        excon.goToTab("vueNewEmployeeApplicantDataframe", "vueNewEmployeeUploadResumeDataframe");
                       """
 
         doBeforeSave = """
@@ -389,7 +389,7 @@ beans {
                                      ]
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueAddressDataframe-tab-id");\n""",
+        dataframeButtons = [ previous: [name:"previous", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script:"""Vue.set(this.\$store.state.vueNewEmployeeApplicantDataframe, "vueNewEmployeeApplicantDataframe_tab_model","vueNewEmployeeBasicInformationDataframe-tab-id");\n""",
                                         flexGridValues: ['xs9', 'sm9', 'md6', 'lg6', 'xl6'],url: ""]]
 
         currentFrameLayout = ref("vueNewEmployeeUploadResumeDataframeLayout")
@@ -1123,7 +1123,7 @@ beans {
 
 
     }
-    vueAddressDataframe(DataframeVue){ bean ->
+   /* vueAddressDataframe(DataframeVue){ bean ->
         bean.parent = dataFrameSuper
         bean.constructorArgs = ['vueAddressDataframe']
         bean.autowire='byName'
@@ -1229,5 +1229,5 @@ beans {
         ]
 
         currentFrameLayout = ref("defaultDataframeLayout")
-    }
+    }*/
 }

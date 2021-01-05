@@ -19,7 +19,7 @@ beans {
 				"vueElintegroNavigationDrawerDataframe",
 
 				//Dataframes used in new employee registration flow of careers page...
-				"vueNewEmployeeBasicInformationDataframe","vueMapWidgetDataframe","vueAddressDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
+				"vueNewEmployeeBasicInformationDataframe","vueMapWidgetDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
 				 "vueNewEmployeeApplicantAddSkillDataframe","vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe",
 				 "vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 
@@ -37,7 +37,7 @@ beans {
 				"vueElintegroForgetPasswordDataframe","vueElintegroChangeForgotPasswordDataframe","vueElintegroLoginDataframe","vueElintegroLoginWithOTPDataframe","vueElintegroLoginTabDataframe","vueElintegroRegisterDataframe",
 
 				//Dataframes used in displaying map
-				 "vueAddMapWidgetDataframe",
+				// "vueAddMapWidgetDataframe",
 
 				 //Dataframes used in translator assistant application...
 				"vueCreateProjectForTranslationDataframe","vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe",
