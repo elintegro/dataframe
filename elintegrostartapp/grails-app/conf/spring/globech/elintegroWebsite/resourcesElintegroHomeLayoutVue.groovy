@@ -304,17 +304,6 @@ beans{
                                 <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
-    vueTermAndConditionDataframeLayout(ColumnLayoutVue){ bean ->
-        layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 ><v-card round class='rounded-card' color="default"  style="overflow: hidden;">
-                                <v-row>
-                                    [termAndConditionHeading]
-                                    [updatedTime]
-                                    <v-row>[termsAndConditionContent]</v-row>
-                                </v-row> 
-                                </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
-    }
     vueElintegroSignUpQuizDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-container grid-list-sm fluid>

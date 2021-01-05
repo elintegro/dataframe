@@ -339,12 +339,9 @@ beans{
                                ,script: """excon.setVisibility('vueFooterPrivacyDataframe',true);"""
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
-                termAndConditions:["widget":"ButtonWidgetVue"
-                               ,"name":"termAndConditions"
-                               ,"attr":"""small text tile"""
-                               ,script: """excon.redirectPage(this,'terms-and-conditions')"""
-                               ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
-                ]
+        ]
+        dataframeButtons=[
+                termAndConditions:["name":"termAndConditions",type: "button", script: """ this.termsAndConditions();""", "attr":""" color='#2ab6f6' small text tile""",flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4']]
         ]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
     }
@@ -366,31 +363,4 @@ beans{
         ]
         currentFrameLayout = ref("vueFooterPrivacyDataframeLayout")
     }
-    vueTermAndConditionDataframe(DataframeVue){bean ->
-        bean.parent = dataFrameSuper
-        bean.constructorArgs = ['vueTermAndConditionDataframe']
-        saveButton = false
-        isGlobal = true
-        route = true
-        currentRoute ="terms-and-conditions"
-        initOnPageLoad = false
-        addFieldDef = [
-                termAndConditionHeading:["widget":"TextDisplayWidgetVue"
-                                      ,"name":"termAndConditionHeading"
-                                      ,elementId: "termAndConditionHeading"
-                                      ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                updatedTime:["widget":"TextDisplayWidgetVue"
-                             ,"name":"updatedTime"
-                             ,elementId: "updatedTime"
-                             ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                termsAndConditionContent:["widget":"TextDisplayWidgetVue"
-                                ,"name":"termsAndConditionContent"
-                                ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
-                ],
-        ]
-        currentFrameLayout = ref("vueTermAndConditionDataframeLayout")
-
-
-    }
-
 }

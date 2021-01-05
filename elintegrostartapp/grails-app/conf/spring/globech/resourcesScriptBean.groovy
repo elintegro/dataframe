@@ -1070,5 +1070,18 @@ beans {
                     },\n
                     """
     }
+    vueFooterContainerDataframe_script(VueJsEntity){bean ->
+        methods="""
+                        termsAndConditions(){
+                            var params = this.state;
+                            var self = this;
+                            params['dataframe'] = 'vueFooterContainerDataframe';
+                            excon.callApi('profileDetail/termAndConditions', 'post', params).then(function(responseData){
+                                                  document.location.href = responseData.config.url
+                                    });
+                        }
+               """
+
+    }
 
 }
