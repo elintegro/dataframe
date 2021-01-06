@@ -339,9 +339,12 @@ beans{
                                ,script: """excon.setVisibility('vueFooterPrivacyDataframe',true);"""
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
-        ]
-        dataframeButtons=[
-                termAndConditions:["name":"termAndConditions",type: "button", script: """ this.termsAndConditions();""", "attr":""" color='#2ab6f6' small text tile""",flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4']]
+                termAndConditions:["widget":"ButtonWidgetVue"
+                               ,"name":"termAndConditions"
+                               ,"attr":"""small text tile"""
+                               ,script: """excon.redirectPage(this,"terms-and-condition");"""
+                               ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
+                ]
         ]
         currentFrameLayout = ref("vueFooterContainerDataframeLayout")
     }
@@ -363,4 +366,18 @@ beans{
         ]
         currentFrameLayout = ref("vueFooterPrivacyDataframeLayout")
     }
+    vueTermAndConditionDataframe(DataframeVue){bean ->
+        bean.parent = dataFrameSuper
+        bean.constructorArgs = ['vueTermAndConditionDataframe']
+        saveButton = false
+        isGlobal = true
+        initOnPageLoad = true
+        doAfterRefresh = "self.termsAndConditions();"
+        route = true
+        currentRoute = "terms-and-condition"
+        currentFrameLayout = ref("vueTermAndConditionDataframeLayout")
+
+
+    }
+
 }
