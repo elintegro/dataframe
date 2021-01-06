@@ -64,10 +64,20 @@
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
     <asset:stylesheet href="/vuejs/multiple-image-upload.css"/>
     <asset:stylesheet href="/vuejs/vuetify-v2.0.5.css"/>
-    <asset:stylesheet href="/vuejs/gc-vue.css"/>
-    <asset:stylesheet href="/vuejs/homePageLayout.css"/>
-    <asset:stylesheet href="/vuejs/translatorAssistantLayout.css"/>
+    <asset:stylesheet href="/erf/gc-vue.css"/>
+    <asset:stylesheet href="/erf/homePageLayout.css"/>
+    <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
 
+    <link rel="manifest" href="./manifest.json"/>
+    <g:if test="${Environment.current != Environment.DEVELOPMENT}">
+        <script>
+            if('serviceWorker' in navigator){
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log("Service worker registered", reg))
+                    .catch((err)=>console.log("Service worker not registered", err))
+            }
+        </script>
+    </g:if>
 </head>
 <body>
 <style>
@@ -103,7 +113,6 @@ ${constructedPageHtml}
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
 <script src="https://unpkg.com/popper.js"></script>
 <script src="https://unpkg.com/v-tooltip"></script>
-%{--<asset:javascript src="/vuejs/v-eutil.min.js"/>--}%
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.googleMapsApi.apiKey}">
 </script>
 <asset:javascript src="/erf/i18Messages.js"/>

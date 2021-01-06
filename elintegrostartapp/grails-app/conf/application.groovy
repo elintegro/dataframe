@@ -58,6 +58,8 @@ grails.mime.types = [
         mdb:           'application/vnd.ms-access',
 ]
 
+grails.resources.pattern = '/**'
+
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
 

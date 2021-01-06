@@ -1,0 +1,20 @@
+{
+  "name": "ElintegroWebApp",
+  "short-name": "ElintegroWebApp",
+  "icons": [
+    {
+      "src": "./img/app_icon_192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/app_icon_192x192.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "theme_color": "rgb(25 118 210)",
+  "background_color": "rgb(25 118 210)",
+  "display": "standalone"
+}

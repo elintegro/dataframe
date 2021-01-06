@@ -22,6 +22,7 @@ class TabWidgetVue extends WidgetVue{
 
         StringBuilder tabHeaders = new StringBuilder()
         StringBuilder tabItems = new StringBuilder()
+        boolean disableTabs = field.disableTabs?:false
         String initialTabView = ""
         boolean first = true
         for(String dfr: field.dataframes){
@@ -29,7 +30,7 @@ class TabWidgetVue extends WidgetVue{
             Dataframe tabDfr = Dataframe.getDataframeByName(dfr)
             String dfrName = tabDfr.dataframeName
             String dfrLabel = tabDfr.messageSource.getMessage(tabDfr.dataframeLabelCode, null, dfrName, LocaleContextHolder.getLocale())
-            tabHeaders.append(""" <v-tab style ="text-transform:capitalize; color:white;background-color:gray;border-top-left-radius: 45%;border-top-right-radius: 45%;" ripple href="#$dfrName-tab-id" @click.stop='onTabClick("$dfrName")'>${dfrLabel}</v-tab>\n""")
+            tabHeaders.append(""" <v-tab style ="text-transform:capitalize; color:white;background-color:rgb(199, 210, 243);border-top-left-radius: 45%;border-top-right-radius: 45%;" ripple href="#$dfrName-tab-id" @click.stop='onTabClick("$dfrName")' :disabled='$disableTabs' >${dfrLabel}</v-tab>\n""")
             tabItems.append(""" <v-tab-item value="$dfrName-tab-id" ><$dfrName :${dfrName}_prop='${dataframe.dataframeName}_prop'/></v-tab-item>\n""")
             dataframe.childDataframes.add(dfrName)
             if(first){
@@ -40,7 +41,7 @@ class TabWidgetVue extends WidgetVue{
         addClickMethodToTab(dataframe, field)
         setDefaultTabView(dataframe, field, initialTabView)
         String html = """<v-card round style ="overflow:hidden;" >
-                                  <v-tabs hide-slider background-color="blue darken-2" v-model="state.${dataframe.dataframeName}_tab_model" active-class="cyan">
+                                  <v-tabs hide-slider v-model="state.${dataframe.dataframeName}_tab_model" active-class="blue darken-2">
                                       ${tabHeaders.toString()}
                                       ${getCloseButtonHtml(field)}
                                   </v-tabs>
@@ -58,7 +59,7 @@ class TabWidgetVue extends WidgetVue{
         boolean showCloseButton = field.showCloseButton?:false
         if(showCloseButton){
             return """
-                <v-flex class="text-right" style="align-self:center;"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe" style="color:white;"><v-icon medium >close</v-icon>
+                <v-flex class="text-right" style="align-self:center;"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
                                       </v-btn><span>Close</span></v-tooltip></v-flex>    
                 """
         }
