@@ -1069,5 +1069,17 @@ beans {
                     },\n
                     """
     }
+    vueTermAndConditionDataframe_script(VueJsEntity){bean->
+        data = " privacyPolicyContent:'', "
+        methods = """    termsAndConditions(){
+                            var params = this.state;
+                            var self = this;
+                            params['dataframe'] = 'vueFooterContainerDataframe';
+                            excon.callApi('profileDetail/termAndConditions', 'post', params).then(function(responseData){
+                                                  self.privacyPolicyContent = responseData.data
+                                    });
+                        }
+                    """
+    }
 
 }
