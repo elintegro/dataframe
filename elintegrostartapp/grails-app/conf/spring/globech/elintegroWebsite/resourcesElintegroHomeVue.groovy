@@ -342,8 +342,7 @@ beans{
                 termAndConditions:["widget":"ButtonWidgetVue"
                                ,"name":"termAndConditions"
                                ,"attr":"""small text tile"""
-                               ,onClick:[showAsDialog: true, refDataframe: ref("vueTermAndConditionDataframe")]
-                               ,script: """excon.setVisibility('vueTermAndConditionDataframe',true);"""
+                               ,script: """excon.redirectPage(this,"terms-and-condition");"""
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]
         ]
@@ -372,17 +371,10 @@ beans{
         bean.constructorArgs = ['vueTermAndConditionDataframe']
         saveButton = false
         isGlobal = true
-        initOnPageLoad = false
-        addFieldDef = [
-                termAndConditionHeading:["widget":"TextDisplayWidgetVue"
-                                      ,"name":"termAndConditionHeading"
-                                      ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                ],
-                loremEpsumText:["widget":"TextDisplayWidgetVue"
-                                ,"name":"loremEpsumText"
-                                ,flexGridValues:['xs0', 'sm0', 'md0', 'lg0', 'xl0'],
-                ],
-        ]
+        initOnPageLoad = true
+        doAfterRefresh = "self.termsAndConditions();"
+        route = true
+        currentRoute = "terms-and-condition"
         currentFrameLayout = ref("vueTermAndConditionDataframeLayout")
 
 
