@@ -37,6 +37,19 @@
         font-family: Arial !important;
         word-break: break-word !important;
     }
+    #backButton{
+        display: flex;
+        height: 3.1rem;
+        width: 9.375rem;
+        justify-content: center;
+        justify-items: center;
+        margin-top: 20px;
+        color: white;
+        background-color: #2ab6f6;
+        border-style: none;
+        border-radius: 5%;
+        font-size: 1.5rem;
+    }
     </style>
 </head>
 <body>
@@ -217,5 +230,8 @@ ol li {
 </style>
 </div>
 <div style="color: #595959;font-size: 14px;font-family: Arial;padding-top:16px;">These terms of use were created using <a style="color: rgb(48, 48, 241) !important;" href="https://termly.io/products/terms-and-conditions-generator/?ftseo">Termly's Terms and Conditions Generator</a>.</div>
+<form>
+    <input type="button" id="backButton" value="Go back" onclick="history.back()">
+</form>
 </body>
 </html>
