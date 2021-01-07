@@ -109,8 +109,9 @@ ${constructedPageHtml}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
-<script src="https://unpkg.com/popper.js"></script>
-<script src="https://unpkg.com/v-tooltip"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js"></script>
+%{--<script src="https://unpkg.com/popper.js"></script>--}%
+%{--<script src="https://unpkg.com/v-tooltip"></script>--}%
 %{--<asset:javascript src="/vuejs/v-eutil.min.js"/>--}%
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=${grailsApplication.config.googleMapsApi.apiKey}">
 </script>
@@ -118,6 +119,7 @@ ${constructedPageHtml}
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <asset:javascript src="/erf/erfVueController.js"/>
 <asset:javascript src="/vuejs/vuex.js"/>
+<asset:javascript src="/vuejs/v-tooltip.js"/>
 <asset:javascript src="/vuejs/multiple-image-upload.umd.min.js"/>
 ${constructedPageScript}
 <script>
