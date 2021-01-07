@@ -47,4 +47,9 @@ class ProfileDetailController {
             log.error("Image doesn't exist")
         }
     }
+    def termAndConditions(){
+        def params = request.getJSON()
+        println(params)
+        render(view:"/termsAndCondition/termsAndCondition")
+    }
 }

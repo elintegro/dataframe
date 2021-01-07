@@ -24,6 +24,7 @@ beans {
 	SnackbarWidgetVue(SnackbarWidgetVue){}
 	ButtonWidgetVue(ButtonWidgetVue){}
 	MapWidgetVue(MapWidgetVue){}
+	MapDisplayWidgetVue(MapDisplayWidgetVue){}
 	FKWidgetVue(FKWidgetVue){}
 	TextDisplayWidgetVue(TextDisplayWidgetVue){}
 	FileUploadWidgetVue(FileUploadWidgetVue){}

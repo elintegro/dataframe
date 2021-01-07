@@ -112,7 +112,7 @@ class ApplicationFormController {
         def personId = _params.personId
         DataframeController dc = new DataframeController()
         Dataframe dataframe = dc.getDataframe(_params)
-        def dfInstance = new DataframeInstance(dataframe, _params)
+        def dfInstance = new DataframeInstance(dataframe, _params as Map<String, String>)
         def result = dfInstance.save();
         Map savedResultMap = dfInstance.getSavedDomainsMap();
         DataframeResponse response = new DataframeResponse()

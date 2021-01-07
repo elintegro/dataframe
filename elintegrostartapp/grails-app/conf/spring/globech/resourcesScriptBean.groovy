@@ -233,6 +233,8 @@ beans {
                                      };
                                      vueAddressDataframeVar.state.persisters.address.addressText.value = result[0].formatted_address;
                                      vueAddressDataframeVar.state.persisters.address.addressLine.value = result[0].formatted_address;
+                                     vueAddressDataframeVar.state.persisters.address.longitude.value = result[0].geometry.location.lng();
+                                     vueAddressDataframeVar.state.persisters.address.latitude.value = result[0].geometry.location.lat();
                     },\n"""
     }
 
@@ -1065,6 +1067,18 @@ beans {
                           excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
                      
                     },\n
+                    """
+    }
+    vueTermAndConditionDataframe_script(VueJsEntity){bean->
+        data = " privacyPolicyContent:'', "
+        methods = """    termsAndConditions(){
+                            var params = this.state;
+                            var self = this;
+                            params['dataframe'] = 'vueFooterContainerDataframe';
+                            excon.callApi('profileDetail/termAndConditions', 'post', params).then(function(responseData){
+                                                  self.privacyPolicyContent = responseData.data
+                                    });
+                        }
                     """
     }
 

@@ -19,7 +19,7 @@ beans {
 				"vueElintegroNavigationDrawerDataframe",
 
 				//Dataframes used in new employee registration flow of careers page...
-				"vueNewEmployeeBasicInformationDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
+				"vueNewEmployeeBasicInformationDataframe","vueMapWidgetDataframe","vueNewEmployeeUploadResumeDataframe","vueNewEmployeeApplicantEditSkillDataframe",
 				 "vueNewEmployeeApplicantAddSkillDataframe","vueNewEmployeeSelfAssesmentDataframe","vueNewEmployeeThankYouMessageAfterSaveDataframe",
 				 "vueNewEmployeeAddtionalQuestionsDataframe","vueNewEmployeeApplicantDataframe",
 
@@ -36,7 +36,10 @@ beans {
 				//Dataframes used in login/registration flow...
 				"vueElintegroForgetPasswordDataframe","vueElintegroChangeForgotPasswordDataframe","vueElintegroLoginDataframe","vueElintegroLoginWithOTPDataframe","vueElintegroLoginTabDataframe","vueElintegroRegisterDataframe",
 
-				//Dataframes used in translator assistant application...
+				//Dataframes used in displaying map
+				// "vueAddMapWidgetDataframe",
+
+				 //Dataframes used in translator assistant application...
 				"vueCreateProjectForTranslationDataframe","vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe",
 				"vueAddNewRecordForCurrentProjectDataframe","vueEditTranslatedRecordsOfGridDataframe","vueDeleteTranslatedRecordsOfGridDataframe","vueDeleteSourceRecordsOfGridDataframe",
 				"vueDialogBoxForNotLoggedInUserDataframe","vueGridOfTranslatedTextDataframe","vueEditSourceRecordsOfGridDataframe","vueGridOfSourceTextDataframe","vueTranslatorDataframe","vueHowYouDoDataframe","vueNewsLetterDataframe",
