@@ -54,7 +54,7 @@
     font-size: 1rem;
     font-weight: bold;
     color: black;
-    background-color: #7be236;
+    background-color: #f6f6f6;
 }
 
 .borderInTranslation .v-data-table__wrapper table tr:nth-child(even) td{
