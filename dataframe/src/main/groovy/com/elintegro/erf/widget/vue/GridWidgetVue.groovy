@@ -408,7 +408,7 @@ $fieldParams
         onButtonClick.each{Map onButtonClickMaps ->
             String actionName = getMessageSource().getMessage(onButtonClickMaps?.actionName?:"", null, onButtonClickMaps?.actionName?:"", LocaleContextHolder.getLocale())
             dataHeader.add(['text':actionName.capitalize(), 'keys':actionName, 'value':'name', sortable: false])
-            fieldParams.append("\n<td class='text-start layout' @click.stop=''>");
+            fieldParams.append("\n<td class='text-start' @click.stop=''>");
             onButtonClickMaps.buttons.each {Map buttonMaps->
                 String text = buttonMaps?.buttonName
                 String appendCallbackScript

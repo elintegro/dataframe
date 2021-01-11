@@ -111,3 +111,10 @@ tr.selected td {
     margin-top:-12px;
     margin-left:5px;
 }
+.v-data-table__wrapper table thead th{
+    font-size: 1rem;
+    font-weight: 900;
+    font-family: system-ui,sans-serif;
+    color: #0f1111;
+    background-color: #f6f6f6;
+}
