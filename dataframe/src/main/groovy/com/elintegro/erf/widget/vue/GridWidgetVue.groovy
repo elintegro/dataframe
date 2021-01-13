@@ -80,6 +80,7 @@ class GridWidgetVue extends WidgetVue {
         String itemsStr = getFieldJSONItems(field)
         String headerString = "${getFieldJSONNameVue(field)}${DOT}${headers}"
         boolean isDynamic = field.isDynamic?:false
+        String inlineEdit = field?.inlineEdit
         String gridTitle
         if(isDynamic){
             gridTitle = label?"""<v-card-title class='title pt-0 font-weight-light' style='$labelStyle'>$label\t{{state.gridTitleFromState}}</v-card-title>""":""
@@ -113,6 +114,20 @@ class GridWidgetVue extends WidgetVue {
             ${getAttr(field)}
     >
 $fieldParams
+    <template v-slot:item.${inlineEdit}="props">    
+        <v-edit-dialog :return-value.sync='props.item.${inlineEdit}' @save="save" @open="open"> 
+                {{props.item.${inlineEdit}}}
+        <template v-slot:input>
+            <v-text-field  
+                v-model="props.item.${inlineEdit}"
+                :rules='[max25chars]'
+                single-line 
+                counter
+            >
+            </v-text-field>
+        </template>
+        </v-edit-dialog>
+    </template>   
     </v-data-table></v-card>
         ${onclickDfrBuilder.toString()}
 """

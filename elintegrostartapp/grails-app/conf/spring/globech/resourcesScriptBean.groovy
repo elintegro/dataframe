@@ -664,6 +664,7 @@ beans {
     }
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
         created = """this.fillApplicationSkillTable();"""
+        data = """ edit:false,max25chars:v => v.length <= 25 || 'Input too long!', """
         methods = """
                  fillApplicationSkillTable(){  
                  var details = this.state.vueNewEmployeeSelfAssesmentDataframe
@@ -676,6 +677,12 @@ beans {
                           var response = responseData;
                 });
                  
+                  },\n
+                  open(){
+                        this.edit = true;
+                  },\n
+                  save(){
+                        this.edit = false;
                   },\n
                   """
     }

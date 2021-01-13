@@ -425,6 +425,7 @@ beans {
 //                                    ,onClick :[showAsDialog: true, refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe"),]
                                     ,editButton: true
                                     ,itemKey: "Id"
+                                    ,inlineEdit:"Skill"
                                     ,onButtonClick   : [
                                                 ['actionName': 'Edit Skill', 'buttons': [
                                                         [name        : "edit"
