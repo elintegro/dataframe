@@ -161,6 +161,9 @@ beans {
 //                      , hql             : """select concat(clientProject.clientName, ' ',clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
 //                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
                         , gridWidth       : 820
+                        ,editableField:"Description"
+                        ,tableName:"ClientProject"
+                        ,saveEditedFieldData:true
                         , search          : true
                         ,internationalize: true
                         ,manageFields     :[linkToWebsite: [type: 'link', script: '']]
@@ -425,7 +428,8 @@ beans {
 //                                    ,onClick :[showAsDialog: true, refDataframe: ref("vueNewEmployeeApplicantEditSkillDataframe"),]
                                     ,editButton: true
                                     ,itemKey: "Id"
-                                    ,inlineEdit:"Skill"
+                                    ,editableField:"Skill"
+                                    ,saveEditedFieldData:true
                                     ,onButtonClick   : [
                                                 ['actionName': 'Edit Skill', 'buttons': [
                                                         [name        : "edit"
