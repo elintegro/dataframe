@@ -429,6 +429,7 @@ beans {
                                     ,editButton: true
                                     ,itemKey: "Id"
                                     ,editableField:"Skill"
+                                    ,tableName: "ApplicationSkill"
                                     ,saveEditedFieldData:true
                                     ,onButtonClick   : [
                                                 ['actionName': 'Edit Skill', 'buttons': [

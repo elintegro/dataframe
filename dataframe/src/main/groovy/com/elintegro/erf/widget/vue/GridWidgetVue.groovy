@@ -269,7 +269,9 @@ $fieldParams
                           },\n
                           save (data) {
                               var params = this.state;
+                              params['id'] = data.Id;
                               params['dataOfSelectedRow'] = data;
+                              params['editableField'] = '$fieldProps.editableField'
                               params['tableName'] = '$tableName';
                               params['dataframe'] = '$dataframe.dataframeName'
                               var self = this;

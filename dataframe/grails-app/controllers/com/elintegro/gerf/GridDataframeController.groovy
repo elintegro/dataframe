@@ -17,6 +17,7 @@ import com.elintegro.erf.dataframe.service.GridDataFrame
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.util.Holders
+import org.grails.orm.hibernate.cfg.GrailsDomainBinder
 
 //import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.ApplicationContext
@@ -73,9 +74,14 @@ class GridDataframeController {
     def saveGridData(){
         def param = request.getJSON()
         //Todo: here after getting selected row data we have to save those data in generic way by finding the correct domain class..
-        println(param)
-
-        render(success:false)
+        String className = param.tableName
+        def editableFieldInit = param.editableField
+        def editableField = editableFieldInit.toLowerCase()
+        Class clazz = grailsApplication.domainClasses.find { it.clazz.simpleName == className }.clazz
+        def clazzObject = clazz.findById(param.dataOfSelectedRow.Id)
+        clazzObject."${editableField}" = param.dataOfSelectedRow."${editableFieldInit}"
+        clazzObject.save(flush:true)
+        render(success:true)
 
     }
 
