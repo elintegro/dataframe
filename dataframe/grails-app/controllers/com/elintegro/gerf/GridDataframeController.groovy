@@ -17,6 +17,7 @@ import com.elintegro.erf.dataframe.service.GridDataFrame
 import grails.converters.JSON
 import grails.core.GrailsApplication
 import grails.util.Holders
+import org.grails.orm.hibernate.cfg.GrailsDomainBinder
 
 //import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.context.ApplicationContext
@@ -69,6 +70,22 @@ class GridDataframeController {
         //= dataframe.readAndGetJson(params)
 
         render jsonMap as JSON
+    }
+    def saveGridData(){
+        def param = request.getJSON()
+        String className = param.tableName
+        String editableFieldInit = param.editableFields
+        //Todo: editableFieldInit gets the array of editable Fields inside the string so we have to check which field is getting edited and save the edited data
+        def nameOfTransit = param.nameOfTransit
+        def headers = param.transits."${nameOfTransit}".headers
+        Class clazz = grailsApplication.domainClasses.find { it.clazz.simpleName == className }.clazz
+        def clazzObject = clazz.findById(param.dataOfSelectedRow.Id)
+        for(def i=0;i<editableFieldInit.size();i++) {
+            clazzObject.id = param.dataOfSelectedRow."${editableFieldInit}"
+        }
+        clazzObject.save(flush:true)
+        render(success:true)
+
     }
 
 

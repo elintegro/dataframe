@@ -35,6 +35,8 @@ class GridWidgetVue extends WidgetVue {
 
     def contextPath = Holders.grailsApplication.config.rootPath
     public String ajaxDeleteUrl = "dataframe/ajaxDeleteExpire"
+    public String gridSaveUrl = "${contextPath}/gridDataframe/saveGridData"
+
     String embDDfr = "";
     private static final String headers = "headers"
     private static final String defaultData = "defaultData"
@@ -112,7 +114,7 @@ class GridWidgetVue extends WidgetVue {
             ${dataTableAttribbutes.toString()}
             ${getAttr(field)}
     >
-$fieldParams
+$fieldParams   
     </v-data-table></v-card>
         ${onclickDfrBuilder.toString()}
 """
@@ -127,9 +129,9 @@ $fieldParams
         String headerWidth = field.headerWidth?:''
         String valueMember = field?.valueMember
         boolean internationalize = field.internationalize?true:false
+        List editableFields = field?.editableFields
         StringBuilder requestFieldParams   = new StringBuilder()
         StringBuilder fieldParams          = new StringBuilder();
-
         ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory, "${dataframe.dataframeName}:${field.name}" );
         List<MetaField> fieldMetaData      = dataframe.metaFieldService.getMetaDataFromFields(parsedHql, field.name);
         field.put("gridMetaData", fieldMetaData);
@@ -163,6 +165,25 @@ $fieldParams
             }else {
                 Map manageFields = field.manageFields as Map
                 String tdString = "\n<td class='$headerClass'>{{ props.item.$propItemText }}</td>";
+                if(editableFields && editableFields.contains(propItemText)){
+                    tdString = """\n<td class ='$headerClass' >
+                                    <v-edit-dialog
+                                          :return-value.sync="props.item.$propItemText"
+                                          large persistent
+                                          @save="save(props.item)"
+                                          @cancel="cancel"
+                                          @open="open"
+                                          @close="close">
+                                          <div >{{ props.item.$propItemText }}</div>
+                                          <template v-slot:input>
+                                             <v-text-field
+                                                v-model="props.item.$propItemText"
+                                                label="Edit" single-line counter autofocus >
+                                             </v-text-field>
+                                          </template>
+                                    </v-edit-dialog> 
+                    </td> """
+                }
                 if(manageFields){
                     if(manageFields.containsKey(propItemVal)){
                         if('link' == manageFields[propItemVal].type){
@@ -206,6 +227,17 @@ $fieldParams
         addMethodsToScript(dataframe, field)
 //        putPropWatcherForChildDataframes(dataframe)
         field.put("gridDataframeList", gridDataframeList);
+        if(editableFields){
+            dataframe.getVueJsBuilder().addToDataScript("""
+                snack: false,
+                snackColor: '',
+                snackText: '',
+           """)
+
+
+        }
+
+
         String draggIndicator = field.draggable?""" <td class="drag" style="max-width:'20px';">::</td>""":""
         return """
 
@@ -221,10 +253,47 @@ $fieldParams
 
         String dataVariable = dataframe.getDataVariableForVue(fieldProps)
         def dataHeader = fieldProps.dataHeader
+        boolean saveEditedFieldData = fieldProps.saveEditedFieldData?:false
+        String tableName = fieldProps.tableName
+        String nameOfTransit = fieldProps.nameOfTransit
         String headerString = "${getFieldJSONNameVue(fieldProps)}${DOT}${headers}"
         dataframe.getVueJsBuilder().addToMethodScript(""" getDefaultDataHeaders_${dataVariable} : function(){\n
                              var defaultDataHeaders = ${dataHeader as JSON};
                              this.$headerString = defaultDataHeaders;
+                          },\n
+                          save (data) {
+                              var params = this.state;
+                              params['id'] = data.Id;
+                              params['dataOfSelectedRow'] = data;
+                              params['editableFields'] = '${fieldProps.editableFields}';
+                              params['nameOfTransit'] = '$nameOfTransit';  
+                              params['tableName'] = '$tableName';
+                              params['dataframe'] = '$dataframe.dataframeName'
+                              var self = this;
+                              if($saveEditedFieldData == true){
+                                      excon.callApi('$gridSaveUrl', 'post', params).then(function(responseData){
+                                                 var response = responseData.data;
+
+                                      });
+                              }                    
+                              else{
+                                    this.snack = true
+                                    this.snackColor = 'success'
+                                    this.snackText = 'Data updated'
+                              }          
+                          },\n
+                          cancel () {
+                                    this.snack = true
+                                    this.snackColor = 'error'
+                                    this.snackText = 'Canceled'
+                          },\n
+                          open () {
+                                    this.snack = true
+                                    this.snackColor = 'info'
+                                    this.snackText = 'Dialog opened'
+                          },\n
+                          close () {
+                                    console.log('Dialog closed')
                           },\n""")
     }
 
