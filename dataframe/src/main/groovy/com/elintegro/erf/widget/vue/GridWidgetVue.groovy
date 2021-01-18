@@ -129,7 +129,7 @@ $fieldParams
         String headerWidth = field.headerWidth?:''
         String valueMember = field?.valueMember
         boolean internationalize = field.internationalize?true:false
-        String editableField = field.editableField?:""
+        List editableFields = field?.editableFields
         StringBuilder requestFieldParams   = new StringBuilder()
         StringBuilder fieldParams          = new StringBuilder();
         ParsedHql parsedHql = new ParsedHql(wdgHql, dataframe.grailsApplication, dataframe.sessionFactory, "${dataframe.dataframeName}:${field.name}" );
@@ -165,15 +165,7 @@ $fieldParams
             }else {
                 Map manageFields = field.manageFields as Map
                 String tdString = "\n<td class='$headerClass'>{{ props.item.$propItemText }}</td>";
-                if(manageFields){
-                    if(manageFields.containsKey(propItemVal)){
-                        if('link' == manageFields[propItemVal].type){
-                            tdString = "\n<td class='$headerClass'><a :href='props.item.$propItemText' target='_blank' style ='text-decoration :none !important;' >{{ props.item.$propItemText }} </a></td>";
-                        }
-                    }
-                }
-                if(editableField == headerText){
-
+                if(editableFields && editableFields.contains(propItemText)){
                     tdString = """\n<td class ='$headerClass' >
                                     <v-edit-dialog
                                           :return-value.sync="props.item.$propItemText"
@@ -184,9 +176,6 @@ $fieldParams
                                           @close="close">
                                           <div >{{ props.item.$propItemText }}</div>
                                           <template v-slot:input>
-                                              <div class="mt-4 title">Update $editableField</div>
-                                          </template>
-                                          <template v-slot:input>
                                              <v-text-field
                                                 v-model="props.item.$propItemText"
                                                 label="Edit" single-line counter autofocus >
@@ -194,10 +183,14 @@ $fieldParams
                                           </template>
                                     </v-edit-dialog> 
                     </td> """
-
-
                 }
-
+                if(manageFields){
+                    if(manageFields.containsKey(propItemVal)){
+                        if('link' == manageFields[propItemVal].type){
+                            tdString = "\n<td class='$headerClass'><a :href='props.item.$propItemText' target='_blank' style ='text-decoration :none !important;' >{{ props.item.$propItemText }} </a></td>";
+                        }
+                    }
+                }
                 fieldParams.append(tdString)
             }
             requestFieldParams.append("\nparams['").append(metaField["alias"]).append("'] = dataRecord.").append(metaField["alias"]).append(";\n");
@@ -234,7 +227,7 @@ $fieldParams
         addMethodsToScript(dataframe, field)
 //        putPropWatcherForChildDataframes(dataframe)
         field.put("gridDataframeList", gridDataframeList);
-        if(editableField){
+        if(editableFields){
             dataframe.getVueJsBuilder().addToDataScript("""
                 snack: false,
                 snackColor: '',
@@ -262,6 +255,7 @@ $fieldParams
         def dataHeader = fieldProps.dataHeader
         boolean saveEditedFieldData = fieldProps.saveEditedFieldData?:false
         String tableName = fieldProps.tableName
+        String nameOfTransit = fieldProps.nameOfTransit
         String headerString = "${getFieldJSONNameVue(fieldProps)}${DOT}${headers}"
         dataframe.getVueJsBuilder().addToMethodScript(""" getDefaultDataHeaders_${dataVariable} : function(){\n
                              var defaultDataHeaders = ${dataHeader as JSON};
@@ -271,16 +265,15 @@ $fieldParams
                               var params = this.state;
                               params['id'] = data.Id;
                               params['dataOfSelectedRow'] = data;
-                              params['editableField'] = '$fieldProps.editableField'
+                              params['editableFields'] = '${fieldProps.editableFields}';
+                              params['nameOfTransit'] = '$nameOfTransit';  
                               params['tableName'] = '$tableName';
                               params['dataframe'] = '$dataframe.dataframeName'
                               var self = this;
                               if($saveEditedFieldData == true){
                                       excon.callApi('$gridSaveUrl', 'post', params).then(function(responseData){
                                                  var response = responseData.data;
-                                                 self.snack = true
-                                                 self.snackColor = 'success'
-                                                 self.snackText = 'Data saved'
+
                                       });
                               }                    
                               else{

@@ -153,7 +153,7 @@ beans {
                         , name            : "clientProject"
 
                         ,hql             : """select clientProject.id as Id ,clientProject.clientName as Clientname ,clientProject.projectName as Projectname,  clientProject.logo as Logo, 
-                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
+                                                clientProject.description as Des,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
 
 
 //                      , hql             : """select (clientProject.clientName || ' ' ||clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
@@ -161,8 +161,9 @@ beans {
 //                      , hql             : """select concat(clientProject.clientName, ' ',clientProject.projectName) as Clientproject,  clientProject.logo as Logo,
 //                                                clientProject.description as Description,clientProject.linkToWebsite as LinkToWebsite from ClientProject clientProject"""
                         , gridWidth       : 820
-                        ,editableField:"Description"
+                        ,editableFields:["Des","Projectname"]
                         ,tableName:"ClientProject"
+                        ,nameOfTransit:"clientProject"
                         ,saveEditedFieldData:true
                         , search          : true
                         ,internationalize: true
