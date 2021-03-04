@@ -266,7 +266,7 @@ beans {
                                  ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         ],
                         "careersDescription":["widget"      : "PictureDisplayWidgetVue"
-                                              ,"attr"       : " cover class='careersDescriptionPicture' "
+                                              ,"attr"       : " contain class='careersDescriptionPicture' "
                                               ,url: "assets/image_Careers.png"
                                               ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                 ]]
