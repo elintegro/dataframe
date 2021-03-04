@@ -111,3 +111,6 @@ tr.selected td {
     margin-top:-12px;
     margin-left:5px;
 }
+.careersDescriptionPicture{
+    border-radius: 20px;
+}

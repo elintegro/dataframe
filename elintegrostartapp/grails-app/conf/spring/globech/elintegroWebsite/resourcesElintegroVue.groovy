@@ -265,9 +265,10 @@ beans {
                                  ,"name":"careersHeader"
                                  ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         ],
-                        "careersDescription":["widget":"TextDisplayWidgetVue"
-                                         ,"name":"careersDescription"
-                                         ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "careersDescription":["widget"      : "PictureDisplayWidgetVue"
+                                              ,"attr"       : " cover class='careersDescriptionPicture' "
+                                              ,url: "assets/image_Careers.png"
+                                              ,flexGridValues:['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                 ]]
         dataframeButtons = [registerForNewEmployee: [name: "register", type: "button",route: true,routeIdScript: "0", attr:" width= '100' style='background-color:#1976D2; color:white;' ", refDataframe: ref("vueNewEmployeeApplicantDataframe"),
                                                      "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
