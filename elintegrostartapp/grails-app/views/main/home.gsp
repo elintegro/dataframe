@@ -47,7 +47,7 @@
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     </g:if>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Elintegro App Factory</title>
+    <title>Elintegro Software Factory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/home/logoWithoutText.jpg" type="image/x-icon">
     <meta name="google-signin-client_id" content="482906574403-seedi2p2ae3s9obm2ohb8bevq693jl3n.apps.googleusercontent.com">
