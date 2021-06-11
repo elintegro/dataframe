@@ -171,7 +171,7 @@ beans{
                                             align="center"
                                             justify="center"
                                          >
-                                            <v-col cols="2" xs="2"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
+                                            <v-col cols="2" xs="2"  sm="1" md="1" lg="1" xl="1" align="left" justify="center"><v-img src="assets/home/comma.png"></v-img></v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.quote}}</v-col>
                                             <v-col cols="0" xs="0" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
                                                 

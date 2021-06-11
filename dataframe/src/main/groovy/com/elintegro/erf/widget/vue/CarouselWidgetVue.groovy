@@ -26,7 +26,12 @@ class CarouselWidgetVue extends CollectionWidgetVue{
         String height = field.height
         String content = field.content
         """
-               <v-carousel
+               
+
+
+
+
+<v-carousel
                       cycle
                       show-arrows-on-hover
                       hide-delimiter-background

@@ -1,6 +1,8 @@
  .row{
-    margin-right: 12px;
-    margin-left: 12px;
+    margin-right: auto;
+    margin-left: auto;
+     box-sizing: border-box;
+     width: 100%;
 }
  .mainContainer{
      width: 100%;
@@ -10,8 +12,8 @@
  }
 .mainContainer .our_home{
     background-color:white;
-    padding-bottom: 100px;
-    padding-top: 110px;
+    /*padding-bottom: 100px;*/
+    /*padding-top: 110px;*/
 }
 .mainContainer .our_home .heading-2{
     font-size: 43px;
@@ -52,7 +54,7 @@
 .mainContainer .our_home .paragraph{
     color: black;
     font-size: 25px;
-    font-family:Roboto;
+    font-family:sans-serif;
 }
 .mainContainer .our_home #vueFirstContainerDataframe_buildApp{
     background-color: black;
@@ -71,65 +73,122 @@
         height: 450px;
     }
 }
+
 .mainContainer .our_work{
-    background-color:white;
-    padding-bottom: 100px;
-    padding-top: 100px;
+    background-color:#4e98c917;
+    padding-top: 70px;
+
 }
-.mainContainer .our_work .heading-2{
-    font-size:38px;
-    color:black;
+
+.mainContainer .our_work .heading-1{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 10px;
+
 }
 .mainContainer .our_work .paragraph{
-    font-size:14px;
-    color:black;
+    font-family: 'Poppins', sans-serif;
+    color: #393939;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 35px;
+    text-align: left;
 }
+ .webSection .paragraph {
+     font-family: 'Poppins', sans-serif;
+     color: #393939;
+     font-size: 18px;
+     font-weight: normal;
+     line-height: 35px;
+     text-align: left;
+
+ }
+ .webSection .heading-1 {
+     font-family: 'Poppins', sans-serif;
+     color: #000000;
+     font-size: 26px;
+     font-weight: 600;
+     padding-bottom: 10px;
+ }
 .mainContainer .our_process{
     background-color:white;
-    padding-bottom: 100px;
-    padding-top: 100px;
+    padding-top: 70px;
+
 }
-.mainContainer .our_process .heading-2{
-    font-size:38px;
-    color:black;
+.mainContainer .our_process .heading-1{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 10px;
 }
 .mainContainer .our_process .paragraph{
-    font-size: 14px;
-    color:black;
+    font-family: 'Poppins', sans-serif;
+    color: #393939;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 35px;
+    text-align: left;
+
 }
 .mainContainer .collaboration{
     background-color:white;
-    padding-bottom: 110px;
-    padding-top: 110px;
+    padding-top: 70px;
 }
-.mainContainer .collaboration .heading-2{
-    font-size:38px;
-    color:black;
+.mainContainer .collaboration .heading-1{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 10px;
 }
 .mainContainer .collaboration .paragraph{
-    font-size: 14px;
-    color:black;
+    font-family: 'Poppins', sans-serif;
+    color: #393939;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 35px;
+    text-align: left;
+
 }
 .mainContainer .our_framework{
     background-color:white;
-    padding-bottom: 110px;
-    padding-top: 100px;
+    padding-top: 70px;
+    position: relative;
 }
-.mainContainer .our_framework .heading-2{
-    font-size:38px;
-    color:black;
+.mainContainer .our_framework .heading-1{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 10px;
 }
 .mainContainer .our_framework .paragraph{
-    font-size: 14px;
-    color:black;
+    font-family: 'Poppins', sans-serif;
+    color: #393939;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 35px;
+    text-align: left;
 }
+ .careerBackground {
+
+     position: absolute;
+     top: 0px;
+     left: 0px;
+     width: 250px;
+     height: 75vh;
+     padding-top: 40px;
+ }
 .mainContainer .Quotes{
-    background-color: white;
+    background-color: #4e98c917;
     padding-bottom: 100px;
     padding-top: 100px;
 }
 .mainContainer .Quotes .midColumn{
-    background-color: #2ab6f6;
+    background-color: white;
 }
 .mainContainer .Quotes .midColumn .row{
     justify-content: center;
@@ -210,3 +269,20 @@
      height: 50px;
      color:#2ab6f6;
  }
+ .webSection {
+     position: relative !important;
+     overflow: hidden;
+     background-color:#4e98c917;
+
+ }
+ .webSection img {
+     position: absolute !important;
+     bottom: -100px !important;
+     right: 0px !important;
+     height: 619px;
+     width: 35%;
+ }
+.carousel {
+    height: 20vh;
+    width: 60%;
+}

@@ -47,7 +47,7 @@
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     </g:if>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Elintegro Software Factory</title>
+    <title>Elintegro App Factory </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/home/logoWithoutText.jpg" type="image/x-icon">
     <meta name="google-signin-client_id" content="482906574403-seedi2p2ae3s9obm2ohb8bevq693jl3n.apps.googleusercontent.com">
@@ -67,6 +67,8 @@
     <asset:stylesheet href="/erf/gc-vue.css"/>
     <asset:stylesheet href="/erf/homePageLayout.css"/>
     <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400&display=swap" rel="stylesheet">
 
     <link rel="manifest" href="./manifest.json"/>
     <g:if test="${Environment.current != Environment.DEVELOPMENT}">
