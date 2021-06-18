@@ -67,9 +67,16 @@
     <asset:stylesheet href="/erf/gc-vue.css"/>
     <asset:stylesheet href="/erf/homePageLayout.css"/>
     <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400&display=swap" rel="stylesheet">
+    <asset:stylesheet href="/erf/owlCarousel.css"/>
+%{--    <asset:stylesheet href="/erf/font.css"/>--}%
 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,500&display=swap" rel="stylesheet">
+%{--    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400&display=swap" rel="stylesheet">--}%
+%{--    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />--}%
+
+    %{--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />--}%
     <link rel="manifest" href="./manifest.json"/>
     <g:if test="${Environment.current != Environment.DEVELOPMENT}">
         <script>
@@ -120,15 +127,61 @@ ${constructedPageHtml}
 <asset:javascript src="/erf/i18Messages.js"/>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <asset:javascript src="/erf/erfVueController.js"/>
+<asset:javascript src="/erf/owlCarousel.js"/>
 <asset:javascript src="/vuejs/vuex.js"/>
 <asset:javascript src="/vuejs/multiple-image-upload.umd.min.js"/>
 ${constructedPageScript}
+%{--<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">--}%
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.0/dist/aos.css" />
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-
+    AOS.init(
+        {
+            once: false,
+            duration: 1200,
+        }
+    );
     // import Vuetify from 'vuetify'
     // Vue.use(Vuetify,{
     //     rtl:true
     // })
+    $('.owl-carousel').owlCarousel({
+        loop: true,
+        margin: 10,
+        dots: false,
+        nav: true,
+        autoplay: true,
+        autoplaySpeed: 100,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+            },
+            414: {
+                items: 2,
+            },
+            700: {
+                items: 3,
+            },
+            991: {
+                items: 5,
+            },
+            1280: {
+                items: 7,
+            }
+        }
+    })
+
+
+    $(document).on('scroll', function() {
+        console.log('this is running')
+        if ($(document).scrollTop() > 86) {
+            $('#banner').addClass('shrink');
+        } else {
+            $('#banner').removeClass('shrink');
+        }
+    });
+
 </script>
 </body>
 </html>

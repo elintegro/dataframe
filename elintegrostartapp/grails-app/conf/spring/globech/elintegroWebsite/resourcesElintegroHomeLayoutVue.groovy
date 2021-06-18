@@ -9,7 +9,7 @@ beans {
 
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-row>
                                     <v-container class = "mainContainer" fluid>
-                                         <br><br><vueFirstContainerDataframe/>
+                                         <br><br><vueFirstContainerDataframe />
                                          <vueOurWorkContainerDataframe/>
                                          <vueOurProcessContainerDataframe/> 
                                          <vueCollaborationContainerDataframe/>
@@ -33,8 +33,12 @@ beans {
 
         layoutPlaceHolder = """
                                     <v-flex xs12 sm12 md12 lg12 x12 id ="our_home" class = "our_home">
-                                        <v-row>
-                                        <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
+                                   
+                                        <v-row >
+                           
+                                        <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> 
+                                        
+                                        </v-col>
                                              <v-col class="homeAnimationColumn" cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
                                                 <v-row>
                                                     <h2 class="heading-2">[build]</h2>[apps][buildData]
@@ -64,12 +68,13 @@ beans {
                                        
                                         <v-row   class="webSection our_work" id ="our_work">
                                          <v-col cols="1" > </v-col>
-                                             <v-col cols="5" >
+                                             <v-col cols="5" data-aos="fade-up">
                                                          <v-img alt ="our_frameworks"  src="assets/home/webMobile.png"></v-img>
                                              </v-col>
-                                             <v-col cols="5"  align-self="center" >
+                                             <v-col cols="5"  align-self="center" data-aos="fade-up" >
+                                             
                                                     <h2 class="heading-1 ">[weDeliver]</h2>
-                                                                <p class="paragraph">
+                                                                <p class="paragraph" >
                                                                     [WeDeliverTextParagraphOne]
                                                                 </p>
                                              </v-col>
@@ -84,9 +89,9 @@ beans {
                                        <v-flex xs12 sm12 md12 lg12 x12 id="our_process" class="our_process">
                                             <v-row>
                                             <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
-                                                 <v-col cols="12" xs="10" sm="10" md="5" xl="6" lg="6" align-self = 'center'>
+                                                 <v-col cols="12" xs="10" sm="10" md="5" xl="6" lg="6" align-self = 'center' data-aos="fade-up">
                                                        <v-row >
-                                                            <h2 class="heading-1">[youDeserve]</h2>
+                                                            <h2 class="heading-1" >[youDeserve]</h2>
                                                        </v-row><br>
                                                        <v-row>
                                                                 <p class="paragraph">[ourProcessTextOne]
@@ -94,7 +99,7 @@ beans {
                                                                 </p>
                                                        </v-row>
                                                  </v-col>
-                                                <v-col cols="12" xs="12" sm="12" md="4" xl="5" lg="5" class="text-center" >
+                                                <v-col cols="12" xs="12" sm="12" md="4" xl="5" lg="5" class="text-center" data-aos="fade-up" >
                                                     <v-img alt ="our_frameworks"  src="assets/home/aboutus.png" style= "width:100%"></v-img>
                                                  </v-col>
                                             </v-row>       
@@ -110,11 +115,11 @@ beans {
                                  <v-flex xs12 sm12 md12 lg12 x12 id="collaboration" class="collaboration">
                                       <v-row class= "webSection">
                                             <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
-                                            <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
+                                            <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center' data-aos="fade-up">
                                                   <v-img alt ="our_frameworks"  src="assets/home/appimg.png"></v-img>
                                             </v-col>
                                           
-                                            <v-col cols="12" xs="12" sm="12" md="4" xl="6" lg="6" class="text-center" align-self = 'center'>
+                                            <v-col cols="12" xs="12" sm="12" md="4" xl="6" lg="6" class="text-center" align-self = 'center' data-aos="fade-up">
                                                     <v-row>               
                                                     <h2 class="heading-1">[agilityAsService]</h2>
                                                 </v-row><br>
@@ -163,83 +168,160 @@ beans {
     vueQuotesContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
-                       
-                                <v-flex xs12 sm12 md12 lg12 x12 id="Quotes" class="Quotes">
-                                    <v-row >
-                                        <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col> 
-                                            <v-col class = "midColumn" cols="12" xs="12" sm="12" md="10" xl="10" lg="10">
-                                                <v-row><h1 class="heading">[customerSay]</h1></v-row>
-                                                <br>
-                                                <v-row>
-                                                 [quotes]
-                                                </v-row>
-                                            </v-col>
-                                        <v-col cols="12" xs="0" sm="0" md="0" xl="0" lg="0"></v-col>        
-                                    </v-row>
-                                </v-flex>
-                          
+                                <div id="Quotes" class="Quotes pt-10">
+                                <div class=" flex-column">
+                                  <h1 class="heading">What our customers say about us</h1>
+                                  <v-row justify="center">
+                                  <v-col cols="7" >    
+                                  <v-card elevation="12" class="QuotesPadding pa-6 ma-2" >        
+                                    <v-carousel
+                                        cycle
+                                        height="300"
+                                        class=' pa-0'
+                                        hide-delimiter-background
+                                        delimiter-background
+                                        show-arrows
+                                      >
+                                        <v-carousel-item
+                                        class = "comma px-12" 
+                                           v-for="(text,i) in texts"
+                                          :key="i"
+                                        >
+                                        
+                                        <v-row >
+                                        <v-col cols="2" class="pa-6 pb-6 text-right">
+                                        <img :src="text.src"></img>
+                                        </v-col>
+                                        <v-col cols="10" class="pa-0"></v-col>
+                                        </v-row>
+                                         <v-row>
+                                            <v-col cols="2" class="pa-0"></v-col>
+                                            <v-col cols="10" class="pa-0">
+                                              <div class="text-h5 commas">
+                                                {{ text.title}}
+                                              </div>
+                                              <div class="text-h6 blue--text commas">
+                                                {{ text.person}}
+                                              </div>
+                                             </v-col>
+                                    
+                                            </v-row> 
+                                        </v-carousel-item>
+                                      </v-carousel>
+                                      
+                                      </v-card>
+                                      </v-col>
+                                      </v-row>
+                                      </v-col>
+                                    </div>                    
+                                  </div>
+                        
                             
                             """
     }
+
     vueOurTechnologiesContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """
-<div>
-                                                <v-row class ="text-center">
-                                                   <v-col cols="12" xs="12" sm="12" md="12" xl="12" lg="12">
-                                                   <h2 class="heading-2 carousel">[thisIsHow]</h2></v-col>
-                                                </v-row>
-                                                <v-carousel class= "carousel" >
-    <v-carousel-item src="assets/home/slider1.png"></v-carousel-item>
-    <v-carousel-item src="assets/home/slider2.png"></v-carousel-item>
-    <v-carousel-item src="assets/home/slider3.png"></v-carousel-item>
-                                                </v-carousel>
-                                              </div>
-                                             
+        layoutPlaceHolder = """                   
+                                              <div class="tech-section py-5">
+        <div class="container-fluid section-padding">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tech-heading">
+                        <h4>This is how we do it</h4>
+                    </div>
+                    <div class="tech-slider">
+                        <div class="owl-carousel owl-theme owl-loaded">
+                            <div class="owl-stage-outer">
+                                <div class="owl-stage">
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider1.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider2.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider3.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider4.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider5.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider6.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider7.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider3.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider2.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider5.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider6.png" class="img-fluid" alt="" />
+                                    </div>
+                                    <div class="owl-item">
+                                        <img src="assets/home/slider7.png" class="img-fluid" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+                            
                             """
     }
     vueQuizPlaceholderContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
-                            <v-container id="quiz_placeholder" class="Quiz_Placeholder" fluid>
+                           <div id="quiz_placeholder" class="Quiz_Placeholder">
                                             <v-flex xs12 sm12 md12 lg12 x12>
-                                               <v-row></v-row><br><br><br>
                                                <v-row>
-                                                 <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-                                                    <v-col class="columnLeft" cols="12" xs="10" sm="10" md="4" xl="4" lg="4" align-self = 'center'>
-                                                        <v-row></v-row>
-                                                        <v-row><h2 class="heading-1">[letsTalk]</h2></v-row>
-                                                    </v-col>
-                                                 <v-col cols="12" xs="0" sm="0" md="2" xl="2" lg="2"></v-col>
-                                                    <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4">
-                                                       <v-card class="v-card">
+                                                 <v-col cols="12" xs="1" sm="1" md="3" xl="3" lg="3"></v-col>
+                                                
+                                                   <v-col cols="12" xs="8" sm="6" md="6" xl="7" lg="7">
+                                                     <v-row align="center"  justify="center">  <h2 class="heading-1">[letsTalk]</h2> </v-row>              
+                                                     <div class="contactAfter">
+                                                      <img alt ="our_frameworks"  src="assets/home/contact-before.png" class="contactAfterTop" ></img>
+                                                      <img alt ="our_frameworks"  src="assets/home/contact-after.png" class="contactAfterBottom" ></img>
+                                                      </div>
+                                                       <v-card class="quiz-card-container" align="center"  justify="center">
+                                                        <v-row>
                                                             <vueElintegroSignUpQuizDataframe/>
-                                                       </v-card>
-                                                    </v-col>
-                                                <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"></v-col>
-                                                </v-row>
-                                               <br><br><br><v-row></v-row>
+                                                            </v-row>
+                                                      </v-card>
+                                                   </v-col>
+                                                <v-col cols="12" xs="0" sm="0" md="4" xl="3" lg="2"></v-col>
+                                               
                                             </v-flex>
-                                         </v-container>
+                                         </div>
                             
                             """
     }
     vueFooterContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
-                                    <v-container class="footer" fluid>
-                                        <v-row>
-                                            <v-col class="photoCol" cols="12" xs= "12" sm="6" md="6" lg="6">
-                                                <v-img src="assets/home/plant.png"></v-img>
-                                            </v-col>
-                                            <v-col cols="12" xs= "12" sm="12" md="12" lg="12">    
-                                                <v-row class = "footerTexts" align="center" justify="end"
-                                                >
-                                                    [footerPrivacy][termAndConditions]
-                                                </v-row>
-                                            </v-col>
-                                        </v-row>                  
-                                    </v-container>
+                                  <footer class="footer-section">
+                <div class="col-12">
+                    <div class="footer">
+                        <ul>
+                            <li> [footerPrivacy] </li>
+                            <li> [termAndConditions] </li>
+                        </ul>
+                    </div>
+         
+    </footer>
                                 
                             """
     }

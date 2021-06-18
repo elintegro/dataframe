@@ -22,15 +22,16 @@ beans {
     /*Layout test for component and router based layout design*/
 
 
-    sectionLayout3(RowLayoutVue){ bean->
+    sectionLayout3(RowLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>
+                                   
                                      <navigationlayout/>
                                      <vuealertmsgdataframe/>
                                      <midsectionlayout/>
                                      <footerlayout/>
                                </div>"""
-        children = ["navigationLayout", "midSectionLayout","footerLayout"]
+        children = ["navigationLayout", "midSectionLayout", "footerLayout"]
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
     /*<v-card color="light-blue darken-2" text><v-layout row align-start justify-end>
@@ -38,9 +39,11 @@ beans {
             <v-flex shrink> <vueafterloggedindataframe v-if="this.\$store.state.vueInitDataframe.loggedIn"/>
     <vueloginnavigation v-else/></v-flex>
         </v-layout></v-card>*/
-    navigationLayout(ColumnLayoutVue){bean ->
+    navigationLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-toolbar color="light-blue darken-2" dark  tabs style="z-index:99;">
+        layoutPlaceHolder = """
+
+<v-toolbar color="light-blue darken-2" dark  tabs style="z-index:99;">
                                    <v-toolbar-side-icon></v-toolbar-side-icon>
                                    <v-toolbar-title class="display-1 thin  amber--text text--lighten-1" dark> logo  </v-toolbar-title>
                                  
@@ -48,11 +51,14 @@ beans {
                                    <vueNavigationButtonDataframe/>
                                    <vueElintegroNavigationLogoDataframe/>
                                    <vueInitDataframe/>
-                               </v-toolbar>"""
+                               </v-toolbar>
+                   
+                               """
+
         isGlobal = true
     }
 
-    vueToolbarDataframeLayout(RowLayoutVue){bean ->
+    vueToolbarDataframeLayout(RowLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-toolbar-items dark class="hidden-xs-and-down">
                                     <v-card v-if="this.\$store.state.vueInitDataframe.loggedIn" color="light-blue darken-2 ma-2" text>[BUTTON_SCRIPT][REF_FIELD]
@@ -62,7 +68,7 @@ beans {
                                 </v-toolbar-items>"""
     }
 
-    loginLogoutNavigationLayout(ColumnLayoutVue){bean ->
+    loginLogoutNavigationLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-card style="height:inherit;" color="light-blue darken-2" text><v-container fill-height grid-list-xl><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-container></v-card>"""
     }
@@ -71,7 +77,7 @@ beans {
       <v-tab ripple href="#vueOwnerTreeDataframe-tab-id">My Properties</v-tab><v-tab ripple href="#vueUserProfileDataframe-tab-id">Financial Data</v-tab><v-tab ripple href="#vueUserProfileDataframe-tab-id">My Profile</v-tab></v-tabs>*/
 
 
-    midSectionLayout(RowLayoutVue){bean ->
+    midSectionLayout(RowLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-content class="body-1 text-capitalize"><v-container fluid><v-layout row align-start justify-start>
                                     <columnspacerlayout/>
@@ -80,7 +86,7 @@ beans {
                                      </v-layout></v-container></v-content>"""
         children = ["columnSpacerLayout", "mainSectionLayout"]
     }
-    mainSectionLayout(ColumnLayoutVue){bean ->
+    mainSectionLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-layout wrap row align-start justify-start><v-content><v-container grid-list-md><v-layout row wrap justify-center>
                                                                 <v-flex xs2 order-lg1></v-flex>
@@ -97,13 +103,13 @@ beans {
 //            <router-view name='vueapplicationformdataframe'/>
 //
 //    <vueapplicationformdataframe v-if="this.\$store.state.vueToolbarDataframe.newApplication_display == true"/>
-    mainPageMessageLayout(RowLayoutVue){bean ->
+    mainPageMessageLayout(RowLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-container fluid><v-layout wrap column>
                                 <span align="center" class="headline">Welcome to Elintegro Start App. </br>Please Register or Login, in order to start working with the application. Or, start building on top of it, to create your next masterpiece.</span>
                                 </v-layout></v-container>"""
     }
-    myPropertySectionLayout(ColumnLayoutVue){bean ->
+    myPropertySectionLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-layout wrap row align-start justify-start><v-flex xs12 sm12 md12 lg3 xl3><v-container fluid><v-layout wrap column><vueownertreedataframe/></v-layout></v-container></v-flex><v-flex xs12 sm12 md12 lg7 xl7><v-content><v-container grid-list-md><v-layout row wrap justify-center>
                                         <router-view name='vuepropertydataframe'/>
@@ -114,41 +120,38 @@ beans {
     }
 
 
-
-    sidebarLayout(ColumnLayoutVue){bean ->
+    sidebarLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-navigation-drawer permanent fixed app v-model="drawer">Elintegro Start App</v-navigation-drawer>"""
     }
 
 
-
-    vueUserProfileDataframeLayout(ColumnLayoutVue){ bean->
+    vueUserProfileDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round width='fit-content'><v-toolbar dark color="light-blue darken-2"><v-toolbar-title class="white--text">My Profile</v-toolbar-title><v-spacer></v-spacer></v-toolbar>[vueUserProfileDataframe]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[ALL_OTHER_BUTTONS][saveButton]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
 
 
-
-    vueAfterLoggedinDataframeLayout(ColumnLayoutVue){bean ->
+    vueAfterLoggedinDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-card color="light-blue darken-2 mt-2" text id="vueAfterLoggedinDataframe-id" @click="vueProfileMenuDataframe_display = true;" ><v-layout row align-center justify-center> [person.mainPicture][REF_FIELD]</v-layout></v-card>"""
     }
 
-    vueProfileMenuDataframeLayout(ColumnLayoutVue){bean ->
+    vueProfileMenuDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-card color="default" text id="vueProfileMenuDataframe-id" style="overflow: hidden;"><v-form  ref='vueProfileMenuDataframe_form'><v-container class="pa-2"><v-layout wrap><v-flex xs12 sm12 md12 lg12 xl12><v-subheader class="subheading">Hello, {{vueProfileMenuDataframe_person_fullName}}</v-subheader></v-flex>[person.mainPicture]</v-layout></v-container></v-form>[BUTTON_SCRIPT]</v-card>"""
     }
 
 
-    vueLoginDataframeLayout(RowLayoutVue){bean ->
+    vueLoginDataframeLayout(RowLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class="rounded-card" style="width:320px; border-radius:10px;"><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
                                 <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click="closeDataframe"><v-icon medium >close</v-icon>
                                 </v-btn><span>Close</span></v-tooltip></v-toolbar>[DATAFRAME_SCRIPT]<v-layout align-content-space-around row wrap align-center>[BUTTON_SCRIPT]</v-layout></v-card></v-flex>"""
     }
 
-    vueRegisterDataframeLayout(ColumnLayoutVue){ bean->
+    vueRegisterDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card'><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
                                 <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
@@ -156,19 +159,19 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
 
-    vueUserManagementMenuDataframeLayout(RowLayoutVue){bean ->
+    vueUserManagementMenuDataframeLayout(RowLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-card color="default" text><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-card>"""
 
     }
 
-    vueRegisterMenuDataframeLayout(RowLayoutVue){bean ->
+    vueRegisterMenuDataframeLayout(RowLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-card color="default" text><v-layout row align-center justify-center>[BUTTON_SCRIPT][REF_FIELD]</v-layout></v-card>"""
 
     }
 
-    vueApplicationFormDataframeLayout(ColumnLayoutVue){ bean->
+    vueApplicationFormDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueApplicationFormDataframe_tab_model">
@@ -192,13 +195,13 @@ beans {
     }
 
 
-    vueContactDataframeLayout(ColumnLayoutVue){ bean->
+    vueContactDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>[DATAFRAME_LABEL]<v-container><v-layout row wrap justify-end align-end> [DATAFRAME_SCRIPT]<div>[address]</div>[BUTTON_SCRIPT]</v-layout></v-container></div>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
 
-    prescribedMedicationDataframeLayout(ColumnLayoutVue){ bean->
+    prescribedMedicationDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class="rounded-card" style="width:500px; border-radius:10px;"><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
                                 <v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
@@ -207,13 +210,12 @@ beans {
     }
 
 
-
-    addressDataframeLayout(ColumnLayoutVue){ bean->
+    addressDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[previous][ALL_OTHER_BUTTONS][googleMap]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
-    vueFormDetailDataframeLayout(ColumnLayoutVue){ bean->
+    vueFormDetailDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueApplicationFormDetailDataframe_tab_model">
@@ -237,7 +239,7 @@ beans {
     }
 
 
-    vueFormEditDataframeLayout(ColumnLayoutVue){ bean->
+    vueFormEditDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueApplicationFormEditDataframe_tab_model">
@@ -259,46 +261,46 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 
     }
-    vueContactFormDataframeLayout(ColumnLayoutVue){ bean->
+    vueContactFormDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>[DATAFRAME_LABEL]<v-layout row wrap justify-center><v-flex xs12 sm12 md8 lg8 xl8><v-layout row wrap justify-left> [ALL_OTHER_FIELDS]</v-layout></v-flex><v-flex xs12 sm12 md4 lg4 xl4>[person.mainPicture]</v-flex></v-layout></div>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
-    vueContactDataframeLayout(ColumnLayoutVue){ bean->
+    vueContactDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>[DATAFRAME_LABEL]<v-layout row wrap justify-center><v-flex xs12 sm12 md8 lg8 xl8><v-layout row wrap justify-left> [ALL_OTHER_FIELDS]</v-layout></v-flex><v-flex xs12 sm12 md4 lg4 xl4>[person.mainPicture]</v-flex>[ALL_OTHER_BUTTONS]</v-layout></div>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
 
-    vueContactDetailDataframeLayout(ColumnLayoutVue){ bean->
+    vueContactDetailDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>[DATAFRAME_LABEL]<v-layout row wrap justify-center><v-flex xs12 sm12 md8 lg8 xl8><v-layout row wrap justify-left> [ALL_OTHER_FIELDS]</v-layout></v-flex><v-flex xs12 sm12 md4 lg4 xl4>[person.mainPicture]</v-flex></v-layout></div>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
-    vueContactEditDataframeLayout(ColumnLayoutVue){ bean->
+    vueContactEditDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div>[DATAFRAME_LABEL]<v-layout row wrap justify-center><v-flex xs12 sm12 md8 lg8 xl8><v-form ref="vueContactEditDataframe_form"><v-layout row wrap justify-left> [ALL_OTHER_FIELDS]</v-layout></v-form></v-flex><v-flex xs12 sm12 md4 lg4 xl4>[person.mainPicture]</v-flex>[ALL_OTHER_BUTTONS]</v-layout></div>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
 
-    vueContactDetailDataframeLayout1(ColumnLayoutVue){ bean->
+    vueContactDetailDataframeLayout1(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-card round class='rounded-card'><v-toolbar dark color="light-blue darken-2"><v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title><v-spacer></v-spacer><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe"><v-icon medium >close</v-icon>
                                    </v-btn><span>Close</span></v-tooltip></v-toolbar>
                                    <v-container grid-list-xl fluid><v-layout row wrap justify-center><v-flex xs12 sm12 md8 lg8 xl8><v-layout row wrap justify-left> [ALL_OTHER_FIELDS]</v-layout></v-flex><v-flex xs12 sm12 md4 lg4 xl4>[person.mainPicture]</v-flex>[BUTTON_SCRIPT]</v-layout></v-container></v-card>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
     }
-    addressDetailDataframeLayout(ColumnLayoutVue){ bean->
+    addressDetailDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap></v-layout></v-container></v-card-actions></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
-    addressEditDataframeLayout(ColumnLayoutVue){ bean->
+    addressEditDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[ALL_OTHER_BUTTONS][googleMap]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
     }
-    vueEmployeeDataframeLayout(ColumnLayoutVue){ bean->
+    vueEmployeeDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueEmployeeAddDataframe_tab_model">
@@ -322,7 +324,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 
     }
-    vueEmployeeDetailDataframeLayout(ColumnLayoutVue){ bean->
+    vueEmployeeDetailDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueEmployeeDetailDataframe_tab_model">
@@ -351,7 +353,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 
     }
-    vueEmployeeEditDataframeLayout(ColumnLayoutVue){ bean->
+    vueEmployeeEditDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueEmployeeEditDataframe_tab_model">
@@ -382,7 +384,7 @@ beans {
     }
 
 
-    vueProviderDataframeLayout(ColumnLayoutVue){ bean->
+    vueProviderDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueProviderAddDataframe_tab_model">
@@ -406,7 +408,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 
     }
-    vueProviderDetailDataframeLayout(ColumnLayoutVue){ bean->
+    vueProviderDetailDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueProviderDetailDataframe_tab_model">
@@ -437,7 +439,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 
     }
-    vueProviderEditDataframeLayout(ColumnLayoutVue){ bean->
+    vueProviderEditDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueProviderEditDataframe_tab_model">
@@ -470,8 +472,7 @@ beans {
     }
 
 
-
-    vueVendorDataframeLayout(ColumnLayoutVue){ bean->
+    vueVendorDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueVendorAddDataframe_tab_model">
@@ -495,7 +496,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 
     }
-    vueVendorDetailDataframeLayout(ColumnLayoutVue){ bean->
+    vueVendorDetailDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueVendorDetailDataframe_tab_model">
@@ -526,7 +527,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 
     }
-    vueVendorEditDataframeLayout(ColumnLayoutVue){ bean->
+    vueVendorEditDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueVendorEditDataframe_tab_model">
@@ -559,8 +560,7 @@ beans {
     }
 
 
-
-    vueClientDetailDataframeLayout(ColumnLayoutVue){ bean->
+    vueClientDetailDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueClientDetailDataframe_tab_model">
@@ -582,7 +582,7 @@ beans {
         flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
 
     }
-    vueClientEditDataframeLayout(ColumnLayoutVue){ bean->
+    vueClientEditDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
                                 <v-tabs color="light-blue darken-2" dark slider-color="yellow" v-model="vueClientEditDataframe_tab_model">

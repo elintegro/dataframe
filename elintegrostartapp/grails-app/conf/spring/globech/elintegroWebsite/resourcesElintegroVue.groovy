@@ -126,10 +126,12 @@ beans {
                         "url"         : "assets/home/logo.png",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "attr"        : " contain ",
-                        "height"      : "50",
-                        "width"       : "350",
-                        "padding"      : "100",
-                        "margin-left" : "85"
+//                        "height"      : "64",
+//                        "width"       : "200",
+//                        "padding-left ": "75px",
+//                        "width"    :  "25%"
+//                        "padding"      : "100",
+//                        "margin-left" : "85"
                         //"min-width"   : "40"
 
                 ]

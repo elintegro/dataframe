@@ -33,7 +33,7 @@ class CarouselWidgetVue extends CollectionWidgetVue{
 
 <v-carousel
                       cycle
-                      show-arrows-on-hover
+                      show-arrows-on
                       hide-delimiter-background
                       height= "$height"
                       ${getAttr(field)}

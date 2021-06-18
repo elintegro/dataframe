@@ -184,6 +184,52 @@ beans {
         data = "newApplication_display:true,\n"
 
     }
+    vueQuotesContainerDataframe_script(VueJsEntity) { bean ->
+
+        data = """
+ texts: [
+          {
+            src: '/assets/home/comma.png',
+            title : "From concept to development, it was a pleasure to work with Elintegro. They delivered my product on time and on budget. I’d definitely hire them again.",
+            person : "Drasko Raicevic,Quickbody Fitness" 
+          },
+          {
+            src: '/assets/home/comma.png',
+            title : "The Dating app Elintegro developed for me was perfect. It was exactly what I needed, and more.",
+            person : "Lev, Matchmaker" 
+          },
+ 
+ 
+ ],
+ \n
+
+
+        """
+    }
+    vueOurTechnologiesContainerDataframe_script(VueJsEntity) { bean ->
+
+        data =  """
+          
+       items: [
+          {
+            src: '/assets/home/slider1.png'
+          },
+          {
+            src: '/assets/home/slider2.png'
+          },
+          {
+            src: '/assets/home/slider3.png'
+          },
+          {
+            src: '/assets/home/slider4.png'
+          },
+        ],
+      \n
+
+ """
+
+
+    }
     vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
         computed = """progressBarValue(){ 
                                           var progressValue = this.state.progressValue;

@@ -85,7 +85,6 @@ class ComboboxVue extends CollectionWidgetVue {
                   ${isDisabled(dataframe, field)?":disabled=true":""}
                   item-text="${displayMember}"
                   item-value="${valueMember}"
-                  small-chips
                   $multiple
                   hide-no-data
                   hide-selected

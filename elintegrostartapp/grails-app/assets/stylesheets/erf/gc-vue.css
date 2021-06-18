@@ -37,11 +37,11 @@ tr.selected td {
 .underLine.v-text-field>.v-input__control>.v-input__slot>.v-select__slot>.v-select__selections {
     color: #1976D2;
 }
-.appBar{
-    height: 50px;
-    padding-top: 24px;
-    margin-left: 41px;
-}
+/*.appBar{*/
+/*    height: 50px;*/
+/*    padding-top: 24px;*/
+/*    margin-left: 41px;*/
+/*}*/
 
 #newEmployeeBasicInformation{
     padding-top: 1%;
@@ -76,6 +76,7 @@ tr.selected td {
     border: 0;
     padding: 5px;
     cursor: pointer;
+    font-family: 'Poppins', sans-serif;
 }
 
 .navigationDrawer {
