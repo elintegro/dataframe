@@ -254,46 +254,46 @@ beans{
                        "lead.nameOfProject":[
                                widget:"InputWidgetVue"
                                ,name: "nameOfProject"
-                               ,attr: """solo attach  auto-select-first """
+                               ,attr: """solo attach  auto-select-first class='quiz-signup' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                                ],
                        "lead.deadline":[
                                 widget:"DateWidgetVue"
                                 ,name: "deadline"
-                                ,attr: """solo attach  background-color='#fff !important' color='#197DC3' """
+                                ,attr: """solo attach  class='quiz-signup' """
                                 ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "lead.descriptionOfProject":[
                                widget:"TextAreaWidgetVue"
                                ,name: "descriptionOfProject"
-                               ,attr: """solo attach  background-color='#fff !important' color='#197DC3' """
+                               ,attr: """solo attach   class='quiz-signup' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                        ],
                        "person.firstName":[
                                 widget:"InputWidgetVue"
                                 ,name: "firstName"
-                                ,attr: """solo attach auto-select-first flat background-color='#fff !important' color='#197DC3' """
+                                ,attr: """solo attach auto-select-first class='quiz-signup' """
 //                                ,"validationRules":[[condition:"v => !!v", message:"FirstName.required.message"]]
                                 ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "person.lastName":[
                                 widget:"InputWidgetVue"
                                 ,name: "lastName"
-                                ,attr: """solo attach auto-select-first flat background-color='#fff !important' color='#197DC3' """
+                                ,attr: """solo attach auto-select-first flat  class='quiz-signup' """
                                 ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"]]
                                 ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "person.email":[
                                widget:"EmailWidgetVue"
                                ,name: "email"
-                               ,attr: """solo attach auto-select-first flat background-color='#fff !important' color='#197DC3' """
+                               ,attr: """solo attach auto-select-first flat  class='quiz-signup' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "person.phone":[
                                "name":"phone"
                                ,"widget":"PhoneNumberWidgetVue"
                                ,"validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]
-                               ,attr: """solo attach auto-select-first flat background-color='#fff !important' color='#197DC3' """
+                               ,attr: """solo attach auto-select-first flat  class='quiz-signup' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
 
         ]
@@ -335,7 +335,7 @@ beans{
         addFieldDef = [
                 footerPrivacy:["widget":"ButtonWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,"attr":""" class='fontOfPrivacy'"""
+                               ,"attr":""" plain class='fontOfPrivacy'"""
                                ,onClick:[showAsDialog: true, refDataframe: ref("vueFooterPrivacyDataframe")]
                                ,script: """excon.setVisibility('vueFooterPrivacyDataframe',true);"""
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],

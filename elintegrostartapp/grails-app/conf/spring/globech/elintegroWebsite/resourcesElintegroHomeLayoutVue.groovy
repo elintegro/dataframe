@@ -89,19 +89,21 @@ beans {
                                        <v-flex xs12 sm12 md12 lg12 x12 id="our_process" class="our_process">
                                             <v-row>
                                             <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
-                                                 <v-col cols="12" xs="10" sm="10" md="5" xl="6" lg="6" align-self = 'center' data-aos="fade-up">
+                                                 <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="5" align-self = 'center' data-aos="fade-up">
                                                        <v-row >
                                                             <h2 class="heading-1" >[youDeserve]</h2>
-                                                       </v-row><br>
+                                                       </v-row>
                                                        <v-row>
                                                                 <p class="paragraph">[ourProcessTextOne]
                                                                 </p><p class="paragraph para">[ourProcessTextTwo]
                                                                 </p>
-                                                       </v-row>
+                                                       </v-row>   
                                                  </v-col>
+                                                  <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1" class="about-us-margin-right"> </v-col>
                                                 <v-col cols="12" xs="12" sm="12" md="4" xl="5" lg="5" class="text-center" data-aos="fade-up" >
                                                     <v-img alt ="our_frameworks"  src="assets/home/aboutus.png" style= "width:100%"></v-img>
                                                  </v-col>
+                                             
                                             </v-row>       
                                        </v-flex>
                                 
@@ -119,19 +121,17 @@ beans {
                                                   <v-img alt ="our_frameworks"  src="assets/home/appimg.png"></v-img>
                                             </v-col>
                                           
-                                            <v-col cols="12" xs="12" sm="12" md="4" xl="6" lg="6" class="text-center" align-self = 'center' data-aos="fade-up">
+                                            <v-col cols="12" xs="12" sm="12" md="5" xl="5" lg="5" class="text-center" align-self = 'center' data-aos="fade-up">
                                                     <v-row>               
                                                     <h2 class="heading-1">[agilityAsService]</h2>
-                                                </v-row><br>
+                                                </v-row>
                                                 <v-row>
                                                     <p class="paragraph">[collaborationFirstParagraph]
                                                     </p><p class="paragraph">[collaborationSecondParagraph]
                                                     </p>
                                                 </v-row>
-                                                      
-
                                             </v-col>
-                                            
+                                            <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
                                       </v-row>       
                                  </v-flex>
                             
@@ -142,11 +142,11 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """
                                  
-                                            <v-flex xs12 sm12 md12 lg12 x12 id="our_framework" class = "our_framework">
+                                            <v-flex xs12 sm12 md12 lg12 x12 id="our_framework" class = "our_framework" data-aos="fade-up">
                                                 <v-row class="qualityBuilt">
                                                        <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
-                                                       <v-col cols="12" xs="12" sm="12" md="4" xl="6" lg="6" class="text-center" align-self = 'center'>
-                                                              <v-row><h2 class="heading-1">[QualityBuilt]</h2></v-row><br>
+                                                       <v-col cols="12" xs="12" sm="12" md="5" xl="5" lg="5" class="text-center" align-self = 'center'>
+                                                              <v-row><h2 class="heading-1">[QualityBuilt]</h2></v-row>
                                                         <v-row>
                                                                 <p class="paragraph">[ourFrameworkTextFirstParagraph]
                                                                 </p><p class="paragraph">[ourFrameworkTextSecondParagraph]
@@ -160,6 +160,7 @@ beans {
                                                       <v-img alt ="our_frameworks"  src="assets/home/careerimg.png"></v-img>
                                                     </v-col>
                                                           <img alt ="our_frameworks"  src="assets/home/careerbg.png" class="careerBackground" ></img>
+                                                           <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
                                                 </v-row>
                                             </v-flex>
                                    
@@ -168,10 +169,10 @@ beans {
     vueQuotesContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
-                                <div id="Quotes" class="Quotes pt-10">
-                                <div class=" flex-column">
+                                <div id="Quotes" class="Quotes pt-10" >
+                                <div class=" flex-column" data-aos="fade-up">
                                   <h1 class="heading">What our customers say about us</h1>
-                                  <v-row justify="center">
+                                  <v-row justify="center" sta>
                                   <v-col cols="7" >    
                                   <v-card elevation="12" class="QuotesPadding pa-6 ma-2" >        
                                     <v-carousel
@@ -285,7 +286,7 @@ beans {
     vueQuizPlaceholderContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
-                           <div id="quiz_placeholder" class="Quiz_Placeholder">
+                           <div id="quiz_placeholder" class="Quiz_Placeholder" data-aos="fade-up">
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                <v-row>
                                                  <v-col cols="12" xs="1" sm="1" md="3" xl="3" lg="3"></v-col>
@@ -303,7 +304,7 @@ beans {
                                                       </v-card>
                                                    </v-col>
                                                 <v-col cols="12" xs="0" sm="0" md="4" xl="3" lg="2"></v-col>
-                                               
+                                               </v-row>
                                             </v-flex>
                                          </div>
                             
@@ -320,7 +321,7 @@ beans {
                             <li> [termAndConditions] </li>
                         </ul>
                     </div>
-         
+         </div>
     </footer>
                                 
                             """
