@@ -172,7 +172,7 @@ beans {
                                 <div id="Quotes" class="Quotes pt-10" >
                                 <div class=" flex-column" data-aos="fade-up">
                                   <h1 class="heading">What our customers say about us</h1>
-                                  <v-row justify="center" sta>
+                                  <v-row justify="center">
                                   <v-col cols="7" >    
                                   <v-card elevation="12" class="QuotesPadding pa-6 ma-2" >        
                                     <v-carousel
@@ -188,7 +188,7 @@ beans {
                                            v-for="(text,i) in texts"
                                           :key="i"
                                         >
-                                        
+
                                         <v-row >
                                         <v-col cols="2" class="pa-6 pb-6 text-right">
                                         <img :src="text.src"></img>
@@ -205,25 +205,27 @@ beans {
                                                 {{ text.person}}
                                               </div>
                                              </v-col>
-                                    
+
                                             </v-row> 
                                         </v-carousel-item>
                                       </v-carousel>
-                                      
+
                                       </v-card>
                                       </v-col>
                                       </v-row>
                                       </v-col>
                                     </div>                    
                                   </div>
-                        
                             
                             """
     }
 
     vueOurTechnologiesContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """                   
+        layoutPlaceHolder = """                  
+ <v-row> 
+ <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+      <v-col cols="12" xs="1" sm="1" md="10" xl="10" lg="10">
                                               <div class="tech-section py-5">
         <div class="container-fluid section-padding">
             <div class="row">
@@ -279,8 +281,9 @@ beans {
             </div>
         </div>
     </div>
-    
-                            
+    </v-col>
+      <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+     </v-row>                       
                             """
     }
     vueQuizPlaceholderContainerDataframeLayout(ColumnLayoutVue) { bean ->

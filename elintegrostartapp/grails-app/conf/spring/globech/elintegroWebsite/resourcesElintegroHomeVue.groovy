@@ -50,6 +50,7 @@ beans{
                 ],
                 "buildApp":["widget":"ButtonWidgetVue"
                             ,"name":"buildApp"
+                            ,attr: """ """
                             ,flexGridValues:['xs0', 'sm0', 'md6', 'lg6', 'xl6']
                             ,script: """ this.scrollToQuiz('coachClone');"""
                 ]
@@ -298,7 +299,7 @@ beans{
 
         ]
         dataframeButtons = [
-                submit: [name: "submit", type: "button",attr: """style='background-color:#212121; color:#fff; border-radius: 20px; font-size: 16px; border: none; font-weight: 300;     box-shadow: 0px 0px 34px #3030301c; width=120px;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
+                submit: [name: "submit", type: "button",attr: """class='form-submission-button' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
         currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }

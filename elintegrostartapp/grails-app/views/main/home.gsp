@@ -68,6 +68,7 @@
     <asset:stylesheet href="/erf/homePageLayout.css"/>
     <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
     <asset:stylesheet href="/erf/owlCarousel.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.0/dist/aos.css" />
 %{--    <asset:stylesheet href="/erf/font.css"/>--}%
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -130,10 +131,11 @@ ${constructedPageHtml}
 <asset:javascript src="/erf/owlCarousel.js"/>
 <asset:javascript src="/vuejs/vuex.js"/>
 <asset:javascript src="/vuejs/multiple-image-upload.umd.min.js"/>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 ${constructedPageScript}
 %{--<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">--}%
-<link rel="stylesheet" href="https://unpkg.com/aos@2.3.0/dist/aos.css" />
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
 <script>
     AOS.init(
         {

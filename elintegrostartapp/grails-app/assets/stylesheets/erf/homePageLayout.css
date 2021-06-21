@@ -65,14 +65,15 @@ body {
     font-family:sans-serif;
 }
 .mainContainer .our_home #vueFirstContainerDataframe_buildApp{
-    background-color: black;
-    color:white;
-    font-family:sans-serif;
-    font-size:inherit;
-    padding: 20px;
-    text-transform: unset;
+    background-color: #212121;
+    color: #fff;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 14px !important;
+    padding: 23px 13px !important;
+    box-shadow: 0px 0px 34px #3030301c;
+    border: none;
+    /*outline: none !important;*/
+    cursor: pointer;
 
 }
 @media screen and (max-width: 480px){
@@ -281,10 +282,8 @@ body {
 
 .footer-section {
     position: relative;
-    margin-top: 180px;
-    padding-top: 48px;
-    padding-bottom: 48px;
-    width: 100%;
+    margin-top: 250px;
+
 }
 
 .footer-section::before {
@@ -442,7 +441,7 @@ body {
 
  #banner.shrink {
      background: #fff;
-     box-shadow: 0 0 45px 0px #d6d6d6;
+     box-shadow: 0 0 45px 0 #d6d6d6;
      padding-top: 5px;
      transition: all .4s;
  }
@@ -450,9 +449,8 @@ body {
      height: 60px !important;
  }
 
- .navigationItem {
-     font-family: Poppins;
-     font-size: 2rem;
+ .navigationItem:hover {
+    color: blue;
 
  }
  .owl-carousel .owl-item img {
@@ -514,6 +512,8 @@ body {
      padding-bottom: 50px;
  }
 
+
+
 .fontOfPrivacy {
 
 
@@ -555,8 +555,8 @@ body {
 
 .v-btn:not(.v-btn--round).v-size--default {
     height: 0px !important;
-     min-width: 0px !important;
-    padding: 0px 5px !important;
+     min-width: 0 !important;
+    padding: 0 9px !important;
 }
 .v-btn {
     text-transform:none !important;
@@ -570,4 +570,23 @@ body {
     color: #0f1111;
 }
 
+.form-submission-button  {
+    background-color: #212121;
+    color: #fff;
+    border-radius: 20px;
+    padding: 8px 50px;
+    font-size: 16px;
+    border: none;
+    font-weight: 300;
+    box-shadow: 0px 0px 34px #3030301c;
+    cursor: pointer;
+}
 
+/*.loginButton:hover  {*/
+/*    text-decoration: underline;*/
+
+/*}*/
+
+.v-btn__content {
+
+}
