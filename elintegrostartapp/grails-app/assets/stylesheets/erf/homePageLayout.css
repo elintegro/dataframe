@@ -405,8 +405,8 @@ body {
     background-image: url('/assets/home/banner-before.png');
     background-repeat: no-repeat;
     background-size: cover;
-    right: 0px;
-    top: 0px;
+    right: 0;
+    top: 0;
     width: 130px;
     height: 120px;
     z-index: 100;
@@ -418,8 +418,8 @@ body {
     background-image: url('/assets/home/banner-after.png');
     background-repeat: no-repeat;
     background-size: cover;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     width: 560px;
     height: 240px;
     z-index: 100;

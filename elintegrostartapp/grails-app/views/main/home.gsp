@@ -176,7 +176,6 @@ ${constructedPageScript}
 
 
     $(document).on('scroll', function() {
-        console.log('this is running')
         if ($(document).scrollTop() > 86) {
             $('#banner').addClass('shrink');
         } else {
