@@ -64,9 +64,21 @@
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
     <asset:stylesheet href="/vuejs/multiple-image-upload.css"/>
     <asset:stylesheet href="/vuejs/vuetify-v2.0.5.css"/>
-    <asset:stylesheet href="/vuejs/gc-vue.css"/>
-    <asset:stylesheet href="/vuejs/homePageLayout.css"/>
-    <asset:stylesheet href="/vuejs/translatorAssistantLayout.css"/>
+    <asset:stylesheet href="/erf/gc-vue.css"/>
+    <asset:stylesheet href="/erf/homePageLayout.css"/>
+    <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
+
+    <g:if test="${Environment.CUSTOM.name == "qa"}">
+        <link rel="manifest" href="./manifest.json"/>
+        <script>
+            if('serviceWorker' in navigator){
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log("Service worker registered", reg))
+                    .catch((err)=>console.log("Service worker not registered", err))
+            }
+        </script>
+    </g:if>
+
 
 </head>
 <body>

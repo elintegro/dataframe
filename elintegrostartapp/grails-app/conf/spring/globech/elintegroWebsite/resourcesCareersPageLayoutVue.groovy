@@ -17,7 +17,7 @@ beans {
                                             <v-container style = "background-color: #fafbfd">
                                                  <v-row class = "justify-center"><h1 style="color: #2c3442;"><b>[careersHeader]</b></h1></v-row>
                                                  <v-row class = "justify-center pa-2">[BUTTON_SCRIPT]</v-row>  
-                                                 <v-row class = "justify-center"><p>[careersDescription]</p></v-row>
+                                                 <v-row class = "justify-center">[careersDescription]</v-row>
                                             </v-container>
                                     </v-card>
                                </v-flex>"""

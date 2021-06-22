@@ -118,3 +118,7 @@ tr.selected td {
     color: #0f1111;
     background-color: #f6f6f6;
 }
+
+.careersDescriptionPicture{
+    border-radius: 20px;
+}
