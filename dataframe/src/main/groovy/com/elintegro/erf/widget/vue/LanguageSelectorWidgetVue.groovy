@@ -109,8 +109,8 @@ class LanguageSelectorWidgetVue extends CollectionWidgetVue {
         String modelString = getFieldJSONModelNameVue(field)
         """
             <v-row class="mx-0 align-baseline">
-                  <v-col cols="2">
-                        <v-icon style='color:#1976D2;'>translate</v-icon>
+                  <v-col cols="2 mt-3">
+                       <img src="assets/home/navbarimg.png">
                   </v-col>
                   <v-col class="pt-6" cols="6"> 
                       <v-select

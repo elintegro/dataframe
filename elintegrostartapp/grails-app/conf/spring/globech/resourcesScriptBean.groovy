@@ -206,30 +206,7 @@ beans {
 
         """
     }
-    vueOurTechnologiesContainerDataframe_script(VueJsEntity) { bean ->
 
-        data =  """
-          
-       items: [
-          {
-            src: '/assets/home/slider1.png'
-          },
-          {
-            src: '/assets/home/slider2.png'
-          },
-          {
-            src: '/assets/home/slider3.png'
-          },
-          {
-            src: '/assets/home/slider4.png'
-          },
-        ],
-      \n
-
- """
-
-
-    }
     vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
         computed = """progressBarValue(){ 
                                           var progressValue = this.state.progressValue;

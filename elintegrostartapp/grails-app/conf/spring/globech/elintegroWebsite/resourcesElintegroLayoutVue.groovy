@@ -126,7 +126,7 @@ beans {
                                      <v-menu offset-y tile z-index = 101 close-on-content-click>
                                          <template v-slot:activator="{ on, attrs }">
                                              <v-flex xs0 sm0 md0 lg0 xl0>
-                                             <v-btn color="#212121" dark v-bind="attrs" text style="text-transform:capitalize; font-family:'poppins' ">About Us</v-btn>
+                                             <v-btn color="#212121" dark v-bind="attrs" text style="text-transform:capitalize;" class="navigation-hover">About Us</v-btn>
                                              </v-flex>
                                          </template>
                                          <v-list width="min-content" style=" margin-right: -30px;margin-left: -30px;">
@@ -138,7 +138,7 @@ beans {
                                      <v-menu offset-y tile z-index = 101 close-on-content-click>
                                          <template v-slot:activator="{ on, attrs }">
                                              <v-flex xs0 sm0 md0 lg0 xl0>
-                                             <v-btn class="ma-md-0"color="#212121" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;">Apps</v-btn>
+                                             <v-btn color="#212121" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;" class="navigation-hover" >Apps</v-btn>
                                              </v-flex>
                                          </template>
                                          <v-list width="min-content" style=" margin-right: -30px;margin-left: -30px;">

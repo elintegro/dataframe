@@ -37,11 +37,6 @@ tr.selected td {
 .underLine.v-text-field>.v-input__control>.v-input__slot>.v-select__slot>.v-select__selections {
     color: #1976D2;
 }
-/*.appBar{*/
-/*    height: 50px;*/
-/*    padding-top: 24px;*/
-/*    margin-left: 41px;*/
-/*}*/
 
 #newEmployeeBasicInformation{
     padding-top: 1%;
@@ -118,7 +113,7 @@ tr.selected td {
 .v-data-table__wrapper table thead th{
     font-size: 1rem;
     font-weight: 900;
-    font-family: system-ui,sans-serif;
+    font-family: Poppins;
     color: #0f1111;
     background-color: #f6f6f6;
 }

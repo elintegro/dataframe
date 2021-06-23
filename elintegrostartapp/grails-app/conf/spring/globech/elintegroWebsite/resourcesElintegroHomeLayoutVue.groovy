@@ -169,41 +169,43 @@ beans {
     vueQuotesContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
-                                <div id="Quotes" class="Quotes pt-10" >
+                                <div  class="Quotes pt-10" >
                                 <div class=" flex-column" data-aos="fade-up">
                                   <h1 class="heading">What our customers say about us</h1>
                                   <v-row justify="center">
                                   <v-col cols="7" >    
-                                  <v-card elevation="12" class="QuotesPadding pa-6 ma-2" >        
+                                  <v-card elevation="12" class="QuotesPadding " >        
                                     <v-carousel
                                         cycle
                                         height="300"
                                         class=' pa-0'
                                         hide-delimiter-background
-                                        delimiter-background
+                                       
                                         show-arrows
                                       >
                                         <v-carousel-item
-                                        class = "comma px-12" 
+                                        class = "comma pr-16" 
                                            v-for="(text,i) in texts"
                                           :key="i"
                                         >
 
                                         <v-row >
-                                        <v-col cols="2" class="pa-6 pb-6 text-right">
+                                        <v-col cols='1'></v-col>
+                                        <v-col cols="1" class='mt-4'>
                                         <img :src="text.src"></img>
                                         </v-col>
                                         <v-col cols="10" class="pa-0"></v-col>
                                         </v-row>
                                          <v-row>
                                             <v-col cols="2" class="pa-0"></v-col>
-                                            <v-col cols="10" class="pa-0">
+                                            <v-col cols="8" class="pa-0">
                                               <div class="text-h5 commas">
                                                 {{ text.title}}
                                               </div>
                                               <div class="text-h6 blue--text commas">
                                                 {{ text.person}}
                                               </div>
+                                               <v-col cols="2" class="pa-0"></v-col>
                                              </v-col>
 
                                             </v-row> 
