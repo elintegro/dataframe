@@ -548,5 +548,45 @@ body {
 
 
 .theme--dark.v-btn.v-btn--icon {
-    color: lightskyblue;
+    color:#007bff;
+    opacity: 0.5;
 }
+.theme--dark.v-btn.v-btn--icon:hover {
+    opacity: unset;
+
+}
+.QuotesPadding,
+.v-window__container,
+.v-window__prev,
+.QuotesPadding,
+.v-window__container .v-window__next{
+    background: none !important;
+}
+.QuotesPadding .v-window__container .v-window__prev .v-btn i ,
+.QuotesPadding .v-window__container .v-window__next .v-btn i{
+    font-size: 70px !important;
+}
+.QuotesPadding .v-window .v-item--active  {
+    color:#007bff;
+    opacity: unset !important;
+}
+.QuotesPadding .v-window .v-carousel__controls__item {
+    box-shadow: none;
+}
+.QuotesPadding .v-window .v-carousel__controls__item .v-btn:before {
+    background-color: none;
+}
+.QuotesPadding .theme--dark.v-btn--active:hover::before, .QuotesPadding .theme--dark.v-btn--active::before {
+    opacity: unset;
+}
+.v-btn--fab.v-size--small {
+    height: 0;
+    width: 0;
+}
+.QuotesPadding .v-window__container .v-window__next {
+    right: 47px;
+}
+.QuotesPadding .v-window__container .v-window__prev {
+    left: 47px;
+}
+

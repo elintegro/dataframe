@@ -89,6 +89,7 @@ beans {
                         , search:true
                         ,defaultLanguage :"English"
                         ,attr: """style='max-width:min-content;margin-top=-2%;'"""
+                        ,imageIcon : true
                         ,onSelect:[methodScript:"this.selectedLanguage(_params);"]
                 ],]
         currentFrameLayout = ref("vueElintegroLanguageSelectorDataframeLayout")
