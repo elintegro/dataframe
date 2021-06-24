@@ -555,13 +555,13 @@ body {
     opacity: unset;
 
 }
-.QuotesPadding,
-.v-window__container,
-.v-window__prev,
-.QuotesPadding,
-.v-window__container .v-window__next{
-    background: none !important;
-}
+/*.QuotesPadding,*/
+/*.v-window__container,*/
+/*.v-window__prev,*/
+/*.QuotesPadding,*/
+/*.v-window__container .v-window__next{*/
+/*    background: none !important;*/
+/*}*/
 .QuotesPadding .v-window__container .v-window__prev .v-btn i ,
 .QuotesPadding .v-window__container .v-window__next .v-btn i{
     font-size: 70px !important;
