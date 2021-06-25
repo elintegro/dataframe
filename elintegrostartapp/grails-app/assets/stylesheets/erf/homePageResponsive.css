@@ -1,0 +1,321 @@
+
+@media screen and (max-width: 1366px) {
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1, .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .Quiz_Placeholder .heading-1{
+        font-size: 24px;
+    }
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph ,
+    .mainContainer .our_framework .paragraph{
+        font-size: 17px;
+    }
+
+}
+
+@media screen and (max-width: 1280px) {
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1, .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .Quiz_Placeholder .heading-1{
+        font-size: 36px;
+    }
+}
+@media screen and (max-width: 1440px) {
+    .footer-section::before {
+        height: 195px;
+    }
+}
+@media screen and (max-width: 1366px) {
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1, .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .Quiz_Placeholder .heading-1{
+        font-size: 24px;
+    }
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph {
+        font-size: 17px;
+    }
+    .mainContainer .our_home .heading-2 {
+        /*font-size: 38px;*/
+    }
+}
+
+
+
+@media screen and (max-width: 1024px) {
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1,.collaboration .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .mainContainer.Quiz_Placeholder .heading-1{
+        font-size: 22px;
+    }
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph  {
+        font-size: 16px;
+    }
+}
+@media screen and (max-width: 768px) {
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph {
+        font-size: 16px;
+        line-height: 25px;
+    }
+    .mainContainer .our_home .heading-2 {
+        font-size: 30px;
+    }
+}
+@media screen and (max-width: 450px) {
+    #banner {
+        padding-bottom: 40px;
+    }
+    #banner.shrink {
+        padding-top: 40px;
+    }
+    .bannerSection::after {
+        width: 71%;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+    }
+
+    .appBar {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .bannerSection::before {
+        width: 29%;
+        height: 114px;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    .mainContainer .our_home .homeAnimationColumn {
+        padding: 66px;
+        text-align: center;
+        height: 0;
+    }
+
+
+
+    .mainContainer .our_home .heading-2 {
+        text-align: center;
+        font-size: 43px;
+    }
+    .mainContainer .our_work,
+    .mainContainer .our_process,
+    .mainContainer .collaboration,
+    .mainContainer .our_framework,
+    .mainContainer .Quotes,
+    .mainContainer .Quiz_Placeholder{
+        padding: 0px 25px;
+    }
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1,.collaboration .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .Quiz_Placeholder .heading-1 {
+        font-size: 22px;
+        text-align: center;
+
+    }
+
+
+    .collaboration .webSection .heading-1,
+    .mainContainer .our_framework .heading-1{
+
+        padding-left: 112px;
+    }
+
+    .mainContainer .Quotes .QuotesPadding .commas {
+        padding: 7px 0px 0px 49x;
+        font-size: 12px !important;
+        text-align: left !important;
+        line-height: 21px !important;
+    }
+
+    .mainContainer .Quotes .QuotesPadding img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .mainContainer .Quiz_Placeholder .quiz-card-container {
+        max-width: 100%;
+        padding: 30px;
+    }
+
+    .mainContainer .Quiz_Placeholder .contactAfter {
+        display: none;
+    }
+    .careerBackground {
+        top: -20px;
+        width: 154px;
+        height: 45vh;
+    }
+    .v-btn--fab.v-size--small {
+        padding-top: 20px;
+    }
+
+    .QuotesPadding .v-window__container .v-window__prev .v-btn i {
+        margin-right: 87px;
+    }
+
+    .QuotesPadding .v-window__container .v-window__next .v-btn i {
+        margin-left: 87px;
+    }
+
+    .footerContainer .footer-section::before {
+        height: 228px;
+        background-position-x: -1224px;
+    }
+    .footerContainer .footer-section {
+        padding-bottom: 15px;
+        margin-top: 67px;
+    }
+    .footer ul li {
+        font-size: 14px;
+    }
+    .footer ul {
+        padding: 0;
+    }
+
+
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph {
+        font-size: 16px;
+        text-align: center;
+        line-height: 25px;
+    }
+}
+@media screen and (max-width: 375px) {
+    #banner {
+        padding-bottom: 40px;
+    }
+    #banner.shrink {
+        padding-top: 40px;
+    }
+    .bannerSection::after {
+        width: 91%;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+    }
+
+    .appBar {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .bannerSection::before {
+        width: 29%;
+        height: 114px;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .mainContainer .our_home .homeAnimationColumn {
+        padding: 66px;
+        text-align: center;
+        height: 0;
+    }
+
+    .mainContainer .our_home .heading-2 {
+        text-align: center;
+        font-size: 43px;
+    }
+
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .Quotes .heading {
+        font-size: 22px;
+
+
+
+    }
+
+    .Quiz_Placeholder .heading-1 {
+        font-size: 18px;
+    }
+
+    .mainContainer .Quotes .QuotesPadding .commas {
+        padding: 7px 0px 0px 49x;
+        font-size: 12px !important;
+        text-align: left !important;
+        line-height: 21px !important;
+    }
+
+    .mainContainer .Quotes .QuotesPadding img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .mainContainer .Quiz_Placeholder .quiz-card-container {
+        max-width: 100%;
+        padding: 30px;
+    }
+
+    .mainContainer .Quiz_Placeholder .contactAfter {
+        display: none;
+    }
+    .careerBackground {
+        top: -20px;
+        width: 160px;
+        height: 61vh;
+    }
+    .v-btn--fab.v-size--small {
+        padding-top: 20px;
+    }
+
+    .QuotesPadding .v-window__container .v-window__prev .v-btn i {
+        margin-right: 87px;
+    }
+
+    .QuotesPadding .v-window__container .v-window__next .v-btn i {
+        margin-left: 87px;
+    }
+
+    .mainContainer .collaboration .heading-1,
+    .mainContainer .our_framework .heading-1 {
+        padding-left: 92px !important;
+    }
+
+
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph {
+        font-size: 16px;
+        text-align: center;
+        line-height: 25px;
+    }
+
+    .footerContainer .footer-section::before {
+        height: 215px;
+        background-position-x: -1214px;
+    }
+    .footerContainer .footer-section {
+        padding-bottom: 15px;
+        margin-top: 67px;
+    }
+    .footer ul li {
+        font-size: 14px;
+    }
+    .footer ul {
+        padding: 0;
+    }
+}

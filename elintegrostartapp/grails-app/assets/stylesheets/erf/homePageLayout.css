@@ -1,10 +1,9 @@
 body {
     font-family: 'Poppins' !important;
+    margin: 0;
+padding: 0;
 }
 
-.container {
-    padding: 5px !important;
-}
  .appBar {
      padding-left: 75px;
      width: 28%;
@@ -66,12 +65,14 @@ body {
 }
 .navigation-hover {
     height: 0 !important;
+    padding-left:8px !important;
 }
 .navigation-hover :hover{
     color: #197DC3;
 }
 .navigation-hover-underline {
     height: 0px !important;
+    padding-left: 8px !important;
 }
 .navigation-hover-underline :hover{
     text-decoration: underline;
@@ -207,6 +208,7 @@ body {
      width: 250px;
      height: 75vh;
      padding-top: 40px;
+     overflow: hidden;
  }
 
 
@@ -528,6 +530,7 @@ body {
     font-size: 16px !important;
     font-weight: 400 !important;
     letter-spacing: 0px ;
+    vertical-align: text-top !important;
 }
 
 .theme--light.v-btn {
@@ -589,4 +592,3 @@ body {
 .QuotesPadding .v-window__container .v-window__prev {
     left: 47px;
 }
-

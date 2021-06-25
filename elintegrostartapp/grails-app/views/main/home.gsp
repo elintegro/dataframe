@@ -66,6 +66,7 @@
     <asset:stylesheet href="/vuejs/vuetify-v2.0.5.css"/>
     <asset:stylesheet href="/erf/gc-vue.css"/>
     <asset:stylesheet href="/erf/homePageLayout.css"/>
+    <asset:stylesheet href="/erf/homePageResponsive.css"/>
     <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
     <asset:stylesheet href="/erf/owlCarousel.css"/>
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.0/dist/aos.css" />
