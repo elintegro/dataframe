@@ -193,7 +193,7 @@
     }
 
 
-    .mainContainer .our_work p,
+    .mainContainer .our_work .paragraph,
     .mainContainer .our_process .paragraph,
     .mainContainer .collaboration .paragraph,
     .mainContainer .our_framework .paragraph {
@@ -295,7 +295,7 @@
     }
 
 
-    .mainContainer .our_work p,
+    .mainContainer .our_work .paragraph,
     .mainContainer .our_process .paragraph,
     .mainContainer .collaboration .paragraph,
     .mainContainer .our_framework .paragraph {
