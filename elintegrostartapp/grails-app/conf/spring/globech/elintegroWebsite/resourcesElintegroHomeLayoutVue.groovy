@@ -57,7 +57,7 @@ beans {
                                             <v-col cols="12" xs="12" sm="5" md="5" xl="5" lg="5" class="text-center">
                                                <v-img alt ="our_home"  src="assets/home/newmobile.png"></v-img>
                                             </v-col>
-                                               <v-col cols="12" xs="0" sm="0" md="1" xl="1" lg="1"> </v-col>
+                                               <v-col cols="12" xs="0" sm="0" md="0" xl="1" lg="1"> </v-col>
                                         </v-row>
                                     </v-flex>
                                
@@ -69,11 +69,11 @@ beans {
         layoutPlaceHolder = """ 
                                        
                                         <v-row   class="webSection our_work" id ="our_work">
-                                         <v-col cols="12" xs="10" sm="10" md="1" xl="1" lg="1" > </v-col>
-                                             <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="5" data-aos="fade-up">
+                                         <v-col cols="12" xs="10" sm="1" md="1" xl="1" lg="1" > </v-col>
+                                             <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" data-aos="fade-up">
                                                          <v-img alt ="our_frameworks"  src="assets/home/webMobile.png"></v-img>
                                              </v-col>
-                                             <v-col cols="12" xs="10" sm="10" md="4" xl="5" lg="5" align-self="center" data-aos="fade-up" >
+                                             <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" align-self="center" data-aos="fade-up" >
                                              
                                                     <h2 class="heading-1 ">[weDeliver]</h2>
                                                                 <p class="paragraph" >
@@ -90,8 +90,8 @@ beans {
                                
                                        <v-flex xs12 sm12 md12 lg12 x12 id="our_process" class="our_process">
                                             <v-row>
-                                            <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
-                                                 <v-col cols="12" xs="10" sm="10" md="4" xl="4" lg="5" align-self = 'center' data-aos="fade-up">
+                                            <v-col cols="12" xs="10" sm="1" md="1" xl="1" lg="1"> </v-col>
+                                                 <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" align-self = 'center' data-aos="fade-up">
                                                        <v-row >
                                                             <h2 class="heading-1" >[youDeserve]</h2>
                                                        </v-row>
@@ -101,8 +101,8 @@ beans {
                                                                 </p>
                                                        </v-row>   
                                                  </v-col>
-                                                  <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1" class="about-us-margin-right"> </v-col>
-                                                <v-col cols="12" xs="12" sm="12" md="4" xl="5" lg="5" class="text-center" data-aos="fade-up" >
+                                                  <v-col cols="12" xs="10" sm="1" md="1" xl="1" lg="1" class="about-us-margin-right"> </v-col>
+                                                <v-col cols="12" xs="12" sm="5" md="5" xl="5" lg="5" class="text-center" data-aos="fade-up" >
                                                     <v-img alt ="our_frameworks"  src="assets/home/aboutus.png" style= "width:100%"></v-img>
                                                  </v-col>
                                              
@@ -118,12 +118,12 @@ beans {
                              
                                  <v-flex xs12 sm12 md12 lg12 x12 id="collaboration" class="collaboration">
                                       <v-row class= "webSection">
-                                            <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
-                                            <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center' data-aos="fade-up">
+                                            <v-col cols="12" xs="10" sm="1" md="1" xl="1" lg="1"> </v-col>
+                                            <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" align-self = 'center' data-aos="fade-up">
                                                   <v-img alt ="our_frameworks"  src="assets/home/appimg.png"></v-img>
                                             </v-col>
                                           
-                                            <v-col cols="12" xs="12" sm="12" md="5" xl="5" lg="5" class="text-center" align-self = 'center' data-aos="fade-up">
+                                            <v-col cols="12" xs="12" sm="5" md="5" xl="5" lg="5" class="text-center" align-self = 'center' data-aos="fade-up">
                                                     <v-row>               
                                                     <h2 class="heading-1">[agilityAsService]</h2>
                                                 </v-row>
@@ -133,7 +133,7 @@ beans {
                                                     </p>
                                                 </v-row>
                                             </v-col>
-                                            <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
+                                            <v-col cols="12" xs="10" sm="1" md="1" xl="1" lg="1"> </v-col>
                                       </v-row>       
                                  </v-flex>
                             
@@ -146,8 +146,8 @@ beans {
                                  
                                             <v-flex xs12 sm12 md12 lg12 x12 id="our_framework" class = "our_framework" data-aos="fade-up">
                                                 <v-row class="qualityBuilt">
-                                                       <v-col cols="12" xs="10" sm="10" md="5" xl="1" lg="1"> </v-col>
-                                                       <v-col cols="12" xs="12" sm="12" md="5" xl="5" lg="5" class="text-center" align-self = 'center'>
+                                                       <v-col cols="12" xs="10" sm="1" md="1" xl="1" lg="1"> </v-col>
+                                                       <v-col cols="12" xs="12" sm="5" md="5" xl="5" lg="5" class="text-center" align-self = 'center'>
                                                               <v-row><h2 class="heading-1">[QualityBuilt]</h2></v-row>
                                                         <v-row>
                                                                 <p class="paragraph">[ourFrameworkTextFirstParagraph]
@@ -158,7 +158,7 @@ beans {
 
                                                     </v-col>
                                                    
-                                                       <v-col cols="12" xs="10" sm="10" md="5" xl="5" lg="5" align-self = 'center'>
+                                                       <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" align-self = 'center'>
                                                       <v-img alt ="our_frameworks"  src="assets/home/careerimg.png"></v-img>
                                                     </v-col>
                                                           <img alt ="our_frameworks"  src="assets/home/careerbg.png" class="careerBackground" ></img>
@@ -175,7 +175,7 @@ beans {
                                 <div class=" flex-column" data-aos="fade-up">
                                   <h1 class="heading">What our customers say about us</h1>
                                   <v-row justify="center">
-                                  <v-col cols="12" xs="8" sm="8" md="7" xl="7" lg="7" >    
+                                  <v-col cols="12" xs="8" sm="10" md="10" xl="10" lg="7" >    
                                   <v-card elevation="12" class="QuotesPadding " >        
                                     <v-carousel
                                         cycle
@@ -192,22 +192,22 @@ beans {
                                         >
 
                                         <v-row >
-                                        <v-col cols='1'></v-col>
-                                        <v-col cols="1" class='mt-4'>
+                                        <v-col cols='12' sm="1" md="1" xl="1" lg="1"></v-col>
+                                        <v-col cols="12" sm="1" md="1" xl="1" lg="1" class='mt-4'>
                                         <img :src="text.src"></img>
                                         </v-col>
-                                        <v-col cols="10" class="pa-0"></v-col>
+                                        <v-col cols="10" sm="10" md="10" xl="10" lg="10" class="pa-0"></v-col>
                                         </v-row>
                                          <v-row>
-                                            <v-col cols="2" class="pa-0"></v-col>
-                                            <v-col cols="8" class="pa-0">
+                                            <v-col cols="12" sm="2" md="2" xl="2" lg="2" class="pa-0"></v-col>
+                                            <v-col cols="12" sm="8" md="8" xl="8" lg="8"class="pa-0">
                                               <div class="text-h5 commas">
                                                 {{ text.title}}
                                               </div>
                                               <div class="text-h6 blue--text commas">
                                                 {{ text.person}}
                                               </div>
-                                               <v-col cols="2" class="pa-0"></v-col>
+                                               <v-col cols="12"sm="2" md="2" xl="2" lg="2" class="pa-0"></v-col>
                                              </v-col>
 
                                             </v-row> 
@@ -228,8 +228,8 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """                  
  <v-row> 
- <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
-      <v-col cols="12" xs="1" sm="1" md="10" xl="10" lg="10">
+ <v-col cols="12"  md="1" xl="1" lg="1"></v-col>
+      <v-col cols="12"  md="10" xl="10" lg="10">
                                               <div class="tech-section py-5">
         <div class="container-fluid section-padding">
             <div class="row">
@@ -286,7 +286,7 @@ beans {
         </div>
     </div>
     </v-col>
-      <v-col cols="12" xs="1" sm="1" md="1" xl="1" lg="1"></v-col>
+      <v-col cols="12"  md="1" xl="1" lg="1"></v-col>
      </v-row>                       
                             """
     }
@@ -296,9 +296,9 @@ beans {
                            <div id="quiz_placeholder" class="Quiz_Placeholder" data-aos="fade-up">
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                <v-row>
-                                                 <v-col cols="12" xs="1" sm="1" md="3" xl="3" lg="3"></v-col>
+                                                 <v-col cols="12" xs="1" sm="1" md="3" xl="1" lg="3"></v-col>
                                                 
-                                                   <v-col cols="12" xs="10" sm="10" md="6" xl="7" lg="7">
+                                                   <v-col cols="12" xs="10" sm="10" md="7" xl="10" lg="7">
                                                      <v-row align="center"  justify="center">  <h2 class="heading-1">[letsTalk]</h2> </v-row>              
                                                      <div class="contactAfter">
                                                       <img alt ="our_frameworks"  src="assets/home/contact-before.png" class="contactAfterTop" ></img>
@@ -310,7 +310,7 @@ beans {
                                                             </v-row>
                                                       </v-card>
                                                    </v-col>
-                                                <v-col cols="12" xs="1" sm="1" md="4" xl="3" lg="2"></v-col>
+                                                <v-col cols="12" xs="1" sm="1" md="4" xl="1" lg="2"></v-col>
                                                </v-row>
                                             </v-flex>
                                          </div>

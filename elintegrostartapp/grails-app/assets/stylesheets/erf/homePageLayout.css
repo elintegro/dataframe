@@ -3,7 +3,10 @@ body {
     margin: 0;
 padding: 0;
 }
-
+.row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
  .appBar {
      padding-left: 75px;
      width: 28%;

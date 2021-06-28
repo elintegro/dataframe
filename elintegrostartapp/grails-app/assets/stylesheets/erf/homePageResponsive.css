@@ -52,6 +52,20 @@
 
 
 @media screen and (max-width: 1024px) {
+    .appBar {
+
+    }
+    .webSection img {
+        height: 573px;
+        width: 54%;
+    }
+    .careerBackground {
+        width: 255px;
+        height: 33vh;
+    }
+    .mainContainer .Quiz_Placeholder .quiz-card-container {
+        max-width: 100%;
+    }
     .mainContainer .our_work .heading-1,
     .mainContainer .our_process .heading-1,
     .mainContainer .collaboration .heading-1,.collaboration .webSection .heading-1,
@@ -67,24 +81,45 @@
     }
 }
 @media screen and (max-width: 768px) {
-    .mainContainer .our_work p,
+    .appBar {
+
+    }
+    .bannerSection::after {
+        width: 435px;
+        height: 153px;
+    }
+    .container {
+        padding: 0;
+    }
+    .webSection img {
+        height: 455px;
+        width: 57%;
+    }
+    .careerBackground {
+        height: 40vh;
+        width: 212px;
+    }
+    .mainContainer .Quiz_Placeholder .quiz-card-container {
+        margin-left: 44px;
+
+    }
+    .mainContainer .Quiz_Placeholder .contactAfter .contactAfterTop {
+        left: -23px;
+    }
+    .mainContainer .Quiz_Placeholder .contactAfter .contactAfterBottom {
+        bottom: -1200px;
+    }
+
+    .mainContainer .our_work .paragraph,
     .mainContainer .our_process .paragraph,
     .mainContainer .collaboration .paragraph,
     .mainContainer .our_framework .paragraph {
         font-size: 16px;
         line-height: 25px;
     }
-    .mainContainer .our_home .heading-2 {
-        font-size: 30px;
-    }
+
 }
 @media screen and (max-width: 450px) {
-    #banner {
-        padding-bottom: 40px;
-    }
-    #banner.shrink {
-        padding-top: 40px;
-    }
     .bannerSection::after {
         width: 71%;
         background-size: contain;
@@ -115,21 +150,26 @@
         text-align: center;
         font-size: 43px;
     }
-    .mainContainer .our_work,
-    .mainContainer .our_process,
-    .mainContainer .collaboration,
-    .mainContainer .our_framework,
-    .mainContainer .Quotes,
-    .mainContainer .Quiz_Placeholder{
-        padding: 0px 25px;
+
+    .webSection img  {
+        width: 100%;
     }
+    /*.mainContainer .our_work,*/
+    /*.mainContainer .our_process,*/
+    /*.mainContainer .collaboration,*/
+    /*.mainContainer .our_framework,*/
+    /*.mainContainer .Quotes,*/
+    /*.mainContainer .Quiz_Placeholder{*/
+    /*    padding: 0px 25px;*/
+    /*}*/
     .mainContainer .our_work .heading-1,
     .mainContainer .our_process .heading-1,
     .mainContainer .collaboration .heading-1,.collaboration .webSection .heading-1,
     .mainContainer .our_framework .heading-1,
     .Quiz_Placeholder .heading-1 {
-        font-size: 22px;
+        font-size: 23px;
         text-align: center;
+        padding-left: 0;
 
     }
 
@@ -145,6 +185,7 @@
         font-size: 12px !important;
         text-align: left !important;
         line-height: 21px !important;
+        max-width: 100%;
     }
 
     .mainContainer .Quotes .QuotesPadding img {
@@ -162,8 +203,8 @@
     }
     .careerBackground {
         top: -20px;
-        width: 154px;
-        height: 45vh;
+        width: 207px;
+        height: 58vh;
     }
     .v-btn--fab.v-size--small {
         padding-top: 20px;
@@ -203,12 +244,11 @@
     }
 }
 @media screen and (max-width: 375px) {
-    #banner {
-        padding-bottom: 40px;
+    .container {
+        padding:0px;
     }
-    #banner.shrink {
-        padding-top: 40px;
-    }
+
+
     .bannerSection::after {
         width: 91%;
         background-size: contain;
@@ -242,15 +282,15 @@
     .mainContainer .our_work .heading-1,
     .mainContainer .our_process .heading-1,
     .mainContainer .Quotes .heading {
-        font-size: 22px;
+        font-size: 19px;
 
 
 
     }
 
-    .Quiz_Placeholder .heading-1 {
-        font-size: 18px;
-    }
+    /*.Quiz_Placeholder .heading-1 {*/
+    /*    font-size: 18px;*/
+    /*}*/
 
     .mainContainer .Quotes .QuotesPadding .commas {
         padding: 7px 0px 0px 49x;
@@ -274,8 +314,8 @@
     }
     .careerBackground {
         top: -20px;
-        width: 160px;
-        height: 61vh;
+        width: 171px;
+        height: 60%;
     }
     .v-btn--fab.v-size--small {
         padding-top: 20px;
