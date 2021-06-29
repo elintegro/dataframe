@@ -53,7 +53,7 @@
 
 @media screen and (max-width: 1024px) {
     .appBar {
-
+        width: 43%;
     }
     .webSection img {
         height: 573px;
@@ -79,10 +79,15 @@
     .mainContainer .our_framework .paragraph  {
         font-size: 16px;
     }
+    .mainContainer .Quiz_Placeholder .contactAfter .contactAfterBottom {
+        bottom: -944px;
+        right: -95px;
+
+    }
 }
 @media screen and (max-width: 768px) {
     .appBar {
-
+ width: 53%;
     }
     .bannerSection::after {
         width: 435px;
@@ -99,10 +104,6 @@
         height: 40vh;
         width: 212px;
     }
-    .mainContainer .Quiz_Placeholder .quiz-card-container {
-        margin-left: 44px;
-
-    }
     .mainContainer .Quiz_Placeholder .contactAfter .contactAfterTop {
         left: -23px;
     }
@@ -117,6 +118,17 @@
         font-size: 16px;
         line-height: 25px;
     }
+    .mainContainer .Quotes .QuotesPadding .commas {
+
+        font-size: 16px !important;
+        text-align: left !important;
+        line-height: 34px !important;
+        max-width: 100%;
+    }
+    .mainContainer .Quotes .QuotesPadding img {
+        padding-left: 41px;
+    }
+
 
 }
 @media screen and (max-width: 450px) {
@@ -144,8 +156,6 @@
         height: 0;
     }
 
-
-
     .mainContainer .our_home .heading-2 {
         text-align: center;
         font-size: 43px;
@@ -154,14 +164,7 @@
     .webSection img  {
         width: 100%;
     }
-    /*.mainContainer .our_work,*/
-    /*.mainContainer .our_process,*/
-    /*.mainContainer .collaboration,*/
-    /*.mainContainer .our_framework,*/
-    /*.mainContainer .Quotes,*/
-    /*.mainContainer .Quiz_Placeholder{*/
-    /*    padding: 0px 25px;*/
-    /*}*/
+
     .mainContainer .our_work .heading-1,
     .mainContainer .our_process .heading-1,
     .mainContainer .collaboration .heading-1,.collaboration .webSection .heading-1,
@@ -181,8 +184,8 @@
     }
 
     .mainContainer .Quotes .QuotesPadding .commas {
-        padding: 7px 0px 0px 49x;
-        font-size: 12px !important;
+        padding: 0px 65px 0px 49px;
+        font-size: 16px !important;
         text-align: left !important;
         line-height: 21px !important;
         max-width: 100%;
@@ -190,12 +193,14 @@
 
     .mainContainer .Quotes .QuotesPadding img {
         height: 40px;
-        width: 40px;
+        width: 77px;
+        padding-left: 38px;
     }
 
     .mainContainer .Quiz_Placeholder .quiz-card-container {
         max-width: 100%;
         padding: 30px;
+        margin-left: 0 !important;
     }
 
     .mainContainer .Quiz_Placeholder .contactAfter {
@@ -293,7 +298,7 @@
     /*}*/
 
     .mainContainer .Quotes .QuotesPadding .commas {
-        padding: 7px 0px 0px 49x;
+        padding: 0 48px;
         font-size: 12px !important;
         text-align: left !important;
         line-height: 21px !important;
@@ -301,12 +306,14 @@
 
     .mainContainer .Quotes .QuotesPadding img {
         height: 40px;
-        width: 40px;
+        width: 72px;
+        padding-left: 35px;
     }
 
     .mainContainer .Quiz_Placeholder .quiz-card-container {
         max-width: 100%;
         padding: 30px;
+        margin-left: 0 !important;
     }
 
     .mainContainer .Quiz_Placeholder .contactAfter {

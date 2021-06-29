@@ -192,22 +192,22 @@ beans {
                                         >
 
                                         <v-row >
-                                        <v-col cols='12' sm="1" md="1" xl="1" lg="1"></v-col>
-                                        <v-col cols="12" sm="1" md="1" xl="1" lg="1" class='mt-4'>
+                                        <v-col cols='12' xs='1' sm="1" md="1" xl="1" lg="1"></v-col>
+                                        <v-col cols="12" xs='1' sm="1" md="1" xl="1" lg="1" class='mt-4'>
                                         <img :src="text.src"></img>
                                         </v-col>
-                                        <v-col cols="10" sm="10" md="10" xl="10" lg="10" class="pa-0"></v-col>
+                                        <v-col cols="10" xs='10' sm="10" md="10" xl="10" lg="10" class="pa-0"></v-col>
                                         </v-row>
                                          <v-row>
-                                            <v-col cols="12" sm="2" md="2" xl="2" lg="2" class="pa-0"></v-col>
-                                            <v-col cols="12" sm="8" md="8" xl="8" lg="8"class="pa-0">
+                                            <v-col cols="12" xs='2' sm="2" md="2" xl="2" lg="2" class="pa-0"></v-col>
+                                            <v-col cols="12" xs='8' sm="8" md="8" xl="8" lg="8"class="pa-0">
                                               <div class="text-h5 commas">
                                                 {{ text.title}}
                                               </div>
                                               <div class="text-h6 blue--text commas">
                                                 {{ text.person}}
                                               </div>
-                                               <v-col cols="12"sm="2" md="2" xl="2" lg="2" class="pa-0"></v-col>
+                                               <v-col cols="12" xs='2' sm="2" md="2" xl="2" lg="2" class="pa-0"></v-col>
                                              </v-col>
 
                                             </v-row> 
