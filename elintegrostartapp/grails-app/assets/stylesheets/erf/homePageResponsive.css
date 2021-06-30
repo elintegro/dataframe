@@ -55,6 +55,13 @@
     .appBar {
         width: 43%;
     }
+     .navigationDrawer {
+        min-height:min-content;
+        border-radius:9px;
+        }
+        .navigationDrawerContent {
+        padding-right:769px;
+        }
     .webSection img {
         height: 573px;
         width: 54%;
@@ -96,6 +103,17 @@
     .container {
         padding: 0;
     }
+    .navigationDrawer {
+    min-height:min-content;
+    border-radius:9px;
+    }
+    .drawerContentWithAppsDataframe,
+    .drawerContentWithNavigationButtonsBeforeOrAfterLoggedIn {
+    margin-top:0;
+    }
+    .navigationDrawerContent {
+    padding-right:510px;
+    }
     .webSection img {
         height: 455px;
         width: 57%;
@@ -104,11 +122,14 @@
         height: 40vh;
         width: 212px;
     }
+    .mainContainer .Quiz_Placeholder {
+    padding : 30px;
+    }
     .mainContainer .Quiz_Placeholder .contactAfter .contactAfterTop {
-        left: -23px;
+        left: -60px;
     }
     .mainContainer .Quiz_Placeholder .contactAfter .contactAfterBottom {
-        bottom: -1200px;
+        bottom: -1160px;
     }
 
     .mainContainer .our_work .paragraph,
@@ -150,6 +171,22 @@
         background-size: cover;
         background-repeat: no-repeat;
     }
+    .navigationDrawer {
+    height :min-content;
+    left:25px;
+    border-radius:10px;
+    }
+    .navigationDrawerContent {
+    padding-right:156px;
+    line-height:36px;
+    }
+    .drawer-mask {
+    height:100vh;
+    }
+
+    .drawerContentWithAppsDataframe, .drawerContentWithNavigationButtonsBeforeOrAfterLoggedIn {
+    margin:0;
+    }
     .mainContainer .our_home .homeAnimationColumn {
         padding: 66px;
         text-align: center;
@@ -180,7 +217,6 @@
     .collaboration .webSection .heading-1,
     .mainContainer .our_framework .heading-1{
 
-        padding-left: 112px;
     }
 
     .mainContainer .Quotes .QuotesPadding .commas {
@@ -196,7 +232,13 @@
         width: 77px;
         padding-left: 38px;
     }
+    .mainContainer .Quotes .heading {
+    padding: 20px;
+    }
 
+.mainContainer .Quiz_Placeholder {
+     padding: 20px;
+    }
     .mainContainer .Quiz_Placeholder .quiz-card-container {
         max-width: 100%;
         padding: 30px;
@@ -274,7 +316,7 @@
     }
 
     .mainContainer .our_home .homeAnimationColumn {
-        padding: 66px;
+        padding: 47px;
         text-align: center;
         height: 0;
     }
@@ -338,7 +380,7 @@
 
     .mainContainer .collaboration .heading-1,
     .mainContainer .our_framework .heading-1 {
-        padding-left: 92px !important;
+        padding: 0 82px;
     }
 
 

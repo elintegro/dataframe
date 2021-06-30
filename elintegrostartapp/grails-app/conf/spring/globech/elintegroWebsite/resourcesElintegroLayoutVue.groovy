@@ -66,12 +66,13 @@ beans {
                                       <div style="text-align: left" class="hidden-lg-and-up">
                                           <v-app-bar-nav-icon class="toggle" @click="drawerVisible = true" ></v-app-bar-nav-icon>
                                       </div>
-                                        
+                                       
                                       <div class="navigationDrawer"
                                           :style="{
                                                    width: drawerVisible ? 'min-content' : '0',
                                           }"
                                           >
+                                         
                                           <v-row class="navigationDrawerContent">
                                               <h4 class="drawerContentWithHomeButton"><vueElintegroNavigationFirstTwoButtonDataframe/></h4>
                                               <h4 class="drawerContentWithAppsDataframe"><vueElintegroAppsDataframe/></h4>
@@ -79,6 +80,7 @@ beans {
                                                      <vueElintegroNavigationButtonBeforeLoggedInDataframe v-else/></h4>
                                               <h4 class="drawerContentWithLanguageSelector"><vueElintegroLanguageSelectorDataframe/></h4>
                                           </v-row>
+                                      
                                       </div>
                                       <div class="drawer-mask"
                                           :style="{
@@ -126,7 +128,7 @@ beans {
                                      <v-menu offset-y tile z-index = 101 close-on-content-click>
                                          <template v-slot:activator="{ on, attrs }">
                                              <v-flex xs0 sm0 md0 lg0 xl0>
-                                             <v-btn color="#212121" dark v-bind="attrs" text style="text-transform:capitalize;" class="navigation-hover">About Us</v-btn>
+                                             <v-btn color="#212121" type="link" dark v-bind="attrs" v-on="on" text style="text-transform:capitalize;" class="navigation-hover">About Us</v-btn>
                                              </v-flex>
                                          </template>
                                          <v-list width="min-content" style=" margin-right: -30px;margin-left: -30px;">

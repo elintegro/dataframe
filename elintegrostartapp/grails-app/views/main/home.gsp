@@ -141,7 +141,7 @@ ${constructedPageScript}
 <script>
     AOS.init(
         {
-            once: false,
+              once:false,
             duration: 1200,
         }
     );

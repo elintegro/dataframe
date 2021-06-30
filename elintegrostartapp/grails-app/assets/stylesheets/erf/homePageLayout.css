@@ -25,6 +25,7 @@ padding: 0;
     /*padding-bottom: 100px;*/
     /*padding-top: 110px;*/
 }
+
 .mainContainer .our_home .heading-2{
     font-size: 43px;
     color:#3898ed;
@@ -95,7 +96,7 @@ padding: 0;
 }
 @media screen and (max-width: 480px){
     .mainContainer .our_home .homeAnimationColumn{
-        min-height: 350px;
+        min-height : 450px;
         height: 450px;
     }
 }
@@ -287,10 +288,9 @@ padding: 0;
 
 }
 
-
-
-
-
+.footerContainer {
+padding:0px;
+}
 .footer {
     text-align: left;
 }
