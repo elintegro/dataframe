@@ -80,8 +80,8 @@
 %{--    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />--}%
 
     %{--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />--}%
-    <link rel="manifest" href="./manifest.json"/>
-    <g:if test="${Environment.current != Environment.DEVELOPMENT}">
+    <g:if test="${Environment.CUSTOM.name == "qa"}">
+        <link rel="manifest" href="./manifest.json"/>
         <script>
             if('serviceWorker' in navigator){
                 navigator.serviceWorker.register('./sw.js')
