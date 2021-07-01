@@ -107,10 +107,13 @@ class LanguageSelectorWidgetVue extends CollectionWidgetVue {
         String valueMember = field.valueMember?:'id'
         String itemsStr = getFieldJSONItems(field)
         String modelString = getFieldJSONModelNameVue(field)
+        boolean imageIcon = field.imageIcon?:false
+        String imageURL = field.imageURL?:'assets/home/navbarimg.png'
         """
             <v-row class="mx-0 align-baseline">
-                  <v-col cols="2">
-                        <v-icon style='color:#1976D2;'>translate</v-icon>
+                  <v-col cols="2 mt-3">
+                       <img v-if='$imageIcon' src="$imageURL"/>
+                       <v-icon v-else style='color:#1976D2;'>translate</v-icon>
                   </v-col>
                   <v-col class="pt-6" cols="6"> 
                       <v-select

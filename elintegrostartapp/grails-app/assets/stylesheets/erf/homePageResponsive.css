@@ -1,0 +1,410 @@
+
+@media screen and (max-width: 1366px) {
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1, .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .Quiz_Placeholder .heading-1{
+        font-size: 24px;
+    }
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph ,
+    .mainContainer .our_framework .paragraph{
+        font-size: 17px;
+    }
+
+}
+
+@media screen and (max-width: 1280px) {
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1, .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .Quiz_Placeholder .heading-1{
+        font-size: 36px;
+    }
+}
+@media screen and (max-width: 1440px) {
+    .footer-section::before {
+        height: 195px;
+    }
+}
+@media screen and (max-width: 1366px) {
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1, .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .Quiz_Placeholder .heading-1{
+        font-size: 24px;
+    }
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph {
+        font-size: 17px;
+    }
+    .mainContainer .our_home .heading-2 {
+        /*font-size: 38px;*/
+    }
+}
+
+
+
+@media screen and (max-width: 1024px) {
+    .appBar {
+        width: 43%;
+    }
+     .navigationDrawer {
+        min-height:min-content;
+        border-radius:9px;
+        }
+        .navigationDrawerContent {
+        padding-right:769px;
+        }
+    .webSection img {
+        height: 573px;
+        width: 54%;
+    }
+    .careerBackground {
+        width: 255px;
+        height: 33vh;
+    }
+    .mainContainer .Quiz_Placeholder .quiz-card-container {
+        max-width: 100%;
+    }
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1,.collaboration .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .mainContainer.Quiz_Placeholder .heading-1{
+        font-size: 22px;
+    }
+    .mainContainer .our_work p,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph  {
+        font-size: 16px;
+    }
+    .mainContainer .Quiz_Placeholder .contactAfter .contactAfterBottom {
+        bottom: -944px;
+        right: -95px;
+
+    }
+}
+@media screen and (max-width: 768px) {
+    .appBar {
+ width: 53%;
+    }
+    .bannerSection::after {
+        width: 435px;
+        height: 153px;
+    }
+    .container {
+        padding: 0;
+    }
+    .navigationDrawer {
+    min-height:min-content;
+    border-radius:9px;
+    }
+    .drawerContentWithAppsDataframe,
+    .drawerContentWithNavigationButtonsBeforeOrAfterLoggedIn {
+    margin-top:0;
+    }
+    .navigationDrawerContent {
+    padding-right:510px;
+    }
+    .webSection img {
+        height: 455px;
+        width: 57%;
+    }
+    .careerBackground {
+        height: 40vh;
+        width: 212px;
+    }
+    .mainContainer .Quiz_Placeholder {
+    padding : 30px;
+    }
+    .mainContainer .Quiz_Placeholder .contactAfter .contactAfterTop {
+        left: -60px;
+    }
+    .mainContainer .Quiz_Placeholder .contactAfter .contactAfterBottom {
+        bottom: -1160px;
+    }
+
+    .mainContainer .our_work .paragraph,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph {
+        font-size: 16px;
+        line-height: 25px;
+    }
+    .mainContainer .Quotes .QuotesPadding .commas {
+
+        font-size: 16px !important;
+        text-align: left !important;
+        line-height: 34px !important;
+        max-width: 100%;
+    }
+    .mainContainer .Quotes .QuotesPadding img {
+        padding-left: 41px;
+    }
+
+
+}
+@media screen and (max-width: 450px) {
+    .bannerSection::after {
+        width: 71%;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+    }
+
+    .appBar {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .bannerSection::before {
+        width: 29%;
+        height: 114px;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    .navigationDrawer {
+    height :min-content;
+    left:25px;
+    border-radius:10px;
+    }
+    .navigationDrawerContent {
+    padding-right:156px;
+    line-height:36px;
+    }
+    .drawer-mask {
+    height:100vh;
+    }
+
+    .drawerContentWithAppsDataframe, .drawerContentWithNavigationButtonsBeforeOrAfterLoggedIn {
+    margin:0;
+    }
+    .mainContainer .our_home .homeAnimationColumn {
+        padding: 66px;
+        text-align: center;
+        height: 0;
+    }
+
+    .mainContainer .our_home .heading-2 {
+        text-align: center;
+        font-size: 43px;
+    }
+
+    .webSection img  {
+        width: 100%;
+    }
+
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .collaboration .heading-1,.collaboration .webSection .heading-1,
+    .mainContainer .our_framework .heading-1,
+    .Quiz_Placeholder .heading-1 {
+        font-size: 23px;
+        text-align: center;
+        padding-left: 0;
+
+    }
+
+
+    .collaboration .webSection .heading-1,
+    .mainContainer .our_framework .heading-1{
+
+    }
+
+    .mainContainer .Quotes .QuotesPadding .commas {
+        padding: 0px 65px 0px 49px;
+        font-size: 16px !important;
+        text-align: left !important;
+        line-height: 21px !important;
+        max-width: 100%;
+    }
+
+    .mainContainer .Quotes .QuotesPadding img {
+        height: 40px;
+        width: 77px;
+        padding-left: 38px;
+    }
+    .mainContainer .Quotes .heading {
+    padding: 20px;
+    }
+
+.mainContainer .Quiz_Placeholder {
+     padding: 20px;
+    }
+    .mainContainer .Quiz_Placeholder .quiz-card-container {
+        max-width: 100%;
+        padding: 30px;
+        margin-left: 0 !important;
+    }
+
+    .mainContainer .Quiz_Placeholder .contactAfter {
+        display: none;
+    }
+    .careerBackground {
+        top: -20px;
+        width: 207px;
+        height: 58vh;
+    }
+    .v-btn--fab.v-size--small {
+        padding-top: 20px;
+    }
+
+    .QuotesPadding .v-window__container .v-window__prev .v-btn i {
+        margin-right: 87px;
+    }
+
+    .QuotesPadding .v-window__container .v-window__next .v-btn i {
+        margin-left: 87px;
+    }
+
+    .footerContainer .footer-section::before {
+        height: 228px;
+        background-position-x: -1224px;
+    }
+    .footerContainer .footer-section {
+        padding-bottom: 15px;
+        margin-top: 67px;
+    }
+    .footer ul li {
+        font-size: 14px;
+    }
+    .footer ul {
+        padding: 0;
+    }
+
+
+    .mainContainer .our_work .paragraph,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph {
+        font-size: 16px;
+        text-align: center;
+        line-height: 25px;
+    }
+}
+@media screen and (max-width: 375px) {
+    .container {
+        padding:0px;
+    }
+
+
+    .bannerSection::after {
+        width: 91%;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+    }
+
+    .appBar {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .bannerSection::before {
+        width: 29%;
+        height: 114px;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .mainContainer .our_home .homeAnimationColumn {
+        padding: 47px;
+        text-align: center;
+        height: 0;
+    }
+
+    .mainContainer .our_home .heading-2 {
+        text-align: center;
+        font-size: 43px;
+    }
+
+    .mainContainer .our_work .heading-1,
+    .mainContainer .our_process .heading-1,
+    .mainContainer .Quotes .heading {
+        font-size: 19px;
+
+
+
+    }
+
+    /*.Quiz_Placeholder .heading-1 {*/
+    /*    font-size: 18px;*/
+    /*}*/
+
+    .mainContainer .Quotes .QuotesPadding .commas {
+        padding: 0 48px;
+        font-size: 12px !important;
+        text-align: left !important;
+        line-height: 21px !important;
+    }
+
+    .mainContainer .Quotes .QuotesPadding img {
+        height: 40px;
+        width: 72px;
+        padding-left: 35px;
+    }
+
+    .mainContainer .Quiz_Placeholder .quiz-card-container {
+        max-width: 100%;
+        padding: 30px;
+        margin-left: 0 !important;
+    }
+
+    .mainContainer .Quiz_Placeholder .contactAfter {
+        display: none;
+    }
+    .careerBackground {
+        top: -20px;
+        width: 171px;
+        height: 60%;
+    }
+    .v-btn--fab.v-size--small {
+        padding-top: 20px;
+    }
+
+    .QuotesPadding .v-window__container .v-window__prev .v-btn i {
+        margin-right: 87px;
+    }
+
+    .QuotesPadding .v-window__container .v-window__next .v-btn i {
+        margin-left: 87px;
+    }
+
+    .mainContainer .collaboration .heading-1,
+    .mainContainer .our_framework .heading-1 {
+        padding: 0 82px;
+    }
+
+
+    .mainContainer .our_work .paragraph,
+    .mainContainer .our_process .paragraph,
+    .mainContainer .collaboration .paragraph,
+    .mainContainer .our_framework .paragraph {
+        font-size: 16px;
+        text-align: center;
+        line-height: 25px;
+    }
+
+    .footerContainer .footer-section::before {
+        height: 215px;
+        background-position-x: -1214px;
+    }
+    .footerContainer .footer-section {
+        padding-bottom: 15px;
+        margin-top: 67px;
+    }
+    .footer ul li {
+        font-size: 14px;
+    }
+    .footer ul {
+        padding: 0;
+    }
+}

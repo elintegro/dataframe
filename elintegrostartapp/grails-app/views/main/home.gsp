@@ -47,9 +47,9 @@
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     </g:if>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Elintegro App Factory</title>
+    <title>Elintegro App Factory </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/assets/home/logoWithoutText.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="/assets/home/newDesignLogoWithoutText.png" type="image/x-icon">
     <meta name="google-signin-client_id" content="482906574403-seedi2p2ae3s9obm2ohb8bevq693jl3n.apps.googleusercontent.com">
     <asset:stylesheet href="/vuejs/tooltip.css"/>
     <asset:javascript src="jquery/jquery-1.11.2.js"/>
@@ -61,13 +61,25 @@
     <g:else>
         <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     </g:else>
-    <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
+%{--    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">--}%
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
     <asset:stylesheet href="/vuejs/multiple-image-upload.css"/>
     <asset:stylesheet href="/vuejs/vuetify-v2.0.5.css"/>
     <asset:stylesheet href="/erf/gc-vue.css"/>
     <asset:stylesheet href="/erf/homePageLayout.css"/>
+    <asset:stylesheet href="/erf/homePageResponsive.css"/>
     <asset:stylesheet href="/erf/translatorAssistantLayout.css"/>
+    <asset:stylesheet href="/erf/owlCarousel.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.0/dist/aos.css" />
+%{--    <asset:stylesheet href="/erf/font.css"/>--}%
 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,500&display=swap" rel="stylesheet">
+%{--    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400&display=swap" rel="stylesheet">--}%
+%{--    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />--}%
+
+    %{--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />--}%
     <link rel="manifest" href="./manifest.json"/>
     <g:if test="${Environment.current != Environment.DEVELOPMENT}">
         <script>
@@ -118,15 +130,61 @@ ${constructedPageHtml}
 <asset:javascript src="/erf/i18Messages.js"/>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 <asset:javascript src="/erf/erfVueController.js"/>
+<asset:javascript src="/erf/owlCarousel.js"/>
 <asset:javascript src="/vuejs/vuex.js"/>
 <asset:javascript src="/vuejs/multiple-image-upload.umd.min.js"/>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 ${constructedPageScript}
-<script>
+%{--<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">--}%
 
+
+<script>
+    AOS.init(
+        {
+              once:false,
+            duration: 1200,
+        }
+    );
     // import Vuetify from 'vuetify'
     // Vue.use(Vuetify,{
     //     rtl:true
     // })
+    $('.owl-carousel').owlCarousel({
+        loop: true,
+        margin: 10,
+        dots: false,
+        nav: true,
+        autoplay: true,
+        autoplaySpeed: 100,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+            },
+            414: {
+                items: 2,
+            },
+            700: {
+                items: 3,
+            },
+            991: {
+                items: 5,
+            },
+            1280: {
+                items: 7,
+            }
+        }
+    })
+
+
+    $(document).on('scroll', function() {
+        if ($(document).scrollTop() > 86) {
+            $('#banner').addClass('shrink');
+        } else {
+            $('#banner').removeClass('shrink');
+        }
+    });
+
 </script>
 </body>
 </html>

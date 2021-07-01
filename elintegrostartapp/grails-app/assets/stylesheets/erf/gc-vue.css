@@ -37,9 +37,7 @@ tr.selected td {
 .underLine.v-text-field>.v-input__control>.v-input__slot>.v-select__slot>.v-select__selections {
     color: #1976D2;
 }
-.appBar{
-    height: 65px;
-}
+
 #newEmployeeBasicInformation{
     padding-top: 1%;
 }
@@ -65,6 +63,10 @@ tr.selected td {
 .navigationDrawerContent {
     font-weight: 400;
     color: #0ca3a3;
+    font-family:poppins;
+    line-height:33px;
+    margin-top: 20px;
+    padding-right:900px;
 }
 .toggle {
     width: 120px;
@@ -73,33 +75,34 @@ tr.selected td {
     border: 0;
     padding: 5px;
     cursor: pointer;
+    font-family: 'Poppins', sans-serif;
 }
 
 .navigationDrawer {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 69px;
     width: 0; /* initially */
     overflow: hidden;
-    height: 100vh;
-    padding-left: 0; /* initially */
-    border-left: 1px solid whitesmoke;
     background: white;
-    z-index: 200;
+    z-index: 202;
     transition: all 0.2s;
     text-align: left;
+    margin-top : 84px;
+    border-radius:9px;
 }
 
 .drawer-mask {
     position: absolute;
     left: 0;
-    top: 0;
-    width: 0; /* initially */
+    top: 67px;
+    width: 100vw; /* initially */
     height: 100vh;
     background: #000;
-    opacity: 0.3;
+    opacity: 1;
     z-index: 199;
     transition: opacity 0.2s;
+    background:whitesmoke;
 }
 .drawerContentWithHomeButton{
     margin-left: 18px;
@@ -114,7 +117,7 @@ tr.selected td {
 .v-data-table__wrapper table thead th{
     font-size: 1rem;
     font-weight: 900;
-    font-family: system-ui,sans-serif;
+    font-family: Poppins;
     color: #0f1111;
     background-color: #f6f6f6;
 }

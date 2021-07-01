@@ -1,18 +1,31 @@
- .row{
-    margin-right: 12px;
-    margin-left: 12px;
+body {
+    font-family: 'Poppins' !important;
+    margin: 0;
+padding: 0;
 }
+.row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+ .appBar {
+     padding-left: 75px;
+     width: 28%;
+
+ }
  .mainContainer{
      width: 100%;
-     padding: 0px;
      margin-right: auto;
      margin-left: auto;
+     font-family:'poppins' !important;
+     /*padding: 0 !important;*/
  }
 .mainContainer .our_home{
     background-color:white;
-    padding-bottom: 100px;
-    padding-top: 110px;
+    position: relative;
+    /*padding-bottom: 100px;*/
+    /*padding-top: 110px;*/
 }
+
 .mainContainer .our_home .heading-2{
     font-size: 43px;
     color:#3898ed;
@@ -52,93 +65,157 @@
 .mainContainer .our_home .paragraph{
     color: black;
     font-size: 25px;
-    font-family:Roboto;
+    font-family:sans-serif;
+}
+.navigation-hover {
+    height: 0 !important;
+    padding-left:8px !important;
+}
+.navigation-hover :hover{
+    color: #197DC3;
+}
+.navigation-hover-underline {
+    height: 0px !important;
+    padding-left: 8px !important;
+}
+.navigation-hover-underline :hover{
+    text-decoration: underline;
+
 }
 .mainContainer .our_home #vueFirstContainerDataframe_buildApp{
-    background-color: black;
-    color:white;
-    font-family:sans-serif;
-    font-size:inherit;
-    padding: 20px;
-    text-transform: unset;
+    background-color: #212121;
+    color: #fff;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 14px !important;
+    padding: 23px 13px !important;
+    box-shadow: 0px 0px 34px #3030301c;
+    border: none;
+    /*outline: none !important;*/
+    cursor: pointer;
 
 }
 @media screen and (max-width: 480px){
     .mainContainer .our_home .homeAnimationColumn{
-        min-height: 350px;
+        min-height : 450px;
         height: 450px;
     }
 }
+
 .mainContainer .our_work{
-    background-color:white;
-    padding-bottom: 100px;
-    padding-top: 100px;
+    background-color:#4e98c917;
+    padding-top: 70px;
+
 }
-.mainContainer .our_work .heading-2{
-    font-size:38px;
-    color:black;
+
+.mainContainer .our_work .heading-1{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 10px;
+
 }
 .mainContainer .our_work .paragraph{
-    font-size:14px;
-    color:black;
+    font-family: 'Poppins', sans-serif;
+    color: #393939;
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 35px;
+    text-align: left;
 }
+ .webSection .paragraph {
+     font-family: 'Poppins', sans-serif;
+     color: #393939;
+     font-size: 17px;
+     font-weight: normal;
+     line-height: 35px;
+     text-align: left;
+
+ }
+ .webSection .heading-1 {
+     font-family: 'Poppins', sans-serif;
+     color: #000000;
+     font-size: 26px;
+     font-weight: 600;
+     padding-bottom: 10px;
+ }
 .mainContainer .our_process{
     background-color:white;
-    padding-bottom: 100px;
-    padding-top: 100px;
+    padding-top: 70px;
+
 }
-.mainContainer .our_process .heading-2{
-    font-size:38px;
-    color:black;
+.mainContainer .our_process .heading-1{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 10px;
 }
 .mainContainer .our_process .paragraph{
-    font-size: 14px;
-    color:black;
+    font-family: 'Poppins', sans-serif;
+    color: #393939;
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 35px;
+    text-align: left;
+
+}
+.our_process .about-us-margin-right {
+    margin-right: -61px;
 }
 .mainContainer .collaboration{
     background-color:white;
-    padding-bottom: 110px;
-    padding-top: 110px;
+    padding-top: 70px;
 }
-.mainContainer .collaboration .heading-2{
-    font-size:38px;
-    color:black;
+.mainContainer .collaboration .heading-1{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 10px;
 }
 .mainContainer .collaboration .paragraph{
-    font-size: 14px;
-    color:black;
+    font-family: 'Poppins', sans-serif;
+    color: #393939;
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 35px;
+    text-align: left;
+
 }
 .mainContainer .our_framework{
     background-color:white;
-    padding-bottom: 110px;
-    padding-top: 100px;
+    padding-top: 70px;
+    position: relative;
 }
-.mainContainer .our_framework .heading-2{
-    font-size:38px;
-    color:black;
+.mainContainer .our_framework .heading-1{
+    font-family: 'Poppins', sans-serif;
+    color: #000000;
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 10px;
+
 }
 .mainContainer .our_framework .paragraph{
-    font-size: 14px;
-    color:black;
+    font-family: 'Poppins', sans-serif;
+    font-size:17.6px;
+    font-weight: 400;
+    line-height: 35px;
+    color: #212529;
+    text-align: left;
 }
-.mainContainer .Quotes{
-    background-color: white;
-    padding-bottom: 100px;
-    padding-top: 100px;
-}
-.mainContainer .Quotes .midColumn{
-    background-color: #2ab6f6;
-}
-.mainContainer .Quotes .midColumn .row{
-    justify-content: center;
-}
-.mainContainer .Quotes .midColumn .contentQuotes{
-    padding:0px;
-    background-color:#2ab6f6;
-    font-size: 14px;
-}
+ .careerBackground {
+
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 250px;
+     height: 75vh;
+     padding-top: 40px;
+     overflow: hidden;
+ }
+
+
 .mainContainer .our_Technologies{
     background-color: #f5f5f5;
 }
@@ -149,64 +226,372 @@
     align-self: center;
 }
 .mainContainer .Quiz_Placeholder{
-    background-color:#000000;
+    background-color:#FFFFFF;
+    padding-top: 50px;
+    /*position: relative;*/
 }
+ .mainContainer .Quiz_Placeholder .contactAfter {
+     position: relative;
+
+ }
+ .mainContainer .Quiz_Placeholder .contactAfter .contactAfterTop{
+     width: 209px;
+     height: 196px;
+     top: -3px;
+     left: -68px;
+     background-repeat: no-repeat;
+     background-size: contain;
+     position: absolute;
+     z-index: 1;
+     visibility: visible;
+
+ }
+ .mainContainer .Quiz_Placeholder .contactAfter .contactAfterBottom{
+     width: 308px;
+     height: 272px;
+     bottom: -927px;
+     right: 15px;
+     background-repeat: no-repeat;
+     background-size: contain;
+     position: absolute;
+     z-index: 1;
+     visibility: visible;
+
+ }
 .mainContainer .Quiz_Placeholder .columnLeft{
     padding-top: 6%;
     padding-left:8%;
 
 }
-.mainContainer .Quiz_Placeholder .columnLeft .heading-1{
-    color:#2ab6f6;
-    font-size:38px;
+.mainContainer .Quiz_Placeholder .QuizHeading{
+    font-family: 'Poppins', sans-serif;
+    color: #393939;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 35px;
+
 }
 .mainContainer .Quiz_Placeholder .pa-md-0{
     padding:6%
 }
-.mainContainer .Quiz_Placeholder .v-card{
-    color:#f1f1f1
-}
-.footerContainer{
+.mainContainer .Quiz_Placeholder .quiz-card-container{
+    background-color: #fff;
+    border-radius: 53px;
+    box-shadow: 2px -3px 6px 3px #e5e5ff;
+    /*padding: 50px 90px;*/
+    z-index: 2;
+    margin-top: 50px;
+    max-width: 86%;
     width: 100%;
-    padding: 0px;
-    margin-right: auto;
-    margin-left: auto;
+    padding : 60px;
+    padding-top :38px;
+
 }
-.footerContainer .footer{
-    background-color:#212121;
-    padding: -12px;
+
+.footerContainer {
+padding:0px;
 }
-.footerContainer .footer .footerTexts .flex{
-    text-align: end;
+.footer {
+    text-align: left;
 }
- .footerContainer .footer .footerTexts .flex #vueFooterContainerDataframe_footerPrivacy{
-     color:#2ab6f6;
-     background-color:#212121;
-     text-transform: none;
+
+.footer-section {
+    position: relative;
+    margin-top: 250px;
+
+}
+
+.footer-section::before {
+    content: '';
+    background-image: url('/assets/home/footerbg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 180px;
+
+}
+
+.footer ul {
+    list-style: none;
+    padding-left: 122px;
+
+}
+
+.footer ul li {
+    display: inline-block;
+    color: #000;
+}
+
+
+ .webSection {
+     position: relative !important;
+     overflow: hidden;
+     background-color:#4e98c917;
+
  }
- .footerContainer .footer .footerTexts .flex #vueFooterContainerDataframe_termAndConditions{
-     color:#2ab6f6;
-     background-color:#212121;
-     text-transform: none;
+ .webSection img {
+     position: absolute !important;
+     bottom: -100px !important;
+     right: 0px !important;
+     height: 619px;
+     width: 35%;
  }
- .privacyPolicyHeadingText{
-     color:#2ab6f6;
-     align-items: center;
-     font-size:30px;
-     padding-bottom: 10px;
+.mainContainer .Quotes{
+    background-color: #4e98c917;
+    height: 600px;
+    margin-top: 55px;
+}
+.Quotes .commas {
+    color: #393939;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 35px;
+    max-width: 92%;
+    width: 100%;
+}
+.Quotes .heading {
+    text-align: center;
+}
+.Quotes .carausolBody {
+    padding: 0px 40px;
+
+}
+.Quotes .heading {
+    color: #000000;
+    margin: 0 auto;
+    font-size: 25px;
+    font-weight: 600;
+    padding-bottom: 3rem;
+}
+ .QuotesPadding {
+     border-radius: 20px;
  }
 
- .footerContainer .footer .row{
-     align-items: flex-end;
+ .bannerSection {
      position: relative;
  }
- .footerContainer .footer .row .photoCol {
+.bannerSection::before {
+    content: '';
+    position: absolute;
+    background-image: url('/assets/home/banner-before.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    right: 0;
+    top: 0;
+    width: 130px;
+    height: 120px;
+    z-index: 100;
+
+}
+.bannerSection::after {
+    content: '';
+    position: absolute;
+    background-image: url('/assets/home/banner-after.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    left: 0;
+    top: 0;
+    width: 560px;
+    height: 240px;
+    z-index: 100;
+}
+
+
+
+ #banner{
+     padding-top: 25px;
+     padding-bottom: 10px;
+     transition: all 0.4s;
+     background-color: transparent;
+     /*padding: 20px 0px;*/
+     z-index: 99;
+
+
+ }
+
+
+ #banner.shrink {
+     background: #fff;
+     box-shadow: 0 0 45px 0 #d6d6d6;
+     padding-top: 5px;
+     transition: all .4s;
+ }
+ #banner .v-toolbar__content {
+     height: 60px !important;
+ }
+
+ .navigationItem:hover {
+    color: blue;
+
+ }
+ .owl-carousel .owl-item img {
+     display: block;
+     width: 100%;
+     box-shadow: 1px 0px 11px 1px rgb(232 223 240);
+ }
+ .tech-slider .owl-item {
+     padding: 10px;
+ }
+
+ .tech-slider .owl-carousel.owl-loaded {
+     display: block;
+     padding: 0px 55px;
+ }
+ .tech-slider .owl-prev,
+ .tech-slider .owl-next {
      position: absolute;
-     margin-left: -36px;
-     padding-bottom: 0px;
-     margin-bottom: -12px;
+     top: 75px;
+     height: 28px;
+     width: 28px;
+     background-size: cover !important;
+     background-repeat: no-repeat !important;
+     outline: none !important;
  }
- .footerContainer .footer .footerTexts{
-     height: 50px;
-     color:#2ab6f6;
+
+ .tech-slider .owl-prev {
+     right: 100px;
+     background-image: url('/assets/home/techPre.png') !important;
+     top: -54px;
+     width: 40px;
  }
+
+ .tech-slider .owl-next {
+     width: 40px;
+     right: 25px;
+     top: -55px;
+     background-image: url('/assets/home/techNext.png') !important;
+ }
+
+ .tech-slider .owl-prev span,
+ .tech-slider .owl-next span {
+     display: none;
+ }
+ .tech-section .tech-heading h4 {
+
+     color: #000000;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     font-size: 25px;
+     padding-top: 40px;
+     font-weight: 800;
+     padding: 0px auto;
+     font-family: 'Poppins', sans-serif;
+ }
+ .tech-slider {
+     margin-top: 100px;
+     padding-bottom: 50px;
+ }
+
+.footer-section .footer .fontOfPrivacy {
+    height: 0;
+    padding-left: 46px;
+}
+.fontOfPrivacy:hover {
+    text-decoration: underline;
+}
+.quiz-signup{
+    border-radius: 12px !important;
+
+}
+.quiz-signup div[role="combobox"]{
+    border: 1px solid #197DC3 !important;
+}
+.quiz-signup div[role="combobox"] label{
+    color: #393939 !important;
+}
+.quiz-signup div[role="combobox"] i{
+    color: black !important;
+}
+.quiz-signup .v-menu__content .v-select-list{
+    outline: auto !important;
+}
+.quiz-signup .v-menu__content .v-select-list .v-list .v-list-item:hover::before{
+    opacity:unset !important;
+}
+
+.quiz-signup .v-input__control .v-input__slot {
+    border: 1px solid #197DC3 !important;
+    box-shadow: none;
+}
+.v-text-field.v-text-field--solo:not(.v-text-field--solo-flat) > .v-input__control > .v-input__slot {
+    box-shadow: none;
+}
+
+
+/*.v-btn:not(.v-btn--round).v-size--default {*/
+/*    !*height: 0 !important;*!*/
+/*     min-width: 0 !important;*/
+/*    padding: 0 9px !important;*/
+/*}*/
+.v-btn {
+    text-transform:none !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    letter-spacing: 0px ;
+    vertical-align: text-top !important;
+}
+
+.theme--light.v-btn {
+    color: #0f1111;
+}
+
+.quiz-card-container .form-submission-button  {
+    background-color: #212121 !important;
+    color: #fff !important;
+    border-radius: 20px;
+    padding: 20px 45px !important;
+    font-size: 16px !important;
+    border: none;
+    font-weight: 300 !important;
+    box-shadow: 0 0 34px #3030301c !important;
+    cursor: pointer;
+}
+
+
+.theme--dark.v-btn.v-btn--icon {
+    color:#007bff;
+    opacity: 0.5;
+}
+.theme--dark.v-btn.v-btn--icon:hover {
+    opacity: unset;
+
+}
+/*.QuotesPadding,*/
+/*.v-window__container,*/
+/*.v-window__prev,*/
+/*.QuotesPadding,*/
+/*.v-window__container .v-window__next{*/
+/*    background: none !important;*/
+/*}*/
+.QuotesPadding .v-window__container .v-window__prev .v-btn i ,
+.QuotesPadding .v-window__container .v-window__next .v-btn i{
+    font-size: 70px !important;
+}
+.QuotesPadding .v-window .v-item--active  {
+    color:#007bff;
+    opacity: unset !important;
+}
+.QuotesPadding .v-window .v-carousel__controls__item {
+    box-shadow: none;
+}
+.QuotesPadding .v-window .v-carousel__controls__item .v-btn:before {
+    background-color: none;
+}
+.QuotesPadding .theme--dark.v-btn--active:hover::before, .QuotesPadding .theme--dark.v-btn--active::before {
+    opacity: unset;
+}
+.v-btn--fab.v-size--small {
+    height: 0;
+    width: 0;
+}
+.QuotesPadding .v-window__container .v-window__next {
+    right: 47px;
+}
+.QuotesPadding .v-window__container .v-window__prev {
+    left: 47px;
+}

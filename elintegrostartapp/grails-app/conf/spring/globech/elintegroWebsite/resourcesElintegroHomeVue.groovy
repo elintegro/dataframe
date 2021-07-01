@@ -50,6 +50,7 @@ beans{
                 ],
                 "buildApp":["widget":"ButtonWidgetVue"
                             ,"name":"buildApp"
+                            ,attr: """ """
                             ,flexGridValues:['xs0', 'sm0', 'md6', 'lg6', 'xl6']
                             ,script: """ this.scrollToQuiz('coachClone');"""
                 ]
@@ -171,7 +172,7 @@ beans{
                                             align="center"
                                             justify="center"
                                          >
-                                            <v-col cols="2" xs="2"  sm="1" md="1" lg="1" xl="1" align="center" justify="center"><v-img src="assets/home/inverted-comma.png"></v-img></v-col>
+                                            <v-col cols="2" xs="2"  sm="1" md="1" lg="1" xl="1" align="left"><v-img src="assets/home/comma.png"></v-img></v-col>
                                             <v-col cols="12" xs="12" sm="12" md="12" lg="12" xl="12" align="center" justify="center">{{item.quote}}</v-col>
                                             <v-col cols="0" xs="0" sm="12" md="12" lg="12" xl="12" align="center" justify="center">
                                                 
@@ -227,7 +228,7 @@ beans{
                                 ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadDescription'"""
                                 ,"displayMember": "Answer"
                                 ,"valueMember"  : "id"
-                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,attr: """ solo attach auto-select-first flat id="vueElintegroSignUpQuizDataframe-leadDescription" append-icon="mdi-chevron-down" class='quiz-signup' """
                                 ,search:true
                                 ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.leadStage":[
@@ -237,7 +238,7 @@ beans{
                                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadStage'"""
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
-                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,attr: """solo attach auto-select-first flat append-icon="mdi-chevron-down" class='quiz-signup' """
                                ,search:true
                                ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.leadBudget":[
@@ -247,57 +248,64 @@ beans{
                                ,"hql"               : """select answer.id as id , answer.answerKey as Answer from AnswerTable answer inner join answer.question question where question.questionName = 'leadBudget'"""
                                ,"displayMember": "Answer"
                                ,"valueMember"  : "id"
-                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,attr: """solo attach auto-select-first flat append-icon="mdi-chevron-down"  class='quiz-signup' """
+
                                ,search:true
                                ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
                        "lead.nameOfProject":[
                                widget:"InputWidgetVue"
                                ,name: "nameOfProject"
-                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,attr: """solo attach  auto-select-first class='quiz-signup' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                                ],
                        "lead.deadline":[
                                 widget:"DateWidgetVue"
                                 ,name: "deadline"
-                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,attr: """solo attach  class='quiz-signup' """
                                 ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "lead.descriptionOfProject":[
                                widget:"TextAreaWidgetVue"
                                ,name: "descriptionOfProject"
-                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,attr: """solo attach   class='quiz-signup' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
                        ],
                        "person.firstName":[
                                 widget:"InputWidgetVue"
                                 ,name: "firstName"
-                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,attr: """solo attach auto-select-first class='quiz-signup' """
 //                                ,"validationRules":[[condition:"v => !!v", message:"FirstName.required.message"]]
                                 ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "person.lastName":[
                                 widget:"InputWidgetVue"
                                 ,name: "lastName"
-                                ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                                ,attr: """solo attach auto-select-first flat  class='quiz-signup' """
                                 ,"validationRules":[[condition:"v => !!v", message:"LastName.required.message"]]
                                 ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "person.email":[
                                widget:"EmailWidgetVue"
                                ,name: "email"
-                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,attr: """solo attach auto-select-first flat  class='quiz-signup' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
                        ],
                        "person.phone":[
                                "name":"phone"
                                ,"widget":"PhoneNumberWidgetVue"
                                ,"validationRules":[[condition:"v => !!v", message: 'Phone.required.message'],[condition: "v => /[0-9]/.test(v)",message: "Only.numbers.are.allowed."],[condition:"v => (v && v.length >= 10 && v.length <= 15)",message:"Phone.number.must.be.between.10.and.15"]]
-                               ,attr: """outlined background-color='#EBF9FF !important' color='#2AB6F6' """
+                               ,attr: """solo attach auto-select-first flat  class='quiz-signup' """
                                ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
 
         ]
         dataframeButtons = [
-                submit: [name: "submit", type: "button",attr: """style='background-color:#1976D2; color:white;' """,script: """this.saveSignUpForm()""", "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']]]
+                submit: [name: "submit",
+                         type: "button",
+                         classNames : "form-submission-button" ,
+                         script : """this.saveSignUpForm()""",
+                         "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12' ]
+                ]
+        ]
         currentFrameLayout = ref("vueElintegroSignUpQuizDataframeLayout")
 
     }
@@ -334,14 +342,14 @@ beans{
         addFieldDef = [
                 footerPrivacy:["widget":"ButtonWidgetVue"
                                ,"name":"footerPrivacy"
-                               ,"attr":"""small text tile"""
+                               ,"attr":""" plain class='fontOfPrivacy'"""
                                ,onClick:[showAsDialog: true, refDataframe: ref("vueFooterPrivacyDataframe")]
                                ,script: """excon.setVisibility('vueFooterPrivacyDataframe',true);"""
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ],
                 termAndConditions:["widget":"ButtonWidgetVue"
                                ,"name":"termAndConditions"
-                               ,"attr":"""small text tile"""
+                               ,"attr":"""class='fontOfPrivacy'"""
                                ,script: """excon.redirectPage(this,"terms-and-condition");"""
                                ,flexGridValues:['xs12', 'sm4', 'md4', 'lg4', 'xl4'],
                 ]

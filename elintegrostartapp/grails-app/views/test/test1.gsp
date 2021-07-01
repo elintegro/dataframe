@@ -16,8 +16,10 @@
     <script type="text/javascript" src="/assets/jquery/dateformat.js?compile=false"></script>
     <link rel="stylesheet" href="/assets/vuejs/vue-material.css?compile=false"/>
     <link rel="stylesheet" href="/assets/vuejs/vuetify.min.css?compile=false"/>
-    <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">
+%{--    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.9.97/css/materialdesignicons.min.css">--}%
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="/assets/vuejs/gc-vue.css?compile=false"/>
+
 </head>
 <body>
 <style>

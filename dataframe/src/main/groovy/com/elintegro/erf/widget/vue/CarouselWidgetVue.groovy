@@ -26,9 +26,14 @@ class CarouselWidgetVue extends CollectionWidgetVue{
         String height = field.height
         String content = field.content
         """
-               <v-carousel
+               
+
+
+
+
+<v-carousel
                       cycle
-                      show-arrows-on-hover
+                      show-arrows-on
                       hide-delimiter-background
                       height= "$height"
                       ${getAttr(field)}

@@ -41,7 +41,14 @@ beans {
         saveButton = false
         initOnPageLoad = true
         dataframeButtons = [
-                             home : [name: "home", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueElintegroHomeDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']]]
+                             home : [name: "home",
+                                     type: "link",
+                                     attr:  "style='color:#212121;'",
+                                     classNames: 'navigation-hover',
+                                     route: true,routeIdScript: "0", refDataframe: ref("vueElintegroHomeDataframe"),
+                                     "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']
+                             ]
+        ]
         currentFrameLayout = ref("elintegroNavigationButtonFirstLayout")
     }
     vueElintegroNavigationButtonBeforeLoggedInDataframe(DataframeVue) { bean ->
@@ -50,12 +57,12 @@ beans {
         isGlobal = true
         saveButton = false
         initOnPageLoad = true
-        dataframeButtons = [register       : [name: "register", type: "link", showAsDialog: true, attr:"style='color:#1976D2;'",
+        dataframeButtons = [register       : [name: "register", type: "link", showAsDialog: true, attr:  " style='color:#1976D2;'" , classNames:"navigation-hover-underline",
                                               refDataframe: ref("vueElintegroRegisterDataframe"), tooltip: [message: 'Register'],"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            login          : [name: "login", type: "link",showAsDialog: true,attr:"style='color:#1976D2;'",
+                            login          : [name: "login",  type: "link", showAsDialog: true,attr:"style='color:#1976D2;'", classNames:"navigation-hover-underline",
                                               refDataframe: ref("vueElintegroLoginTabDataframe"), tooltip: [message: 'Login'],"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"),"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            careers        : [name: "careers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"),"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            contactUs      : [name: "contactUs", type: "link",attr:"style='color:#212121;'",   classNames: 'navigation-hover', route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"),"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            careers        : [name: "careers", type: "link",attr:" style='color:#212121;'",  classNames: 'navigation-hover',  route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"),"flexGridValues":['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                            ]
         wrapButtons = false
 
@@ -82,6 +89,7 @@ beans {
                         , search:true
                         ,defaultLanguage :"English"
                         ,attr: """style='max-width:min-content;margin-top=-2%;'"""
+                        ,imageIcon : true
                         ,onSelect:[methodScript:"this.selectedLanguage(_params);"]
                 ],]
         currentFrameLayout = ref("vueElintegroLanguageSelectorDataframeLayout")
@@ -94,9 +102,9 @@ beans {
         saveButton = false
         initOnPageLoad = true
         dataframeButtons = [myProfile       : [name: "profile", type: "link",attr:"style='color:#1976D2;'", showAsDialog: true,refDataframe: ref("vueElintegroProfileMenuDataframe"),"flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            contactUs      : [name: "contactUs", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            contactUs      : [name: "contactUs", type: "link",attr:"style='color:#212121;'",   classNames: 'navigation-hover', route: true,routeIdScript: "0", refDataframe: ref("vueContactUsPageDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             applicants     : [name: "applicants", type: "link",attr:"style='color:#1976D2;'",route: true, routeIdScript: "0", refDataframe: ref("vueElintegroApplicantsDataframe"), roles: "ROLE_ADMIN", accessType: "ifAnyGranted", "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
-                            careers        : [name: "careers", type: "link",attr:"style='color:#1976D2;'",route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
+                            careers        : [name: "careers", type: "link",attr:"style='color:#212121;'",  classNames: 'navigation-hover',  route: true,routeIdScript: "0", refDataframe: ref("vueCareersDataframe"), "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']],
                             ]
                             wrapButtons = false
 
@@ -123,11 +131,15 @@ beans {
         addFieldDef = [
                 "logo": [
                         "widget"      : "PictureDisplayWidgetVue",
-                        "url"         : "assets/home/logo.jpg",
+                        "url"         : "assets/home/logo.png",
                         flexGridValues: ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
                         "attr"        : " contain ",
-                        "height"      : "64",
-                        "width"       : "200",
+//                        "height"      : "64",
+//                        "width"       : "200",
+//                        "padding-left ": "75px",
+//                        "width"    :  "25%"
+//                        "padding"      : "100",
+//                        "margin-left" : "85"
                         //"min-width"   : "40"
 
                 ]
