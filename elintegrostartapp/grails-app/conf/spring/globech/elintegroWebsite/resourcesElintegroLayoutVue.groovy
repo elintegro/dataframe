@@ -33,8 +33,8 @@ beans {
 
 <div>
 <v-flex>   
-<div class= "bannerSection">
-                                    <v-app-bar id="banner"  fixed  outline elevate-on-scroll  flat color="white"  tabs   >   
+
+                                    <v-app-bar id="banner" class= "bannerSection" fixed  outline elevate-on-scroll  flat color="white"  tabs   >   
                                  
                                        <vueElintegroNavigationDrawerDataframe/>
                              
@@ -55,7 +55,7 @@ beans {
                                        <vueInitDataframe/>
                               
                                     </v-app-bar>
-                                     </div>
+                                   
         </v-flex>
         </div>
         """
@@ -64,7 +64,7 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """  <div>
                                       <div style="text-align: left" class="hidden-lg-and-up">
-                                          <v-app-bar-nav-icon class="toggle" @click="drawerVisible = true" ></v-app-bar-nav-icon>
+                                          <v-app-bar-nav-icon class="toggle" style="background-size:auto;" @click="drawerVisible = true" > <v-img src="/assets/home/nav-toggle.png"></v-img></v-app-bar-nav-icon>
                                       </div>
                                        
                                       <div class="navigationDrawer"

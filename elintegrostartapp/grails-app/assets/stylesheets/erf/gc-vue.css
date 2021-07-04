@@ -70,13 +70,13 @@ tr.selected td {
 }
 .toggle {
     width: 120px;
-    background: white;
-    color: tomato;
+    background: none;
     border: 0;
-    padding: 5px;
+    padding: 12px;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
 }
+
 
 .navigationDrawer {
     position: absolute;
@@ -95,7 +95,7 @@ tr.selected td {
 .drawer-mask {
     position: absolute;
     left: 0;
-    top: 67px;
+    top: -25px;
     width: 100vw; /* initially */
     height: 100vh;
     background: #000;
