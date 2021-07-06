@@ -47,8 +47,8 @@ beans {
                                      classNames: 'navigation-hover',
                                      route: true,routeIdScript: "0", refDataframe: ref("vueElintegroHomeDataframe"),
                                      "flexGridValues": ['xs0', 'sm0', 'md0', 'lg0', 'xl0']
-                             ]
-        ]
+                                    ]
+                            ]
         currentFrameLayout = ref("elintegroNavigationButtonFirstLayout")
     }
     vueElintegroNavigationButtonBeforeLoggedInDataframe(DataframeVue) { bean ->

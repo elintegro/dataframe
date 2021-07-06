@@ -133,22 +133,19 @@ ${constructedPageHtml}
 <asset:javascript src="/erf/owlCarousel.js"/>
 <asset:javascript src="/vuejs/vuex.js"/>
 <asset:javascript src="/vuejs/multiple-image-upload.umd.min.js"/>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://unpkg.com/aos@2.3.0/dist/aos.js"></script>
+<script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 1200,
+    });
+</script>
 ${constructedPageScript}
 %{--<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">--}%
 
 
 <script>
-    AOS.init(
-        {
-              once:false,
-            duration: 1200,
-        }
-    );
-    // import Vuetify from 'vuetify'
-    // Vue.use(Vuetify,{
-    //     rtl:true
-    // })
+
     $('.owl-carousel').owlCarousel({
         loop: true,
         margin: 10,
