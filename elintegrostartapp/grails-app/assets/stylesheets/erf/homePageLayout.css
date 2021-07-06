@@ -370,11 +370,10 @@ padding:0px;
  .QuotesPadding {
      border-radius: 20px;
  }
-
- .bannerSection {
-     position: relative;
- }
-.bannerSection::before {
+.v-app-bar--hide-shadow{
+position: relative;
+}
+.v-app-bar--hide-shadow::before {
     content: '';
     position: absolute;
     background-image: url('/assets/home/banner-before.png');
@@ -384,10 +383,10 @@ padding:0px;
     top: 0;
     width: 130px;
     height: 120px;
-    z-index: 100;
+    z-index: -1;
 
 }
-.bannerSection::after {
+.v-app-bar--hide-shadow::after {
     content: '';
     position: absolute;
     background-image: url('/assets/home/banner-after.png');
@@ -397,7 +396,7 @@ padding:0px;
     top: 0;
     width: 560px;
     height: 240px;
-    z-index: 100;
+    z-index: -1;
 }
 
 
