@@ -68,12 +68,12 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """ 
                                        
-                                        <v-row   class="webSection our_work" id ="our_work" data-aos="fade-up">
+                                        <v-row   class="webSection our_work" id ="our_work" >
                                          <v-col cols="12" xs="10" sm="1" md="1" xl="1" lg="1" > </v-col>
-                                             <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" >
+                                             <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" data-aos="fade-up">
                                                          <v-img alt ="our_frameworks"  src="assets/home/webMobile.png"></v-img>
                                              </v-col>
-                                             <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" align-self="center"  >
+                                             <v-col cols="12" xs="10" sm="5" md="5" xl="5" lg="5" align-self="center"  data-aos="fade-up">
                                              
                                                     <h2 class="heading-1 ">[weDeliver]</h2>
                                                                 <p class="paragraph" >
