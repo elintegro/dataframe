@@ -47,7 +47,7 @@
         <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     </g:if>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Elintegro App Factory </title>
+    <title>Elintegro App Factory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/home/newDesignLogoWithoutText.png" type="image/x-icon">
     <meta name="google-signin-client_id" content="482906574403-seedi2p2ae3s9obm2ohb8bevq693jl3n.apps.googleusercontent.com">
@@ -80,8 +80,8 @@
 %{--    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />--}%
 
     %{--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />--}%
-    <link rel="manifest" href="./manifest.json"/>
-    <g:if test="${Environment.current != Environment.DEVELOPMENT}">
+    <g:if test="${Environment.CUSTOM.name == "qa"}">
+        <link rel="manifest" href="./manifest.json"/>
         <script>
             if('serviceWorker' in navigator){
                 navigator.serviceWorker.register('./sw.js')
