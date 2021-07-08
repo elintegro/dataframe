@@ -512,6 +512,12 @@ position: relative;
 .quiz-signup .v-menu__content .v-select-list .v-list .v-list-item:hover::before{
     opacity:unset !important;
 }
+.quiz-signup .v-menu__content .v-select-list .v-list-item--link:before  {
+background-color: #007bff;
+}
+.quiz-signup .v-menu__content .v-select-list .v-list-item__content .v-list-item__title {
+    z-index: 1;
+}
 
 .quiz-signup .v-input__control .v-input__slot {
     border: 1px solid #197DC3 !important;
