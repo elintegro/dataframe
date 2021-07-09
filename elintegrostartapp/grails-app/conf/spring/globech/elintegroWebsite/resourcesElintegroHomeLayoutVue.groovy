@@ -175,7 +175,7 @@ beans {
                                 <div class=" flex-column" data-aos="fade-up">
                                   <h1 class="heading">What our customers say about us</h1>
                                   <v-row justify="center">
-                                  <v-col cols="12" xs="8" sm="10" md="10" xl="10" lg="7" >    
+                                  <v-col cols="12" xs="8" sm="10" md="10" xl="7" lg="7" >    
                                   <v-card elevation="12" class="QuotesPadding " >        
                                     <v-carousel
                                         cycle
@@ -296,9 +296,9 @@ beans {
                            <div id="quiz_placeholder" class="Quiz_Placeholder" data-aos="fade-up">
                                             <v-flex xs12 sm12 md12 lg12 x12>
                                                <v-row>
-                                                 <v-col cols="12" xs="1" sm="1" md="3" xl="1" lg="3"></v-col>
+                                                 <v-col cols="12" xs="1" sm="1" md="2" xl="3" lg="3"></v-col>
                                                 
-                                                   <v-col cols="12" xs="10" sm="10" md="7" xl="10" lg="7">
+                                                   <v-col cols="12" xs="10" sm="10" md="8" xl="7" lg="7">
                                                      <v-row align="center"  justify="center">  <h2 class="heading-1">[letsTalk]</h2> </v-row>              
                                                      <div class="contactAfter">
                                                       <img alt ="our_frameworks"  src="assets/home/contact-before.png" class="contactAfterTop" ></img>
@@ -310,7 +310,7 @@ beans {
                                                             </v-row>
                                                       </v-card>
                                                    </v-col>
-                                                <v-col cols="12" xs="1" sm="1" md="4" xl="1" lg="2"></v-col>
+                                                <v-col cols="12" xs="1" sm="1" md="2" xl="2" lg="2"></v-col>
                                                </v-row>
                                             </v-flex>
                                          </div>
