@@ -95,8 +95,6 @@ class LanguageSelectorWidgetVue extends CollectionWidgetVue {
                             $field.onSelect.methodScript
              },\n """)
         }
-        String defaultLanguage = field.defaultLanguage?:"English"
-        dataframe.getVueJsBuilder().addToDataScript("""defaultLanguage:'$defaultLanguage',""")
         boolean isReadOnly = dataframe.isReadOnly(field)
         String typeString = ""
         if(!isSearchable(field)){
@@ -105,6 +103,7 @@ class LanguageSelectorWidgetVue extends CollectionWidgetVue {
         String multiple = field.multiple?"multiple":''
         String displayMember = field.displayMember?:'name'
         String valueMember = field.valueMember?:'id'
+        String getIconAttr = field.getIconAttr?:''
         String itemsStr = getFieldJSONItems(field)
         String modelString = getFieldJSONModelNameVue(field)
         boolean imageIcon = field.imageIcon?:false
@@ -118,7 +117,7 @@ class LanguageSelectorWidgetVue extends CollectionWidgetVue {
                   <v-col class="pt-6" cols="6"> 
                       <v-select
                           class = "underLine"
-                          v-model = "defaultLanguage" 
+                          v-model = "state.transits.defaultLanguage" 
                           :items="$itemsStr"
                           ${validate(field)?":rules = '${fldName}_rule'":""}
                           label="$label"

@@ -52,6 +52,7 @@ beans = {
     loadResource "globech/resourcesLayout.groovy"
     loadResource "globech/resourcesLayoutVue.groovy"
     loadResource "globech/resourcesVue.groovy"
+    loadResource "globech/resourcesViewRoutes.groovy"
     loadResource "globech/applicationManagement/resourcesApplicationForm.groovy"
     loadResource "globech/applicationManagement/resourcesApplicationManagement.groovy"
     loadResource "globech/userManagement/resourcesUserManagement.groovy"

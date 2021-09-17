@@ -20,5 +20,5 @@ class PageDFRegistryVue {
     List<String> allDataframesList
     String containerLayout = ""
     String defaultInitDataframeComp = ""
-
+    ViewRoutes viewRoutes = null
 }

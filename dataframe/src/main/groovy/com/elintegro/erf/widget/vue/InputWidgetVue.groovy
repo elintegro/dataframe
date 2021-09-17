@@ -27,6 +27,7 @@ class InputWidgetVue extends WidgetVue {
         String autoComplete = field.autoComplete?:'off'
         String clearable = field.clearable?"clearable":""
         String placeholder = field.placeholder?:""
+        String events = field.events?:""
         //String modelString = dataframe.getFieldJSONModelNameVue(field)
         //    String modelString = dataframe.getFieldModelNameVue(field)
         String html = """<v-text-field
@@ -39,6 +40,7 @@ class InputWidgetVue extends WidgetVue {
             style="width:${getWidth(field)}; height:${getHeight(field)};"
             autocomplete = $autoComplete
             placeholder = "$placeholder"
+            $events
             $clearable
             ${getAttr(field)}
           ></v-text-field>"""

@@ -53,6 +53,7 @@ beans {
         ]
 		dataframesToShowInMainPage = []
 		containerLayout = "vueElintegroContainerLayout" //outermost layout name
+		viewRoutes = ref("allDataframeRoutes")
 	}
 
 }

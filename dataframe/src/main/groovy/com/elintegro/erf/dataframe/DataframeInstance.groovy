@@ -334,7 +334,7 @@ class DataframeInstance implements DataframeConstants{
 				String refFieldName =  namedParam[1];
 				String keyNamedParam = DataframeVue.buildFullFieldNameKeyParamWithDot(df, refDomainAlias, refFieldName, key);
 //				jsonMapDf.put(keyNamedParam, value)
-				jsonMapDf.put("$refDomainAlias",["$refFieldName": value, "$key":value]) //todo check if this works for all cases
+				jsonMapDf.put(refDomainAlias,[(refFieldName): value, (key):value]) //todo check if this works for all cases
 
 				jData?."${DOMAIN_KEYS}".putAll(jsonMapDf)
 			}

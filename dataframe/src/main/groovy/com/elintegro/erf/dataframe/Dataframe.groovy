@@ -148,6 +148,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 	def ajaxInsertUrl = "dataframe/ajaxInsert";
 	def ajaxDefaultUrl = "dataframe/ajaxDefaultData";
 	def ajaxCreateUrl ="dataframe/ajaxCreateNew"
+	def ajaxFileSaveUrl = "fileUpload/ajaxFileSave"
 
 	public static Dataframe getDataframeByName(String dataframeName){
 		return (Dataframe) Holders.grailsApplication.mainContext.getBean(dataframeName)
@@ -481,7 +482,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 			addField(key, value)
 		}
 		//Todo: We need to refactor it soon...
-//		addField("alertMesssage", [widget: "SnackbarWidgetVue",flexGridValues: ['xs0', 'sm0', 'md0', 'lg0', 'xl0'],])
+//		addField("alertMesssage", [widget: "SnackbarWidgetVue",cssGridValues: ['xs0', 'sm0', 'md0', 'lg0', 'xl0'],])
 	}
 
 	List getHqlResult(def queryHql){
@@ -725,7 +726,7 @@ public class Dataframe extends DataframeSuperBean implements Serializable, DataF
 		this.currentFrameLayout.numberFields = fields.getList().size()
 		getAdditionalDataFromAjax(additionalParameters)
 		String additionalParametersStr = additionalParameters.toString()
-		doAfterSaveStringBuilder.append(doAfterSave)
+		//doAfterSaveStringBuilder.append(doAfterSave)
 		def ajaxSavescripts = """
 			<script>
 			/**

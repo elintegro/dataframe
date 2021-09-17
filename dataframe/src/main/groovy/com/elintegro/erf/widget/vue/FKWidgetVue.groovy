@@ -34,10 +34,13 @@ class FKWidgetVue extends WidgetVue{
 
     String getVueDataVariable(DataframeVue dataframe, Map field) {
         String dataVariable = dataframe.getDataVariableForVue(field)
-        Dataframe refDataframe = getReferenceDataframe(field.parent)
-        String refDataframeName = refDataframe.dataframeName
-        //todo now the update of store value in save method is not automated. make it automated.
-        return """$dataVariable : excon.getFromStore('$refDataframeName','key'),\n"""
+        if(field.parent){
+            Dataframe refDataframe = getReferenceDataframe(field.parent)
+            String refDataframeName = refDataframe.dataframeName
+            //todo now the update of store value in save method is not automated. make it automated.
+            return """$dataVariable : excon.getFromStore('$refDataframeName','key'),\n"""
+        }
+        return ""
 
     }
 

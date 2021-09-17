@@ -36,13 +36,16 @@ public class DFButton {
 	public String doBeforeSave; // Script just before Ajax save
 	public String doAfterSave=""; // Script just after Ajax save
 	public boolean showAsDialog = false; //Show the refDataframe as Dialog??
+	public boolean showToolbar = false;
 	public boolean route = false; // Show as Route??
+	public Map routeMap;
 	public Map tooltip;
 	public String attr; //add extra attribbubtes from descripter
 	public  String layout=""; // layout for buttons
 	public String doBeforeAjax; // Script just bbefore ajax call
-	public String routeIdScript; //Id for the dataframe when route is true
-	public List flexGridValues; //grid values for v-flex
+	public String routeName; //route name to appear in the url
+	public String doAfterRoute; //If we have to do something after routing the page
+	public Map cssGridValues; //grid values for v-col
 	public Map showAsMenu;
 	public String attachTo; //Attch the menu to another field
 	public String roles; //"ROLE_ADMIN,ROLE_CUSTOMER"
@@ -50,5 +53,7 @@ public class DFButton {
 	public String classNames;
 	public boolean scrollable;
 	public boolean persistent;
+	public String dialogBoxWidth;
+	public String dialogBoxMaxWidth;
 
 }

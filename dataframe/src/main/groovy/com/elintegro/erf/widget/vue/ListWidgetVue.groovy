@@ -3,9 +3,11 @@ package com.elintegro.erf.widget.vue
 import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DataframeInstance
+import com.elintegro.erf.dataframe.DataframeView
 import com.elintegro.erf.dataframe.DbResult
 import com.elintegro.erf.dataframe.ParsedHql
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import grails.converters.JSON
 import org.apache.commons.lang.WordUtils
 import org.springframework.context.i18n.LocaleContextHolder
@@ -37,6 +39,7 @@ class ListWidgetVue extends CollectionWidgetVue {
         boolean itemString = field.itemString?:false
         modelString = itemString?itemsStr:getFieldJSONModelNameVue(field)
         String onClick = field.OnClick?:""
+        String htmlForAddButton = getHtmlForAddButton(dataframe, field, modelString)
         """
            <v-list ${isDisabled(dataframe, field) ? "disabled" : ""} flat ${getAttr(field)}>
                   <v-subheader>$label</v-subheader>
@@ -49,9 +52,47 @@ class ListWidgetVue extends CollectionWidgetVue {
                                <v-divider style="border-color:rgb(42, 182, 246);"></v-divider>
                           </v-list-item-content>
                        </v-list-item>
+                       $htmlForAddButton
                   </v-card>
                   </v-list-item-group>
            </v-list>
         """
+    }
+
+    private String getHtmlForAddButton(DataframeVue dataframe, Map field, String modelString){
+        boolean addable = field.addable?:false
+        String fldName = getFieldName(dataframe, field)
+        if(addable){
+            addMthodForAddButton(dataframe, field, fldName, modelString)
+            return """
+
+<v-row>
+                <v-col><v-text-field
+placeholder = "Add new data"
+outlined
+ v-model='${fldName}_listdata'></v-text-field></v-col>
+                <v-col><v-btn @click='${fldName}_addToList'>Add</v-btn></v-col>
+                </v-row>
+"""
+        }
+
+        return ""
+    }
+
+    private void addMthodForAddButton(dataframe, field, String fldName, String modelString){
+
+        String displayMember = field.displayMember ?: 'name'
+        VueJsBuilder vueJsBuilder = dataframe.getVueJsBuilder()
+        vueJsBuilder.addToDataScript("""
+                ${fldName}_listdata: "",
+        """)
+                vueJsBuilder.addToMethodScript("""${fldName}_addToList: function(){
+                           if(Array.isArray(this.${modelString})){
+                                this.${modelString}.push({$displayMember: this.${fldName}_listdata});
+                            } else {
+                                this.${modelString} = [{$displayMember: this.${fldName}_listdata}];
+                            }
+                                this.${fldName}_listdata= "";
+             },\n """)
     }
 }

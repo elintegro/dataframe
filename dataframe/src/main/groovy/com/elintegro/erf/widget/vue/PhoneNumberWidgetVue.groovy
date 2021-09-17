@@ -33,7 +33,7 @@ class PhoneNumberWidgetVue extends WidgetVue{
                <v-text-field
                  label="$label"
                  v-model = "${getFieldJSONModelNameVue(field)}" 
-                 :rules = "${fldName}_rule"
+                 ${validate(field)?":rules = '${fldName}_rule'":""}
                  ${isReadOnly?"readonly":''}
                  ${toolTip(field)}
                  ${getAttr(field)}

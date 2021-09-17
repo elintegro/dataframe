@@ -173,7 +173,7 @@ beans {
                                  [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                  
                                  </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
     }
 
 

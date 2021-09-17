@@ -98,9 +98,9 @@ beans {
         createStore = true
 //        vueStore = ["state":"event_manager: true,\n"]
 
-        dataframeButtons = [ReportClientEvent:[name:"ReportClientEvent", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], route: true, routeIdScript: "0", refDataframe: ref("vueRecordEventDataframe"), roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
-                            IssueRequest:[name:"IssueRequest", type:"link", attr: "open-on-hover", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_CLIENT"], accessType: "ifAnyGranted"],
-                            ReportIncident:[name:"ReportIncident", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"]/*, attr:"text"*/
+        dataframeButtons = [ReportClientEvent:[name:"ReportClientEvent", type:"link", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], route: true, routeIdScript: "0", refDataframe: ref("vueRecordEventDataframe"), roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
+                            IssueRequest:[name:"IssueRequest", type:"link", attr: "open-on-hover", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_CLIENT"], accessType: "ifAnyGranted"],
+                            ReportIncident:[name:"ReportIncident", type:"link", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN", "ROLE_NURSE", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"]/*, attr:"text"*/
         ]
         currentFrameLayout = ref("vueUserManagementMenuDataframeLayout")
     }
@@ -110,12 +110,12 @@ beans {
         bean.constructorArgs = ['vueUserManagementMenuDataframe']
         isGlobal = true
         saveButton = false
-        dataframeButtons = [ApplicationManagement:[name:"ApplicationManagement", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], "route" : true, routeIdScript: "0", refDataframe: ref("vueApplicationManagementDataframe") , roles:["ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
-                            ClientManagement:[name:"ClientManagement", type:"link", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_NURSE"], accessType: "ifAnyGranted"],
-                            Employees:[name:"Employees", type:"link",  attr: "open-on-hover", route: true, routeIdScript: "0", refDataframe: ref("vueEmployeeGridDataframe"),"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Vendors:[name:"Vendors", type:"link",route: true, routeIdScript: "0", refDataframe: ref("vueVendorGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text", roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            ServiceProviders:[name:"ServiceProviders", type:"link", attr:"text",route: true, routeIdScript: "0", refDataframe: ref("vueProviderGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Users:[name:"Users", type:"link", attr:"text", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_SUPER_ADMIN"], accessType: "ifAnyGranted"]
+        dataframeButtons = [ApplicationManagement:[name:"ApplicationManagement", type:"link","cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],"route" : true, routeIdScript: "0", refDataframe: ref("vueApplicationManagementDataframe") , roles:["ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER"], accessType: "ifAnyGranted"],
+                            ClientManagement:[name:"ClientManagement", type:"link", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_CARE_GIVER", "ROLE_NURSE"], accessType: "ifAnyGranted"],
+                            Employees:[name:"Employees", type:"link",  attr: "open-on-hover", route: true, routeIdScript: "0", refDataframe: ref("vueEmployeeGridDataframe"),"cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Vendors:[name:"Vendors", type:"link",route: true, routeIdScript: "0", refDataframe: ref("vueVendorGridDataframe"), "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], attr:"text", roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            ServiceProviders:[name:"ServiceProviders", type:"link", attr:"text",route: true, routeIdScript: "0", refDataframe: ref("vueProviderGridDataframe"), "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Users:[name:"Users", type:"link", attr:"text", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_SUPER_ADMIN"], accessType: "ifAnyGranted"]
         ]
         currentFrameLayout = ref("vueUserManagementMenuDataframeLayout")
     }
@@ -126,14 +126,14 @@ beans {
         isGlobal = true
         saveButton = false
 
-        dataframeButtons = [Administrator:[name:"Administrator", type:"link", "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-//                            Client:[name:"Client", type:"link", attr: "text", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+        dataframeButtons = [Administrator:[name:"Administrator", type:"link", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+//                            Client:[name:"Client", type:"link", attr: "text", route: true, routeIdScript: "0", refDataframe: ref("vueClientGridDataframe"), "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
 
-//                            Receptionist:[name:"Receptionist", type:"link",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Employee:[name:"Employee", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueEmployeeAddDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], attr:"text",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Provider:[name:"Provider", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueProviderAddDataframe"), attr:"text",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-//                            Relative:[name:"Relative", type:"link", attr:"text", route: true, routeIdScript: "0", refDataframe: ref("vueRelativeGridDataframe"), "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], showAsDialog: true, roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
-                            Vendors:[name:"Vendors", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueVendorAddDataframe"), attr:"text",  "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"]
+//                            Receptionist:[name:"Receptionist", type:"link",  "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], attr:"text",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Employee:[name:"Employee", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueEmployeeAddDataframe"), "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], attr:"text",roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Provider:[name:"Provider", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueProviderAddDataframe"), attr:"text",  "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+//                            Relative:[name:"Relative", type:"link", attr:"text", route: true, routeIdScript: "0", refDataframe: ref("vueRelativeGridDataframe"), "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], showAsDialog: true, roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"],
+                            Vendors:[name:"Vendors", type:"link", route: true, routeIdScript: 0, refDataframe: ref("vueVendorAddDataframe"), attr:"text",  "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'], roles:["ROLE_ADMIN"], accessType: "ifAnyGranted"]
         ]
         currentFrameLayout = ref("vueRegisterMenuDataframeLayout")
     }
@@ -156,36 +156,37 @@ beans {
 //        createStore = true
 //        childDataframes=["vueAddressDataframe"]
 
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
         doAfterSave = """setTimeout(function(){ vueUserProfileDataframeVar.\$router.push('/');this.location.reload();}, 3000);"""
         route = true
         addFieldDef =[
                 "person.id":[
                         widget: "NumberInputWidgetVue",
                         "required": "required"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6']],
+                        ,"cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
+                        ],
 
                 "person.firstName":[
                         widget: "InputWidgetVue",
                         "required": "required"
                         ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 10) || 'FirstName must be less than 10'"]]
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']],
+                        ,"cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'4']],
 
                 "person.lastName":[
                         widget: "InputWidgetVue",
                         "required": "required"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
+                        ,"cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'4']
                         ,"validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 10) || 'LastName must be less than 10'"]]
                 ],
                 "person.bday":[
                         widget: "DateWidgetVue",
                         "required": "required"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg12', 'xl4']],
+                        ,"cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'12', 'xl':'4']],
                 "person.email":[
                         widget: "EmailWidgetVue",
                         "required": "required"
                         ,readOnly: true
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,"cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"validate":["rule":["v => !!v || 'E-mail is required'"]]
                 ],
                 "person.phone":[
@@ -195,7 +196,7 @@ beans {
                 ],
                 "person.languages":[
                         widget: "MultiSelectComboboxVue"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl4']
+                        ,"cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'4']
                         , hql: """select language.id as id, language.ename as ename from Language as language"""
                         ,"displayMember":"ename"
                         ,"valueMember":"id"
@@ -206,7 +207,7 @@ beans {
                         "widget" : "PictureDisplayWidgetVue",
                         "aspectRatio":"2.5",
                         "attr": "contain",
-                        "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'],
+                        "cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'4'],
                         "width":200,
                         "height":200],
 
@@ -224,7 +225,7 @@ beans {
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button", url: "", route: true, "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], refDataframe: ref("vueResetPasswordDfr")] ]
+        dataframeButtons = [ resetPassword: [name:"resetPassword", type: "button", url: "", route: true,"cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'4'] , refDataframe: ref("vueResetPasswordDfr")] ]
 
         currentFrameLayout = ref("vueUserProfileDataframeLayout")
 
@@ -276,8 +277,8 @@ beans {
         //Vue parameters
         isGlobal = true
         dataframeButtons = [
-                Register:[name:"register", type:"link", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true, attr:"flat", script:""" this.vueRegisterDataframe_display = true;\n  excon.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', true);\n""", refDataframe: ref("vueRegisterDataframe"), tooltip: [message: 'Register']],
-                Login:[name:"login", type:"link", attr:"flat", "flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6'], showAsDialog: true,script:""" this.vueLoginDataframe_display = true; \n  excon.saveToStore('dataframeShowHideMaps','vueLoginDataframe_display', true);\n""", refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login']]]
+                Register:[name:"register", type:"link","cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6'], showAsDialog: true, attr:"flat", script:""" this.vueRegisterDataframe_display = true;\n  excon.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', true);\n""", refDataframe: ref("vueRegisterDataframe"), tooltip: [message: 'Register']],
+                Login:[name:"login", type:"link", attr:"flat","cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6'], showAsDialog: true,script:""" this.vueLoginDataframe_display = true; \n  excon.saveToStore('dataframeShowHideMaps','vueLoginDataframe_display', true);\n""", refDataframe: ref("vueLoginDataframe"), tooltip: [message: 'Login']]]
         currentFrameLayout = ref("loginLogoutNavigationLayout")
         createStore = true
 
@@ -295,7 +296,7 @@ beans {
 
         addFieldDef =[
                 "alert":[widget: "SnackbarWidgetVue"
-//                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+//                        ,"cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]
 
         ]
@@ -319,18 +320,18 @@ beans {
         saveButton = true
         wrapInForm=true
 
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
         doAfterSave = """ excon.saveToStore('vueLoginNavigation','responseData');\nexcon.saveToStore('dataframeShowHideMaps','vueRegisterDataframe_display', false);\n
                            """
         addFieldDef =[
-                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
-                "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                "user.email":[widget: "EmailWidgetVue", "placeHolder":"Enter your email","cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']],
+                "user.firstName":[widget: "InputWidgetVue", "placeHolder":"Enter your Firstname","cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                                   ,"validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]]],
-                "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                "user.lastName":[widget: "InputWidgetVue", "placeHolder":"Enter your Lastname","cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                                  ,"validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]]]
-                ,"user.password":[widget: "PasswordWidgetVue", "width":"150", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                ,"user.password":[widget: "PasswordWidgetVue", "width":"150", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                                   ,"validate":["rule":["v => !!v || 'Password is required'", "v => (v && v.length >= 8) || 'Password must be greater than 8'"]]]
-                ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                ,"password2":[widget: "PasswordWidgetVue", "width":"150", "insertAfter":"user.password", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                               ,"validate":["rule":["v => !!(v==this.vueRegisterDataframe_user_password) || 'Password and Confirm Password must match'"]]]
         ]
 
@@ -350,9 +351,9 @@ beans {
         boolean loginWithSpringSecurity = Holders.grailsApplication.config.loginWithSpringSecurity?true:false
         String loginAuthenticateUrl = loginWithSpringSecurity?"login/authenticate" : "login/loginUser"
 
-        addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
-                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an email","flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
-                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px', "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']]
+        addFieldDef = ["user.password":["widget" : "PasswordWidgetVue", "name": "user.password", autoComplete:"on", "width":150,"cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']]
+                       ,"user.username":["widget" : "EmailWidgetVue",  "name": "user.username", autoComplete:"on", "width":150, "errMessage":"Username should be an email","cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']]
+                       ,"rememberMe":["widget" : "CheckboxWidgetVue", height : '30px', "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']]
         ]
 
         dataframeButtons = [ login:[name:"login", type: "button", url: "${loginAuthenticateUrl}", layout: "<v-flex xs12 sm12 md6 lg6 xl6 pa-0>[BUTTON_SCRIPT]</v-flex>", attr: """color='light-blue darken-2' dark style="width: 10px;" """, doBeforeSave:""" var elementId = '#loginDataframe';
@@ -404,8 +405,8 @@ beans {
                                                            this.location.reload();
                                                           //Dataframe.showHideDataframesBasedOnUserType(data);
                                                        """,
-                                                     failureScript:""" if(!response.msg){ this.location.reload();}"""],"flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
-                             forgetPassword:[name: "forgetPassword", type: "link", attr:"style='margin-left:-3px;'", script:""" console.log("Forget Password Clicked");""", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'],
+                                                     failureScript:""" if(!response.msg){ this.location.reload();}"""],"cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']],
+                             forgetPassword:[name: "forgetPassword", type: "link", attr:"style='margin-left:-3px;'", script:""" console.log("Forget Password Clicked");""", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'],
                                              layout: "<v-flex xs12 sm12 md6 lg6 xl6 style='margin-bottom:10px;'><v-layout column align-start justify-center>[BUTTON_SCRIPT]</v-layout></v-flex>"],
                              logInWithGoogle:[name: "logInWithGoogle", type: "image", attr:"style='margin-left:-3px;'", image:[url: "vueLoginDataframe.button.logInWithGoogle.imageUrl", width:'135px', height: '48px'], script:"""
 //                                                                                             var url = "/elintegrostartapp/oauth/authenticate/google";
@@ -415,12 +416,12 @@ beans {
                                                                                                 window.opener.location.reload();
                                                                                                 close();
                                                                                              }*/
-                                                                                              """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']],
+                                                                                              """, "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']],
                              logInWithFacebook:[name: "logInWithFacebook", type: "image", attr: "style=\"margin-top:3px;\"", image:[url: "vueLoginDataframe.button.logInWithFacebook.imageUrl", width: '135px', height: '43px'],script:"""
                                                                                              var provider = 'facebook';
                                                                                              var url = "springSecurityOAuth2/authenticate?provider="+provider+"";
                                                                                              var childWindow = window.open(url, "payment",  "width=500,height=500");
-                                                                                              """, "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']]
+                                                                                              """, "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']]
 
         ]
 
@@ -444,13 +445,13 @@ beans {
                                 "widget" : "InputWidgetVue",
                                 "readOnly": true,
                                 "hide": true,
-                                "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                                "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         ],*/
                 "person.mainPicture": [
                         "widget" : "PictureDisplayWidgetVue",
                         "layout": "<v-layout align-center justify-center><v-avatar :size=\"avatarSize\" color=\"grey lighten-4\">[FIELD_SCRIPT]</v-avatar></v-layout>",
                         "aspectRatio":"2.5",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                 ]
         ]
         currentFrameLayout = ref("vueAfterLoggedinDataframeLayout")
@@ -472,25 +473,25 @@ beans {
                         "widget" : "PictureDisplayWidgetVue",
                         "layout": "<v-layout align-center justify-center><v-avatar :size=\"90\" style='margin-top:0px;' color=\"grey lighten-4\">[FIELD_SCRIPT]</v-avatar></v-layout>",
                         "aspectRatio":"2.5",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                 ],
                 "person.firstName": [
                         "widget" : "InputWidgetVue",
                         "readOnly": true,
                         "height":"50px",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                 ],
                 "person.id": [
                         "widget" : "InputWidgetVue",
                         "readOnly": true,
                         hide: true,
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                 ]
 
         ]
 //        this.location.reload();
-        dataframeButtons = [profile:[name:'Profile', type: "link", attr: "text small", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], showAsDialog: false, route:true, routeIdScript:"this.vueProfileMenuDataframe_person_id;", refDataframe: ref('vueUserProfileDataframe')],
-                            Logout:[name:"logout", type:"link", url:"logoff", attr:"text small","flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6'], script:"", callBackParams:[failureScript:"""vueProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
+        dataframeButtons = [profile:[name:'Profile', type: "link", attr: "text small", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'], showAsDialog: false, route:true, routeIdScript:"this.vueProfileMenuDataframe_person_id;", refDataframe: ref('vueUserProfileDataframe')],
+                            Logout:[name:"logout", type:"link", url:"logoff", attr:"text small","cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'], script:"", callBackParams:[failureScript:"""vueProfileMenuDataframeVar.\$router.push("/");this.location.reload();"""]]]
         currentFrameLayout = ref("vueProfileMenuDataframeLayout")
     }
 
@@ -505,19 +506,19 @@ beans {
         ajaxUrl = "dataframe/ajaxCreateNew"
         initOnPageLoad = true
         route = true
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
         addFieldDef = [
 
                 "event.description":[
                         widget: "TextAreaWidgetVue"
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                        ,"cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']],
                 "event.client": [
                         "widget":"ComboboxVue",
                         "name":"event.client",
                         "hql":"select client.id as id, person.firstName as firstName from Client as client inner join client.person person"
                         ,"displayMember":"firstName"
                         ,"valueMember":"id"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6']
+                        ,"cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "event.eventType": [
                         "widget":"ComboboxVue",
@@ -525,7 +526,7 @@ beans {
                         "hql":"select type.id as id, type.code as code, type.name as name from EventType as type"
                         ,"displayMember":"name"
                         ,"valueMember":"id"
-                        ,"flexGridValues":['xs12', 'sm6', 'md6', 'lg6', 'xl6']
+                        ,"cssGridValues": ['xs':'12', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "event.images":[
                         "widget" : "PictureUploadWidgetVue"
@@ -576,7 +577,7 @@ beans {
                         , hql             : """select person.id as Id, person.firstName as Firstname, person.lastName as Lastname, person.email as email, person.phone as Phone from Relative relative inner join relative.person person"""
                         , gridWidth       : 420
                         , search          : true
-                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]
 
         ]
@@ -602,19 +603,19 @@ beans {
 
                 "person.email": [
                         "widget"        : "EmailWidgetVue",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "person.phone"       : [
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "person.firstName"   : [
                         "validate": ["rule": ["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.lastName"    : [
                         "validate": ["rule": ["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.mainPicture" : [
                         "widget"        : "PictureDisplayWidgetVue",
@@ -627,7 +628,7 @@ beans {
                                 "                \"person.mainPicture\":[\n" +
                                 "                        \"widget\": \"PictureDisplayWidgetVue\",\n" +
                                 "                        \"defaultValue\"  : \"elintegro_logo.png\",\n" +
-                                "                        flexGridValues: ['xs12', 'sm6', 'md1', 'lg4', 'xl4'],\n" +
+                                "                        \"cssGridValues\": ['xs':'12', 'sm':'6', 'md':'1', 'lg':'4', 'xl':'4'],\n" +
                                 "                        \"aspectRatio\":\"2.5\",\n" +
                                 "                      \"height\":\"20px\",\n" +
                                 "                        \"width\":\"300px\",\n" +
@@ -638,7 +639,7 @@ beans {
                                 "\n" +
                                 "    }`.jpg",
                         "aspectRatio"   : "2.5",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"        : 200]
         ]
 
@@ -658,25 +659,25 @@ beans {
 
                 "person.email": [
                         "widget"        : "EmailWidgetVue",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "person.phone"       : [
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "person.firstName"   : [
                         "validate": ["rule": ["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.lastName"    : [
                         "validate": ["rule": ["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.mainPicture" : [
                         "widget"        : "PictureDisplayWidgetVue",
                         "defaultValue"  : "default_profile.jpg",
                         "aspectRatio"   : "2.5",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"        : 200]
         ]
 

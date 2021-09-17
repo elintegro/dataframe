@@ -1,6 +1,8 @@
 package com.elintegro.erf.widget.vue
 
+import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import org.grails.web.json.JSONObject
 import org.springframework.context.i18n.LocaleContextHolder
 
 /**
@@ -18,7 +20,8 @@ class TimeWidgetVue extends WidgetVue{
         String dateFormatPlaceholder = getMessageSource().getMessage("date.format.hint", null, "date.format.hint", LocaleContextHolder.getLocale())
         String menuAttr = field.menuAttr?:""
 
-        String modelString = getModelString(dataframe, field)
+//        String modelString = getModelString(dataframe, field)
+        String modelString = getFieldJSONModelNameVue(field)
         return """
                     <v-dialog
                                         ref="${fldName}_dialog"
@@ -31,10 +34,11 @@ class TimeWidgetVue extends WidgetVue{
                                     <template v-slot:activator="{ on }">
                                         <v-text-field
                                                 v-model="$modelString"
-                                                :label="${getLabel(field)}"
+                                                label="${getLabel(field)}"
                                                 prepend-icon="access_time"
                                                 readonly
                                                 v-on="on"
+                                                ${fillProps(field)}
                                         ></v-text-field>
                                     </template>
                                     <v-time-picker
@@ -56,5 +60,19 @@ class TimeWidgetVue extends WidgetVue{
 
         String dataVariable = dataframe.getDataVariableForVue(field)
         return """${dataVariable}_dialog:false,\n"""
+    }
+
+    boolean setPersistedValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        if(value.hour && value.minute)
+            jData?.persisters?."${domainAlias}"."${fieldName}".value = value.hour + ":"+value.minute
+        else
+            super.setPersistedValueToResponse(jData, value, domainAlias, fieldName, additionalDataRequestParamMap, dfInstance, sessionHibernate, fieldProps)
+    }
+
+    boolean setTransientValueToResponse(JSONObject jData, def value, String domainAlias, String fieldName, Map additionalDataRequestParamMap, DataframeInstance dfInstance, Object sessionHibernate, Map fieldProps){
+        if(value.hour && value.minute)
+            jData?.persisters?."${domainAlias}"."${fieldName}".value = value.hour + ":"+value.minute
+        else
+            super.setTransientValueToResponse(jData, value, domainAlias, fieldName, additionalDataRequestParamMap, dfInstance, sessionHibernate, fieldProps)
     }
 }

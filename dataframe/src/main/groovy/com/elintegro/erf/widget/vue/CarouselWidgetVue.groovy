@@ -1,3 +1,4 @@
+package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.widget.vue.CollectionWidgetVue
@@ -26,14 +27,9 @@ class CarouselWidgetVue extends CollectionWidgetVue{
         String height = field.height
         String content = field.content
         """
-               
-
-
-
-
-<v-carousel
+               <v-carousel
                       cycle
-                      show-arrows-on
+                      show-arrows-on-hover
                       hide-delimiter-background
                       height= "$height"
                       ${getAttr(field)}

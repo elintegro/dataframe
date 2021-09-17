@@ -30,7 +30,7 @@ beans {
         dataframeLabelCode = "Employee.Registration"
         //These are values, that overrides the default ones
         childDataframes = ["vueEmployeeAddressDataframe"]
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
 //        saveButtonAttr = " color='light-blue darken-2' dark"
         initOnPageLoad = false
         isGlobal = true
@@ -48,11 +48,11 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"person",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueEmployeeContactDataframe")
                 ],
                 "employee.positionStart":[
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "employee.role"  :[
                         "widget"        : "ComboboxVue"
@@ -60,17 +60,17 @@ beans {
                         ,internationalize: true
                         ,"hql"          : "select role.id as id, role.authority as name from Role as role where isEmployee=true"
 
-                        ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,"cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                 ],
 
                 "employee.description":[
                         widget: "TextAreaWidgetVue"
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                        ,"cssGridValues": ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']],
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueEmployeeAddDataframe, "vueEmployeeAddDataframe_tab_model","vueEmployeeAddressDataframe-tab-id");\n""", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""],
+        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueEmployeeAddDataframe, "vueEmployeeAddDataframe_tab_model","vueEmployeeAddressDataframe-tab-id");\n""", "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'],url: ""],
 //                             Submit:[name:"submit", type: "button", script: "vueEmployeeAddDataframeVar.\$router.push('/');this.location.reload();"]
         ]
         currentFrameLayout = ref("vueEmployeeDataframeLayout")
@@ -85,7 +85,7 @@ beans {
         createStore = true
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
         ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
@@ -95,25 +95,25 @@ beans {
 
                 "person.email":[
                         "widget"     : "EmailWidgetVue",
-                        "flexGridValues":['xs8', 'sm8', 'md8', 'lg8', 'xl8']
+                        "cssGridValues": ['xs':'8', 'sm':'8', 'md':'8', 'lg':'8', 'xl':'8']
                 ],
                 "person.phone":[
-                        "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "person.firstName":[
                         "validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]],
-                        "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'6', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.lastName":[
                         "validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]],
-                        "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']
+                        "cssGridValues": ['xs':'6', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.mainPicture":[
                         "widget"      : "PictureDisplayWidgetVue",
                         "defaultValue":"default_profile.jpg",
                         "aspectRatio" :"2.5",
-                        "flexGridValues":['xs12', 'sm6', 'md6', 'lg4', 'xl4'],
+                        "cssGridValues": ['xs':'6', 'sm':'6', 'md':'6', 'lg':'4', 'xl':'4'],
                         "width"       :200,
                         "height"      :200]
         ]
@@ -136,7 +136,7 @@ beans {
         doBeforeSave = "params['personId'] = excon.getFromStore('vueEmployeeContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueEmployeeAddDataframe','vueEmployeeAddDataframe_tab_model', 'vueEmployeeAddDataframe-tab-id');"
 
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
         ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
@@ -146,13 +146,13 @@ beans {
         addFieldDef = [
                 "address.addressLine": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
 
                 "address.addressLine2": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
                 "address.postalZip": [
@@ -164,7 +164,7 @@ beans {
                         "insertAfter":"address.addressLine",
                         script       : """ this.updatedAddressValue = this.vueEmployeeAddressDataframe_address_addressLine;""",
                         "attr"       :"round right",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                 ],
                 "googleMap": [
                         "widget"      : "DataframeWidgetVue",
@@ -174,13 +174,12 @@ beans {
                         passValueAsProp : true,
                         "showInMap"   :true,
                         "name"        : "googleMap",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"      :'500px'
 
                 ]
         ]
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueEmployeeAddDataframe, "vueEmployeeAddDataframe_tab_model","vueEmployeeContactDataframe-tab-id");\n""",flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'], url: ""] ]
-
+        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueEmployeeAddDataframe, "vueEmployeeAddDataframe_tab_model","vueEmployeeContactDataframe-tab-id");\n""","cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'], url: ""] ]
         currentFrameLayout = ref("addressDataframeLayout")
 
     }
@@ -231,7 +230,7 @@ beans {
 //                        , hql             : """select  person.id as ID, person.firstName as Firstname, person.lastName as Lastname, person.email as email from Employee employee inner join employee.person person inner join employee.facility facility where facility.id=:facilityId"""
                         , gridWidth       : 420
                         , showGridSearch          : true
-                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]
 
         ]
@@ -264,13 +263,13 @@ beans {
                 "employee.person":[
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
-                        , valueMember:"id",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , valueMember:"id"
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueContactDetailDataframe")
                 ],
                 "employee.positionStart":[
                         "readOnly"      : true,
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "employee.role"  :[
                         "widget"        : "ComboboxVue"
@@ -278,22 +277,21 @@ beans {
                         ,readOnly        : true
                         ,internationalize: true
                         ,"hql"          : "select role.id as id, role.authority as name from Role as role where isEmployee=true"
-
-                        ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                 ],
 
                 "employee.description":[
                         widget: "TextAreaWidgetVue"
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']],
 
 
         ]
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model  = 'vueMedicalRecordDataframe-tab-id'", url: "", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']] ]
+//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model  = 'vueMedicalRecordDataframe-tab-id'", url: "", "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']] ]
         currentFrameLayout = ref("vueEmployeeDetailDataframeLayout")
     }
     vueEmployeeEditDataframe(DataframeVue) { bean ->
@@ -309,7 +307,7 @@ beans {
         deleteButton = false
         wrapInForm = true
         tab = true
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 //        vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
         childDataframes=["vueContactEditDataframe", "vueAddressEditDataframe"]
 
@@ -318,11 +316,11 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"id",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueContactEditDataframe")
                 ],
                 "employee.positionStart":[
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "employee.role"  :[
                         "widget"        : "ComboboxVue"
@@ -330,21 +328,21 @@ beans {
                         ,internationalize: true
                         ,"hql"          : "select role.id as id, role.authority as name from Role as role where isEmployee=true"
 
-                        ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                 ],
 
                 "employee.description":[
                         widget: "TextAreaWidgetVue"
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']],
 
 
         ]
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model  = 'vueMedicalRecordDataframe-tab-id'", url: "", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']] ]
+//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model  = 'vueMedicalRecordDataframe-tab-id'", url: "", "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']] ]
         currentFrameLayout = ref("vueEmployeeEditDataframeLayout")
     }
 
@@ -361,7 +359,7 @@ beans {
         dataframeLabelCode = "Provider.Registration"
         //These are values, that overrides the default ones
         childDataframes = ["vueProviderAddressDataframe"]
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
 //        saveButtonAttr = " color='light-blue darken-2' dark"
         initOnPageLoad = false
         isGlobal = true
@@ -379,7 +377,7 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"person",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueProviderContactDataframe")
                 ],
                 "provider.providerType"  :[
@@ -388,14 +386,14 @@ beans {
                         ,internationalize: true
                         ,"hql"          : "select pType.id as id, pType.name as name from ProviderType as pType"
 
-                        ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                 ]
 
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueProviderAddDataframe, "vueProviderAddDataframe_tab_model","vueProviderAddressDataframe-tab-id");\n""", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""],
+        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueProviderAddDataframe, "vueProviderAddDataframe_tab_model","vueProviderAddressDataframe-tab-id");\n""", "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'],url: ""],
 //                             Submit:[name:"submit", type: "button", script: "vueEmployeeAddDataframeVar.\$router.push('/');this.location.reload();"]
         ]
         currentFrameLayout = ref("vueProviderDataframeLayout")
@@ -410,7 +408,7 @@ beans {
         createStore = true
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
         ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
@@ -420,25 +418,26 @@ beans {
 
                 "person.email":[
                         "widget"     : "EmailWidgetVue",
-                        "flexGridValues":['xs8', 'sm8', 'md8', 'lg8', 'xl8']
+                        "cssGridValues":['xs':'8', 'sm':'8', 'md':'8', 'lg':'8', 'xl':'8']
                 ],
                 "person.phone":[
-                        "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "person.firstName":[
                         "validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]],
-                        "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'6', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
+
                 ],
                 "person.lastName":[
                         "validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]],
-                        "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'6', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.mainPicture":[
                         "widget"      : "PictureDisplayWidgetVue",
                         "defaultValue":"default_profile.jpg",
                         "aspectRatio" :"2.5",
-                        "flexGridValues":['xs12', 'sm6', 'md6', 'lg4', 'xl4'],
+                        "cssGridValues":['xs':'12', 'sm':'6', 'md':'6', 'lg':'4', 'xl':'4'],
                         "width"       :200,
                         "height"      :200]
         ]
@@ -461,7 +460,7 @@ beans {
         doBeforeSave = "params['personId'] = excon.getFromStore('vueProviderContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueProviderAddDataframe','vueProviderAddDataframe_tab_model', 'vueProviderAddDataframe-tab-id');"
 
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
         ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
@@ -471,13 +470,13 @@ beans {
         addFieldDef = [
                 "address.addressLine": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
 
                 "address.addressLine2": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
                 "address.postalZip": [
@@ -489,7 +488,7 @@ beans {
                         "insertAfter":"address.addressLine",
                         script       : """ this.updatedAddressValue = this.vueProviderAddressDataframe_address_addressLine;""",
                         "attr"       :"round right",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                 ],
                 "googleMap": [
                         "widget"      : "DataframeWidgetVue",
@@ -499,12 +498,12 @@ beans {
                         passValueAsProp : true,
                         "showInMap"   :true,
                         "name"        : "googleMap",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"      :'500px'
 
                 ]
         ]
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueProviderAddDataframe, "vueProviderAddDataframe_tab_model","vueProviderContactDataframe-tab-id");\n""", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""] ]
+        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueProviderAddDataframe, "vueProviderAddDataframe_tab_model","vueProviderContactDataframe-tab-id");\n""", "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'],url: ""] ]
 
         currentFrameLayout = ref("addressDataframeLayout")
 
@@ -554,7 +553,7 @@ beans {
                         , hql             : """select  person.firstName as Firstname, person.lastName as Lastname, provider.id as Id from Provider provider inner join provider.person person inner join provider.facility facility where facility.id=:facilityId"""
                         , gridWidth       : 420
                         , showGridSearch          : true
-                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]
 
         ]
@@ -590,7 +589,7 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"id",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueContactDetailDataframe")
                 ],
                 "provider.providerType"  :[
@@ -600,7 +599,7 @@ beans {
                         ,internationalize: true
                         ,"hql"          : "select pType.id as id, pType.name as name from ProviderType as pType"
 
-                        ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                 ]
@@ -624,7 +623,7 @@ beans {
         deleteButton = false
         wrapInForm = true
         tab = true
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 //        vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
         childDataframes=["vueContactEditDataframe", "vueAddressEditDataframe"]
 
@@ -633,7 +632,7 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"id",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueContactEditDataframe")
                 ],
                 "provider.providerType"  :[
@@ -642,7 +641,7 @@ beans {
                         ,internationalize: true
                         ,"hql"          : "select pType.id as id, pType.name as name from ProviderType as pType"
 
-                        ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                 ],
@@ -651,7 +650,7 @@ beans {
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model  = 'vueMedicalRecordDataframe-tab-id'", url: "", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']] ]
+//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model  = 'vueMedicalRecordDataframe-tab-id'", url: "", "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']] ]
         currentFrameLayout = ref("vueProviderEditDataframeLayout")
     }
 
@@ -669,7 +668,7 @@ beans {
         dataframeLabelCode = "Vendor.Registration"
         //These are values, that overrides the default ones
         childDataframes = ["vueVendorAddressDataframe"]
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
 //        saveButtonAttr = " color='light-blue darken-2' dark"
         initOnPageLoad = false
         isGlobal = true
@@ -687,16 +686,16 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"person",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueVendorContactDataframe")
                 ],
 
                 "vendor.description":[
                         widget: "TextAreaWidgetVue"
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']],
         ]
 
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueVendorAddDataframe, "vueVendorAddDataframe_tab_model","vueVendorAddressDataframe-tab-id");\n""", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'],url: ""],
+        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueVendorAddDataframe, "vueVendorAddDataframe_tab_model","vueVendorAddressDataframe-tab-id");\n""", "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'],url: ""],
 //                             Submit:[name:"submit", type: "button", script: "vueEmployeeAddDataframeVar.\$router.push('/');this.location.reload();"]
         ]
         currentFrameLayout = ref("vueVendorDataframeLayout")
@@ -711,7 +710,7 @@ beans {
         createStore = true
         dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
         ajaxSaveUrl = "userManagementForm/saveContact"
         doAfterSave = """
 
@@ -721,25 +720,25 @@ beans {
 
                 "person.email":[
                         "widget"     : "EmailWidgetVue",
-                        "flexGridValues":['xs8', 'sm8', 'md8', 'lg8', 'xl8']
+                        "cssGridValues":['xs':'8', 'sm':'8', 'md':'8', 'lg':'8', 'xl':'8']
                 ],
                 "person.phone":[
-                        "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "person.firstName":[
                         "validate":["rule":["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]],
-                        "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'6', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.lastName":[
                         "validate":["rule":["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]],
-                        "flexGridValues":['xs6', 'sm6', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'6', 'sm':'6', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.mainPicture":[
                         "widget"      : "PictureDisplayWidgetVue",
                         "defaultValue":"default_profile.jpg",
                         "aspectRatio" :"2.5",
-                        "flexGridValues":['xs12', 'sm6', 'md6', 'lg4', 'xl4'],
+                        "cssGridValues":['xs':'12', 'sm':'6', 'md':'6', 'lg':'4', 'xl':'4'],
                         "width"       :200,
                         "height"      :200]
         ]
@@ -762,7 +761,7 @@ beans {
         doBeforeSave = "params['personId'] = excon.getFromStore('vueVendorContactDataframe','key');"
         doAfterSave = "excon.saveToStore('vueVendorAddDataframe','vueVendorAddDataframe_tab_model', 'vueVendorAddDataframe-tab-id');"
 
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
         ajaxSaveUrl = "userManagementForm/saveAddress"
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
         childDataframes = ["vueMapWidgetDataframe"]
@@ -772,13 +771,13 @@ beans {
         addFieldDef = [
                 "address.addressLine": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
 
                 "address.addressLine2": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
                 "address.postalZip": [
@@ -790,7 +789,7 @@ beans {
                         "insertAfter":"address.addressLine",
                         script       : """ this.updatedAddressValue = this.vueVendorAddressDataframe_address_addressLine;""",
                         "attr"       :"round right",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                 ],
                 "googleMap": [
                         "widget"      : "DataframeWidgetVue",
@@ -800,12 +799,12 @@ beans {
                         passValueAsProp : true,
                         "showInMap"   :true,
                         "name"        : "googleMap",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"      :'500px'
 
                 ]
         ]
-        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueVendorAddDataframe, "vueVendorAddDataframe_tab_model","vueVendorContactDataframe-tab-id");\n""", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'], url: ""] ]
+        dataframeButtons = [ previous: [name:"previous", type: "button", script:"""Vue.set(this.\$store.state.vueVendorAddDataframe, "vueVendorAddDataframe_tab_model","vueVendorContactDataframe-tab-id");\n""", "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'], url: ""] ]
 
         currentFrameLayout = ref("addressDataframeLayout")
 
@@ -855,7 +854,7 @@ beans {
                         , hql             : """select  person.firstName as Firstname, person.lastName as Lastname, vendor.id as Id from Vendor vendor inner join vendor.person person inner join vendor.facilities facility where facility.id=:facilityId"""
                         , gridWidth       : 420
                         , showGridSearch          : true
-                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]
 
         ]
@@ -889,13 +888,13 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"id",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueContactDetailDataframe")
                 ],
 
                 "vendor.description":[
                         widget: "TextAreaWidgetVue"
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']],
 
         ]
 
@@ -917,7 +916,7 @@ beans {
         deleteButton = false
         wrapInForm = true
         tab = true
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 //        vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
         childDataframes=["vueContactEditDataframe", "vueAddressEditDataframe"]
 
@@ -926,13 +925,13 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"id",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueContactEditDataframe")
                 ],
 
                 "vendor.description":[
                         widget: "TextAreaWidgetVue"
-                        ,"flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']],
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']],
         ]
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
@@ -964,7 +963,7 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"id",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueContactDetailDataframe")
                 ]
 
@@ -988,7 +987,7 @@ beans {
         deleteButton = false
         wrapInForm = true
         tab = true
-//        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+//        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 //        vueStore = ["state":"vueApplicationFormDataframe_tab_model: 'vueApplicationFormDataframe-tab-id',\n"]
         childDataframes=["vueContactEditDataframe", "vueAddressEditDataframe"]
 
@@ -997,7 +996,7 @@ beans {
                         widget: "DataframeWidgetVue"
                         , name:"applicant"
                         , valueMember:"id",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe":ref("vueContactEditDataframe")
                 ]
         ]
@@ -1052,7 +1051,7 @@ beans {
                         , hql             : """select  person.firstName as Firstname, person.lastName as Lastname, client.id as Id from Client client inner join client.person person inner join client.facility facility where facility.id=:facilityId"""
                         , gridWidth       : 420
                         , showGridSearch  : true
-                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]
 
         ]

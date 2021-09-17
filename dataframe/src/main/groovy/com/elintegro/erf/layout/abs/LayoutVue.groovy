@@ -13,8 +13,10 @@ These actions are prohibited by law if you do not accept this License. Therefore
 
 package com.elintegro.erf.layout.abs
 
-
+import com.elintegro.erf.dataframe.ResultPageHtmlBuilder
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.dataframe.vue.VueJsBuilder
+import com.elintegro.erf.dataframe.vue.ViewRoutes
 import com.elintegro.erf.widget.Widget
 import com.elintegro.erf.widget.vue.WidgetVue
 import grails.util.Holders
@@ -35,7 +37,6 @@ class LayoutVue extends Layout {
     boolean layoutAddedToResultPage = false
 
     DataframeVue df
-
     LayoutVue parentLayout
     String layoutPlaceHolder = ""
 
@@ -48,11 +49,11 @@ class LayoutVue extends Layout {
     static def grailsApplication
 
     static final String DEFAULT_FIELD_LAYOUT="""
-						<v-flex <%print gridValueString%> <%print flexAttr%> ><% print widget %></v-flex>
-	"""
+						<v-col cols='0' <%print gridValueString%> <%print flexAttr%> ><% print widget %></v-col>
+	                     """
 //    <div id='<% print divId %>'>
     static final String DEFAULT_DATAFRAME_LAYOUT = """
-            <v-flex xs12 sm6 md4 lg4 xl4>[DATAFRAME_FIELD]</v-flex>"""
+            <v-col cols='12' xs='12' sm='6' md='4' lg='4' xl='4'>[DATAFRAME_FIELD]</v-col>"""
     static final String ALL_OTHER_FIELDS = "[ALL_OTHER_FIELDS]";
     static final String ALL_OTHER_FIELDS_REGEXP = "\\[ALL_OTHER_FIELDS\\]";
 
@@ -60,14 +61,16 @@ class LayoutVue extends Layout {
 
     //For Vue
     StringBuilder compRegScript = new StringBuilder()
-    List children = [] // Add all the children's layout names
+    List childLayouts = [] // Add all the children's layout names
     List childDataframes = [] //Add all the components to register under this layouts component
     boolean isGlobal = false // Whether or not to register component globally
-    static List defaultGridValues = Holders.grailsApplication.config.vue.flexGridValues.Default?:['xs12', 'sm12', 'md4', 'lg4', 'xl4']
-    static List defaultButtonGridValues = ['xs12', 'sm12', 'md4', 'lg4', 'xl4']
-    List flexGridValues = defaultGridValues
+    static Map defaultCssGridValues = Holders.grailsApplication.config.vue.cssGridValues.Default?:[xs:'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
+    static Map defaultButtonCssGridValues = ['xs':'12', 'sm':'12', 'md':'4', 'lg':'4', 'xl':'4']
+    Map cssGridValues = defaultCssGridValues
     boolean componentRegistered = false //Set once the component is registered
 
+    boolean route = false
+    String currentRoute = ""
     String dataframeName = "dataframe"
     boolean wrapInForm = true
     String wrapperLayoutForFieldsInGroupOpenTag = ""
@@ -78,6 +81,104 @@ class LayoutVue extends Layout {
     protected String dataframeLayout = layoutPlaceHolder
     private openingTagAttached = false
     int fieldCount = 0
+    static Set<String> builtComponents = new HashSet()
+
+    LayoutVue (){
+        String defaultRoute = (layoutBeanName.replaceAll("vue","").replaceAll("Dataframe","").replaceAll("Layout", "").split(/(?=[A-Z])/).join("-")).toLowerCase();
+        currentRoute = currentRoute?:defaultRoute
+    }
+
+    public Map constructLayoutComponents(){
+
+        StringBuilder initHtml = new StringBuilder()
+        StringBuilder globalComponentScript = new StringBuilder()
+        StringBuilder vueRoutes = new StringBuilder()
+        String finalLayoutScript = constructFinalLayoutScript(initHtml, globalComponentScript, vueRoutes)
+        [initHtml: initHtml.toString(), layoutCompScript: finalLayoutScript, globalComponentScript:globalComponentScript.toString(), vueRoutes:vueRoutes.toString()]
+    }
+
+    private String constructFinalLayoutScript(StringBuilder initHtml, StringBuilder globalComponentScript, StringBuilder vueRoutes){
+        String wrapperLayout = layoutPlaceHolder
+        StringBuilder resultPageScript = new StringBuilder()
+        if(childLayouts.isEmpty()){
+            return ""
+        }
+        for(String ch : childLayouts){
+            if(ch.trim() != "") {
+                LayoutVue layoutObj = getLayoutVue(ch)
+                layoutObj.prepareVueLayout(resultPageScript, globalComponentScript, vueRoutes)
+            }
+        }
+        initHtml.append(wrapperLayout)
+        builtComponents = new HashSet<>()
+        return resultPageScript.toString()
+    }
+
+    public def prepareVueLayout( StringBuilder resultPageScript, StringBuilder globalComponentScript, StringBuilder vueRoutes){
+        if(childLayouts.isEmpty()){
+            constructComponentScript(resultPageScript, globalComponentScript, vueRoutes)
+            return
+        }
+        for(String ch : childLayouts){
+            if(builtComponents.contains(ch)){
+                continue
+            }
+            if(ch.trim() != ""){
+                if(!ResultPageHtmlBuilder.registeredComponents.contains(ch) && !isGlobal) {
+                    compRegScript.append(VueJsBuilder.createCompRegistrationString(ch))
+                    ResultPageHtmlBuilder.registeredComponents.add(ch)
+                }
+                LayoutVue layoutObj = getLayoutVue(ch)
+                layoutObj.prepareVueLayout(resultPageScript, globalComponentScript, vueRoutes)
+            }
+        }
+        constructComponentScript(resultPageScript, globalComponentScript, vueRoutes)
+    }
+
+    private void constructComponentScript(StringBuilder resultPageScript, StringBuilder globalComponentScript, StringBuilder vueRoutes){
+        StringBuilder compBuilder = new StringBuilder()
+//        String layoutPlaceHolder = disObj.layoutPlaceHolder
+        String layoutName = layoutBeanName
+        String formatPlaceholder = "["+layoutName + "]"
+/*
+        if(routeMap){
+            vueRoutes.append(ViewRoutes.constructRoute(routeMap, layoutName))
+            componentRegistered = true
+            isGlobal = false
+        }
+*/
+        if(isGlobal){
+            compBuilder.append("Vue.component('${layoutName}',{\n")
+            compBuilder.append("name: '${layoutName}',\n")
+            componentRegistered = true
+        }else{
+            componentRegistered = false
+            compBuilder.append("const ${layoutName}Comp = {\n")
+        }
+        compBuilder.append("template:`")
+        compBuilder.append(layoutPlaceHolder)
+        compBuilder.append("`,\n")
+        compBuilder.append("components:{\n") //register embedded components
+        compBuilder.append(compRegScript.toString())
+        compRegScript.setLength(0) //Resetting compRegScript for another layout obj
+        if(!childDataframes.isEmpty()){
+            for(String compS : childDataframes){
+                if(!ResultPageHtmlBuilder.registeredComponents.contains(compS)){
+                    compBuilder.append(VueJsBuilder.createCompRegistrationString(compS))
+                    ResultPageHtmlBuilder.registeredComponents.add(compS)
+                }
+            }
+        }
+        compBuilder.append("},\n")
+        if(isGlobal){
+            compBuilder.append("})\n")
+            globalComponentScript.append(compBuilder.toString())
+        }else{
+            compBuilder.append("}\n")
+            resultPageScript.append(compBuilder.toString())
+        }
+        builtComponents.add(layoutName) // Add the built components to this List. Remove later if not used.
+    }
 
     void applyLayoutForField(StringBuilder resultPagehtml, StringBuilder fieldsHtmlBuilder, String widgetForm, String fieldName, String fldNameAlias, String childDataframe) throws LayoutException{
         String eitherFieldNamePlaceHolder = "[$fieldName]"
@@ -125,9 +226,9 @@ class LayoutVue extends Layout {
         String fieldLayout = ""
         if(!wrapperLayoutForFieldsInGroupOpenTag.trim() || !wrapperLayoutForFieldsInGroupOpenTag.contains(dataframeName+'-form')){
             if(wrapInForm){
-                wrapperLayoutForFieldsInGroupOpenTag = "<v-flex xs12 sm12 md12 lg12 xl12><v-form  ref='${dataframeName}_form'><v-container grid-list-xl fluid><v-layout wrap>\n"    // TODO change all other instances of formId
+                wrapperLayoutForFieldsInGroupOpenTag = "<v-col xs='12' sm='12' md='12' lg='12' xl='12'><v-form  ref='${dataframeName}_form'><v-row wrap>\n"    // TODO change all other instances of formId
             }else{
-                wrapperLayoutForFieldsInGroupOpenTag = "<div ref='${dataframeName}_form'><v-container grid-list-xl fluid><v-layout wrap>\n"
+                wrapperLayoutForFieldsInGroupOpenTag = "<div ref='${dataframeName}_form'><v-row wrap>\n"
             }
         }
 
@@ -137,9 +238,9 @@ class LayoutVue extends Layout {
     private String getWrapperLayoutForFieldsInGroupCloseTag(){
         if(!wrapperLayoutForFieldsInGroupCloseTag.trim()){
             if(wrapInForm) {
-                wrapperLayoutForFieldsInGroupCloseTag = "</v-layout></v-container></v-form></v-flex>\n"
+                wrapperLayoutForFieldsInGroupCloseTag = "</v-row></v-form></v-col>\n"
             }else{
-                wrapperLayoutForFieldsInGroupCloseTag = "</v-layout></v-container></div>\n"
+                wrapperLayoutForFieldsInGroupCloseTag = "</v-row></div>\n"
             }
         }
 
@@ -212,8 +313,8 @@ class LayoutVue extends Layout {
         String wrap = wrapButtons?"wrap":""
         if(resulthtml.contains(formattedDfName)){
             int index = resulthtml.indexOf(formattedDfName)
-            remainingbuttons.insert(0, "<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row justify-center $wrap pa-2>\n")
-            remainingbuttons.append("</v-layout></v-container></v-card-actions>\n")
+            remainingbuttons.insert(0, "<v-card-actions><v-row justify='center' $wrap pa-2>\n")
+            remainingbuttons.append("</v-row></v-card-actions>\n")
             remainingbuttons.append(" <font color='red'><div id='$dataframeName-errorContainer'></div></font>\n");
             replaceInStringBuilder(resulthtml, formattedDfName, remainingbuttons.toString())
         } else {
@@ -221,7 +322,6 @@ class LayoutVue extends Layout {
                 replaceInStringBuilder(resulthtml, allOtherButtons, remainingbuttons.toString())
             }
         }
-
     }
 
     public void applyLayoutForButton(StringBuilder dataframeHtml, StringBuilder remainingButtons, btnName, btnScript){
@@ -239,10 +339,9 @@ class LayoutVue extends Layout {
             dataframeHtml.replace(stInd, endInd, btnScript)
         }
         boolean dataframeRightToLeftLanguage = Holders.grailsApplication.config.dataframe.right_to_left_language
-            if(!dataframeRightToLeftLanguage){
-                remainingButtons.insert(0,btnScript)
-            }
-        else {
+        if(dataframeRightToLeftLanguage){
+            remainingButtons.insert(0,btnScript)
+        } else {
             remainingButtons.append(btnScript)
         }
 
@@ -259,14 +358,32 @@ class LayoutVue extends Layout {
             }
         }
     }
-    public static String convertListToString(flexGridValues){
-        if(flexGridValues == null || flexGridValues.isEmpty()){
+    public static String convertListToString(cssGridValues){
+        if(cssGridValues == null || cssGridValues.isEmpty()){
             return ""
         }
         StringBuilder sb = new StringBuilder();
-        for (String s : flexGridValues) {
+        for (String s : cssGridValues) {
             sb.append(s);
             sb.append(" ");
+        }
+        return sb.toString()
+    }
+
+    public static String convertListToString(Map cssGridValues){
+        if(!cssGridValues){
+            return ""
+        }
+        List gridKeys = ['xs', 'sm', 'md', 'lg', 'xl']
+        StringBuilder sb = new StringBuilder();
+        for(String key: gridKeys){
+            if(cssGridValues.get(key)){
+                sb.append(key);
+                sb.append("='");
+                sb.append(cssGridValues.get(key));
+                sb.append("'");
+                sb.append(" ");
+            }
         }
         return sb.toString()
     }
@@ -305,8 +422,8 @@ class LayoutVue extends Layout {
         return finalHeadTag
     }
 
-    public static LayoutVue getLayoutVue(containerLayoutStr){
-        LayoutVue layoutVue = (LayoutVue)Holders.grailsApplication.mainContext.getBean(containerLayoutStr)
+    public static LayoutVue getLayoutVue(String layoutName){
+        LayoutVue layoutVue = (LayoutVue)Holders.grailsApplication.mainContext.getBean(layoutName)
         return layoutVue
     }
 
@@ -337,11 +454,6 @@ class LayoutVue extends Layout {
 
     private LayoutVue(String name){
         this.name = name
-    }
-
-    //DEFAULT LAYOUT
-    public LayoutVue(){
-
     }
 
     //DEFAULT LAYOUT

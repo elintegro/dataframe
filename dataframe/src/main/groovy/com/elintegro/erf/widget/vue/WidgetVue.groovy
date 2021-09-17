@@ -45,6 +45,19 @@ abstract class WidgetVue extends Widget<DataframeVue>{
     public static final String excon = "excon"
 
     //This assigns a new value and returns true if new value was different then the old one
+    public String fillProps(Map field){
+        String label = field.label
+        String placeholder = field.placeholder?:"Enter your ${field.name}."
+        String autoComplete = field.autoComplete ?: 'off'
+        String boxdesign = field.boxdesign?:"outlined"
+        String bgColor = field.bgColor?:"#EBF9FF !important"
+        String color = field.color?:"#2AB6F6"
+        return """
+               $boxdesign
+                background-color='$bgColor' color='$color'
+"""
+    }
+
     @Override
     boolean populateDomainInstanceValue(Dataframe dataframe, def domainInstance, DomainClassInfo domainMetaData, String fieldName, Map field, def inputValue){
         if(inputValue.value == null || inputValue.value == "") return true

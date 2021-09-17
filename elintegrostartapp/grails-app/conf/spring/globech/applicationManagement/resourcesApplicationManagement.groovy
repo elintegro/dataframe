@@ -79,7 +79,7 @@ beans {
                         , hql             : """select  apcant.firstName as Firstname, apcant.lastName as Lastname,status.name as Status, app.id as Id from Application app inner join app.applicant apcant inner join app.status status"""
                         , gridWidth       : 420
                         , showGridSearch  : true
-                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]
         ]
 
@@ -111,20 +111,20 @@ beans {
                 "app.createTime"     : [
                         name            : "createTime",
                         attr            : " left",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "app.applicant"    : [
                         widget          : "DataframeWidgetVue"
                         , name          : "applicant"
                         , valueMember   : "id",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         , "dataframe"   : ref("vueContactDetailDataframe")
                 ],
                 "app.medicalRecord": [
                         widget          : "DataframeWidgetVue"
                         , name          : "medicalRecord"
                         , valueMember   : "id",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         , "dataframe"   : ref("vueMedicalRecordDetailDataframe")
                 ]
 
@@ -133,7 +133,7 @@ beans {
 
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """*/
-//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model  = 'vueMedicalRecordDataframe-tab-id'", url: "", "flexGridValues":['xs12', 'sm12', 'md6', 'lg6', 'xl6']] ]
+//        dataframeButtons = [ previous: [name:"previous", type: "button", script:"this.\$store.state.vueApplicationFormDataframe.vueApplicationFormDataframe_tab_model  = 'vueMedicalRecordDataframe-tab-id'", url: "", "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']] ]
         currentFrameLayout = ref("vueFormDetailDataframeLayout")
     }
 
@@ -158,13 +158,13 @@ beans {
         addFieldDef = [
                 "address.addressLine": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValue":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
 
                 "address.addressLine2": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
                 "address.postalZip": [
@@ -181,7 +181,7 @@ beans {
                         passValueAsProp : true,
                         "showInMap"   :true,
                         "name"        : "googleMap",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"      :'500px'
 
                 ]*/
@@ -201,7 +201,7 @@ beans {
         initOnPageLoad = true
         //These are values, that overrides the default ones
         wrapInForm = true
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
         doBeforeRefresh = "params['recordId'] = excon.getFromStore('vueMedicalRecordDetailDataframe', 'key');"
         saveButton = false
         addFieldDef = [:
@@ -215,7 +215,7 @@ beans {
                                                                          from MedicalRecord record inner join record.medications medication where record.id=:id"""
                                               , gridWidth       : 420
                                               , search          : false
-                                              , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                                              , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                        ]*/
         ]
 
@@ -264,7 +264,7 @@ beans {
                                                                   from MedicalRecord record inner join record.medications medication where record.id=:id"""
                         , gridWidth       : 420
                         , search          : false
-                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]
 
         ]
@@ -296,13 +296,13 @@ beans {
                         widget          : "DataframeWidgetVue"
                         ,name           : "medication"
                         ,valueMember    : "id"
-                        ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe"    : ref("vueMedicationsDetailDataframe")
                 ],
 
                 "prescribedMed.dosage"     : [
                         name           : "dosage",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "prescribedMed.frequencyUnit"  :[
@@ -310,28 +310,28 @@ beans {
                         ,"name"         : "frequencyUnit"
                         ,"hql"          : "select pf.id as id, pf.name as name from FrequencyUnit as pf"
 
-                        ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                 ],
 
                 "prescribedMed.units"     : [
                         name           : "frequency",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "prescribedMed.frequency"     : [
                         name           : "frequency",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "prescribedMed.start"          : [
                         widget          : "DateWidgetVue"
                         ,name           : "start",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "prescribedMed.expiration"     : [
                         widget          : "DateWidgetVue"
                         ,name           : "expiration",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ]
 
         ]
@@ -365,12 +365,12 @@ beans {
 
         ajaxSaveUrl = "applicationForm/save"
         //These are values, that overrides the default ones
-//        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+//        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
         deleteButton = false
         wrapInForm = true
         tab = true
 
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
         childDataframes=["vueContactFormEditDataframe","vueMedicationsGridEditDataframe"]
 
 //        doAfterSave = """setTimeout(function(){ this.location.reload();}, 3000);"""
@@ -379,20 +379,20 @@ beans {
                 "app.createTime"     : [
                         name            : "createTime",
                         attr            : " left",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "app.applicant"    : [
                         widget          : "DataframeWidgetVue"
                         , name          : "applicant"
                         , valueMember   : "id",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         , "dataframe"   : ref("vueContactFormEditDataframe")
                 ],
                 "app.medicalRecord": [
                         widget          : "DataframeWidgetVue"
                         , name          : "medicalRecord"
                         , valueMember   : "id",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         , "dataframe"   : ref("vueMedicalRecordEditDataframe")
                 ]
 
@@ -402,7 +402,7 @@ beans {
         /*doAfterRefresh = """var currentlocation = this.location.href;
                              this.location.href = currentlocation + 'vueuserprofiledataframe'; """ expire:[name:"expire", type: "button", url: "/elintegrostartapp/applicationForm/expire"]*/
         dataframeButtons = [
-                makeClient: [name:"makeClient", type: "button", doBeforeAjax:"""params["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nparams["id"] = excon.getFromStore('vueApplicationFormEditDataframe', 'key');""", flexGridValues: ['xs12', 'sm12', 'md6', 'lg6', 'xl6'], url: "/elintegrostartapp/applicationForm/makeClient"],
+                makeClient: [name:"makeClient", type: "button", doBeforeAjax:"""params["facilityId"]= excon.getFromStore("vueAppNameDataframe","facilityId");\nparams["id"] = excon.getFromStore('vueApplicationFormEditDataframe', 'key');""", "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6'], url: "/elintegrostartapp/applicationForm/makeClient"],
 
 
         ]
@@ -417,31 +417,31 @@ beans {
         saveButton = false
 //        dataframeLabelCode = "Contact Information"
 //        childDataframes=["vueAddressDataframe"]
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
                 "person.email": [
                         "widget"        : "EmailWidgetVue",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "person.phone"       : [
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "person.firstName"   : [
                         "validate": ["rule": ["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.lastName"    : [
                         "validate": ["rule": ["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.mainPicture" : [
                         "widget"        : "PictureDisplayWidgetVue",
                         "defaultValue"  : "default_profile.jpg",
                         "aspectRatio"   : "2.5",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"        : 200]
         ]
 
@@ -462,25 +462,25 @@ beans {
 
                 "person.email": [
                         "widget"        : "EmailWidgetVue",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "person.phone"       : [
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "person.firstName"   : [
                         "validate": ["rule": ["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.lastName"    : [
                         "validate": ["rule": ["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.mainPicture" : [
                         "widget"        : "PictureDisplayWidgetVue",
                         "defaultValue"  : "default_profile.jpg",
                         "aspectRatio"   : "2.5",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"        : 200]
         ]
 
@@ -496,31 +496,31 @@ beans {
         saveButton = true
 //        dataframeLabelCode = "Contact.Information"
 //        childDataframes=["vueAddressDataframe"]
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 //        doAfterSave = "excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_tab_model','vueMedicalRecordDataframe-tab-id');"
         addFieldDef = [
 
                 "person.email": [
                         "widget"        : "EmailWidgetVue",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ],
                 "person.phone"       : [
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "person.firstName"   : [
                         "validate": ["rule": ["v => !!v || 'FirstName is required'", "v => (v && v.length <= 20) || 'FirstName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.lastName"    : [
                         "validate": ["rule": ["v => !!v || 'LastName is required'", "v => (v && v.length <= 20) || 'LastName must be less than 20'"]],
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "person.mainPicture" : [
                         "widget"        : "PictureDisplayWidgetVue",
                         "defaultValue"  : "default_profile.jpg",
                         "aspectRatio"   : "2.5",
-                        "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"        : 200]
         ]
 
@@ -541,7 +541,7 @@ beans {
 //        initOnPageLoad=true //false by default excon.saveToStore('vueApplicationFormDataframe','vueApplicationFormDataframe_display', false);
         doBeforeSave = "params['personId'] = excon.getFromStore('vueContactDataframe','key');"
 
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
         doBeforeRefresh = "params['personId'] = excon.getFromStore('vueContactEditDataframe', 'key');"
         childDataframes =["vueMapWidgetDataframe"]
         //These are default values, they are here to demonstrate how to overwrite it with different button combination, if required
@@ -552,13 +552,13 @@ beans {
         addFieldDef = [
                 "address.addressLine": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
 
                 "address.addressLine2": [
                         "widget"   : "InputWidgetVue",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
 
                 ],
                 "address.postalZip": [
@@ -570,7 +570,7 @@ beans {
                         "insertAfter":"address.addressLine",
                         script       : """ this.updatedAddressValue = this.vueAddressEditDataframe_address_addressLine;""",
                         "attr"       :"round right",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                 ],
                 "googleMap": [
                         "widget"      : "DataframeWidgetVue",
@@ -581,7 +581,7 @@ beans {
                         passValueAsProp : true,
                         "showInMap"   :true,
                         "name"        : "googleMap",
-                        "flexGridValues":['xs12', 'sm12', 'md12', 'lg12', 'xl12'],
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12'],
                         "height"      :'500px'
 
                 ]
@@ -602,7 +602,7 @@ beans {
         //These are values, that overrides the default ones
         wrapInForm = true
 
-        flexGridValuesForSaveButton = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValuesForSaveButton = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
         saveButton = true
         addFieldDef = [
 
@@ -673,7 +673,7 @@ beans {
                                                                   from MedicalRecord record inner join record.medications medication where record.id=:id"""
                         , gridWidth       : 420
                         , search          : false
-                        , "flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                 ]/*,
                 "addMedication":[
                         "widget": "ButtonWidgetVue",
@@ -711,13 +711,13 @@ beans {
                         widget          : "DataframeWidgetVue"
                         ,name           : "medication"
                         ,valueMember    : "id"
-                        ,"flexGridValues": ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+                        , "cssGridValues":['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
                         ,"dataframe"    : ref("vueMedicationsEditDataframe")
                 ],
 
                 "prescribedMed.dosage"     : [
                         name           : "dosage",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
 
                 "prescribedMed.frequencyUnit"  :[
@@ -725,28 +725,28 @@ beans {
                         ,"name"         : "frequencyUnit"
                         ,"hql"          : "select pf.id as id, pf.name as name from FrequencyUnit as pf"
 
-                        ,"flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        ,"cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                         ,"displayMember": "name"
                         ,"valueMember"  : "id"
                 ],
 
                 "prescribedMed.units"     : [
                         name           : "frequency",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "prescribedMed.frequency"     : [
                         name           : "frequency",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "prescribedMed.start"          : [
                         widget          : "DateWidgetVue"
                         ,name           : "start",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ],
                 "prescribedMed.expiration"     : [
                         widget          : "DateWidgetVue"
                         ,name           : "expiration",
-                        "flexGridValues": ['xs12', 'sm12', 'md6', 'lg6', 'xl6']
+                        "cssGridValues":['xs':'12', 'sm':'12', 'md':'6', 'lg':'6', 'xl':'6']
                 ]
 
         ]

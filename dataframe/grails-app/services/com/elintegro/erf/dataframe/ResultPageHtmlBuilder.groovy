@@ -16,25 +16,17 @@ package com.elintegro.erf.dataframe
 import com.elintegro.erf.dataframe.vue.DataframeVue
 import com.elintegro.erf.dataframe.vue.PageDFRegistryVue
 import com.elintegro.erf.dataframe.vue.VueJsBuilder
+import com.elintegro.erf.dataframe.vue.ViewRoutes
 import com.elintegro.erf.layout.abs.LayoutVue
 import com.elintegro.erf.widget.vue.WidgetVue
 import com.elintegro.utils.DataframeFileUtil
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.util.Environment
 import groovy.util.logging.Slf4j
-import org.apache.tomcat.util.http.fileupload.FileUtils
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Attributes
-import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.i18n.LocaleContextHolder
-
-import javax.persistence.MapsId
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
 
 @Slf4j
 class ResultPageHtmlBuilder {
@@ -85,7 +77,7 @@ class ResultPageHtmlBuilder {
         finalScriptSb.append("})\n")
 
         finalScriptSb.append(dfrComps.vueGlobalCompScript) //append globbal dataframe components
-        finalScriptSb.append(globalLayoutCompScriptSb.toString()) // append global layout components
+        finalScriptSb.append(layoutStructM.globalComponentScript) // append global layout components
         finalScriptSb.append(dfrComps.dfrCompScript) // append other dfr components
         finalScriptSb.append(layoutStructM.layoutCompScript) // append other layout components
         //Initialize i18n
@@ -93,15 +85,19 @@ class ResultPageHtmlBuilder {
         finalScriptSb.append(""" const i18n = new VueI18n({
                                  locale:'${LocaleContextHolder.getLocale().getLanguage()}',
                                  messages
-                           });""")
+                           });\n""")
 //Initialize Router
         finalScriptSb.append("const router = new VueRouter({\n")// Initialize Router
 //        finalScriptSb.append("mode:'history',\n")
+/*
         finalScriptSb.append(" routes: [\n")
 //        finalScriptSb.append("{path: '/:routeId', components: {default: $defaultComp, $dfrComps.dfrCompRegisterationScript}},\n")
-//        finalScriptSb.append(vueRoutes.toString()) // from layouts
+        finalScriptSb.append(layoutStructM.vueRoutes) // from layouts
         finalScriptSb.append(dfrComps.vueRoutes) //from dfrs
         finalScriptSb.append("]\n")
+*/
+        finalScriptSb.append(" routes: \n")
+        finalScriptSb.append(ViewRoutes.constructRoute(gcMainPgObj.viewRoutes))
         finalScriptSb.append("})\n")
 //Initialize main app
         finalScriptSb.append("var app = new Vue ({\nel:'#app',\n") // Vue Instance
@@ -126,24 +122,28 @@ class ResultPageHtmlBuilder {
         finalScriptSb.append("</script>")
         return [initHtml:initHmtl, finalScript:finalScriptSb.toString()]
     }
-    public constructLayoutComps(String contLytStr){
 
-        LayoutVue contLytObj = LayoutVue.getLayoutVue(contLytStr.trim())
-        StringBuilder initHtml = new StringBuilder()
-        String finalLayoutScript = constructFinalLayoutScript(contLytObj, initHtml)
-        [initHtml: initHtml.toString(), layoutCompScript: finalLayoutScript]
+    private Map constructDfrComps(List dataframes){
+        DfrCompBuilder dfrCompBuilder = new DfrCompBuilder()
+        return dfrCompBuilder.constructDfrComps(dataframes)
+    }
+
+    public Map constructLayoutComps(String containerLayoutName){
+
+        LayoutVue constainerLayout = LayoutVue.getLayoutVue(containerLayoutName.trim())
+        return constainerLayout.constructLayoutComponents()
     }
 
     private static String constructCompRegistrationForMainLayout(PageDFRegistryVue gcMainPgObj){
         def containerLayoutS = gcMainPgObj.containerLayout
 
         LayoutVue contLytObj = LayoutVue.getLayoutVue(containerLayoutS)
-        if(!contLytObj.children){
+        if(!contLytObj.childLayouts){
             return ""
         }
         StringBuilder ltSb = new StringBuilder()
         int index = 0;
-        for(String ltS : contLytObj.children){
+        for(String ltS : contLytObj.childLayouts){
             LayoutVue lytT = LayoutVue.getLayoutVue(ltS)
             if(!registeredComponents.contains(ltS)){
                 ltSb.append(VueJsBuilder.createCompRegistrationString(ltS, index))
@@ -153,45 +153,6 @@ class ResultPageHtmlBuilder {
         }
 
         return ltSb.toString()
-    }
-
-    private String constructFinalLayoutScript(LayoutVue contLytObj, StringBuilder initHtml){
-        List children = contLytObj.children
-        String wrapperLayout = contLytObj.layoutPlaceHolder
-        StringBuilder resultPageScript = new StringBuilder()
-        if(children.isEmpty()){
-            return ""
-        }
-        for(String ch : children){
-            if(ch.trim() != "") {
-                LayoutVue layoutObj = LayoutVue.getLayoutVue(ch)
-                prepareVueLayout(layoutObj.children, resultPageScript, layoutObj)
-            }
-        }
-        initHtml.append(wrapperLayout)
-        return resultPageScript.toString()
-    }
-
-    private def prepareVueLayout(children, resultPageScript, disObj){
-        if(children.isEmpty()){
-            constructSectionalComponent(resultPageScript, disObj)
-            return
-        }
-        for(String ch : children){
-            if(builtComponents.contains(ch)){
-                continue
-            }
-            if(ch.trim() != ""){
-                LayoutVue layoutObj = LayoutVue.getLayoutVue(ch)
-                if(!registeredComponents.contains(ch) && !layoutObj.isGlobal) {
-                    disObj.compRegScript.append(VueJsBuilder.createCompRegistrationString(ch))
-                    registeredComponents.add(ch)
-                }
-                List childs = layoutObj.children
-                prepareVueLayout(childs, resultPageScript, layoutObj)
-            }
-        }
-        constructSectionalComponent(resultPageScript, disObj)
     }
 
     private String getMainPgVueCompRegistrationString(PageDFRegistryVue gcMainPgObj){
@@ -211,49 +172,6 @@ class ResultPageHtmlBuilder {
         }
 
         return sb.toString()
-    }
-
-    private void constructSectionalComponent(StringBuilder resultPageScript, LayoutVue disObj){
-        StringBuilder compBuilder = new StringBuilder()
-        String layoutPlaceHolder = disObj.layoutPlaceHolder
-        String layoutName = disObj.layoutBeanName
-        String formatPlaceholder = "["+layoutName + "]"
-        if(disObj.isGlobal){
-            compBuilder.append("Vue.component('${layoutName}',{\n")
-            compBuilder.append("name: '${layoutName}',\n")
-            disObj.componentRegistered = true
-        }else{
-            disObj.componentRegistered = false
-            compBuilder.append("const ${layoutName}Comp = {\n")
-        }
-        compBuilder.append("template:`")
-        compBuilder.append(layoutPlaceHolder)
-        compBuilder.append("`,\n")
-        compBuilder.append("components:{\n") //register embedded components
-        compBuilder.append(disObj.compRegScript.toString())
-        disObj.compRegScript.setLength(0) //Resetting compRegScript for another layout obj
-        if(!disObj.childDataframes.isEmpty()){
-            for(String compS : disObj.childDataframes){
-                if(!registeredComponents.contains(compS)){
-                    compBuilder.append(VueJsBuilder.createCompRegistrationString(compS))
-                    registeredComponents.add(compS)
-                }
-            }
-        }
-        compBuilder.append("},\n")
-        if(disObj.isGlobal){
-            compBuilder.append("})\n")
-            globalLayoutCompScriptSb.append(compBuilder.toString())
-        }else{
-            compBuilder.append("}\n")
-            resultPageScript.append(compBuilder.toString())
-        }
-        builtComponents.add(layoutName) // Add the built components to this List. Remove later if not used.
-    }
-
-    private Map constructDfrComps(dataframes){
-        DfrCompBuilder dfrCompBuilder = new DfrCompBuilder()
-        return dfrCompBuilder.constructDfrComps(dataframes)
     }
 
 
