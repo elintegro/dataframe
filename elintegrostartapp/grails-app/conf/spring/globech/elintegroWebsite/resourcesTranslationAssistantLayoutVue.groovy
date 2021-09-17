@@ -22,7 +22,7 @@ beans{
                                         <vueFooterContainerDataframe/>
                                     </v-container>   
                                </v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueMeetTranslatorAssistantIntroDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -40,7 +40,7 @@ beans{
                                     </v-flex>     
                                </v-container>
                             """
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueTranslatorAssistantBeoforeAndAfterLoggedInDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
@@ -75,7 +75,7 @@ beans{
                                         </v-row>    
                                   </v-flex>
                                 </v-container>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
 
     }
     vueCreateProjectForTranslationDataframeLayout(ColumnLayoutVue){ bean->
@@ -96,7 +96,7 @@ beans{
                                         </v-row>    
                                    </v-card>
                                </v-flex>"""
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl2']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
     }
     vueElintegroTranslatorDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
@@ -128,7 +128,7 @@ beans{
                                     </v-container>   
                                     </v-container>
                                  </v-flex>"""
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
     }
     vueAddNewRecordForCurrentProjectDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -148,7 +148,7 @@ beans{
                                         <v-row class="pa-8" style="text-align: center;">[save]</v-row>
                                     </v-card>
                                  </v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueEditTextOfNewlyAddedRecordForCurrentProjectDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
@@ -172,7 +172,7 @@ beans{
                                  [DATAFRAME_SCRIPT]
                                  <v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions>
                                  </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
     }
     vueDeleteSourceRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
@@ -180,7 +180,7 @@ beans{
                                  [DATAFRAME_SCRIPT]
                                  <v-card-actions class = "justify-center">[BUTTON_SCRIPT]</v-card-actions>
                                  </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 
 
     }
@@ -193,7 +193,7 @@ beans{
                                                  <vueElintegroProgressBarDataframe v-if="progressBarEnable"/>
                                         </v-layout>
                                     </v-container></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 
 
     }
@@ -233,7 +233,7 @@ beans{
                                     </v-flex>
                                 </v-container>
                                 """
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
     }
     vueNewsLetterDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
@@ -255,7 +255,7 @@ beans{
                                         </v-row>    
                                     </v-flex>
                                 </v-container> """
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
     }
     vueEditTranslatedRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -270,7 +270,7 @@ beans{
                                        <v-row class="px-8">[Key][SourceText][Text]</v-row>[BUTTON_SCRIPT]
                                   </v-card>
                                </v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueEditSourceRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -285,20 +285,20 @@ beans{
                                        <v-row class="px-8">[Key][Text]</v-row>[BUTTON_SCRIPT]
                                   </v-card>
                                </v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueDeleteTranslatedRecordsOfGridDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round class='rounded-card' >
                                 <v-flex class="text-right"><v-tooltip bottom><v-btn icon target="_blank" slot="activator" @click.prevent="closevueDeleteTranslatedRecordsOfGridDataframe();"><v-icon medium >close</v-icon>
                                 </v-btn><span>Close</span></v-tooltip></v-flex>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueDialogBoxForNotLoggedInUserDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                                <v-row><v-col cols="12" xs="0" sm="0" md="3" xl="3" lg="3"></v-col><v-col cols="12" xs="0" sm="0" md="6" xl="6" lg="6"><v-card><v-row><v-card-actions class="justify-center"><h1 style="margin-left:20px;">You must be logged in to continue...</h1></v-card-actions></v-row><br><v-row><v-col cols="12" style="margin-left:10px;">[BUTTON_SCRIPT]</v-col></v-row></v-card></v-col><v-col  cols="12" xs="0" sm="0" md="3" xl="3" lg="3"></v-col></v-row>
                                 </v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
 }

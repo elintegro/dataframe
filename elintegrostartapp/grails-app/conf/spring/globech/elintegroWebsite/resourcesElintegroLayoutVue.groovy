@@ -15,7 +15,7 @@ beans {
     vueElintegroContainerLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<div id='app' ><v-app class="app" style="background-color:#fff;"><sectionLayout/></v-app></div>"""
-        children = ["sectionLayout"]
+        childLayouts = ["sectionLayout"]
     }
     sectionLayout(RowLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -24,8 +24,8 @@ beans {
                                   <vueElintegroMidSectionLayout/>
                                   <vueElintegroFooterLayout/>
                               </v-content>"""
-        children = ["vueElintegroNavigationLayout","vueElintegroMidSectionLayout","vueElintegroFooterLayout"]
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        childLayouts = ["vueElintegroNavigationLayout","vueElintegroMidSectionLayout","vueElintegroFooterLayout"]
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
     }
     vueElintegroNavigationLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
@@ -117,7 +117,7 @@ beans {
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
                               [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                               </v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
 
     }
     vueElintegroAppsDataframeLayout(ColumnLayoutVue){ bean ->
@@ -156,24 +156,24 @@ beans {
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
                                   [DATAFRAME_SCRIPT]
-                                  <div style="margin-top:-40px; height:125px;">[BUTTON_SCRIPT]</div>
+                                  <div style="margin-top:-40px; height:125px;" class='elintegro-sub-menu'>[BUTTON_SCRIPT]</div>
                                   </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueElintegroAboutUsMenuDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
                                   [DATAFRAME_SCRIPT]
-                                  <div style="margin-top:-40px; height:320px; margin-left:-4px;">[BUTTON_SCRIPT]</div>
+                                  <div style="margin-top:-40px; height:320px; margin-left:-4px;" class='about-us-menu'>[BUTTON_SCRIPT]</div>
                                   </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueTechnologiesDataframeDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card><v-toolbar dark color="blue darken-2" height="100px" style="margin-bottom:30px;">
                                  <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
                                   </v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]</v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueNewEmployeeBasicInformationDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -185,7 +185,7 @@ beans {
     vueAddressDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>[DATAFRAME_LABEL][DATAFRAME_SCRIPT]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[ALL_OTHER_BUTTONS][googleMap]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueNewEmployeeUploadResumeDataframeLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
@@ -198,7 +198,7 @@ beans {
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card>
                                  [DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                  </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueNewEmployeeApplicantEditSkillDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
@@ -207,7 +207,7 @@ beans {
                                 </v-btn><span>Close</span></v-tooltip></v-flex>
                                 [DATAFRAME_SCRIPT]
                                 <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueNewEmployeeApplicantAddSkillDataframeLayout(ColumnLayoutVue){ bean ->
         layoutBeanName = bean.name
@@ -216,7 +216,7 @@ beans {
                                 </v-btn><span>Close</span></v-tooltip></v-flex>
                                 [DATAFRAME_SCRIPT]
                                 <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
 
     vueNewEmployeeAddtionalQuestionsDataframeLayout(ColumnLayoutVue) {bean ->
@@ -234,12 +234,12 @@ beans {
                                 <v-row><v-col cols="4"></v-col><v-col cols="4"><v-flex class="text-center"><h5>If you have additional questions, please send us an email to contact:<h4>hr@elintegro.com</h4></h5></v-flex></v-col><v-col cols="4"></v-col></v-row>
                              <v-flex>[BUTTON_SCRIPT]</v-flex>
                                 </v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueElintegroLoginTabDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """ [tab]"""
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 
     }
     vueElintegroLoginDataframeLayout(RowLayoutVue){bean ->
@@ -271,7 +271,7 @@ beans {
         layoutPlaceHolder = """<v-flex><v-row><v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col>
                               <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" style="padding-top:5%;"> <v-card>[DATAFRAME_SCRIPT]<v-card-actions class="justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-col>
                                <v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col></v-row></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
 
     vueElintegroRegisterDataframeLayout(ColumnLayoutVue){ bean->
@@ -282,7 +282,7 @@ beans {
                                             <v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
                                             <v-spacer></v-spacer>
                                             <v-tooltip bottom>
-                                                <v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe">
+                                                <v-btn icon color='white' target="_blank" slot="activator" @click.prevent="closeDataframe">
                                                     <v-icon medium >close</v-icon>
                                                 </v-btn><span>Close</span>
                                             </v-tooltip>
@@ -294,7 +294,7 @@ beans {
                                                 [saveButton]
                                             </v-layout></v-container>
                                     </v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
 
     vueElintegroAfterLoggedinDataframeLayout(ColumnLayoutVue){bean ->
@@ -310,12 +310,12 @@ beans {
                                 <v-flex>[person.mainPicture]</v-flex>
                                 <v-flex><v-card-actions class="justify-center"><h3>{{vueElintegroProfileMenuDataframe_person_fullName}}</h3></v-card-actions><v-card-actions class="justify-center">{{vueElintegroProfileMenuDataframe_person_email}}</v-card-actions></v-flex>
                                 <v-spacer></v-spacer></v-form><br><v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueElintegroUserProfileDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round width='fit-content'><v-toolbar dark color="light-blue darken-2"><v-toolbar-title class="white--text">My Profile</v-toolbar-title><v-spacer></v-spacer></v-toolbar>[vueElintegroUserProfileDataframe]<v-card-actions><v-container fluid grid-list-lg pa-0><v-layout row wrap pa-2>[ALL_OTHER_BUTTONS]</v-layout></v-container></v-card-actions></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg3', 'xl2']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'3', 'xl':'2']
     }
     vueElintegroApplicantsDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
@@ -323,12 +323,12 @@ beans {
                                  <v-toolbar-title class="white--text" style="margin:100px;">[DATAFRAME_LABEL]</v-toolbar-title>
                                   </v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                   <v-card class ="applicant">[applicant]</v-card></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueElintegroApplicantDetailsDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """ [DATAFRAME_SCRIPT]"""
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
 
     }
     vueElintegroApplicantGeneralInformationDataframeLayout(ColumnLayoutVue){bean ->

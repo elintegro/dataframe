@@ -27,7 +27,7 @@ beans {
                                 
                                 
                                 """
-        flexGridValues = ['xs12', 'sm12', 'md12', 'lg12', 'xl12']
+        cssGridValues = ['xs':'12', 'sm':'12', 'md':'12', 'lg':'12', 'xl':'12']
     }
     vueFirstContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
@@ -171,7 +171,7 @@ beans {
     vueQuotesContainerDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
         layoutPlaceHolder = """
-                                <div  class="Quotes pt-10" >
+                                <div  class="Quotes pt-10" id='Quotes' >
                                 <div class=" flex-column" data-aos="fade-up">
                                   <h1 class="heading">What our customers say about us</h1>
                                   <v-row justify="center">
@@ -230,7 +230,7 @@ beans {
  <v-row> 
  <v-col cols="12"  md="1" xl="1" lg="1"></v-col>
       <v-col cols="12"  md="10" xl="10" lg="10">
-                                              <div class="tech-section py-5">
+                                              <div class="tech-section py-5" id="our_Technologies">
         <div class="container-fluid section-padding">
             <div class="row">
                 <div class="col-md-12">
@@ -353,7 +353,7 @@ beans {
                                 </v-row>
                                 [DATAFRAME_SCRIPT]
                                 <v-flex class="text-center">[BUTTON_SCRIPT]</v-flex></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
     vueElintegroSignUpQuizDataframeLayout(ColumnLayoutVue) { bean ->
         layoutBeanName = bean.name
@@ -367,7 +367,7 @@ beans {
                                              [submit]
                                         </v-layout>
                                </v-container>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
 
     }
     vueElintegroChangePasswordAfterSignUpDataframeLayout(ColumnLayoutVue) { bean ->
@@ -376,7 +376,7 @@ beans {
                               <v-col cols="12" xs="12" sm="12" md="4" xl="4" lg="4" style="padding-top:5%;"> <v-card>[DATAFRAME_SCRIPT]<v-card-actions class="justify-center">[BUTTON_SCRIPT]</v-card-actions></v-card></v-col>
                                <v-col cols="12" xs="0" sm="0" md="4" xl="4" lg="4"></v-col></v-row></v-flex>"""
 
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
 
     }
 }

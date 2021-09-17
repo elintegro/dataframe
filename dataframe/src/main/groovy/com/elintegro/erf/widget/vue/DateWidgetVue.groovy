@@ -36,7 +36,10 @@ class DateWidgetVue extends WidgetVue {
         String localeString = locale?"locale='$locale'":""
         String dateFormatPlaceholder = getMessageSource().getMessage("date.format.hint", null, "date.format.hint", LocaleContextHolder.getLocale())
         String menuAttr = field.menuAttr?:""
-
+        String events = field.events?:""
+        boolean calendarIconOnly = field.calendarIconOnly?:false
+        boolean calendarIconWithLabel = field.calendarIconWithLabel?:false
+        String calendarIconWithLabelAttr= field.calendarIconWithLabelAttr?:""
         String modelString = getFieldJSONModelNameVue(field)
         return """
                     <v-menu
@@ -52,31 +55,60 @@ class DateWidgetVue extends WidgetVue {
                         $menuAttr
                 >
                 <template v-slot:activator="{ on }">
+                    <v-icon
+                        v-if='${calendarIconOnly}'
+                        v-model="${fldName}_formatted"
+                        label="${getLabel(field)}"
+                        ${validate(field)?":rules = '${fldName}_rule'":""}    
+                        v-on="on"
+                        hint="$dateFormatPlaceholder"
+                        readonly
+                        ${toolTip(field)}
+                        ${getAttr(field)}
+                        id="${fldName}_id"
+                    >
+                        mdi-calendar
+                    </v-icon>
+                    <v-btn
+                        v-else-if='${calendarIconWithLabel}'
+                        v-model="${fldName}_formatted"
+                        v-on="on"
+                        ${toolTip(field)}
+                        ${getAttr(field)}
+                        id="${fldName}_id"
+                    >
+                        <v-icon> mdi-calendar </v-icon>
+                        <div ${calendarIconWithLabelAttr}>${getLabel(field)}</div>    
+                    </v-btn>
                     <v-text-field
-                            v-model="${fldName}_formatted"
-                            label="${getLabel(field)}"
-                            ${validate(field)?":rules = '${fldName}_rule'":""}
-                            v-on="on"
-                            hint="$dateFormatPlaceholder"
-                            persistent-hint
-                            prepend-icon=""
-                            prepend-inner-icon="event"
-                            @click:prepend="onIconClick_$fldName"
-                            readonly
-                            id="${fldName}_id"
-                            ${getAttr(field)}
-                            ${toolTip(field)}
+                        v-else
+                        v-model="${fldName}_formatted"
+                        label="${getLabel(field)}"
+                        ${validate(field)?":rules = '${fldName}_rule'":""}
+                        v-on="on"
+                        hint="$dateFormatPlaceholder"
+                        prepend-icon=""
+                        prepend-inner-icon="event"
+                        @click:prepend="onIconClick_$fldName"
+                        readonly
+                        id="${fldName}_id"
+                        ${getAttr(field)}
+                        ${toolTip(field)}
                     ></v-text-field>
                 </template>
-                ${isReadOnly?"":"""<v-date-picker $localeString v-model="${modelString}" no-title scrollable @input="\$refs.${fldName}_menu.save($modelString)"></v-date-picker>"""}
+                ${isReadOnly?"":"""<v-date-picker $localeString v-model="${modelString}" no-title scrollable @input="\$refs.${fldName}_menu.save($modelString)" $events></v-date-picker>"""}
                 </v-menu>
                 """
     }
 
     String getVueDataVariable(DataframeVue dataframe, Map field){
-
         String dataVariable = dataframe.getDataVariableForVue(field)
         String modelString = getFieldJSONModelNameVue(field)
+        String validationString = ""
+        if(validate(field)){
+            String validationRules = validationRules(field)
+            validationString = """ ${dataVariable}_rule: $validationRules,\n"""
+        }
         dataframe.getVueJsBuilder().addToMethodScript("""
 
         onIconClick_$dataVariable:function(e){
@@ -90,7 +122,8 @@ class DateWidgetVue extends WidgetVue {
             this.$modelString = d.toISOString();
             return d.format("dd/mm/yyyy")
         },\n""")
-        return """${dataVariable}_menu:'',\n"""
+
+        return """${dataVariable}_menu:'',$validationString"""
     }
 
     @Override

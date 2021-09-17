@@ -122,6 +122,8 @@ class MapDisplayWidgetVue extends WidgetVue{
         String displayMember = field?.displayMember
         int zoom = field?.zoom?:8
         String mapTypeId = field?.mapTypeId?:"ROADMAP"
+        boolean disableDefaultUI = field.disableDefaultUI?:false
+        String iconScript = field.iconScript?:""
         String addListenerScript = field?.addListenerScript?:""
         String markerClickEvent = """google.maps.event.addListener(marker, 'click', (function (marker, i) {
                                              return function () {
@@ -136,7 +138,8 @@ class MapDisplayWidgetVue extends WidgetVue{
                                      let map = new google.maps.Map(document.getElementById('$fldName'), {
                                          zoom: $zoom,
                                          center: new google.maps.LatLng(${center.lat}, ${center.lng}),
-                                         mapTypeId: google.maps.MapTypeId.$mapTypeId
+                                         mapTypeId: google.maps.MapTypeId.$mapTypeId,
+                                         disableDefaultUI: $disableDefaultUI  
                                      });
                                      let infowindow = new google.maps.InfoWindow();
                                      let markerBounds = new google.maps.LatLngBounds();
@@ -145,6 +148,7 @@ class MapDisplayWidgetVue extends WidgetVue{
                                          let latlng = new google.maps.LatLng(locations[i]['${latitude}'], locations[i]['${longitude}']);
                                          marker = new google.maps.Marker({
                                              position: latlng,
+                                             icon:$iconScript,
                                              map: map
                                          });
                                          markerBounds.extend(latlng);

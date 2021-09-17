@@ -1,21 +1,10 @@
 package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.Dataframe
-import com.elintegro.erf.dataframe.DataframeException
-import com.elintegro.erf.dataframe.DataframeInstance
-import com.elintegro.erf.dataframe.DbResult
-import com.elintegro.erf.dataframe.DomainClassInfo
-import com.elintegro.erf.dataframe.ParsedHql
-import com.elintegro.erf.dataframe.vue.DataframeConstants
 import com.elintegro.erf.dataframe.vue.DataframeVue
-import com.elintegro.erf.dataframe.vue.VueStore
-import grails.converters.JSON
-import groovy.json.JsonSlurper
-import org.apache.commons.lang.StringUtils
+import com.elintegro.erf.dataframe.vue.VueJsBuilder
 import org.apache.commons.lang.WordUtils
 
-import org.grails.web.json.JSONObject
-import org.json.simple.JSONArray
 import org.springframework.context.i18n.LocaleContextHolder
 
 class RadioButtonWidgetVue extends CollectionWidgetVue {
@@ -46,42 +35,41 @@ class RadioButtonWidgetVue extends CollectionWidgetVue {
         }
 
         Map domainFieldMap = dataframe.domainFieldMap
-        Map fldJSON = null
-        if(dataframe.isDatabaseField(field)){ //Put it to PERSISTERS section
-            Map persisters = domainFieldMap.get(Dataframe.PERSISTERS)
-            Map domainJSON = persisters.get(field.get(Dataframe.FIELD_PROP_DOMAIN_ALIAS))
-            fldJSON = domainJSON.get(field.get(Dataframe.FIELD_PROP_NAME))
-        }else{//Put it to TRANSITS section
-            Map transits = domainFieldMap.get(Dataframe.TRANSITS)
-            fldJSON = transits.get(field.get(Dataframe.FIELD_PROP_NAME))
-        }
+        Map fldJSON = getDomainFieldJsonMap(dataframe, field)
         fldJSON?.put("items", res)
-
         return domainFieldMap
     }
 
     private String getRadioButtons(DataframeVue dataframe, Map field, String fldName, String label){
         String onSelect = ""
+        VueJsBuilder store = dataframe.getVueJsBuilder()
         if(field.onSelect && field.onSelect.methodScript ){
             onSelect = " @change='${dataframe.dataframeName}_onSelect_$fldName' "
-            dataframe.getVueJsBuilder().addToMethodScript("""${dataframe.dataframeName}_onSelect_$fldName: function(_params){
+            store.addToMethodScript("""${dataframe.dataframeName}_onSelect_$fldName: function(_params){
                             $field.onSelect.methodScript
              },\n """)
         }
         boolean isReadOnly = dataframe.isReadOnly(field)
         String displayMember = field.displayMember?:'name'
         String valueMember = field.valueMember?:'id'
+        String radioGroupAttr = field.radioGroupAttr?:""
         String itemsStr = getFieldJSONItems(field)
         String modelString = getFieldJSONModelNameVue(field)
+        store.addToMethodScript("""${fldName}_selectedItem : function(selectedItem){
+                                                if(selectedItem instanceof Object){
+                                                     this.${modelString}=this.${itemsStr}.find(i => i.$valueMember === selectedItem.$valueMember);
+                                                }
+                                         },\n""")
         return """
 
-            <v-radio-group v-model="${modelString}">
+            <v-radio-group v-model="${modelString}" :value-comparator="${fldName}_selectedItem(${modelString})" $radioGroupAttr>
                     $label
                     <v-radio
                     v-for="(item,i) in $itemsStr"
                     :key="item.$valueMember"
                     :label = "item.$displayMember"
                     :value="item"
+                    ${getAttr(field)}
                     $onSelect
                     ></v-radio>
             </v-radio-group>

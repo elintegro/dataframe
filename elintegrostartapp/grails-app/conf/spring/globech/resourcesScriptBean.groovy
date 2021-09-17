@@ -140,7 +140,7 @@ beans {
         methods = """scrollTo(param){
            
             if(param =='ourClientsProjects'){
-                 excon.redirectPage(this,"client-project");
+                 this.\$router.push("/client-project");
             }else{
                 let element = document.getElementById(param);
                 if(element != null){
@@ -167,10 +167,10 @@ beans {
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
                     default : 
-                        excon.redirectPage(this,'home');                                
+                        this.\$router.push("/home");                                
                     }
                 }else{
-                       excon.redirectPage(this,'home');
+                       this.\$router.push("/home");  
                        this.\$nextTick(()=> window.document.getElementById(param).scrollIntoView()); 
                 }   
             }
@@ -657,7 +657,7 @@ beans {
                              
                              }
                              else{
-                                 excon.redirectPage(self,"login-page")
+                                 self.\$router.push("login-page");
                              }
                      },\n
         
@@ -783,7 +783,7 @@ beans {
         computed = """ enableDisableTranstaleButtonComputed(){if(this.state.transits.projectList.value){return false}else{return true;};},\n"""
         methods = """enterTranslatorPage(){
                      excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',this.state.transits.projectList.value);
-                     excon.redirectPage(this,'translator')
+                     this.\$router.push('/translate');
 
                  },\n"""
     }
@@ -791,7 +791,7 @@ beans {
         computed = """ enableDisableTranstaleButtonComputed(){if(this.state.transits.projectList.value){return false}else{return true;};},\n"""
         methods = """enterTranslatorPage(){
                      excon.saveToStore('vueTranslatorDataframe','currentlySelectedProject',this.state.transits.projectList.value);
-                     excon.redirectPage(this,'translator')
+                      this.\$router.push('/translate');
 
                  },\n"""
     }
@@ -897,7 +897,7 @@ beans {
                                        else{ 
                                             params['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
                                             excon.callApi('translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser', 'post', params).then(function(responseData){
-                                                 excon.redirectPage(self,"login-page");
+                                                 self.\$router.push("login-page")
                                             })
                                        }                 
                              },\n

@@ -72,20 +72,21 @@ public class DataframeViewJqxVue implements DataframeView {
         } else {
             if(refDataframe){
                 String refDfrName = refDataframe.dataframeName
-                if(dfButton.route){
-                    String routeIdScript = dfButton.routeIdScript
+                if(dfButton.route || dfButton.routeMap){
+                    String routeName = dfButton.routeName?:(dfButton.name?:refDfrName)
+                    String doAfterRoute = dfButton.doAfterRoute?:""
+                    String path = (dfButton.routeMap && dfButton.routeMap.path)?dfButton.routeMap.path:routeName
                     ResultPageHtmlBuilder.registeredComponents.add(refDataframe.dataframeName)
                     script.append("""${dataframeName}_${dfButton.name}: function(_param){\n 
                          $doBeforeAjax
-                         var routeId = ${routeIdScript?:0}
                          this.\$router.push({
                          name: '$refDfrName',
-                         path: '$refDfrName',
+                         path: '/$path',
                          params: {
-                           $refDfrName: "test",
-                           routeId: routeId
+                           $refDfrName: "test"
                          }
-                       })
+                       });
+                       $doAfterRoute
                        },\n""")
                 }else {
                     script.append("""${dataframeName}_${dfButton.name}: function(){\n 
@@ -124,10 +125,25 @@ public class DataframeViewJqxVue implements DataframeView {
         if(dfButton.showAsDialog){
             String scrollable = dfButton.scrollable?"scrollable":""
             String persistent = dfButton.persistent?"persistent":""
-            resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" $scrollable $persistent width='initial' :retain-focus="false" max-width='500px'>""")
+            String dialogBoxWidth = dfButton.dialogBoxWidth?:"initial"
+            String dialogBoxMaxWidth = dfButton.dialogBoxMaxWidth?:"500px"
+            resultPageHtml.append("""<v-dialog v-model="visibility.${refDataframeName}" $scrollable $persistent width = '$dialogBoxWidth' :retain-focus="false" max-width = '$dialogBoxMaxWidth'>""")
+            resultPageHtml.append("""<v-card>""")
+            if(dfButton.showToolbar) {
+                resultPageHtml.append(""" 
+                        <v-toolbar dark color="blue darken-2" class="mb-5">
+                            <v-toolbar-title>[DATAFRAME_LABEL]</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-tooltip bottom>
+                                <v-btn icon target="_blank" slot="activator" @click.prevent="closeDataframe">
+                                    <v-icon medium >close</v-icon>
+                                </v-btn><span>Close</span>
+                                </v-tooltip>
+                    </v-toolbar>""")
+            }
             resultPageHtml.append(refDataframe.getComponentName("resetForm=true"))
 //            resultPageHtml.append("""<component :is='${refDataframeName.toLowerCase()}' ref='${refDataframeName.toLowerCase()}_ref' :${refDataframeName}_prop="${refDataframeName}_data" :key='randomKey'></component>""")
-            resultPageHtml.append("""</v-dialog>\n""")
+            resultPageHtml.append("""</v-card></v-dialog>\n""")
         } else if(dfButton.showAsMenu && dfButton.showAsMenu.attr){
             String attr = dfButton.showAsMenu.attr?:"left"
             String attachTo = dfButton.showAsMenu.attachTo?:"$dataframeName-id"

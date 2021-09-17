@@ -50,7 +50,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	DataframeVue parent
 
 	private String currentLanguage = ""
-	List flexGridValues = []
+	Map cssGridValues = [:]
 	String currentRoute
 
 
@@ -72,12 +72,12 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	StringBuilder stateStringBuilder = new StringBuilder()// Remove after enchancing vueStore implementation
 	Map onClick = new HashMap() //For onCLick on the surface of dataframe
 	String doBeforeRefresh = ""
-	List flexGridValuesForSaveButton = []
+	Map cssGridValuesForSaveButton = [:]
 	String layoutForSaveButton = ""
-	List flexGridValuesForInsertButton = []
-	List flexGridValuesForResetButton = []
-	List flexGridValuesForCancelButton = []
-	List flexGridValuesForDeleteButton = []
+	Map cssGridValuesForInsertButton = [:]
+	Map cssGridValuesForResetButton = [:]
+	Map cssGridValuesForCancelButton = [:]
+	Map cssGridValuesForDeleteButton = [:]
 	String layoutForInsertButton = ""
 	String layoutForResetButton = ""
 	String layoutForCancelButton = ""
@@ -111,7 +111,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		this.dataframeNameLowercase = dataframeName?dataframeName.toLowerCase():""
 		this.dataframeView.dataframeName = dataframeName
 
-		flexGridValues = flexGridValues?:LayoutVue.defaultGridValues
+		cssGridValues = cssGridValues?:LayoutVue.defaultCssGridValues
 
 		String defaultRoute
 		defaultRoute = (dataframeName.replaceAll("vue","").replaceAll("Dataframe","").split(/(?=[A-Z])/).join("-")).toLowerCase();
@@ -246,14 +246,15 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 	protected String prepare(String fieldLayout, Layout frameLayout){
 		init();
 		currentFldLayout = fieldLayout
+		doAfterSaveStringBuilder = new StringBuilder()
 		if(frameLayout != null){
 			currentFrameLayout = frameLayout
 		}
 		StringBuilder fieldsHtmlBuilder = new StringBuilder()
 		this.currentFrameLayout.numberFields = fields.getList().size()
 		this.currentFrameLayout.setDataframeName(dataframeName)
-		List flexGridValuesFromDescriptor = flexGridValues?: LayoutVue.defaultGridValues
-		String gridValueInString = LayoutVue.convertListToString(flexGridValuesFromDescriptor)
+		Map gridValuesFromDescriptor = cssGridValues?: LayoutVue.defaultCssGridValues
+		String gridValueInString = LayoutVue.convertListToString(gridValuesFromDescriptor)
 
 		StringBuilder vueDataVariable = new StringBuilder()
 		StringBuilder vueStateVariable = new StringBuilder()
@@ -287,7 +288,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		keyFieldNames.each {
 			vueStateVariable.append("${convertToDataVariableFromat(it)}"+":\"\",\n")
 			vueSaveVariables.append("params[\"$it\""+"] = this.${convertToDataVariableFromat(it)};\n")
-			vueFileSaveVariables.append("params[\"$it\""+"] = response.namedParameters.id.value;\n")
+			vueFileSaveVariables.append("if(response && response.namedParameters) params[\"$it\""+"] = response.namedParameters.id.value;\n")
 			vueDataFillScript.append("this.${convertToDataVariableFromat(it)} = response['${convertToReturnedDataVariableFromat(it)}']?response['${convertToReturnedDataVariableFromat(it)}']:\"\"\n")
 		}
 		StringBuilder buttonHtmlStringBuilder = new StringBuilder()
@@ -319,6 +320,8 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                              handler: function(val, oldVal){
                                   if(val && val.refreshInitialData){
                                      this.${dataframeName}_fillInitData();
+                                  } else {
+                                      console.log("${dataframeName}_prop has refreshInitialData as false or undefined. Could not refresh.");
                                   }
                              }
                      },\n""")
@@ -350,11 +353,9 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		def lhcLocale = LocaleContextHolder.getLocale()
 		String btnDivId = "";
 		String btnWidget = "";
-		List flexGridValues = field.flexGridValues ?:flexGridValues?: LayoutVue.defaultGridValues
-		//Was in EWEB-68-refactoring; TODO check which line is correct!
-		//List flexGridValues = field.flexGridValues ?: LayoutVue.defaultGridValues
+		Map cssGridValues = field.cssGridValues ?:cssGridValues?: LayoutVue.defaultCssGridValues
 
-		String gridValueString = LayoutVue.convertListToString(flexGridValues)
+		String gridValueString = LayoutVue.convertListToString(cssGridValues)
 		def label = field.fldNmAlias ?: messageSource.getMessage(field.labelCode, null, fldNameDefault, LocaleContextHolder.getLocale())
 		if (field?.labelDisabled) {
 			label = ""
@@ -426,7 +427,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			if(saveButton){
 				String saveButtonAttr = saveButtonAttr?:""
 				String saveButtonAlignment = saveButtonAlignment?:"right"
-				List gridvaluesSave = flexGridValuesForSaveButton?:LayoutVue.defaultButtonGridValues
+				Map gridvaluesSave = cssGridValuesForSaveButton?:LayoutVue.defaultButtonCssGridValues
 				String saveGridValueString = LayoutVue.convertListToString(gridvaluesSave)
 				String saveButtonLabel = messageSource.getMessage("${dataframeName}.button.save", null, messageSource.getMessage("button.save", null, "Save", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
 				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize $saveButtonAlignment' id='$dataframeName-save' @click='${dataframeName}_save' $saveButtonAttr :loading='${dataframeName}_save_loading' >${saveButtonLabel}</v-btn>\n", layoutForSaveButton, saveGridValueString)     // TODO  i18n
@@ -437,7 +438,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(ajaxInsertUrl){
 			if(insertButton){
 				String insertButtonAttr = insertButtonAttr?:""
-				List gridvaluesInsert = flexGridValuesForInsertButton?:LayoutVue.defaultButtonGridValues
+				Map gridvaluesInsert = cssGridValuesForInsertButton?:LayoutVue.defaultButtonCssGridValues
 				String insertGridValueString = LayoutVue.convertListToString(gridvaluesInsert)
 
 				String insertButtonAlignment = insertButtonAlignment?:"left"
@@ -449,7 +450,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 		if(resetButton){
 			String resetButtonAttr = resetButtonAttr?:""
-			List gridvaluesReset = flexGridValuesForResetButton?:LayoutVue.defaultButtonGridValues
+			Map gridvaluesReset = cssGridValuesForResetButton?:LayoutVue.defaultButtonCssGridValues
 			String resetGridValueString = LayoutVue.convertListToString(gridvaluesReset)
 
 			String resetButtonAlignment = resetButtonAlignment?:"left"
@@ -460,7 +461,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		}
 		if(cancelButton){
 			String cancelButtonAttr = cancelButtonAttr?:" left"
-			List gridvaluesCancel = flexGridValuesForCancelButton?:LayoutVue.defaultButtonGridValues
+			Map gridvaluesCancel = cssGridValuesForCancelButton?:LayoutVue.defaultButtonCssGridValues
 			String cancelGridValueString = LayoutVue.convertListToString(gridvaluesCancel)
 			String cancelButtonLabel = messageSource.getMessage("${dataframeName}.button.cancel", null, messageSource.getMessage("button.cancel", null, "Cancel", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
 			String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize' id='$dataframeName-cancel' @click='${dataframeName}_cancel' $cancelButtonAttr>${cancelButtonLabel}</v-btn>\n", layoutForCancelButton, cancelGridValueString)     // TODO  i18n
@@ -470,7 +471,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if(ajaxDeleteUrl){
 			if(deleteButton){
 				String deleteButtonAttr = deleteButtonAttr?:" left"
-				List gridValuesDelete = flexGridValuesForDeleteButton?:LayoutVue.defaultButtonGridValues
+				Map gridValuesDelete = cssGridValuesForDeleteButton?:LayoutVue.defaultButtonCssGridValues
 				String deleteGridValueString = LayoutVue.convertListToString(gridValuesDelete)
 				String deleteButtonLabel = messageSource.getMessage("${dataframeName}.button.delete", null, messageSource.getMessage("button.delete", null, "Delete", LocaleContextHolder.getLocale()), LocaleContextHolder.getLocale())
 				String btnScript = applyLayoutForButton("<v-btn type='button' class='text-capitalize' id='$dataframeName-delete' @click='${dataframeName}_delete' $deleteButtonAttr>${deleteButtonLabel}</v-btn>\n", layoutForDeleteButton, deleteGridValueString)     // TODO  i18n
@@ -553,12 +554,15 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			vueJsBuilder.addToMethodScript(vueJsEntity.methods)
 		}
 
-		if(route){
-			vueRoutes = "{ path: '/$currentRoute/:routeId',name:'${dataframeName}' , component: ${dataframeName}Comp },\n"
+/*
+		if(routeMap){
+			vueRoutes = ViewRoutes.constructRoute(routeMap, dataframeName)
+//			vueRoutes = "{ path: '/$currentRoute/:routeId',name:'${dataframeName}' , component: ${dataframeName}Comp },\n"
 			componentRegistered = true
 			isGlobal = false
 			ResultPageHtmlBuilder.registeredComponents.add(dataframeName)
 		}
+*/
 
 		createVueStore(vueJsBuilder) //create vueStore
 		VueStore vueStore1 = vueJsBuilder.getVueStore()
@@ -649,7 +653,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
                  params["url"] =  '$df.ajaxSaveUrl';
                  params["showAlertMessage"] = ${requiresConfirmationMessage}
                  params["doBeforeSave"] = function(params){params['callApi'] = true;\n${doBeforeSave} }
-                 params["doAfterSave"] = function(response){ 
+                 params["doAfterSave"] = function(response = {}, errors = []){ 
 								 ${doAfterSave} 
                                  ${doAfterSaveStringBuilder}
 							     if(response.domain_keys){
@@ -797,7 +801,20 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		String classNames = btn.classNames?:""
 		String height = ""
 		String width = ""
-		List flexGridValues = btn.flexGridValues?:LayoutVue.defaultButtonGridValues
+		String loader = """ <template v-slot:placeholder>
+                            	<v-row
+                                	class="fill-height ma-0"
+                                    align="center"
+                                    justify="center"
+                                >
+                                <v-progress-circular
+                                	indeterminate
+                                    color="#ffc526"
+                                ></v-progress-circular>
+                                </v-row>
+                          	</template>
+                         """
+		Map cssGridValues = btn.cssGridValues?:LayoutVue.defaultButtonCssGridValues
 
 		if(btn.image){
 			height = btn.image?.height?:50
@@ -808,7 +825,7 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 		if ("link".equals(btn.type)) {
 			btnString=" <v-btn href='${btn.url}' class='text-capitalize $classNames' text id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr>${buttonLabel}</v-btn>\n"
 		}else if("image".equals(btn.type)){
-			btnString=" <input type='image' src='$imgUrl' id='$dataframeName-${btn.name}' alt='${buttonLabel}' @click.prevent='${dataframeName}_${btn.name}' $attr height='$height' width='$width' />\n"
+			btnString=" <v-img type='image' src='$imgUrl' id='$dataframeName-${btn.name}' alt='${buttonLabel}' @click.prevent='${dataframeName}_${btn.name}' $attr height='$height' width='$width' >${loader}</v-img>\n"
 		}else{
 			if(btn.image && btn.image.showIcon){
 				btnString=""" <v-btn ${WidgetVue.toolTip(btn)} class='text-capitalize $classNames' type='button' id='$dataframeName-${btn.name}' @click.prevent='${dataframeName}_${btn.name}' $attr><img height="${btn.image.height ?: 20}" width="${btn.image.width ?: 25}" src="$imgUrl"/></v-btn>\n"""
@@ -817,14 +834,14 @@ public class DataframeVue extends Dataframe implements Serializable, DataFrameIn
 			}
 		}
 
-		String gridValueString = LayoutVue.convertListToString(flexGridValues)
+		String gridValueString = LayoutVue.convertListToString(cssGridValues)
 		String btnStringWithLayout = applyLayoutForButton(btnString.toString(), layout, gridValueString)
 		String btnStringWithLayoutAndSpringSecurity = WidgetVue.wrapWithSpringSecurityVue( btn, btnStringWithLayout)
 		return btnStringWithLayoutAndSpringSecurity
 	}
 
 	private String applyLayoutForButton(String btnString, String LayoutString, String gridValueString){
-		btnString = "<v-flex $gridValueString>"+btnString+"</v-flex>"
+		btnString = "<v-col cols='0' $gridValueString>"+btnString+"</v-col>"
 		if(LayoutString.contains("[BUTTON_SCRIPT]")){
 			btnString = LayoutString.replace("[BUTTON_SCRIPT]", btnString)
 		}

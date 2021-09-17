@@ -73,9 +73,7 @@ class ComboboxVue extends CollectionWidgetVue {
         String displayMember = field.displayMember?:'name'
         String valueMember = field.valueMember?:'id'
         String itemsStr = getFieldJSONItems(field)
-        String modelString1 = getModelString(dataframe, field) //TODO: decide which one is correct?
         String modelString = getFieldJSONModelNameVue(field)
-        String dataVariable = dataframe.getDataVariableForVue(field)//TODO: may be we do not need it!
         return """
             <v-combobox
                   v-model = "${modelString}"  

@@ -600,3 +600,18 @@ background-color: #007bff;
 .QuotesPadding .v-window__container .v-window__prev {
     left: 47px;
 }
+.about-us-menu .v-card__actions .row div,
+.elintegro-sub-menu .v-card__actions .row div{
+    padding: 8px !important;
+    display: flex;
+    flex: 1 1 auto;
+    max-width: 100%;
+}
+.new-employee-tab-attr,
+.login-tab-attr{
+    text-transform:capitalize !important;
+    color:white !important;
+    background-color:rgb(199, 210, 243) !important;
+    border-top-left-radius: 45% !important;
+    border-top-right-radius: 45% !important;
+}

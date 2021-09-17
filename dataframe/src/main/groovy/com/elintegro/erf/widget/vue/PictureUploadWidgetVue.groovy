@@ -17,6 +17,7 @@ import com.elintegro.erf.dataframe.Dataframe
 import com.elintegro.erf.dataframe.DataframeException
 import com.elintegro.erf.dataframe.DomainClassInfo
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import grails.util.Holders
 import org.apache.commons.lang.StringUtils
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
@@ -39,8 +40,8 @@ class PictureUploadWidgetVue extends WidgetVue {
         String dropText = field?.dropText?:"Drop your file here ..."
         String markIsPrimary = field?.markIsPrimary?:""
         String popupText = field?.popupText?:""
-        String idUpload = field?.idUpload
-        String idEdit = field?.idEdit
+        String idUpload = field?.idUpload?:fldName
+        String idEdit = field?.idEdit?:fldName
         def maxImage = field?.maxImage?:5
         boolean camera = field?.camera?:false
         boolean videoHeight = field?.videoHeight
@@ -48,34 +49,48 @@ class PictureUploadWidgetVue extends WidgetVue {
         boolean canvasHeight = field?.canvasHeight
         boolean canvasWidth = field?.canvasWidth
         return """
-              <div ${getAttr(field)} style="display: flex;">
-               <v-image-upload
-                  :multiple=$multiple
-                  @upload-success="${fldName}_uploadImages" 
-                  @limit-exceeded="${fldName}_limitExceeded" 
-                  ${deleteButton ? "@before-remove='${fldName}_beforeRemove'" : ""}
-                  ${editButton ? "@edit-image='${fldName}_editImage'" : ""}
-                  ${toolTip(field)}  
-                    ${idUpload ? "id-upload=$idUpload" : ""}
-                    ${idEdit ? "edit-upload=$idEdit" : ""}
-                    :max-image=$maxImage
-                    :camera = $camera
-                    ${videoHeight ? ":video-height=$videoHeight" : ""}
-                    ${videoWidth ? ":video-width=$videoWidth" : ""}
-                    ${canvasHeight ? ":canvas-height=$canvasHeight" : ""}
-                    ${canvasWidth ? ":canvas-width=$canvasWidth" : ""}
-                    primary-text = "$primaryText"
-                    browse-text = "$browseText"
-                    drag-text = "$dragText"
-                    drop-text="$dropText"
-                    mark-is-primary-text="$markIsPrimary"
-                    popup-text="$popupText"
-                    :show-delete=$deleteButton
-                    :show-edit=$editButton
-                    :show-add=$addButton
-            ></v-image-upload>
-               </div>
-               """
+              <div ${getAttr(field)} style="display: block; max-width: fit-content; margin:0 auto;">
+                   <div class="v-label theme--light">
+                   ${getLabel(field)}
+                    </div>
+                   <v-image-upload
+                      :multiple='$multiple'
+                      @upload-success="${fldName}_handleImageUpload" 
+                      @limit-exceeded="${fldName}_limitExceeded" 
+                      ${deleteButton ? "@before-remove='${fldName}_beforeRemove'" : ""}
+                      ${editButton ? "@edit-image='${fldName}_editImage'" : ""}
+                      ${toolTip(field)}  
+                        ${idUpload ? "id-upload=$idUpload" : ""}
+                        ${idEdit ? "id-edit=$idEdit" : ""}
+                        :max-image=$maxImage
+                        :camera = '$camera'
+                        ${videoHeight ? ":video-height=$videoHeight" : ""}
+                        ${videoWidth ? ":video-width=$videoWidth" : ""}
+                        ${canvasHeight ? ":canvas-height=$canvasHeight" : ""}
+                        ${canvasWidth ? ":canvas-width=$canvasWidth" : ""}
+                        primary-text = "$primaryText"
+                        browse-text = "$browseText"
+                        drag-text = "$dragText"
+                        drop-text="$dropText"
+                        mark-is-primary-text="$markIsPrimary"
+                        popup-text="$popupText"
+                        :show-delete='$deleteButton'
+                        :show-edit='$editButton'
+                        :show-add='$addButton'
+                        :data-images="imageList"
+                        :is-camera-disable = "${fldName}_cameraDisable"
+                   ></v-image-upload>
+                   <v-progress-circular
+                        :size="140"
+                        :width="6"
+                        color="rgb(177,243,198)"
+                        indeterminate
+                        v-show="${fldName}_showLoader"
+                        class="imageResizeLoader"
+                   >Reducing...</v-progress-circular>
+                   
+              </div>
+        """
     }
 
     @Override
@@ -86,15 +101,17 @@ class PictureUploadWidgetVue extends WidgetVue {
         JSONArray selectedItems =  convertToJSONArrayIfSingleJSONObject(inputValue)
         JSONArray availableItems = inputValue.items
 
-        if(!domainClassInfo.isAssociation(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
-            def oldfldVal = domainInstance."${fieldName}"
-            if(oldfldVal == inputValue.value) return false
-            domainInstance."${fieldName}" = inputValue.value
+        if(!domainClassInfo.isAssociation(fieldName) || domainClassInfo.isToOne(fieldName)){ // this means we just want to apply description value to the text field without association with any other entity
+            if ((inputValue.value instanceof JSONArray) && (inputValue.value.size() > 0)){
+                Map requestInputValue = ["value":inputValue.value[0].getAt("imageName")]
+                super.populateDomainInstanceValue(dataframe, domainInstance, domainClassInfo, fieldName, field, requestInputValue)
+            }else {
+                def oldfldVal = domainInstance."${fieldName}"
+                if(oldfldVal == inputValue.value) return false
+                domainInstance."${fieldName}" = inputValue.value
+            }
         }else if(domainClassInfo.isToMany(fieldName)){
             return saveHasManyAssociation(selectedItems, domainClassInfo.getRefDomainClass(fieldName), fieldName, domainInstance)
-        }else if(domainClassInfo.isToOne(fieldName)){
-            def oldfldVal = domainInstance."${fieldName}".value
-            domainInstance."${fieldName}" = inputValue.value[0] //TODO: check if there is not exception in case of single choice
         }
         return true
     }
@@ -144,17 +161,72 @@ class PictureUploadWidgetVue extends WidgetVue {
         boolean deleteButton = field?.deleteButton
         boolean editButton = field?.editButton
         boolean markIsPrimary = field?.markIsPrimary?:false
-        dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
+        String fileSaveUrl = field.ajaxFileSaveUrl?:dataframe.ajaxFileSaveUrl
+        String doAfterSave = field.doAfterSave?:""
+        def imageMaxSize = Holders.grailsApplication.config.image.maxSize
+        dataframe.getVueJsBuilder().addToDataScript("""imageList:[],\n ${fldName}_cameraDisable : false,\n ${fldName}_showLoader:false,\n """).addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
                 .addToMethodScript("""
+           ${fldName}_handleImageUpload: function(file, currentIndex, imageList){
+                               if(file.size > 52428800){ //52428800 bytes = 50mb
+                                  let response = {};
+                                  response.msg = "Image size should be less than 50 MB"
+                                  excon.showAlertMessage(response);
+                                  this.imageList = [];
+                                  this.${fldName}_imagesData = [];
+                                  return false;
+                               }
+                               else if(file.size > 2097152){
+                                   let confirmMsg = confirm("The picture is too big, would you like to reduce the size?");
+                                   if(confirmMsg){
+                                       this.${fldName}_showLoader = true;
+                                       this.${fldName}_reduceImageSize(file, currentIndex, imageList)
+                                   }
+                                   else{
+                                       this.imageList = [];
+                                       this.${fldName}_imagesData = [];
+                                       return false;
+                                   }
+                               }else{
+                                    this.${fldName}_uploadImages(file, currentIndex, imageList)
+                               }
+           },\n  
            ${fldName}_uploadImages: function(file, currentIndex, imageList){
-                        this.${fldName}_files.push(file);
-                        let imageData = ${excon}.getImageDataInfo(file);
-                        this.${fldName}_imagesData.push(imageData);
-                        let stateVariable = excon.getFromStore("$dataframe.dataframeName");
-                        stateVariable.${getFieldJSONNameVueWithoutState(field)} = this.${fldName}_imagesData;
-                        excon.saveToStore("$dataframe.dataframeName", stateVariable);
-                        
-                    },\n
+                            this.${fldName}_files.push(file);
+                            let imageData = ${excon}.getImageDataInfo(file);
+                            this.${fldName}_imagesData.push(imageData);
+                            let stateVariable = excon.getFromStore("$dataframe.dataframeName");
+                            stateVariable.${getFieldJSONNameVueWithoutState(field)} = this.${fldName}_imagesData;
+                            excon.saveToStore("$dataframe.dataframeName", stateVariable);
+                            this.${fldName}_cameraDisable  = true;
+           },\n 
+           ${fldName}_reduceImageSize: function(file, currentIndex, imageList){
+                                var self = this;
+                                var imageFile = file
+                                
+                                var options = {
+                                    maxSizeMB: $imageMaxSize,
+                                    useWebWorker: true,
+                                    maxIteration: 50, 
+                                }
+                                imageCompression(imageFile, options)
+                                    .then(function (compressedFile) {
+                                        console.log(compressedFile); // write your own logic
+                                        var newFile = new File([compressedFile], compressedFile.name);
+                                        var reader = new FileReader();
+                                        console.log(reader.readAsDataURL(compressedFile))
+                                         reader.onloadend = function() {
+                                             var base64data = reader.result; 
+                                             self.${fldName}_showLoader = false;
+                                             imageList[currentIndex].path = base64data;
+                                             self.${fldName}_uploadImages(newFile, currentIndex, imageList)
+                                         }
+                                    })
+                                    .catch(function (error) {
+                                        self.${fldName}_showLoader = false;
+                                        console.log(error.message);
+                                });
+
+           },\n      
            ${deleteButton ? """${fldName}_beforeRemove: function(currentIndex, beforeRemove){
                             var r = confirm("Remove image !");
                             if (r == true) {
@@ -164,11 +236,24 @@ class PictureUploadWidgetVue extends WidgetVue {
                                     this.${fldName}_imagesData.splice(currentIndex, 1);
                                     excon.getFromStore("$dataframe.dataframeName").${getFieldJSONNameVueWithoutState(field)} = this.${fldName}_imagesData;
                                 }
+                                if(this.${fldName}_imagesData.length < 1){
+                                   this.${fldName}_cameraDisable  = false;
+                                }
                             } 
                     },\n  """ : ""}
            ${editButton ? """${fldName}_editImage: function(file, currentIndex, fileList){
-                            this.${fldName}_files[currentIndex] = file;
-                            excon.getFromStore("$dataframe.dataframeName").${getFieldJSONNameVueWithoutState(field)}[currentIndex] = ${excon}.getImageDataInfo(file);
+                            let currentInd = currentIndex?currentIndex:0;
+                            this.${fldName}_files[currentInd] = file;
+                            let stateValues = excon.getFromStore("$dataframe.dataframeName");
+                            let imageArray = stateValues.${getFieldJSONNameVueWithoutState(field)};
+                            if(imageArray != null || imageArray != undefined){
+                              imageArray[currentInd] = ${excon}.getImageDataInfo(file);
+                            }else{
+                                imageArray = [];
+                                imageArray[currentInd] = ${excon}.getImageDataInfo(file);
+                                stateValues.${getFieldJSONNameVueWithoutState(field)} = imageArray;
+                                excon.saveToStore('$dataframe.dataframeName',stateValues);
+                            }
                     },\n  """ : ""}
            ${markIsPrimary ? """${fldName}_markIsPrimary: function(currentIndex, fileList){
                             console.log('markIsPrimary data', index, fileList);
@@ -177,6 +262,7 @@ class PictureUploadWidgetVue extends WidgetVue {
                             alert('Limit exceeded');
                     },\n
            ${fldName}_ajaxFileSave: function(data, params){
+                        let self = this;
                         var fileList = this.${fldName}_files;
                         if(fileList.length > 0){
                             var picData = new FormData();
@@ -189,8 +275,13 @@ class PictureUploadWidgetVue extends WidgetVue {
                             for (var i = 0; i < fileList.length; i++) {
                                 picData.append("$genId["+i+"]", fileList[i]);
                             }
-                            axios.post('${field.ajaxFileSaveUrl}', picData).then(response => {
+                            axios.post('${fileSaveUrl}', picData).then(response => {
                               console.log(response)
+                              $doAfterSave
+                              self.imageList = [];
+                              self.${fldName}_imagesData = [];
+                              self.${fldName}_cameraDisable = false;
+                              self.${fldName}_files = []
                             }).catch(function (error) {
                                 console.log(error);
                             });

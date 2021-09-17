@@ -13,7 +13,7 @@ beans {
                                  <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
                                   </v-toolbar>[DATAFRAME_SCRIPT][BUTTON_SCRIPT]
                                   <v-card class ="clientProject">[clientProject]</v-card></v-card></v-flex>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
 
 }

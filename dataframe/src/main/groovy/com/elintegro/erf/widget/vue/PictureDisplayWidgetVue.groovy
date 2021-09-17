@@ -15,6 +15,7 @@ package com.elintegro.erf.widget.vue
 
 import com.elintegro.erf.dataframe.DataframeInstance
 import com.elintegro.erf.dataframe.vue.DataframeVue
+import com.elintegro.erf.dataframe.vue.VueStore
 import grails.util.Holders
 import org.grails.web.json.JSONObject
 
@@ -29,16 +30,74 @@ class PictureDisplayWidgetVue extends WidgetVue{
         String heightString = height?"height=$height":""
         String widthString  = width?"""width=$width """:""
         String modelString = getFieldJSONModelNameVue(field)
-        String html =  """<v-img
-           id = "$fldParam"
-          :src="$modelString"
-          
-          :alt = "${modelString}_alt"
-          aspect-ratio="$aspectRatio"
-          ${toolTip(field)} 
-           $heightString
-           $widthString
-          ${getAttr(field)} ></v-img>"""
+        String pictureTitle = field.pictureTitle?:""
+        boolean containsLoader = field?.containsLoader?:false
+        String loaderType = field?.loaderType?:"circular"
+        String loaderAttrs = field?.loaderAttrs?:""
+        String loader = """ <template v-if="$containsLoader" v-slot:placeholder>
+                                <v-row
+                                    class="fill-height ma-0"
+                                    align="center"
+                                    justify="center"
+                                >
+                                    <v-progress-$loaderType
+                                        ${loaderAttrs}
+                                    ></v-progress-$loaderType>
+                                </v-row>
+                             </template>
+                           """
+        String pictureTitleCode = pictureTitle?"""<div class="d-flex justify-end mx-3 mb-3">
+                                                  <span class="my-span">
+                                                   $pictureTitle
+                                                  </span>
+                                                </div>""":""
+        boolean pictureButton = field.pictureButton?:false
+        String setButtonAttr = field.setButtonAttr?:""
+        String setIconAttr = field.setIconAttr?:""
+        String setMarginPaddingForPictureButton = field.setMarginPaddingForPictureButton?:" mx-3 mb-3"
+        if(pictureButton){
+            String refHtml = ""
+            def onClick = field.onClick
+            if(onClick && field.get('onClick')){
+                if(onClick.refDataframe){
+                    refHtml = getRefHtml(onClick as Map, dataframe)
+                }
+            }
+            String html =  """ <v-img
+                                   id = "$fldParam"
+                                   :src="$modelString"
+                                   :alt = "${modelString}_alt"
+                                   aspect-ratio="$aspectRatio"
+                                   ${toolTip(field)} 
+                                   $heightString
+                                   $widthString
+                                   ${getAttr(field)} 
+                                >
+                                   ${loader}
+                                   <div class="d-flex justify-end ${setMarginPaddingForPictureButton}">
+                                       $refHtml<v-btn $setButtonAttr>
+                                            <v-img $setIconAttr></v-img>
+                                       </v-btn>
+                                   </div> 
+                                </v-img>
+                           """
+            return html
+        }
+        String html =  """
+                            <v-img
+                               id = "$fldParam"
+                               :src="$modelString"
+                               :alt = "${modelString}_alt"
+                               aspect-ratio="$aspectRatio"
+                               ${toolTip(field)} 
+                               $heightString
+                               $widthString
+                               ${getAttr(field)} 
+                            >
+                               $pictureTitleCode
+                               ${loader} 
+                            </v-img>
+                       """
         if(field?.layout){
             html = applyLayout(dataframe, field, html)
         }
@@ -85,4 +144,33 @@ class PictureDisplayWidgetVue extends WidgetVue{
     public Object getInitValues(DataframeVue df, Map fieldProps){
         return fieldProps.url?:getDefaultImageName()
     }
+    String pictureButtonCode(DataframeVue dataframe, Map field,String html){
+        String setButtonAttr = field.setButtonAttr?:""
+        String setIconAttr = field.setIconAttr?:""
+        html ="""<div class="d-flex justify-end mx-3 mb-3">
+                        <v-btn $setButtonAttr><v-img $setIconAttr></v-img></v-btn>
+                  </div> 
+                """
+
+     }
+    private String getRefHtml(Map onClick, DataframeVue dataframe){
+        StringBuilder sb = new StringBuilder()
+        DataframeVue refDataframe = DataframeVue.getDataframeBeanFromReference(onClick.refDataframe)
+        String refDataframeName = refDataframe.dataframeName
+        String dialogBoxWidth = onClick.dialogBoxWidth?:"initial"
+        VueStore store = dataframe.getVueJsBuilder().getVueStore()
+        store.addToDataframeVisibilityMap("${refDataframeName} : false,\n")
+        dataframe.getVueJsBuilder().addToDataScript(" ${refDataframeName}_data:{key:'', refreshGrid:true},\n")
+        def maxWidth = onClick.dialogBoxMaxWidth?:"500px"
+        if(onClick.showAsDialog){
+            sb.append("""<v-dialog v-model="visibility.${refDataframeName}" width='$dialogBoxWidth' max-width='$maxWidth'><v-card>""")
+            sb.append(refDataframe.getComponentName("resetForm=true "))
+            sb.append("""</v-card></v-dialog>""")
+        } else {
+            sb.append(refDataframe.getComponentName("resetForm=true"))
+        }
+
+        return sb.toString()
+    }
+
 }

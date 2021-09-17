@@ -94,7 +94,7 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
         String fldName = dataVariable
         def defaultValue = field.defaultValue?:""
         def doAfterSave = field.doAfterSave?:""
-        String genId = fldName+"-file"
+        def genId = fldName+"-file"
         dataframe.getVueJsBuilder().addToCreatedScript("""this.${fldName}_computedFileUploadParams();\n""")
                 .addToMethodScript("""
                    ${fldName}_uploadFile: function(event){
@@ -113,35 +113,36 @@ class FilesUploadWidgetVue extends com.elintegro.erf.widget.vue.WidgetVue {
                               excon.saveToStore("$dataframe.dataframeName", stateVariable)
                               },\n
                              ${fldName}_ajaxFileSave: function(data, params){
-                              var fileList = this.${fldName}_files;
-                              if(fileList.length > 0){                                                                        
-                              var fileData = new FormData();
-                              for (var i = 0; i < fileList.length; i++) {
-                              fileData.append('fileName',fileList[i].name);
-                              fileData.append('fileStorageSize',fileList[i].size);                              
-                              fileData.append('fileLastModified',fileList[i].lastModified);
-                              fileData.append('fileLastModifiedDate',fileList[i].lastModifiedDate);
-                              fileData.append('fileWebKitRelativePath',fileList[i].webKitRelativePath);
-                              fileData.append('fileType',fileList[i].type);                              
-                              fileData.append("$genId["+i+"]", fileList[i]);
-                            }
-                            fileData.append('fileSize',fileList.length);
-                            fileData.append('fldId','$fldName');
-                            if(data.params != null){
-                            fileData.append('params',data.params.id);}
-                            }
-                            let self = this;
-                              axios({ method:'post',
-                                        url:'${field.ajaxFileSaveUrl}',
-                                        data:fileData 
-                                 }).then(response => {
-                                            ${doAfterSave}
-                                            console.log(response)
-                                                    })
-                                  .catch(function(error){
-                                                console.log(error)
-                                                });                      
-                   },
+                                  var fileList = this.${fldName}_files;
+                                  if(fileList.length > 0){                                                                        
+                                      var fileData = new FormData();
+                                      for (var i = 0; i < fileList.length; i++) {
+                                          fileData.append('fileName',fileList[i].name);
+                                          fileData.append('fileStorageSize',fileList[i].size);                              
+                                          fileData.append('fileLastModified',fileList[i].lastModified);
+                                          fileData.append('fileLastModifiedDate',fileList[i].lastModifiedDate);
+                                          fileData.append('fileWebKitRelativePath',fileList[i].webKitRelativePath);
+                                          fileData.append('fileType',fileList[i].type);                              
+                                          fileData.append("$genId["+i+"]", fileList[i]);
+                                      }
+                                      fileData.append('fileSize',fileList.length);
+                                      fileData.append('fldId','$fldName');
+                                      if(data && data.params != null){
+                                        fileData.append('params',data.params.id);
+                                      }
+                                  }
+                                  let self = this;
+                                  axios({ method:'post',
+                                            url:'${field.ajaxFileSaveUrl}',
+                                            data:fileData 
+                                     }).then(response => {
+                                                ${doAfterSave}
+                                                console.log(response)
+                                                        })
+                                      .catch(function(error){
+                                                    console.log(error)
+                                                    });                      
+                             },
                    
                        ${fldName}_computedFileUploadParams() {
              var refParams = this.params;

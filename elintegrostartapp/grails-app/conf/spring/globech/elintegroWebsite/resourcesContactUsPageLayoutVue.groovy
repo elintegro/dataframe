@@ -24,7 +24,7 @@ beans {
                                         </v-flex>
                                     </v-card>
                                  </v-flex></v-layout></v-container>"""
-        flexGridValues = ['xs12', 'sm6', 'md4', 'lg4', 'xl4']
+        cssGridValues = ['xs':'12', 'sm':'6', 'md':'4', 'lg':'4', 'xl':'4']
     }
 }
 

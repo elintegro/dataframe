@@ -45,6 +45,7 @@ class NumberInputWidgetVue extends WidgetVue {
             ${toolTip(field)}
             style="width:${getWidth(field)}; height:${getHeight(field)};"
             ${getAttr(field)}
+            ${fillProps(field)}
           ></v-text-field>"""
     }
 

@@ -97,7 +97,7 @@ grails.gorm.default.constraints = {
 
 grails.gorm.failOnError = true
 
-vue.flexGridValues.Default = ['xs12', 'sm12', 'md4', 'lg4', 'xl4']
+vue.cssGridValues.Default = ['xs':'12', 'sm':'12', 'md':'4', 'lg':'4', 'xl':'4']
 
 
 
@@ -704,4 +704,6 @@ dataframe.right_to_left_language = false
 quizzableUrl = "https://quizzable.elintegro.com/"
 
 application.languages = """'fr','en','es'"""
+
+image.maxSize = 2 //i.e 2 MB
 
