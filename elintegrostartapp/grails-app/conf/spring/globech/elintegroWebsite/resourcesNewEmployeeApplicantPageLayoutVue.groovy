@@ -8,8 +8,8 @@ import grails.util.Holders
 beans {
     vueNewEmployeeApplicantDataframeLayout(ColumnLayoutVue){bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12><v-card round >
-                                <v-tabs color="white" slider-color="yellow"  background-color="blue darken-2" v-model="vueNewEmployeeApplicantDataframe_tab_model">
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 class="mt-9"><v-card round class="mt-9" >
+                                <v-tabs  color="white" slider-color="yellow"  background-color="blue darken-2" v-model="vueNewEmployeeApplicantDataframe_tab_model">
                                     <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueNewEmployeeBasicInformationDataframe-tab-id">Basic Information</v-tab>
                                     <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueNewEmployeeUploadResumeDataframe-tab-id">Upload Resume</v-tab>
                                      <v-tab style ="text-transform:capitalize; color:white;" ripple href="#vueNewEmployeeSelfAssesmentDataframe-tab-id">Self Assesment</v-tab>

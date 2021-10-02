@@ -9,8 +9,8 @@ beans {
     vueCareersDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
-                                    <v-card flat>
-                                        <v-toolbar dark color="blue darken-2" height="100" class="mb-7">
+                                    <v-card flat style="z-index:100; margin-top:41px;">
+                                        <v-toolbar dark color="blue darken-2" height="100">
                                         <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
                                         <v-spacer></v-spacer>
                                         </v-toolbar>

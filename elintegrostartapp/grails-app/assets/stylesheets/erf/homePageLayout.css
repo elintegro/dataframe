@@ -600,3 +600,6 @@ background-color: #007bff;
 .QuotesPadding .v-window__container .v-window__prev {
     left: 47px;
 }
+.theme--light.v-tabs > .v-tabs-bar {
+    margin-top: 70px;
+}
