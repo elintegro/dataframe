@@ -1,4 +1,4 @@
-/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development. 
+/* Elintegro Dataframe is a framework designed to accelerate the process of full-stack application development.
 We invite you to join the community of developers making it even more powerful!
 For more information please visit  https://www.elintegro.com
 
@@ -7,7 +7,7 @@ Copyright © 2007-2019  Elinegro Inc. Eugene Lipkovich, Shai Lipkovich
 This program is under the terms of the GNU General Public License as published by the Free Software Foundation, version 3.
 See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works. 
+You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to modify or distribute the Program or its derivative works.
 These actions are prohibited by law if you do not accept this License. Therefore, by modifying or distributing the Program or any work based on the Program, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or modifying the Program or works based on it. */
 
 
@@ -18,8 +18,8 @@ import grails.util.Holders
 
 beans {
 
-    def contextPath = Holders.grailsApplication.config.rootPath
     def defaultUrl = Holders.grailsApplication.config.grails.serverURL
+    String staticHomePageUrl = Holders.grailsApplication.config.static_home_page_url
     vueInitDataframe_script(VueJsEntity) { bean ->
         created = """this.setInitPageValues();
                      this.setupHomePage()
@@ -27,23 +27,16 @@ beans {
 
         methods =
                 """  setupHomePage: function(){
+                          let staticPageUrl = '${staticHomePageUrl}'
                           var currentUrl = window.location.href;
                           var defaultUrl = '${defaultUrl}/#/';
                           var a = currentUrl.split('#')
                           if(currentUrl == defaultUrl || a[1] == '/'){
-                            let homePage = "vueElintegroHomeDataframe";
-                            let routeId = 0;
-                            this.\$router.push({
-                                  name: homePage,
-                                path: '/',
-                                params: {
-                                   routeId: ""
-                                }
-                            })
+                            window.open(staticPageUrl, "_self");
                           }
                      }
                ,\nsetInitPageValues:function(){
-                                               
+
                        axios.get('login/getUserInfo').then(function (responseData) {
                             const res = responseData.data;
                             excon.saveToStore("vueInitDataframe", "loggedIn", res.loggedIn);
@@ -84,13 +77,22 @@ beans {
                               if(loggedIn == false){
 //                               vueInitDataframeVar.\$router.push("/");this.location.reload();
                               }
-                            
+
                         }).catch(function (error) {
                             console.log(error);
                         });
                       } ,  \n
-                                                                            
+
         """
+    }
+
+    vueElintegroNavigationFirstTwoButtonDataframe_script(VueJsEntity){bean ->
+        methods = """
+           redirectToHome(){
+                let staticPageUrl = '${staticHomePageUrl}'
+                window.open(staticPageUrl, "_self");
+           },\n"""
+
     }
 
     vueFirstContainerDataframe_script(VueJsEntity){bean ->
@@ -131,14 +133,14 @@ beans {
                                       letterCount += x;
                                       }
                             }, 120)
-                    },\n           
+                    },\n
 
                     """
     }
 
     vueElintegroAboutUsMenuDataframe_script(VueJsEntity){ bean ->
         methods = """scrollTo(param){
-           
+
             if(param =='ourClientsProjects'){
                  excon.redirectPage(this,"client-project");
             }else{
@@ -148,34 +150,34 @@ beans {
                     case 'our_work' :
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
-                    case 'our_process' : 
+                    case 'our_process' :
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
-                    case 'collaboration' : 
+                    case 'collaboration' :
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
-                    case 'our_framework' : 
+                    case 'our_framework' :
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
                     case 'Quotes' :
                         element.scrollIntoView({ behavior: 'smooth' });
-                        break;    
+                        break;
                     case 'our_Technologies' :
                         element.scrollIntoView({ behavior: 'smooth' });
-                        break;      
+                        break;
                     case 'quiz_placeholder'  :
                         element.scrollIntoView({ behavior: 'smooth' });
                         break;
-                    default : 
-                        excon.redirectPage(this,'home');                                
+                    default :
+                        excon.redirectPage(this,'home');
                     }
                 }else{
                        excon.redirectPage(this,'home');
-                       this.\$nextTick(()=> window.document.getElementById(param).scrollIntoView()); 
-                }   
+                       this.\$nextTick(()=> window.document.getElementById(param).scrollIntoView());
+                }
             }
-  
-            
+
+
         },\n
         """
     }
@@ -191,15 +193,15 @@ beans {
           {
             src: '/assets/home/comma.png',
             title : "From concept to development, it was a pleasure to work with Elintegro. They delivered my product on time and on budget. I’d definitely hire them again.",
-            person : "Drasko Raicevic,Quickbody Fitness" 
+            person : "Drasko Raicevic,Quickbody Fitness"
           },
           {
             src: '/assets/home/comma.png',
             title : "The Dating app Elintegro developed for me was perfect. It was exactly what I needed, and more.",
-            person : "Lev, Matchmaker" 
+            person : "Lev, Matchmaker"
           },
- 
- 
+
+
  ],
  \n
 
@@ -208,12 +210,12 @@ beans {
     }
 
     vueElintegroProgressBarDataframe_script(VueJsEntity){bean ->
-        computed = """progressBarValue(){ 
+        computed = """progressBarValue(){
                                           var progressValue = this.state.progressValue;
                                           if(progressValue == undefined || progressValue == null || progressValue == ''){
                                              return 0;
                                           }else{
-                                              return progressValue; 
+                                              return progressValue;
                                           }
                                         },\n"""
     }
@@ -305,7 +307,7 @@ beans {
                                            }else{
                                                 alert("Failed to change password.");
                                            }
-                                           
+
                                     })
                    },\n
                   """
@@ -330,7 +332,7 @@ beans {
     }
     vueElintegroLoginWithOTPDataframe_script(VueJsEntity){bean ->
         data = """showThisFieldAfterCodeSent : false,"""
-        computed = """showHideSendCodeButton(){ 
+        computed = """showHideSendCodeButton(){
                                               let stateValues = excon.getFromStore('vueElintegroLoginWithOTPDataframe');
                                              if(stateValues.transits.email.value  && this.showThisFieldAfterCodeSent == false){ return true;} else{return false;}},\n"""
         methods = """sendVerificationCode(){
@@ -366,13 +368,13 @@ beans {
                                           }else{
                                                excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
                                                excon.refreshPage();
-                                          }        
+                                          }
                                     }
                                     else{
                                         excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
                                         excon.showAlertMessage(response);
                                     }
-                                   
+
                               })
                  },\n
                  loginWithVerificationCode(){
@@ -390,7 +392,7 @@ beans {
                                  }else if(response.success == false && response.incorrectVerificationCode != true){
                                      excon.setVisibility('vueElintegroLoginWithOTPDataframe',false);
                                      setTimeout(function(){excon.refreshPage();}, 2000);
-                                 }  
+                                 }
                                  excon.showAlertMessage(response);
                               })
                  },\n
@@ -405,7 +407,7 @@ beans {
                                 console.log(responseData);
                                 var response = responseData.data;
                                 excon.showAlertMessage(response);
-                              }) 
+                              })
                  },\n
                  """
     }
@@ -589,9 +591,9 @@ beans {
                                                }else{
                                                     setTimeout(function(){window.location.reload();},2000);
                                                }
-                                               
+
                                         })
-                                    }    
+                                    }
 
 
                                     },\n"""
@@ -619,7 +621,7 @@ beans {
                                  }
                            }
                    },\n
-                           
+
                   """
     }
 
@@ -639,14 +641,14 @@ beans {
                                   });
                              }
                              else{
-                                  
+
                                  window.open('https://quizzable.elintegro.com/','_blank');
                              }
                      },\n
                      ecommerceApp(){
                              var self = this;
                              if(this.\$store.state.vueInitDataframe.loggedIn){
-                             
+
                                   var params = this.state;
                                   params['dataframe'] = 'vueElintegroSubMenuDataframe';
                                   excon.callApi('ELcommerceLogin/elCommerceLoginFromElintegro', 'post', params).then(function(response){
@@ -654,33 +656,33 @@ beans {
                                            var serverUrl = response.data.serverUrl
                                            window.open(serverUrl+'elintegro_ELcommerce/authenticateWithToken/'+token,'_blank')
                                   });
-                             
+
                              }
                              else{
                                  excon.redirectPage(self,"login-page")
                              }
                      },\n
-        
+
 
         """
     }
     vueNewEmployeeBasicInformationDataframe_script(VueJsEntity){bean ->
-        methods = """  
+        methods = """
                       /* This method is an example of possibility to manipulate the objects on the Front-end*/
                       newEmployeeBasicInformation_doSomething(){
                        //Can use all javascript arsenal
                        // Can create variabbles and access this.state.<dataframe> JSON objects
                        var details = this.state.vueNewEmployeeBasicInformationDataframe
-                       //Run existing methods, defined in Datfram descriptor and generated by the framework 
+                       //Run existing methods, defined in Datfram descriptor and generated by the framework
                        if (this.\$refs.vueNewEmployeeBasicInformationDataframe_form.validate()){
                        //Even call a backend!
                        excon.callApi('EmployeeApplication/createApplicant', 'post', params).then(function(responseData){
                           var response = responseData;
                           //Use excon object to store/retrieve data fro the store.state.<dataframe>....
-                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","state",response.data.data)                                                                                                            
+                          excon.saveToStore("vueNewEmployeeBasicInformationDataframe","state",response.data.data)
                         });
-                
-                        excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id"); 
+
+                        excon.saveToStore("vueNewEmployeeApplicantDataframe", "vueNewEmployeeApplicantDataframe_tab_model", "vueNewEmployeeUploadResumeDataframe-tab-id");
                         }
                      },\n
                      """
@@ -688,7 +690,7 @@ beans {
     vueNewEmployeeSelfAssesmentDataframe_script(VueJsEntity){
         created = """this.fillApplicationSkillTable();"""
         methods = """
-                 fillApplicationSkillTable(){  
+                 fillApplicationSkillTable(){
                  var details = this.state.vueNewEmployeeSelfAssesmentDataframe
                  var params = {};
                        var self = this;
@@ -698,20 +700,20 @@ beans {
                          self.vueNewEmployeeSelfAssesmentDataframe_fillInitData();
                           var response = responseData;
                 });
-                 
+
                   },\n
                   """
     }
     vueNewEmployeeApplicantAddSkillDataframe_script(VueJsEntity){bean ->
         methods = """addNewSkill(){
-                                    
+
                                     var params = this.state;
                                     params['applicationId']= excon.getFromStore('vueNewEmployeeBasicInformationDataframe','domain_keys.application.id');
                                     var self = this;
                                     excon.callApi('EmployeeApplication/addNewSkillSet', 'post', params).then(function(responseData){
                                            var response = responseData.data;
                                            excon.setVisibility("vueNewEmployeeApplicantAddSkillDataframe", false);
-                                           excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'I','transits');                                                 
+                                           excon.refreshDataForGrid(response,'vueNewEmployeeSelfAssesmentDataframe', 'applicationSkill', 'I','transits');
                                     });
                   },\n"""
 
@@ -721,7 +723,7 @@ beans {
     }
 
     vueElintegroApplicantGeneralInformationDataframe_script(VueJsEntity){bean ->
-          computed ="""vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){ 
+          computed ="""vueElintegroApplicantGeneralInformationDataframe_person_selectedposition(){
                                         var positions = [];
                                         var items = this.state.persisters.application.availablePositions.value;
                                         if(!items) return;
@@ -738,7 +740,7 @@ beans {
         def pathForDocFile = Holders.grailsApplication.config.images.defaultImagePathForDocFile
         def pathForCsvFile =  Holders.grailsApplication.config.images.defaultImagePathForCsvFile
         methods ="""afterRefreshing(response){
-              
+
                                  let params = response;
                                  if(params.persisters){
                                      let fileName = params.persisters.files.fileName.value;
@@ -761,15 +763,15 @@ beans {
                                       excon.saveToStore('vueElintegroApplicantCVDataframe',stateValues);
                                   }else{
                                   console.log("File not found...")
-                                  }  
-                                 
+                                  }
+
                                   },\n
-                              
+
         """
     }
     vueElintegroCommentPageForApplicantDataframe_script(VueJsEntity){bean ->
         methods ="""addCommentsForApplicant(){
-                                        
+
                                     var params = this.state;
                                     var self = this;
                                     params['dataframe'] = 'vueElintegroCommentPageForApplicantDataframe';
@@ -834,7 +836,7 @@ beans {
                                     const notSelectedLanguages = params.transits.notSelectedLanguages;
                                     excon.callApi('translatorAssistant/addLanguage', 'post', params).then(function(responseData){
                                                   self.vueTranslatorDataframe_fillInitData();
-                                                  
+
                                     });
                              },\n
                              sourceText(){
@@ -876,7 +878,7 @@ beans {
                                         excon.fillInitialData(stateValues);
 
                              },\n
-                             
+
                              downloadAllTranslatedFiles(){
                                        var params = this.state;
                                        var self = this;
@@ -891,15 +893,15 @@ beans {
                                                                     fileLink.click();
                                                                 }else{
                                                                      excon.showAlertMessage(response);
-                                                                }      
+                                                                }
                                                         });
                                        }
-                                       else{ 
+                                       else{
                                             params['projectDetails'] = excon.getFromStore('vueTranslatorDataframe','currentlySelectedProject');
                                             excon.callApi('translatorAssistant/saveProjectDetailsInSessionForNotLoggedInUser', 'post', params).then(function(responseData){
                                                  excon.redirectPage(self,"login-page");
                                             })
-                                       }                 
+                                       }
                              },\n
 
 
@@ -914,7 +916,7 @@ beans {
                                         params['dataframe'] = 'vueAddNewRecordForCurrentProjectDataframe';
                                         excon.callApi('translatorAssistant/translateNewlyAddedRecord', 'post', params).then(function(responseData){
                                                  var response = responseData.data;
-                                                 excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'textToTranslate', 'U', 'transits'); 
+                                                 excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'textToTranslate', 'U', 'transits');
                                         })
                     },\n
                     saveNewlyAddedRecord(){
@@ -929,7 +931,7 @@ beans {
                                       else{
                                             alert("Key and Source Text shouldn't be empty.");
                                       }
-                    
+
                     },\n
                     closeVueAddNewRecordForCurrentProjectDataframe(){
                                     var params = this.state;
@@ -943,7 +945,7 @@ beans {
                                        excon.setVisibility("vueAddNewRecordForCurrentProjectDataframe", false);
                                     }
                     },\n
-                   
+
         """
     }
     vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_script(VueJsEntity){ bean ->
@@ -951,7 +953,7 @@ beans {
                    updateEditedTextInGrid(){
                                       var translatedData = {text:{value:this.state.transits.text.value}, language:{value:this.vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe_prop.parentData.TargetLanguage}};
                                       var response = {persisters:{textToTranslate:translatedData}};
-                                      excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'textToTranslate', 'U', 'transits'); 
+                                      excon.refreshDataForGrid(response,'vueAddNewRecordForCurrentProjectDataframe', 'textToTranslate', 'U', 'transits');
                                       excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
                    },\n
                    closeVueEditTextOfNewlyAddedRecordForCurrentProjectDataframe(){
@@ -965,7 +967,7 @@ beans {
                                     else{
                                        excon.setVisibility("vueEditTextOfNewlyAddedRecordForCurrentProjectDataframe", false);
                                     }
-                                     
+
                    },\n
                   """
 
@@ -978,7 +980,7 @@ beans {
                              return false;
                           }
                           else{
-                              return true; 
+                              return true;
                           }
         },\n
                        translateWithGoogleButtonShowHide(){
@@ -1002,7 +1004,7 @@ beans {
                                                       if(self.progressBarEnable == false){clearInterval(myVar)}
                                                });
                                          } ,1000);
-                                         
+
                                          excon.callApi('translatorAssistant/translateWithGoogle', 'post', params).then(function(responseData){
                                               self.vueGridOfTranslatedTextDataframe_fillInitData();
                                               var response = responseData.data;
@@ -1044,7 +1046,7 @@ beans {
                          return false;
                      }
                           excon.setVisibility("vueEditSourceRecordsOfGridDataframe", false);
-                     
+
                     },\n
                   """
     }
@@ -1071,7 +1073,7 @@ beans {
                                                                    let response = responseData.data;
                                                                    let stateValuesForEditTranslatedRecordsOfGridDataframe = excon.getFromStore('vueEditTranslatedRecordsOfGridDataframe')
                                                                    stateValuesForEditTranslatedRecordsOfGridDataframe.persisters.translatedText.text.value = response.translatedText
-                                                                   excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe', stateValuesForEditTranslatedRecordsOfGridDataframe); 
+                                                                   excon.saveToStore('vueEditTranslatedRecordsOfGridDataframe', stateValuesForEditTranslatedRecordsOfGridDataframe);
                                                                    });
                     },\n
                     closeVueEditTranslatedRecordsOfGridDataframe(){
@@ -1088,7 +1090,7 @@ beans {
                          return false;
                      }
                           excon.setVisibility("vueEditTranslatedRecordsOfGridDataframe", false);
-                     
+
                     },\n
                     """
     }
