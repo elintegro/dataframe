@@ -357,7 +357,7 @@ padding:0px;
     text-align: center;
 }
 .Quotes .carausolBody {
-    padding: 0px 40px;
+    padding: 0 40px;
 
 }
 .Quotes .heading {
@@ -517,6 +517,9 @@ background-color: #007bff;
 }
 .quiz-signup .v-menu__content .v-select-list .v-list-item__content .v-list-item__title {
     z-index: 1;
+}
+.v-text-field.v-text-field--solo .v-input__control {
+    padding: 0 11px;
 }
 
 .quiz-signup .v-input__control .v-input__slot {
