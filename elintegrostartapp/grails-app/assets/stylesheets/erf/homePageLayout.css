@@ -521,6 +521,9 @@ background-color: #007bff;
 .v-text-field.v-text-field--solo .v-input__control {
     padding: 0 11px;
 }
+.v-text-field.v-text-field--solo .v-input__control {
+    padding: 0 11px;
+}
 
 .quiz-signup .v-input__control .v-input__slot {
     border: 1px solid #197DC3 !important;
@@ -605,4 +608,17 @@ background-color: #007bff;
 }
 .theme--light.v-tabs > .v-tabs-bar {
     margin-top: 70px;
+}
+.theme--light.v-tabs > .v-tabs-bar {
+    margin-top: 70px;
+}
+.contact-us-container {
+    margin-top: 100px;
+}
+.career-page-container {
+    margin-top: 60px;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    align-items: center;
 }

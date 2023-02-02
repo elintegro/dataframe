@@ -8,8 +8,8 @@ import grails.util.Holders
 beans {
     vueCareersDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12>
-                                    <v-card flat style="z-index:100; margin-top:41px;">
+        layoutPlaceHolder = """<v-flex xs12 sm12 md12 lg12 xl12 class="career-page-container">
+                                    <v-card flat style="z-index:100;">
                                         <v-toolbar dark color="blue darken-2" height="100">
                                         <v-toolbar-title class="white--text">[DATAFRAME_LABEL]</v-toolbar-title>
                                         <v-spacer></v-spacer>

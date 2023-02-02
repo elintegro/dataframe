@@ -10,7 +10,7 @@ beans {
     contactUsPageDataframeLayout(ColumnLayoutVue){ bean->
         layoutBeanName = bean.name
         layoutPlaceHolder = """<v-container class="text-xs-center"> 
-                                 <v-layout row child-flex justify-center align-center wrap>
+                                 <v-layout row child-flex justify-center align-center wrap class="contact-us-container">
                                  <v-flex xs12 sm12 md6 lg6 xl6>
                                     <v-card color="#fafbfd">
                                         <v-toolbar dark color="blue darken-2" class="mb-7" height="100">

@@ -93,7 +93,7 @@ beans {
     }
     vueElintegroMidSectionLayout(ColumnLayoutVue){bean ->
         layoutBeanName = bean.name
-        layoutPlaceHolder = """<v-flex style="margin-top:70px;"><v-content>
+        layoutPlaceHolder = """<v-flex style="margin-top:100px;"><v-content>
                              <router-view :key="\$route.fullPath"></router-view>
                              </v-content>
                                 </v-flex>
